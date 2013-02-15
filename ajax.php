@@ -27,6 +27,7 @@ if (isset($_GET['deck'])) {
       $result["success"] = true;
       $result["player"] = $player->name;
       $result["verified"] = $player->verified;
+      $result["event_running"] = $event->active == 1;
     } else {
       $result["success"] = false;
     }
@@ -40,6 +41,19 @@ if (isset($_GET['deck'])) {
     $result = array();
     $result['success'] = $event->removeEntry($old);
     $result['player'] = $old;
+    json_headers();
+    echo json_encode($result);
+  }
+} elseif (isset($_GET['dropplayer']) && isset($_GET['event'])) {
+  $event = new Event($_GET['event']);
+  if ($event->authCheck($_SESSION['username'])) {
+    $result = array();
+    $playername = $_GET['dropplayer'];
+    $event->dropPlayer($playername);
+    $result['success'] = true;
+    $result['player'] = $playername;
+    $result['eventname'] = $event->name;
+    $result['round'] = $event->current_round;
     json_headers();
     echo json_encode($result);
   }
