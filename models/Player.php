@@ -5,14 +5,26 @@ class Player {
   public $password;
   public $host;
   public $super;
-
+  public $pkmember;
+  public $rememberMe; // if selected will record IP address. Gatherling will automatically log players in of known IP addresses.
+  public $ipAddress;
 
   static function isLoggedIn() {
     return isset($_SESSION['username']);
   }
+  
+  static function logOut() {
+      unset($_SESSION['sessionname']);
+      unset($_SESSION['username']);
+      session_destroy();
+  }
 
   static function loginName() {
-    return $_SESSION['username'];
+    if (Player::isLoggedIn()) {
+        return $_SESSION['username'];
+    } else {
+      return false;
+    }
   }
 
   static function getSessionPlayer() {
@@ -37,6 +49,29 @@ class Player {
     $hashpwd = hash('sha256', $password);
 
     return strcmp($srvpass, $hashpwd) == 0;
+  }
+  
+  static function getClientIPAddress() {
+      // this is used with the rememberMe feature to keep players logged in
+      // Test if it is a shared client
+      if (!empty($_SERVER['HTTP_CLIENT_IP'])){
+          $ip=$_SERVER['HTTP_CLIENT_IP'];
+      //Is it a proxy address
+      }elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+          $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+      }else{
+          $ip=$_SERVER['REMOTE_ADDR'];
+      }
+      return $ip;
+  }
+  
+  static function saveIPAddress($ipAddress, $player) {
+    $ipAddress = ip2long($ipAddress);
+    $db = Database::getConnection();
+    $stmt = $db->prepare("UPDATE players SET ipaddress = ? WHERE name = ?");
+    $stmt->bind_param("ds", $ipAddress, $player);
+    $stmt->execute();
+    $stmt->close();
   }
 
   static function findByName($playername) {
@@ -77,10 +112,10 @@ class Player {
 
   function __construct($name) {
     $database = Database::getConnection();
-    $stmt = $database->prepare("SELECT name, password, host, super, mtgo_confirmed FROM players WHERE name = ?");
+    $stmt = $database->prepare("SELECT name, password, rememberme, INET_NTOA(ipaddress), host, super, pkmember, mtgo_confirmed FROM players WHERE name = ?");
     $stmt->bind_param("s", $name);
     $stmt->execute();
-    $stmt->bind_result($this->name, $this->password, $this->host, $this->super, $this->verified);
+    $stmt->bind_result($this->name, $this->password, $this->rememberMe, $this->ipAddress, $this->host, $this->super, $this->pkmember, $this->verified);
     if ($stmt->fetch() == NULL) {
       throw new Exception('Player '. $name .' is not found.');
     }
@@ -89,20 +124,36 @@ class Player {
 
   function save() {
     $db = Database::getConnection();
-    $stmt = $db->prepare("UPDATE players SET password = ?, host = ?, super = ? WHERE name = ?");
-    $stmt->bind_param("sdds", $this->password, $this->host, $this->super, $this->name);
+    $stmt = $db->prepare("UPDATE players SET password = ?, rememberme = ?, host = ?, super = ?, pkmember = ? WHERE name = ?");
+    $stmt->bind_param("sdddds", $this->password, $this->rememberMe, $this->host, $this->super, $this->pkmember, $this->name);
     $stmt->execute();
     $stmt->close();
   }
 
+  public function getIPAddresss() {
+    return $this->ipAddress;      
+  }
+    
+  /** Returns true if a player has hosted at least one event. */
   function isHost() {
-    return ($this->super == 1) || (count($this->stewardsSeries()) > 0) || ($this->getHostedEventsCount() > 0);
+    return ($this->super == 1) || (count($this->organizersSeries()) > 0) || ($this->getHostedEventsCount() > 0);
   }
 
-  function isSteward() {
-    return ($this->super == 1) || (count($this->stewardsSeries()) > 0);
+  /** Returns true if a player organizers a series. */
+  function isOrganizer($seriesName = "") {
+    if($seriesName == "") {
+        return ($this->super == 1) || (count($this->organizersSeries()) > 0);
+    } else {
+        return Database::single_result("SELECT series 
+                                        FROM series_organizers 
+                                        WHERE player = '{$this->name}' AND series = '{$seriesName}'") > 0;
+    }
   }
 
+  static function isPKmember() {
+    return ($this->pkmember == 1);
+  }
+    
   function getHostedEvents() {
     $db = Database::getConnection();
     $stmt = $db->prepare("SELECT name FROM events WHERE host = ? OR cohost = ?");
@@ -251,12 +302,13 @@ class Player {
     return $decks;
   }
 
+  // Gets the $number most recent matches.  Ignores matches in progress.
   function getRecentMatches($number = 6) {
     $db = Database::getConnection();
     $stmt = $db->prepare("SELECT m.id
       FROM matches m, events e, subevents s
       WHERE (m.playera = ? OR m.playerb = ?) AND m.subevent = s.id
-       AND s.parent = e.name
+       AND s.parent = e.name AND m.result != 'P'
       ORDER BY e.start DESC, s.timing DESC, m.round DESC LIMIT $number");
     $stmt->bind_param("ss", $this->name, $this->name);
     $stmt->execute();
@@ -274,6 +326,32 @@ class Player {
     }
 
     return $matches;
+  }
+
+  // Returns all matches that are curently in progress.
+  function getCurrentMatches() {
+      $db = Database::getConnection();
+      $stmt = $db->prepare("SELECT m.id
+      FROM matches m, events e, subevents s
+      WHERE (m.playera = ? OR m.playerb = ?) AND m.subevent = s.id
+      AND s.parent = e.name AND (m.result = 'P' OR m.result = 'BYE' or m.result = 'League')
+      ORDER BY e.start DESC, s.timing DESC, m.round DESC ");
+      $stmt->bind_param("ss", $this->name, $this->name);
+      $stmt->execute();
+      $stmt->bind_result($matchid);
+
+      $matchids = array();
+      while ($stmt->fetch()) {
+          $matchids[] = $matchid;
+      }
+      $stmt->close();
+
+      $matches = array();
+      foreach ($matchids as $matchid) {
+          $matches[] = new Match($matchid);
+      }
+
+      return $matches;
   }
 
   function getAllMatches() {
@@ -412,6 +490,7 @@ class Player {
     return $entries;
   }
 
+  // TODO: remove ignore functionality for decks. Not sure what this function does. Part of it?
   function getUnenteredCount() {
     $db = Database::getConnection();
     $stmt = $db->prepare("SELECT count(event) FROM entries n, events e
@@ -428,15 +507,19 @@ class Player {
 
   function getRating($format = "Composite", $date = "3000-01-01 00:00:00") {
     $db = Database::getConnection();
-    $stmt = $db->prepare("SELECT rating FROM ratings WHERE player = ?
-      AND updated < ? AND format = ?
-      ORDER BY updated DESC LIMIT 1");
+    $stmt = $db->prepare("SELECT rating 
+                          FROM ratings 
+                          WHERE player = ?
+                          AND updated < ? 
+                          AND format = ?
+                          ORDER BY updated 
+                          DESC LIMIT 1");
     $stmt->bind_param("sss", $this->name, $date, $format);
     $stmt->execute();
     $stmt->bind_result($rating);
 
     if ($stmt->fetch() == NULL) {
-      $rating = 1600;
+      $rating = 0; // was set to 1600, I am going to use it to only show ratings for formats the players has played in
     }
 
     $stmt->close();
@@ -445,9 +528,13 @@ class Player {
 
   function getRatingRecord($format = "Composite", $date = "3000-01-01 00:00:00") {
     $db = Database::getConnection();
-    $stmt = $db->prepare("SELECT wins, losses FROM ratings
-      WHERE player = ? and updated < ? AND format = ?
-      ORDER BY updated DESC LIMIT 1");
+    $stmt = $db->prepare("SELECT wins, losses 
+                          FROM ratings
+                          WHERE player = ? 
+                          AND updated < ? 
+                          AND format = ?
+                          ORDER BY updated 
+                          DESC LIMIT 1");
     $stmt->bind_param("sss", $this->name, $date, $format);
     $stmt->execute();
     $wins = 0;
@@ -462,10 +549,11 @@ class Player {
   function getMaxRating($format = "Composite") {
     $db = Database::getConnection();
     $stmt = $db->prepare("SELECT MAX(rating) AS max
-      FROM ratings r
-      WHERE r.player = ? and r.format = '$format'
-      AND r.wins + r.losses >= 20");
-    $stmt->bind_param("s", $this->name);
+                          FROM ratings r
+                          WHERE r.player = ? 
+                          AND r.format = ?
+                          AND r.wins + r.losses >= 20");
+    $stmt->bind_param("ss", $this->name, $format);
     $stmt->execute();
     $max = NULL;
     $stmt->bind_result($max);
@@ -477,10 +565,10 @@ class Player {
   function getMinRating($format = "Composite") {
     $db = Database::getConnection();
     $stmt = $db->prepare("SELECT MIN(rating) AS min
-      FROM ratings r
-      WHERE r.player = ? and r.format = '$format'
-      AND r.wins + r.losses >= 20");
-    $stmt->bind_param("s", $this->name);
+                          FROM ratings r
+                          WHERE r.player = ? AND r.format = ?
+                          AND r.wins + r.losses >= 20");
+    $stmt->bind_param("ss", $this->name, $format);
     $stmt->execute();
     $min = NULL;
     $stmt->bind_result($min);
@@ -502,6 +590,10 @@ class Player {
         $wins = $wins + 1;
       } elseif ($match->playerLost($this->name)) {
         $losses = $losses + 1;
+      } else if ($match->playerBye($this->name)) {
+        $wins = $wins + 1;
+      } else if ($match->playerMatchInProgress($this->name)) {
+          ; // do nothing since match is in progress and there are no results
       } else {
         $draws = 1;
       }
@@ -544,7 +636,7 @@ class Player {
   function getStreak($type = "W") {
     $matches = $this->getAllMatches();
 
-    $arr = array();
+    $results = array();
     foreach ($matches as $match) {
       $thisres = 'D';
       if ($match->playerWon($this->name)) {
@@ -553,36 +645,36 @@ class Player {
         $thisres = 'L';
       }
 
-      $arr[] = $thisres;
+      $results[] = $thisres;
     }
 
     $max = 0;
     $streak = 0;
-    for ($ndx = 0; $ndx < sizeof($arr); $ndx++) {
-      if ($arr[$ndx] == $type) {$streak++;}
+    foreach ($results as $result) {
+      if ($result == $type) {$streak++;}
       else {$streak = 0;}
       if ($streak > $max) {$max = $streak;}
     }
     return $max;
   }
 
+  ## changed the select statment, brings back list of opps ordered by games lost
   function getRival() {
     $db = Database::getConnection();
-    $stmt = $db->prepare("SELECT q.p AS opp, count(q.p) n FROM
-       (SELECT playera AS p FROM matches WHERE playerb = ?
+  
+    $stmt = $db->prepare("SELECT q.p AS opp, sum(losses) losses FROM
+       (select  playera as p, playerb_losses as losses from matches where playerb = ? and playerb_losses > 0
         UNION ALL
-        SELECT playerb as p FROM matches WHERE playera = ?) AS q
-        GROUP BY q.p ORDER BY n DESC LIMIT 1");
+        select  playerb as p, playera_losses as losses from matches where playera = ? and playera_losses > 0
+        ) AS q GROUP BY q.p ORDER BY losses DESC LIMIT 1");
     $stmt->bind_param("ss", $this->name, $this->name);
     $stmt->execute();
     $stmt->bind_result($rival, $numtimes);
-
-    $rivalname = null;
     $stmt->fetch();
     $stmt->close();
 
-    if ($rivalname != null) {
-      return new Player($rivalname);
+    if ($rival != null) {
+      return new Player($rival);
     } else {
       return null;
     }
@@ -830,6 +922,7 @@ class Player {
     return $seasons;
   }
 
+  // TODO: Is this part of the deck ignore functionality? If so remove it.
   function setIgnoreEvent($eventname, $ignored) {
     $db = Database::getConnection();
     $stmt = $db->prepare("UPDATE entries SET ignored = ? WHERE event = ? AND player = ?");
@@ -875,16 +968,18 @@ class Player {
     if ((strcasecmp($verifyplayer,$this->name) == 0) && (strcasecmp($db_challenge,$challenge) == 0)) {
       return true;
     } else {
+      $error_log = "Player = '{$this->name}' Challenge = '{$challenge}' Verify = '{$verifyplayer}' DBChallenge = '{$db_challenge}'\n";
+      file_put_contents("/var/www/pdcmagic.com/gatherling/challenge.log", $error_log, FILE_APPEND);
       return false;
     }
   }
 
-  public function stewardsSeries() {
+  public function organizersSeries() {
     if ($this->isSuper()) {
       return Series::allNames();
     }
     $db = Database::getConnection();
-    $stmt = $db->prepare("SELECT series FROM series_stewards WHERE player = ?");
+    $stmt = $db->prepare("SELECT series FROM series_organizers WHERE player = ?");
     $stmt->bind_param("s", $this->name);
     $stmt->execute();
     $series = array();
@@ -899,7 +994,7 @@ class Player {
   public function linkTo() {
     $result = "<a href=\"profile.php?player={$this->name}\">$this->name";
     if ($this->verified == 1) {
-      $result .= " <img src=\"imageset/verified.png\" width=\"12\" height=\"12\" />";
+      $result .= image_tag("verified.png", array("width" => "12", "height" => "12"));
     }
     $result .= "</a>";
 
@@ -907,23 +1002,11 @@ class Player {
   }
 
   public static function activeCount() {
-    $db = Database::getConnection();
-    $stmt = $db->prepare("SELECT count(name) FROM players where password is not null");
-    $stmt->execute();
-    $stmt->bind_result($result);
-    $stmt->fetch();
-    $stmt->close();
-    return $result;
+    return Database::single_result("SELECT count(name) FROM players where password is not null");
   }
 
   public static function verifiedCount() {
-    $db = Database::getConnection();
-    $stmt = $db->prepare("SELECT count(name) FROM players where mtgo_confirmed = 1");
-    $stmt->execute();
-    $stmt->bind_result($result);
-    $stmt->fetch();
-    $stmt->close();
-    return $result;
+    return Database::single_result("SELECT count(name) FROM players where mtgo_confirmed = 1");
   }
 }
 
