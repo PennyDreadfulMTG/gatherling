@@ -5,20 +5,50 @@ $HC = "#DDDDDD";
 $R1 = "#EEEEEE";
 $R2 = "#FFFFFF";
 $CC = $R1;
+putenv("TZ=US/Eastern"); // force time functions to use US/Eastern time
+
+function is_assoc($array) {
+  return (bool)count(array_filter(array_keys($array), 'is_string'));
+}
+
+/** Gets the correct name, relative to the gatherling root dir, for a file in the theme.
+ *  Allows for overrides, falls back to default/
+ */
+function theme_file($name) {
+  global $CONFIG;
+  $theme_dir = "styles/{$CONFIG['style']}/";
+  $default_dir = "styles/default/";
+  if (file_exists($theme_dir . $name)) {
+    return $theme_dir . $name;
+  }
+  return $default_dir . $name;
+}
 
 function print_header($title, $js = null, $extra_head_content = "") {
   global $CONFIG;
-  echo "<html><head><meta http-equiv=\"X-UA-Compatible\" content=\"IE=8\" />";
-  echo "<title>{$CONFIG['site_name']} | Gatherling | {$title}</title>";
-echo <<<EOT
-    <link rel="stylesheet" type="text/css" media="all" href="./css/reset.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="./css/text.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="./css/960.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="./css/pdcmagic.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="./css/gatherling.css" />
-EOT;
+  
+  // if player ip address changes could be a hacker breaking in. 
+  // Once you implement a remember me cookie, this will also 
+  // destroy the remember me cookie if the IP's don't match
+  if (Player::isLoggedIn()) {
+      $player = new Player(Player::loginName());
+      if ($player->getIPAddresss() != Player::getClientIPAddress()) {
+          Player::logOut();
+          redirect("login.php?ipaddresschanged=true");
+      }
+  }
+  
+  ini_set('session.gc_maxlifetime',2*60*60); // sets session timer to 2 hours, format is N hr * 60 minutes * 60 seconds
+  echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
+  echo "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">\n";
+  echo "  <head>\n";
+  echo "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n";
+  echo "    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />\n";
+  echo "    <meta name=\"google-site-verification\" content=\"VWE-XX0CgPTHYgUqJ6t13N75y-p_Q9dgtqXikM3EsBo\" />\n";
+  echo "    <title>{$CONFIG['site_name']} | {$title}</title>\n";
+  echo "    <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"". theme_file("css/stylesheet.css") . "\" />\n";
+  echo "    <script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js\"></script>\n";
   if ($js) {
-    echo "<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js\"></script>\n";
     echo "<script type=\"text/javascript\">";
     echo $js;
     echo "</script>";
@@ -28,21 +58,27 @@ EOT;
   </head>
   <body>
     <div id="maincontainer" class="container_12">
-      <div id="headerimage" class="grid_12">
-        <img src="imageset/header.jpg"/>
-      </div>
-      <div id="mainmenu_submenu" class="grid_12">
+        <div id="header_bar" class="box">
+            <div id="header_gatherling">
+EOT;
+ include_once("analyticstracking.php"); // google analytics tracking
+//  echo image_tag("header_gatherling.png");
+  echo <<<EOT
+            </div>
+            <div id="header_logo">
+EOT;
+  echo image_tag("header_logo.png");
+  echo <<<EOT
+            </div>
+        </div>      
+        <div id="mainmenu_submenu" class="grid_12 menubar">
         <ul>
-          <li><a href="/gatherling/">Home</a></li>
-          <li><a href="http://forums.pdcmagic.com/">Forums</a></li>
-          <li><a href="series.php">Events</a></li>
-          <li class="current">
-            <a href="index.php">
-            Gatherling
-            </a>
-          </li>
-          <li><a href="ratings.php">Ratings</a></li>
-          <li class="last"><a href="http://community.wizards.com/pauperonline/wiki/">Wiki</a></li>
+          <li><span class=\"inputbutton\"><a href="./gatherling.php">Home</a></span></li>
+          <li><a href="http://pauperkrew.com/">Forums</a></li>
+          <li><a href="./series.php">Events</a></li>
+          <li><a href="./index.php">Gatherling</a></li>
+          <li><a href="./ratings.php">Ratings</a></li>
+          <li><a href="http://www.wizards.com/Magic/Digital/MagicOnline.aspx?x=mtg/digital/magiconline/whatshappening">MTGO News</a></li>
         </ul>
       </div>
 EOT;
@@ -51,16 +87,16 @@ EOT;
 
   $super = false;
   $host = false;
-  $steward = false;
+  $organizer = false;
 
   if ($player != NULL) {
     $host = $player->isHost();
     $super = $player->isSuper();
-    $steward = count($player->stewardsSeries()) > 0;
+    $organizer = count($player->organizersSeries()) > 0;
   }
 
   $tabs = 5;
-  if ($super || $steward) {
+  if ($super || $organizer) {
     $tabs += 1;
   }
   if ($host) {
@@ -71,18 +107,24 @@ EOT;
   }
 
   echo <<<EOT
-<div id="submenu" class="grid_12 tabs_$tabs">
+<div id="submenu" class="grid_12 tabs_$tabs menubar">
   <ul>
     <li><a href="profile.php">Profile</a></li>
     <li><a href="player.php">Player CP</a></li>
     <li><a href="eventreport.php">Metagame</a></li>
     <li><a href="decksearch.php">Decks</a></li>
 EOT;
+  if ($player == NULL) {
+    echo "<li class=\"last\"><a href=\"login.php\">Login</a></li>\n";
+  } else {
+    echo "<li class=\"last\"><a href=\"logout.php\">Logout [{$player->name}]</a></li>\n";
+  }
+
   if ($host || $super) {
     echo "<li><a href=\"event.php\">Host CP</a></li>\n";
   }
 
-  if ($steward || $super) {
+  if ($organizer || $super) {
     echo "<li><a href=\"seriescp.php\">Series CP</a></li>\n";
   }
 
@@ -90,21 +132,19 @@ EOT;
     echo "<li><a href=\"admincp.php\">Admin CP</a></li>\n";
   }
 
-  if ($player == NULL) {
-    echo "<li class=\"last\"><a href=\"login.php\">Login</a></li>\n";
-  } else {
-    echo "<li class=\"last\"><a href=\"logout.php\">Logout [{$player->name}]</a></li>\n";
-  }
-
   echo "</ul> </div>\n";
 }
 
 function print_footer() {
-  echo "<div class=\"grid_10 prefix_1 suffix_1\"> <div id=\"gatherling_footer\" class=\"box\">";
+  echo "<div class=\"prefix_1 suffix_1\">\n";
+  echo "<div id=\"gatherling_footer\" class=\"box\">\n";
   version_tagline();
-  echo "</div> </div>";
+  echo "</div><!-- prefix_1 suffix_1 -->\n";
+  echo "</div><!-- gatherling_footer -->\n";
   echo "<div class=\"clear\"></div>\n";
-  include_once('util/tracking.php');
+  echo "</div> <!-- container -->\n"; 
+  echo "</body>\n";
+  echo "</html>\n";
 }
 
 function headerColor() {
@@ -127,8 +167,21 @@ function linkToLogin() {
 }
 
 function printCardLink($card) {
-  echo "<a href=\"http://www.deckbox.org/mtg/{$card}\"";
-  echo " target=\"_blank\">{$card}</a>";
+  $gathererName = preg_replace('/ /',']+[',$card);
+  echo "<span class=\"cardHoverImageWrapper\">";
+  echo "<a href=\"http://gatherer.wizards.com/Pages/Search/Default.aspx?name=+[{$gathererName}]\" ";
+  echo "class=\"linkedCardName\" target=\"_blank\">{$card}<span class=\"linkCardHoverImage\"><p class=\"crop\" style=\"background-image: url(http://gatherer.wizards.com/Handlers/Image.ashx?name={$card}&type=card\"><img src=\"http://gatherer.wizards.com/Handlers/Image.ashx?name={$card}&type=card\"></p></span></a></span>";
+}
+
+function image_tag($filename, $extra_attr = NULL) {
+  $tag = "<img ";
+  if (is_array($extra_attr)) {
+    foreach ($extra_attr as $key => $value) {
+      $tag .= "{$key}=\"{$value}\" ";
+    }
+  }
+  $tag .= "src=\"" . theme_file("images/{$filename}") . "\" />";
+  return $tag;
 }
 
 function noHost() {
@@ -137,9 +190,7 @@ function noHost() {
 }
 
 function medalImgStr($medal) {
-  $ret = "<img style=\"border-width: 0px\" ";
-  $ret = $ret . "src=\"imageset/" . $medal . ".png\">";
-  return $ret;
+  return image_tag("$medal.png", array("style" => "border-width: 0px"));
 }
 
 function seasonDropMenu($season, $useall = 0) {
@@ -157,7 +208,7 @@ function formatDropMenu($format, $useAll = 0, $form_name = 'format') {
     $db = Database::getConnection();
     $query = "SELECT name FROM formats ORDER BY priority desc, name";
     $result = $db->query($query) or die($db->error);
-    echo "<select name=\"{$form_name}\">";
+    echo "<select class=\"inputbox\" name=\"{$form_name}\">";
     $title = ($useAll == 0) ? "- Format -" : "All";
     echo "<option value=\"\">$title</option>";
     while($thisFormat = $result->fetch_assoc()) {
@@ -169,9 +220,22 @@ function formatDropMenu($format, $useAll = 0, $form_name = 'format') {
     $result->close();
 }
 
+function dropMenu($name, $options, $selected = NULL) {
+  echo "<select class=\"inputbox\" name=\"{$name}\">";
+  foreach ($options as $option) {
+    $setxt = "";
+    if (!is_null($selected) && $selected == $option) {
+      $setxt = " selected";
+    }
+    echo "<option value=\"{$option}\"{$setxt}>{$option}</option>";
+  }
+  echo "</select>";
+}
+
+
 function numDropMenu($field, $title, $max, $def, $min = 0, $special="") {
     if(strcmp($def, "") == 0) {$def = -1;}
-    echo "<select name=\"$field\">";
+    echo "<select class=\"inputbox\" name=\"$field\">";
     echo "<option value=\"\">$title</option>";
     if(strcmp($special, "") != 0) {
         $sel = ($def == 128) ? "selected" : "";
@@ -186,7 +250,7 @@ function numDropMenu($field, $title, $max, $def, $min = 0, $special="") {
 
 function timeDropMenu($hour, $minutes = 0) {
   if(strcmp($hour, "") == 0) {$hour = -1;}
-  echo "<select name=\"hour\">";
+  echo "<select class=\"inputbox\" name=\"hour\">";
   echo "<option value=\"\">- Hour -</option>";
   for($h = 0; $h < 24; $h++) {
     for ($m = 0; $m < 60; $m += 30) {
@@ -224,53 +288,6 @@ function minutes($mins) {
   return $mins * 60;
 }
 
-function db_query_single() {
-  $params = func_get_args();
-  $query = array_shift($params);
-  $paramspec = array_shift($params);
-  $db = Database::getConnection();
-  $stmt = $db->prepare($query);
-  $stmt or die($db->error);
-  if (count($params) == 1) {
-    list($one) = $params;
-    $stmt->bind_param($paramspec, $one);
-  } else if (count($params) == 2) {
-    list($one, $two) = $params;
-    $stmt->bind_param($paramspec, $one, $two);
-  } else if (count($params) == 3) {
-    list($one, $two, $three) = $params;
-    $stmt->bind_param($paramspec, $one, $two, $three);
-  } else if (count($params) == 4) {
-    list($one, $two, $three, $four) = $params;
-    $stmt->bind_param($paramspec, $one, $two, $three, $four);
-  } else if (count($params) == 5) {
-    list($one, $two, $three, $four, $five) = $params;
-    $stmt->bind_param($paramspec, $one, $two, $three, $four, $five);
-  } else if (count($params) == 6) {
-    list($one, $two, $three, $four, $five, $six) = $params;
-    $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six);
-  } else if (count($params) == 7) {
-    list($one, $two, $three, $four, $five, $six, $seven) = $params;
-    $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven);
-  } else if (count($params) == 8) {
-    list($one, $two, $three, $four, $five, $six, $seven, $eight) = $params;
-    $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven, $eight);
-  } else if (count($params) == 9) {
-    list($one, $two, $three, $four, $five, $six, $seven, $eight, $nine) = $params;
-    $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven, $eight, $nine);
-  } else if (count($params) == 10) {
-    list($one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten) = $params;
-    $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten);
-  }
-
-  $stmt->execute() or die($stmt->error);
-  $stmt->bind_result($result);
-
-  $stmt->fetch();
-  $stmt->close();
-  return $result;
-}
-
 function json_headers() {
   header('Content-type: application/json');
   header('Cache-Control: no-cache');
@@ -280,7 +297,7 @@ function json_headers() {
 function distance_of_time_in_words($from_time,$to_time = 0, $include_seconds = false) {
   $dm = $distance_in_minutes = abs(($from_time - $to_time))/60;
   $ds = $distance_in_seconds = abs(($from_time - $to_time));
-
+  
   switch ($distance_in_minutes) {
     case $dm > 0 && $dm < 1:
     if($include_seconds == false) {
@@ -342,8 +359,66 @@ function distance_of_time_in_words($from_time,$to_time = 0, $include_seconds = f
   }
 }
 
+function not_allowed($reason) {
+  echo "<span class=\"notallowed inputbutton\" title=\"{$reason}\">&#x26A0;</span>";
+}
+
+function cardsetDropMenu($cardsetType, $format, $disabled) {
+  $cardsets = Database::list_result_single_param("SELECT name FROM cardsets WHERE type = ?", "s", $cardsetType);
+
+  $legalsets = array();
+  if (strcmp($cardsetType, "Core") == 0) {$legalsets = $format->getCoreCardsets();}
+  if (strcmp($cardsetType, "Block") == 0) {$legalsets = $format->getBlockCardsets();}
+  if (strcmp($cardsetType, "Extra") == 0) {$legalsets = $format->getExtraCardsets();}
+  
+  if ($disabled) {
+      echo "<select disabled=\"disabled\" class=\"inputbox\" name=\"cardsetname\" STYLE=\"width: 250px\">\n";
+  } else {
+      echo "<select class=\"inputbox\" name=\"cardsetname\" STYLE=\"width: 250px\">\n";      
+  }
+  echo "<option value=\"Unclassified\">- {$cardsetType} Cardset Name -</option>\n";
+  $finalList = array();
+  foreach ($cardsets as $cardsetName) {
+      $notFound = true;
+      foreach ($legalsets as $legalsetName) {
+          if(strcmp($cardsetName, $legalsetName) == 0) {
+              $notFound = false;
+          }
+      }
+      if($notFound) {
+          $finalList[] = $cardsetName;
+      }
+  }
+  foreach ($finalList as $setName) {
+      echo "<option value=\"$setName\">$setName</option>\n";
+  }
+}
+
+function formatsDropMenu($formatType="", $seriesName = "System") {
+  $formatNames = array();
+  
+  if ($formatType == "System")  {$formatNames = Format::getSystemFormats();}
+  if ($formatType == "Public")  {$formatNames = Format::getPublicFormats();}
+  if ($formatType == "Private") {$formatNames = Format::getPrivateFormats($seriesName);}
+  if ($formatType == "All")     {$formatNames = Format::getAllFormats();}
+  
+  echo "<select class=\"inputbox\" name=\"format\" STYLE=\"width: 250px\">\n";
+  echo "<option value=\"Unclassified\">- {$formatType} Format Name -</option>\n";
+  foreach ($formatNames as $formatName) {
+      echo "<option value=\"$formatName\">$formatName</option>\n";
+  }
+}
+
+function stringField($field, $def, $len) {
+  echo "<input class=\"inputbox\" type=\"text\" name=\"$field\" value=\"$def\" size=\"$len\">";
+}
+
 function version_tagline() {
-  print "Gatherling version 2.1.0 (\"The program wasn't designed to alter the past. It was designed to affect the future.\")";
+  print "Gatherling version 4.5.2 (\"People assume that time is a strict progression of cause to effect, but actually — from a non-linear, non-subjective viewpoint — it's more like a big ball of wibbly-wobbly... timey-wimey... stuff.\")";
+  # print "Gatherling version 4.0.0 (\"Call me old fashioned, but, if you really wanted peace, couldn't you just STOP FIGHTING?\")";
+  # print "Gatherling version 3.3.0 (\"Do not offend the Chair Leg of Truth. It is wise and terrible.\")";
+  # print "Gatherling version 2.1.27PK (\"Please give us a simple answer, so that we don't have to think, because if we think, we might find answers that don't fit the way we want the world to be.\")";
+  # print "Gatherling version 2.1.26PK (\"The program wasn't designed to alter the past. It was designed to affect the future.\")";
   # print "Gatherling version 2.0.6 (\"We stole the Statue of Liberty! ...  The small one, from Las Vegas.\")";
   # print "Gatherling version 2.0.5 (\"No, that's perfectly normal paranoia. Everyone in the universe gets that.\")";
   # print "Gatherling version 2.0.4 (\"This is no time to talk about time. We don't have the time!\")";
@@ -362,3 +437,9 @@ function version_tagline() {
   # print "Gatherling version 1.9.1 (\"It's the United States of Don't Touch That Thing Right in Front of You.\")";
   # print "Gatherling version 1.9 (\"It's funny 'cause the squirrel got dead\")";
 }
+
+function redirect($page) {
+  header("Location: {$CONFIG['base_url']}{$page}");
+  exit(0);
+}
+
