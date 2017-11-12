@@ -205,4 +205,11 @@ if ($version < 10) {
   echo "... DB now at version 10! <br />";
 }
 
+if ($version < 11) {
+  echo "Updating to version 11 ('Remember Me' flag)... <br />";  
+  do_query("ALTER TABLE `gatherling`.`players` ADD COLUMN `rememberme` INT NULL AFTER `mtgo_challenge`, ADD COLUMN `ipaddress` INT NULL AFTER `rememberme`;");
+  $db->commit();
+  echo "... DB now at version 11! <br />";
+}
+
 $db->autocommit(TRUE);
