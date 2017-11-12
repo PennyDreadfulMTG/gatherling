@@ -208,9 +208,11 @@ if ($version < 10) {
 }
 
 if ($version < 11) {
-  echo "Updating to version 11 ('Remember Me' flag)... <br />";
+  echo "Updating to version 11 (Reverse-engineered migrations from Dabil's tweaking)... <br />";
   do_query("ALTER TABLE `gatherling`.`players` ADD COLUMN `rememberme` INT NULL AFTER `mtgo_challenge`, ADD COLUMN `ipaddress` INT NULL AFTER `rememberme`, ADD COLUMN `pkmember` INT NULL AFTER `ipaddress`;");
   do_query("ALTER TABLE `gatherling`.`events` ADD COLUMN `pkonly` TINYINT(3) NULL AFTER `prereg_allowed`;");
+  do_query("ALTER TABLE `gatherling`.`series` ADD COLUMN `pkonly_default` TINYINT(1) NULL AFTER `prereg_default`;");
+  do_query("ALTER TABLE `gatherling`.`series_stewards` RENAME TO  `gatherling`.`series_organizers`;");
   do_query("UPDATE db_version SET version = 11");
   $db->commit();
   echo "... DB now at version 11! <br />";

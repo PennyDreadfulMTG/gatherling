@@ -36,7 +36,7 @@ foreach ($active_series as $series_name) {
   <div class="series-stewards">
     Hosted by
     <ul>
-      <?php foreach ($series->stewards as $player) { ?>
+      <?php foreach ($series->organizers as $player) { ?>
         <li><?php echo $player; ?></li>
       <?php } ?>
     </ul>

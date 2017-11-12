@@ -111,7 +111,7 @@ class Series {
       return true; 
     }
     return false; 
-  } 
+  }
 
   function getEvents() { 
     $db = Database::getConnection(); 

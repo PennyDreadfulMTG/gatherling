@@ -211,7 +211,7 @@ function handleActions() {
     if ($series->authCheck(Player::loginName())) { 
       $series->name = $newseries;
       $series->active = $newactive; 
-      $series->start_time = $newtime . ":00:00";
+      $series->start_time = $newtime . ":00";
       $series->start_day = $newday;
       $series->prereg_default = $prereg;
       $series->pkonly_default = $pkonly;

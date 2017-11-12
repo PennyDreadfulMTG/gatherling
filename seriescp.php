@@ -28,7 +28,7 @@ if (!Player::isLoggedIn()) {
 
 function do_page() {
   handleActions();
-  $player_series = Player::getSessionPlayer()->stewardsSeries();
+  $player_series = Player::getSessionPlayer()->organizersSeries();
   if (count($player_series) == 0) {
     printNoSeries();
     return;
@@ -127,7 +127,7 @@ function printStewardsForm($series) {
   echo "<p style=\"width: 75%; text-align: left;\">Series organizers can create new series events, manage any event in the series, and modify anything on this page.  Please add them with care as they could screw with anything related to your series including changing the logo and the time.  Only verified members can be series organizers. <br /> <b>If you just need a guest host, add them as the host to a specific event!</b> </p>";
   echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
   echo "<tr><th style=\"text-align: center;\"> Player </th> <th style=\"width: 50px; text-align: center;\"> Delete </th> </tr>";
-  foreach ($series->stewards as $steward) {
+  foreach ($series->organizers as $steward) {
     echo "<tr> <td style=\"text-align: center;\"> {$steward} </td>";
     echo "<td style=\"text-align: center; width: 50px; \"> <input type=\"checkbox\" value=\"{$steward}\" name=\"delstewards[]\" ";
     if ($steward == Player::loginName()) {
@@ -250,7 +250,7 @@ function handleActions() {
     $series = new Series($seriesname);
     if ($series->authCheck(Player::loginName())) {
       $series->active = $newactive;
-      $series->start_time = $newtime . ":00:00";
+      $series->start_time = $newtime . ":00";
       $series->start_day = $newday;
       $series->save();
     }
@@ -268,7 +268,7 @@ function handleActions() {
     if (isset($_POST['delstewards'])) {
       $removals = $_POST['delstewards'];
       foreach ($removals as $deadsteward) {
-        $series->removeSteward($deadsteward);
+        $series->removeOrganizer($deadsteward);
       }
     }
     if (!isset($_POST['addsteward'])) {
@@ -283,10 +283,10 @@ function handleActions() {
     }
     if ($addplayer->verified == 0 && Player::getSessionPlayer()->super == 0 ) {
       $hasError = true;
-      $errormsg .= "Can't add {$addplayer->name} to stewards, they aren't a verified user!";
+      $errormsg .= "Can't add {$addplayer->name} to Organizers, as they aren't a verified user!";
       return;
     }
-    $series->addSteward($addplayer->name);
+    $series->addOrganizer($addplayer->name);
   } else if ($_POST['action'] == "Update Points Rules") {
     $new_rules = $_POST['new_rules'];
     $series->setSeasonRules($_POST['season'], $new_rules);
