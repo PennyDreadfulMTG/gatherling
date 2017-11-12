@@ -113,6 +113,9 @@ class Player {
   function __construct($name) {
     $database = Database::getConnection();
     $stmt = $database->prepare("SELECT name, password, rememberme, INET_NTOA(ipaddress), host, super, pkmember, mtgo_confirmed FROM players WHERE name = ?");
+    if (!$stmt){
+      die($database->error);
+    }
     $stmt->bind_param("s", $name);
     $stmt->execute();
     $stmt->bind_result($this->name, $this->password, $this->rememberMe, $this->ipAddress, $this->host, $this->super, $this->pkmember, $this->verified);

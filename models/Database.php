@@ -9,6 +9,10 @@ class Database {
       global $CONFIG; 
       $instance = new mysqli($CONFIG['db_hostname'], $CONFIG['db_username'],
                              $CONFIG['db_password'], $CONFIG['db_database']);
+        if (mysqli_connect_errno()) {
+            echo(mysqli_connect_error());
+            die('failed to connect to db');
+        }
     } 
 
     return $instance;

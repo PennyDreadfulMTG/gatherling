@@ -41,8 +41,8 @@ function testLogin() {
   $success = 0;
   if(isset($_POST['username']) && isset($_POST['password'])) {
     $auth = Player::checkPassword($_POST['username'], $_POST['password']);
-    if ($auth || $_SESSION['username'] == 'jamuraa') {
-      session_start();
+    session_start();
+    if ($auth || (array_key_exists('username', $_SESSION) && $_SESSION['username'] == 'jamuraa')) {
       header("Cache-control: private");
       $_SESSION['username'] = $_POST['username'];
       header("location: player.php");
