@@ -12,12 +12,12 @@ session_start();
 # Need to be logged in as admin before you can even try this.
 # Katelyn: I question the validity of the above, and would recommend commenting out the below code.
 
-$some_admin = Player::getSessionPlayer();
+// $some_admin = Player::getSessionPlayer();
 
-if (!$some_admin->isSuper()) {
-  header("Location: index.php");
-  exit(0);
-}
+// if (!$some_admin->isSuper()) {
+//   header("Location: index.php");
+//   exit(0);
+// }
 
 $db = Database::getConnection();
 
@@ -207,7 +207,7 @@ if ($version < 10) {
 
 if ($version < 11) {
   echo "Updating to version 11 ('Remember Me' flag)... <br />";  
-  do_query("ALTER TABLE `gatherling`.`players` ADD COLUMN `rememberme` INT NULL AFTER `mtgo_challenge`, ADD COLUMN `ipaddress` INT NULL AFTER `rememberme`;");
+  do_query("ALTER TABLE `gatherling`.`players` ADD COLUMN `rememberme` INT NULL AFTER `mtgo_challenge`, ADD COLUMN `ipaddress` INT NULL AFTER `rememberme`, ADD COLUMN `pkmember` INT NULL AFTER `ipaddress`;");
   $db->commit();
   echo "... DB now at version 11! <br />";
 }
