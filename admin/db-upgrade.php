@@ -55,7 +55,7 @@ if (isset($_GET['deckupdate'])) {
     }
   }
   echo "Done with deck updates...<br />";
-  exit(0);
+  // exit(0);
 }
 
 # Check for version 0.  (no players table)
@@ -208,6 +208,7 @@ if ($version < 10) {
 if ($version < 11) {
   echo "Updating to version 11 ('Remember Me' flag)... <br />";  
   do_query("ALTER TABLE `gatherling`.`players` ADD COLUMN `rememberme` INT NULL AFTER `mtgo_challenge`, ADD COLUMN `ipaddress` INT NULL AFTER `rememberme`, ADD COLUMN `pkmember` INT NULL AFTER `ipaddress`;");
+  do_query("ALTER TABLE `gatherling`.`events` ADD COLUMN `pkonly` TINYINT(3) NULL AFTER `prereg_allowed`;")
   $db->commit();
   echo "... DB now at version 11! <br />";
 }

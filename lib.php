@@ -30,13 +30,13 @@ function print_header($title, $js = null, $extra_head_content = "") {
   // if player ip address changes could be a hacker breaking in. 
   // Once you implement a remember me cookie, this will also 
   // destroy the remember me cookie if the IP's don't match
-  if (Player::isLoggedIn()) {
-      $player = new Player(Player::loginName());
-      if ($player->getIPAddresss() != Player::getClientIPAddress()) {
-          Player::logOut();
-          redirect("login.php?ipaddresschanged=true");
-      }
-  }
+  // if (Player::isLoggedIn()) {
+  //     $player = new Player(Player::loginName());
+  //     if ($player->getIPAddresss() != Player::getClientIPAddress()) {
+  //         Player::logOut();
+  //         redirect("login.php?ipaddresschanged=true");
+  //     }
+  // }
   
   ini_set('session.gc_maxlifetime',2*60*60); // sets session timer to 2 hours, format is N hr * 60 minutes * 60 seconds
   echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";

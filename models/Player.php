@@ -670,6 +670,9 @@ class Player {
         UNION ALL
         select  playerb as p, playera_losses as losses from matches where playera = ? and playera_losses > 0
         ) AS q GROUP BY q.p ORDER BY losses DESC LIMIT 1");
+    if (!$stmt){
+      die($db->error);
+    }
     $stmt->bind_param("ss", $this->name, $this->name);
     $stmt->execute();
     $stmt->bind_result($rival, $numtimes);
