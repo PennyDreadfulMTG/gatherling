@@ -213,6 +213,37 @@ if ($version < 11) {
   do_query("ALTER TABLE `gatherling`.`events` ADD COLUMN `pkonly` TINYINT(3) NULL AFTER `prereg_allowed`;");
   do_query("ALTER TABLE `gatherling`.`series` ADD COLUMN `pkonly_default` TINYINT(1) NULL AFTER `prereg_default`;");
   do_query("ALTER TABLE `gatherling`.`series_stewards` RENAME TO  `gatherling`.`series_organizers`;");
+  do_query("ALTER TABLE `gatherling`.`events` ADD COLUMN `player_reportable` TINYINT(3) NULL AFTER `pkonly`, ADD COLUMN `prereg_cap` INT NULL AFTER `player_reportable`;")
+  do_query("ALTER TABLE `gatherling`.`formats` 
+  ADD COLUMN `type` VARCHAR(45) NULL AFTER `priority`,
+  ADD COLUMN `series_name` VARCHAR(40) NULL AFTER `type`,
+  ADD COLUMN `singleton` TINYINT(3) NULL AFTER `series_name`,
+  ADD COLUMN `commander` TINYINT(3) NULL AFTER `singleton`,
+  ADD COLUMN `planechase` TINYINT(3) NULL AFTER `commander`,
+  ADD COLUMN `vanguard` TINYINT(3) NULL AFTER `planechase`,
+  ADD COLUMN `prismatic` TINYINT(3) NULL AFTER `vanguard`,
+  ADD COLUMN `allow_commons` TINYINT(3) NULL AFTER `prismatic`,
+  ADD COLUMN `allow_uncommons` TINYINT(3) NULL AFTER `allow_commons`,
+  ADD COLUMN `allow_rares` TINYINT(3) NULL AFTER `allow_uncommons`,
+  ADD COLUMN `allow_mythics` TINYINT(3) NULL AFTER `allow_rares`,
+  ADD COLUMN `allow_timeshifted` TINYINT(3) NULL AFTER `allow_mythics`,
+  ADD COLUMN `min_main_cards_allowed` INT NULL AFTER `allow_timeshifted`,
+  ADD COLUMN `max_main_cards_allowed` INT NULL AFTER `min_main_cards_allowed`,
+  ADD COLUMN `min_side_cards_allowed` INT NULL AFTER `max_main_cards_allowed`,
+  ADD COLUMN `max_side_cards_allowed` INT NULL AFTER `min_side_cards_allowed`;");
+  # This should 100% be done with a JOIN, but it wasn't, and I'm not going to break stuff refactoring yet.
+  do_query("ALTER TABLE `gatherling`.`bans` ADD COLUMN `card_name` VARCHAR(40) NULL AFTER `allowed`;");
+  do_query("CREATE TABLE `restricted` (
+    `card` bigint(20) unsigned NOT NULL,
+    `format` varchar(40) NOT NULL,
+    `allowed` tinyint(3) unsigned NOT NULL DEFAULT '0',
+    `card_name` varchar(40) DEFAULT NULL,
+    PRIMARY KEY (`card`,`format`),
+    KEY `format` (`format`),
+    FOREIGN KEY (`card`) REFERENCES `cards` (`id`) ON UPDATE CASCADE,
+    FOREIGN KEY (`format`) REFERENCES `formats` (`name`) ON UPDATE CASCADE
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+  
   do_query("UPDATE db_version SET version = 11");
   $db->commit();
   echo "... DB now at version 11! <br />";

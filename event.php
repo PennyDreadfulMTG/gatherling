@@ -418,7 +418,7 @@ function eventForm($event = NULL, $forcenew = false) {
         $minutes = strftime('M', time());
     }
     echo "<tr><th>Date & Time</th><td>";
-    numDropMenu("year", "- Year -", 2013, $year, 2011);
+    numDropMenu("year", "- Year -", 2020, $year, 2011);
     monthDropMenu($month);
     numDropMenu("day", "- Day- ", 31, $day, 1);
     timeDropMenu($hour, $minutes);

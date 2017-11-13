@@ -157,7 +157,7 @@ class Database {
       return true;
   }
 
-  function db_query_single() {
+  static public function db_query_single() {
       $params = func_get_args();      
       $query = array_shift($params);
       $paramspec = array_shift($params);
