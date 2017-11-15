@@ -1060,7 +1060,7 @@ function updateEvent() {
   if(!isset($_POST['prereg_cap']))        {$_POST['prereg_cap'] = 0;}
   
   $event = new Event($_POST['name']);
-  $event->start = "{$_POST['year']}-{$_POST['month']}-{$_POST['day']} {$_POST['hour']}:00:00";
+  $event->start = "{$_POST['year']}-{$_POST['month']}-{$_POST['day']} {$_POST['hour']}:00";
   $event->finalized = $_POST['finalized'];
   $event->active = $_POST['active'];
   $event->current_round = $_POST['newmatchround'];
