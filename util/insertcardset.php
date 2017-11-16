@@ -58,16 +58,21 @@ if (!$set_already_in) {
   }
   $stmt->close();
 }
+else
+{
+  $stmt = $database->prepare("DELETE FROM gatherling.cards WHERE `cardset` = ?;");
+  $stmt->bind_param("s", $set);
+  $stmt->execute() or die($stmt->errorCode());
+  $stmt->close();  
+}
 
 $stmt = $database->prepare("INSERT INTO cards(cost, convertedcost, name, cardset, type,
   isw, isu, isb, isr, isg, isp, rarity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
 foreach ($data->cards as $card) {
   $cardsparsed++;
-  if ($card->rarity === "Common") {
-    insertCard($card, $set, $card->rarity, $stmt);
-    $cardsinserted++;
-  }
+  insertCard($card, $set, $card->rarity, $stmt);
+  $cardsinserted++;
 }
 
 echo "End of File Reached<br />";

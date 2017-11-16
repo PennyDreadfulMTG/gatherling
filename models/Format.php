@@ -430,7 +430,8 @@ class Format {
         foreach($cardRarities as $rarity) {
             switch($rarity) {
                 case "Land":
-                   $isLegal = true;
+                case "Basic Land":
+                    $isLegal = true;
                     break;
                 case "Common":
                     if($this->allow_commons == 1){$isLegal = true;}  
@@ -449,7 +450,10 @@ class Format {
                     break;
                 case "Special":
                     if($this->vanguard == 1) {$isLegal = true;}
-                    break;                  
+                    break;
+                default:
+                    die("Unexpected rarity {$rarity}!");
+                    break;
             }
         }
         return $isLegal;
