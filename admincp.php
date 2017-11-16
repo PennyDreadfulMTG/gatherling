@@ -140,24 +140,13 @@ function printCalcRatingsForm() {
 }
 
 function printAddCardSet() {
-    echo "<form action=\"admincp.php\" method=\"post\" enctype=\"multipart/form-data\">";
-    echo "<input type=\"hidden\" name=\"view\" value=\"no_view\" />";
-    echo "<h3><center>Install New Cardset</center></h3>";
-    echo "<table class=\"form\" style=\"border-width: 0px\" align=\"center\">";
-    echo "<tr><th>Cardset Name</th>";
-    echo "<td><input class=\"inputbox\" type=\"text\" name=\"cardsetname\" />";
-    echo "</td></tr>";
-    echo "<tr><th>Release Date</th>";
-    echo "<td><input class=\"inputbox\" type=\"text\" name=\"releasedate\" />";
-    echo "</td></tr>";
-    echo "<tr><th>Set Type</th>";
-    echo "<td>";
-    dropMenu("settype", array("Core", "Block", "Extra"));
-    echo "</td> </tr>";
-    echo "<tr><th>Cardset Text Spoiler</th>";
-    echo "<td><input class=\"inputbox\" type=\"file\" name=\"cardsetfile\" /> ";
-    echo "<input class=\"inputbutton\" type=\"submit\" name=\"action\" value=\"Install New Cardset\" /></td></tr>";
-    echo "</table></form>";
+  echo "<form action=\"util/insertcardset.php\" method=\"post\" enctype=\"multipart/form-data\">";
+  echo "<h3><center>Install New Cardset</center></h3>";
+  echo "<table class=\"form\" style=\"border-width: 0px\" align=\"center\">";
+  print_select_input("Set Type", "settype", array("Core" => "Core", "Block" => "Block", "Extra" => "Extra"));
+  print_file_input("Cardset JSON", "cardsetfile");
+  print_submit("Install New Cardset");
+  echo "</table></form>";
 }
 
 function printChangePasswordForm() {
