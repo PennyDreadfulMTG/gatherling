@@ -42,7 +42,9 @@ function testLogin() {
   if(isset($_POST['username']) && isset($_POST['password'])) {
     $auth = Player::checkPassword($_POST['username'], $_POST['password']);
     session_start();
-    if ($auth || (array_key_exists('username', $_SESSION) && $_SESSION['username'] == 'jamuraa')) {
+    // The commented code below allows Jamuraa to su into any user without a password.  
+    // This should be refactored to work for any admin, or be removed alltogether.
+    if ($auth /* || (array_key_exists('username', $_SESSION) && $_SESSION['username'] == 'jamuraa') */) {
       header("Cache-control: private");
       $_SESSION['username'] = $_POST['username'];
       header("location: player.php");

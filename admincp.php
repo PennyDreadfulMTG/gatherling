@@ -52,7 +52,7 @@ function do_page() {
       } else {
           Format::formatEditor("admincp.php");
       }
-  } elseif(($view == "add_cardset") && (Player::loginName() == 'Dabil')) {
+  } elseif(($view == "add_cardset")) {
       printAddCardSet();
   } elseif ($view == "calc_ratings") {
       printCalcRatingsForm();
@@ -85,7 +85,7 @@ function adminCPMenu() {
   echo " | <a href=\"admincp.php?view=create_series\">Create New Series</a>";
   echo " | <a href=\"admincp.php?view=format_editor\">Format Editor</a>";
   echo " | <a href=\"admincp.php?view=calc_ratings\">Ratings</a>";
-  if (Player::loginName() == 'Dabil') {echo " | <a href=\"admincp.php?view=add_cardset\">Add New Cardset</a>";}
+  echo " | <a href=\"admincp.php?view=add_cardset\">Add New Cardset</a>";
   echo "</td></tr></table>";
 }
 
@@ -181,7 +181,7 @@ function handleActions() {
     $player = new Player($_POST['username']);
     $player->setPassword($_POST['new_password']);
     $result = "Password changed for user {$player->name} to {$_POST['new_password']}";
-  } else if (($_POST['action'] == "Install New Cardset") && ($_SESSION['username'] == 'Dabil')) {
+  } else if ($_POST['action'] == "Install New Cardset") {
       $set = $_POST['cardsetname'];
       $settype = $_POST['settype'];
       $releasedate = $_POST['releasedate'];
