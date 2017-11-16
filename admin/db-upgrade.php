@@ -208,15 +208,91 @@ if ($version < 10) {
 }
 
 if ($version < 11) {
-  echo "Updating to version 11 (Reverse-engineered migrations from Dabil's tweaking)... <br />";
+  // Match Pairing Updates
+  // Reconstructed from schemas.
+  echo "Updating to version 11 (add pairing system stuff, cards)... <br />";
+  do_query("ALTER TABLE cards ADD COLUMN (isp TINYINT(1) DEFAULT '0')");
+  do_query("ALTER TABLE cards ADD COLUMN (rarity VARCHAR(40) DEFAULT NULL)");
+
+  do_query("ALTER TABLE events ADD COLUMN (active TINYINT(1) DEFAULT '0')");
+  do_query("ALTER TABLE events ADD COLUMN (current_round TINYINT(3) NOT NULL)");
+  do_query("ALTER TABLE events ADD COLUMN (player_reportable TINYINT(1) NOT NULL DEFAULT '0')");
+
+  do_query("ALTER TABLE matches ADD COLUMN (playera_wins INT(11) NOT NULL DEFAULT '0')");
+  do_query("ALTER TABLE matches ADD COLUMN (playera_losses INT(11) NOT NULL DEFAULT '0')");
+  do_query("ALTER TABLE matches ADD COLUMN (playera_draws INT(11) NOT NULL DEFAULT '0')");
+  do_query("ALTER TABLE matches ADD COLUMN (playerb_wins INT(11) NOT NULL DEFAULT '0')");
+  do_query("ALTER TABLE matches ADD COLUMN (playerb_losses INT(11) NOT NULL DEFAULT '0')");
+  do_query("ALTER TABLE matches ADD COLUMN (playerb_draws INT(11) NOT NULL DEFAULT '0')");
+  do_query("ALTER TABLE matches ADD COLUMN (verification varchar(40) NOT NULL DEFAULT 'unverified')");
+  // Automatically verify all the ones that are in here already
+  do_query("UPDATE matches SET verification = 'verified'");
+
+  do_query(<<<EOS
+CREATE TABLE IF NOT EXISTS `standings` (
+  `player` varchar(40) DEFAULT NULL,
+  `event` varchar(40) DEFAULT NULL,
+  `active` tinyint(3) DEFAULT '0',
+  `matches_played` tinyint(3) DEFAULT '0',
+  `games_won` tinyint(3) DEFAULT '0',
+  `games_played` tinyint(3) DEFAULT '0',
+  `byes` tinyint(3) DEFAULT '0',
+  `OP_Match` decimal(3,3) DEFAULT '0.000',
+  `PL_Game` decimal(3,3) DEFAULT '0.000',
+  `OP_Game` decimal(3,3) DEFAULT '0.000',
+  `score` tinyint(3) DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `seed` tinyint(3) NOT NULL,
+  `matched` tinyint(1) NOT NULL,
+  `matches_won` tinyint(3) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `player` (`player`),
+  KEY `event` (`event`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=266 ;
+EOS
+);
+
+  do_query("UPDATE db_version SET version = 11");
+  $db->commit();
+  echo "... DB now at version 11! <br />";
+}
+
+if ($version < 12) {
+  // Fixes to the pairing updates
+  echo "Updating to version 12 (final changes for the pairing)... <br />";
+  do_query("ALTER TABLE matches MODIFY COLUMN result VARCHAR(5) not null");
+  do_query("UPDATE db_version SET version = 12");
+
+  $db->commit();
+  echo "... DB now at version 12! <br />";
+}
+
+if ($version < 13) {
+  echo "Updating to version 13 (add players_editdecks to events)... <br />";
+  do_query("ALTER TABLE events ADD COLUMN player_editdecks TINYINT(1) NOT NULL DEFAULT '1'");
+  do_query("UPDATE events SET player_editdecks = (finalized != 1)");
+
+  do_query("UPDATE db_version SET version = 13");
+  $db->commit();
+  echo "... DB now at version 13! <br />";
+}
+
+if ($version < 14) {
+  echo "Updating to version 14 (add drop_round to entries)... <br />";
+  do_query("ALTER TABLE entries ADD COLUMN drop_round INTEGER");
+
+  do_query("UPDATE db_version SET version = 14");
+  $db->commit();
+  echo "... DB now at version 14! <br />";
+}
+
+if ($version < 15) {
+  echo "Updating to version 15 (Reverse-engineered migrations from Dabil's tweaking)... <br />";
   do_query("ALTER TABLE `gatherling`.`players` ADD COLUMN `rememberme` INT NULL AFTER `mtgo_challenge`, ADD COLUMN `ipaddress` INT NULL AFTER `rememberme`, ADD COLUMN `pkmember` INT NULL AFTER `ipaddress`;");
   do_query("ALTER TABLE `gatherling`.`events` 
-            ADD COLUMN `pkonly` TINYINT(3) NULL AFTER `prereg_allowed`,
-            ADD COLUMN `active` TINYINT(3) NULL AFTER `pkonly`,
-            ADD COLUMN `current_round` INT NULL AFTER `active`;");
+            ADD COLUMN `pkonly` TINYINT(3) NULL AFTER `prereg_allowed`;");
   do_query("ALTER TABLE `gatherling`.`series` ADD COLUMN `pkonly_default` TINYINT(1) NULL AFTER `prereg_default`;");
   do_query("ALTER TABLE `gatherling`.`series_stewards` RENAME TO  `gatherling`.`series_organizers`;");
-  do_query("ALTER TABLE `gatherling`.`events` ADD COLUMN `player_reportable` TINYINT(3) NULL AFTER `pkonly`, ADD COLUMN `prereg_cap` INT NULL AFTER `player_reportable`;")
   do_query("ALTER TABLE `gatherling`.`formats` 
     ADD COLUMN `type` VARCHAR(45) NULL AFTER `priority`,
     ADD COLUMN `series_name` VARCHAR(40) NULL AFTER `type`,
@@ -246,11 +322,14 @@ if ($version < 11) {
     FOREIGN KEY (`card`) REFERENCES `cards` (`id`) ON UPDATE CASCADE,
     FOREIGN KEY (`format`) REFERENCES `formats` (`name`) ON UPDATE CASCADE
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
-  do_query("ALTER TABLE `gatherling`.`entries` 
-    ADD COLUMN `drop_round` INT NULL AFTER `registered_at`;")
-  do_query("UPDATE db_version SET version = 11");
+  do_query("CREATE TABLE `gatherling`.`deckerrors` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `deck` BIGINT(20) NOT NULL,
+    `error` TEXT NOT NULL,
+    PRIMARY KEY (`id`));");
+  do_query("UPDATE db_version SET version = 15");
   $db->commit();
-  echo "... DB now at version 11! <br />";
+  echo "... DB now at version 15! <br />";
 }
 
 $db->autocommit(TRUE);
