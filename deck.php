@@ -300,6 +300,7 @@ function parseCards($text) {
       $card = preg_replace("/Æ/", "AE", $card);
       $card = preg_replace("/\306/", "AE", $card);
       $card = preg_replace("/ö/", "o", $card);
+      $card = preg_replace("/ \/\/ /", "/", $card);
       $card = strtolower($card);
       if(isset($cardarr[$card])) {
         $cardarr[$card] += $qty;
