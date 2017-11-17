@@ -15,7 +15,18 @@ if ($file == FALSE) {
 $data = json_decode($file);
 
 $set = $data->name;
-$settype = $_POST['settype'];
+$settype = $data->type;
+switch ($settype) {
+  case 'core':
+    $settype = 'Core';
+    break;
+  case 'expansion':
+    $settype = 'Block';
+    break;
+  default:
+    $settype = 'Extra';
+    break;
+}
 $releasedate = $data->releaseDate;
 
 //$set = "Put cardset name here";
