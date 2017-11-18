@@ -53,7 +53,7 @@ class Standings
             $this->OP_Match = 0;
             $this->PL_Game = 0;
             $this->OP_Game = 0;
-            $this->seed = 999;
+            $this->seed = 127;
             $this->matched = 0;
             $this->draws = 0;
 

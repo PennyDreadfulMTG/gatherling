@@ -327,6 +327,9 @@ if ($version < 15) {
     `deck` BIGINT(20) NOT NULL,
     `error` TEXT NOT NULL,
     PRIMARY KEY (`id`));");
+  do_query("ALTER TABLE `gatherling`.`standings` ADD COLUMN `draws` TINYINT(3) NULL DEFAULT '0' AFTER `matches_won`;");
+  do_query("ALTER TABLE `gatherling`.`ratings` 
+  ADD COLUMN `event` VARCHAR(80) NULL AFTER `losses`;");
   do_query("UPDATE db_version SET version = 15");
   $db->commit();
   echo "... DB now at version 15! <br />";
