@@ -73,12 +73,12 @@ EOT;
         </div>      
         <div id="mainmenu_submenu" class="grid_12 menubar">
         <ul>
-          <li><span class=\"inputbutton\"><a href="./gatherling.php">Home</a></span></li>
-          <li><a href="http://pauperkrew.com/">Forums</a></li>
+          <li><span class=\"inputbutton\"><a href="./index.php">Home</a></span></li>
+          <li><a href="https://discord.gg/H6EHdHu">Discord</a></li>
           <li><a href="./series.php">Events</a></li>
           <li><a href="./index.php">Gatherling</a></li>
           <li><a href="./ratings.php">Ratings</a></li>
-          <li><a href="http://www.wizards.com/Magic/Digital/MagicOnline.aspx?x=mtg/digital/magiconline/whatshappening">MTGO News</a></li>
+          <li><a href="https://pennydreadfulmagic.com/bugs/">Known Bugs</a></li>
         </ul>
       </div>
 EOT;

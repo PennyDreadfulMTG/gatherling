@@ -12,7 +12,7 @@ print_header("Event Information");
 
 <div class="grid_10 suffix_1 prefix_1">
 <div id="gatherling_main" class="box">
-<div class="uppertitle"> Regular Pauper Player-Run Events </div>
+<div class="uppertitle"> Series Events </div>
 
 <?php
 $active_series = Series::activeNames();
@@ -43,7 +43,7 @@ foreach ($active_series as $series_name) {
   </div>
   <div class="series-info">
     <table>
-    <tr> <th> Format </th> <td> <a href="<?php echo $formatforums[$series->this_season_format]; ?>">Pauper <?php echo $series->this_season_format ?></a> </td> </tr>
+    <tr> <th> Format </th> <td> <a href="<?php echo $formatforums[$series->this_season_format]; ?>"><?php echo $series->this_season_format ?></a> </td> </tr>
     <tr> <th> Regular Time </th> <td> <?php echo $series->start_day ?>, <?php echo strftime("%I:%M %P", strtotime($series->start_time)) ?> Eastern Time </td> </tr>
     <tr> <th> Rules </th> <td> <a href="<?php echo $series->this_season_master_link ?>">Season <?php echo $series->this_season_season ?> Master Document</a> </td> </tr>
     <tr> <th> Most Recent Event </th> <td> <?php echo $series->mostRecentEvent()->linkReport() ?> </td> </tr>

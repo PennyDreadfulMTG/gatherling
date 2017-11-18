@@ -71,84 +71,72 @@ class Match {
     return new Event($eventname);
   } 
 
+  private function playerA($name) {
+    return strcasecmp($this->playera, $name) == 0;
+  }
+
+  private function playerB($name) {
+    return strcasecmp($this->playerb, $name) == 0;
+  }
+
   private function toName($player_or_name) {
     if (is_object($player_or_name)) {
       return $player_or_name->name;
     }
     return $player_or_name;
   }
-  
-function playerBye($player) {
-    $playername = $player; 
 
-    if (is_object($player)) {
-        $playername = $player->name;
+function playerLetter($player) {
+    if ($this->playerA($player)) {
+        return 'a';
+        } else {
+        return 'b';
+        }
     }
 
-    if ((strcasecmp ($this->playera, $playername) == 0) && ($this->result == 'BYE')) {
-        return true;
+  // Returns true if $player has a bye in this match
+  function playerBye($player) {
+    if ($this->result != 'BYE') {
+      return false;
     }
+    $playername = $this->toName($player);
 
-    if ((strcasecmp ($this->playerb, $playername) == 0) && ($this->result == 'BYE')) {
-        return true;
-    }
+    return $this->playerA($playername) || $this->playerB($playername);
+  }
 
-    return false;
-}  
-
+  // Returns true if $player is playing this match right now.
 function playerMatchInProgress($player) {
-    $playername = $player;
-
-    if (is_object($player)) {
-        $playername = $player->name;
-    }
-
-    if ((strcasecmp ($this->playera, $playername) == 0) && ($this->result == 'P')) {
-        return true;
-    }
-
-    if ((strcasecmp ($this->playerb, $playername) == 0) && ($this->result == 'P')) {
-        return true;
-    }
-
-    return false;
-}  
+    if ($this->result != 'P') {
+        return false;
+      }
+      $playername = $this->toName($player);
+  
+      return $this->playerA($playername) || $this->playerB($playername);
+  }
 
   function playerWon($player) { 
-    $playername = $player;
- 
-    if (is_object($player)) { 
-      $playername = $player->name;
-    }  
-
-    if ((strcasecmp($this->playera, $playername) == 0) && ($this->result == 'A')) { 
-      return true; 
-    } 
-
-    if ((strcasecmp($this->playerb, $playername) == 0) && ($this->result == 'B')) {
-      return true;
-    }
-
-    return false;
+    $playername = $this->toName($player);
+    
+        return (($this->playerA($playername) && ($this->result == 'A'))
+             || ($this->playerB($playername) && ($this->result == 'B')));    
   } 
 
-  function playerLost($player) { 
-    $playername = $player;
+  function playerLost($player) {
+    $playername = $this->toName($player);
 
-    if (is_object($player)) { 
-      $playername = $player->name;
-    }  
+    return (($this->playerA($playername) && ($this->result == 'B'))
+         || ($this->playerB($playername) && ($this->result == 'A')));
+  }
 
-    if ((strcasecmp($this->playerb, $playername) == 0) && ($this->result == 'A')) { 
-      return true; 
-    } 
+  // returns the number of wins for the current match for $player
+  // returns false if the player is not in this match.
+  function getPlayerWins($player) {
+    $playername = $this->toName($player);
 
-    if ((strcasecmp($this->playera, $playername) == 0) && ($this->result == 'B')) {
-      return true;
-    }
-
+    if ($this->playerA($playername)) { return $this->playera_wins; }
+    if ($this->playerB($playername)) { return $this->playerb_wins; }
     return false;
-  } 
+  }
   
   function playerDropped($player) {
     $playername = $this->toName($player);
@@ -156,45 +144,15 @@ function playerMatchInProgress($player) {
     return ($entry->drop_round == $this->round);
   }  
 
-  function getPlayerWins($player) { 
-    // returns the named player wins for the current match. Doesn't matter if he is player A or B
-    $playername = $player;
-
-    if (is_object($player)) { 
-      $playername = $player->name;
-    }  
-
-    if (strcasecmp($this->playera, $playername) == 0) { 
-      return $this->playera_wins;
-    } 
-
-    if (strcasecmp($this->playerb, $playername) == 0) {
-      return $this->playerb_wins;
-    }
-
-    return false;
-  } 
-
   // returns the number of wins for the current match for $player
   // Returns false if the player is not in this match.
-  function getPlayerLosses($player) { 
-  // returns the player losses for the current match. Doesn't matter if player is player A or B
-    $playername = $player;
+  function getPlayerLosses($player) {
+    $playername = $this->toName($player);
 
-    if (is_object($player)) { 
-      $playername = $player->name;
-    }  
-
-    if (strcasecmp($this->playera, $playername) == 0) { 
-      return $this->playera_losses; 
-    } 
-
-    if (strcasecmp($this->playerb, $playername) == 0) {
-      return $this->playerb_losses;
-    }
-
+    if ($this->playerA($playername)) { return $this->playera_losses; }
+    if ($this->playerB($playername)) { return $this->playerb_losses; }
     return false;
-  } 
+  }
 
   function getWinner() { 
     
@@ -240,15 +198,8 @@ function matchInProgress() {
 }
 
   function getLoser() { 
-
-    if ($this->playerLost($this->playera)) { 
-      return $this->playera; 
-    } 
-
-    if ($this->playerLost($this->playerb)) { 
-      return $this->playerb;
-    } 
-
+    if ($this->playerLost($this->playera)) { return $this->playera; }
+    if ($this->playerLost($this->playerb)) { return $this->playerb; }
     return NULL; 
   } 
 
@@ -317,6 +268,12 @@ function matchInProgress() {
         return NULL;       
         }
     }
+    
+    public function reportSubmitted($name) {
+        if ($this->playerA($name) && (($this->playera_wins + $this->playera_losses) > 0)) { return true; }
+        if ($this->playerB($name) && (($this->playerb_wins + $this->playerb_losses) > 0)) { return true; }
+        return false;
+      }
 
     // Checks both reports against each other to see if they match.
     // Marks ones where they don't match as 'failed'
@@ -529,4 +486,9 @@ function matchInProgress() {
     public function isDraw() {
         return ($this->playera_wins == $this->playerb_wins);
     }
+
+    public function isReportable() {
+        $event = $this->getEvent();
+        return ($event->player_reportable == 1);
+      }
 }

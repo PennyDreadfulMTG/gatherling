@@ -43,6 +43,13 @@ if ($player == NULL) {
       } else {
         $result = "Your challenge is wrong.  Get a new one by sending the message 'ua pdcmagic' to infobot on MTGO!";
       }
+    } else if ($_POST['action'] == 'finalize_result') {
+      // write results to matches table
+      Match::saveReport($_POST['report'], $_POST['match_id'], $_POST['player']);
+    } else if ($_POST['action'] == 'drop') {
+      // drop player from event
+      $event = new Event($_POST['event']);
+      $event->dropPlayer($player->name);
     }
   }
   // Handle modes
@@ -53,14 +60,15 @@ if ($player == NULL) {
   if (isset($_POST['mode'])) {
     $dispmode = $_POST['mode'];
   }
+  //* redo this later as switch rather than elseifs, for now just kludge on
   if ($dispmode == 'alldecks') {
     print_allContainer();
   } elseif ($dispmode == 'allratings') {
     if(!isset($_GET['format'])) {$_GET['format'] = "Composite";}
-    print_ratingsTable($_SESSION['username']);
-    echo "<br><br>";
+    print_ratingsTable(Player::loginName());
+    echo "<br /><br />";
     print_ratingHistoryForm($_GET['format']);
-    echo "<br>";
+    echo "<br />";
     print_ratingsHistory($_GET['format']);
   } elseif ($dispmode == 'allmatches') {
     print_allMatchForm($player);
@@ -70,8 +78,17 @@ if ($player == NULL) {
     print_matchTable($player);
   } elseif ($dispmode == 'changepass') {
     print_changePassForm($player, $result);
+  } elseif ($dispmode == 'submit_result') {
+    print_submit_resultForm($_GET['player'], $_GET['match_id']);
+  } elseif ($dispmode == 'verify_result') {
+    print_verify_resultForm($_POST['report'], $_POST['match_id'],$_POST['player']);
+  } elseif ($dispmode == 'standings') {
+    Standings::printEventStandings($_GET['event'],Player::loginName());
   } elseif ($dispmode == 'verifymtgo') {
     print_verifyMtgoForm($player, $result);
+    // print_manualverifyMtgoForm();
+  } elseif ($dispmode == 'drop_form') {
+    print_dropConfirm($_GET['event'], $player);
   } else {
     print_mainPlayerCP($player);
   }
@@ -83,6 +100,104 @@ if ($player == NULL) {
 <?php print_footer(); ?>
 
 <?php
+//Drop confirmation form
+
+//"player.php?action=drop&event={$event->name}
+function print_dropConfirm($event_name, $player) {
+  echo <<<EOD
+<center><h3>Drop Form</h3>
+<center style="color: red; font-weight: bold;">
+Are you sure you want to drop? This cannot be undone. </center>
+Please be sure to submit a result for any active matches before you drop.\n
+<table class="form">
+<tr><th>
+<td>
+<form action="player.php" method="post">
+  <input name="action" type="hidden" value="drop" />
+  <input name="event" type="hidden" value="{$event_name}" />
+  <input name="player" type="hidden" value="{$player->name}" />
+  <input name="submit" type="submit" value="Drop from Event" />
+</form>
+  <form action="player.php" method="get">
+    <input name="submit" type="submit" value="Cancel" />
+  </form>
+  </td> </tr>
+  <tr> <td colspan="2" class="buttons">
+  </td> </tr> </table>
+EOD;
+}
+
+//* form to report results
+//{$player->name}
+function print_submit_resultForm($player, $match_id) {
+  echo "<center><h3>Report Game Results</h3>
+  Enter results for this match</center>\n";
+  echo "<center style=\"color: red; font-weight: bold;\">****</center>\n";
+  echo "<form action=\"player.php\" method=\"post\">\n";
+  echo "<input name=\"mode\" type=\"hidden\" value=\"verify_result\" />\n";
+  echo "<input name=\"match_id\" type=\"hidden\" value=\"{$match_id}\" />\n";
+  echo "<input name=\"player\" type=\"hidden\" value=\"{$player}\" />\n";
+  echo "<table class=\"form\">";
+  echo "<tr><th><input type='radio' name='report' value='W20' /> I won the match 2-0<br /></th>\n";
+  echo "<td></td> </tr>\n";
+  echo "<tr><th><input type='radio' name='report' value='W21' />I won the match 2-1</th>\n";
+  echo "<td></td> </tr>\n";
+  echo "<tr><th><input type='radio' name='report' value='L20' />I lost the match 0-2</th>\n";
+  echo "<td> </td> </tr>\n";
+  echo "<tr><th><input type='radio' name='report' value='L21' />I lost the match 1-2</th>\n";
+  echo "<td> </td> </tr>\n";
+  echo "<tr> <td colspan=\"2\" class=\"buttons\">\n";
+  echo "<input name=\"submit\" type=\"submit\" value=\"Submit Match Report\" />\n";
+  echo "</td> </tr> </table> \n";
+  echo "</form>\n";
+  echo "<div class=\"clear\"> </div>\n";
+}
+
+//* form to confirm submission
+function print_verify_resultForm($report, $match_id, $player) {
+  echo "<center><h3><br>Confirm Game Results</p></h3> </center>\n";
+  echo "<center style=\"color: red; font-weight: bold;\">Please confirm your entry.</center></p>\n";
+  echo "<center><h4>";
+  switch ($report){
+    case "W20":
+      echo "I won the match 2-0";
+      break;
+    case "W21":
+      echo "I won the match 2-1";
+      break;
+    case "L20":
+      echo "I lost the match 0-2";
+      break;
+    case "L21":
+      echo "I lost the match 1-2";
+      break;
+  }
+  echo "</center></h4></p>";
+  echo "<center style=\"color: red; font-weight: bold;\">*</center>\n";
+
+  echo "<table class=\"form\">";
+  echo "<tr><th>";
+  echo "<form action=\"player.php\" method=\"post\">\n";
+  echo "<input name=\"action\" type=\"hidden\" value=\"finalize_result\" />\n";
+  echo "<input name=\"match_id\" type=\"hidden\" value=\"{$match_id}\" />\n";
+  echo "<input name=\"report\" type=\"hidden\" value=\"{$report}\" />\n";
+  echo "<input name=\"player\" type=\"hidden\" value=\"{$player}\" />\n";
+  echo "<input name=\"submit\" type=\"submit\" value=\"Verify Match Report\" />\n";
+  echo "</form>\n";
+  echo "</th>\n";
+  echo "<td> ";
+  echo "<form action=\"player.php\" method=\"get\">\n";
+  echo "<input name=\"match_id\" type=\"hidden\" value=\"{$match_id}\" />\n";
+  echo "<input name=\"mode\" type=\"hidden\" value=\"submit_result\" />\n";
+  echo "<input name=\"submit\" type=\"submit\" value=\"Go Back and Correct\" />\n";
+  echo "</form>\n";
+  echo "</td> </tr> \n";
+  echo "<tr> <td colspan=\"2\" class=\"buttons\">\n";
+
+  echo "</td> </tr> </table> \n";
+  echo "</form>\n";
+  echo "<div class=\"clear\"> </div>\n";
+}
 
 function print_changePassForm($player, $result) {
   echo "<center><h3>Changing your password</h3>
@@ -145,13 +260,15 @@ function setPlayerIgnores() {
 }
 
 function print_mainPlayerCP($player) {
-  $upper = strtoupper($_SESSION['username']);
+  $upper = strtoupper(Player::loginName());
   echo "<div class=\"alpha grid_5\">\n";
   echo "<div id=\"gatherling_lefthalf\">\n";
   print_conditionalAllDecks();
   print_recentDeckTable();
   print_preRegistration();
+  print_ActiveEvents();  //* new
   print_recentMatchTable();
+  print_currentMatchTable();  //* new
   echo "</div></div>\n";
   echo "<div class=\"omega grid_5\">\n";
   echo "<div id=\"gatherling_righthalf\">\n";
@@ -234,9 +351,29 @@ function print_preRegistration() {
     echo "<tr><td>{$event->name}</td>";
     echo "<td>" . distance_of_time_in_words(time(), strtotime($event->start)) . "</td>";
     if ($event->hasRegistrant($player->name)) {
-      echo "<td>Registered <a href=\"prereg.php?action=unreg&event={$event->name}\">(Unreg)</a></td>";
+      echo "<td>Registered <a href=\"prereg.php?action=unreg&event=" . urlencode($event->name) . "\">(Unreg)</a></td>";
     } else {
-      echo "<td><a href=\"prereg.php?action=reg&event={$event->name}\">Register</a></td>";
+      echo "<td><a href=\"prereg.php?action=reg&event=" . urlencode($event->name) . "\">Register</a></td>";
+    }
+    echo "</tr>";
+  }
+  echo "</table>";
+}
+
+//* Modified above function to display active events and a link to current standings
+// Undecided about showing all active events, or only those the player is enrolled in.
+function print_ActiveEvents() {
+  global $player;
+  $events = Event::getActiveEvents();
+  echo "<table><tr><td colspan=\"3\"><b>ACTIVE EVENTS</b></td></tr>";
+  if (count($events) == 0) {
+    echo "<tr><td colspan=\"3\"> No events are currently active. </td> </tr>";
+  }
+  foreach ($events as $event) {
+    echo "<tr><td>{$event->name}</td>";
+    echo "<td><a href=\"player.php?mode=standings&event=" . urlencode($event->name) . "\">Current Standings</a></td>";
+    if ($event->hasActivePlayer($player->name)){
+      echo "<td><a href=\"player.php?mode=drop_form&event=" . urlencode($event->name) . "\">Drop From Event</a></td>";
     }
     echo "</tr>";
   }
@@ -306,23 +443,64 @@ function print_recentMatchTable() {
   echo "<tr><td colspan=3><b>RECENT MATCHES</td><td align=\"right\">\n";
   echo "<a href=\"player.php?mode=allmatches\">(see all)</a></td></tr>\n";
   foreach ($matches as $match) {
-    $res = "D"; $color = "#FF9900";
-    if ($match->playerWon($player->name)) {
-      $res = "W";
-      $color = "#009900";
-    }
-    if ($match->playerLost($player->name)) {
-      $res = "L";
-      $color = "#FF0000";
-    }
-    $opp = $match->playera;
-    if (strcasecmp($player->name, $opp) == 0) {
-      $opp = $match->playerb;
-    }
-    echo "<tr><td><b><font color=\"$color\">$res</font></b></td>\n";
+    $res = $match->getPlayerResult($player->name);
+    $opp = $match->otherPlayer($player->name);
+    $event = $match->getEvent();
+    echo "<tr>";
+    echo "<td>{$event->name} Round: {$event->current_round} </td>";
+    echo "<td><b>$res {$match->getPlayerWins($player->name)} - {$match->getPlayerLosses($player->name)}</b></td>";
     echo "<td>vs.</td>\n";
     $oppplayer = new Player($opp);
     echo "<td>" . $oppplayer->linkTo() . "</td></tr>\n";
+  }
+  echo "</table>\n";
+}
+//copied above function and altered to show matches in progress
+function print_currentMatchTable() {
+  global $player;
+
+  $matches = $player->getCurrentMatches();
+
+  echo "<table style=\"border-width: 0px\" width=300>\n";
+  echo "<tr><td colspan=\"4\"><b>ACTIVE MATCHES</td><td align=\"right\">\n";
+  echo "</td></tr>\n";
+  foreach ($matches as $match) {
+    $event = $match->getEvent();
+    $opp = $match->otherPlayer($player->name);
+
+    if ($match->result != "BYE") {
+      $oppplayer = new Player($opp);
+      $player_number = $match->playerLetter($player->name);
+      echo "<tr>";
+      echo "<td>{$event->name} Round: {$event->current_round} </td>";
+      echo "<td>vs.</td>\n";
+      echo "<td>" . $oppplayer->linkTo() ."</td><td>";
+      if ($match->verification == "unverified"){
+        if ($match->reportSubmitted($player->name)) {
+          echo "(Report Submitted)";
+        } else {
+          if ($match->isReportable() == True){
+            echo "<a href=\"player.php?mode=submit_result&match_id=".$match->id."&player=".$player_number ."\">(Report Result)</a>";
+          } else {
+            echo "Please report results in the report channel for this event";
+          }
+        }
+      } else if ($match->verification == "failed") {
+        echo "<span style=\"color: red; font-weight: bold;\">Verification Failed</span><a href=\"player.php?mode=submit_result&match_id=".$match->id."&player=".$player_number ."\">(Correct Result)</a>";
+      } else { // Only verified left
+        echo "(Match Verified)";
+      }
+      echo "</td></tr>\n";
+    } else { // result is a bye
+      if ($match->round == $event->current_round){
+        echo "<tr><td>";
+        echo $event->name." Round: ".$event->current_round." ";
+        echo "</td>";
+        echo "<td>You have a BYE for the current round.</td>\n";
+        echo "</tr>\n";
+      }
+    }
+
   }
   echo "</table>\n";
 }

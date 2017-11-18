@@ -133,7 +133,7 @@ class Entry {
   
   function createDeckLink() { // creates a link to enter a deck list once a player is registered for the event
     if ($this->canCreateDeck(Player::loginName())) {
-      return "<a class=\"createlink\" class=\"create_deck_link\" href=\"deck.php?player={$this->player->name}&event={$this->event->name}&mode=create\">[Create Deck]</a>";
+      return "<a class=\"create_deck_link\" href=\"deck.php?player=" . urlencode($this->player->name) . "&event=" . urlencode($this->event->name) . "&mode=create\">[Create Deck]</a>";
     } else {
       return "(no deck entered)";
     }

@@ -16,6 +16,8 @@ class Event {
   public $reporturl;
   public $metaurl;
 
+  public $player_editdecks;
+    
   // Class associations
   public $series; // belongs to Series
   public $host; // has one Player - host
@@ -61,20 +63,23 @@ class Event {
       $this->current_round = 0;
       $this->player_reportable = 0;
       $this->prereg_cap = 0;
-
+      $this->player_editdecks = 1;
+      
       return;
     }
 
-    $db = Database::getConnection();
-    $stmt = $db->prepare("SELECT format, host, cohost, series, season, number, start, kvalue, finalized, prereg_allowed, pkonly, threadurl, metaurl, reporturl, active, current_round, player_reportable, prereg_cap FROM events WHERE name = ?");
-    if (!$stmt) {
-      die($db->error);
-    }
-    $stmt->bind_param("s", $name);
-    $stmt->execute();
-    $stmt->bind_result($this->format, $this->host, $this->cohost, $this->series, $this->season, $this->number, $this->start, $this->kvalue, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->threadurl, $this->metaurl, $this->reporturl, $this->active, $this->current_round, $this->player_reportable, $this->prereg_cap);
-    if ($stmt->fetch() == NULL) {
-      throw new Exception('Event '. $name .' not found in DB');
+    if (!$this->new) {
+      $db = Database::getConnection();
+      $stmt = $db->prepare("SELECT format, host, cohost, series, season, number, start, kvalue, finalized, prereg_allowed, threadurl, metaurl, reporturl, active, current_round, player_reportable, player_editdecks FROM events WHERE name = ?");
+      if (!$stmt) {
+        die($db->error);
+      }
+      $stmt->bind_param("s", $name);
+      $stmt->execute();
+      $stmt->bind_result($this->format, $this->host, $this->cohost, $this->series, $this->season, $this->number, $this->start, $this->kvalue, $this->finalized, $this->prereg_allowed, $this->threadurl, $this->metaurl, $this->reporturl, $this->active, $this->current_round, $this->player_reportable, $this->player_editdecks);
+      if ($stmt->fetch() == NULL) {
+        throw new Exception('Event '. $name .' not found in DB');
+      }
     }
 
     $stmt->close();
@@ -125,9 +130,9 @@ class Event {
     if ($this->new) {
       $stmt = $db->prepare("INSERT INTO events(name, start, format,
         host, cohost, kvalue, number, season, series,
-        threadurl, reporturl, metaurl, finalized, prereg_allowed, pkonly, player_reportable, prereg_cap)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?)");
-      $stmt->bind_param("sssssdddssssdddd", $this->name, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue, $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl, $this->metaurl, $this->prereg_allowed, $this->pkonly, $this->player_reportable, $this->prereg_cap);
+        threadurl, reporturl, metaurl, finalized, prereg_allowed, pkonly, player_reportable, prereg_cap, player_editdecks)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?)");
+      $stmt->bind_param("sssssdddssssddddd", $this->name, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue, $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl, $this->metaurl, $this->prereg_allowed, $this->pkonly, $this->player_reportable, $this->prereg_cap, $this->player_editdecks);
       $stmt->execute() or die($stmt->error);
       $stmt->close();
 
@@ -138,9 +143,9 @@ class Event {
       $stmt = $db->prepare("UPDATE events SET
         start = ?, format = ?, host = ?, cohost = ?, kvalue = ?,
         number = ?, season = ?, series = ?, threadurl = ?, reporturl = ?,
-        metaurl = ?, finalized = ?, prereg_allowed = ?, pkonly = ?, active = ?, current_round = ?, player_reportable = ?, prereg_cap = ? WHERE name = ?");
+        metaurl = ?, finalized = ?, prereg_allowed = ?, pkonly = ?, active = ?, current_round = ?, player_reportable = ?, prereg_cap = ?, player_editdecks = ? WHERE name = ?");
       $stmt or die($db->error);
-      $stmt->bind_param("ssssdddssssddddddds", $this->start, $this->format, $this->host, $this->cohost, $this->kvalue, $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl, $this->metaurl, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->active, $this->current_round, $this->player_reportable, $this->prereg_cap, $this->name );
+      $stmt->bind_param("ssssdddssssdddddddsd", $this->start, $this->format, $this->host, $this->cohost, $this->kvalue, $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl, $this->metaurl, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->active, $this->current_round, $this->player_reportable, $this->prereg_cap, $this->name, $this->player_editdecks);
       $stmt->execute() or die($stmt->error);
       $stmt->close();
 
@@ -1233,5 +1238,49 @@ class Event {
             return false;
         }
         else return true;
+    }
+
+    function matchesOfType($type) {
+      $verification = '';
+      if ($type == 'unfinished') {
+        $verification = 'unverified';
+      } elseif ($type == 'finished') {
+        $verification = 'verified';
+      } 
+  
+      $db = Database::getConnection();
+      $stmt = $db->prepare("SELECT m.id FROM matches m, subevents s, events e
+        WHERE m.subevent = s.id AND s.parent = e.name AND e.name = ? AND
+        m.verification = ? AND m.round = ? AND s.timing = ? ORDER BY m.verification");
+      $current_round = $this->current_round;
+      $timing = 1;
+      if ($current_round > $this->mainrounds) {
+        $current_round -= $this->mainrounds;
+        $timing = 2;
+      }
+      $stmt->bind_param("ssdd", $this->name, $verification, $current_round, $timing);
+      $stmt->execute();
+      $stmt->bind_result($matchid);
+  
+      $mids = array();
+      while ($stmt->fetch()) {
+        $mids[] = $matchid;
+      }
+      $stmt->close();
+  
+      $matches = array();
+      foreach ($mids as $mid) {
+        $matches[] = new Match($mid);
+      }
+  
+      return $matches;
+    }
+  
+    function unfinishedMatches() {
+      return $this->matchesOfType('unfinished');
+    }
+  
+    function finishedMatches() {
+      return $this->matchesOfType('finished');
     }
 }
