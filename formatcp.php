@@ -31,8 +31,8 @@ function do_page() {
   }
   
   printFormatCPIntroduction();
-  printError();
   handleActions();
+  printError();
   
   $view = "change_password";
 

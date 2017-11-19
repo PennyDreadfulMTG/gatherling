@@ -1,8 +1,8 @@
 <?php
-session_start();
 require_once('../lib.php');
 
 if (PHP_SAPI != "cli"){
+  session_start();
   if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
     redirect("index.php");
   }
