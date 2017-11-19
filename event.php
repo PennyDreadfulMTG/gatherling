@@ -374,6 +374,44 @@ function eventForm($event = NULL, $forcenew = false) {
   if (is_null($event)) {
     $event = new Event("");
   }
+  if ($edit) {
+    echo "<table style=\"border-width: 0px\" align=\"center\">";
+    $view = "reg";
+    if ($event->active)
+      $view = "match";
+    $view = isset($_GET['view']) ? $_GET['view'] : $view;
+    $view = isset($_POST['view']) ? $_POST['view'] : $view;
+    echo "<tr><td colspan=\"2\">&nbsp;</td></tr>";
+    controlPanel($event, $view);
+    echo "<tr><td colspan=\"2\">&nbsp;</td></tr>";
+    echo "</table>";
+    if (strcmp($view, "reg") == 0) {
+      playerList($event);
+    } elseif (strcmp($view, "settings") == 0) {
+      eventSettings($event, $edit);
+    } elseif (strcmp($view, "match") == 0) {
+      matchList($event);
+    } elseif (strcmp($view,"standings") == 0) {
+      standingsList($event);
+    } elseif (strcmp($view, "medal") == 0) {
+      medalList($event);
+    } elseif (strcmp($view, "autoinput") == 0) {
+      autoInputForm($event);
+    } elseif (strcmp($view, "fileinput") == 0) {
+      fileInputForm($event);
+      // file3InputForm($event); DCI 3 files currently don't work. Re-enable once they do. 
+    } elseif (strcmp($view, "points_adj") == 0) {
+      pointsAdjustmentForm($event);
+    }
+  }
+  else
+  {
+    eventSettings($event, $edit);
+  }
+  echo "</table>";
+}
+
+function eventSettings($event, $edit){
   echo "<form action=\"event.php\" method=\"post\" ";
   echo "enctype=\"multipart/form-data\">";
   echo "<table class=\"form\" style=\"border-width: 0px\" align=\"center\">";
@@ -514,32 +552,7 @@ function eventForm($event = NULL, $forcenew = false) {
     echo "</td></tr>";
     echo "</table>";
     echo "</form>";
-    echo "<table style=\"border-width: 0px\" align=\"center\">";
-    $view = "reg";
-    $view = isset($_GET['view']) ? $_GET['view'] : $view;
-    $view = isset($_POST['view']) ? $_POST['view'] : $view;
-    echo "<tr><td colspan=\"2\">&nbsp;</td></tr>";
-    controlPanel($event, $view);
-    echo "<tr><td colspan=\"2\">&nbsp;</td></tr>";
-    echo "</table>";
-    if (strcmp($view, "reg") == 0) {
-      playerList($event);
-    } elseif (strcmp($view, "match") == 0) {
-      matchList($event);
-    } elseif (strcmp($view,"standings") == 0) {
-      standingsList($event);
-    } elseif (strcmp($view, "medal") == 0) {
-      medalList($event);
-    } elseif (strcmp($view, "autoinput") == 0) {
-      autoInputForm($event);
-    } elseif (strcmp($view, "fileinput") == 0) {
-      fileInputForm($event);
-      // file3InputForm($event); DCI 3 files currently don't work. Re-enable once they do. 
-    } elseif (strcmp($view, "points_adj") == 0) {
-      pointsAdjustmentForm($event);
-    }
   }
-  echo "</table>";
 }
 
 function playerList($event) {
@@ -1219,7 +1232,8 @@ function resultDropMenu($name = "newmatchresult", $extra_options = array()) {
 function controlPanel($event, $cur = "") {
   $name = $event->name;
   echo "<tr><td colspan=\"2\" align=\"center\">";
-  echo "<a href=\"event.php?name=$name&view=reg\">Registration</a>";
+  echo "<a href=\"event.php?name=$name&view=settings\">Event Settings</a>";
+  echo " | <a href=\"event.php?name=$name&view=reg\">Registration</a>";
   echo " | <a href=\"event.php?name=$name&view=match\">Match Listing</a>";
   echo " | <a href=\"event.php?name=$name&view=standings\">Standings</a>";
   echo " | <a href=\"event.php?name=$name&view=medal\">Medals</a>";
