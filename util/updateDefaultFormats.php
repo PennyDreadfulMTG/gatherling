@@ -12,6 +12,15 @@ updateStandard();
 updateModern();
 updatePennyDreadful();
 
+function info($text){
+  if (PHP_SAPI == "cli"){
+    echo $text . '\n';
+  }
+  else{
+    echo $text . '<br/>';
+  }
+}
+
 function LoadFormat($format){
   if (!Format::doesFormatExist($format))
   {
@@ -37,12 +46,12 @@ function do_query($query) {
 }
 
 function updateStandard(){
-  echo "Processing Standard...<br/>\n";
+  info("Processing Standard...");
   $fmt = LoadFormat("Standard");
   $legal = json_decode(file_get_contents("http://whatsinstandard.com/api/v5/sets.json"));
   if (!$legal)
   {
-    echo "Unable to load WhatsInStandard API.  Aborting.<br/>\n";
+    info("Unable to load WhatsInStandard API.  Aborting.");
     return;
   }
   Database::no_result_single_param("DELETE FROM setlegality WHERE format = ?", "s", $fmt->name);
@@ -56,11 +65,11 @@ function updateStandard(){
       $exit = $now + 1;
     if ($exit < $now)
     {
-      echo "{$set->code} has rotated out.<br/>\n";
+      info("{$set->code} has rotated out.");
     }
     else if ($enter > $now)
     {
-      echo "{$set->code} is yet to be released.<br/>\n";
+      info("{$set->code} is yet to be released.");
     }
     else
     {
@@ -76,13 +85,13 @@ function updateStandard(){
         redirect("insertcardset.php?cardsetcode={$set->code}");
       }
       $fmt->insertNewLegalSet($setName);
-      echo "{$set->code} is Standard Legal.<br/>\n";      
+      info("{$set->code} is Standard Legal.");
     }
   }
 }
 
 function updateModern(){
-  echo "Processing Modern...<br/>\n";
+  info("Processing Modern...");
   $fmt = LoadFormat("Modern");
   
   $legal = $fmt->getLegalCardsets();
@@ -113,7 +122,7 @@ function updateModern(){
       }
       if ($notFound) {
         $fmt->insertNewLegalSet($setName);
-        echo "{$setName} is Modern Legal.<br/>\n";  
+        info("{$setName} is Modern Legal.");
       }
     }
   }
@@ -121,21 +130,20 @@ function updateModern(){
 
 function updatePennyDreadful()
 {
-  echo "Processing PD...<br/>\n";
+  info("Processing PD...");
   $fmt = LoadFormat("Penny Dreadful");
 
   $legal_cards = parseCards(file_get_contents("http://pdmtgo.com/legal_cards.txt"));
   if ($legal_cards){
     foreach($legal_cards as $card) {
-      // echo "  {$card}<br/>\n";  
       $success = $fmt->insertCardIntoLegallist($card);
       if(!$success) {
-        echo "Can't add {$card} to Legal list, it is either not in the database, already on the ban list, or already on the legal list<br/>\n";
+        info("Can't add {$card} to Legal list, it is either not in the database, or already on the ban list.");
         return; 
       }
     }
   }
   else{
-    echo "Unable to fetch legal_cards.txt<br/>\n";  
+    info("Unable to fetch legal_cards.txt");
   }
 }
