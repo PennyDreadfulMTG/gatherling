@@ -49,9 +49,40 @@ function do_page() {
   printError();
   printSeriesForm($active_series);
   printLogoForm($active_series);
-  printRecentEventsTable($active_series);
-  printPointsForm($active_series);
-  printStewardsForm($active_series);
+  seriesCPMenu();
+  if (isset($_REQUEST['view'])){
+    $view = $_REQUEST['view'];
+  }
+  else
+  {
+    $view = "recent_events";
+  }
+  switch ($view){
+    case "recent_events":
+    printRecentEventsTable($active_series);
+    break;
+
+    case "points_management":
+    printPointsForm($active_series);
+    break;
+
+    case "organizers":
+    printStewardsForm($active_series);
+    break;
+
+    default:
+    echo "<div class=\"error\">Error: Unknown View '{$view}'</div>";
+  }
+}
+
+function seriesCPMenu() {
+  echo "<table><tr><td colspan=\"2\" align=\"center\">";
+  echo "<a href=\"seriescp.php?view=recent_events\">Recent Events</a>";
+  echo " | <a href=\"seriescp.php?view=points_management\">Points Management</a>";
+  echo " | <a href=\"seriescp.php?view=organizers\">Series Organizers</a>";
+  // echo " | <a href=\"seriescp.php?view=calc_ratings\">Ratings</a>";
+  // echo " | <a href=\"seriescp.php?view=add_cardset\">Add New Cardset</a>";
+  echo "</td></tr></table>";
 }
 
 function printError() {
