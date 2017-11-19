@@ -14,10 +14,10 @@ updatePennyDreadful();
 
 function info($text){
   if (PHP_SAPI == "cli"){
-    echo $text . '\n';
+    echo $text . "\n";
   }
   else{
-    echo $text . '<br/>';
+    echo $text . "<br/>";
   }
 }
 
