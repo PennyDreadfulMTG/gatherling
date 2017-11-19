@@ -6,8 +6,8 @@ include 'lib_form_helper.php';
 $hasError = false;
 $errormsg = "";
 
-if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
-  redirect("index.php");
+if (!Player::isLoggedIn()) {
+  redirect("login.php");
 }
 
 print_header("Format Control Panel");
@@ -26,7 +26,7 @@ print_header("Format Control Panel");
 function do_page() {
   $player = Player::getSessionPlayer();
   if (!$player->isSuper()) {
-    printNoAdmin(); 
+    printNoAdmin($player->isOrganizer());
     return;
   }
   
@@ -52,9 +52,12 @@ function printFormatCPIntroduction() {
     echo "<br />";
 }
 
-function printNoAdmin() { 
+function printNoAdmin($isOrganizer) { 
   $hasError = true;
-  $errormsg = "<center>You're not an Admin here on Gatherling.com! Access Restricted.<br />";
+  if ($isOrganizer)
+    $errormsg = "<center>Right now, Format editor is only available to Admins.  This is coming soon!<br />";
+  else
+    $errormsg = "<center>You're not an Admin here on Gatherling.com! Access Restricted.<br />";
   echo "<a href=\"player.php\">Back to the Player Control Panel</a></center>";
 } 
 
