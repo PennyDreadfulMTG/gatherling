@@ -2,20 +2,37 @@
 session_start();
 require_once('../lib.php');
 
-if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
-  redirect("index.php");
+if (PHP_SAPI == 'cli'){
+  if (isset($argv[1])){
+    if (strlen($argv[1]) < 4)
+    $file = file_get_contents("https://raw.githubusercontent.com/mtgjson/mtgjson/master/json/{$argv[1]}.json");
+    else
+    $file = file_get_contents($argv[1]);
+  }
+  else{
+    die("No set provided.");
+  }
 }
+else{
 
-if (isset($_POST['cardsetcode']))
-{
-  $file = file_get_contents("https://raw.githubusercontent.com/mtgjson/mtgjson/master/json/{$_POST['cardsetcode']}.json");
+  if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
+    redirect("index.php");
+  }
+  
+  if (isset($_POST['cardsetcode']))
+  {
+    $file = file_get_contents("https://raw.githubusercontent.com/mtgjson/mtgjson/master/json/{$_POST['cardsetcode']}.json");
+  }
+  else if (isset($_FILES['cardsetfile']))
+  {
+    $file = file_get_contents($_FILES['cardsetfile']['tmp_name']);
+  }
+  else{
+    die("No set provided.");
+  }
 }
-else
-{
-  $file = file_get_contents($_FILES['cardsetfile']['tmp_name']);
-}
-
-if ($file == FALSE) {
+  
+  if ($file == FALSE) {
   die("Can't open the file you uploaded: {$_FILES['cardsetfile']['tmp_name']}");
 }
 
