@@ -31,9 +31,9 @@ function do_page() {
   }
   
   printAdminCPIntroduction();
+  handleActions();
   printError();
   adminCPMenu();
-  handleActions();
   
   $view = "change_password";
 
