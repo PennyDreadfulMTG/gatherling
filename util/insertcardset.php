@@ -19,9 +19,9 @@ else{
     redirect("index.php");
   }
   
-  if (isset($_POST['cardsetcode']))
+  if (isset($_REQUEST['cardsetcode']))
   {
-    $file = file_get_contents("https://raw.githubusercontent.com/mtgjson/mtgjson/master/json/{$_POST['cardsetcode']}.json");
+    $file = file_get_contents("https://raw.githubusercontent.com/mtgjson/mtgjson/master/json/{$_REQUEST['cardsetcode']}.json");
   }
   else if (isset($_FILES['cardsetfile']))
   {
@@ -32,7 +32,7 @@ else{
   }
 }
   
-  if ($file == FALSE) {
+if ($file == FALSE) {
   die("Can't open the file you uploaded: {$_FILES['cardsetfile']['tmp_name']}");
 }
 
@@ -42,6 +42,7 @@ $set = $data->name;
 $settype = $data->type;
 switch ($settype) {
   case 'core':
+  case 'starter':
     $settype = 'Core';
     break;
   case 'expansion':
@@ -82,8 +83,8 @@ if (!$set_already_in) {
   echo "Inserting card set ($set, $releasedate, $settype)...<br />";
 
   // Insert the card set
-  $stmt = $database->prepare("INSERT INTO cardsets(released, name, type) values(?, ?, ?)");
-  $stmt->bind_param("sss", $releasedate, $set, $settype);
+  $stmt = $database->prepare("INSERT INTO cardsets(released, name, type, code) values(?, ?, ?, ?)");
+  $stmt->bind_param("ssss", $releasedate, $set, $settype, $data->code);
 
   if (!$stmt->execute()) {
     echo "!!!!!!!!!! Set Insertion Error !!!!!!!!!<br /><br /><br />";

@@ -334,5 +334,12 @@ if ($version < 15) {
   $db->commit();
   echo "... DB now at version 15! <br />";
 }
+if ($version < 16) {
+  echo "Updating to version 16 (add code to cardsets)... <br />";
+  do_query("ALTER TABLE cardsets ADD COLUMN code VARCHAR(3)");
+  do_query("UPDATE db_version SET version = 16");
+  $db->commit();
+  echo "... DB now at version 16! <br />";
+}
 
 $db->autocommit(TRUE);

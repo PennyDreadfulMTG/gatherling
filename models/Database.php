@@ -111,6 +111,15 @@ class Database {
 
     return $list;
   }
+
+  static public function no_result_single_param($sql, $paramType, $param) {
+    $db = Database::getConnection();
+    $stmt = $db->prepare($sql);
+    $stmt->bind_param($paramType, $param);
+    $result = $stmt->execute();
+    $stmt->close();
+    return $result;
+  }
   
   static public function db_query() {
       $params = func_get_args();
