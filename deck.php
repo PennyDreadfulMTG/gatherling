@@ -262,8 +262,8 @@ function insertDeck() {
   $deck->playername = $_POST['player'];
   $deck->eventname = $_POST['event'];
 
-  $deck->maindeck_cards = parseCards($_POST['contents']);
-  $deck->sideboard_cards = parseCards($_POST['sideboard']);
+  $deck->maindeck_cards = parseCardsWithQuantity($_POST['contents']);
+  $deck->sideboard_cards = parseCardsWithQuantity($_POST['sideboard']);
 
   if (!$deck->save()) {
     deckForm($deck);
@@ -277,40 +277,14 @@ function updateDeck($deck) {
   $deck->name = $_POST['name'];
   $deck->notes = $_POST['notes'];
 
-  $deck->maindeck_cards = parseCards($_POST['contents']);
-  $deck->sideboard_cards = parseCards($_POST['sideboard']);
+  $deck->maindeck_cards = parseCardsWithQuantity($_POST['contents']);
+  $deck->sideboard_cards = parseCardsWithQuantity($_POST['sideboard']);
 
   if (!$deck->save()) {
     deckForm($deck);
   }
 
   return $deck;
-}
-
-function parseCards($text) {
-  $lines = explode("\n", $text);
-  $badcards = array();
-  $cardarr = array();
-  foreach ($lines as $line) {
-    $chopped = chop($line);
-    if (preg_match("/[ \t]*([0-9]+)x?[ \t]+(.*)/i", $chopped, $m)) {
-      $qty = $m[1];
-      $card = chop($m[2]);
-      // AE Litigation
-      $card = preg_replace("/Æ/", "AE", $card);
-      $card = preg_replace("/\306/", "AE", $card);
-      $card = preg_replace("/ö/", "o", $card);
-      $card = preg_replace("/ \/\/ /", "/", $card);
-      $card = strtolower($card);
-      if(isset($cardarr[$card])) {
-        $cardarr[$card] += $qty;
-      } else {
-        $cardarr[$card] = $qty;
-      }
-    }
-  }
-
-  return $cardarr;
 }
 
 function printPlaceString($medal) {

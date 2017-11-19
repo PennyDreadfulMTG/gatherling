@@ -395,20 +395,3 @@ function getConvertedCost($cost) {
   return $cmc;
 }
 
-function parseCards($text) {
-  $cardarr = array();
-  $lines = explode("\n", $text);
-  foreach ($lines as $card) {
-      // AE Litigation
-      $card = preg_replace("/Æ/", "AE", $card);
-      $card = preg_replace("/\306/", "AE", $card);
-      $card = preg_replace("/ö/", "o", $card);
-      $card = strtolower($card);
-      $card = trim($card);
-      if ($card != '') {
-          $cardarr[] = $card;
-      }
-  }
-  return $cardarr;
-}
-

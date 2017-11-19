@@ -10,6 +10,7 @@ if (PHP_SAPI != "cli"){
 
 updateStandard();
 updateModern();
+updatePennyDreadful();
 
 function LoadFormat($format){
   if (!Format::doesFormatExist($format))
@@ -115,5 +116,26 @@ function updateModern(){
         echo "{$setName} is Modern Legal.<br/>\n";  
       }
     }
+  }
+}
+
+function updatePennyDreadful()
+{
+  echo "Processing PD...<br/>\n";
+  $fmt = LoadFormat("Penny Dreadful");
+
+  $legal_cards = parseCards(file_get_contents("http://pdmtgo.com/legal_cards.txt"));
+  if ($legal_cards){
+    foreach($legal_cards as $card) {
+      // echo "  {$card}<br/>\n";  
+      $success = $fmt->insertCardIntoLegallist($card);
+      if(!$success) {
+        echo "Can't add {$card} to Legal list, it is either not in the database, already on the ban list, or already on the legal list<br/>\n";
+        return; 
+      }
+    }
+  }
+  else{
+    echo "Unable to fetch legal_cards.txt<br/>\n";  
   }
 }

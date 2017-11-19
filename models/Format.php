@@ -700,7 +700,9 @@ class Format {
             return false; // card not found in database
         }
         
-        if($this->isCardOnBanList($card) || $this->isCardOnLegalList($card) || $this->isCardOnLegalList($card)) {
+        if ($this->isCardOnLegalList($card)){
+            return true;
+        } else if ($this->isCardOnBanList($card) || $this->isCardOnLegalList($card)) {
             return false;
         } else {
             $db = Database::getConnection();

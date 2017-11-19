@@ -113,11 +113,11 @@ function handleActions() {
             if(count($cards) > 0) {
                 foreach($cards as $card) {
                     $success = $format->insertCardIntoLegallist($card);
-                }
-                if(!$success) {
-                    $hasError = true;
-                    $errormsg .= "Can't add {$card} to Legal list, it is either not in the database, already on the ban list, or already on the legal list";
-                    return; 
+                    if(!$success) {
+                        $hasError = true;
+                        $errormsg .= "Can't add {$card} to Legal list, it is either not in the database or on the ban list.";
+                        return; 
+                    }
                 }
             }
         }

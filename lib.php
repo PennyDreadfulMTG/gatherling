@@ -443,3 +443,43 @@ function redirect($page) {
   exit(0);
 }
 
+function parseCards($cards) {
+  if (!is_array($cards))
+  {
+    $cardarr = array();
+    $cards = explode("\n", $cards);
+  }
+  foreach ($cards as $card) {
+      // AE Litigation
+      $card = preg_replace("/Æ/", "AE", $card);
+      $card = preg_replace("/\306/", "AE", $card);
+      $card = preg_replace("/ö/", "o", $card);
+      $card = preg_replace("/ \/\/ /", "/", $card);
+      $card = strtolower($card);
+      $card = trim($card);
+      if ($card != '') {
+          $cardarr[] = $card;
+      }
+  }
+  return $cardarr;
+}
+
+function parseCardsWithQuantity($cards) {
+  $cards = parseCards($cards);
+  $badcards = array();
+  $cardarr = array();
+  foreach ($cards as $line) {
+    $chopped = chop($line);
+    if (preg_match("/[ \t]*([0-9]+)x?[ \t]+(.*)/i", $chopped, $m)) {
+      $qty = $m[1];
+      $card = chop($m[2]);
+      if(isset($cardarr[$card])) {
+        $cardarr[$card] += $qty;
+      } else {
+        $cardarr[$card] = $qty;
+      }
+    }
+  }
+
+  return $cardarr;
+}
