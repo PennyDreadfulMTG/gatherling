@@ -50,7 +50,8 @@ function do_page() {
       if (isset($_POST['format'])) {
           Format::formatEditor("admincp.php", $_POST['format'], "System");
       } else {
-          Format::formatEditor("admincp.php");
+        printNewFormat();
+        printLoadFormat();
       }
   } elseif(($view == "add_cardset")) {
       printAddCardSet();
@@ -358,13 +359,7 @@ function handleActions() {
       
       $format->save();
   } else if($_POST['action'] == "New") {
-      echo "<form action=\"admincp.php\" method=\"post\">";
-      echo "<input type=\"hidden\" name=\"view\" value=\"no_view\" />";
-      echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
-      echo "<tr><td colspan=\"2\">New Format Name: <input type=\"text\" name=\"newformatname\" STYLE=\"width: 175px\"/></td></tr>";
-      echo "<td colspan=\"2\" class=\"buttons\">";
-      echo "<input class=\"inputbutton\" type=\"submit\" value=\"Create New Format\" name =\"action\" /></td></tr>";
-      echo"</table></form>";
+    printNewFormat();
   } else if($_POST['action'] == "Create New Format") {      
       $format = new Format("");
       $format->name = $_POST['newformatname'];
@@ -386,16 +381,7 @@ function handleActions() {
           echo "</form>";          
       }
   } else if($_POST['action'] == "Load") {
-      echo "<h4>Load Format</h4>\n";
-      echo "<form action=\"admincp.php\" method=\"post\">"; 
-      echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
-      echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
-      echo "<tr><td>";
-      formatsDropMenu("All");
-      echo "</td>";
-      echo "<td colspan=\"2\" class=\"buttons\">";
-      echo "<input class=\"inputbutton\" type=\"submit\" value=\"Load Format\" name =\"action\" /></td></tr>";
-      echo"</table></form>";
+        printLoadFormat();
   } else if($_POST['action'] == "Save As") {
       $format = new Format($_POST['format']);
       $oldformatname = $format->name;
@@ -488,6 +474,30 @@ function handleActions() {
           echo "</form>";          
       }      
   }
+}
+
+function printNewFormat(){
+    echo "<h4>New Format</h4>\n";
+    echo "<form action=\"admincp.php\" method=\"post\">";
+    echo "<input type=\"hidden\" name=\"view\" value=\"no_view\" />";
+    echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
+    echo "<tr><td colspan=\"2\">New Format Name: <input type=\"text\" name=\"newformatname\" STYLE=\"width: 175px\"/></td></tr>";
+    echo "<td colspan=\"2\" class=\"buttons\">";
+    echo "<input class=\"inputbutton\" type=\"submit\" value=\"Create New Format\" name =\"action\" /></td></tr>";
+    echo"</table></form>";
+}
+
+function printLoadFormat(){
+    echo "<h4>Load Format</h4>\n";
+    echo "<form action=\"admincp.php\" method=\"post\">"; 
+    echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+    echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
+    echo "<tr><td>";
+    formatsDropMenu("All");
+    echo "</td>";
+    echo "<td colspan=\"2\" class=\"buttons\">";
+    echo "<input class=\"inputbutton\" type=\"submit\" value=\"Load Format\" name =\"action\" /></td></tr>";
+    echo"</table></form>";
 }
 
 function insertCardSetAction ($set, $settype, $releasedate, $file) {

@@ -77,7 +77,7 @@ if ($gatherlingoutofservice != 1)
         <div class="gatherling_news box">
             <div class=" alpha omega uppertitle"> Gatherling News: Update to Gatherling 4! </div>
             <div class="clear"></div>
-                    <?php require_once ("news.php"); ?>
+                    <?php //require_once ("news.php"); ?>
             <div class="clear"></div>
         </div> <!-- box gatherlingnews -->   
 
@@ -85,7 +85,7 @@ if ($gatherlingoutofservice != 1)
             <div class=" alpha omega uppertitle"> Bug Report: Know of a bug not listed here? <a href="message.php?mode=Send&type=Bug Report">Message Dabil!</a></div>
             <div class="clear"></div>
                 <ul>
-                    <?php require_once ("bugs.php"); ?>
+                    <?php //require_once ("bugs.php"); ?>
                 </ul>
             <div class="clear"></div>
         </div> <!-- box gatherlingnews -->   
@@ -94,7 +94,7 @@ if ($gatherlingoutofservice != 1)
             <div class=" alpha omega uppertitle"> Planned Updates: Got an idea you would like to see added? <a href="message.php?mode=Send&type=Update Request">Message Dabil!</a></div>
             <div class="clear"></div>
                 <ul>
-                    <?php require_once ("updates.php"); ?>
+                    <?php //require_once ("updates.php"); ?>
                 </ul>
             <div class="clear"></div>
         </div> <!-- box gatherlingnews -->   
