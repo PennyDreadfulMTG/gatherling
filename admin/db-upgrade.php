@@ -341,5 +341,68 @@ if ($version < 16) {
   $db->commit();
   echo "... DB now at version 16! <br />";
 }
+if ($version < 17) {
+  /// The below migrations don't really work, and I'm inclined to just drop the db to push it through.
+  /// If you have real data, maybe try to get it working?
+  echo "Updating to version 17 (Add unique constraint to cards)... <br />";
 
+  // do_query("SET FOREIGN_KEY_CHECKS=0;");
+  // do_query("CREATE TEMPORARY TABLE `cards_tmp` (
+  //   `cost` varchar(40) DEFAULT NULL,
+  //   `convertedcost` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  //   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  //   `isw` tinyint(1) DEFAULT '0',
+  //   `isr` tinyint(1) DEFAULT '0',
+  //   `isg` tinyint(1) DEFAULT '0',
+  //   `isu` tinyint(1) DEFAULT '0',
+  //   `isb` tinyint(1) DEFAULT '0',
+  //   `name` varchar(40) NOT NULL,
+  //   `cardset` varchar(40) NOT NULL,
+  //   `type` varchar(40) NOT NULL,
+  //   `isp` tinyint(1) DEFAULT '0',
+  //   `rarity` varchar(40) DEFAULT NULL,
+  //   PRIMARY KEY (`id`),
+  //   KEY `cardset` (`cardset`)
+  // ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+
+  // $select = $db->prepare("SELECT cost, convertedcost, name, cardset, type,
+  // isw, isu, isb, isr, isg, isp, rarity FROM `cards`;");
+  // $insert = $db->prepare("INSERT INTO cards_tmp(cost, convertedcost, name, cardset, type,
+  //   isw, isu, isb, isr, isg, isp, rarity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  //   ON DUPLICATE KEY UPDATE `cost` = VALUES(`cost`), `convertedcost`= VALUES(`convertedcost`), `type` = VALUES(`type`), 
+  //     isw = VALUES(`isw`), isu = VALUES(`isu`), isb = VALUES(`isb`),isr = VALUES(`isr`),isg = VALUES(`isg`),isp = VALUES(`isp`),
+  //     `rarity` = VALUES(`rarity`);");
+
+  // $select->execute();
+  // $select->bind_result($cost, $cmc, $name, $cardset, $type, $isw, $isu, $isb, $isr, $isg, $isp, $rarity);
+  // while ($select->fetch()) {
+  //   $insert->bind_param("sdsssdddddds", $cost, $cmc, $name, $cardset, $type, $isw, $isu, $isb, $isr, $isg, $isp, $rarity);
+  //   if (!$insert->execute()) {
+  //     die("Failed to copy {$name} to temporary table.");
+  //   }
+  // }
+  // do_query("TRUNCATE `cards`;");
+  do_query("ALTER TABLE `cards` ADD UNIQUE `unique_index`(`name`, `cardset`);");
+  // do_query("SET FOREIGN_KEY_CHECKS=1;");
+  
+  // $select = $db->prepare("SELECT cost, convertedcost, name, cardset, type,
+  // isw, isu, isb, isr, isg, isp, rarity FROM `cards_tmp`;");
+  // $insert = $db->prepare("INSERT INTO cards(cost, convertedcost, name, cardset, type,
+  //   isw, isu, isb, isr, isg, isp, rarity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  //   ON DUPLICATE KEY UPDATE `cost` = VALUES(`cost`), `convertedcost`= VALUES(`convertedcost`), `type` = VALUES(`type`), 
+  //     isw = VALUES(`isw`), isu = VALUES(`isu`), isb = VALUES(`isb`),isr = VALUES(`isr`),isg = VALUES(`isg`),isp = VALUES(`isp`),
+  //     `rarity` = VALUES(`rarity`);");
+
+  // $select->execute();
+  // $select->bind_result($cost, $cmc, $name, $cardset, $type, $isw, $isu, $isb, $isr, $isg, $isp, $rarity);
+  // while ($select->fetch()) {
+  //   $insert->bind_param("sdsssdddddds", $cost, $cmc, $name, $cardset, $type, $isw, $isu, $isb, $isr, $isg, $isp, $rarity);
+  //   if (!$insert->execute()) {
+  //     die("Failed to copy {$name} to temporary table.");
+  //   }
+  // }
+  do_query("UPDATE db_version SET version = 17");
+  $db->commit();
+  echo "... DB now at version 17! <br />";
+}
 $db->autocommit(TRUE);

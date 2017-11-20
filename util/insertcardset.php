@@ -31,7 +31,12 @@ else{
     die("No set provided.");
   }
 }
-  
+
+if (isset($_REQUEST['return']))
+{
+  echo "Return to <a href='{$_REQUEST['return']}'>{$_REQUEST['return']}</a><br/>";
+}
+
 if ($file == FALSE) {
   die("Can't open the file you uploaded: {$_FILES['cardsetfile']['tmp_name']}");
 }
@@ -103,7 +108,10 @@ else
 }
 
 $stmt = $database->prepare("INSERT INTO cards(cost, convertedcost, name, cardset, type,
-  isw, isu, isb, isr, isg, isp, rarity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+  isw, isu, isb, isr, isg, isp, rarity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  ON DUPLICATE KEY UPDATE `cost` = VALUES(`cost`), `convertedcost`= VALUES(`convertedcost`), `type` = VALUES(`type`), 
+  isw = VALUES(`isw`), isu = VALUES(`isu`), isb = VALUES(`isb`),isr = VALUES(`isr`),isg = VALUES(`isg`),isp = VALUES(`isp`),
+  `rarity` = VALUES(`rarity`);");
 
 foreach ($data->cards as $card) {
   $cardsparsed++;
