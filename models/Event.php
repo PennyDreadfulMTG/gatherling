@@ -130,9 +130,13 @@ class Event {
     if ($this->new) {
       $stmt = $db->prepare("INSERT INTO events(name, start, format,
         host, cohost, kvalue, number, season, series,
-        threadurl, reporturl, metaurl, finalized, prereg_allowed, pkonly, player_reportable, prereg_cap, player_editdecks)
+        threadurl, reporturl, metaurl, finalized, prereg_allowed, pkonly, 
+        player_reportable, prereg_cap, player_editdecks)
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?)");
-      $stmt->bind_param("sssssdddssssddddd", $this->name, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue, $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl, $this->metaurl, $this->prereg_allowed, $this->pkonly, $this->player_reportable, $this->prereg_cap, $this->player_editdecks);
+      $stmt->bind_param("sssssdddssssddddd", $this->name, $this->start, $this->format, 
+        $this->host, $this->cohost, $this->kvalue, $this->number, $this->season, $this->series, 
+        $this->threadurl, $this->reporturl, $this->metaurl, $this->prereg_allowed, $this->pkonly, 
+        $this->player_reportable, $this->prereg_cap, $this->player_editdecks);
       $stmt->execute() or die($stmt->error);
       $stmt->close();
 
@@ -143,9 +147,13 @@ class Event {
       $stmt = $db->prepare("UPDATE events SET
         start = ?, format = ?, host = ?, cohost = ?, kvalue = ?,
         number = ?, season = ?, series = ?, threadurl = ?, reporturl = ?,
-        metaurl = ?, finalized = ?, prereg_allowed = ?, pkonly = ?, active = ?, current_round = ?, player_reportable = ?, prereg_cap = ?, player_editdecks = ? WHERE name = ?");
+        metaurl = ?, finalized = ?, prereg_allowed = ?, pkonly = ?, active = ?, current_round = ?,
+         player_reportable = ?, prereg_cap = ?, player_editdecks = ? WHERE name = ?");
       $stmt or die($db->error);
-      $stmt->bind_param("ssssdddssssdddddddsd", $this->start, $this->format, $this->host, $this->cohost, $this->kvalue, $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl, $this->metaurl, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->active, $this->current_round, $this->player_reportable, $this->prereg_cap, $this->name, $this->player_editdecks);
+      $stmt->bind_param("ssssdddssssdddddddsd", $this->start, $this->format, $this->host, $this->cohost, $this->kvalue, 
+        $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl, 
+        $this->metaurl, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->active, $this->current_round,
+        $this->player_reportable, $this->prereg_cap, $this->name, $this->player_editdecks);
       $stmt->execute() or die($stmt->error);
       $stmt->close();
 
