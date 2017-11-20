@@ -49,6 +49,11 @@ if ($file == FALSE) {
 $data = json_decode($file);
 
 $set = $data->name;
+if ($set == "Time Spiral \"Timeshifted\"")
+{
+  // Terrible hack, but needed.
+  $set = "Time Spiral Timeshifted";
+}
 $settype = $data->type;
 switch ($settype) {
   case 'core':
