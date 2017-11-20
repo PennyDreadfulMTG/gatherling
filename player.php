@@ -224,7 +224,7 @@ function print_changePassForm($player, $result) {
 function print_verifyMtgoForm($player, $result) {
   echo "<center><h3>Verifying your MTGO account</h3>
     Verify your MTGO account by following these simple steps:<br />
-    1. Chat 'ua pdcmagic' to infobot to get a verification code <br />
+    1. Chat '!verify gatherling' to pdbot to get a verification code <br />
     2. Enter the verification code here to be verified <br />
     \n";
   echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
