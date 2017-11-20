@@ -15,9 +15,12 @@ if ($event->prereg_allowed != 1) {
 
 if ($_GET['action'] == "reg") {
   $event->addPlayer($player->name);
+  $ename = urlencode($event->name);
+  $location = "deck.php?player={$player->name}&event={$ename}&mode=create";
 } elseif ($_GET['action'] == "unreg") {
   $event->removeEntry($player->name);
+  $location = 'player.php';
 }
 
-header("Location: player.php");
+header("Location: {$location}");
 
