@@ -182,6 +182,16 @@ class Deck {
     return $count;
   }
 
+  static public function getColorString() {
+    $str = ""; 
+    foreach ($count as $color => $n) { 
+      if ($n > 0) { 
+        $str = $str . $color;
+      }
+    }
+    return strtoupper($str);
+  }
+
   // TODO: Find a way to list the inline id as a param
   function getCastingCosts() { 
     $db = Database::getConnection(); 
@@ -812,7 +822,7 @@ class Deck {
       return "Deck not found";
     } else {
       if (empty($this->name)) {
-          $this->name = "** NO NAME **"; 
+          $this->name = $this->getColorString() . ' ' . $this->archetype; 
       }
       if (!$this->isValid()) {
           $verify = "deckunverified";

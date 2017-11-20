@@ -39,7 +39,7 @@ function addSet($set, $step) {
   else
   {
     $args = urlencode("step={$step}");
-    redirect("insertcardset.php?cardsetcode={$set}&return=updateDefaultFormats.php&ret_args={$args}");
+    redirect("util/insertcardset.php?cardsetcode={$set}&return=updateDefaultFormats.php&ret_args={$args}");
   }
 }
 
