@@ -79,7 +79,7 @@ function adminCPMenu() {
   echo "<table><tr><td colspan=\"2\" align=\"center\">";
   echo "<a href=\"admincp.php?view=change_password\">Change Player Password</a>";
   echo " | <a href=\"admincp.php?view=create_series\">Create New Series</a>";
-  echo " | <a href=\"admincp.php?view=format_editor\">Format Editor</a>";
+  // echo " | <a href=\"admincp.php?view=format_editor\">Format Editor</a>";
   echo " | <a href=\"admincp.php?view=calc_ratings\">Ratings</a>";
   echo " | <a href=\"admincp.php?view=add_cardset\">Add New Cardset</a>";
   echo "</td></tr></table>";
