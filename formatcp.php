@@ -67,6 +67,7 @@ function formatEditor($format = "", $seriesName = "System") {
   }
   switch ($view){
     case 'settings':
+    case 'no_view':
     printFormatSettings($active_format, $seriesName);
     break;
     case 'bandr':
