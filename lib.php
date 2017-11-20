@@ -418,6 +418,22 @@ function formatsDropMenu($formatType="", $seriesName = "System") {
   }
 }
 
+function printStewardSelect($player_series, $selected) {
+  echo "<center>";
+  echo "<form action=\"seriescp.php\" method=\"get\">";
+  echo "<select name=\"series\">";
+  foreach ($player_series as $series) {
+    echo "<option value=\"{$series}\"";
+    if ($series == $selected) {
+      echo " selected";
+    }
+    echo ">{$series}</option>";
+  }
+  echo "</select>";
+  echo "<input type=\"submit\" value=\"Select Series\">";
+  echo "</form>";
+}
+
 function stringField($field, $def, $len) {
   echo "<input class=\"inputbox\" type=\"text\" name=\"$field\" value=\"$def\" size=\"$len\">";
 }

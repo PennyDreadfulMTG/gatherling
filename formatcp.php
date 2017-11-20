@@ -25,49 +25,70 @@ print_header("Format Control Panel");
 
 function do_page() {
   $player = Player::getSessionPlayer();
-  if (!$player->isSuper()) {
+  if ($player->isSuper()) {
+    $seriesName = "System";
+  }
+  else if ($player->isOrganizer()){
+    $player_series = Player::getSessionPlayer()->organizersSeries();
+    if (isset($_REQUEST['series']))
+    {
+      $seriesName = $_REQUEST['series'];
+    }
+    else
+    {
+      $seriesName = $player_series[0];
+    }
+
+    if (count($player_series) > 1) {
+      printStewardSelect($player_series, $seriesName);
+    } else {
+      echo "<center> Managing {$seriesName} </center>";
+    } 
+
+    $auth = false;
+    foreach ($player_series as $ps)
+    {
+      if (strcmp($seriesName, $ps) == 0)
+      {
+        $auth = true;
+      }
+    }
+    if (!$auth)
+    {
+      printNoAdmin($player->isOrganizer());
+      return;
+    }
+  }
+  else
+  {
     printNoAdmin($player->isOrganizer());
+    printError();
     return;
   }
   
-  printFormatCPIntroduction();
-  handleActions();
+  handleActions($seriesName);
   printError();
   
-  $view = "change_password";
-
+  $view = "settings";
+  
   if (isset($_GET['view']) && ($_GET['view'] != "")) {$view = $_GET['view'];}
   if (isset($_POST['view'])) {$view = $_POST['view'];}
   
-  if (isset($_REQUEST['format'])) {
-        formatEditor($_REQUEST['format'], "System");
-    } else {
-    printNewFormat();
-    printLoadFormat();
-    } 
-  echo "</center><div class=\"clear\"></div></div>";
-}
+  if (!isset($_REQUEST['format'])) {
+    formatCPMenu(new Format(""), $seriesName);
+    printLoadFormat($seriesName);
+    return;
+  }
+  $format = $_REQUEST['format'];
 
-function formatEditor($format = "", $seriesName = "System") {
-  $active_format = NULL;
   if(Format::doesFormatExist($format)) {
     $active_format = new Format($format);
   } else {
     $active_format = new Format("");
   }
-  
   formatCPMenu($active_format, $seriesName);
-  if (isset($_REQUEST['view']))
-  {
-    $view = $_REQUEST['view'];
-  }
-  else
-  {
-    $view = 'settings';
-  }
   switch ($view){
     case 'settings':
-    case 'no_view':
     printFormatSettings($active_format, $seriesName);
     break;
     case 'bandr':
@@ -76,19 +97,18 @@ function formatEditor($format = "", $seriesName = "System") {
     case 'cardsets':
     printCardSets($active_format, $seriesName);
     break;
+    case 'no_view':
+    break;
     default:
     echo "Unknown View!";
   }
-}
-
-function printFormatCPIntroduction() {
-    echo "<br />";
+  echo "</center><div class=\"clear\"></div></div>";
 }
 
 function printNoAdmin($isOrganizer) { 
   $hasError = true;
   if ($isOrganizer)
-    $errormsg = "<center>Right now, Format editor is only available to Admins.  This is coming soon!<br />";
+    $errormsg = "<center>You're not authorized to edit this format! Access Restricted.<br />";
   else
     $errormsg = "<center>You're not an Admin here on Gatherling.com! Access Restricted.<br />";
   echo "<a href=\"player.php\">Back to the Player Control Panel</a></center>";
@@ -102,7 +122,7 @@ function printError() {
   }
 }
 
-function handleActions() {
+function handleActions($seriesName) {
     global $hasError;
     global $errormsg;
     if (!isset($_POST['action'])) {
@@ -253,8 +273,13 @@ function handleActions() {
     } else if($_POST['action'] == "Create New Format") {      
         $format = new Format("");
         $format->name = $_POST['newformatname'];
-        $format->type = "System";
-        $format->series_name = "System";
+        $seriesType = "Private";
+        if ($seriesName == "System")
+        {
+          $seriesType = "System";
+        }
+        $format->type = $seriesType;
+        $format->series_name = $seriesName;
         $success = $format->save();
         if ($success) {
             echo "<h4>New Format $format->name Created Successfully!</h4>";
@@ -271,7 +296,7 @@ function handleActions() {
             echo "</form>";          
         }
     } else if($_POST['action'] == "Load") {
-          printLoadFormat();
+          printLoadFormat($seriesName);
     } else if($_POST['action'] == "Save As") {
         $format = new Format($_POST['format']);
         $oldformatname = $format->name;
@@ -286,8 +311,13 @@ function handleActions() {
     } else if($_POST['action'] == "Save") {
         $format = new Format("");
         $format->name = $_POST['newformat'];
-        $format->type = "System";
-        $format->series_name = "System";
+        $seriesType = "Private";
+        if ($seriesName == "System")
+        {
+          $seriesType = "System";
+        }
+        $format->type = $seriesType;
+        $format->series_name = $seriesName;
         $success = $format->saveAs($_POST['oldformat']);
         if ($success) {
             echo "<h4>New Format $format->name Saved Successfully!</h4>";
@@ -310,7 +340,8 @@ function handleActions() {
         echo "<input type=\"hidden\" name=\"view\" value=\"no_view\" />";
         echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
         echo "<tr><td>";
-        formatsDropMenu("All");
+        if ($seriesName == "System") { formatsDropMenu("All"); } 
+        else { formatsDropMenu("Private", $seriesName); }
         echo "</td>";
         echo "<td colspan=\"2\">Rename Format As... <input type=\"text\" name=\"newformat\" STYLE=\"width: 175px\"/></td></tr>";
         echo "<td colspan=\"2\" class=\"buttons\">";
@@ -319,8 +350,13 @@ function handleActions() {
     } else if($_POST['action'] == "Rename Format") {
         $format = new Format("");
         $format->name = $_POST['newformat'];
-        $format->type = "System";
-        $format->series_name = "System";
+        $seriesType = "Private";
+        if ($seriesName == "System")
+        {
+          $seriesType = "System";
+        }
+        $format->type = $seriesType;
+        $format->series_name = $seriesName;
         $success = $format->rename($_POST['format']);
         if ($success) {
             echo "<h4>Format {$_POST['format']} Renamed as $format->name Successfully!</h4>";
@@ -342,7 +378,8 @@ function handleActions() {
         echo "<input type=\"hidden\" name=\"view\" value=\"no_view\" />";
         echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
         echo "<tr><td>";
-        formatsDropMenu("All");
+        if ($seriesName == "System") { formatsDropMenu("All"); } 
+        else { formatsDropMenu("Private", $seriesName); }
         echo "</td>";
         echo "<td colspan=\"2\" class=\"buttons\">";
         echo "<input class=\"inputbutton\" type=\"submit\" value=\"Delete Format\" name =\"action\" /></td></tr>";
@@ -377,13 +414,14 @@ function handleActions() {
     echo"</table></form>";
 }
 
-function printLoadFormat(){
+function printLoadFormat($seriesName){
     echo "<h4>Load Format</h4>\n";
     echo "<form action=\"formatcp.php\" method=\"post\">"; 
     echo "<input type=\"hidden\" name=\"view\" value=\"settings\" />";
     echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
     echo "<tr><td>";
-    formatsDropMenu("All");
+    if ($seriesName == "System") { formatsDropMenu("All"); } 
+    else { formatsDropMenu("Private", $seriesName); }
     echo "</td>";
     echo "<td colspan=\"2\" class=\"buttons\">";
     echo "<input class=\"inputbutton\" type=\"submit\" value=\"Load Format\" name =\"action\" /></td></tr>";

@@ -99,22 +99,6 @@ function printNoSeries() {
   echo "<a href=\"player.php\">Back to the Player Control Panel</a></center>";
 }
 
-function printStewardSelect($player_series, $selected) {
-  echo "<center>";
-  echo "<form action=\"seriescp.php\" method=\"get\">";
-  echo "<select name=\"series\">";
-  foreach ($player_series as $series) {
-    echo "<option value=\"{$series}\"";
-    if ($series == $selected) {
-      echo " selected";
-    }
-    echo ">{$series}</option>";
-  }
-  echo "</select>";
-  echo "<input type=\"submit\" value=\"Select Series\">";
-  echo "</form>";
-}
-
 function printSeriesForm($series) {
   echo "<form action=\"seriescp.php\" method=\"post\">";
   echo "<table class=\"form\" style=\"border-width: 0px\" align=\"center\">";
