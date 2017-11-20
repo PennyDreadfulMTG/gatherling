@@ -182,9 +182,9 @@ class Deck {
     return $count;
   }
 
-  static public function getColorString() {
+  public function getColorString() {
     $str = ""; 
-    foreach ($count as $color => $n) { 
+    foreach ($this->getColorCounts() as $color => $n) { 
       if ($n > 0) { 
         $str = $str . $color;
       }

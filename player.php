@@ -424,7 +424,7 @@ function print_allDeckTable() {
     $imgcell = medalImgStr($deck->medal);
     echo "<td width=20>$imgcell</td>\n";
     echo "<td>" . $deck->linkTo();
-    $cards = $deck->getCardCount();
+    $cards = $deck->getCardCount(array_merge($deck->maindeck_cards, $deck->sideboard_cards));
     if($cards < 60) {print $rstar;}
     if($cards < 6)  {print $rstar;}
     echo "</td>\n";
