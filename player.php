@@ -11,6 +11,7 @@ print_header("Player Control Panel");
 if ($player == NULL) {
   echo "<center> You must <a href=\"login.php\">log in</a> to use your player control panel.</center>\n";
 } else {
+  $result = '';
   // Handle actions
   if (isset($_POST['action'])) {
     if ($_POST['action'] == 'setIgnores') {
