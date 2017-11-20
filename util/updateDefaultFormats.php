@@ -21,6 +21,16 @@ function info($text){
   }
 }
 
+function addSet($set) {
+  if (PHP_SAPI == "cli") {
+    info("Please add {$set} to the database");
+  }
+  else
+  {
+    redirect("insertcardset.php?cardsetcode={$set}&return=updateDefaultFormats.php");
+  }
+}
+
 function LoadFormat($format){
   if (!Format::doesFormatExist($format))
   {
@@ -67,7 +77,8 @@ function updateStandard(){
       $success = $stmt->fetch();
       $stmt->close();
       if (!$success){
-        redirect("insertcardset.php?cardsetcode={$set->code}");
+        addSet($set->code);
+        return;
       }
       $expected[] = $setName;
     }
@@ -129,16 +140,35 @@ function updatePennyDreadful()
   $fmt = LoadFormat("Penny Dreadful");
 
   $legal_cards = parseCards(file_get_contents("http://pdmtgo.com/legal_cards.txt"));
-  if ($legal_cards){
-    foreach($legal_cards as $card) {
-      $success = $fmt->insertCardIntoLegallist($card);
-      if(!$success) {
-        info("Can't add {$card} to PD Legal list, it is not in the database.");
-        return; 
+  if (!$legal_cards){
+    info("Unable to fetch legal_cards.txt");
+    return;
+  }
+  foreach ($fmt->card_legallist as $card) {
+    $remove = true;
+    foreach ($legal_cards as $legal_card) {
+      if (strcasecmp($card, $legal_card) == 0) {  
+        $remove = false;
       }
     }
+    if ($remove){
+      $fmt->deleteCardFromLegallist($card);
+      info("{$card} is no longer PD Legal.");      
+    }
   }
-  else{
-    info("Unable to fetch legal_cards.txt");
+  foreach ($legal_cards as $card) {
+    $success = $fmt->insertCardIntoLegallist($card);
+    if(!$success) {
+      info("Can't add {$card} to PD Legal list, it is not in the database.");
+      $set = findSetForCard($card);
+      addSet($set);
+      return; 
+    }
   }
+}
+
+function findSetForCard($card) {
+  $card = urlencode($card);
+  $data = json_decode(file_get_contents("http://api.scryfall.com/cards/named?exact={$card}"));
+  return strtoupper($data->set);
 }
