@@ -118,7 +118,7 @@ class Event {
     $this->new = false;
   }
 
-  function session_timeout_stat () {
+  static public function session_timeout_stat () {
       // Get the current Session Timeout Value
       $currentTimeoutInSecs = ini_get("session.gc_maxlifetime");      
       return $currentTimeoutInSecs;

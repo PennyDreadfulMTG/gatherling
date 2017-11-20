@@ -434,6 +434,16 @@ function printStewardSelect($player_series, $selected) {
   echo "</form>";
 }
 
+function printUpcomingEvent($event) {
+  $dt = new DateTime($event->start);
+  if (!$dt) { die(DateTime::getLastErrors());}
+  $date = $dt->format("d/m/Y");
+  $time = $dt->format("g:i A");
+  echo "<table class=\"center\"><tbody><tr><td width=\"60\">$date</td>";
+  echo "<td width=\"100\"><a href=\"{$event->threadurl}\">{$event->series} {$event->season}.{$event->number}</a><br>{$event->format}</td>";
+  echo "<td width=\"50\">{$time}</td></tr></tbody></table>";
+}
+
 function stringField($field, $def, $len) {
   echo "<input class=\"inputbox\" type=\"text\" name=\"$field\" value=\"$def\" size=\"$len\">";
 }

@@ -51,7 +51,7 @@ foreach ($active_series as $series_name) {
     $nextevent = $series->nextEvent();
     if ($nextevent) {
     ?>
-      <tr> <th> Next Event </th> <td> <?php echo strftime("%B %e %I:%M %P registration", strtotime($nextevent->start) - minutes(30)) ?> </td> </tr>
+      <tr> <th> Next Event </th> <td> <?php echo strftime("%B %e %I:%M %P registration", strtotime($nextevent->start)) ?> </td> </tr>
     <?php } else { ?>
       <tr> <th> Next Event </th> <td> Not scheduled yet </td> </tr>
     <?php } ?>
