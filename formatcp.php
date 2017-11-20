@@ -57,12 +57,27 @@ function formatEditor($format = "", $seriesName = "System") {
   }
   
   formatCPMenu($active_format, $seriesName);
-  
-  printFormatSettings($active_format, $seriesName);
-  
-  printBandR($active_format, $seriesName);
-
-  printCardSets($active_format, $seriesName);
+  if (isset($_REQUEST['view']))
+  {
+    $view = $_REQUEST['view'];
+  }
+  else
+  {
+    $view = 'settings';
+  }
+  switch ($view){
+    case 'settings':
+    printFormatSettings($active_format, $seriesName);
+    break;
+    case 'bandr':
+    printBandR($active_format, $seriesName);
+    break;
+    case 'cardsets':
+    printCardSets($active_format, $seriesName);
+    break;
+    default:
+    echo "Unknown View!";
+  }
 }
 
 function printFormatCPIntroduction() {
@@ -243,14 +258,14 @@ function handleActions() {
         if ($success) {
             echo "<h4>New Format $format->name Created Successfully!</h4>";
             echo "<form action=\"formatcp.php\" method=\"post\">";
-            echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+            echo "<input type=\"hidden\" name=\"view\" value=\"settings\" />";
             echo "<input type=\"hidden\" name=\"format\" value=\"$format->name\" />";
             echo "<input class=\"inputbutton\" type=\"submit\" value=\"Continue\" name =\"action\" />";
             echo "</form>";
         } else {
             echo "<h4>New Format {$_POST['newformatname']} Could Not Be Created:-(</h4>";
             echo "<form action=\"formatcp.php\" method=\"post\">";
-            echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+            echo "<input type=\"hidden\" name=\"view\" value=\"settings\" />";
             echo "<input class=\"inputbutton\" type=\"submit\" value=\"Continue\" name =\"action\" />";
             echo "</form>";          
         }
@@ -276,14 +291,14 @@ function handleActions() {
         if ($success) {
             echo "<h4>New Format $format->name Saved Successfully!</h4>";
             echo "<form action=\"formatcp.php\" method=\"post\">";
-            echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+            echo "<input type=\"hidden\" name=\"view\" value=\"settings\" />";
             echo "<input type=\"hidden\" name=\"format\" value=\"$format->name\" />";
             echo "<input class=\"inputbutton\" type=\"submit\" value=\"Continue\" name =\"action\" />";
             echo "</form>";
         } else {
             echo "<h4>New Format {$_POST['newformat']} Could Not Be Saved :-(</h4>";
             echo "<form action=\"formatcp.php\" method=\"post\">";
-            echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+            echo "<input type=\"hidden\" name=\"view\" value=\"settings\" />";
             echo "<input type=\"hidden\" name=\"format\" value=\"{$_POST['oldformat']}\" />";
             echo "<input class=\"inputbutton\" type=\"submit\" value=\"Continue\" name =\"action\" />";
             echo "</form>";          
@@ -309,7 +324,7 @@ function handleActions() {
         if ($success) {
             echo "<h4>Format {$_POST['format']} Renamed as $format->name Successfully!</h4>";
             echo "<form action=\"formatcp.php\" method=\"post\">";
-            echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+            echo "<input type=\"hidden\" name=\"view\" value=\"settings\" />";
             echo "<input type=\"hidden\" name=\"format\" value=\"$format->name\" />";
             echo "<input class=\"inputbutton\" type=\"submit\" value=\"Continue\" name =\"action\" />";
             echo "</form>";
@@ -337,7 +352,7 @@ function handleActions() {
         if ($success) {
             echo "<h4>Format {$_POST['format']} Deleted Successfully!</h4>";
             echo "<form action=\"formatcp.php\" method=\"post\">";
-            echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+            echo "<input type=\"hidden\" name=\"view\" value=\"settings\" />";
             echo "<input class=\"inputbutton\" type=\"submit\" value=\"Continue\" name =\"action\" />";
             echo "</form>";
         } else {
@@ -364,7 +379,7 @@ function handleActions() {
 function printLoadFormat(){
     echo "<h4>Load Format</h4>\n";
     echo "<form action=\"formatcp.php\" method=\"post\">"; 
-    echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+    echo "<input type=\"hidden\" name=\"view\" value=\"settings\" />";
     echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
     echo "<tr><td>";
     formatsDropMenu("All");
@@ -388,7 +403,7 @@ echo "<p style=\"width: 75%; text-align: left;\">Coming in a future update will 
     and manage your own custom filters. That way you can have Alt Events that have special filters.</p>";
 
 echo "<form action=\"formatcp.php\" method=\"post\">"; 
-echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+echo "<input type=\"hidden\" name=\"view\" value=\"settings\" />";
 echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
 echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
 
@@ -555,7 +570,7 @@ if ($active_format->noFormatLoaded()) {
   echo " /></td>";
 }
 echo "</tr>";
-echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+echo "<input type=\"hidden\" name=\"view\" value=\"settings\" />";
 echo "<tr>";
 if ($active_format->noFormatLoaded()) {
   echo "<td colspan=\"5\" class=\"buttons\">";
@@ -746,7 +761,7 @@ function printCardSets($active_format, $seriesName) {
   $extraCardSets = $active_format->getExtraCardsets();
   echo "<h4>Core Cardsets Allowed</h4>\n";
   echo "<form action=\"formatcp.php\" method=\"post\">"; 
-  echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+  echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
   echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
   echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
   echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
@@ -768,26 +783,17 @@ function printCardSets($active_format, $seriesName) {
       echo "</td>";
       echo "</tr>";
   }
-  if ($active_format->noFormatLoaded()) {
-      echo "<tr><td>";
-      cardsetDropMenu("Core", $active_format, true);
-      echo "</td>";
-      echo "<td colspan=\"2\" class=\"buttons\">";
-      echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
-      echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" disabled=\"disabled\" />";
-  } else {
-      echo "<tr><td>";
-      cardsetDropMenu("Core", $active_format, false);
-      echo "</td>";
-      echo "<td colspan=\"2\" class=\"buttons\">";
-      echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
-      echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" />";
-  }
+  echo "<tr><td>";
+  cardsetDropMenu("Core", $active_format, false);
+  echo "</td>";
+  echo "<td colspan=\"2\" class=\"buttons\">";
+  echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
+  echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" />";
   echo"</td></tr></table></form>";
 
   echo "<h4>Block Cardsets Allowed</h4>\n";
   echo "<form action=\"formatcp.php\" method=\"post\">"; 
-  echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+  echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
   echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
   echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
   echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
@@ -809,26 +815,18 @@ function printCardSets($active_format, $seriesName) {
       echo "</td>";
       echo "</tr>";
   }
-  if ($active_format->noFormatLoaded()) {
-      echo "<tr><td>";
-      cardsetDropMenu("Block", $active_format, true);
-      echo "</td>";
-      echo "<td colspan=\"2\" class=\"buttons\">";
-      echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
-      echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" disabled=\"disabled\" />";
-  } else {
-      echo "<tr><td>";
-      cardsetDropMenu("Block", $active_format, false);
-      echo "</td>";
-      echo "<td colspan=\"2\" class=\"buttons\">";
-      echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
-      echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" />";
-  }
+
+  echo "<tr><td>";
+  cardsetDropMenu("Block", $active_format, false);
+  echo "</td>";
+  echo "<td colspan=\"2\" class=\"buttons\">";
+  echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
+  echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" />";
   echo"</td></tr></table></form>";
 
   echo "<h4>Extra Cardsets Allowed</h4>\n";
   echo "<form action=\"formatcp.php\" method=\"post\">"; 
-  echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+  echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
   echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
   echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
   echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
@@ -850,20 +848,11 @@ function printCardSets($active_format, $seriesName) {
       echo "</td>";
       echo "</tr>";
   }
-  if ($active_format->noFormatLoaded()) {
-      echo "<tr><td>";
-      cardsetDropMenu("Extra", $active_format, true);
-      echo "</td>";
-      echo "<td colspan=\"2\" class=\"buttons\">";
-      echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
-      echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" disabled=\"disabled\" />";
-  } else {
-      echo "<tr><td>";
-      cardsetDropMenu("Extra", $active_format, false);
-      echo "</td>";
-      echo "<td colspan=\"2\" class=\"buttons\">";
-      echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
-      echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" />";
-  }
+  echo "<tr><td>";
+  cardsetDropMenu("Extra", $active_format, false);
+  echo "</td>";
+  echo "<td colspan=\"2\" class=\"buttons\">";
+  echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
+  echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" />";
   echo"</td></tr></table></form></center>";
 }
