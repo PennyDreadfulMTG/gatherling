@@ -265,7 +265,7 @@ function matchInProgress() {
         $stmt->execute();
         Match::validateReport($match_id);
 
-        return NULL;       
+        return NULL;
         }
     }
     

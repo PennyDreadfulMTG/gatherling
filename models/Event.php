@@ -151,10 +151,10 @@ class Event {
         metaurl = ?, finalized = ?, prereg_allowed = ?, pkonly = ?, active = ?, current_round = ?,
          player_reportable = ?, prereg_cap = ?, player_editdecks = ? WHERE name = ?");
       $stmt or die($db->error);
-      $stmt->bind_param("ssssdddssssdddddddsd", $this->start, $this->format, $this->host, $this->cohost, $this->kvalue, 
+      $stmt->bind_param("ssssdddssssdddddddds", $this->start, $this->format, $this->host, $this->cohost, $this->kvalue, 
         $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl, 
         $this->metaurl, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->active, $this->current_round,
-        $this->player_reportable, $this->prereg_cap, $this->name, $this->player_editdecks);
+        $this->player_reportable, $this->prereg_cap, $this->player_editdecks, $this->name);
       $stmt->execute() or die($stmt->error);
       $stmt->close();
 

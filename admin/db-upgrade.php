@@ -406,11 +406,23 @@ if ($version < 17) {
   echo "... DB now at version 17! <br />";
 }
 if ($version < 18) {
-  echo "Updating to version 16 (add prereg_cap to events)... <br />";
+  echo "Updating to version 18 (add prereg_cap to events)... <br />";
   do_query("ALTER TABLE events ADD COLUMN `prereg_cap` int(11) DEFAULT NULL;");
   do_query("UPDATE db_version SET version = 18");
   $db->commit();
   echo "... DB now at version 18! <br />";
+}
+if ($version < 19) {
+  echo "Updating to version 19 (Fix rounding error with standings)... <br />";  
+  do_query("ALTER TABLE `gatherling`.`standings` 
+  CHANGE COLUMN `OP_Match` `OP_Match` DECIMAL(4,3) NULL DEFAULT '0.000',
+  CHANGE COLUMN `PL_Game` `PL_Game` DECIMAL(4,3) NULL DEFAULT '0.000',
+  CHANGE COLUMN `OP_Game` `OP_Game` DECIMAL(4,3) NULL DEFAULT '0.000';");
+  do_query("ALTER TABLE `gatherling`.`events` 
+  CHANGE COLUMN `prereg_cap` `prereg_cap` INT(11) NULL DEFAULT '0';");
+  do_query("UPDATE db_version SET version = 19");
+  $db->commit();
+  echo "... DB now at version 19! <br />";
 }
 
 $db->autocommit(TRUE);
