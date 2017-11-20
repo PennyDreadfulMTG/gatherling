@@ -8,7 +8,7 @@ class Ratings {
     public $wins;
     public $losses;
     
-    private $ratingNames;
+    public $ratingNames;
     
     function __construct($format = "") {
         if ($format == "") {
@@ -19,11 +19,11 @@ class Ratings {
             $this->wins = 0;
             $this->losses = 0;
             $this->ratingNames = array("Standard", "Extended", "Modern", "Classic", "Legacy",  
-                                       "Pauper", "SilverBlack", "Heirloom", "Commander");
-            return; 
-        } 
+                                       "Pauper", "SilverBlack", "Heirloom", "Commander", "Penny Dreadful");
+            return;
+        }
     }
-    
+
     function deleteAllRatings() {
         $db = Database::getConnection();
         $db->query("DELETE FROM ratings") or die($db->error);
@@ -97,18 +97,15 @@ class Ratings {
     function calcOtherRating() {
         $db = Database::getConnection();
 
+        $notlike = '';
+        foreach($this->ratingNames as $format) {
+            $notlike = $notlike . " AND format NOT LIKE \"%" . $format . "%\" ";
+        }
+
         $result = $db->query("SELECT name, start 
                               FROM events 
                               WHERE finalized = '1' 
-                              AND format NOT LIKE \"%Standard%\" 
-                              AND format NOT LIKE \"%Extended%\" 
-                              AND format NOT LIKE \"%Modern%\" 
-                              AND format NOT LIKE \"%Classic%\" 
-                              AND format NOT LIKE \"%Legacy%\" 
-                              AND format NOT LIKE \"%Pauper%\"
-                              AND format NOT LIKE \"%SilverBlack%\"
-                              AND format NOT LIKE \"%Heirloom%\"
-                              AND format NOT LIKE \"%Commander%\"
+                              $notlike
                               ORDER BY start") or die($db->error);
         echo "<h3>Calculating Other Formats Ratings</h3>";
         

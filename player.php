@@ -573,21 +573,16 @@ function print_matchTable($player, $limit=0) {
 
 function print_ratingsTableSmall() {
   global $player;
-  $composite = $player->getRating("Composite");
-  $standard = $player->getRating("Standard");
-  $extended = $player->getRating("Extended");
-  $classic = $player->getRating("Classic");
-  $other = $player->getRating("Other Formats");
-
   echo "<table style=\"border-width: 0px;\" width=300>";
   echo "<tr><td colspan=1><b>MY RATINGS</td>\n";
   echo "<td colspan=1 align=\"right\">";
   echo "<a href=\"player.php?mode=allratings\">(see all)</a></td></tr>\n";
-  echo "<tr><td>Composite</td><td align=\"right\">$composite</td></tr>\n";
-  echo "<tr><td>Standard</td><td align=\"right\">$standard</td></tr>\n";
-  echo "<tr><td>Extended</td><td align=\"right\">$extended</td></tr>\n";
-  echo "<tr><td>Classic</td><td align=\"right\">$classic</td></tr>\n";
-  echo "<tr><td>Other Formats</td><td align=\"right\">$other</td></tr>\n";
+  foreach (array('Composite', 'Standard', 'Legacy', 'Penny Dreadful', 'Heirloom', 'Other Formats') as $rating) {
+    $n = $player->getRating($rating);
+    if ($n != 0 && $n != 1600){
+      echo "<tr><td>$rating</td><td align=\"right\">{$n}</td></tr>\n";
+    }
+  }
   echo "</table>";
 }
 
@@ -598,10 +593,11 @@ function print_ratingsTable() {
   echo "<td align=\"center\"><b>Record</td>\n";
   echo "<td align=\"center\"><b>Low</td>\n";
   echo "<td align=\"center\"><b>High</td></tr>\n";
-  print_ratingLine("Composite");
-  print_ratingLine("Standard");
-  print_ratingLine("Extended");
-  print_ratingLine("Classic");
+  $ratings = new Ratings();
+  print_ratingLine("Composite");  
+  foreach ($ratings->ratingNames as $rating){
+    print_ratingLine($rating);
+  }
   print_ratingLine("Other Formats");
   echo "</table>\n";
 }
@@ -685,8 +681,12 @@ function print_ratingsHistory($format) {
 }
 
 function print_ratingHistoryForm($format) {
-  $formats = array("Composite", "Standard", "Extended", "Classic",
-    "Other Formats");
+  $formats = array("Composite");
+  $ratings = new Ratings();
+  foreach ($ratings->ratingNames as $rating){
+    $formats[] = $rating;
+  }
+  $formats[] = "Other Formats";
   echo "<center>\n";
   echo "<form action=\"player.php\" method=\"get\">\n";
   echo "Show history for&nbsp;";
