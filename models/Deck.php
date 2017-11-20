@@ -697,12 +697,12 @@ class Deck {
         $this->errors[] = "This format allows a maximum of {$format->max_main_cards_allowed} Maindeck Cards";
     }
     
-    if ($this->sideboard_cardcount != $format->min_side_cards_allowed && 
-        $this->sideboard_cardcount != $format->max_side_cards_allowed) {
+    if ($this->sideboard_cardcount < $format->min_side_cards_allowed && 
+        $this->sideboard_cardcount > $format->max_side_cards_allowed) {
         if ($format->min_side_cards_allowed == $format->max_side_cards_allowed)
             $this->errors[] = "A legal sideboard for this format has $format->max_side_cards_allowed cards.";
         else {
-            $this->errors[] = "A legal sideboard for this format has either $format->min_side_cards_allowed cards, or 
+            $this->errors[] = "A legal sideboard for this format has between $format->min_side_cards_allowed and 
                               $format->max_side_cards_allowed cards.";
         }
     }
