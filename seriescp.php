@@ -49,7 +49,7 @@ function do_page() {
   printError();
   printSeriesForm($active_series);
   printLogoForm($active_series);
-  seriesCPMenu();
+  seriesCPMenu($active_series_name);
   if (isset($_REQUEST['view'])){
     $view = $_REQUEST['view'];
   }
@@ -75,11 +75,12 @@ function do_page() {
   }
 }
 
-function seriesCPMenu() {
+function seriesCPMenu($active_series_name) {
+  $active_series_name = urlencode($active_series_name);
   echo "<table><tr><td colspan=\"2\" align=\"center\">";
-  echo "<a href=\"seriescp.php?view=recent_events\">Recent Events</a>";
-  echo " | <a href=\"seriescp.php?view=points_management\">Points Management</a>";
-  echo " | <a href=\"seriescp.php?view=organizers\">Series Organizers</a>";
+  echo "<a href=\"seriescp.php?view=recent_events&series={$active_series_name}\">Recent Events</a>";
+  echo " | <a href=\"seriescp.php?view=points_management&series={$active_series_name}\">Points Management</a>";
+  echo " | <a href=\"seriescp.php?view=organizers&series={$active_series_name}\">Series Organizers</a>";
   // echo " | <a href=\"seriescp.php?view=calc_ratings\">Ratings</a>";
   // echo " | <a href=\"seriescp.php?view=add_cardset\">Add New Cardset</a>";
   echo "</td></tr></table>";
@@ -154,6 +155,7 @@ function printSeriesForm($series) {
 function printStewardsForm($series) {
   echo "<form action=\"seriescp.php\" method=\"post\">";
   echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
+  echo "<input type=\"hidden\" name=\"view\" value=\"organizers\" />";
   echo "<h3> <center>Series Organizers</center> </h3>";
   echo "<p style=\"width: 75%; text-align: left;\">Series organizers can create new series events, manage any event in the series, and modify anything on this page.  Please add them with care as they could screw with anything related to your series including changing the logo and the time.  Only verified members can be series organizers. <br /> <b>If you just need a guest host, add them as the host to a specific event!</b> </p>";
   echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
@@ -198,6 +200,7 @@ function printPointsForm($series) {
   echo "<center>";
   echo "<form action=\"seriescp.php\">";
   echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
+  echo "<input type=\"hidden\" name=\"view\" value=\"points_management\" />";
   seasonDropMenu($chosen_season);
   echo "<input type=\"submit\" value=\"Choose Season\" />";
   echo "</form>";
