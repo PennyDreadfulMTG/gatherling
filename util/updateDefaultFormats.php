@@ -3,6 +3,7 @@ require_once('../lib.php');
 
 if (PHP_SAPI != "cli"){
   session_start();
+  set_time_limit(0);
   if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
     redirect("index.php");
   }
