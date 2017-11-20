@@ -398,9 +398,6 @@ function deckInfoCell($deck) {
 
   $rstar = "<font color=\"#FF0000\">*</font>";
   $name = $deck->name;
-  if (empty($name)) {
-    $name = "** NO NAME **";
-  }
   $line1 = "<b>" . strtoupper($name) . "</b>";
   $deck_format = $event->format;
   if (!$deck->isValid()) {

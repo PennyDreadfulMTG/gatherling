@@ -427,11 +427,11 @@ class Deck {
     $this->errors = array();
     $format = NULL; // will initialize later after I verify that eventname has been.
 
-    if ($this->name == NULL || $this->name == "") {
-      $this->errors[] = "Name cannot be blank";
-    }
     if ($this->archetype != "Unclassified" && !in_array($this->archetype, Deck::getArchetypes())) {
-      $this->archetype = "Unclassified";
+        $this->archetype = "Unclassified";
+    }
+    if ($this->name == NULL || $this->name == "") {
+        $this->name = $this->getColorString() . ' ' . $this->archetype; 
     }
     
     if ($this->id == 0) { 
