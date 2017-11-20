@@ -34,7 +34,12 @@ else{
 
 if (isset($_REQUEST['return']))
 {
-  echo "Return to <a href='{$_REQUEST['return']}'>{$_REQUEST['return']}</a><br/>";
+  $args = '';
+  if (isset($_REQUEST['ret_args']))
+  {
+    $args = $_REQUEST['ret_args'];
+  }
+  echo "Return to <a href='{$_REQUEST['return']}?{$args}'>{$_REQUEST['return']}</a><br/>";
 }
 
 if ($file == FALSE) {
