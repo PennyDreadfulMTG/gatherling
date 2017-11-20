@@ -99,13 +99,6 @@ if (!$set_already_in) {
   }
   $stmt->close();
 }
-else
-{
-  $stmt = $database->prepare("DELETE FROM gatherling.cards WHERE `cardset` = ?;");
-  $stmt->bind_param("s", $set);
-  $stmt->execute() or die($stmt->errorCode());
-  $stmt->close();  
-}
 
 $stmt = $database->prepare("INSERT INTO cards(cost, convertedcost, name, cardset, type,
   isw, isu, isb, isr, isg, isp, rarity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -125,33 +118,43 @@ echo "Total Cards Inserted: {$cardsinserted}<br />";
 $stmt->close();
 
 function insertCard($card, $set, $rarity, $stmt) {
-  # new gatherer - card type is now a . because of unicode
   $typeline = join($card->types, " ");
-  if (count($card->subtypes) > 0) {
+  if (isset($card->subtypes) && count($card->subtypes) > 0) {
     $typeline = $typeline . " - " . join($card->subtypes, " ");
+  }
+  $name = $card->name;
+  if ($card->layout == "split" || $card->layout == "aftermath")
+  {
+    // SPLIT CARDS!!!!!!
+    $name = implode('/', $card->names);
+    // TODO: Make sure we get the $ism flags right. (We currently don't)
   }
 
   echo "<table class=\"new_card\">";
-  foreach (array('name', 'manaCost', 'cmc', 'type', 'rarity') as $attr) {
-    echo "<tr><th>{$attr}:</th><td>" . $card->{$attr} . "</td></tr>";
+  echo "<tr><th>Name:</th><td>" . $name . "</td></tr>";
+  foreach (array('manaCost', 'cmc', 'type', 'rarity') as $attr) {
+    if (isset($card->{$attr}))
+      echo "<tr><th>{$attr}:</th><td>" . $card->{$attr} . "</td></tr>";
   }
   echo "<tr><th>Card Colors:</th><td>";
   $isw = $isu = $isb = $isr = $isg = $isp = 0;
-  if(preg_match("/W/", $card->manaCost)) {$isw = 1;echo "White ";}
-  if(preg_match("/U/", $card->manaCost)) {$isu = 1;echo "Blue ";}
-  if(preg_match("/B/", $card->manaCost)) {$isb = 1;echo "Black ";}
-  if(preg_match("/R/", $card->manaCost)) {$isr = 1;echo "Red ";}
-  if(preg_match("/G/", $card->manaCost)) {$isg = 1;echo "Green ";}
-  if(preg_match("/P/", $card->manaCost)) {$isp = 1;echo "Phyrexian ";}
+  if (isset($card->manaCost)){
+    if(preg_match("/W/", $card->manaCost)) {$isw = 1;echo "White ";}
+    if(preg_match("/U/", $card->manaCost)) {$isu = 1;echo "Blue ";}
+    if(preg_match("/B/", $card->manaCost)) {$isb = 1;echo "Black ";}
+    if(preg_match("/R/", $card->manaCost)) {$isr = 1;echo "Red ";}
+    if(preg_match("/G/", $card->manaCost)) {$isg = 1;echo "Green ";}
+    if(preg_match("/P/", $card->manaCost)) {$isp = 1;echo "Phyrexian ";}
+  }
   echo "</td></tr>";
 
   $empty_string = "";
   $zero = 0;
 
   if (property_exists($card, "manaCost")) {
-    $stmt->bind_param("sdsssdddddds", $card->manaCost, $card->cmc, $card->name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity);
+    $stmt->bind_param("sdsssdddddds", $card->manaCost, $card->cmc, $name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity);
   } else {
-    $stmt->bind_param("sdsssdddddds", $empty_string, $zero, $card->name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity);
+    $stmt->bind_param("sdsssdddddds", $empty_string, $zero, $name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity);
   }
 
   if (!$stmt->execute()) {
