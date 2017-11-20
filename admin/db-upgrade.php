@@ -405,4 +405,12 @@ if ($version < 17) {
   $db->commit();
   echo "... DB now at version 17! <br />";
 }
+if ($version < 18) {
+  echo "Updating to version 16 (add prereg_cap to events)... <br />";
+  do_query("ALTER TABLE events ADD COLUMN `prereg_cap` int(11) DEFAULT NULL;");
+  do_query("UPDATE db_version SET version = 18");
+  $db->commit();
+  echo "... DB now at version 18! <br />";
+}
+
 $db->autocommit(TRUE);
