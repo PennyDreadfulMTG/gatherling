@@ -448,6 +448,7 @@ function version_tagline() {
 }
 
 function redirect($page) {
+  global $CONFIG;
   header("Location: {$CONFIG['base_url']}{$page}");
   exit(0);
 }
@@ -468,12 +469,13 @@ function parseCards($cards) {
   return $cardarr;
 }
 
-function normaliseCardName($card){
+function normaliseCardName($card, $tolower = false){
   $card = preg_replace("/Æ/", "AE", $card);
   $card = preg_replace("/\306/", "AE", $card);
   $card = preg_replace("/ö/", "o", $card);
   $card = preg_replace("/ \/\/ /", "/", $card);
-  $card = strtolower($card);
+  if ($tolower)
+    $card = strtolower($card);
   return $card = trim($card);
 }
 
