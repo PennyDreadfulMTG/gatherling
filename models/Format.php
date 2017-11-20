@@ -485,6 +485,16 @@ class Format {
                                                          "ss", $this->name, $card)) > 0;
     }
     
+    public function isCardSetLegal($setName) {
+        $legal = $this->getLegalCardsets();
+        foreach ($legal as $legalsetName) {
+            if (strcmp($setName, $legalsetName) == 0) {  
+              return true;
+            }
+        }
+        return false;
+    }
+
     public function isCardSingletonLegal($card, $amt) {
         $isLegal = false;
         
@@ -552,7 +562,7 @@ class Format {
         
         return $isLegal;
     }
-    
+
     public static function getCardColors($card) {
         $db = Database::getConnection(); 
         $stmt = $db->prepare("SELECT isw, isr, isg, isu, isb

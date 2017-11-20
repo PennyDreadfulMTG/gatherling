@@ -33,20 +33,7 @@ function LoadFormat($format){
   return new Format($format);
 }
 
-function do_query($query) {
-  global $db;
-  echo "Executing Query: $query <br />";
-  $result = $db->query($query);
-  if (!$result) {
-    echo "!!!! - Error: ";
-    echo $db->error;
-    exit(0);
-  }
-  return $result;
-}
-
 function updateStandard(){
-  info("Processing Standard...");
   $fmt = LoadFormat("Standard");
   $legal = json_decode(file_get_contents("http://whatsinstandard.com/api/v5/sets.json"));
   if (!$legal)
@@ -54,10 +41,8 @@ function updateStandard(){
     info("Unable to load WhatsInStandard API.  Aborting.");
     return;
   }
-  Database::no_result_single_param("DELETE FROM setlegality WHERE format = ?", "s", $fmt->name);
-  
+  $expected = array();
   foreach ($legal->sets as $set){
-    // $code = $set->code;
     $enter = strtotime($set->enter_date);
     $exit = strtotime($set->exit_date);
     $now = time();
@@ -65,11 +50,11 @@ function updateStandard(){
       $exit = $now + 1;
     if ($exit < $now)
     {
-      info("{$set->code} has rotated out.");
+      // Set has rotated out.
     }
     else if ($enter > $now)
     {
-      info("{$set->code} is yet to be released.");
+      // Set is yet to be released. (And probably not available in MTGJSON yet)
     }
     else
     {
@@ -84,14 +69,31 @@ function updateStandard(){
       if (!$success){
         redirect("insertcardset.php?cardsetcode={$set->code}");
       }
+      $expected[] = $setName;
+    }
+  }
+  foreach ($fmt->getLegalCardsets() as $setName) {
+    $remove = true;
+    foreach ($expected as $legalsetName) {
+      if (strcmp($setName, $legalsetName) == 0) {  
+        $remove = false;
+      }
+    }
+    if ($remove){
+      $fmt->deleteLegalCardSet($setName);
+      info("{$setName} is no longer Standard Legal.");      
+    }
+  }
+
+  foreach ($expected as $setName){
+    if (!$fmt->isCardSetLegal($setName)) {
       $fmt->insertNewLegalSet($setName);
-      info("{$set->code} is Standard Legal.");
+      info("{$setName} is now Standard Legal.");
     }
   }
 }
 
 function updateModern(){
-  info("Processing Modern...");
   $fmt = LoadFormat("Modern");
   
   $legal = $fmt->getLegalCardsets();
@@ -114,13 +116,7 @@ function updateModern(){
     $release = strtotime($set[2]);
     if ($release > $cutoff)
     {
-      $notFound = true;
-      foreach ($legal as $legalsetName) {
-          if (strcmp($setName, $legalsetName) == 0) {  
-            $notFound = false;
-          }
-      }
-      if ($notFound) {
+      if (!$fmt->isCardSetLegal($setName)) {
         $fmt->insertNewLegalSet($setName);
         info("{$setName} is Modern Legal.");
       }
@@ -130,7 +126,6 @@ function updateModern(){
 
 function updatePennyDreadful()
 {
-  info("Processing PD...");
   $fmt = LoadFormat("Penny Dreadful");
 
   $legal_cards = parseCards(file_get_contents("http://pdmtgo.com/legal_cards.txt"));
@@ -138,7 +133,7 @@ function updatePennyDreadful()
     foreach($legal_cards as $card) {
       $success = $fmt->insertCardIntoLegallist($card);
       if(!$success) {
-        info("Can't add {$card} to Legal list, it is either not in the database, or already on the ban list.");
+        info("Can't add {$card} to PD Legal list, it is not in the database.");
         return; 
       }
     }

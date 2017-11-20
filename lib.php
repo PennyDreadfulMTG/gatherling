@@ -376,26 +376,31 @@ function cardsetDropMenu($cardsetType, $format, $disabled) {
   if (strcmp($cardsetType, "Extra") == 0) {$legalsets = $format->getExtraCardsets();}
   
   if ($disabled) {
-      echo "<select disabled=\"disabled\" class=\"inputbox\" name=\"cardsetname\" STYLE=\"width: 250px\">\n";
-  } else {
-      echo "<select class=\"inputbox\" name=\"cardsetname\" STYLE=\"width: 250px\">\n";      
+      echo "<select disabled=\"disabled\" class=\"inputbox\" name=\"cardsetname\" STYLE=\"width: 250px\">";
+      echo "<option value=\"Unclassified\">- {$cardsetType} Cardset Name -</option>";
+      echo "</select>\n";
+      return;
   }
-  echo "<option value=\"Unclassified\">- {$cardsetType} Cardset Name -</option>\n";
   $finalList = array();
   foreach ($cardsets as $cardsetName) {
-      $notFound = true;
-      foreach ($legalsets as $legalsetName) {
-          if(strcmp($cardsetName, $legalsetName) == 0) {
-              $notFound = false;
-          }
-      }
-      if($notFound) {
-          $finalList[] = $cardsetName;
-      }
+    
+    if (!$format->isCardSetLegal($cardsetName)) {
+      $finalList[] = $cardsetName;
+    }
   }
-  foreach ($finalList as $setName) {
+  if ($finalList) {
+    echo "<select class=\"inputbox\" name=\"cardsetname\" STYLE=\"width: 250px\">\n";      
+    echo "<option value=\"Unclassified\">- {$cardsetType} Cardset Name -</option>\n";
+    foreach ($finalList as $setName) {
       echo "<option value=\"$setName\">$setName</option>\n";
+    }
   }
+  else {
+    echo "<select disabled=\"disabled\" class=\"inputbox\" name=\"cardsetname\" STYLE=\"width: 250px\">";
+    echo "<option value=\"Unclassified\">- All {$cardsetType} sets have been added -</option>";
+    echo "</select>\n";  
+  }
+  echo "</select>\n";
 }
 
 function formatsDropMenu($formatType="", $seriesName = "System") {
