@@ -133,6 +133,7 @@ class Event {
         threadurl, reporturl, metaurl, finalized, prereg_allowed, pkonly, 
         player_reportable, prereg_cap, player_editdecks)
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?)");
+      $stmt or die($db->error);
       $stmt->bind_param("sssssdddssssddddd", $this->name, $this->start, $this->format, 
         $this->host, $this->cohost, $this->kvalue, $this->number, $this->season, $this->series, 
         $this->threadurl, $this->reporturl, $this->metaurl, $this->prereg_allowed, $this->pkonly, 
