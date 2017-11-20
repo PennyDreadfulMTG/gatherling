@@ -134,7 +134,7 @@ function insertCard($card, $set, $rarity, $stmt) {
     $name = implode('/', $card->names);
     // TODO: Make sure we get the $ism flags right. (We currently don't)
   }
-
+  $name = normaliseCardName($name);
   echo "<table class=\"new_card\">";
   echo "<tr><th>Name:</th><td>" . $name . "</td></tr>";
   foreach (array('manaCost', 'cmc', 'type', 'rarity') as $attr) {

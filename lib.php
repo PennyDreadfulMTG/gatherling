@@ -460,17 +460,21 @@ function parseCards($cards) {
   }
   foreach ($cards as $card) {
       // AE Litigation
-      $card = preg_replace("/Æ/", "AE", $card);
-      $card = preg_replace("/\306/", "AE", $card);
-      $card = preg_replace("/ö/", "o", $card);
-      $card = preg_replace("/ \/\/ /", "/", $card);
-      $card = strtolower($card);
-      $card = trim($card);
+      $card = normaliseCardName($card);
       if ($card != '') {
           $cardarr[] = $card;
       }
   }
   return $cardarr;
+}
+
+function normaliseCardName($card){
+  $card = preg_replace("/Æ/", "AE", $card);
+  $card = preg_replace("/\306/", "AE", $card);
+  $card = preg_replace("/ö/", "o", $card);
+  $card = preg_replace("/ \/\/ /", "/", $card);
+  $card = strtolower($card);
+  return $card = trim($card);
 }
 
 function parseCardsWithQuantity($cards) {
