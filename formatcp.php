@@ -212,6 +212,14 @@ function handleActions($seriesName) {
                 }
             }
         }      
+    } else if (strncmp($_POST['action'], "Add All", 8)) {
+        $format = new Format($_POST['format']);
+        $cardsetType = substr($_POST['action'], 8);
+        $missing = getMissingSets($cardsetType, $format);
+        foreach ($missing as $set)
+        {
+            $format->insertNewLegalSet($set);
+        }
     } else if ($_POST['action'] == "Update Restricted List") {
         $active_format = $_POST['format'];
         $format = new Format($active_format);
@@ -759,4 +767,48 @@ function printCardSets($active_format, $seriesName) {
     echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
     echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" />";
     echo"</td></tr></table></form></center>";
+}
+
+function cardsetDropMenu($cardsetType, $format, $disabled) {
+    if ($disabled) {
+        echo "<select disabled=\"disabled\" class=\"inputbox\" name=\"cardsetname\" STYLE=\"width: 250px\">";
+        echo "<option value=\"Unclassified\">- {$cardsetType} Cardset Name -</option>";
+        echo "</select>\n";
+        return;
+    }
+    $finalList = getMissingSets($cardsetType, $format);
+    if ($finalList) {
+      echo "<select class=\"inputbox\" name=\"cardsetname\" STYLE=\"width: 250px\">\n";      
+      echo "<option value=\"Unclassified\">- {$cardsetType} Cardset Name -</option>\n";
+      foreach ($finalList as $setName) {
+        echo "<option value=\"$setName\">$setName</option>\n";
+      }
+    }
+    else {
+      echo "<select disabled=\"disabled\" class=\"inputbox\" name=\"cardsetname\" STYLE=\"width: 250px\">";
+      echo "<option value=\"Unclassified\">- All {$cardsetType} sets have been added -</option>";
+      echo "</select>\n";  
+    }
+    echo "</select>\n";
+    if (count($finalList) > 2){
+      echo "<input class=\"inputbutton\" type=\"submit\" value=\"Add All {$cardsetType}\" name =\"action\" />";
+    }
+  }
+
+function getMissingSets($cardsetType, $format) {
+    $cardsets = Database::list_result_single_param("SELECT name FROM cardsets WHERE type = ?", "s", $cardsetType);
+    
+    $legalsets = array();
+    if (strcmp($cardsetType, "Core") == 0) {$legalsets = $format->getCoreCardsets();}
+    if (strcmp($cardsetType, "Block") == 0) {$legalsets = $format->getBlockCardsets();}
+    if (strcmp($cardsetType, "Extra") == 0) {$legalsets = $format->getExtraCardsets();}
+    
+    $finalList = array();
+    foreach ($cardsets as $cardsetName) {
+        
+        if (!$format->isCardSetLegal($cardsetName)) {
+            $finalList[] = $cardsetName;
+        }
+    }
+    return $finalList;
 }

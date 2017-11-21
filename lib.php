@@ -367,42 +367,6 @@ function not_allowed($reason) {
   echo "<span class=\"notallowed inputbutton\" title=\"{$reason}\">&#x26A0;</span>";
 }
 
-function cardsetDropMenu($cardsetType, $format, $disabled) {
-  $cardsets = Database::list_result_single_param("SELECT name FROM cardsets WHERE type = ?", "s", $cardsetType);
-
-  $legalsets = array();
-  if (strcmp($cardsetType, "Core") == 0) {$legalsets = $format->getCoreCardsets();}
-  if (strcmp($cardsetType, "Block") == 0) {$legalsets = $format->getBlockCardsets();}
-  if (strcmp($cardsetType, "Extra") == 0) {$legalsets = $format->getExtraCardsets();}
-  
-  if ($disabled) {
-      echo "<select disabled=\"disabled\" class=\"inputbox\" name=\"cardsetname\" STYLE=\"width: 250px\">";
-      echo "<option value=\"Unclassified\">- {$cardsetType} Cardset Name -</option>";
-      echo "</select>\n";
-      return;
-  }
-  $finalList = array();
-  foreach ($cardsets as $cardsetName) {
-    
-    if (!$format->isCardSetLegal($cardsetName)) {
-      $finalList[] = $cardsetName;
-    }
-  }
-  if ($finalList) {
-    echo "<select class=\"inputbox\" name=\"cardsetname\" STYLE=\"width: 250px\">\n";      
-    echo "<option value=\"Unclassified\">- {$cardsetType} Cardset Name -</option>\n";
-    foreach ($finalList as $setName) {
-      echo "<option value=\"$setName\">$setName</option>\n";
-    }
-  }
-  else {
-    echo "<select disabled=\"disabled\" class=\"inputbox\" name=\"cardsetname\" STYLE=\"width: 250px\">";
-    echo "<option value=\"Unclassified\">- All {$cardsetType} sets have been added -</option>";
-    echo "</select>\n";  
-  }
-  echo "</select>\n";
-}
-
 function formatsDropMenu($formatType="", $seriesName = "System") {
   $formatNames = array();
   
