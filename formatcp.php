@@ -212,7 +212,7 @@ function handleActions($seriesName) {
                 }
             }
         }      
-    } else if (strncmp($_POST['action'], "Add All", 8)) {
+    } else if (strncmp($_POST['action'], "Add All", 7) == 0) {
         $format = new Format($_POST['format']);
         $cardsetType = substr($_POST['action'], 8);
         $missing = getMissingSets($cardsetType, $format);
@@ -254,7 +254,6 @@ function handleActions($seriesName) {
         $success = $format->deleteEntireRestrictedlist(); // leave a message of success
     } else if($_POST['action'] == "Update Format") {
         $format = new Format($_POST['format']);
-        
         if(isset($_POST['formatdescription'])) {$format->description = $_POST['formatdescription'];}
         
         if(isset($_POST['minmain'])) {$format->min_main_cards_allowed = $_POST['minmain'];}    
@@ -408,6 +407,10 @@ function handleActions($seriesName) {
             echo "</form>";          
         }      
     }
+    else {
+        $hasError = true;
+        $errormsg = "Unknown action '{$_POST['action']}'";
+    }
 }
 
 function printNewFormat(){
@@ -525,7 +528,6 @@ function printFormatSettings($active_format, $seriesName) {
     if($active_format->allow_timeshifted == 1) {echo "checked=\"yes\" ";}    
     echo " /></td>";
     echo "</tr>";
-    echo "<input type=\"hidden\" name=\"view\" value=\"settings\" />";
     echo "<tr>";
     echo "<td colspan=\"5\" class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Format\" name =\"action\" /></td>";
     echo "</tr>";
