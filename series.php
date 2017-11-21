@@ -2,11 +2,6 @@
 session_start();
 include 'lib.php';
 
-$formatforums = array('Standard' => 'http://forums.pdcmagic.com/viewforum.php?f=4',
-  'Extended' => 'http://forums.pdcmagic.com/viewforum.php?f=5',
-  'Classic' => 'http://forums.pdcmagic.com/viewforum.php?f=6',
-  'Zendikar Block' => 'http://forums.pdcmagic.com/viewforum.php?f=20');
-
 print_header("Event Information");
 ?>
 
@@ -43,7 +38,7 @@ foreach ($active_series as $series_name) {
   </div>
   <div class="series-info">
     <table>
-    <tr> <th> Format </th> <td> <a href="<?php echo $formatforums[$series->this_season_format]; ?>"><?php echo $series->this_season_format ?></a> </td> </tr>
+    <tr> <th> Format </th> <td> <a href="<?php echo $series->this_season_master_link ?>"><?php echo $series->this_season_format ?></a> </td> </tr>
     <tr> <th> Regular Time </th> <td> <?php echo $series->start_day ?>, <?php echo strftime("%I:%M %P", strtotime($series->start_time)) ?> Eastern Time </td> </tr>
     <tr> <th> Rules </th> <td> <a href="<?php echo $series->this_season_master_link ?>">Season <?php echo $series->this_season_season ?> Master Document</a> </td> </tr>
     <tr> <th> Most Recent Event </th> <td> <?php echo $series->mostRecentEvent()->linkReport() ?> </td> </tr>
