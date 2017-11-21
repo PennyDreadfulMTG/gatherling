@@ -2,35 +2,39 @@
 
 require '../lib.php';
 
-session_start();
+session_start(); 
+
 $some_admin = Player::getSessionPlayer();
-if (!$some_admin->isSuper()) {
-  header("Location: index.php");
-  exit(0);
-}
+if(!is_null($some_admin)) {
+    if (!$some_admin->isSuper()) {
+        header("Location: gatherling.php"); 
+        exit(0);
+    }
+} else {
+    header("Location: gatherling.php"); 
+    exit(0);    
+} 
 
-$db = Database::getConnection();
+$ndx = 7000;
+$totalHangingDecks = 0;
+$decksChecked = 0;
 
-function do_query($query) {
-  global $db;
-  echo "Executing Query: $query <br />";
-  $result = $db->query($query);
-  if (!$result) {
-    echo "!!!! - Error: ";
-    echo $db->error;
-    exit(0);
-  }
-  return $result;
-}
+while($ndx > 0) {
+    if (Database::single_result("SELECT Count(*) FROM decks d WHERE id = {$ndx}")) {
+        $decksChecked++;
+        $deck = new Deck($ndx);
+        if ($deck != NULL || $deck->id != 0) {
+            if ($deck->playername == NULL) {
+                $totalHangingDecks++;
+                echo "<a href=\"deck.php?mode=view&id=". $deck->id . "\">" . $deck->name . "</a> Deck ID: " . $deck->id . " is a hanging deck and will be deleted.<br />\n";
+                $deck->delete();
+            }
+        }
+    }
+    $ndx--;
+} 
 
-$db->autocommit(FALSE);
+echo "Total hanging decks found and removed: $totalHangingDecks<br />\n";
+echo "Total decks checked: $decksChecked<br />\n";
 
-$result = do_query("SELECT d.id FROM decks d WHERE d.id NOT IN (SELECT DISTINCT deck FROM deckcontents) AND d.name = \"\"");
-
-while ($deckid = $result->fetch_array()) {
-  do_query("UPDATE entries SET deck = NULL WHERE deck = {$deckid[0]}");
-  do_query("DELETE FROM decks WHERE id = {$deckid[0]}");
-}
-
-$db->commit();
-$db->autocommit(TRUE);
+?>

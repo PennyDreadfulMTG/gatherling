@@ -398,19 +398,29 @@ function deckInfoCell($deck) {
 
   $rstar = "<font color=\"#FF0000\">*</font>";
   $name = $deck->name;
+  if (empty($name)) {
+    $name = "** NO NAME **";
+  }
   $line1 = "<b>" . strtoupper($name) . "</b>";
   $deck_format = $event->format;
   if (!$deck->isValid()) {
     $line1 .= $rstar;
   }
   $cardcountsline = "{$nmaincards} Maindeck cards and {$nsidecards} Sideboard";
-  $line2 = $event->format . " &middot; " . $deck->getColorImages() . " " . $deck->archetype;
+  $line2 = $event->format . " &middot; " . $deck->getColorImages();
   $line3 .= "<i>(" . $deck->recordString() . ")</i>";
+  $format = new Format($event->format);
+  if ($format->tribal > 0) {
+      $line2 .= " " . $deck->tribe . "  " . $deck->archetype . "</td></tr>\n";
+  } else {
+      $line2 .= $deck->archetype . "</td></tr>\n ";
+  }
 
   echo "<table style=\"border-width: 0px\">\n";
   echo "<tr><td style=\"font-size: 10pt;\">$line1 (deck id: $deck->id)</td></tr>\n";
+  if ($format->tribal > 0) {echo "<tr><td>Tribe: " . $deck->tribe . "</td></tr>";}
   echo "<tr><td>$cardcountsline</td></tr>\n";
-  echo "<tr><td>$line2</td></tr>\n";
+  echo "<tr><td>$line2";
   echo "<tr><td>$line3</td></tr>\n";
   echo "</table>\n";
 

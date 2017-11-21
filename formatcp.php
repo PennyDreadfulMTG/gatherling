@@ -39,7 +39,7 @@ function do_page() {
         }
         
         if (count($player_series) > 1) {
-            printStewardSelect($player_series, $seriesName);
+            printOrganizerSelect($player_series, $seriesName);
         } else {
             echo "<center> Managing {$seriesName} </center>";
         } 
@@ -266,7 +266,8 @@ function handleActions($seriesName) {
         if(isset($_POST['vanguard']))         {$format->vanguard = 1;}          else {$format->vanguard = 0;}
         if(isset($_POST['planechase']))       {$format->planechase = 1;}        else {$format->planechase = 0;}
         if(isset($_POST['prismatic']))        {$format->prismatic = 1;}         else {$format->prismatic = 0;}
-        
+        if(isset($_POST['tribal']))           {$format->tribal = 1;}            else {$format->tribal = 0;}
+
         if(isset($_POST['allowcommons']))     {$format->allow_commons = 1;}     else {$format->allow_commons = 0;}    
         if(isset($_POST['allowuncommons']))   {$format->allow_uncommons = 1;}   else {$format->allow_uncommons = 0;}
         if(isset($_POST['allowrares']))       {$format->allow_rares = 1;}       else {$format->allow_rares = 0;}
@@ -505,6 +506,9 @@ function printFormatSettings($active_format, $seriesName) {
     echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"prismatic\" value=\"1\" ";
     if($active_format->prismatic == 1) {echo "checked=\"yes\" ";}    
     echo " /></td>";
+    echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"tribal\" value=\"1\" ";
+    if($active_format->tribal == 1) {echo "checked=\"yes\" ";}    
+    echo " /></td>";
     echo "</tr></table>";
     
     echo "<h4>Allow Rarity Selection</h4>";
@@ -565,6 +569,8 @@ function printBandR($active_format, $seriesName)
     $bandCards = $active_format->getBanList();
     $legalCards = $active_format->getLegalList();
     $restrictedCards = $active_format->getRestrictedList();
+    $restrictedToTribe = $active_format->getRestrictedToTribeList();
+    
     // beginning of the restricted list
     $cardCount = count($restrictedCards);
     echo "<form action=\"formatcp.php\" method=\"post\">"; 
@@ -601,7 +607,59 @@ function printBandR($active_format, $seriesName)
     echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Restricted List\" name =\"action\" /></td>";
     echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Restricted List\" name =\"action\" /></td>";
     echo "</tr></table></form>";
-    
+
+    // restricted list to tribe
+    if ($active_format->tribal) {
+        $cardCount = count($restrictedToTribe);
+        echo "<form action=\"{$calledBy}\" method=\"post\">"; 
+        echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+        echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
+        echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
+        echo "<h4>Restricted To Tribe List: $cardCount Cards</h4>\n";
+        echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
+        echo "<tr><th style=\"text-align: center;\">Card Name</th><th style=\"width: 50px; text-align: center;\">Delete</th></tr>";
+        if (count($restrictedToTribe)) {
+            foreach($restrictedToTribe as $card) {
+                echo "<tr><td style=\"text-align: center;\">";
+                // don't print card link if list is over 100 cards
+                if ($cardCount > 100) {
+                    echo "$card <br />";
+                } else {
+                    printCardLink($card);
+                }
+                echo "</td>";
+                echo "<td style=\"text-align: center;\">";
+                echo "<input type=\"checkbox\" name=\"delrestrictedtotribe[]\" value=\"{$card}\" /></td></tr>";
+            }
+        } else {
+            echo "<tr><td><font color=\"red\">No creatures have been restricted to tribe</font></td>";
+            echo "<td style=\"width: 100px; text-align: center;\">";
+            if ($active_format->noFormatLoaded()) {
+                not_allowed("No Format Loaded, Please Load a Format to Edit");
+            } else {
+                not_allowed("No Restricted To Tribe Creatures To Delete");            
+            }
+            echo "</td>";
+            echo "</tr>";
+        }
+        if ($active_format->noFormatLoaded()) {
+            echo "<tr><td colspan=\"2\"> Add new: ";
+            echo "<textarea class=\"inputbox\" disabled=\"disabled\" rows=\"5\" cols=\"40\"></textarea></td></tr>\n";
+            echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+            echo "<tr>";
+            echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Restricted To Tribe List\" name =\"action\" disabled=\"disabled\" /></td>";
+            echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Restricted To Tribe List\" name =\"action\" disabled=\"disabled\" /></td>";
+        } else {
+            echo "<tr><td colspan=\"2\"> Add new: ";
+            echo "<textarea class=\"inputbox\" rows=\"5\" cols=\"40\" name=\"addrestrictedtotribecreature\"></textarea></td></tr>\n";
+            echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+            echo "<tr>";
+            echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Restricted To Tribe List\" name =\"action\" /></td>";
+            echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Restricted To Tribe List\" name =\"action\" /></td>";
+        }
+        echo "</tr></table></form>";
+    }
+
     // if the series is using a legal card list, don't show the banlist
     if (!count($legalCards)) {
         $cardCount = count($bandCards);
@@ -678,6 +736,109 @@ function printBandR($active_format, $seriesName)
         echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Legal List\" name =\"action\" /></td>";
         echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Legal List\" name =\"action\" /></td>";
         echo "</tr></table></form>";
+    }
+
+    // tribe ban
+    // tribe will be banned, subtype will still be allowed in other tribes decks
+    if ($active_format->tribal) {
+        if(Format::doesFormatExist($format)) {
+            $tribesBanned = $active_format->getTribesBanned();
+        } else {
+            $tribesBanned = array();
+        }
+        echo "<h4>Tribe Banlist</h4>\n";
+        echo "<form action=\"{$calledBy}\" method=\"post\">"; 
+        echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+        echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
+        echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
+        echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
+        echo "<tr><th style=\"text-align: center;\">Tribe Name</th><th style=\"width: 50px; text-align: center;\">Delete</th></tr>";
+        if (count($tribesBanned)) {
+            foreach($tribesBanned as $bannedTribe) {
+                echo "<tr><td style=\"text-align: center;\">$bannedTribe</td>";
+                echo "<td style=\"text-align: center; width: 50px; \"><input type=\"checkbox\" name=\"delbannedtribe[]\" value=\"$bannedTribe\" />";
+                echo "</td></tr>";
+            }
+        } else {
+            echo "<tr><td><font color=\"red\">No Tribes Currently Banned</font></td>";
+            echo "<td style=\"width: 100px; text-align: center;\">";
+            if ($active_format->noFormatLoaded()) {
+                not_allowed("No Format Loaded, Please Load a Format to Edit");
+            } else {
+                not_allowed("No Selected Tribe To Delete");            
+            }
+            echo "</td>";
+            echo "</tr>";
+        }
+        if ($active_format->noFormatLoaded()) {
+            echo "<tr><td>";
+            tribeBanDropMenu($active_format);
+            echo "</td>";
+            echo "<td colspan=\"2\" class=\"buttons\">";
+            echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+            echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Tribe Ban\" name =\"action\" disabled=\"disabled\" />";
+            echo "<input class=\"inputbutton\" type=\"submit\" value=\"Ban All Tribes\" name =\"action\" disabled=\"disabled\" />";
+        } else {
+            echo "<tr><td>";
+            tribeBanDropMenu($active_format);
+            echo "</td>";
+            echo "<td colspan=\"2\" class=\"buttons\">";
+            echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+            echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Tribe Ban\" name =\"action\" />";
+            echo "</td><td>";
+            echo "<input class=\"inputbutton\" type=\"submit\" value=\"Ban All Tribes\" name =\"action\" />";
+        }
+        echo"</td></tr></table></form>";    
+    }   
+        
+    // subtype ban
+    // subtype is banned and is not allowed to be used by any deck
+    if ($active_format->tribal) {
+        if(Format::doesFormatExist($format)) {
+            $subTypesBanned = $active_format->getSubTypesBanned();
+        } else {
+            $subTypesBanned = array();
+        }
+        echo "<h4>Subtype Banlist</h4>\n";
+        echo "<form action=\"{$calledBy}\" method=\"post\">"; 
+        echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+        echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
+        echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
+        echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
+        echo "<tr><th style=\"text-align: center;\">Tribe Name</th><th style=\"width: 50px; text-align: center;\">Delete</th></tr>";
+        if (count($subTypesBanned)) {
+            foreach($subTypesBanned as $bannedSubType) {
+                echo "<tr><td style=\"text-align: center;\">$bannedSubType</td>";
+                echo "<td style=\"text-align: center; width: 50px; \"><input type=\"checkbox\" name=\"delbannedsubtype[]\" value=\"$bannedSubType\" />";
+                echo "</td></tr>";
+            }
+        } else {
+            echo "<tr><td><font color=\"red\">No Subtypes Currently Banned</font></td>";
+            echo "<td style=\"width: 100px; text-align: center;\">";
+            if ($active_format->noFormatLoaded()) {
+                not_allowed("No Format Loaded, Please Load a Format to Edit");
+            } else {
+                not_allowed("No Selected SubType To Delete");            
+            }
+            echo "</td>";
+            echo "</tr>";
+        }
+        if ($active_format->noFormatLoaded()) {
+            echo "<tr><td>";
+            subTypeBanDropMenu($active_format);
+            echo "</td>";
+            echo "<td colspan=\"2\" class=\"buttons\">";
+            echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+            echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Subtype Ban\" name =\"action\" disabled=\"disabled\" />";
+        } else {
+            echo "<tr><td>";
+            subTypeBanDropMenu($active_format);
+            echo "</td>";
+            echo "<td colspan=\"2\" class=\"buttons\">";
+            echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+            echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Subtype Ban\" name =\"action\" />";
+        }
+        echo"</td></tr></table></form>";    
     }
 }
 

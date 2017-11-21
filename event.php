@@ -132,24 +132,20 @@ function content() {
       authFailed();
     }
   } elseif (mode_is("Create A New Event")) {
-    $player = Player::getSessionPlayer();
-    if($player->isOrganizer()) {
-      eventForm();
-    } else {
-      authFailed();
-    }
+      eventForm(NULL, true);
   } elseif (mode_is("Create Next Event")) {
     $oldevent = new Event($_POST['name']);
     $newevent = new Event("");
     $newevent->season = $oldevent->season;
     $newevent->number = $oldevent->number + 1;
     $newevent->format = $oldevent->format;
-    $newevent->start = strftime("%Y-%m-%d %H:00:00", strtotime($oldevent->start) + (86400 * 7));
+    $newevent->start = strftime("%Y-%m-%d %H:%M:00", strtotime($oldevent->start) + (86400 * 7));
     $newevent->kvalue = $oldevent->kvalue;
     $newevent->finalized = 0;
     $newevent->pkonly = $oldevent->pkonly;
     $newevent->player_reportable = $oldevent->player_reportable;
     $newevent->prereg_cap = $oldevent->prereg_cap;
+    $newevent->private_decks = $oldevent->private_decks;
     $newevent->prereg_allowed = $oldevent->prereg_allowed;
     $newevent->threadurl = $oldevent->threadurl;
     
@@ -161,6 +157,8 @@ function content() {
     $newevent->mainstruct = $oldevent->mainstruct;
     $newevent->finalrounds = $oldevent->finalrounds;
     $newevent->finalstruct = $oldevent->finalstruct;
+    $newevent->player_reported_draws = $oldevent->player_reported_draws;
+    $newevent->prereg_cap = $oldevent->prereg_cap;
 
     $newevent->name = sprintf("%s %d.%02d",$newevent->series, $newevent->season, $newevent->number);
 
@@ -230,9 +228,11 @@ function content() {
       } elseif (mode_is("Upload Trophy")) {
         if (insertTrophy()) {
           $event->hastrophy = 1;
+          $_GET['view'] = "settings";
         }
       } elseif (mode_is("Update Event Info")) {
         $event = updateEvent();
+        $_GET['view'] = "settings";
       }
       eventForm($event);
     }
@@ -374,44 +374,39 @@ function eventForm($event = NULL, $forcenew = false) {
   if (is_null($event)) {
     $event = new Event("");
   }
-  if ($edit) {
-    echo "<table style=\"border-width: 0px\" align=\"center\">";
-    $view = "reg";
-    if ($event->active)
-      $view = "match";
-    $view = isset($_GET['view']) ? $_GET['view'] : $view;
-    $view = isset($_POST['view']) ? $_POST['view'] : $view;
-    echo "<tr><td colspan=\"2\">&nbsp;</td></tr>";
-    controlPanel($event, $view);
-    echo "<tr><td colspan=\"2\">&nbsp;</td></tr>";
-    echo "</table>";
-    if (strcmp($view, "reg") == 0) {
-      playerList($event);
-    } elseif (strcmp($view, "settings") == 0) {
-      eventSettings($event, $edit);
-    } elseif (strcmp($view, "match") == 0) {
-      matchList($event);
-    } elseif (strcmp($view,"standings") == 0) {
-      standingsList($event);
-    } elseif (strcmp($view, "medal") == 0) {
-      medalList($event);
-    } elseif (strcmp($view, "autoinput") == 0) {
-      autoInputForm($event);
-    } elseif (strcmp($view, "fileinput") == 0) {
-      fileInputForm($event);
-      // file3InputForm($event); DCI 3 files currently don't work. Re-enable once they do. 
-    } elseif (strcmp($view, "points_adj") == 0) {
-      pointsAdjustmentForm($event);
-    }
-  }
-  else
-  {
-    eventSettings($event, $edit);
-  }
-  echo "</table>";
-}
 
-function eventSettings($event, $edit){
+  echo "<table style=\"border-width: 0px\" align=\"center\">";
+  if ($forcenew) {
+      $view ="edit";
+  } else {
+      if (!isset($view)){$view = "reg";} ;
+      $view = isset($_GET['view']) ? $_GET['view'] : $view;
+      $view = isset($_POST['view']) ? $_POST['view'] : $view;
+  }
+
+  echo "<tr><td colspan=\"2\">&nbsp;</td></tr>";
+  controlPanel($event, $view);
+  echo "<tr><td colspan=\"2\">&nbsp;</td></tr>";
+  echo "</table>";
+
+    if (strcmp($view, "reg") == 0) {
+        playerList($event);
+    } elseif (strcmp($view, "match") == 0) {
+        matchList($event);
+    } elseif (strcmp($view,"standings") == 0) {
+        standingsList($event);
+    } elseif (strcmp($view, "medal") == 0) {
+        medalList($event);
+    } elseif (strcmp($view, "autoinput") == 0) {
+        autoInputForm($event);
+    } elseif (strcmp($view, "fileinput") == 0) {
+        fileInputForm($event);
+        // file3InputForm($event); DCI 3 files currently don't work. Re-enable once they do. 
+    } elseif (strcmp($view, "points_adj") == 0) {
+        pointsAdjustmentForm($event);
+    } elseif (strcmp($view,"reports") == 0) {
+        reportsForm($event);
+    } else{
   echo "<form action=\"event.php\" method=\"post\" ";
   echo "enctype=\"multipart/form-data\">";
   echo "<table class=\"form\" style=\"border-width: 0px\" align=\"center\">";
@@ -446,7 +441,7 @@ function eventSettings($event, $edit){
         echo "Automatically name this event based on Series, Season, and Number.";
         echo "<br /><input type=\"radio\" name=\"naming\" value=\"custom\">";
         echo "Use a custom name: ";
-        echo "<input type=\"text\" name=\"name\" value=\"{$event->name}\" ";
+        echo "<input class=\"inputbox\" type=\"text\" name=\"name\" value=\"{$event->name}\" ";
         echo "size=\"40\">";
         echo "</td></tr>";
         $year = strftime('Y', time());
@@ -456,7 +451,7 @@ function eventSettings($event, $edit){
         $minutes = strftime('M', time());
     }
     echo "<tr><th>Date & Time</th><td>";
-    numDropMenu("year", "- Year -", 2020, $year, 2011);
+    numDropMenu("year", "- Year -", date('Y')+1, $year, 2011);
     monthDropMenu($month);
     numDropMenu("day", "- Day- ", 31, $day, 1);
     timeDropMenu($hour, $minutes);
@@ -521,10 +516,20 @@ function eventSettings($event, $edit){
     echo " The event host may still add players beyond this limit. 0 is disabled.";
     echo "</td></tr>";
 
+    echo "<tr><th>Deck List Privacy</th>";
+    echo "<td><input type=\"checkbox\" name=\"private_decks\" value=\"1\" ";
+    if($event->private_decks == 1) {echo "checked=\"yes\" ";}
+    echo "/></td></tr>";
+
+    echo "<tr><th>Allow Player Reported Draws</th>";
+    echo "<td><input type=\"checkbox\" name=\"player_reported_draws\" value=\"1\" ";
+    if($event->player_reported_draws == 1) {echo "checked=\"yes\" ";}
+    echo "/> This allows players to report a draw result for matches.</td></tr>";
+
   if($edit == 0) {
     echo "<tr><td>&nbsp;</td></tr>";
     echo "<tr><td colspan=\"2\" class=\"buttons\">";
-    echo "<input type=\"submit\" name=\"mode\" value=\"Create New Event\">";
+    echo "<input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Create New Event\">";
     echo "<input type=\"hidden\" name=\"insert\" value=\"1\">";
     echo "</td></tr>";
   } else {
@@ -552,18 +557,69 @@ function eventSettings($event, $edit){
     echo "</td></tr>";
     echo "</table>";
     echo "</form>";
+
+    }
   }
+  echo "</table>";
+}
+
+function reportsForm($event) {
+    /* @var $entries \www\models\Event.php
+     */
+    $entries = $event->getEntriesByDateTime();
+    $entries2 = $event->getEntriesByMedal();
+    $numEntries = count($entries);
+    $emailAd = "---------";
+    
+    echo "<table style=\"border-width: 0px\" align=\"center\">";
+    echo "<center><h2><b>Player Information</b></h2></center>";
+    echo "<tr><td>&nbsp;</td></tr>";
+    if($numEntries > 0) {
+        echo "<tr><th>Players by final placing</th><th>Player</th><th>Email</th></tr>";
+        $count = 1;
+        foreach($entries2 as $entryName) {
+            $player = new Player($entryName);
+            if($player->emailAddress != "") {
+                $emailAd = $player->emailAddress;
+            } else {
+                $emailAd = "---------";
+            }
+            echo "<tr><td align=\"center\">$count</td><td>$entryName</td><td align=\"center\">$emailAd</td></tr>";
+            $count++;
+        }
+
+
+        echo "<tr><th>Registration Order</th><th>Player</th><th>Email</th></tr>";
+        $count = 1;
+        foreach($entries as $entryName) {
+            $player = new Player($entryName);
+            if($player->emailAddress != "") {
+                $emailAd = $player->emailAddress;
+            } else {
+                $emailAd = "---------";
+            }
+            echo "<tr><td align=\"center\">$count</td><td>$entryName</td><td align=\"center\">$emailAd</td></tr>";
+            $count++;
+        }
+    } else {
+        echo "<tr><td align=\"center\" colspan=\"5\"><i>";
+        echo "No players are currently registered for this event.</i></td></tr>";
+    }
+    echo "</table>";
 }
 
 function playerList($event) {
   global $drop_icon;
   $entries = $event->getEntries();
   $numentries = count($entries);
+  $format = new Format($event->format);
   echo "<form action=\"event.php\" method=\"post\">";
   echo "<input type=\"hidden\" name=\"name\" value=\"{$event->name}\" />";
   echo "<table style=\"border-width: 0px\" align=\"center\">";
   echo "<tr><td colspan=\"2\" align=\"center\">";
   echo "<table align=\"center\" style=\"border-width: 0px;\">";
+  echo "<tr><td colspan=\"4\" align=\"center\">";
+  echo "<h2>{$event->name}</h2></td></tr>";
   echo "<tr><td colspan=\"4\" align=\"center\">";
   if ($numentries > 0) {
     echo "<b>{$numentries} Registered Players</b></td></tr>";
@@ -577,8 +633,15 @@ function playerList($event) {
       if ($event->active == 1){
           echo "<th>Drop</th>";
       }
-      echo "<th style=\"text-align: left\">Player</th><th>Medal</th>";
-      echo "<th style=\"text-align: center\">Deck</th><th>Delete</th></tr>";
+      if ($event->finalized && !$event->active) {
+          echo "<th>Medal</th>";
+      }
+      echo "<th style=\"text-align: center\">Player</th>";
+      echo "<th style=\"text-align: center\">Deck</th>";
+      if ($format->tribal) {
+          echo "<th>Tribe</th>";
+      }
+      echo "<th>Delete</th></tr>";
       } else {
           echo "<tr><td align=\"center\" colspan=\"5\"><i>";
           echo "No players are currently registered for this event.</i></td></tr>";
@@ -596,16 +659,22 @@ function playerList($event) {
             echo "<td>{$drop_icon} {$entry->drop_round} <a href=\"event.php?player=".$entry->player->name."&event=".$event->name."&action=undrop&name=".$event->name."\">(undrop)</a></td>"; // else echo a symbol to represent player has dropped
         }
     }
+    if ($event->finalized && !$event->active) {
+        if(strcmp("", $entry->medal) != 0) {
+            $img = medalImgStr($entry->medal);
+        }
+        echo "<td align=\"center\">$img</td>";
+    }
     echo "<td>";
-    echo "{$entry->player->name}";
+    if ($entry->player->emailAddress == "") {
+        echo "{$entry->player->name}";
+    } else {
+        displayPlayerEmailPopUp($entry->player->name, $entry->player->emailAddress);
+    }
     if ($entry->player->verified) {
       echo image_tag("verified.png", array("alt" => "Verified", "title" => "Player Verified on MTGO"));
     }
     echo "</td>";
-    if(strcmp("", $entry->medal) != 0) {
-      $img = medalImgStr($entry->medal);
-    }
-    echo "<td align=\"center\">$img</td>";
     if ($entry->deck) {
       $decklink = $entry->deck->linkTo();
     } else {
@@ -616,6 +685,13 @@ function playerList($event) {
       if(!$entry->deck->isValid()) {$decklink .= $rstar;}
     }
     echo "<td>$decklink</td>";
+    if ($format->tribal) {
+        if ($entry->deck != NULL) {
+            echo "<td>" . $entry->deck->tribe . "</td>";
+        } else {
+            echo "<td> </td>"; // leave tribe blank
+        }
+    }
     echo "<td align=\"center\">";
     if ($entry->canDelete()) {
       echo "<input type=\"checkbox\" name=\"delentries[]\" value=\"{$entry->player->name}\" />";
@@ -624,13 +700,13 @@ function playerList($event) {
   }
     echo "</td></tr>";
   }
-  if ($event->active == 0) {
+  if ($event->active == 0 && !$event->finalized) {
       echo "<tr id=\"row_new_entry\"><td>Add: ";
       stringField("newentry", "", 40);
       echo "</td><td>&nbsp;</td><td colspan=2>";
       echo "<input id=\"update_reg\" class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Update Registration\" />";
       echo "</td></tr>";
-  } else if ($event->active == 1) {
+  } else if ($event->active == 1 && !$event->finalized) {
       echo "<tr id=\"row_new_entry\"><td>Add:</td><td>";
       stringField("newentry", "", 40);
       echo "</td><td>&nbsp;</td><td colspan=2>";
@@ -1071,6 +1147,8 @@ function updateEvent() {
   if(!isset($_POST['prereg_allowed']))    {$_POST['prereg_allowed'] = 0;}
   if(!isset($_POST['player_reportable'])) {$_POST['player_reportable'] = 0;}
   if(!isset($_POST['prereg_cap']))        {$_POST['prereg_cap'] = 0;}
+  if(!isset($_POST['private_decks']))     {$_POST['private_decks'] = 0;}
+  if(!isset($_POST['player_reported_draws']))     {$_POST['player_reported_draws'] = 0;}
   
   $event = new Event($_POST['name']);
   $event->start = "{$_POST['year']}-{$_POST['month']}-{$_POST['day']} {$_POST['hour']}:00";
@@ -1081,8 +1159,14 @@ function updateEvent() {
   $event->pkonly = $_POST['pkonly'];
   $event->player_reportable = $_POST['player_reportable'];
   $event->prereg_cap = $_POST['prereg_cap'];
+  $event->private_decks = $_POST['private_decks'];
+  $event->player_reported_draws = $_POST['player_reported_draws'];
+  
+  if ($event->format != $_POST['format']) {
+      $event->format = $_POST['format'];
+      $event->updateDecksFormat($_POST['format']);
+  }
 
-  $event->format = $_POST['format'];
   $event->host = $_POST['host'];
   $event->cohost = $_POST['cohost'];
   $event->kvalue = $_POST['kvalue'];
@@ -1240,6 +1324,7 @@ function controlPanel($event, $cur = "") {
   // echo " | <a href=\"event.php?name=$name&view=autoinput\">Auto-Input</a>"; hiding until I fix the auto-input feature
   echo " | <a href=\"event.php?name=$name&view=fileinput\">DCI-R File Input</a>";
   echo " | <a href=\"event.php?name=$name&view=points_adj\">Season Points Adj.</a>";
+  echo " | <a href=\"event.php?name=$name&view=reports\">Reports</a>";
   echo "</td></tr>";
 }
 
@@ -1258,6 +1343,13 @@ function updateReg() {
   }
   if(isset($_POST['newentry'])) {
       $event->addPlayer($_POST['newentry']);
+  }
+
+  if(isset($_POST['earned_byes'])) {
+      foreach ($_POST['earned_byes'] as $playername) {
+          $entry = new Entry ($event->name,$playername);
+          $entry->add_earned_byes($playername, $playername[1]);
+      }
   }
 }
 

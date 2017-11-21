@@ -356,6 +356,8 @@ function matchInProgress() {
         // Goes through all matches in this round and updates scores
         // TODO remove scoring from here, as it's now calculated elsewhere so much of this is redundant
 
+        $series = new Series($this->series);
+        $seasonRules = $series->getSeasonRules($this->season);
         $thisevent= Event::getEventBySubevent($this->subevent);
         $playera_standing = new Standings($thisevent->name, $this->playera);
         $playerb_standing = new Standings($thisevent->name, $this->playerb);
@@ -377,7 +379,7 @@ function matchInProgress() {
                     $playera_standing->score += 3;
                 }else if ($structure == "League"){
                     $playera_standing->score += 3;
-                    $playerb_standing->score -= 1;
+                    $playerb_standing->score += $seasonRules["loss_pts"];
             }
             $this->result = 'A';
         }else{
@@ -388,7 +390,7 @@ function matchInProgress() {
                     $playerb_standing->score += 3;
                 }else if ($structure == "League"){
                     $playerb_standing->score += 3;
-                    $playera_standing->score -= 1;
+                    $playera_standing->score += $seasonRules["loss_pts"];
                 }
                 $this->result = 'B';
             }
@@ -413,6 +415,24 @@ function matchInProgress() {
     // Don't know what this does, but it looks a lot like the above.
     public function fixScores($structure) {
         // Goes through all matches in this round and updates scores
+        
+        // I am thinking about making this use the points designated by the 
+        // Series Organizer for the seasons
+        // will need to add:
+        
+        // $series = new Series($this->series); // this gets access to the season points
+        // $rules = $series->getSeasonRules($this->season_number); // retrieves the points as specified by Organizer
+        // see Series line# 695
+        // can then add points like this: 
+        // $playera_standing->score += $rules['win_pts']; // for adding win points
+        // $playerb_standing->score += $rules['loss_pts']; // adds points for loss
+        // for a player to loose points for a loss, Organizer would have to specify
+        // a negative value, at least I think that would work. 
+        // use $rules['bye_pts'] for byes, since byes count as a win 
+       
+        
+        $series = new Series($this->series);
+        $seasonRules = $series->getSeasonRules($this->season);
         $thisevent= Event::getEventBySubevent($this->subevent);
         $playera_standing = new Standings($thisevent->name, $this->playera);
         $playerb_standing = new Standings($thisevent->name, $this->playerb);
@@ -433,7 +453,7 @@ function matchInProgress() {
             $playera_standing->score += 3;
             $playera_standing->matches_won += 1;
             if ($structure == "League"){
-                $playerb_standing->score -= 1;
+                $playerb_standing->score += $seasonRules["loss_pts"];
             }
             if ($structure == "Single Elimination"){
                 $playerb_standing->active = 0;
@@ -443,7 +463,7 @@ function matchInProgress() {
             $playerb_standing->score += 3;
             $playerb_standing->matches_won += 1;
             if ($structure == "League"){
-                $playera_standing->score -= 1;
+                $playera_standing->score += $seasonRules["loss_pts"];
             }
             if ($structure == "Single Elimination"){
                 $playera_standing->active = 0;
@@ -508,4 +528,12 @@ function matchInProgress() {
         $event = $this->getEvent();
         return ($event->player_reportable == 1);
       }
+	public function allowsPlayerReportedDraws() {
+		$event = new Event($this->eventname);
+		if ($event->player_reported_draws == 1){
+			return 1;
+		}else{
+			return 2;
+                }
+	}
 }

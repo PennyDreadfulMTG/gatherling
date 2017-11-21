@@ -6,6 +6,7 @@ class Series {
   public $start_day;
   public $start_time;
   public $organizers; # has many :organizers, :through => series_organizers, :class_name => Player
+  public $bannedplayers;
   
   public $this_season_format;
   public $this_season_master_link;
@@ -20,6 +21,7 @@ class Series {
       $this->start_day = ""; 
       $this->start_time = "";
       $this->organizers = array();
+      $this->bannedplayers = array();
       $this->new = true;
       $this->prereg_default = true;
       $this->pkonly_default = false;
@@ -51,6 +53,17 @@ class Series {
     } 
     $stmt->close();
 
+    // banned players
+    $stmt = $db->prepare("SELECT player FROM playerbans WHERE series = ?");
+    $stmt->bind_param("s", $this->name); 
+    $stmt->execute(); 
+    $stmt->bind_result($one_player); 
+    $this->bannedplayers = array();
+    while ($stmt->fetch()) { 
+      $this->bannedplayers[] = $one_player;
+    } 
+    $stmt->close();
+    
     // Most recent season
     $this_season = $this->mostRecentEvent()->season;
     $stmt = $db->prepare("SELECT format, master_link FROM series_seasons WHERE series = ? AND season = ?"); 
@@ -85,12 +98,25 @@ class Series {
   function isOrganizer($name) {
     return in_array(strtolower($name), array_map('strtolower', $this->organizers));
   }
+  
+  function isPlayerBanned($name) {
+      return in_array(strtolower($name), array_map('strtolower', $this->bannedplayers));
+  }
 
   function addOrganizer($name) { 
     if (empty($name)) { return; }
     $db = Database::getConnection(); 
     $stmt = $db->prepare("INSERT INTO series_organizers(series, player) VALUES(?, ?)");
     $stmt->bind_param("ss", $this->name, $name); 
+    $stmt->execute(); 
+    $stmt->close(); 
+  } 
+
+  function addBannedPlayer($name, $reason) { 
+    if (empty($name)) { return; }
+    $db = Database::getConnection(); 
+    $stmt = $db->prepare("INSERT INTO playerbans(series, player, date, reason) VALUES(?, ?, CURRENT_DATE(), ?)");
+    $stmt->bind_param("sss", $this->name, $name, $reason); 
     $stmt->execute(); 
     $stmt->close(); 
   } 
@@ -103,6 +129,22 @@ class Series {
     $stmt->close(); 
   } 
 
+  function removeBannedPlayer($name) { 
+    $db = Database::getConnection(); 
+    $stmt = $db->prepare("DELETE FROM playerbans WHERE series = ? AND player = ?");
+    $stmt->bind_param("ss", $this->name, $name); 
+    $stmt->execute(); 
+    $stmt->close(); 
+  } 
+
+  function getBannedPlayerDate($name) {
+      return Database::single_result_single_param("SELECT date FROM playerbans WHERE player = ?", "s", $name);
+  }
+  
+  function getBannedPlayerReason($name) {
+      return Database::single_result_single_param("SELECT reason FROM playerbans WHERE player = ?", "s", $name);
+  }
+  
   function authCheck($playername) { 
     $player = new Player($playername); 
 

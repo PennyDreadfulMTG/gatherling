@@ -3,7 +3,7 @@
 require_once 'lib.php';
 
 function print_text_input($label, $name, $value = "") {
-  echo "<tr><th>{$label}</th><td><input type=\"text\" name=\"{$name}\" value=\"{$value}\" /> </td></tr>";
+  echo "<tr><th>{$label}</th><td><input class=\"inputbox\" type=\"text\" name=\"{$name}\" value=\"{$value}\" /> </td></tr>";
 }
 
 function print_password_input($label, $name, $value = "") {
@@ -16,7 +16,7 @@ function print_file_input($label, $name) {
 }
 
 function print_submit($label, $name = "action") {
-  echo "<tr><td colspan=\"2\" class=\"buttons\"><input type=\"submit\" name=\"{$name}\" value=\"{$label}\" /></td></tr>";
+  echo "<tr><td colspan=\"2\" class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" name=\"{$name}\" value=\"{$label}\" /></td></tr>";
 }
 
 function print_select($name, $options = array(), $selected = NULL) {

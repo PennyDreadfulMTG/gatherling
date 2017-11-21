@@ -98,10 +98,6 @@ function eventList($series = "", $season = "") {
     $ch = $thisEvent['cohost'];
     if(!is_null($ch) && strcmp($ch, "") != 0) {echo "/$ch";}
     echo "</td>";
-    #echo "<td>$date</td>";
-    # echo "<td align=\"center\"><input type=\"checkbox\" ";
-    # if($thisEvent['finalized'] == 1) {echo "checked";}
-    # echo "></td>";
     echo "</tr>";
     $count = $count + 1;
   }
@@ -258,13 +254,20 @@ function fullmetagame($event) {
   echo "<table style=\"border-width: 0px;\" align=\"center\">";
   $hg = headerColor();
   echo "<tr style=\"\">";
-  if ($event->finalized == '0') {
+  if ($event->finalized == '0' and $event->private_decks == 1) {
       echo "<td colspan=5 align=\"center\"><b><h3>Registered Players</h3></td></tr>\n";
       echo "<center><h2><em>Deck lists are not shown for privacy until event is finalized.</em></h2></center>";
       while($row = $result->fetch_assoc()) {
           $play = new Player($row['player']);
           $entry = new Entry($event->name, $play->name);
-          echo "<tr><td>" . $play->linkTo() . "</td><td align=\left\">{$entry->recordString()}</td></tr>";
+          $format = new Format($event->format);
+          // $deck = new Deck($entry->deck);
+          
+          echo "<tr><td>";
+          if ($format->tribal && ($event->current_round > 1)) {
+              echo "<td>" . $entry->deck->tribe . "</td>";
+          }
+          echo "<td>" . $play->linkTo() . "</td><td align=\left\">{$entry->recordString()}</td></tr>";
       }
   }
   else {
@@ -390,7 +393,7 @@ function trophyCell($event) {
   $deck = $event->getPlaceDeck('1st');
   $player = $event->getPlacePlayer('1st');
   if (!$player) { 
-    echo "No winner yet!";
+    echo "<br />No winner yet!";
   } else { 
     $playerwin = new Player($player);
     echo $playerwin->linkTo();

@@ -19,11 +19,24 @@ class Ratings {
             $this->wins = 0;
             $this->losses = 0;
             $this->ratingNames = array("Standard", "Extended", "Modern", "Classic", "Legacy",  
-                                       "Pauper", "SilverBlack", "Heirloom", "Commander", "Penny Dreadful");
+                                       "Pauper", "SilverBlack", "Heirloom", "Commander", "Tribal Wars"
+                                       "Penny Dreadful");
             return;
         }
     }
 
+    function formatDropMenuR($format = "") {
+        $names = array("Composite", "Standard", "Extended", "Modern", 
+                       "Classic", "Legacy", "Pauper", "SilverBlack", "Heirloom", 
+                       "Commander", "Tribal Wars", "Other Formats");
+	echo "<select class=\"inputbox\" name=\"format\">";
+        foreach ($names as $name) {
+           $sel = (strcmp($name, $format) == 0) ? "selected" : "";
+           echo "<option value=\"{$name}\" $sel>{$name}</option>";
+	}
+	echo "</select>";
+    }
+    
     function deleteAllRatings() {
         $db = Database::getConnection();
         $db->query("DELETE FROM ratings") or die($db->error);
@@ -106,6 +119,7 @@ class Ratings {
                               FROM events 
                               WHERE finalized = '1' 
                               $notlike
+                              AND format NOT LIKE \"%Tribal Wars%\"
                               ORDER BY start") or die($db->error);
         echo "<h3>Calculating Other Formats Ratings</h3>";
         
