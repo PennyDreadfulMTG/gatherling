@@ -132,7 +132,7 @@ function content() {
       authFailed();
     }
   } elseif (mode_is("Create A New Event")) {
-    $player = Player::getSessionPlayer()
+    $player = Player::getSessionPlayer();
     if($player->isOrganizer()) {
       eventForm();
     } else {
