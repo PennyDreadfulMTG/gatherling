@@ -2,12 +2,11 @@
 session_start();
 include 'lib.php';
 include 'lib_form_helper.php';
-
 $hasError = false;
 $errormsg = "";
 
 if (!Player::isLoggedIn()) {
-  redirect("login.php");
+    redirect("login.php");
 }
 
 print_header("Format Control Panel");
@@ -24,114 +23,114 @@ print_header("Format Control Panel");
 <?php 
 
 function do_page() {
-  $player = Player::getSessionPlayer();
-  if ($player->isSuper()) {
-    $seriesName = "System";
-  }
-  else if ($player->isOrganizer()){
-    $player_series = Player::getSessionPlayer()->organizersSeries();
-    if (isset($_REQUEST['series']))
-    {
-      $seriesName = $_REQUEST['series'];
+    $player = Player::getSessionPlayer();
+    if ($player->isSuper()) {
+        $seriesName = "System";
+    }
+    else if ($player->isOrganizer()){
+        $player_series = Player::getSessionPlayer()->organizersSeries();
+        if (isset($_REQUEST['series']))
+        {
+            $seriesName = $_REQUEST['series'];
+        }
+        else
+        {
+            $seriesName = $player_series[0];
+        }
+        
+        if (count($player_series) > 1) {
+            printStewardSelect($player_series, $seriesName);
+        } else {
+            echo "<center> Managing {$seriesName} </center>";
+        } 
+        
+        $auth = false;
+        foreach ($player_series as $ps)
+        {
+            if (strcmp($seriesName, $ps) == 0)
+            {
+                $auth = true;
+            }
+        }
+        if (!$auth)
+        {
+            printNoAdmin($player->isOrganizer());
+            return;
+        }
     }
     else
     {
-      $seriesName = $player_series[0];
+        printNoAdmin($player->isOrganizer());
+        printError();
+        return;
     }
-
-    if (count($player_series) > 1) {
-      printStewardSelect($player_series, $seriesName);
-    } else {
-      echo "<center> Managing {$seriesName} </center>";
-    } 
-
-    $auth = false;
-    foreach ($player_series as $ps)
-    {
-      if (strcmp($seriesName, $ps) == 0)
-      {
-        $auth = true;
-      }
-    }
-    if (!$auth)
-    {
-      printNoAdmin($player->isOrganizer());
-      return;
-    }
-  }
-  else
-  {
-    printNoAdmin($player->isOrganizer());
+    
+    handleActions($seriesName);
     printError();
-    return;
-  }
-  
-  handleActions($seriesName);
-  printError();
-  
-  $view = "settings";
-  
-  if (isset($_GET['view']) && ($_GET['view'] != "")) {$view = $_GET['view'];}
-  if (isset($_POST['view'])) {$view = $_POST['view'];}
-  
-  if (!isset($_REQUEST['format'])) {
-    formatCPMenu(new Format(""), $seriesName);
-    printLoadFormat($seriesName);
-    return;
-  }
-  $format = $_REQUEST['format'];
-
-  if(Format::doesFormatExist($format)) {
-    $active_format = new Format($format);
-  } else {
-    $active_format = new Format("");
-  }
-  formatCPMenu($active_format, $seriesName);
-  switch ($view){
-    case 'settings':
-    printFormatSettings($active_format, $seriesName);
-    break;
-    case 'bandr':
-    printBandR($active_format, $seriesName);
-    break;
-    case 'cardsets':
-    printCardSets($active_format, $seriesName);
-    break;
-    case 'no_view':
-    break;
-    default:
-    echo "Unknown View!";
-  }
-  echo "</center><div class=\"clear\"></div></div>";
+    
+    $view = "settings";
+    
+    if (isset($_GET['view']) && ($_GET['view'] != "")) {$view = $_GET['view'];}
+    if (isset($_POST['view'])) {$view = $_POST['view'];}
+    
+    if (!isset($_REQUEST['format'])) {
+        formatCPMenu(new Format(""), $seriesName);
+        printLoadFormat($seriesName);
+        return;
+    }
+    $format = $_REQUEST['format'];
+    
+    if(Format::doesFormatExist($format)) {
+        $active_format = new Format($format);
+    } else {
+        $active_format = new Format("");
+    }
+    formatCPMenu($active_format, $seriesName);
+    switch ($view){
+        case 'settings':
+        printFormatSettings($active_format, $seriesName);
+        break;
+        case 'bandr':
+        printBandR($active_format, $seriesName);
+        break;
+        case 'cardsets':
+        printCardSets($active_format, $seriesName);
+        break;
+        case 'no_view':
+        break;
+        default:
+        echo "Unknown View!";
+    }
+    echo "</center><div class=\"clear\"></div></div>";
 }
 
 function printNoAdmin($isOrganizer) { 
-  $hasError = true;
-  if ($isOrganizer)
+    $hasError = true;
+    if ($isOrganizer)
     $errormsg = "<center>You're not authorized to edit this format! Access Restricted.<br />";
-  else
+    else
     $errormsg = "<center>You're not an Admin here on Gatherling.com! Access Restricted.<br />";
-  echo "<a href=\"player.php\">Back to the Player Control Panel</a></center>";
+    echo "<a href=\"player.php\">Back to the Player Control Panel</a></center>";
 } 
 
 function printError() {
-  global $hasError;
-  global $errormsg;
-  if ($hasError) {
-    echo "<div class=\"error\">{$errormsg}</div>";
-  }
+    global $hasError;
+    global $errormsg;
+    if ($hasError) {
+        echo "<div class=\"error\">{$errormsg}</div>";
+    }
 }
 
 function handleActions($seriesName) {
     global $hasError;
     global $errormsg;
     if (!isset($_POST['action'])) {
-      return;
+        return;
     }
     if ($_POST['action'] == "Update Banlist") {
         $active_format = $_POST['format'];
         $format = new Format($active_format);
-  
+        
         if (isset($_POST['addbancard']) && $_POST['addbancard'] != '') {
             $cards = parseCards($_POST['addbancard']);
             if(count($cards) > 0) {
@@ -145,7 +144,7 @@ function handleActions($seriesName) {
                 }
             }
         }
-  
+        
         if (isset($_POST['delbancards'])) {
             $delBanCards = $_POST['delbancards'];
             foreach($delBanCards as $cardName){
@@ -163,7 +162,7 @@ function handleActions($seriesName) {
     } else if ($_POST['action'] == "Update Legal List") {
         $active_format = $_POST['format'];
         $format = new Format($active_format);
-  
+        
         if (isset($_POST['addlegalcard']) && $_POST['addlegalcard'] != '') {
             $cards = parseCards($_POST['addlegalcard']);
             if(count($cards) > 0) {
@@ -177,7 +176,7 @@ function handleActions($seriesName) {
                 }
             }
         }
-  
+        
         if (isset($_POST['dellegalcards'])) {
             $dellegalCards = $_POST['dellegalcards'];
             foreach($dellegalCards as $cardName){
@@ -216,7 +215,7 @@ function handleActions($seriesName) {
     } else if ($_POST['action'] == "Update Restricted List") {
         $active_format = $_POST['format'];
         $format = new Format($active_format);
-  
+        
         if (isset($_POST['addrestrictedcard']) && $_POST['addrestrictedcard'] != '') {
             $cards = parseCards($_POST['addrestrictedcard']);
             if(count($cards) > 0) {
@@ -230,7 +229,7 @@ function handleActions($seriesName) {
                 }
             }
         }
-  
+        
         if (isset($_POST['delrestrictedcards'])) {
             $delRestrictedCards = $_POST['delrestrictedcards'];
             foreach($delRestrictedCards as $cardName){
@@ -247,20 +246,20 @@ function handleActions($seriesName) {
         $success = $format->deleteEntireRestrictedlist(); // leave a message of success
     } else if($_POST['action'] == "Update Format") {
         $format = new Format($_POST['format']);
-  
+        
         if(isset($_POST['formatdescription'])) {$format->description = $_POST['formatdescription'];}
         
         if(isset($_POST['minmain'])) {$format->min_main_cards_allowed = $_POST['minmain'];}    
         if(isset($_POST['maxmain'])) {$format->max_main_cards_allowed = $_POST['maxmain'];}    
         if(isset($_POST['minside'])) {$format->min_side_cards_allowed = $_POST['minside'];}    
         if(isset($_POST['maxside'])) {$format->max_side_cards_allowed = $_POST['maxside'];}    
-  
+        
         if(isset($_POST['singleton']))        {$format->singleton = 1;}         else {$format->singleton = 0;}    
         if(isset($_POST['commander']))        {$format->commander = 1;}         else {$format->commander = 0;}
         if(isset($_POST['vanguard']))         {$format->vanguard = 1;}          else {$format->vanguard = 0;}
         if(isset($_POST['planechase']))       {$format->planechase = 1;}        else {$format->planechase = 0;}
         if(isset($_POST['prismatic']))        {$format->prismatic = 1;}         else {$format->prismatic = 0;}
-  
+        
         if(isset($_POST['allowcommons']))     {$format->allow_commons = 1;}     else {$format->allow_commons = 0;}    
         if(isset($_POST['allowuncommons']))   {$format->allow_uncommons = 1;}   else {$format->allow_uncommons = 0;}
         if(isset($_POST['allowrares']))       {$format->allow_rares = 1;}       else {$format->allow_rares = 0;}
@@ -269,14 +268,14 @@ function handleActions($seriesName) {
         
         $format->save();
     } else if($_POST['action'] == "New") {
-      printNewFormat();
+        printNewFormat();
     } else if($_POST['action'] == "Create New Format") {      
         $format = new Format("");
         $format->name = $_POST['newformatname'];
         $seriesType = "Private";
         if ($seriesName == "System")
         {
-          $seriesType = "System";
+            $seriesType = "System";
         }
         $format->type = $seriesType;
         $format->series_name = $seriesName;
@@ -296,7 +295,7 @@ function handleActions($seriesName) {
             echo "</form>";          
         }
     } else if($_POST['action'] == "Load") {
-          printLoadFormat($seriesName);
+        printLoadFormat($seriesName);
     } else if($_POST['action'] == "Save As") {
         $format = new Format($_POST['format']);
         $oldformatname = $format->name;
@@ -314,7 +313,7 @@ function handleActions($seriesName) {
         $seriesType = "Private";
         if ($seriesName == "System")
         {
-          $seriesType = "System";
+            $seriesType = "System";
         }
         $format->type = $seriesType;
         $format->series_name = $seriesName;
@@ -353,7 +352,7 @@ function handleActions($seriesName) {
         $seriesType = "Private";
         if ($seriesName == "System")
         {
-          $seriesType = "System";
+            $seriesType = "System";
         }
         $format->type = $seriesType;
         $format->series_name = $seriesName;
@@ -401,9 +400,9 @@ function handleActions($seriesName) {
             echo "</form>";          
         }      
     }
-  }
+}
 
-  function printNewFormat(){
+function printNewFormat(){
     echo "<h4>New Format</h4>\n";
     echo "<form action=\"formatcp.php\" method=\"post\">";
     echo "<input type=\"hidden\" name=\"view\" value=\"no_view\" />";
@@ -434,217 +433,121 @@ function printFormatSettings($active_format, $seriesName) {
     sets you don't want players to use, add to the ban list. You don't need to ban cards that aren't in the allowed 
     card sets. Finally make sure that the appropriate rarities that you want to allow are checked. For example
     a pauper event would leave only the commons box checked.</p>";
-echo "<p style=\"width: 75%; text-align: left;\">The name of this filter will default to the name of the series.  
+    echo "<p style=\"width: 75%; text-align: left;\">The name of this filter will default to the name of the series.  
     To use this filter, go to the Season Points Management->Season Format and select this filter. This sets the
     filter to be used for the entire season. You can also set this filter by going to Host CP->Format. This only
     sets the filter to be used for that single event.</p>";
-echo "<p style=\"width: 75%; text-align: left;\">Coming in a future update will be the ability for you to create
+    echo "<p style=\"width: 75%; text-align: left;\">Coming in a future update will be the ability for you to create
     and manage your own custom filters. That way you can have Alt Events that have special filters.</p>";
+    
+    echo "<form action=\"formatcp.php\" method=\"post\">"; 
+    echo "<input type=\"hidden\" name=\"view\" value=\"settings\" />";
+    echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
+    echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
+    
+    echo "<h4>Format Description</h4>";
+    echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
+    
+    echo "<tr><td>";
+    echo "<textarea class=\"inputbox\" rows=\"10\" cols=\"60\" name=\"formatdescription\">";
+    echo "$active_format->description";
+    echo "</textarea>";
+    echo "</td></tr>\n";
+    echo "</table>";
+    echo "<h4>Card Modifiers</h4>";
+    echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
+    echo "<tr><th>Minimum Mainboard Cards</th>";
+    echo "<td style=\"width: 50px; text-align: center;\">";
+    stringField("minmain", $active_format->min_main_cards_allowed, 5);
+    echo "</td>";
+    echo "<th>&nbsp;Maximum Mainboard Cards&nbsp;</th>";
+    echo "<td style=\"width: 50px; text-align: center;\">";
+    stringField("maxmain", $active_format->max_main_cards_allowed, 5);
+    echo "</td>";
+    echo "</tr><tr><th>Minimum Sideboard Cards</th>";
+    echo "<td style=\"width: 50px; text-align: center;\">";
+    stringField("minside", $active_format->min_side_cards_allowed, 5);
+    echo "</td>";
+    echo "<th>&nbsp;Maximum Sideboard Cards&nbsp;</th>";
+    echo "<td style=\"width: 50px; text-align: center;\">";
+    stringField("maxside", $active_format->max_side_cards_allowed, 5);
+    echo "</td>";
+    echo "</tr></table>";
+    
+    echo "<h4>Deck Modifiers</h4>";
+    echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
+    echo "<tr><th style=\"width: 100px; text-align: center;\">Singleton</th><th style=\"width: 100px; text-align: center;\">Commander</th>";
+    echo "<th style=\"width: 100px; text-align: center;\">Vanguard</th><th style=\"width: 100px; text-align: center;\">Planechase</th>";
+    echo "<th style=\"width: 100px; text-align: center;\">Prismatic</th></tr>";
+    echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"singleton\" value=\"1\" ";
+    if($active_format->singleton == 1) {echo "checked=\"yes\" ";}   
+    echo " /></td>";
+    echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"commander\" value=\"1\" ";
+    if($active_format->commander == 1) {echo "checked=\"yes\" ";} 
+    echo " /></td>";
+    echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"vanguard\" value=\"1\" ";
+    if($active_format->vanguard == 1) {echo "checked=\"yes\" ";}    
+    echo " /></td>";
+    echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"planechase\" value=\"1\" ";
+    if($active_format->planechase == 1) {echo "checked=\"yes\" ";}    
+    echo " /></td>";
+    echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"prismatic\" value=\"1\" ";
+    if($active_format->prismatic == 1) {echo "checked=\"yes\" ";}    
+    echo " /></td>";
+    echo "</tr></table>";
+    
+    echo "<h4>Allow Rarity Selection</h4>";
+    echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
+    echo "<tr><th style=\"width: 100px; text-align: center;\">Commons</th><th style=\"width: 100px; text-align: center;\">Uncommons</th>";
+    echo "<th style=\"width: 100px; text-align: center;\">Rares</th><th style=\"width: 100px; text-align: center;\">Mythics</th>";
+    echo "<th style=\"width: 100px; text-align: center;\">Timeshifted</th></tr>";
+    echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"allowcommons\" value=\"1\" ";
+    if($active_format->allow_commons == 1) {echo "checked=\"yes\" ";}   
+    echo " /></td>";
+    echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"allowuncommons\" value=\"1\" ";
+    if($active_format->allow_uncommons == 1) {echo "checked=\"yes\" ";} 
+    echo " /></td>";
+    echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"allowrares\" value=\"1\" ";
+    if($active_format->allow_rares == 1) {echo "checked=\"yes\" ";}    
+    echo " /></td>";
+    echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"allowmythics\" value=\"1\" ";
+    if($active_format->allow_mythics == 1) {echo "checked=\"yes\" ";}    
+    echo " /></td>";
+    echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"allowtimeshifted\" value=\"1\" ";
+    if($active_format->allow_timeshifted == 1) {echo "checked=\"yes\" ";}    
+    echo " /></td>";
+    echo "</tr>";
+    echo "<input type=\"hidden\" name=\"view\" value=\"settings\" />";
+    echo "<tr>";
+    echo "<td colspan=\"5\" class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Format\" name =\"action\" /></td>";
+    echo "</tr>";
+    echo "</table></form>";
+}
 
-echo "<form action=\"formatcp.php\" method=\"post\">"; 
-echo "<input type=\"hidden\" name=\"view\" value=\"settings\" />";
-echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
-echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
-
-echo "<h4>Format Description</h4>";
-echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
-if ($active_format->noFormatLoaded()) {
-  echo "<tr><td>";
-  echo "<textarea class=\"inputbox\" rows=\"10\" cols=\"60\" disabled=\"disabled\">";
-  echo "$active_format->description";
-  echo "</textarea>";
-  echo "</td></tr>\n";
-} else {
-  echo "<tr><td>";
-  echo "<textarea class=\"inputbox\" rows=\"10\" cols=\"60\" name=\"formatdescription\">";
-  echo "$active_format->description";
-  echo "</textarea>";
-  echo "</td></tr>\n";
-}
-echo "</table>";
-echo "<h4>Card Modifiers</h4>";
-echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
-echo "<tr><th>Minimum Mainboard Cards</th>";
-if ($active_format->noFormatLoaded()) {
-  echo "<td style=\"width: 50px; text-align: center;\">";
-  not_allowed("No Format Loaded, Please Load a Format to Edit");
-  echo "</td>";
-} else {
-  echo "<td style=\"width: 50px; text-align: center;\">";
-  stringField("minmain", $active_format->min_main_cards_allowed, 5);
-  echo "</td>";
-}
-echo "<th>&nbsp;Maximum Mainboard Cards&nbsp;</th>";
-if ($active_format->noFormatLoaded()) {
-  echo "<td style=\"width: 50px; text-align: center;\">";
-  not_allowed("No Format Loaded, Please Load a Format to Edit");
-  echo "</td>";
-} else {
-  echo "<td style=\"width: 50px; text-align: center;\">";
-  stringField("maxmain", $active_format->max_main_cards_allowed, 5);
-  echo "</td>";
-}
-echo "</tr><tr><th>Minimum Sideboard Cards</th>";
-if ($active_format->noFormatLoaded()) {
-  echo "<td style=\"width: 50px; text-align: center;\">";
-  not_allowed("No Format Loaded, Please Load a Format to Edit");
-  echo "</td>";
-} else {
-  echo "<td style=\"width: 50px; text-align: center;\">";
-  stringField("minside", $active_format->min_side_cards_allowed, 5);
-  echo "</td>";
-}
-echo "<th>&nbsp;Maximum Sideboard Cards&nbsp;</th>";
-if ($active_format->noFormatLoaded()) {
-  echo "<td style=\"width: 50px; text-align: center;\">";
-  not_allowed("No Format Loaded, Please Load a Format to Edit");
-  echo "</td>";
-} else {
-  echo "<td style=\"width: 50px; text-align: center;\">";
-  stringField("maxside", $active_format->max_side_cards_allowed, 5);
-  echo "</td>";
-}
-echo "</tr></table>";
-
-echo "<h4>Deck Modifiers</h4>";
-echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
-echo "<tr><th style=\"width: 100px; text-align: center;\">Singleton</th><th style=\"width: 100px; text-align: center;\">Commander</th>";
-echo "<th style=\"width: 100px; text-align: center;\">Vanguard</th><th style=\"width: 100px; text-align: center;\">Planechase</th>";
-echo "<th style=\"width: 100px; text-align: center;\">Prismatic</th></tr>";
-if ($active_format->noFormatLoaded()) {
-  echo "<td style=\"width: 100px; text-align: center;\">";
-  not_allowed("No Format Loaded, Please Load a Format to Edit");
-  echo "</td>";
-} else {
-  echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"singleton\" value=\"1\" ";
-  if($active_format->singleton == 1) {echo "checked=\"yes\" ";}   
-  echo " /></td>";
-}
-if ($active_format->noFormatLoaded()) {
-  echo "<td style=\"width: 100px; text-align: center;\">";
-  not_allowed("No Format Loaded, Please Load a Format to Edit");
-  echo "</td>";
-} else {
-  echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"commander\" value=\"1\" ";
-  if($active_format->commander == 1) {echo "checked=\"yes\" ";} 
-  echo " /></td>";
-}
-if ($active_format->noFormatLoaded()) {
-  echo "<td style=\"width: 100px; text-align: center;\">";
-  not_allowed("No Format Loaded, Please Load a Format to Edit");
-  echo "</td>";
-} else {
-  echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"vanguard\" value=\"1\" ";
-  if($active_format->vanguard == 1) {echo "checked=\"yes\" ";}    
-  echo " /></td>";
-}
-if ($active_format->noFormatLoaded()) {
-  echo "<td style=\"width: 100px; text-align: center;\">";
-  not_allowed("No Format Loaded, Please Load a Format to Edit");
-  echo "</td>";
-} else {
-  echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"planechase\" value=\"1\" ";
-  if($active_format->planechase == 1) {echo "checked=\"yes\" ";}    
-  echo " /></td>";
-}
-if ($active_format->noFormatLoaded()) {
-  echo "<td style=\"width: 100px; text-align: center;\">";
-  not_allowed("No Format Loaded, Please Load a Format to Edit");
-  echo "</td>";
-} else {
-  echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"prismatic\" value=\"1\" ";
-  if($active_format->prismatic == 1) {echo "checked=\"yes\" ";}    
-  echo " /></td>";
-}
-echo "</tr></table>";
-
-echo "<h4>Allow Rarity Selection</h4>";
-echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
-echo "<tr><th style=\"width: 100px; text-align: center;\">Commons</th><th style=\"width: 100px; text-align: center;\">Uncommons</th>";
-echo "<th style=\"width: 100px; text-align: center;\">Rares</th><th style=\"width: 100px; text-align: center;\">Mythics</th>";
-echo "<th style=\"width: 100px; text-align: center;\">Timeshifted</th></tr>";
-if ($active_format->noFormatLoaded()) {
-  echo "<td style=\"width: 100px; text-align: center;\">";
-  not_allowed("No Format Loaded, Please Load a Format to Edit");
-  echo "</td>";
-} else {
-  echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"allowcommons\" value=\"1\" ";
-  if($active_format->allow_commons == 1) {echo "checked=\"yes\" ";}   
-  echo " /></td>";
-}
-if ($active_format->noFormatLoaded()) {
-  echo "<td style=\"width: 100px; text-align: center;\">";
-  not_allowed("No Format Loaded, Please Load a Format to Edit");
-  echo "</td>";
-} else {
-  echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"allowuncommons\" value=\"1\" ";
-  if($active_format->allow_uncommons == 1) {echo "checked=\"yes\" ";} 
-  echo " /></td>";
-}
-if ($active_format->noFormatLoaded()) {
-  echo "<td style=\"width: 100px; text-align: center;\">";
-  not_allowed("No Format Loaded, Please Load a Format to Edit");
-  echo "</td>";
-} else {
-  echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"allowrares\" value=\"1\" ";
-  if($active_format->allow_rares == 1) {echo "checked=\"yes\" ";}    
-  echo " /></td>";
-}
-if ($active_format->noFormatLoaded()) {
-  echo "<td style=\"width: 100px; text-align: center;\">";
-  not_allowed("No Format Loaded, Please Load a Format to Edit");
-  echo "</td>";
-} else {
-  echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"allowmythics\" value=\"1\" ";
-  if($active_format->allow_mythics == 1) {echo "checked=\"yes\" ";}    
-  echo " /></td>";
-}
-if ($active_format->noFormatLoaded()) {
-  echo "<td style=\"width: 100px; text-align: center;\">";
-  not_allowed("No Format Loaded, Please Load a Format to Edit");
-  echo "</td>";
-} else {
-  echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"allowtimeshifted\" value=\"1\" ";
-  if($active_format->allow_timeshifted == 1) {echo "checked=\"yes\" ";}    
-  echo " /></td>";
-}
-echo "</tr>";
-echo "<input type=\"hidden\" name=\"view\" value=\"settings\" />";
-echo "<tr>";
-if ($active_format->noFormatLoaded()) {
-  echo "<td colspan=\"5\" class=\"buttons\">";
-  echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Format\" name =\"action\" disabled=\"disabled\" />";
-  echo "</td>";
-} else {
-  echo "<td colspan=\"5\" class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Format\" name =\"action\" /></td>";
-}
-echo "</tr>";
-echo "</table></form>";
-}
 function formatCPMenu($active_format, $seriesName) {
-  echo "<center>";
-  echo "<h3>Format Editor</h3>";
-  if ($active_format->name != "") {echo "<h4>Currently Editing: $active_format->name</h4>";}
-  echo "<form action=\"formatcp.php\" method=\"post\">"; 
-  echo "<input type=\"hidden\" name=\"view\" value=\"no_view\" />";
-  echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
-  echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
-  echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
-  echo "<tr><td class=\"buttons\"><input class=\"inputbutton\" style=\"width: 75px\" type=\"submit\" value=\"New\" name =\"action\" />";
-  echo "<input class=\"inputbutton\" style=\"width: 75px\" type=\"submit\" value=\"Load\" name =\"action\" />";
-  echo "<input class=\"inputbutton\" style=\"width: 75px\" type=\"submit\" value=\"Save As\" name =\"action\" />"; 
-  echo "<input class=\"inputbutton\" style=\"width: 75px\" type=\"submit\" value=\"Rename\" name =\"action\" />"; 
-  echo "<input class=\"inputbutton\" style=\"width: 75px\" type=\"submit\" value=\"Delete\" name =\"action\" /></tr>";
-  echo "</table></form>";
-  if ($active_format->name != "") 
-  {
-    $escaped = urlencode($active_format->name);
-    echo "<table><tr><td colspan=\"2\" align=\"center\">";
-    echo "<a href=\"formatcp.php?view=settings&format={$escaped}\">Format Settings</a>";
-    echo " | <a href=\"formatcp.php?view=bandr&format={$escaped}\">Legal, Banned & Restricted</a>";
-    echo " | <a href=\"formatcp.php?view=cardsets&format={$escaped}\">Legal Sets</a>";
-    echo "</td></tr></table>";
-  }
+    echo "<center>";
+    echo "<h3>Format Editor</h3>";
+    if ($active_format->name != "") {echo "<h4>Currently Editing: $active_format->name</h4>";}
+    echo "<form action=\"formatcp.php\" method=\"post\">"; 
+    echo "<input type=\"hidden\" name=\"view\" value=\"no_view\" />";
+    echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
+    echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
+    echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
+    echo "<tr><td class=\"buttons\"><input class=\"inputbutton\" style=\"width: 75px\" type=\"submit\" value=\"New\" name =\"action\" />";
+    echo "<input class=\"inputbutton\" style=\"width: 75px\" type=\"submit\" value=\"Load\" name =\"action\" />";
+    echo "<input class=\"inputbutton\" style=\"width: 75px\" type=\"submit\" value=\"Save As\" name =\"action\" />"; 
+    echo "<input class=\"inputbutton\" style=\"width: 75px\" type=\"submit\" value=\"Rename\" name =\"action\" />"; 
+    echo "<input class=\"inputbutton\" style=\"width: 75px\" type=\"submit\" value=\"Delete\" name =\"action\" /></tr>";
+    echo "</table></form>";
+    if ($active_format->name != "") 
+    {
+        $escaped = urlencode($active_format->name);
+        echo "<table><tr><td colspan=\"2\" align=\"center\">";
+        echo "<a href=\"formatcp.php?view=settings&format={$escaped}\">Format Settings</a>";
+        echo " | <a href=\"formatcp.php?view=bandr&format={$escaped}\">Legal, Banned & Restricted</a>";
+        echo " | <a href=\"formatcp.php?view=cardsets&format={$escaped}\">Legal Sets</a>";
+        echo "</td></tr></table>";
+    }
 }
 
 function printBandR($active_format, $seriesName)
@@ -677,29 +580,16 @@ function printBandR($active_format, $seriesName)
     } else {
         echo "<tr><td><font color=\"red\">No cards have been restricted</font></td>";
         echo "<td style=\"width: 100px; text-align: center;\">";
-        if ($active_format->noFormatLoaded()) {
-            not_allowed("No Format Loaded, Please Load a Format to Edit");
-        } else {
-            not_allowed("No Restricted Cards To Delete");            
-        }
+        not_allowed("No Restricted Cards To Delete");            
         echo "</td>";
         echo "</tr>";
     }
-    if ($active_format->noFormatLoaded()) {
-        echo "<tr><td colspan=\"2\"> Add new: ";
-        echo "<textarea class=\"inputbox\" disabled=\"disabled\" rows=\"5\" cols=\"40\"></textarea></td></tr>\n";
-        echo "<input type=\"hidden\" name=\"view\" value=\"bandr\" />";
-        echo "<tr>";
-        echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Restricted List\" name =\"action\" disabled=\"disabled\" /></td>";
-        echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Restricted List\" name =\"action\" disabled=\"disabled\" /></td>";
-    } else {
-        echo "<tr><td colspan=\"2\"> Add new: ";
-        echo "<textarea class=\"inputbox\" rows=\"5\" cols=\"40\" name=\"addrestrictedcard\"></textarea></td></tr>\n";
-        echo "<input type=\"hidden\" name=\"view\" value=\"bandr\" />";
-        echo "<tr>";
-        echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Restricted List\" name =\"action\" /></td>";
-        echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Restricted List\" name =\"action\" /></td>";
-    }
+    echo "<tr><td colspan=\"2\"> Add new: ";
+    echo "<textarea class=\"inputbox\" rows=\"5\" cols=\"40\" name=\"addrestrictedcard\"></textarea></td></tr>\n";
+    echo "<input type=\"hidden\" name=\"view\" value=\"bandr\" />";
+    echo "<tr>";
+    echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Restricted List\" name =\"action\" /></td>";
+    echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Restricted List\" name =\"action\" /></td>";
     echo "</tr></table></form>";
     
     // if the series is using a legal card list, don't show the banlist
@@ -728,29 +618,16 @@ function printBandR($active_format, $seriesName)
         } else {
             echo "<tr><td><font color=\"red\">No cards have been banned</font></td>";
             echo "<td style=\"width: 100px; text-align: center;\">";
-            if ($active_format->noFormatLoaded()) {
-                not_allowed("No Format Loaded, Please Load a Format to Edit");
-            } else {
-                not_allowed("No Ban Cards To Delete");            
-            }
+            not_allowed("No Ban Cards To Delete");            
             echo "</td>";
             echo "</tr>";
         }
-        if ($active_format->noFormatLoaded()) {
-            echo "<tr><td colspan=\"2\"> Add new: ";
-            echo "<textarea class=\"inputbox\" rows=\"5\" cols=\"40\" disabled=\"disabled\"></textarea></td></tr>\n";
-            echo "<input type=\"hidden\" name=\"view\" value=\"bandr\" />";
-            echo "<tr>";
-            echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Banlist\" name =\"action\" disabled=\"disabled\" /></td>";
-            echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Banlist\" name =\"action\" disabled=\"disabled\" /></td>";
-        } else {
-            echo "<tr><td colspan=\"2\"> Add new: ";
-            echo "<textarea class=\"inputbox\" rows=\"5\" cols=\"40\" name=\"addbancard\"></textarea></td></tr>\n";
-            echo "<input type=\"hidden\" name=\"view\" value=\"bandr\" />";
-            echo "<tr>";
-            echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Banlist\" name =\"action\" /></td>";
-            echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Banlist\" name =\"action\" /></td>";
-        }
+        echo "<tr><td colspan=\"2\"> Add new: ";
+        echo "<textarea class=\"inputbox\" rows=\"5\" cols=\"40\" name=\"addbancard\"></textarea></td></tr>\n";
+        echo "<input type=\"hidden\" name=\"view\" value=\"bandr\" />";
+        echo "<tr>";
+        echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Banlist\" name =\"action\" /></td>";
+        echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Banlist\" name =\"action\" /></td>";
         echo "</tr></table></form>";
     }
     
@@ -793,105 +670,93 @@ function printBandR($active_format, $seriesName)
         echo "</tr></table></form>";
     }
 }
-    
+
 function printCardSets($active_format, $seriesName) {
-  $coreCardSets = $active_format->getCoreCardsets();
-  $blockCardSets = $active_format->getBlockCardsets();
-  $extraCardSets = $active_format->getExtraCardsets();
-  echo "<h4>Core Cardsets Allowed</h4>\n";
-  echo "<form action=\"formatcp.php\" method=\"post\">"; 
-  echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
-  echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
-  echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
-  echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
-  echo "<tr><th style=\"text-align: center;\">Cardset Name</th><th style=\"width: 50px; text-align: center;\">Delete</th></tr>";
-  if (count($coreCardSets)) {
-      foreach($coreCardSets as $setName) {
-          echo "<tr><td style=\"text-align: center;\">{$setName}</td>";
-          echo "<td style=\"text-align: center; width: 50px; \"><input type=\"checkbox\" name=\"delcardsetname[]\" value=\"{$setName}\" />";
-          echo "</td></tr>";
-      }
-  } else {
-      echo "<tr><td><font color=\"red\">No Core Sets are Allowed</font></td>";
-      echo "<td style=\"width: 100px; text-align: center;\">";
-      if ($active_format->noFormatLoaded()) {
-          not_allowed("No Format Loaded, Please Load a Format to Edit");
-      } else {
-          not_allowed("No Selected Card Set To Delete");            
-      }
-      echo "</td>";
-      echo "</tr>";
-  }
-  echo "<tr><td>";
-  cardsetDropMenu("Core", $active_format, false);
-  echo "</td>";
-  echo "<td colspan=\"2\" class=\"buttons\">";
-  echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
-  echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" />";
-  echo"</td></tr></table></form>";
-
-  echo "<h4>Block Cardsets Allowed</h4>\n";
-  echo "<form action=\"formatcp.php\" method=\"post\">"; 
-  echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
-  echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
-  echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
-  echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
-  echo "<tr><th style=\"text-align: center;\">Cardset Name</th><th style=\"width: 50px; text-align: center;\">Delete</th></tr>";
-  if (count($blockCardSets)) {
-      foreach($blockCardSets as $setName) {
-          echo "<tr><td style=\"text-align: center;\">{$setName}</td>";
-          echo "<td style=\"text-align: center; width: 50px; \"><input type=\"checkbox\" name=\"delcardsetname[]\" value=\"{$setName}\" />";
-          echo "</td></tr>";
-      }
-  } else {
-      echo "<tr><td><font color=\"red\">No Block Sets are Allowed</font></td>";
-      echo "<td style=\"width: 100px; text-align: center;\">";
-      if ($active_format->noFormatLoaded()) {
-          not_allowed("No Format Loaded, Please Load a Format to Edit");
-      } else {
-          not_allowed("No Selected Card Set To Delete");            
-      }
-      echo "</td>";
-      echo "</tr>";
-  }
-
-  echo "<tr><td>";
-  cardsetDropMenu("Block", $active_format, false);
-  echo "</td>";
-  echo "<td colspan=\"2\" class=\"buttons\">";
-  echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
-  echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" />";
-  echo"</td></tr></table></form>";
-
-  echo "<h4>Extra Cardsets Allowed</h4>\n";
-  echo "<form action=\"formatcp.php\" method=\"post\">"; 
-  echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
-  echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
-  echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
-  echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
-  echo "<tr><th style=\"text-align: center;\">Cardset Name</th><th style=\"width: 50px; text-align: center;\">Delete</th></tr>";
-  if (count($extraCardSets)) {
-      foreach($extraCardSets as $setName) {
-          echo "<tr><td style=\"text-align: center;\">{$setName}</td>";
-          echo "<td style=\"text-align: center; width: 50px;\"><input type=\"checkbox\" name=\"delcardsetname[]\" value=\"{$setName}\" />";
-          echo "</td></tr>";
-      }
-  } else {
-      echo "<tr><td><font color=\"red\">No Extra Sets are Allowed</font></td>";
-      echo "<td style=\"width: 100px; text-align: center;\">";
-      if ($active_format->noFormatLoaded()) {
-          not_allowed("No Format Loaded, Please Load a Format to Edit");
-      } else {
-          not_allowed("No Selected Card Set To Delete");            
-      }
-      echo "</td>";
-      echo "</tr>";
-  }
-  echo "<tr><td>";
-  cardsetDropMenu("Extra", $active_format, false);
-  echo "</td>";
-  echo "<td colspan=\"2\" class=\"buttons\">";
-  echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
-  echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" />";
-  echo"</td></tr></table></form></center>";
+    $coreCardSets = $active_format->getCoreCardsets();
+    $blockCardSets = $active_format->getBlockCardsets();
+    $extraCardSets = $active_format->getExtraCardsets();
+    echo "<h4>Core Cardsets Allowed</h4>\n";
+    echo "<form action=\"formatcp.php\" method=\"post\">"; 
+    echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
+    echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
+    echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
+    echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
+    echo "<tr><th style=\"text-align: center;\">Cardset Name</th><th style=\"width: 50px; text-align: center;\">Delete</th></tr>";
+    if (count($coreCardSets)) {
+        foreach($coreCardSets as $setName) {
+            echo "<tr><td style=\"text-align: center;\">{$setName}</td>";
+            echo "<td style=\"text-align: center; width: 50px; \"><input type=\"checkbox\" name=\"delcardsetname[]\" value=\"{$setName}\" />";
+            echo "</td></tr>";
+        }
+    } else {
+        echo "<tr><td><font color=\"red\">No Core Sets are Allowed</font></td>";
+        echo "<td style=\"width: 100px; text-align: center;\">";
+        not_allowed("No Selected Card Set To Delete");            
+        echo "</td>";
+        echo "</tr>";
+    }
+    echo "<tr><td>";
+    cardsetDropMenu("Core", $active_format, false);
+    echo "</td>";
+    echo "<td colspan=\"2\" class=\"buttons\">";
+    echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
+    echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" />";
+    echo"</td></tr></table></form>";
+    
+    echo "<h4>Block Cardsets Allowed</h4>\n";
+    echo "<form action=\"formatcp.php\" method=\"post\">"; 
+    echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
+    echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
+    echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
+    echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
+    echo "<tr><th style=\"text-align: center;\">Cardset Name</th><th style=\"width: 50px; text-align: center;\">Delete</th></tr>";
+    if (count($blockCardSets)) {
+        foreach($blockCardSets as $setName) {
+            echo "<tr><td style=\"text-align: center;\">{$setName}</td>";
+            echo "<td style=\"text-align: center; width: 50px; \"><input type=\"checkbox\" name=\"delcardsetname[]\" value=\"{$setName}\" />";
+            echo "</td></tr>";
+        }
+    } else {
+        echo "<tr><td><font color=\"red\">No Block Sets are Allowed</font></td>";
+        echo "<td style=\"width: 100px; text-align: center;\">";
+        not_allowed("No Selected Card Set To Delete");            
+        echo "</td>";
+        echo "</tr>";
+    }
+    
+    echo "<tr><td>";
+    cardsetDropMenu("Block", $active_format, false);
+    echo "</td>";
+    echo "<td colspan=\"2\" class=\"buttons\">";
+    echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
+    echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" />";
+    echo"</td></tr></table></form>";
+    
+    echo "<h4>Extra Cardsets Allowed</h4>\n";
+    echo "<form action=\"formatcp.php\" method=\"post\">"; 
+    echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
+    echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
+    echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
+    echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
+    echo "<tr><th style=\"text-align: center;\">Cardset Name</th><th style=\"width: 50px; text-align: center;\">Delete</th></tr>";
+    if (count($extraCardSets)) {
+        foreach($extraCardSets as $setName) {
+            echo "<tr><td style=\"text-align: center;\">{$setName}</td>";
+            echo "<td style=\"text-align: center; width: 50px;\"><input type=\"checkbox\" name=\"delcardsetname[]\" value=\"{$setName}\" />";
+            echo "</td></tr>";
+        }
+    } else {
+        echo "<tr><td><font color=\"red\">No Extra Sets are Allowed</font></td>";
+        echo "<td style=\"width: 100px; text-align: center;\">";
+        not_allowed("No Selected Card Set To Delete");            
+        echo "</td>";
+        echo "</tr>";
+    }
+    echo "<tr><td>";
+    cardsetDropMenu("Extra", $active_format, false);
+    echo "</td>";
+    echo "<td colspan=\"2\" class=\"buttons\">";
+    echo "<input type=\"hidden\" name=\"view\" value=\"cardsets\" />";
+    echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Cardsets\" name =\"action\" />";
+    echo"</td></tr></table></form></center>";
 }
