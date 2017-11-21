@@ -444,9 +444,9 @@ function print_recentMatchTable() {
   echo "<tr><td colspan=3><b>RECENT MATCHES</td><td align=\"right\">\n";
   echo "<a href=\"player.php?mode=allmatches\">(see all)</a></td></tr>\n";
   foreach ($matches as $match) {
+    $event = $match->getEvent();
     $res = $match->getPlayerResult($player->name);
     $opp = $match->otherPlayer($player->name);
-    $event = $match->getEvent();
     echo "<tr>";
     echo "<td>{$event->name} Round: {$event->current_round} </td>";
     echo "<td><b>$res {$match->getPlayerWins($player->name)} - {$match->getPlayerLosses($player->name)}</b></td>";

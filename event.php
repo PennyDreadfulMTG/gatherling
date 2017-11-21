@@ -132,8 +132,8 @@ function content() {
       authFailed();
     }
   } elseif (mode_is("Create A New Event")) {
-      $series = new Series($_GET['series']);
-      if($series->authCheck(Player::loginName())) {
+    $player = Player::getSessionPlayer()
+    if($player->isOrganizer()) {
       eventForm();
     } else {
       authFailed();
