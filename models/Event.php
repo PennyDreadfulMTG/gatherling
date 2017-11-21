@@ -36,8 +36,11 @@ class Event {
   public $player_reportable;
   public $prereg_cap; // Cap on player initiated registration
 
+  public $private_decks; // Toggle to disable deck privacy for active events. Allows the metagame page to display during an active event and lets deck lists be viewed if disabled.
+
   public $hastrophy;
   private $new;
+  public $player_reported_draws;
 
   function __construct($name) {
     if ($name == "") {
@@ -61,18 +64,20 @@ class Event {
       $this->current_round = 0;
       $this->player_reportable = 0;
       $this->prereg_cap = 0;
+      $this->private_decks = 1;
+      $this->player_reported_draws = 0;
 
       return;
     }
 
     $db = Database::getConnection();
-    $stmt = $db->prepare("SELECT format, host, cohost, series, season, number, start, kvalue, finalized, prereg_allowed, pkonly, threadurl, metaurl, reporturl, active, current_round, player_reportable, prereg_cap FROM events WHERE name = ?");
+    $stmt = $db->prepare("SELECT format, host, cohost, series, season, number, start, kvalue, finalized, prereg_allowed, pkonly, threadurl, metaurl, reporturl, active, current_round, player_reportable, prereg_cap, private_decks, player_reported_draws FROM events WHERE name = ?");
     if (!$stmt) {
       die($db->error);
     }
     $stmt->bind_param("s", $name);
     $stmt->execute();
-    $stmt->bind_result($this->format, $this->host, $this->cohost, $this->series, $this->season, $this->number, $this->start, $this->kvalue, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->threadurl, $this->metaurl, $this->reporturl, $this->active, $this->current_round, $this->player_reportable, $this->prereg_cap);
+    $stmt->bind_result($this->format, $this->host, $this->cohost, $this->series, $this->season, $this->number, $this->start, $this->kvalue, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->threadurl, $this->metaurl, $this->reporturl, $this->active, $this->current_round, $this->player_reportable, $this->prereg_cap, $this->private_decks, $this->player_reported_draws);
     if ($stmt->fetch() == NULL) {
       throw new Exception('Event '. $name .' not found in DB');
     }
@@ -123,11 +128,15 @@ class Event {
     $db = Database::getConnection();
 
     if ($this->new) {
-      $stmt = $db->prepare("INSERT INTO events(name, start, format,
-        host, cohost, kvalue, number, season, series,
-        threadurl, reporturl, metaurl, finalized, prereg_allowed, pkonly, player_reportable, prereg_cap)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?)");
-      $stmt->bind_param("sssssdddssssdddd", $this->name, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue, $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl, $this->metaurl, $this->prereg_allowed, $this->pkonly, $this->player_reportable, $this->prereg_cap);
+      $stmt = $db->prepare("INSERT INTO events(name, start, format, host, cohost, kvalue, 
+                                               number, season, series, threadurl, reporturl, 
+                                               metaurl, prereg_allowed, finalized, pkonly, player_reportable, 
+                                               prereg_cap, private_decks, player_reported_draws)
+                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?)");
+      $stmt->bind_param("sssssdddssssdddddd", $this->name, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
+                                             $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl, 
+                                             $this->metaurl, $this->prereg_allowed, $this->pkonly, $this->player_reportable, 
+                                             $this->prereg_cap, $this->private_decks, $this->player_reported_draws);
       $stmt->execute() or die($stmt->error);
       $stmt->close();
 
@@ -135,12 +144,17 @@ class Event {
       $this->newSubevent($this->finalrounds, 2, $this->finalstruct);
 
     } else {
-      $stmt = $db->prepare("UPDATE events SET
-        start = ?, format = ?, host = ?, cohost = ?, kvalue = ?,
-        number = ?, season = ?, series = ?, threadurl = ?, reporturl = ?,
-        metaurl = ?, finalized = ?, prereg_allowed = ?, pkonly = ?, active = ?, current_round = ?, player_reportable = ?, prereg_cap = ? WHERE name = ?");
+      $stmt = $db->prepare("UPDATE events SET start = ?, format = ?, host = ?, cohost = ?, kvalue = ?,
+                                              number = ?, season = ?, series = ?, threadurl = ?, reporturl = ?,
+                                              metaurl = ?, finalized = ?, prereg_allowed = ?, pkonly = ?, active = ?, 
+                                              current_round = ?, player_reportable = ?, prereg_cap = ? , private_decks = ?, player_reported_draws = ?
+                                              WHERE name = ?");
       $stmt or die($db->error);
-      $stmt->bind_param("ssssdddssssddddddds", $this->start, $this->format, $this->host, $this->cohost, $this->kvalue, $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl, $this->metaurl, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->active, $this->current_round, $this->player_reportable, $this->prereg_cap, $this->name );
+      $stmt->bind_param("ssssdddssssddddddddds", $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
+                                                $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl, 
+                                                $this->metaurl, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->active, 
+                                                $this->current_round, $this->player_reportable, $this->prereg_cap, $this->private_decks, $this->player_reported_draws,
+                                                $this->name );
       $stmt->execute() or die($stmt->error);
       $stmt->close();
 
@@ -200,6 +214,7 @@ class Event {
   }
 
   function getDecks() {
+    $decks = array();
     $deckids = Database::list_result_single_param("SELECT deck FROM entries WHERE event = ? AND deck IS NOT NULL", "s", $this->name);
     
     foreach($deckids as $deckid) {
@@ -379,6 +394,22 @@ class Event {
     return $subs;
   }
 
+  function getEntriesByDateTime() {
+      return Database::list_result_single_param("SELECT player 
+                                                 FROM entries 
+                                                 WHERE event = ? 
+                                                 AND deck ORDER BY DATE(`registered_at`) ASC",
+                                                 's', $this->name);
+  }
+
+function getEntriesByMedal() {
+    return Database::list_result_single_param("SELECT player
+                                             FROM entries
+                                             WHERE event = ?
+                                             AND deck ORDER BY medal, player ",
+        's', $this->name);
+}
+
   function getEntries() {
     $players = $this->getPlayers();
 
@@ -412,6 +443,11 @@ class Event {
     $playername = trim($playername);
     if (strcmp($playername, "") == 0) {
       return false;
+    }
+    $series = new Series($this->series);
+    $playerIsBanned = $series->isPlayerBanned($playername);
+    if($playerIsBanned) {
+        return false;
     }
     $entry = Entry::findByEventAndPlayer($this->name, $playername);
     $added = false;
@@ -1014,11 +1050,13 @@ class Event {
             $event_names[] = $nextevent;
         }
         $stmt->close();
+
         $events = array();
         foreach ($event_names as $eventname) {
             $events[] = new Event($eventname);
         }
         return $events;
+
     }
 
     function resolveRound($subevent, $current_round) {
@@ -1233,5 +1271,19 @@ class Event {
             return false;
         }
         else return true;
+    }
+    
+    function updateDecksFormat($format) {
+        $deckIDs = Database::list_result_single_param("SELECT deck FROM entries WHERE event = ? AND deck IS NOT NULL", "s", $this->name);
+        
+        if(count($deckIDs)) {
+            $db = Database::getConnection();
+            foreach($deckIDs as $deckID) {
+                $stmt = $db->prepare("UPDATE decks SET format = ? WHERE id = ?");
+                $stmt->bind_param("ss", $format, $deckID);
+                $stmt->execute();
+            }
+            $stmt->close();
+        }
     }
 }

@@ -38,7 +38,8 @@ function print_header($title, $js = null, $extra_head_content = "") {
       }
   }
   
-  ini_set('session.gc_maxlifetime',2*60*60); // sets session timer to 2 hours, format is N hr * 60 minutes * 60 seconds
+  ini_set('session.gc_maxlifetime',10*60*60); // sets session timer to 10 hours, format is N hr * 60 minutes * 60 seconds
+  ini_set('session.cookie_lifetime', 0); // sets the session cookie timer to only timeout when browser is closed
   echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
   echo "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">\n";
   echo "  <head>\n";
@@ -48,6 +49,7 @@ function print_header($title, $js = null, $extra_head_content = "") {
   echo "    <title>{$CONFIG['site_name']} | {$title}</title>\n";
   echo "    <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"". theme_file("css/stylesheet.css") . "\" />\n";
   echo "    <script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js\"></script>\n";
+
   if ($js) {
     echo "<script type=\"text/javascript\">";
     echo $js;
@@ -63,7 +65,7 @@ function print_header($title, $js = null, $extra_head_content = "") {
 EOT;
  include_once("analyticstracking.php"); // google analytics tracking
 //  echo image_tag("header_gatherling.png");
-  echo <<<EOT
+echo <<<EOT
             </div>
             <div id="header_logo">
 EOT;
@@ -74,7 +76,7 @@ EOT;
         <div id="mainmenu_submenu" class="grid_12 menubar">
         <ul>
           <li><span class=\"inputbutton\"><a href="./gatherling.php">Home</a></span></li>
-          <li><a href="http://pauperkrew.com/">Forums</a></li>
+          <li><a href="http://community.wizards.com/forums/102431">Forums</a></li>
           <li><a href="./series.php">Events</a></li>
           <li><a href="./index.php">Gatherling</a></li>
           <li><a href="./ratings.php">Ratings</a></li>
@@ -112,7 +114,7 @@ EOT;
     <li><a href="profile.php">Profile</a></li>
     <li><a href="player.php">Player CP</a></li>
     <li><a href="eventreport.php">Metagame</a></li>
-    <li><a href="decksearch.php">Decks</a></li>
+    <li><a href="decksearch.php">Deck Search</a></li>
 EOT;
   if ($player == NULL) {
     echo "<li class=\"last\"><a href=\"login.php\">Login</a></li>\n";
@@ -168,6 +170,7 @@ function linkToLogin() {
 
 function printCardLink($card) {
   $gathererName = preg_replace('/ /',']+[',$card);
+  $gathererName = str_replace("/", "]+[", $gathererName);
   echo "<span class=\"cardHoverImageWrapper\">";
   echo "<a href=\"http://gatherer.wizards.com/Pages/Search/Default.aspx?name=+[{$gathererName}]\" ";
   echo "class=\"linkedCardName\" target=\"_blank\">{$card}<span class=\"linkCardHoverImage\"><p class=\"crop\" style=\"background-image: url(http://gatherer.wizards.com/Handlers/Image.ashx?name={$card}&type=card\"><img src=\"http://gatherer.wizards.com/Handlers/Image.ashx?name={$card}&type=card\"></p></span></a></span>";
@@ -218,6 +221,68 @@ function formatDropMenu($format, $useAll = 0, $form_name = 'format') {
     }
     echo "</select>";
     $result->close();
+}
+
+function emailStatusDropDown($currentStatus = 1) {
+    echo "<select class=\"inputbox\" name=\"emailstatus\">";
+    if ($currentStatus == 0) {        
+        echo "<option value=\"0\" selected>Private</option>";
+    } else {        
+        echo "<option value=\"0\">Private</option>";
+    }
+    if ($currentStatus == 1) {
+        echo "<option value=\"1\" selected>Public</option>";        
+    } else {
+        echo "<option value=\"1\">Public</option>";
+    }
+    echo "</select>";    
+}
+
+function timeZoneDropMenu($selected="") {
+    
+    echo "<select class=\"inputbox\" name=\"timezone\">";
+    $setxt = "";
+    echo "<option value=\"-12\"{$setxt}>[UTC - 12] Baker Island Time</option>";
+    echo "<option value=\"-11\"{$setxt}>[UTC - 11] Niue Time, Samoa Standard Time</option>";
+    echo "<option value=\"-10\"{$setxt}>[UTC - 10] Hawaii-Aleutian Standard Time, Cook Island Time</option>";
+    echo "<option value=\"-9.5\"{$setxt}>[UTC - 9:30] Marquesas Islands Time</option>";
+    echo "<option value=\"-9\"{$setxt}>[UTC - 9] Alaska Standard Time, Gambier Island Time</option>";
+    echo "<option value=\"-8\"{$setxt}>[UTC - 8] Pacific Standard Time</option>";
+    echo "<option value=\"-7\"{$setxt}>[UTC - 7] Mountain Standard Time</option>";
+    echo "<option value=\"-6\"{$setxt}>[UTC - 6] Central Standard Time</option>";
+    echo "<option value=\"-5\" selected>[UTC - 5] Eastern Standard Time (Gatherling.com Default Time)</option>";
+    echo "<option value=\"-4.5\"{$setxt}>[UTC - 4:30] Venezuelan Standard Time</option>";
+    echo "<option value=\"-4\"{$setxt}>[UTC - 4] Atlantic Standard Time</option>";
+    echo "<option value=\"-3.5\"{$setxt}>[UTC - 3:30] Newfoundland Standard Time</option>";
+    echo "<option value=\"-3\"{$setxt}>[UTC - 3] Amazon Standard Time, Central Greenland Time</option>";
+    echo "<option value=\"-2\"{$setxt}>[UTC - 2] Fernando de Noronha Time, South Georgia &amp; the South Sandwich Islands Time</option>";
+    echo "<option value=\"-1\"{$setxt}>[UTC - 1] Azores Standard Time, Cape Verde Time, Eastern Greenland Time</option>";
+    echo "<option value=\"0\"{$setxt}>[UTC] Western European Time, Greenwich Mean Time</option>";
+    echo "<option value=\"1\"{$setxt}>[UTC + 1] Central European Time, West African Time</option>";
+    echo "<option value=\"2\"{$setxt}>[UTC + 2] Eastern European Time, Central African Time</option>";
+    echo "<option value=\"3\"{$setxt}>[UTC + 3] Moscow Standard Time, Eastern African Time</option>";
+    echo "<option value=\"3.5\"{$setxt}>[UTC + 3:30] Iran Standard Time</option>";
+    echo "<option value=\"4\"{$setxt}>[UTC + 4] Gulf Standard Time, Samara Standard Time</option>";
+    echo "<option value=\"4.5\"{$setxt}>[UTC + 4:30] Afghanistan Time</option>";
+    echo "<option value=\"5\"{$setxt}>[UTC + 5] Pakistan Standard Time, Yekaterinburg Standard Time</option>";
+    echo "<option value=\"5.5\"{$setxt}>[UTC + 5:30] Indian Standard Time, Sri Lanka Time</option>";
+    echo "<option value=\"5.75\"{$setxt}>[UTC + 5:45] Nepal Time</option>";
+    echo "<option value=\"6\"{$setxt}>[UTC + 6] Bangladesh Time, Bhutan Time, Novosibirsk Standard Time</option>";
+    echo "<option value=\"6.5\"{$setxt}>[UTC + 6:30] Cocos Islands Time, Myanmar Time</option>";
+    echo "<option value=\"7\"{$setxt}>[UTC + 7] Indochina Time, Krasnoyarsk Standard Time</option>";
+    echo "<option value=\"8\"{$setxt}>[UTC + 8] Chinese Standard Time, Australian Western Standard Time, Irkutsk Standard Time</option>";
+    echo "<option value=\"8.75\"{$setxt}>[UTC + 8:45] Southeastern Western Australia Standard Time</option>";
+    echo "<option value=\"9\"{$setxt}>[UTC + 9] Japan Standard Time, Korea Standard Time, Chita Standard Time</option>";
+    echo "<option value=\"9.5\"{$setxt}>[UTC + 9:30] Australian Central Standard Time</option>";
+    echo "<option value=\"10\"{$setxt}>[UTC + 10] Australian Eastern Standard Time, Vladivostok Standard Time\</option>";
+    echo "<option value=\"10.5\"{$setxt}>[UTC + 10:30] Lord Howe Standard Time</option>";
+    echo "<option value=\"11\"{$setxt}>[UTC + 11] Solomon Island Time, Magadan Standard Time</option>";
+    echo "<option value=\"11.5\"{$setxt}>[UTC + 11:30] Norfolk Island Time</option>";
+    echo "<option value=\"12\"{$setxt}>[UTC + 12] New Zealand Time, Fiji Time, Kamchatka Standard Time</option>";
+    echo "<option value=\"12.75\"{$setxt}>[UTC + 12:45] Chatham Islands Time</option>";
+    echo "<option value=\"13\"{$setxt}>[UTC + 13] Tonga Time, Phoenix Islands Time</option>";
+    echo "<option value=\"14\"{$setxt}>[UTC + 14] Line Island Time</option>";
+    echo "</select>";
 }
 
 function dropMenu($name, $options, $selected = NULL) {
@@ -295,8 +360,37 @@ function json_headers() {
 }
 
 function distance_of_time_in_words($from_time,$to_time = 0, $include_seconds = false) {
-  $dm = $distance_in_minutes = abs(($from_time - $to_time))/60;
-  $ds = $distance_in_seconds = abs(($from_time - $to_time));
+    $inputSeconds = abs(($from_time - $to_time));
+
+    $secondsInAMinute = 60;
+    $secondsInAnHour  = 60 * $secondsInAMinute;
+    $secondsInADay    = 24 * $secondsInAnHour;
+
+    // extract days
+    $days = floor($inputSeconds / $secondsInADay);
+
+    // extract hours
+    $hourSeconds = $inputSeconds % $secondsInADay;
+    $hours = floor($hourSeconds / $secondsInAnHour);
+
+    // extract minutes
+    $minuteSeconds = $hourSeconds % $secondsInAnHour;
+    $minutes = floor($minuteSeconds / $secondsInAMinute);
+
+    // extract the remaining seconds
+    $remainingSeconds = $minuteSeconds % $secondsInAMinute;
+    $seconds = ceil($remainingSeconds);
+
+    $time_to_start = "";
+    if ($days > 0){$time_to_start = "$days Days, ";}
+    if ($hours > 0){$time_to_start .= "$hours Hours, ";}
+    if ($minutes > 0){$time_to_start .= "$minutes Minutes";}
+
+    return $time_to_start;
+
+    /*$ds = $distance_in_seconds = abs(($from_time - $to_time));
+    $dm = $distance_in_minutes = abs(($from_time - $to_time))/60;
+    $ds = $distance_in_seconds = abs(($from_time - $to_time));
   
   switch ($distance_in_minutes) {
     case $dm > 0 && $dm < 1:
@@ -356,11 +450,41 @@ function distance_of_time_in_words($from_time,$to_time = 0, $include_seconds = f
     default:
       return 'over ' . round($dm / 525600) . ' years';
     break;
+  }*/
   }
-}
 
 function not_allowed($reason) {
   echo "<span class=\"notallowed inputbutton\" title=\"{$reason}\">&#x26A0;</span>";
+}
+
+function displayPlayerEmailPopUp($player, $email) {
+  echo "<a class=\"emailPop\" style=\color: green\" title=\"{$email}\">{$player}</a>";
+}
+
+function tribeBanDropMenu ($format) {
+    $allTribes = Format::getTribesList();
+    $bannedTribes = $format->getTribesBanned();
+    $tribes = array_diff($allTribes, $bannedTribes); // remove tribes banned from drop menu
+    
+    echo "<select class=\"inputbox\" name=\"tribeban\">";
+    echo "<option value=\"Unclassified\">- Tribe to Ban - </option>";
+    foreach ($tribes as $tribe) {
+        echo "<option value=\"$tribe\">$tribe</option>";
+    }
+    echo "</select>";
+}
+
+function subTypeBanDropMenu ($format) {
+    $allSubTypes = Format::getTribesList();
+    $bannedSubTypes = $format->getSubTypesBanned();
+    $subTypes = array_diff($allSubTypes, $bannedSubTypes); // remove sub types banned from drop menu
+    
+    echo "<select class=\"inputbox\" name=\"subtypeban\">";
+    echo "<option value=\"Unclassified\">- Subtype to Ban - </option>";
+    foreach ($subTypes as $subType) {
+        echo "<option value=\"$subType\">$subType</option>";
+    }
+    echo "</select>";
 }
 
 function cardsetDropMenu($cardsetType, $format, $disabled) {
@@ -414,7 +538,7 @@ function stringField($field, $def, $len) {
 }
 
 function version_tagline() {
-  print "Gatherling version 4.5.2 (\"People assume that time is a strict progression of cause to effect, but actually — from a non-linear, non-subjective viewpoint — it's more like a big ball of wibbly-wobbly... timey-wimey... stuff.\")";
+  print "Gatherling version 4.7.0 (\"People assume that time is a strict progression of cause to effect, but actually — from a non-linear, non-subjective viewpoint — it's more like a big ball of wibbly-wobbly... timey-wimey... stuff.\")";
   # print "Gatherling version 4.0.0 (\"Call me old fashioned, but, if you really wanted peace, couldn't you just STOP FIGHTING?\")";
   # print "Gatherling version 3.3.0 (\"Do not offend the Chair Leg of Truth. It is wise and terrible.\")";
   # print "Gatherling version 2.1.27PK (\"Please give us a simple answer, so that we don't have to think, because if we think, we might find answers that don't fit the way we want the world to be.\")";

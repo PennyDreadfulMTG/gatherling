@@ -52,7 +52,7 @@ function do_page() {
       } else {
           Format::formatEditor("admincp.php");
       }
-  } elseif(($view == "add_cardset") && (Player::loginName() == 'Dabil')) {
+  } elseif(($view == "add_cardset") && (Player::loginName() == 'longtimegone')) {
       printAddCardSet();
   } elseif ($view == "calc_ratings") {
       printCalcRatingsForm();
@@ -85,7 +85,7 @@ function adminCPMenu() {
   echo " | <a href=\"admincp.php?view=create_series\">Create New Series</a>";
   echo " | <a href=\"admincp.php?view=format_editor\">Format Editor</a>";
   echo " | <a href=\"admincp.php?view=calc_ratings\">Ratings</a>";
-  if (Player::loginName() == 'Dabil') {echo " | <a href=\"admincp.php?view=add_cardset\">Add New Cardset</a>";}
+  if (Player::loginName() == 'longtimegone') {echo " | <a href=\"admincp.php?view=add_cardset\">Add New Cardset</a>";}
   echo "</td></tr></table>";
 }
 
@@ -130,32 +130,42 @@ function printCreateNewSeriesForm() {
 }
 
 function printCalcRatingsForm() {
+  $ratings = new Ratings();
   echo "<h4>Calculate Ratings</h4>";
   echo "<form action=\"admincp.php\" method=\"post\">";
   echo "<input type=\"hidden\" name=\"view\" value=\"calc_ratings\" />";    
   echo "<table class=\"form\" style=\"border-width: 0px\" align=\"center\">";
   echo "<tr><td class=\"buttons\">";
   echo "<input class=\"inputbutton\" type=\"submit\" name=\"action\" value=\"Re-Calculate All Ratings\" /></td></tr>";
+  echo "<tr><td class=\"buttons\">";
+  echo "<tr><td>Select a rating to Re-Calculate: ";
+  $ratings->formatDropMenuR();
+  echo "&nbsp;";
+  echo "<input class=\"inputbutton\" type=\"submit\" name=\"action\" value=\"Re-Calcualte By Format\" /></td></tr>";
   echo "</table></form>";
 }
 
 function printAddCardSet() {
+
+
+
     echo "<form action=\"admincp.php\" method=\"post\" enctype=\"multipart/form-data\">";
     echo "<input type=\"hidden\" name=\"view\" value=\"no_view\" />";
     echo "<h3><center>Install New Cardset</center></h3>";
     echo "<table class=\"form\" style=\"border-width: 0px\" align=\"center\">";
-    echo "<tr><th>Cardset Name</th>";
-    echo "<td><input class=\"inputbox\" type=\"text\" name=\"cardsetname\" />";
-    echo "</td></tr>";
+    //echo "<tr><th>Cardset Name</th>";
+    SetScraper::getSetList();
+    //echo "<td><input class=\"inputbox\" type=\"text\" name=\"cardsetname\" />";
+    //echo "</td></tr>";
     echo "<tr><th>Release Date</th>";
     echo "<td><input class=\"inputbox\" type=\"text\" name=\"releasedate\" />";
     echo "</td></tr>";
     echo "<tr><th>Set Type</th>";
     echo "<td>";
-    dropMenu("settype", array("Core", "Block", "Extra"));
+    dropMenu("settype", array("Block", "Core", "Extra"));
     echo "</td> </tr>";
-    echo "<tr><th>Cardset Text Spoiler</th>";
-    echo "<td><input class=\"inputbox\" type=\"file\" name=\"cardsetfile\" /> ";
+    echo "<tr>";
+    echo "<td>";
     echo "<input class=\"inputbutton\" type=\"submit\" name=\"action\" value=\"Install New Cardset\" /></td></tr>";
     echo "</table></form>";
 }
@@ -181,13 +191,15 @@ function handleActions() {
     $player = new Player($_POST['username']);
     $player->setPassword($_POST['new_password']);
     $result = "Password changed for user {$player->name} to {$_POST['new_password']}";
-  } else if (($_POST['action'] == "Install New Cardset") && ($_SESSION['username'] == 'Dabil')) {
-      $set = $_POST['cardsetname'];
+  } else if (($_POST['action'] == "Install New Cardset") && ($_SESSION['username'] == 'longtimegone')) {
+      $set = $_POST['edition'];
       $settype = $_POST['settype'];
       $releasedate = $_POST['releasedate'];
-      $file = fopen($_FILES['cardsetfile']['tmp_name'], "r");
-      insertCardSetAction ($set, $settype, $releasedate, $file);
-      $result = "New card set: $set was added to database!";
+      //$file = fopen($_FILES['cardsetfile']['tmp_name'], "r");
+      //insertCardSetAction ($set, $settype, $releasedate, $file);
+      print_r($_POST);
+      SetScraper::addNewSet($set[0],$releasedate,$settype );
+      //$result = "New card set: $set was added to database!";
   } else if ($_POST['action'] == "Create Series") {
     $newactive = $_POST['isactive'];
     $newtime = $_POST['hour'];
@@ -222,6 +234,14 @@ function handleActions() {
       $ratings = new Ratings();
       $ratings->deleteAllRatings();
       $ratings->calcAllRatings();
+  } else if ($_POST['action'] == "Re-Calcualte By Format") {
+      $ratings = new Ratings();
+      $ratings->deleteRatingByFormat($_POST['format']);
+      if ($_POST['format'] == "Composite") {
+          $ratings->calcCompositeRating();
+      } else {
+          $ratings->calcRatingByFormat($_POST['format']);      
+      }
   } else if ($_POST['action'] == "Update Banlist") {
       $active_format = $_POST['format'];
       $format = new Format($active_format);
@@ -354,6 +374,7 @@ function handleActions() {
       if(isset($_POST['vanguard']))         {$format->vanguard = 1;}          else {$format->vanguard = 0;}
       if(isset($_POST['planechase']))       {$format->planechase = 1;}        else {$format->planechase = 0;}
       if(isset($_POST['prismatic']))        {$format->prismatic = 1;}         else {$format->prismatic = 0;}
+      if(isset($_POST['tribal']))           {$format->tribal = 1;}            else {$format->tribal = 0;}
 
       if(isset($_POST['allowcommons']))     {$format->allow_commons = 1;}     else {$format->allow_commons = 0;}    
       if(isset($_POST['allowuncommons']))   {$format->allow_uncommons = 1;}   else {$format->allow_uncommons = 0;}
@@ -543,7 +564,7 @@ while(!feof($file))
     $card[$matches[1]] = $matches[2];
     if($matches[1] == "Set/Rarity") 
     {
-      preg_match("/$set (Land|Common|Uncommon|Rare|Mythic Rare|Special)/", $card[$matches[1]], $submatches);
+      preg_match("/$set (Land|Common|Uncommon|Rare|Mythic Rare|Special|Bonus)/", $card[$matches[1]], $submatches);
       $card[$matches[1]] = $submatches[1];
       echo "<div class=\"clear\"></div>";
       echo "</div>"; // gatherling news
@@ -587,6 +608,11 @@ function insertCard($card, $set, $rarity, $stmt) {
           $card['Cost'] = 0;
   }
   
+  $card['Name'] = preg_replace("/Æ/", "AE", $card['Name']);
+  $card['Name'] = preg_replace("/\306/", "AE", $card['Name']);
+  $card['Name'] = preg_replace("/ö/", "o", $card['Name']);
+  $card['Name'] = preg_replace("/é/", "e", $card['Name']);
+
   echo "<div class=\"cardsidecolumn cardinsert box\">";
   echo "<div class=\"clear\"></div>";
   echo "Card Name:           {$card['Name']}<br />";
@@ -654,10 +680,11 @@ function parseCards($text) {
   $cardarr = array();
   $lines = explode("\n", $text);
   foreach ($lines as $card) {
-      // AE Litigation
+      // Various Character Litigation 
       $card = preg_replace("/Æ/", "AE", $card);
       $card = preg_replace("/\306/", "AE", $card);
       $card = preg_replace("/ö/", "o", $card);
+      $card = preg_replace("/é/", "e", $card);
       $card = strtolower($card);
       $card = trim($card);
       if ($card != '') {

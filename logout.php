@@ -1,6 +1,6 @@
 <?php
+include 'lib.php';
 session_start();
-unset($_SESSION['sessionname']);
-unset($_SESSION['username']);
-session_destroy();
+Player::Logout();
 header("location: index.php");
+?>

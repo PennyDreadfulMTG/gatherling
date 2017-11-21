@@ -27,9 +27,6 @@ $stmt = $db->prepare("SELECT id , (isw + isg + isu + isr + isb) AS n,
   FROM cards WHERE cardset = ? ORDER BY n , isw desc, isg desc, isu desc,
   isr desc, isb desc, name");
 ?>
-
-<body bgcolor=\"#404040\">
-
 <?php
 $n = 0;
 $w = $g = $u = $r = $b = 0;
@@ -42,7 +39,7 @@ foreach ($cardsets as $cardset) {
       echo "<br><br>";
       $n = 0;
     }
-    printf("<img src=\"/cards/%d.jpg\">\n", $id);
+    printf("<img src=\"/cards/%d.jpg\" alt=\"Card Image\" />\n", $id);
     $w = $isw;
     $g = $isg;
     $u = $isu;

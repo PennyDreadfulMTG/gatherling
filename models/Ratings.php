@@ -19,9 +19,21 @@ class Ratings {
             $this->wins = 0;
             $this->losses = 0;
             $this->ratingNames = array("Standard", "Extended", "Modern", "Classic", "Legacy",  
-                                       "Pauper", "SilverBlack", "Heirloom", "Commander");
+                                       "Pauper", "SilverBlack", "Heirloom", "Commander", "Tribal Wars");
             return; 
         } 
+    }
+    
+    function formatDropMenuR($format = "") {
+        $names = array("Composite", "Standard", "Extended", "Modern", 
+                       "Classic", "Legacy", "Pauper", "SilverBlack", "Heirloom", 
+                       "Commander", "Tribal Wars", "Other Formats");
+	echo "<select class=\"inputbox\" name=\"format\">";
+        foreach ($names as $name) {
+           $sel = (strcmp($name, $format) == 0) ? "selected" : "";
+           echo "<option value=\"{$name}\" $sel>{$name}</option>";
+	}
+	echo "</select>";
     }
     
     function deleteAllRatings() {
@@ -109,6 +121,7 @@ class Ratings {
                               AND format NOT LIKE \"%SilverBlack%\"
                               AND format NOT LIKE \"%Heirloom%\"
                               AND format NOT LIKE \"%Commander%\"
+                              AND format NOT LIKE \"%Tribal Wars%\"
                               ORDER BY start") or die($db->error);
         echo "<h3>Calculating Other Formats Ratings</h3>";
         
