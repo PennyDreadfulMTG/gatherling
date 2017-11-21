@@ -137,6 +137,23 @@ function playerMatchInProgress($player) {
     if ($this->playerB($playername)) { return $this->playerb_wins; }
     return false;
   }
+
+  function getPlayerResult($player) {
+    $playername = $this->toName($player);
+    if ($this->playerA($playername)) {
+      if ($this->isBYE()) { return 'BYE'; }
+      if ($this->result == 'A') { return 'Won'; }
+      if ($this->result == 'B') { return 'Loss'; }
+      return 'Draw';
+    }
+    if ($this->playerB($playername)) {
+      if ($this->result == 'A') { return 'Loss'; }
+      if ($this->result == 'B') { return 'Won'; }
+      return 'Draw';
+    }
+    throw new Exception("Player $playername is not in match {$match->id}");
+  }
+
   
   function playerDropped($player) {
     $playername = $this->toName($player);
