@@ -425,54 +425,57 @@ if ($version < 19) {
   echo "... DB now at version 19! <br />";
 }
 if ($version < 20) {
-  echo "Updating to version 20 (Tribal Wars, Player profiles, and Banned Players)... <br />";
-  do_query("ALTER TABLE `decks` 
-  ADD COLUMN `playername` varchar(40) NOT NULL,
-  ADD COLUMN `deck_colors` varchar(6) DEFAULT NULL,
-  ADD COLUMN `format` varchar(40) DEFAULT NULL,
-  ADD COLUMN `tribe` varchar(40) DEFAULT NULL,
-  ADD COLUMN `created_date` datetime DEFAULT NULL;");
-  do_query("ALTER TABLE `events`
-  ADD COLUMN `player_reported_draws` tinyint(1) NOT NULL,
-  ADD COLUMN `private_decks` tinyint(3) unsigned NOT NULL DEFAULT '1';");
-  do_query("ALTER TABLE `formats`
-  ADD COLUMN `tribal` tinyint(3) NOT NULL DEFAULT '0',
-  ADD COLUMN `pure` tinyint(3) NOT NULL DEFAULT '0',
-  ADD COLUMN `underdog` tinyint(3) NOT NULL DEFAULT '0';");
-  do_query("CREATE TABLE IF NOT EXISTS `playerbans` (
-    `series` varchar(40) NOT NULL DEFAULT 'All',
-    `player` varchar(40) NOT NULL,
-    `date` date NOT NULL,
-    `reason` text NOT NULL,
-    KEY `PBIndex` (`series`,`player`)
-  );");
-  do_query("CREATE TABLE IF NOT EXISTS `restrictedtotribe` (
-    `card_name` varchar(40) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-    `card` bigint(20) unsigned NOT NULL,
-    `format` varchar(40) NOT NULL,
-    `allowed` tinyint(3) unsigned NOT NULL DEFAULT '0',
-    PRIMARY KEY (`card`,`format`),
-    KEY `format` (`format`)
-  );");
-  do_query("CREATE TABLE IF NOT EXISTS `subtype_bans` (
-    `name` varchar(40) NOT NULL,
-    `format` varchar(40) NOT NULL,
-    `allowed` smallint(5) unsigned NOT NULL
-  );");
-  do_query("CREATE TABLE IF NOT EXISTS `tribes` (
-    `name` varchar(40) NOT NULL,
-    KEY `Tribe` (`name`)
-  );");
-  do_query("CREATE TABLE IF NOT EXISTS `tribe_bans` (
-    `name` varchar(40) NOT NULL,
-    `format` varchar(40)  NOT NULL,
-    `allowed` smallint(5) unsigned NOT NULL,
-    KEY `TribeBansIndex` (`format`,`name`)
-  );");
-  do_query("ALTER TABLE `players`
-    ADD COLUMN `email` varchar(40) DEFAULT NULL,
-    ADD COLUMN `email_privacy` tinyint(3) NOT NULL,
-    ADD COLUMN `timezone` decimal(10,0) NOT NULL DEFAULT '-5';");
+  // This one is messy, because we need to skip it if we're applying to the production DB on gatherling.com 😕
+  if (!$db->query('select 1 from `restrictedtotribe` LIMIT 1')) {
+    echo "Updating to version 20 (Tribal Wars, Player profiles, and Banned Players)... <br />";
+    do_query("ALTER TABLE `decks` 
+      ADD COLUMN `playername` varchar(40) NOT NULL,
+      ADD COLUMN `deck_colors` varchar(6) DEFAULT NULL,
+      ADD COLUMN `format` varchar(40) DEFAULT NULL,
+      ADD COLUMN `tribe` varchar(40) DEFAULT NULL,
+      ADD COLUMN `created_date` datetime DEFAULT NULL;");
+    do_query("ALTER TABLE `events`
+      ADD COLUMN `player_reported_draws` tinyint(1) NOT NULL,
+      ADD COLUMN `private_decks` tinyint(3) unsigned NOT NULL DEFAULT '1';");
+    do_query("ALTER TABLE `formats`
+      ADD COLUMN `tribal` tinyint(3) NOT NULL DEFAULT '0',
+      ADD COLUMN `pure` tinyint(3) NOT NULL DEFAULT '0',
+      ADD COLUMN `underdog` tinyint(3) NOT NULL DEFAULT '0';");
+    do_query("CREATE TABLE IF NOT EXISTS `playerbans` (
+      `series` varchar(40) NOT NULL DEFAULT 'All',
+      `player` varchar(40) NOT NULL,
+      `date` date NOT NULL,
+      `reason` text NOT NULL,
+      KEY `PBIndex` (`series`,`player`)
+    );");
+    do_query("CREATE TABLE IF NOT EXISTS `restrictedtotribe` (
+      `card_name` varchar(40) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+      `card` bigint(20) unsigned NOT NULL,
+      `format` varchar(40) NOT NULL,
+      `allowed` tinyint(3) unsigned NOT NULL DEFAULT '0',
+      PRIMARY KEY (`card`,`format`),
+      KEY `format` (`format`)
+    );");
+    do_query("CREATE TABLE IF NOT EXISTS `subtype_bans` (
+      `name` varchar(40) NOT NULL,
+      `format` varchar(40) NOT NULL,
+      `allowed` smallint(5) unsigned NOT NULL
+    );");
+    do_query("CREATE TABLE IF NOT EXISTS `tribes` (
+      `name` varchar(40) NOT NULL,
+      KEY `Tribe` (`name`)
+    );");
+    do_query("CREATE TABLE IF NOT EXISTS `tribe_bans` (
+      `name` varchar(40) NOT NULL,
+      `format` varchar(40)  NOT NULL,
+      `allowed` smallint(5) unsigned NOT NULL,
+      KEY `TribeBansIndex` (`format`,`name`)
+    );");
+    do_query("ALTER TABLE `players`
+      ADD COLUMN `email` varchar(40) DEFAULT NULL,
+      ADD COLUMN `email_privacy` tinyint(3) NOT NULL,
+      ADD COLUMN `timezone` decimal(10,0) NOT NULL DEFAULT '-5';");
+  }
   do_query("UPDATE db_version SET version = 20");
   $db->commit();
   echo "... DB now at version 20! <br />";
