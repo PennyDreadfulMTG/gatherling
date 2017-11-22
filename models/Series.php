@@ -7,11 +7,12 @@ class Series {
   public $start_time;
   public $organizers; # has many :organizers, :through => series_organizers, :class_name => Player
   public $bannedplayers;
+  public $mtgo_room;
   
   public $this_season_format;
   public $this_season_master_link;
   public $this_season_season;
-  
+
   public $prereg_default;
   public $pkonly_default;
   
@@ -25,28 +26,29 @@ class Series {
       $this->new = true;
       $this->prereg_default = true;
       $this->pkonly_default = false;
+      $this->mtgo_room = "";
       return; 
     } 
 
     $db = Database::getConnection(); 
-    $stmt = $db->prepare("SELECT isactive, day, normalstart, prereg_default, pkonly_default FROM series WHERE name = ?"); 
+    $stmt = $db->prepare("SELECT isactive, day, normalstart, prereg_default, pkonly_default, mtgo_room FROM series WHERE name = ?"); 
     $stmt or die($db->error);
     $stmt->bind_param("s", $name); 
     $stmt->execute();
-    $stmt->bind_result($this->active, $this->start_day, $this->start_time, $this->prereg_default, $this->pkonly_default); 
+    $stmt->bind_result($this->active, $this->start_day, $this->start_time, $this->prereg_default, $this->pkonly_default, $this->mtgo_room);
     if ($stmt->fetch() == NULL) {
       throw new Exception('Series '. $name .' not found in DB');
-    } 
+    }
 
-    $stmt->close(); 
+    $stmt->close();
 
     $this->name = $name;
 
     // Organizers
     $stmt = $db->prepare("SELECT player FROM series_organizers WHERE series = ?");
-    $stmt->bind_param("s", $this->name); 
+    $stmt->bind_param("s", $this->name);
     $stmt->execute(); 
-    $stmt->bind_result($one_player); 
+    $stmt->bind_result($one_player);
     $this->organizers = array();
     while ($stmt->fetch()) { 
       $this->organizers[] = $one_player;
@@ -55,13 +57,13 @@ class Series {
 
     // banned players
     $stmt = $db->prepare("SELECT player FROM playerbans WHERE series = ?");
-    $stmt->bind_param("s", $this->name); 
-    $stmt->execute(); 
-    $stmt->bind_result($one_player); 
+    $stmt->bind_param("s", $this->name);
+    $stmt->execute();
+    $stmt->bind_result($one_player);
     $this->bannedplayers = array();
-    while ($stmt->fetch()) { 
+    while ($stmt->fetch()) {
       $this->bannedplayers[] = $one_player;
-    } 
+    }
     $stmt->close();
     
     // Most recent season
@@ -79,17 +81,21 @@ class Series {
 
   function save() { 
     $db = Database::getConnection();
+    if (strncmp($this->mtgo_room, '#', 1) == 0)
+    {
+      $this->mtgo_room = substr($this->mtgo_room, 1);
+    }
     if ($this->new) { 
-      $stmt = $db->prepare("INSERT INTO series(name, day, normalstart, isactive, prereg_default, pkonly_default) values(?, ?, ?, ?, ?, ?)");
-      $stmt->bind_param("sssddd", $this->name, $this->start_day, $this->start_time, $this->active, $this->prereg_default, $this->pkonly_default); 
+      $stmt = $db->prepare("INSERT INTO series(name, day, normalstart, isactive, prereg_default, pkonly_default, mtgo_room) values(?, ?, ?, ?, ?, ?, ?)");
+      $stmt->bind_param("sssddd", $this->name, $this->start_day, $this->start_time, $this->active, $this->prereg_default, $this->pkonly_default, $this->mtgo_room); 
       $stmt->execute() or die($stmt->error);
       $stmt->close(); 
-    } else { 
+    } else {
       $stmt = $db->prepare("UPDATE series 
-                            SET day = ?, normalstart = ?, isactive = ?, prereg_default = ?, pkonly_default = ? 
+                            SET day = ?, normalstart = ?, isactive = ?, prereg_default = ?, pkonly_default = ?, mtgo_room = ?
                             WHERE name = ?");
       $stmt or die($db->error); 
-      $stmt->bind_param("ssddds", $this->start_day, $this->start_time, $this->active, $this->prereg_default, $this->pkonly_default, $this->name); 
+      $stmt->bind_param("ssdddss", $this->start_day, $this->start_time, $this->active, $this->prereg_default, $this->pkonly_default, $this->mtgo_room, $this->name); 
       $stmt->execute() or die($stmt->error);
       $stmt->close(); 
     }

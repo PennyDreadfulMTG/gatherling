@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'lib.php';
+include 'lib_form_helper.php';
 
 $hasError = false;
 $errormsg = "";
@@ -42,7 +43,7 @@ function do_page() {
 
   handleActions();
   
-  $view = "recent_events";
+  $view = "settings";
   
   if (isset($_GET['view'])) {$view = $_GET['view'];}
   if (isset($_POST['view'])) {$view = $_POST['view'];}  
@@ -63,37 +64,47 @@ function do_page() {
       $active_format = "";
   }
   printError();
-  
-  if ($view != "no_view") {
-      printSeriesForm($active_series);
-      printLogoForm($active_series);
-      seriesCPMenu($active_series);
-  }
-    
+
+  seriesCPMenu($active_series);
+
   if (!$active_series->authCheck(Player::loginName())) {
     printNoSeries(); 
     return;
-  } else if ($view == "no_view") {
-      ; // show nothing
-  } else if ($view == "recent_events") {
-    printRecentEventsTable($active_series);
-  } elseif ($view == "points_management") {
-    printPointsForm($active_series);
-  } elseif ($view == "organizers") {
-    printSeriesOrganizersForm($active_series);
-  } elseif ($view == "bannedplayers") {
-    printPlayerBanForm($active_series);
-  } elseif ($view == "format_editor") {
-    $esn = urlencode($active_series_name);
-    redirect("formatcp.php?series=$esn");
-  } elseif ($view == "trophies") {
-      printMissingTrophies($active_series);
-  } elseif ($view == "season_standings") {
-    $active_series->seasonStandings($active_series, $active_series->currentSeason());
-  } elseif ($view == "points_adj") {
-    seasonPointsAdj();
+  } else {
+    switch ($view) {
+      case "no_view":
+      case "settings":
+        printSeriesForm($active_series);
+        printLogoForm($active_series);
+        break;
+      case "recent_events":
+        printRecentEventsTable($active_series);
+        break;
+      case "points_management":
+        printPointsForm($active_series);
+        break;
+      case "organizers":
+        printSeriesOrganizersForm($active_series);
+        break;
+      case "bannedplayers":
+        printPlayerBanForm($active_series);
+        break;
+      case "format_editor":
+        $esn = urlencode($active_series_name);
+        redirect("formatcp.php?series=$esn");
+        break;
+      case "trophies":
+        printMissingTrophies($active_series);
+        break;
+      case "season_standings":
+        $active_series->seasonStandings($active_series, $active_series->currentSeason());
+        break;
+      case "points_adj":
+        seasonPointsAdj();
+        break;
+    }
   }
-} 
+}
 
 function printMissingTrophies($series) {
   $recentEvents = $series->getRecentEvents(1000);
@@ -200,8 +211,9 @@ function printSeriesForm($series) {
   echo "<td><input type=\"checkbox\" value=\"1\" name=\"pkonlydefault\" ";
   if($series->pkonly_default == 1) {
       echo "checked "; 
- } 
+  }
   echo "/></td></tr>";
+  print_text_input("MTGO Room", 'mtgo_room', $series->mtgo_room);
   
   # Submit button 
   echo "<tr><td colspan=\"2\" class=\"buttons\">";
@@ -212,11 +224,12 @@ function printSeriesForm($series) {
 function seriesCPMenu($series, $cur = "") {
   $name = $series->name;
   echo "<table><tr><td colspan=\"2\" align=\"center\">";
-  echo "<a href=\"seriescp.php?series=$name&view=recent_events\">Recent Events</a>";
+  echo "<a href=\"seriescp.php?series=$name&view=settings\">Series Settings</a>";
+  echo " | <a href=\"seriescp.php?series=$name&view=recent_events\">Recent Events</a>";
   echo " | <a href=\"seriescp.php?series=$name&view=points_management\">Points Management</a>";
-  echo " | <a href=\"seriescp.php?series=$name&view=points_adj\">Points Adj.</a>";
+  // echo " | <a href=\"seriescp.php?series=$name&view=points_adj\">Points Adj.</a>";
   echo " | <a href=\"seriescp.php?series=$name&view=organizers\">Series Organizers</a>";
-  echo " | <a href=\"formatcp.php?series=$name\">Format Editor</a>";
+  // echo " | <a href=\"formatcp.php?series=$name\">Format Editor</a>";
   echo " | <a href=\"seriescp.php?series=$name&view=trophies\">Trophies</a>";
   echo " | <a href=\"seriescp.php?series=$name&view=season_standings\">Season Standings</a>";
   echo " | <a href=\"seriescp.php?series=$name&view=bannedplayers\">Ban Players</a>";
@@ -401,6 +414,7 @@ function handleActions() {
     $newactive = $_POST['isactive'];
     $newtime = $_POST['hour'];
     $newday = $_POST['start_day'];
+    $room = $_POST['mtgo_room'];
 
     if (!isset($_POST['preregdefault'])) 
         $prereg = 0;
@@ -412,6 +426,7 @@ function handleActions() {
     else
         $pkonly = $_POST['pkonlydefault'];
     
+
     $series = new Series($seriesname); 
     if ($series->authCheck(Player::loginName())) { 
       $series->active = $newactive; 
@@ -419,6 +434,7 @@ function handleActions() {
       $series->start_day = $newday;
       $series->prereg_default = $prereg;
       $series->pkonly_default = $pkonly;
+      $series->mtgo_room = $room;
       $series->save();
     }
   } else if ($_POST['action'] == "Change Logo") {
