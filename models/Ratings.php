@@ -19,7 +19,7 @@ class Ratings {
             $this->wins = 0;
             $this->losses = 0;
             $this->ratingNames = array("Standard", "Extended", "Modern", "Classic", "Legacy",  
-                                       "Pauper", "SilverBlack", "Heirloom", "Commander", "Tribal Wars"
+                                       "Pauper", "SilverBlack", "Heirloom", "Commander", "Tribal Wars",
                                        "Penny Dreadful");
             return;
         }

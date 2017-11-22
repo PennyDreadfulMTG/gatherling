@@ -35,6 +35,30 @@ if ($gatherlingoutofservice != 1)
                 </ul>
             </div>
         </div>
+        <div class="gatherling_news box grid_8">
+            <div class=" alpha omega uppertitle"> Gatherling News: Update to Gatherling 4! </div>
+            <div class="clear"></div>
+                    <?php require_once ("news.php"); ?>
+            <div class="clear"></div>
+        </div> <!-- box gatherlingnews -->   
+
+        <div class="gatherling_news box grid_8">
+            <div class=" alpha omega uppertitle"> Bug Report: Know of a bug not listed here? <a href="message.php?mode=Send&type=Bug Report">Message Dabil!</a></div>
+            <div class="clear"></div>
+                <ul>
+                    <?php require_once ("bugs.php"); ?>
+                </ul>
+            <div class="clear"></div>
+        </div> <!-- box gatherlingnews -->   
+
+        <div class="gatherling_news box grid_8">
+            <div class=" alpha omega uppertitle"> Planned Updates: Got an idea you would like to see added? <a href="message.php?mode=Send&type=Update Request">Message Dabil!</a></div>
+            <div class="clear"></div>
+                <ul>
+                    <?php require_once ("updates.php"); ?>
+                </ul>
+            <div class="clear"></div>
+        </div> <!-- box gatherlingnews -->
     </div>  <!-- gatherlingmain box -->
     <div id="" class="grid_4">
         <div class="box pad">
@@ -78,46 +102,11 @@ if ($gatherlingoutofservice != 1)
                 </div>
             <?php endif; ?>
         </div><!-- grid_4 omega (login/links) -->
-        <div class="box sidecolumn">
-            <center><h4>UPCOMING EVENTS</h4></center>
-            <?php
-                $active_series = Series::activeNames();
-                foreach ($active_series as $series_name) {
-                    $series = new Series($series_name);
-                    if ($series->nextEvent())
-                    {
-                        printUpcomingEvent($series->nextEvent());
-                    }
-                }
-            ?>
-        </div>
+        <?php include('sidebar.php'); ?>
     </div> <!-- Sidebar -->
     <div class="clear"></div>
 
-<!--        <div class="gatherling_news box">
-            <div class=" alpha omega uppertitle"> Gatherling News: Update to Gatherling 4! </div>
-            <div class="clear"></div>
-                    <?php //require_once ("news.php"); ?>
-            <div class="clear"></div>
-        </div> <!-- box gatherlingnews -->   
-
-<!--        <div class="gatherling_news box">
-            <div class=" alpha omega uppertitle"> Bug Report: Know of a bug not listed here? <a href="message.php?mode=Send&type=Bug Report">Message Dabil!</a></div>
-            <div class="clear"></div>
-                <ul>
-                    <?php //require_once ("bugs.php"); ?>
-                </ul>
-            <div class="clear"></div>
-        </div> <!-- box gatherlingnews -->   
-
-<!--        <div class="gatherling_news box">
-            <div class=" alpha omega uppertitle"> Planned Updates: Got an idea you would like to see added? <a href="message.php?mode=Send&type=Update Request">Message Dabil!</a></div>
-            <div class="clear"></div>
-                <ul>
-                    <?php //require_once ("updates.php"); ?>
-                </ul>
-            <div class="clear"></div>
-        </div> <!-- box gatherlingnews -->   
+   
         
     </div>
 

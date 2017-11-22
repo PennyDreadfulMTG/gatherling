@@ -1,12 +1,12 @@
 <?php 
 include_once 'lib.php';
 
-echo "<div class=\"box\">\n";
+echo "<div class=\"box sidecolumn\">\n";
 echo "<h4>UPCOMING EVENTS</h4>\n";
 upcomingEvents();
 echo "</div>";
 
-echo "<div class=\"box\">\n";
+echo "<div class=\"box sidecolumn\">\n";
 echo "<h4>RECENT WINNERS</h4>\n";
 recentWinners();
 echo "</div>\n";

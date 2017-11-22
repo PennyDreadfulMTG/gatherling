@@ -288,12 +288,12 @@ if ($version < 14) {
 
 if ($version < 15) {
   echo "Updating to version 15 (Reverse-engineered migrations from Dabil's tweaking)... <br />";
-  do_query("ALTER TABLE `gatherling`.`players` ADD COLUMN `rememberme` INT NULL AFTER `mtgo_challenge`, ADD COLUMN `ipaddress` INT NULL AFTER `rememberme`, ADD COLUMN `pkmember` INT NULL AFTER `ipaddress`;");
-  do_query("ALTER TABLE `gatherling`.`events` 
+  do_query("ALTER TABLE `players` ADD COLUMN `rememberme` INT NULL AFTER `mtgo_challenge`, ADD COLUMN `ipaddress` INT NULL AFTER `rememberme`, ADD COLUMN `pkmember` INT NULL AFTER `ipaddress`;");
+  do_query("ALTER TABLE `events` 
             ADD COLUMN `pkonly` TINYINT(3) NULL AFTER `prereg_allowed`;");
-  do_query("ALTER TABLE `gatherling`.`series` ADD COLUMN `pkonly_default` TINYINT(1) NULL AFTER `prereg_default`;");
-  do_query("ALTER TABLE `gatherling`.`series_stewards` RENAME TO  `gatherling`.`series_organizers`;");
-  do_query("ALTER TABLE `gatherling`.`formats` 
+  do_query("ALTER TABLE `series` ADD COLUMN `pkonly_default` TINYINT(1) NULL AFTER `prereg_default`;");
+  do_query("ALTER TABLE `series_stewards` RENAME TO  `series_organizers`;");
+  do_query("ALTER TABLE `formats` 
     ADD COLUMN `type` VARCHAR(45) NULL AFTER `priority`,
     ADD COLUMN `series_name` VARCHAR(40) NULL AFTER `type`,
     ADD COLUMN `singleton` TINYINT(3) NULL AFTER `series_name`,
@@ -311,7 +311,7 @@ if ($version < 15) {
     ADD COLUMN `min_side_cards_allowed` INT NULL AFTER `max_main_cards_allowed`,
     ADD COLUMN `max_side_cards_allowed` INT NULL AFTER `min_side_cards_allowed`;");
   # This should 100% be done with a JOIN, but it wasn't, and I'm not going to break stuff refactoring yet.
-  do_query("ALTER TABLE `gatherling`.`bans` ADD COLUMN `card_name` VARCHAR(40) NULL AFTER `allowed`;");
+  do_query("ALTER TABLE `bans` ADD COLUMN `card_name` VARCHAR(40) NULL AFTER `allowed`;");
   do_query("CREATE TABLE `restricted` (
     `card` bigint(20) unsigned NOT NULL,
     `format` varchar(40) NOT NULL,
@@ -322,13 +322,13 @@ if ($version < 15) {
     FOREIGN KEY (`card`) REFERENCES `cards` (`id`) ON UPDATE CASCADE,
     FOREIGN KEY (`format`) REFERENCES `formats` (`name`) ON UPDATE CASCADE
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
-  do_query("CREATE TABLE `gatherling`.`deckerrors` (
+  do_query("CREATE TABLE `deckerrors` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `deck` BIGINT(20) NOT NULL,
     `error` TEXT NOT NULL,
     PRIMARY KEY (`id`));");
-  do_query("ALTER TABLE `gatherling`.`standings` ADD COLUMN `draws` TINYINT(3) NULL DEFAULT '0' AFTER `matches_won`;");
-  do_query("ALTER TABLE `gatherling`.`ratings` 
+  do_query("ALTER TABLE `standings` ADD COLUMN `draws` TINYINT(3) NULL DEFAULT '0' AFTER `matches_won`;");
+  do_query("ALTER TABLE `ratings` 
   ADD COLUMN `event` VARCHAR(80) NULL AFTER `losses`;");
   do_query("UPDATE db_version SET version = 15");
   $db->commit();
@@ -414,15 +414,65 @@ if ($version < 18) {
 }
 if ($version < 19) {
   echo "Updating to version 19 (Fix rounding error with standings)... <br />";  
-  do_query("ALTER TABLE `gatherling`.`standings` 
+  do_query("ALTER TABLE `standings` 
   CHANGE COLUMN `OP_Match` `OP_Match` DECIMAL(4,3) NULL DEFAULT '0.000',
   CHANGE COLUMN `PL_Game` `PL_Game` DECIMAL(4,3) NULL DEFAULT '0.000',
   CHANGE COLUMN `OP_Game` `OP_Game` DECIMAL(4,3) NULL DEFAULT '0.000';");
-  do_query("ALTER TABLE `gatherling`.`events` 
+  do_query("ALTER TABLE `events` 
   CHANGE COLUMN `prereg_cap` `prereg_cap` INT(11) NULL DEFAULT '0';");
   do_query("UPDATE db_version SET version = 19");
   $db->commit();
   echo "... DB now at version 19! <br />";
+}
+if ($version < 20) {
+  echo "Updating to version 20 (Tribal Wars, Player profiles, and Banned Players)... <br />";
+  do_query("ALTER TABLE `decks` 
+  ADD COLUMN `playername` varchar(40) NOT NULL,
+  ADD COLUMN `deck_colors` varchar(6) DEFAULT NULL,
+  ADD COLUMN `format` varchar(40) DEFAULT NULL,
+  ADD COLUMN `tribe` varchar(40) DEFAULT NULL,
+  ADD COLUMN `created_date` datetime DEFAULT NULL;");
+  do_query("ALTER TABLE `events`
+  ADD COLUMN `player_reported_draws` tinyint(1) NOT NULL,
+  ADD COLUMN `private_decks` tinyint(3) unsigned NOT NULL DEFAULT '1';");
+  do_query("ALTER TABLE `formats`
+  ADD COLUMN `tribal` tinyint(3) NOT NULL DEFAULT '0',
+  ADD COLUMN `pure` tinyint(3) NOT NULL DEFAULT '0',
+  ADD COLUMN `underdog` tinyint(3) NOT NULL DEFAULT '0';");
+  do_query("CREATE TABLE IF NOT EXISTS `playerbans` (
+    `series` varchar(40) NOT NULL DEFAULT 'All',
+    `player` varchar(40) NOT NULL,
+    `date` date NOT NULL,
+    `reason` text NOT NULL,
+    KEY `PBIndex` (`series`,`player`)
+  );");
+  do_query("CREATE TABLE IF NOT EXISTS `restrictedtotribe` (
+    `card_name` varchar(40) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+    `card` bigint(20) unsigned NOT NULL,
+    `format` varchar(40) NOT NULL,
+    `allowed` tinyint(3) unsigned NOT NULL DEFAULT '0',
+    PRIMARY KEY (`card`,`format`),
+    KEY `format` (`format`)
+  );");
+  do_query("CREATE TABLE IF NOT EXISTS `subtype_bans` (
+    `name` varchar(40) NOT NULL,
+    `format` varchar(40) NOT NULL,
+    `allowed` smallint(5) unsigned NOT NULL
+  );");
+  do_query("CREATE TABLE IF NOT EXISTS `tribes` (
+    `name` varchar(40) NOT NULL,
+    KEY `Tribe` (`name`)
+  );");
+  do_query("CREATE TABLE IF NOT EXISTS `tribe_bans` (
+    `name` varchar(40) NOT NULL,
+    `format` varchar(40)  NOT NULL,
+    `allowed` smallint(5) unsigned NOT NULL,
+    KEY `TribeBansIndex` (`format`,`name`)
+  );");
+  do_query("ALTER TABLE `players`
+    ADD COLUMN `email` varchar(40) DEFAULT NULL,
+    ADD COLUMN `email_privacy` tinyint(3) NOT NULL,
+    ADD COLUMN `timezone` decimal(10,0) NOT NULL DEFAULT '-5';");
 }
 
 $db->autocommit(TRUE);

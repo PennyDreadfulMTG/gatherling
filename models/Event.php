@@ -142,7 +142,6 @@ class Event {
                                              $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl, 
                                              $this->metaurl, $this->prereg_allowed, $this->pkonly, $this->player_reportable, 
                                              $this->prereg_cap, $this->player_editdecks, $this->private_decks, $this->player_reported_draws);
-        $this->player_reportable, $this->prereg_cap, $this->player_editdecks);
       $stmt->execute() or die($stmt->error);
       $stmt->close();
 
@@ -158,7 +157,7 @@ class Event {
       player_editdecks = ?, private_decks = ?, player_reportable_draws = ?
       WHERE name = ?");
       $stmt or die($db->error);
-      $stmt->bind_param("ssssdddssssddddddddds, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
+      $stmt->bind_param("ssssdddssssddddddddds", $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
         $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl, 
         $this->metaurl, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->active, 
         $this->current_round, $this->player_reportable, $this->prereg_cap,

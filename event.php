@@ -368,6 +368,8 @@ function eventList($series = "", $season = "") {
 function eventForm($event = NULL, $forcenew = false) {
   if ($forcenew) {
     $edit = 0;
+  } else if ($event != NULL && $event->name == "") {
+    $edit = 0;
   } else {
     $edit = ($event != NULL);
   }
@@ -376,12 +378,19 @@ function eventForm($event = NULL, $forcenew = false) {
   }
 
   echo "<table style=\"border-width: 0px\" align=\"center\">";
-  if ($forcenew) {
-      $view ="edit";
+  if ($edit) {
+    if (!isset($view)) {
+      if ($event->active){
+        $view = "match";
+      }
+      else {
+        $view = "reg";
+      }
+    }
+    $view = isset($_GET['view']) ? $_GET['view'] : $view;
+    $view = isset($_POST['view']) ? $_POST['view'] : $view;
   } else {
-      if (!isset($view)){$view = "reg";} ;
-      $view = isset($_GET['view']) ? $_GET['view'] : $view;
-      $view = isset($_POST['view']) ? $_POST['view'] : $view;
+    $view ="edit";
   }
 
   echo "<tr><td colspan=\"2\">&nbsp;</td></tr>";

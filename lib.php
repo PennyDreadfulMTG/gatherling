@@ -522,22 +522,12 @@ function printOrganizerSelect($player_series, $selected) {
   echo "</form>";
 }
 
-function printUpcomingEvent($event) {
-  $dt = new DateTime($event->start);
-  if (!$dt) { die(DateTime::getLastErrors());}
-  $date = $dt->format("d/m/Y");
-  $time = $dt->format("g:i A");
-  echo "<table class=\"center\"><tbody><tr><td width=\"60\">$date</td>";
-  echo "<td width=\"100\"><a href=\"{$event->threadurl}\">{$event->series} {$event->season}.{$event->number}</a><br>{$event->format}</td>";
-  echo "<td width=\"50\">{$time}</td></tr></tbody></table>";
-}
-
 function stringField($field, $def, $len) {
   echo "<input class=\"inputbox\" type=\"text\" name=\"$field\" value=\"$def\" size=\"$len\">";
 }
 
 function version_tagline() {
-  print "Gatherling version 4.7.1 (\"Zagreus at the end of days / Zagreus lies all other ways / Zagreus comes when time's a maze / And all of history is weeping.\")";
+  print "Gatherling version 4.8.0 (\"Zagreus at the end of days / Zagreus lies all other ways / Zagreus comes when time's a maze / And all of history is weeping.\")";
   # print "Gatherling version 4.7.0 (\"People assume that time is a strict progression of cause to effect, but actually — from a non-linear, non-subjective viewpoint — it's more like a big ball of wibbly-wobbly... timey-wimey... stuff.\")";
   # print "Gatherling version 4.5.2 (\"People assume that time is a strict progression of cause to effect, but actually — from a non-linear, non-subjective viewpoint — it's more like a big ball of wibbly-wobbly... timey-wimey... stuff.\")";
   # print "Gatherling version 4.0.0 (\"Call me old fashioned, but, if you really wanted peace, couldn't you just STOP FIGHTING?\")";
