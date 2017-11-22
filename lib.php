@@ -78,7 +78,7 @@ EOT;
           <li><span class=\"inputbutton\"><a href="./index.php">Home</a></span></li>
           <li><a href="https://discord.gg/H6EHdHu">Discord</a></li>
           <li><a href="./series.php">Events</a></li>
-          <li><a href="./index.php">Gatherling</a></li>
+          <li><a href="./gatherling.php">Gatherling</a></li>
           <li><a href="./ratings.php">Ratings</a></li>
           <li><a href="https://pennydreadfulmagic.com/bugs/">Known Bugs</a></li>
         </ul>

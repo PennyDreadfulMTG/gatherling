@@ -39,7 +39,7 @@ if (isset($_REQUEST['return']))
   {
     $args = $_REQUEST['ret_args'];
   }
-  echo "Return to <a href='{$_REQUEST['return']}?{$args}'>{$_REQUEST['return']}</a><br/>";
+  echo "Return to <a href='{$CONFIG['base_url']}{$_REQUEST['return']}?{$args}'>{$_REQUEST['return']}</a><br/>";
 }
 
 if ($file == FALSE) {

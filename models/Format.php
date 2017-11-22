@@ -1407,10 +1407,4 @@ class Format {
       $stmt->close(); 
       return $removed;
   }
-  
-
-
-
-
-
 }

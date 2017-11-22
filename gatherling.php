@@ -2,7 +2,6 @@
 $gatherlingoutofservice = 0;
 if ($gatherlingoutofservice != 1)
 {
-    header('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">');
     include 'lib.php'; 
     include 'config.php';
     session_start();

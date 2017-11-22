@@ -151,18 +151,17 @@ function printAddCardSet() {
     echo "<input type=\"hidden\" name=\"ret_args\" value=\"view=add_cardset\" />";
     print_file_input("Cardset JSON", "cardsetfile");
     print_submit("Install New Cardset");
-    //echo "<tr><th>Cardset Name</th>";
-    SetScraper::getSetList();
-    //echo "<td><input class=\"inputbox\" type=\"text\" name=\"cardsetname\" />";
-    //echo "</td></tr>";
     echo "</table></form>";
 
     echo "<form action=\"util/insertcardset.php\" method=\"post\" enctype=\"multipart/form-data\">";
+    flush();
     echo "<h3><center>Or</center></h3>";
     echo "<table class=\"form\" style=\"border-width: 0px\" align=\"center\">";
     echo "<input type=\"hidden\" name=\"return\" value=\"admincp.php\" />";
     echo "<input type=\"hidden\" name=\"ret_args\" value=\"view=add_cardset\" />";
-    print_text_input("Cardset code", "cardsetcode");
+    // print_text_input("Cardset code", "cardsetcode");
+    $missing = SetScraper::getSetList();
+    print_select_input("Missing Sets", "cardsetcode", $missing);
     print_submit("Install New Cardset");
     echo "</table></form>";
 }
