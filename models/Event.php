@@ -132,6 +132,10 @@ class Event {
   function save() {
     $db = Database::getConnection();
 
+    if ($this->cohost == '') {
+      $this->cohost = NULL;
+    }
+
     if ($this->new) {
       $stmt = $db->prepare("INSERT INTO events(name, start, format, host, cohost, kvalue, 
                                                number, season, series, threadurl, reporturl, 
