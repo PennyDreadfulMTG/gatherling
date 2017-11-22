@@ -477,5 +477,13 @@ if ($version < 20) {
   $db->commit();
   echo "... DB now at version 20! <br />";
 }
-
+if ($version < 21) {
+  echo "Updating to version 21 (add `series`.`mtgo_room` and a default value to `events`.`current_round`)... <br />";
+  do_query("ALTER TABLE `events` CHANGE COLUMN `current_round` `current_round` INT(11) NULL DEFAULT '0';");
+  do_query("ALTER TABLE `gatherling`.`series` 
+  ADD COLUMN `mtgo_room` VARCHAR(10) NULL DEFAULT NULL AFTER `pkonly_default`;");
+  do_query("UPDATE db_version SET version = 21");
+  $db->commit();
+  echo "... DB now at version 21! <br />";
+}
 $db->autocommit(TRUE);
