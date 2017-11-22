@@ -154,7 +154,7 @@ class Event {
       number = ?, season = ?, series = ?, threadurl = ?, reporturl = ?,
       metaurl = ?, finalized = ?, prereg_allowed = ?, pkonly = ?, active = ?, 
       current_round = ?, player_reportable = ?, prereg_cap = ?,
-      player_editdecks = ?, private_decks = ?, player_reportable_draws = ?
+      player_editdecks = ?, private_decks = ?, player_reported_draws = ?
       WHERE name = ?");
       $stmt or die($db->error);
       $stmt->bind_param("ssssdddssssddddddddds", $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
