@@ -304,6 +304,8 @@ function handleActions($seriesName) {
         }
     } else if($_POST['action'] == "Load") {
         printLoadFormat($seriesName);
+    } else if ($_POST['action'] == "Load Format") {
+        // Nothing needs to be done.
     } else if($_POST['action'] == "Save As") {
         $format = new Format($_POST['format']);
         $oldformatname = $format->name;
@@ -490,7 +492,7 @@ function printFormatSettings($active_format, $seriesName) {
     echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
     echo "<tr><th style=\"width: 100px; text-align: center;\">Singleton</th><th style=\"width: 100px; text-align: center;\">Commander</th>";
     echo "<th style=\"width: 100px; text-align: center;\">Vanguard</th><th style=\"width: 100px; text-align: center;\">Planechase</th>";
-    echo "<th style=\"width: 100px; text-align: center;\">Prismatic</th></tr>";
+    echo "<th style=\"width: 100px; text-align: center;\">Prismatic</th><th style=\"width: 100px; text-align: center;\">Tribal</th></tr>";
     echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"singleton\" value=\"1\" ";
     if($active_format->singleton == 1) {echo "checked=\"yes\" ";}   
     echo " /></td>";

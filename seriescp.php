@@ -216,7 +216,7 @@ function seriesCPMenu($series, $cur = "") {
   echo " | <a href=\"seriescp.php?series=$name&view=points_management\">Points Management</a>";
   echo " | <a href=\"seriescp.php?series=$name&view=points_adj\">Points Adj.</a>";
   echo " | <a href=\"seriescp.php?series=$name&view=organizers\">Series Organizers</a>";
-  echo " | <a href=\"seriescp.php?series=$name&view=format_editor\">Format Editor</a>";
+  echo " | <a href=\"formatcp.php?series=$name\">Format Editor</a>";
   echo " | <a href=\"seriescp.php?series=$name&view=trophies\">Trophies</a>";
   echo " | <a href=\"seriescp.php?series=$name&view=season_standings\">Season Standings</a>";
   echo " | <a href=\"seriescp.php?series=$name&view=bannedplayers\">Ban Players</a>";
