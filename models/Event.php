@@ -137,7 +137,7 @@ class Event {
                                                number, season, series, threadurl, reporturl, 
                                                metaurl, prereg_allowed, finalized, pkonly, player_reportable, 
                                                prereg_cap, player_editdecks, private_decks, player_reported_draws)
-                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?)");
+                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?)");
       $stmt->bind_param("sssssdddssssddddddd", $this->name, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
                                              $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl, 
                                              $this->metaurl, $this->prereg_allowed, $this->pkonly, $this->player_reportable, 

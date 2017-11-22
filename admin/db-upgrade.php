@@ -473,6 +473,9 @@ if ($version < 20) {
     ADD COLUMN `email` varchar(40) DEFAULT NULL,
     ADD COLUMN `email_privacy` tinyint(3) NOT NULL,
     ADD COLUMN `timezone` decimal(10,0) NOT NULL DEFAULT '-5';");
+  do_query("UPDATE db_version SET version = 20");
+  $db->commit();
+  echo "... DB now at version 20! <br />";
 }
 
 $db->autocommit(TRUE);
