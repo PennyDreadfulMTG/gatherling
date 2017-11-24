@@ -142,9 +142,6 @@ function printCalcRatingsForm() {
 }
 
 function printAddCardSet() {
-
-
-
     echo "<h3><center>Install New Cardset</center></h3>";
     echo "<table class=\"form\" style=\"border-width: 0px\" align=\"center\">";
     echo "<input type=\"hidden\" name=\"return\" value=\"admincp.php\" />";

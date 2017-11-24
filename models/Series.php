@@ -28,7 +28,7 @@ class Series {
       $this->pkonly_default = false;
       $this->mtgo_room = "";
       return; 
-    } 
+    }
 
     $db = Database::getConnection(); 
     $stmt = $db->prepare("SELECT isactive, day, normalstart, prereg_default, pkonly_default, mtgo_room FROM series WHERE name = ?"); 
@@ -87,7 +87,7 @@ class Series {
     }
     if ($this->new) { 
       $stmt = $db->prepare("INSERT INTO series(name, day, normalstart, isactive, prereg_default, pkonly_default, mtgo_room) values(?, ?, ?, ?, ?, ?, ?)");
-      $stmt->bind_param("sssddd", $this->name, $this->start_day, $this->start_time, $this->active, $this->prereg_default, $this->pkonly_default, $this->mtgo_room); 
+      $stmt->bind_param("sssddds", $this->name, $this->start_day, $this->start_time, $this->active, $this->prereg_default, $this->pkonly_default, $this->mtgo_room); 
       $stmt->execute() or die($stmt->error);
       $stmt->close(); 
     } else {

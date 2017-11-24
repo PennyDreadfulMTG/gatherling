@@ -489,4 +489,11 @@ if ($version < 21) {
   $db->commit();
   echo "... DB now at version 21! <br />";
 }
+if ($version < 22) {
+  echo "Updating to version 22 (Ensure that the ratings table is in the expected order)... <br />";
+  do_query("ALTER TABLE `ratings` CHANGE COLUMN `event` `event` VARCHAR(80) NULL DEFAULT NULL FIRST;");
+  do_query("UPDATE db_version SET version = 22");
+  $db->commit();
+  echo "... DB now at version 22! <br />";
+}
 $db->autocommit(TRUE);

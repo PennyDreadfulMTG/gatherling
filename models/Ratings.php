@@ -119,7 +119,6 @@ class Ratings {
                               FROM events 
                               WHERE finalized = '1' 
                               $notlike
-                              AND format NOT LIKE \"%Tribal Wars%\"
                               ORDER BY start") or die($db->error);
         echo "<h3>Calculating Other Formats Ratings</h3>";
         
@@ -180,7 +179,7 @@ class Ratings {
 
     function insertRatings($event, $players, $format, $date) {
         $db = Database::getConnection();
-    
+
         foreach($players as $player=>$data) {
             $rating = $data['rating'];
             $wins = $data['wins']; 
@@ -225,7 +224,7 @@ class Ratings {
         }
         $stmt->close();
         return $data;
-    }    
+    }
 
     function getEntryRatings($event, $format) {
         $db = Database::getConnection();

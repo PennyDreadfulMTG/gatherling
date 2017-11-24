@@ -17,6 +17,45 @@ else if (isset($_GET['deck'])) {
   $action = 'dropplayer';
 }
 
+function populate($array, $src, $keys) {
+  foreach ($keys as $key){
+    $array[$key] = $src->{$key};
+  }
+  return $array;
+}
+
+function json_event($event) {
+  $series = new Series($event->series);
+  $json = array();
+  // Event Properties
+  $json = populate($json, $event, array('series', 'season', 'number', 'host', 'active', 'finalized', 'current_round'));
+
+  // Series Properties
+  $json = populate($json, $series, array('mtgo_room'));
+  
+  $matches = $event->getMatches();
+  if ($matches){
+    $json['matches'] = array();
+    $addrounds = 0;
+    $roundnum = 0;
+    $timing = 0;
+    foreach ($matches as $m) {
+      $data = populate(array(), $m, array('playera', 'playerb', 'timing'));
+      if ($m->timing > $timing) {
+        $timing = $m->timing;
+        $addrounds += $roundnum;
+      }
+      if ($roundnum != $m->round) {
+        $roundnum = $m->round;
+      }
+      $data['round'] = $m->round + $addrounds;
+      $json['matches'][] = $data;
+    }
+  }
+
+  return $json;
+}
+
 $result = array();
 switch ($action){
   case 'deckinfo':
@@ -37,7 +76,6 @@ switch ($action){
   case 'addplayer':
   $event = new Event($_GET['event']);
   if ($event->authCheck($_SESSION['username'])) {
-    $result = array();
     $new = $_GET['addplayer'];
     if ($event->addPlayer($new)) {
       $player = new Player($new);
@@ -74,15 +112,12 @@ switch ($action){
   case 'dropplayer':
   $event = new Event($_GET['event']);
   if ($event->authCheck($_SESSION['username'])) {
-    $result = array();
     $playername = $_GET['dropplayer'];
     $event->dropPlayer($playername);
     $result['success'] = true;
     $result['player'] = $playername;
     $result['eventname'] = $event->name;
     $result['round'] = $event->current_round;
-    json_headers();
-    echo json_encode($result);
   }
   else
   {
@@ -91,6 +126,12 @@ switch ($action){
   }
   break;
 
+  case 'active_events':
+    $events = Event::getActiveEvents();
+    foreach ($events as $event) {
+      $result[$event->name] = json_event($event);
+    }
+    break;
   default:
     $result['error'] = "Unknown action '{$action}'";
 }
