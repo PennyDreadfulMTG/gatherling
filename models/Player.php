@@ -107,10 +107,8 @@ class Player {
   }
 
   static function findOrCreateByName($playername) {
-    echo "Find or Create $playername<br/>";
     $found = Player::findByName($playername);
     if (is_null($found)) {
-      echo "Creating $playername<br/>";
       return Player::createByName($playername);
     }
    return $found;
