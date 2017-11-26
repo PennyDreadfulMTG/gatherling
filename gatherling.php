@@ -13,6 +13,20 @@ if ($gatherlingoutofservice != 1)
     <div class="gatherling_news box">
         <center><h3>Gatherling Special Update</h3></center>
         <p>
+            By <a href="http://www.gatherling.com/profile.php?player=silasary&mode=Lookup+Profile">silasary</a><br />
+            November 24th, 2017
+        </p>
+        <p>
+            I have upgraded the format editor to be a much nicer experience, cleaned up the codebase significantly, 
+            and made the deck editor a much nicer (and more forgiving) experience.
+            More things to come soon!
+        </p>
+
+    </div>
+
+    <div class="gatherling_news box">
+        <center><h3>Gatherling Special Update</h3></center>
+        <p>
             By <a href="http://www.gatherling.com/profile.php?player=Longtimegone&mode=Lookup+Profile">Longtimegone</a><br />
             April 19th, 2016
         </p>

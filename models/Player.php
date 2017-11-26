@@ -107,8 +107,10 @@ class Player {
   }
 
   static function findOrCreateByName($playername) {
+    echo "Find or Create $playername<br/>";
     $found = Player::findByName($playername);
     if (is_null($found)) {
+      echo "Creating $playername<br/>";
       return Player::createByName($playername);
     }
    return $found;
@@ -129,7 +131,7 @@ class Player {
     $stmt->close();
   }
 
-  function save() {
+  public function save() {
     $db = Database::getConnection();
     $stmt = $db->prepare("UPDATE players SET password = ?, rememberme = ?, host = ?, super = ?, pkmember = ?, email = ?, email_privacy = ?, timezone = ? WHERE name = ?");
     $stmt->bind_param("sddddsdds", $this->password, $this->rememberMe, $this->host, $this->super, $this->pkmember, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->name);

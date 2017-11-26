@@ -496,4 +496,11 @@ if ($version < 22) {
   $db->commit();
   echo "... DB now at version 22! <br />";
 }
+if ($version < 23) {
+  echo "Updating to version 23 (Add default value to player.email_privacy)... <br />";
+  do_query("ALTER TABLE `players` CHANGE COLUMN `email_privacy` `email_privacy` TINYINT(3) NOT NULL DEFAULT '0';");
+  do_query("UPDATE db_version SET version = 23");
+  $db->commit();
+  echo "... DB now at version 23! <br />";
+}
 $db->autocommit(TRUE);
