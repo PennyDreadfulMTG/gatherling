@@ -2,8 +2,28 @@
 
 require_once 'lib.php';
 
-function print_text_input($label, $name, $value = "") {
-  echo "<tr><th>{$label}</th><td><input class=\"inputbox\" type=\"text\" name=\"{$name}\" value=\"{$value}\" /> </td></tr>";
+function print_text_input($label, $name, $value = "", $len = 0, $reminder_text = null) {
+  echo "<tr><th>{$label}</th><td><input class=\"inputbox\" type=\"text\" name=\"{$name}\" value=\"{$value}\""; 
+  if ($len > 0) {
+    echo " size=\"$len\"";
+  }
+  echo " /> ";
+  if ($reminder_text) {
+    echo $reminder_text;
+  }
+  echo "</td></tr>";
+}
+
+function print_checkbox_input($label, $name, $checked = false, $reminder_text = null) {
+  echo "<tr><th>{$label}</th><td><input type=\"checkbox\" name=\"{$name}\" value=\"1\"";
+  if ($checked){
+    echo " checked=\"yes\"";
+  }
+  echo " /> ";
+  if ($reminder_text) {
+    echo $reminder_text;
+  }
+  echo "</td></tr>";
 }
 
 function print_password_input($label, $name, $value = "") {

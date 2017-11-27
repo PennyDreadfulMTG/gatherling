@@ -16,10 +16,7 @@ $content = "";
 
 foreach ($deck->maindeck_cards as $card => $qty) { 
   // Æ to AE litigation
-      $card = preg_replace("/Æ/", "AE", $card);
-      $card = preg_replace("/\306/", "AE", $card);
-      $card = preg_replace("/ö/", "o", $card);
-      $card = preg_replace("/é/", "e", $card);
+      $card = normaliseCardName($card);
   $content .= $qty . " " . $card . "\r\n"; 
 }
 

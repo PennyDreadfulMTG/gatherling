@@ -1,5 +1,6 @@
 <?php session_start();
 include 'lib.php';
+include 'lib_form_helper.php';
 
 $verified_url = theme_file("images/verified.png");
 $dot_url = theme_file("images/dot.png");
@@ -505,35 +506,16 @@ function eventForm($event = NULL, $forcenew = false) {
     echo " rounds of ";
     structDropMenu("finalstruct", $event->finalstruct);
     echo "</td></tr>";
-    echo "<tr><th>Allow Pre-Registration</th>";
-    echo "<td><input type=\"checkbox\" name=\"prereg_allowed\" value=\"1\" ";
-    if($event->prereg_allowed == 1) {echo "checked=\"yes\" ";}
-    echo "/></td></tr>";
+    print_checkbox_input("Allow Pre-Registration", "prereg_allowed", $event->prereg_allowed);
+    print_text_input("Late Entry Limit", "late_entry_limit", $event->late_entry_limit, 4, "The event host may still add players after this round.");
+    print_checkbox_input("Pauper Krew Members Only", "pkonly", $event->pkonly);
 
-    echo "<tr><th>Pauper Krew Members Only</th>";
-    echo "<td><input type=\"checkbox\" name=\"pkonly\" value=\"1\" ";
-    if($event->pkonly == 1) {echo "checked=\"yes\" ";}
-    echo "/></td></tr>";
+    print_checkbox_input("Allow Players to Report Results", "player_reportable", $event->player_reportable);
 
-    echo "<tr><th>Allow Players to Report Results</th>";
-    echo "<td><input type=\"checkbox\" name=\"player_reportable\" value=\"1\" ";
-    if($event->player_reportable == 1) {echo "checked=\"yes\" ";}
-    echo "/></td></tr>";
-
-    echo "<tr><th>Player initiatied registration cap</th><td>";
-    stringField("prereg_cap", $event->prereg_cap, 4);
-    echo " The event host may still add players beyond this limit. 0 is disabled.";
-    echo "</td></tr>";
-
-    echo "<tr><th>Deck List Privacy</th>";
-    echo "<td><input type=\"checkbox\" name=\"private_decks\" value=\"1\" ";
-    if($event->private_decks == 1) {echo "checked=\"yes\" ";}
-    echo "/></td></tr>";
-
-    echo "<tr><th>Allow Player Reported Draws</th>";
-    echo "<td><input type=\"checkbox\" name=\"player_reported_draws\" value=\"1\" ";
-    if($event->player_reported_draws == 1) {echo "checked=\"yes\" ";}
-    echo "/> This allows players to report a draw result for matches.</td></tr>";
+    print_text_input("Player initiatied registration cap", "prereg_cap", $event->prereg_cap, 4, "The event host may still add players beyond this limit. 0 is disabled.");
+    
+    print_checkbox_input("Deck List Privacy", "private_decks", $event->private_decks);
+    print_checkbox_input("Allow Player Reported Draws", "player_reported_draws", $event->player_reported_draws, "This allows players to report a draw result for matches.");
 
   if($edit == 0) {
     echo "<tr><td>&nbsp;</td></tr>";
@@ -665,7 +647,7 @@ function playerList($event) {
             echo "<input type=\"checkbox\" name=\"dropplayer[]\" ";
             echo "value=\"{$entry->player->name}\"></td>";
         } else {
-            echo "<td>{$drop_icon} {$entry->drop_round} <a href=\"event.php?player=".$entry->player->name."&event=".$event->name."&action=undrop&name=".$event->name."\">(undrop)</a></td>"; // else echo a symbol to represent player has dropped
+            echo "<td>{$drop_icon} {$entry->drop_round} <a href=\"event.php?view=reg&player=".$entry->player->name."&event=".$event->name."&action=undrop&name=".$event->name."\">(undrop)</a></td>"; // else echo a symbol to represent player has dropped
         }
     }
     if ($event->finalized && !$event->active) {
@@ -1120,21 +1102,28 @@ function insertEvent() {
   $event->reporturl = $_POST['reporturl'];
 
   if (!isset($_POST['prereg_allowed'])) {
-      $event->prereg_allowed = 0;
+    $event->prereg_allowed = 0;
   } else {
     $event->prereg_allowed = $_POST['prereg_allowed'];
   }
 
   if (!isset($_POST['pkonly'])) {
-      $event->pkonly = 0;
+    $event->pkonly = 0;
   } else {
-      $event->pkonly = $_POST['pkonly']; // Dabil added
+    $event->pkonly = $_POST['pkonly']; // Dabil added
   }
   
   if (!isset($_POST['player_reportable'])) {
-        $event->player_reportable = 0;
+    $event->player_reportable = 0;
   } else {
-        $event->player_reportable = $_POST['player_reportable'];
+    $event->player_reportable = $_POST['player_reportable'];
+  }
+  
+  if (!isset($_POST['late_entry_limit'])) {
+    $event->late_entry_limit = 0;
+  }
+  else {
+    $event->late_entry_limit = $_POST['late_entry_limit'];
   }
 
   if($_POST['mainrounds'] == "") {$_POST['mainrounds'] = 3;}
@@ -1158,7 +1147,8 @@ function updateEvent() {
   if(!isset($_POST['prereg_cap']))        {$_POST['prereg_cap'] = 0;}
   if(!isset($_POST['private_decks']))     {$_POST['private_decks'] = 0;}
   if(!isset($_POST['player_reported_draws']))     {$_POST['player_reported_draws'] = 0;}
-  
+  if (!isset($_POST['late_entry_limit'])) {$_POST['late_entry_limit'] = 0;}
+
   $event = new Event($_POST['name']);
   $event->start = "{$_POST['year']}-{$_POST['month']}-{$_POST['day']} {$_POST['hour']}:00";
   $event->finalized = $_POST['finalized'];
@@ -1170,6 +1160,7 @@ function updateEvent() {
   $event->prereg_cap = $_POST['prereg_cap'];
   $event->private_decks = $_POST['private_decks'];
   $event->player_reported_draws = $_POST['player_reported_draws'];
+  $event->late_entry_limit = $_POST['late_entry_limit'];
   
   if ($event->format != $_POST['format']) {
       $event->format = $_POST['format'];

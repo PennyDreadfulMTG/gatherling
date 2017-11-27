@@ -565,7 +565,12 @@ function print_ActiveEvents(){
     $numberOfLeagues = 0;
     foreach ($events as $event)
     {
-        echo "<tr><td><a href=\"eventreport.php?event={$event->name}\">{$event->name}</a></td>";
+        echo "<tr><td><a href=\"eventreport.php?event={$event->name}\">{$event->name}</a>";
+        $series = new Series($event->series);
+        if ($series->mtgo_room) {
+          echo " <pre style=\"cursor:help;\" title=\"To join a Chat room, use the Chat menu, or type /join #$series->mtgo_room into your game chat.\" >MTGO room #$series->mtgo_room</pre>";
+        }
+        echo "</td>";
         echo "<td><a href=\"player.php?mode=standings&event={$event->name}\">Current Standings</a></td>";
         if (Standings::playerActive($event->name, $player->name) == 1){
             if ($event->current_round > $event->mainrounds) {
@@ -581,6 +586,12 @@ function print_ActiveEvents(){
                 $Leagues[] = "<tr><td>{$event->name} Round: {$event->current_round}</td><td><a href=\"player.php?mode=submit_league_result&event={$event->name}&round={$event->current_round}&subevent={$subevent_id}\">Report League Game</a></td></tr>";
             }
             echo "<td><a href=\"player.php?mode=drop_form&event={$event->name}\">Drop From Event</a></td>";
+        }
+        else {
+          // TODO: This doesn't account for the small amount of time where Event Start time has elapsed, but Round 1 hasn't started
+          if ($event->late_entry_limit <= $event->current_round){
+            echo "<td><a href=\"prereg.php?action=reg&event={$event->name}\">Submit Late Entry</a></td>";
+          }
         }
         echo "</tr>";
     }
@@ -852,8 +863,6 @@ function print_matchTable($player, $limit=0) {
 }
 
 function print_ratingsTableSmall() {
-  // TODO: Re-write this to only show ratings for formats the player has played in
-  // TODO: Write this to look at each format from the formats table, instead of being hard coded
   global $player;
   $ratings = new Ratings();
   $names = array();

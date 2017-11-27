@@ -37,6 +37,7 @@ class Event {
   public $standing;
   public $player_reportable;
   public $prereg_cap; // Cap on player initiated registration
+  public $late_entry_limit; // How many rounds we let people perform late entries
 
   public $private_decks; // Toggle to disable deck privacy for active events. Allows the metagame page to display during an active event and lets deck lists be viewed if disabled.
 
