@@ -130,12 +130,12 @@ EOT;
     echo "<li><a href=\"seriescp.php\">Series CP</a></li>\n";
   }
 
-  if ($super) {
-    echo "<li><a href=\"admincp.php\">Admin CP</a></li>\n";
-  }
-
   if ($organizer || $super) {
     echo "<li><a href=\"formatcp.php\">Format CP</a></li>\n";
+  }
+
+  if ($super) {
+    echo "<li><a href=\"admincp.php\">Admin CP</a></li>\n";
   }
 
   echo "</ul> </div>\n";
