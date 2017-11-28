@@ -167,6 +167,9 @@ function content() {
   } elseif (isset($_POST['name'])) {
     $event = new Event($_POST['name']);
 
+    if (!$event->authCheck(Player::loginName())) {
+      authFailed();
+    } else {
       if (mode_is("Start Event")) {
           $event->active = 1;
           $event->save();
@@ -209,9 +212,6 @@ function content() {
           $event->repairRound();
       }
 
-    if (!$event->authCheck(Player::loginName())) {
-      authFailed();
-    } else {
       if (mode_is("Parse DCI Files")) {
         dciInput();
       } elseif (mode_is("Parse DCIv3 Files")) {
@@ -468,6 +468,8 @@ function eventForm($event = NULL, $forcenew = false) {
     echo "</td></tr>";
     echo "<tr><th>Series</th><td>";
     $seriesList = Player::getSessionPlayer()->organizersSeries();
+    $seriesList[] = $event->series;
+    $seriesList = array_unique($seriesList);
     Series::dropMenu($event->series, 0, $seriesList);
     echo "</td></tr>";
     echo "<tr><th>Season</th><td>";
