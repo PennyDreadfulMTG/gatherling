@@ -526,14 +526,9 @@ function eventForm($event = NULL, $forcenew = false) {
     echo "<input type=\"hidden\" name=\"insert\" value=\"1\">";
     echo "</td></tr>";
   } else {
-    echo "<tr><th>Finalize Event</th>";
-    echo "<td><input type=\"checkbox\" name=\"finalized\" value=\"1\" ";
-    if($event->finalized == 1) {echo "checked=\"yes\" ";}
-    echo "/></td></tr>";
-    echo "<tr><th>Event Active</th>";
-    echo "<td><input type=\"checkbox\" name=\"active\" value=\"1\" ";
-    if($event->active == 1) {echo "checked=\"yes\" ";}
-    echo "/></td></tr>";     
+    print_checkbox_input("Finalize Event", "finalized", $event->finalized);
+    print_checkbox_input("Event Active", "active", $event->active);
+
     echo "<tr><th>Current Round</th>";
     echo "<td>";
     roundDropMenu($event, $event->current_round);

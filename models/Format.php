@@ -354,24 +354,24 @@ class Format {
         }
         return true;
     }
-    
+
     public function noFormatLoaded() {
         return (($this->name == "") || (is_null($this->name)));
     }
-    
+
     public function getLegalCardsets() {
         return database::list_result_single_param("SELECT cardset FROM setlegality WHERE format = ?", "s", $this->name);
     }
-    
+
     public function getLegalCard($cardName) {
-        $db = Database::getConnection(); 
+        $db = Database::getConnection();
         $stmt = $db->prepare("SELECT id, name FROM cards WHERE name = ? AND cardset = ?");
         $cardar = array();
 
         foreach($this->legal_sets as $setName) {
             $stmt->bind_param("ss", $cardName, $setName);
-            $stmt->execute(); 
-            $stmt->bind_result($cardar['id'], $cardar['name']); 
+            $stmt->execute();
+            $stmt->bind_result($cardar['id'], $cardar['name']);
             if (is_null($stmt->fetch())) {
                 $cardar = NULL;
             } else {

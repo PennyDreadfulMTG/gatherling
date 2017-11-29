@@ -22,30 +22,31 @@ class Player {
       return;
     }
     $database = Database::getConnection();
-    $stmt = $database->prepare("SELECT name, password, rememberme, INET_NTOA(ipaddress), host, super, pkmember, mtgo_confirmed, email, email_privacy, timezone FROM players WHERE name = ?");
-    if (!$stmt){
-      die($database->error);
+    $stmt = $database->prepare("SELECT name, password, rememberme, INET_NTOA(ipaddress), host, super,
+                pkmember, mtgo_confirmed, email, email_privacy, timezone FROM players WHERE name = ?");
+    $stmt or die($database->error);
     }
     $stmt->bind_param("s", $name);
     $stmt->execute();
-    $stmt->bind_result($this->name, $this->password, $this->rememberMe, $this->ipAddress, $this->host, $this->super, $this->pkmember, $this->verified, $this->emailAddress, $this->emailPrivacy, $this->timezone);
-    if ($stmt->fetch() == NULL) {
+    $stmt->bind_result($this->name, $this->password, $this->rememberMe, $this->ipAddress, $this->host, $this->super,
+                $this->pkmember, $this->verified, $this->emailAddress, $this->emailPrivacy, $this->timezone);
+    if ($stmt->fetch() == null) {
       throw new Exception('Player '. $name .' is not found.');
     }
     $stmt->close();
   }
 
-  static function isLoggedIn() {
+  public static function isLoggedIn() {
     return isset($_SESSION['username']);
   }
-  
-  static function logOut() {
+
+  public static function logOut() {
       unset($_SESSION['sessionname']);
       unset($_SESSION['username']);
       session_destroy();
   }
 
-  static function loginName() {
+  public static function loginName() {
     if (Player::isLoggedIn()) {
         return $_SESSION['username'];
     } else {
@@ -53,7 +54,7 @@ class Player {
     }
   }
 
-  static function getSessionPlayer() {
+  public static function getSessionPlayer() {
     if (!isset($_SESSION['username'])) {
       return NULL;
     }
@@ -61,7 +62,7 @@ class Player {
     return new Player($_SESSION['username']);
   }
 
-  static function checkPassword($username, $password) {
+  public static function checkPassword($username, $password) {
     $db = Database::getConnection();
     $stmt = $db->prepare("SELECT password FROM players WHERE name = ?");
     $stmt->bind_param("s", $username);
@@ -77,7 +78,7 @@ class Player {
     return strcmp($srvpass, $hashpwd) == 0;
   }
   
-  static function getClientIPAddress() {
+  public static function getClientIPAddress() {
       // this is used with the rememberMe feature to keep players logged in
       // Test if it is a shared client
       if (!empty($_SERVER['HTTP_CLIENT_IP'])){
@@ -129,7 +130,7 @@ class Player {
     return Player::findByName($playername);
   }
 
-  static function findOrCreateByName($playername) {
+  public static function findOrCreateByName($playername) {
     $found = Player::findByName($playername);
     if (is_null($found)) {
       return Player::createByName($playername);
