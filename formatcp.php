@@ -211,7 +211,7 @@ function handleActions($seriesName) {
                     return; 
                 }
             }
-        }      
+        }
     } else if (strncmp($_POST['action'], "Add All", 7) == 0) {
         $format = new Format($_POST['format']);
         $cardsetType = substr($_POST['action'], 8);
@@ -410,7 +410,104 @@ function handleActions($seriesName) {
             echo "<input type=\"hidden\" name=\"format\" value=\"{$_POST['format']}\" />";
             echo "<input class=\"inputbutton\" type=\"submit\" value=\"Continue\" name =\"action\" />";
             echo "</form>";          
+        }
+    // restricted to tribe start
+    } else if ($_POST['action'] == "Update Restricted To Tribe List") {
+        $format = new Format($_POST['format']);
+        if (isset($_POST['addrestrictedtotribecreature']) && $_POST['addrestrictedtotribecreature'] != '') {
+            $cards = parseCards($_POST['addrestrictedtotribecreature']);
+            if(count($cards) > 0) {
+                foreach($cards as $card) {
+                    $success = $format->insertCardIntoRestrictedToTribeList($card);
+                }
+                if(!$success) {
+                    $hasError = true;
+                    $errormsg .= "Can't add {$card} to Restricted to tribe list, it is either not in the database, currently on the ban list, or is already on the Restricted to Tribe List";
+                    return; 
+                }
+            }
+        }
+        if (isset($_POST['delrestrictedtotribe'])) {
+            $delRestrictedToTribe = $_POST['delrestrictedtotribe'];
+            foreach($delRestrictedToTribe as $cardName){
+                $success = $format->deleteCardFromRestrictedToTribeList($cardName);
+                if(!$success) {
+                    $hasError = true;
+                    $errormsg .= "Can't delete {$cardName} from restricted to tribe list.";
+                    return; 
+                }
+            }
+        }
+    } else if ($_POST['action'] == "Delete Entire Restricted To Tribe List") {
+        $format = new Format($_POST['format']);
+        $success = $format->deleteEntireRestrictedToTribeList(); // leave a message of success
+    } else if ($_POST['action'] == "Update Cardsets") {
+        $format = new Format($_POST['format']);
+        
+        if(isset($_POST['cardsetname'])) {
+            $cardsetName = $_POST['cardsetname'];
+            if ($cardsetName != "Unclassified") {
+                $format->insertNewLegalSet($cardsetName);
+            }     
+        }
+        
+        if(isset($_POST['delcardsetname'])) {
+            $delcardsets = $_POST['delcardsetname'];
+            foreach($delcardsets as $cardset) {
+                $success = $format->deleteLegalCardSet($cardset);
+                if(!$success) {
+                    $hasError = true;
+                    $errormsg .= "Can't delete {$cardset} from allowed cardsets";
+                    return; 
+                }
+            }
         }      
+    } else if ($_POST['action'] == "Update Subtype Ban") {
+        $format = new Format($_POST['format']);
+        
+        if(isset($_POST['subtypeban'])) {
+            $subTypeName = $_POST['subtypeban'];
+            if ($subTypeName != "Unclassified") {
+                $format->insertNewSubTypeBan($subTypeName);
+            }     
+        }
+        
+        if(isset($_POST['delbannedsubtype'])) {
+            $delbannedsubtypes = $_POST['delbannedsubtype'];
+            foreach($delbannedsubtypes as $bannedsubtype) {
+                $success = $format->deleteSubTypeBan($bannedsubtype);
+                if(!$success) {
+                    $hasError = true;
+                    $errormsg .= "Can't delete {$bannedsubtype} from banned subtypes";
+                    return; 
+                }
+            }
+        }      
+    } else if ($_POST['action'] == "Update Tribe Ban") {
+        $format = new Format($_POST['format']);
+        
+        if(isset($_POST['tribeban'])) {
+            $tribeName = $_POST['tribeban'];
+            if ($tribeName != "Unclassified") {
+                $format->insertNewTribeBan($tribeName);
+            }     
+        }
+        
+        if(isset($_POST['delbannedtribe'])) {
+            $delbannedtribes = $_POST['delbannedtribe'];
+            foreach($delbannedtribes as $bannedtribe) {
+                $success = $format->deleteTribeBan($bannedtribe);
+                if(!$success) {
+                    $hasError = true;
+                    $errormsg .= "Can't delete {$bannedtribe} from banned tribes";
+                    return; 
+                }
+            }
+        }      
+    } else if ($_POST['action'] == "Ban All Tribes") {
+        $format = new Format($_POST['format']);
+        
+        $format->banAllTribes();
     }
     else {
         $hasError = true;
