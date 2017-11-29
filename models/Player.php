@@ -12,6 +12,29 @@ class Player {
   public $emailPrivacy;
   public $timezone;
 
+  function __construct($name) {
+    if ($name == "") {
+      $this->name = "";
+      $this->password = NULL;
+      $this->super = 0;
+      $this->pkmember = 0;
+      $this->rememberMe = 0;
+      return;
+    }
+    $database = Database::getConnection();
+    $stmt = $database->prepare("SELECT name, password, rememberme, INET_NTOA(ipaddress), host, super, pkmember, mtgo_confirmed, email, email_privacy, timezone FROM players WHERE name = ?");
+    if (!$stmt){
+      die($database->error);
+    }
+    $stmt->bind_param("s", $name);
+    $stmt->execute();
+    $stmt->bind_result($this->name, $this->password, $this->rememberMe, $this->ipAddress, $this->host, $this->super, $this->pkmember, $this->verified, $this->emailAddress, $this->emailPrivacy, $this->timezone);
+    if ($stmt->fetch() == NULL) {
+      throw new Exception('Player '. $name .' is not found.');
+    }
+    $stmt->close();
+  }
+
   static function isLoggedIn() {
     return isset($_SESSION['username']);
   }
@@ -112,21 +135,6 @@ class Player {
       return Player::createByName($playername);
     }
    return $found;
-  }
-
-  function __construct($name) {
-    $database = Database::getConnection();
-    $stmt = $database->prepare("SELECT name, password, rememberme, INET_NTOA(ipaddress), host, super, pkmember, mtgo_confirmed, email, email_privacy, timezone FROM players WHERE name = ?");
-    if (!$stmt){
-      die($database->error);
-    }
-    $stmt->bind_param("s", $name);
-    $stmt->execute();
-    $stmt->bind_result($this->name, $this->password, $this->rememberMe, $this->ipAddress, $this->host, $this->super, $this->pkmember, $this->verified, $this->emailAddress, $this->emailPrivacy, $this->timezone);
-    if ($stmt->fetch() == NULL) {
-      throw new Exception('Player '. $name .' is not found.');
-    }
-    $stmt->close();
   }
 
   public function save() {
