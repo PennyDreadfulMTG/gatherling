@@ -25,7 +25,7 @@ class Player {
     $stmt = $database->prepare("SELECT name, password, rememberme, INET_NTOA(ipaddress), host, super,
                 pkmember, mtgo_confirmed, email, email_privacy, timezone FROM players WHERE name = ?");
     $stmt or die($database->error);
-    }
+
     $stmt->bind_param("s", $name);
     $stmt->execute();
     $stmt->bind_result($this->name, $this->password, $this->rememberMe, $this->ipAddress, $this->host, $this->super,

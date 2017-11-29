@@ -273,6 +273,8 @@ function handleActions($seriesName) {
         if(isset($_POST['allowrares']))       {$format->allow_rares = 1;}       else {$format->allow_rares = 0;}
         if(isset($_POST['allowmythics']))     {$format->allow_mythics = 1;}     else {$format->allow_mythics = 0;}
         if(isset($_POST['allowtimeshifted'])) {$format->allow_timeshifted = 1;} else {$format->allow_timeshifted = 0;}
+
+        if(isset($_POST['eternal'])) {$format->eternal = 1;} else {$format->eternal = 0;}
         
         $format->save();
     } else if($_POST['action'] == "New") {
@@ -534,6 +536,17 @@ function printFormatSettings($active_format, $seriesName) {
     if($active_format->allow_timeshifted == 1) {echo "checked=\"yes\" ";}    
     echo " /></td>";
     echo "</tr>";
+    echo "</table>";
+    
+    echo "<h4>Format Modifiers</h4>";
+    echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
+    echo "<tr><th style=\"width: 100px; text-align: center;\">";
+    print_tooltip("Eternal", "Eternal Formats treat all cardsets as legal.");
+    echo " Format</th></tr>";
+    echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"eternal\" value=\"1\" ";
+    if($active_format->eternal == 1) {echo "checked=\"yes\" ";}    
+    echo " /></td>";
+    echo "</tr>";
     echo "<tr>";
     echo "<td colspan=\"5\" class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Format\" name =\"action\" /></td>";
     echo "</tr>";
@@ -561,7 +574,13 @@ function formatCPMenu($active_format, $seriesName) {
         echo "<table><tr><td colspan=\"2\" align=\"center\">";
         echo "<a href=\"formatcp.php?view=settings&format={$escaped}\">Format Settings</a>";
         echo " | <a href=\"formatcp.php?view=bandr&format={$escaped}\">Legal, Banned & Restricted</a>";
-        echo " | <a href=\"formatcp.php?view=cardsets&format={$escaped}\">Legal Sets</a>";
+        if (!$active_format->eternal) {
+            echo " | <a href=\"formatcp.php?view=cardsets&format={$escaped}\">Legal Sets</a>";
+        }
+        else {
+            echo " | ";
+            print_tooltip("Legal Sets", "All sets are legal, as this is an Eternal format");
+        }
         echo "</td></tr></table>";
     }
 }

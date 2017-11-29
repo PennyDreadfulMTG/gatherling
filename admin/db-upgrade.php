@@ -483,8 +483,7 @@ if ($version < 20) {
 if ($version < 21) {
   echo "Updating to version 21 (add `series`.`mtgo_room` and a default value to `events`.`current_round`)... <br />";
   do_query("ALTER TABLE `events` CHANGE COLUMN `current_round` `current_round` INT(11) NULL DEFAULT '0';");
-  do_query("ALTER TABLE `gatherling`.`series` 
-  ADD COLUMN `mtgo_room` VARCHAR(10) NULL DEFAULT NULL AFTER `pkonly_default`;");
+  do_query("ALTER TABLE `series` ADD COLUMN `mtgo_room` VARCHAR(10) NULL DEFAULT NULL AFTER `pkonly_default`;");
   do_query("UPDATE db_version SET version = 21");
   $db->commit();
   echo "... DB now at version 21! <br />";
@@ -502,5 +501,12 @@ if ($version < 23) {
   do_query("UPDATE db_version SET version = 23");
   $db->commit();
   echo "... DB now at version 23! <br />";
+}
+if ($version < 24) {
+  echo "Updating to version 24 (Eternal Format flag)... <br />";
+  do_query("ALTER TABLE `formats` ADD COLUMN `eternal` TINYINT(3) NOT NULL DEFAULT '0' AFTER `underdog`;");
+  do_query("UPDATE db_version SET version = 24");
+  $db->commit();
+  echo "... DB now at version 24! <br />";
 }
 $db->autocommit(TRUE);

@@ -604,3 +604,7 @@ function parseCardsWithQuantity($cards) {
 
   return $cardarr;
 }
+
+function print_tooltip($text, $tooltip) {
+  echo "<span class=\"tooltip\" title=\"$tooltip\">$text</span>";
+}

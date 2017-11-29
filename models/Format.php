@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 class Format {
     
@@ -12,8 +12,9 @@ class Format {
     // card set construction
     public $card_banlist = array();
     public $card_restrictedlist = array();
-    public $card_legallist = array ();
-    public $legal_sets = array(); 
+    public $card_legallist = array();
+    public $legal_sets = array();
+    public $eternal;
 
     // deck construction switches
     public $singleton;
@@ -38,8 +39,8 @@ class Format {
     public $min_side_cards_allowed;
     public $max_side_cards_allowed;
     
-    private $error = array();   
-    
+    private $error = array();
+
     function __construct($name) {
         if ($name == "") {
             $this->name = ""; 
@@ -50,7 +51,8 @@ class Format {
             $this->card_banlist = array();
             $this->card_legallist = array();
             $this->card_restrictedlist = array();
-            $this->legal_sets = array(); 
+            $this->legal_sets = array();
+            $this->eternal = 0;
             $this->singleton = 0;
             $this->commander = 0;
             $this->planechase = 0;
@@ -69,30 +71,29 @@ class Format {
             $this->min_side_cards_allowed = 0;
             $this->max_side_cards_allowed = 0;
             $this->new = true;
-            return; 
-        } 
+            return;
+        }
 
         if ($this->new) {
             $this->new = false;
             return $this->insertNewFormat();
         } else {
             $db = Database::getConnection();
-            $stmt = $db->prepare("SELECT name, description, type, series_name, singleton, commander, planechase, vanguard, 
-                                         prismatic, tribal, pure, underdog, allow_commons, allow_uncommons, allow_rares, allow_mythics, 
-                                         allow_timeshifted, priority, min_main_cards_allowed, max_main_cards_allowed, 
-                                         min_side_cards_allowed, max_side_cards_allowed
-                                  FROM formats 
+            $stmt = $db->prepare("SELECT name, description, type, series_name, singleton, commander, planechase, vanguard,
+                                         prismatic, tribal, pure, underdog, allow_commons, allow_uncommons, allow_rares, allow_mythics,
+                                         allow_timeshifted, priority, min_main_cards_allowed, max_main_cards_allowed,
+                                         min_side_cards_allowed, max_side_cards_allowed, eternal
+                                  FROM formats
                                   WHERE name = ?");
-            if (!$stmt) {
-                die($db->error);
-            }
+            $stmt or die($db->error);
             $stmt->bind_param("s", $name);
             $stmt->execute();
-            $stmt->bind_result($this->name, $this->description, $this->type, $this->series_name, $this->singleton, 
-                               $this->commander, $this->planechase, $this->vanguard, $this->prismatic, $this->tribal, 
-                               $this->pure, $this->underdog, $this->allow_commons, $this->allow_uncommons, $this->allow_rares, 
-                               $this->allow_mythics,$this->allow_timeshifted, $this->priority, $this->min_main_cards_allowed, 
-                               $this->max_main_cards_allowed, $this->min_side_cards_allowed, $this->max_side_cards_allowed);
+            $stmt->bind_result($this->name, $this->description, $this->type, $this->series_name, $this->singleton,
+                               $this->commander, $this->planechase, $this->vanguard, $this->prismatic, $this->tribal,
+                               $this->pure, $this->underdog, $this->allow_commons, $this->allow_uncommons, $this->allow_rares,
+                               $this->allow_mythics,$this->allow_timeshifted, $this->priority, $this->min_main_cards_allowed,
+                               $this->max_main_cards_allowed, $this->min_side_cards_allowed, $this->max_side_cards_allowed, 
+                               $this->eternal);
             if ($stmt->fetch() == NULL) {
                 throw new Exception('Format '. $name .' not found in DB');
             }
@@ -117,13 +118,13 @@ class Format {
         
         foreach($cardSets as $cardSet) {
             echo "Processing $cardSet<br />";
-            $cardTypes = Database::list_result_single_param("SELECT type 
-                                                             FROM cards 
-                                                             WHERE type 
-                                                             LIKE '%Creature%' 
+            $cardTypes = Database::list_result_single_param("SELECT type
+                                                             FROM cards
+                                                             WHERE type
+                                                             LIKE '%Creature%'
                                                              AND cardset = ?", "s", $cardSet);
             foreach($cardTypes as $type) {
-                $type =  Format::removeTypeCrap($type); 
+                $type =  Format::removeTypeCrap($type);
                 $types = explode(" ", $type);
                 foreach($types as $subtype) {
                     $type = trim($subtype);
@@ -143,7 +144,7 @@ class Format {
             }
         }
     }
-    
+
     public function isTribeTypeInDatabase($type) {
         $tribe = Database::single_result ("SELECT name 
                                            FROM tribes
@@ -171,14 +172,16 @@ class Format {
         $stmt = $db->prepare("INSERT INTO formats(name, description, type, series_name, singleton, commander, planechase, 
                                                   vanguard, prismatic, tribal, pure, underdog, allow_commons, allow_uncommons, allow_rares, 
                                                   allow_mythics, allow_timeshifted, priority, min_main_cards_allowed, 
-                                                  max_main_cards_allowed, min_side_cards_allowed, max_side_cards_allowed)
+                                                  max_main_cards_allowed, min_side_cards_allowed, max_side_cards_allowed,
+                                                  eternal)
                               VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssdddddddddddddddddd", 
-                          $this->name, $this->description, $this->type, $this->series_name, $this->singleton, 
-                          $this->commander, $this->planechase, $this->vanguard, $this->prismatic, $this->tribal, 
-                          $this->pure, $this->underdog, $this->allow_commons, $this->allow_uncommons, $this->allow_rares, 
-                          $this->allow_mythics, $this->allow_timeshifted, $this->priority, $this->min_main_cards_allowed, 
-                          $this->max_main_cards_allowed, $this->min_side_cards_allowed, $this->max_side_cards_allowed);
+        $stmt->bind_param("ssssddddddddddddddddddd",
+                          $this->name, $this->description, $this->type, $this->series_name, $this->singleton,
+                          $this->commander, $this->planechase, $this->vanguard, $this->prismatic, $this->tribal,
+                          $this->pure, $this->underdog, $this->allow_commons, $this->allow_uncommons, $this->allow_rares,
+                          $this->allow_mythics, $this->allow_timeshifted, $this->priority, $this->min_main_cards_allowed,
+                          $this->max_main_cards_allowed, $this->min_side_cards_allowed, $this->max_side_cards_allowed,
+                          $this->eternal);
         $stmt->execute() or die($stmt->error);
         $stmt->close();
         return true;        
@@ -243,15 +246,17 @@ class Format {
                                   SET description = ?, type = ?, series_name = ?, singleton = ?, commander = ?, 
                                   planechase = ?, vanguard = ?, prismatic = ?, tribal = ?, pure = ?, underdog = ?, allow_commons = ?, allow_uncommons = ?, allow_rares = ?, 
                                   allow_mythics = ?, allow_timeshifted = ?, priority = ?, min_main_cards_allowed = ?, 
-                                  max_main_cards_allowed = ?, min_side_cards_allowed = ?, max_side_cards_allowed = ?
+                                  max_main_cards_allowed = ?, min_side_cards_allowed = ?, max_side_cards_allowed = ?,
+                                  eternal = ?
                                   WHERE name = ?");
             $stmt or die($db->error);
-            $stmt->bind_param("sssdddddddddddddddddds", 
-                              $this->description, $this->type, $this->series_name, $this->singleton, $this->commander, 
-                              $this->planechase, $this->vanguard, $this->prismatic, $this->tribal, $this->pure, $this->underdog, 
-                              $this->allow_commons, $this->allow_uncommons, $this->allow_rares, $this->allow_mythics, 
-                              $this->allow_timeshifted, $this->priority, $this->min_main_cards_allowed, 
-                              $this->max_main_cards_allowed, $this->min_side_cards_allowed, $this->max_side_cards_allowed, 
+            $stmt->bind_param("sssddddddddddddddddddds",
+                              $this->description, $this->type, $this->series_name, $this->singleton, $this->commander,
+                              $this->planechase, $this->vanguard, $this->prismatic, $this->tribal, $this->pure, $this->underdog,
+                              $this->allow_commons, $this->allow_uncommons, $this->allow_rares, $this->allow_mythics,
+                              $this->allow_timeshifted, $this->priority, $this->min_main_cards_allowed,
+                              $this->max_main_cards_allowed, $this->min_side_cards_allowed, $this->max_side_cards_allowed,
+                              $this->eternal,
                               $this->name);
             $stmt->execute() or die($stmt->error);
             $stmt->close(); 
@@ -360,6 +365,9 @@ class Format {
     }
 
     public function getLegalCardsets() {
+        if ($this->eternal){
+            return database::list_result("SELECT name FROM cardsets");
+        }
         return database::list_result_single_param("SELECT cardset FROM setlegality WHERE format = ?", "s", $this->name);
     }
 
@@ -595,6 +603,9 @@ class Format {
     }
     
     public function isCardSetLegal($setName) {
+        if ($this->eternal) {
+            return true;
+        }
         $legal = $this->getLegalCardsets();
         foreach ($legal as $legalsetName) {
             if (strcmp($setName, $legalsetName) == 0) {  
