@@ -92,7 +92,7 @@ class Format {
                                $this->commander, $this->planechase, $this->vanguard, $this->prismatic, $this->tribal,
                                $this->pure, $this->underdog, $this->allow_commons, $this->allow_uncommons, $this->allow_rares,
                                $this->allow_mythics,$this->allow_timeshifted, $this->priority, $this->min_main_cards_allowed,
-                               $this->max_main_cards_allowed, $this->min_side_cards_allowed, $this->max_side_cards_allowed, 
+                               $this->max_main_cards_allowed, $this->min_side_cards_allowed, $this->max_side_cards_allowed,
                                $this->eternal);
             if ($stmt->fetch() == NULL) {
                 throw new Exception('Format '. $name .' not found in DB');
@@ -174,7 +174,7 @@ class Format {
                                                   allow_mythics, allow_timeshifted, priority, min_main_cards_allowed, 
                                                   max_main_cards_allowed, min_side_cards_allowed, max_side_cards_allowed,
                                                   eternal)
-                              VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                              VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssddddddddddddddddddd",
                           $this->name, $this->description, $this->type, $this->series_name, $this->singleton,
                           $this->commander, $this->planechase, $this->vanguard, $this->prismatic, $this->tribal,
@@ -402,11 +402,11 @@ class Format {
         return Database::list_result_double_param("SELECT name FROM formats WHERE type = ? AND series_name = ?", 
                                                   "ss", "Private", $seriesName);
     }
-    
+
     static public function getAllFormats() {
         return Database::list_result("SELECT name FROM formats");
     }
-    
+
     public function getCoreCardsets() {
         $legalSets = Database::list_result_single_param("SELECT cardset FROM setlegality WHERE format = ?", "s", $this->name);
         
@@ -419,7 +419,7 @@ class Format {
         }
         return $legalCoreSets;
     }
-    
+
     public function getBlockCardsets() {
         $legalSets = Database::list_result_single_param("SELECT cardset FROM setlegality WHERE format = ?", "s", $this->name);
         
