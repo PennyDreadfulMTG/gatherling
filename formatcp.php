@@ -729,7 +729,7 @@ function printBandR($active_format, $seriesName)
     // restricted list to tribe
     if ($active_format->tribal) {
         $cardCount = count($restrictedToTribe);
-        echo "<form action=\"{$calledBy}\" method=\"post\">"; 
+        echo "<form action=\"formatcp.php\" method=\"post\">"; 
         echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
         echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
         echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
@@ -752,29 +752,16 @@ function printBandR($active_format, $seriesName)
         } else {
             echo "<tr><td><font color=\"red\">No creatures have been restricted to tribe</font></td>";
             echo "<td style=\"width: 100px; text-align: center;\">";
-            if ($active_format->noFormatLoaded()) {
-                not_allowed("No Format Loaded, Please Load a Format to Edit");
-            } else {
-                not_allowed("No Restricted To Tribe Creatures To Delete");            
-            }
+            not_allowed("No Restricted To Tribe Creatures To Delete");            
             echo "</td>";
             echo "</tr>";
         }
-        if ($active_format->noFormatLoaded()) {
-            echo "<tr><td colspan=\"2\"> Add new: ";
-            echo "<textarea class=\"inputbox\" disabled=\"disabled\" rows=\"5\" cols=\"40\"></textarea></td></tr>\n";
-            echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
-            echo "<tr>";
-            echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Restricted To Tribe List\" name =\"action\" disabled=\"disabled\" /></td>";
-            echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Restricted To Tribe List\" name =\"action\" disabled=\"disabled\" /></td>";
-        } else {
-            echo "<tr><td colspan=\"2\"> Add new: ";
-            echo "<textarea class=\"inputbox\" rows=\"5\" cols=\"40\" name=\"addrestrictedtotribecreature\"></textarea></td></tr>\n";
-            echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
-            echo "<tr>";
-            echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Restricted To Tribe List\" name =\"action\" /></td>";
-            echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Restricted To Tribe List\" name =\"action\" /></td>";
-        }
+        echo "<tr><td colspan=\"2\"> Add new: ";
+        echo "<textarea class=\"inputbox\" rows=\"5\" cols=\"40\" name=\"addrestrictedtotribecreature\"></textarea></td></tr>\n";
+        echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+        echo "<tr>";
+        echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Restricted To Tribe List\" name =\"action\" /></td>";
+        echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Restricted To Tribe List\" name =\"action\" /></td>";
         echo "</tr></table></form>";
     }
 
@@ -865,7 +852,7 @@ function printBandR($active_format, $seriesName)
             $tribesBanned = array();
         }
         echo "<h4>Tribe Banlist</h4>\n";
-        echo "<form action=\"{$calledBy}\" method=\"post\">"; 
+        echo "<form action=\"formatcp.php\" method=\"post\">"; 
         echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
         echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
         echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
@@ -918,7 +905,7 @@ function printBandR($active_format, $seriesName)
             $subTypesBanned = array();
         }
         echo "<h4>Subtype Banlist</h4>\n";
-        echo "<form action=\"{$calledBy}\" method=\"post\">"; 
+        echo "<form action=\"formatcp.php\" method=\"post\">"; 
         echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
         echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
         echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
