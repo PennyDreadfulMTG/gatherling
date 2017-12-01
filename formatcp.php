@@ -572,10 +572,12 @@ function printFormatSettings($active_format, $seriesName) {
     echo "<tr><th>Minimum Mainboard Cards</th>";
     echo "<td style=\"width: 50px; text-align: center;\">";
     stringField("minmain", $active_format->min_main_cards_allowed, 5);
+    print_warning_if($active_format->min_main_cards_allowed == 0);
     echo "</td>";
     echo "<th>&nbsp;Maximum Mainboard Cards&nbsp;</th>";
     echo "<td style=\"width: 50px; text-align: center;\">";
     stringField("maxmain", $active_format->max_main_cards_allowed, 5);
+    print_warning_if($active_format->max_main_cards_allowed == 0);
     echo "</td>";
     echo "</tr><tr><th>Minimum Sideboard Cards</th>";
     echo "<td style=\"width: 50px; text-align: center;\">";
@@ -613,6 +615,7 @@ function printFormatSettings($active_format, $seriesName) {
     echo "</tr></table>";
     
     echo "<h4>Allow Rarity Selection</h4>";
+    print_warning_if(0 == $active_format->allow_commons + $active_format->allow_uncommons + $active_format->allow_rares + $active_format->allow_mythics + $active_format->allow_timeshifted);
     echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
     echo "<tr><th style=\"width: 100px; text-align: center;\">Commons</th><th style=\"width: 100px; text-align: center;\">Uncommons</th>";
     echo "<th style=\"width: 100px; text-align: center;\">Rares</th><th style=\"width: 100px; text-align: center;\">Mythics</th>";
