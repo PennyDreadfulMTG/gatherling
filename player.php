@@ -428,13 +428,13 @@ function print_mainPlayerCP($player) {
   print_conditionalAllDecks();
   print_noDeckTable(0);  
   print_recentDeckTable();
+  $Leagues = print_ActiveEvents();
+  print_currentMatchTable($Leagues);
   print_preRegistration();
   if ($player->pkmember == 1) {
       print_PKpreRegistration();
   }
-  $Leagues = print_ActiveEvents();  //* new
   print_recentMatchTable();
-  print_currentMatchTable($Leagues);  //* new
   echo "</div></div>\n";
   echo "<div class=\"omega grid_5\">\n";
   echo "<div id=\"gatherling_righthalf\">\n";
