@@ -145,12 +145,11 @@ class Format {
         }
     }
 
-    public function isTribeTypeInDatabase($type) {
-        $tribe = Database::single_result ("SELECT name 
+    public static function isTribeTypeInDatabase($type) {
+        $tribe = Database::single_result_single_param("SELECT name 
                                            FROM tribes
                                            WHERE name = ?", "s", $type);
-        echo "tribe = " . $tribe . "type = " . $type . "<br />";
-        if ($tribe == $type) {
+        if (strcasecmp($tribe, $type) == 0) {
             return true;
         } else {
             return false;
@@ -664,15 +663,15 @@ class Format {
         return $isLegal;
     }
     
-    public function getCardType ($card) {
+    public static function getCardType ($card) {
         // Selecting card type for card = $card
         $cardType = Database::single_result_single_param("SELECT type
                                                           FROM cards
                                                           WHERE name = ?", "s", $card);
         return $cardType;
     }
-    
-    public function removeTypeCrap($typeString) {
+
+    public static function removeTypeCrap($typeString) {
         // leave only the tribal sub types
         $typeString = str_replace("Tribal ", "", $typeString);
         $typeString = str_replace("Creature - ", "", $typeString);
@@ -684,8 +683,8 @@ class Format {
         $typeString = str_replace("Legendary ", "", $typeString);
         return $typeString;
     }
-    
-    public function isChangeling($card) {
+
+    public static function isChangeling($card) {
         $foundChangeling = false;
         switch($card) {
             case "Amoeboid Changeling":

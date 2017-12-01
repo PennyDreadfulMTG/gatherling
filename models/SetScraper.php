@@ -31,7 +31,7 @@ class SetScraper {
         foreach ($sets as $s) {
             $installed = false;
             foreach ($knowncodes as $c){
-                if ($s->code == $c){
+                if (strcasecmp($s->code, $c) == 0) {
                     $installed = true;
                 }
             }

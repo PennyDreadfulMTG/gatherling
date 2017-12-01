@@ -127,6 +127,8 @@ echo "Total Cards Parsed: {$cardsparsed}<br />";
 echo "Total Cards Inserted: {$cardsinserted}<br />";
 $stmt->close();
 
+Format::constructTribes($set);
+
 function insertCard($card, $set, $rarity, $stmt) {
   $typeline = join($card->types, " ");
   if (isset($card->subtypes) && count($card->subtypes) > 0) {

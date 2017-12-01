@@ -79,8 +79,7 @@ function adminCPMenu() {
   echo "<table><tr><td colspan=\"2\" align=\"center\">";
   echo "<a href=\"admincp.php?view=change_password\">Change Player Password</a>";
   echo " | <a href=\"admincp.php?view=create_series\">Create New Series</a>";
-  // echo " | <a href=\"admincp.php?view=format_editor\">Format Editor</a>";
-  echo " | <a href=\"admincp.php?view=calc_ratings\">Ratings</a>";
+  echo " | <a href=\"admincp.php?view=calc_ratings\">Maintenance Tasks</a>";
   echo " | <a href=\"admincp.php?view=add_cardset\">Add New Cardset</a>";
   echo "</td></tr></table>";
 }
@@ -138,6 +137,11 @@ function printCalcRatingsForm() {
   $ratings->formatDropMenuR();
   echo "&nbsp;";
   echo "<input class=\"inputbutton\" type=\"submit\" name=\"action\" value=\"Re-Calcualte By Format\" /></td></tr>";
+  echo "</table>";
+  echo "<h4>Rebuild tribal database</h4>";
+  echo "<table class=\"form\" style=\"border-width: 0px\" align=\"center\">";
+  echo "<tr><td class=\"buttons\">";
+  echo "<input class=\"inputbutton\" type=\"submit\" name=\"action\" value=\"Rebuild Tribes\" /></td></tr>";
   echo "</table></form>";
 }
 
@@ -235,7 +239,9 @@ function handleActions() {
       } else {
           $ratings->calcRatingByFormat($_POST['format']);      
       }
-    }
+  } else if ($_POST['action'] == "Rebuild Tribes") {
+    Format::constructTribes("All");
+  }
 }
 
 function printNewFormat(){
