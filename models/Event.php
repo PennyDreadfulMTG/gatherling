@@ -478,8 +478,8 @@ function getEntriesByMedal() {
       $stmt->close();
       //For late registration. Check to see if event is active, if so, create entry for player in standings
       if ($this->active == 1){
-      $standing = new Standings($this->name, $playername);
-      $standing->save();
+        $standing = new Standings($this->name, $playername);
+        $standing->save();
       }
       $added = true;
     }

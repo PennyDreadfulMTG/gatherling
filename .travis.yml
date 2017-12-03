@@ -1,0 +1,8 @@
+language: php
+php:
+  - '5.6'
+  - '7.1'
+  - nightly
+before_script:
+  - php admin/db-upgrade.php
+  - php util/updateDefaultFormats.php
