@@ -73,7 +73,7 @@ final class EventsTest extends TestCase
      * @depends testEventCreation
      */
     public function testRegistration($event) {
-        for ($i=0; $i < 8; $i++) { 
+        for ($i=0; $i < 8; $i++) {
             $event->addPlayer("testplayer". $i);
         }
         // 8 players have expressed interest in the event.
