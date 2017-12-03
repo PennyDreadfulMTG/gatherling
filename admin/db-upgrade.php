@@ -1,10 +1,14 @@
 <?php
 
+ini_set('max_execution_time', 300);
+
 # Upgrades the database.  There are a couple of pretty crude checks for
 # versions 0 (no database) and 1 (no version table).  Hopefully it will
 # work for you, but you can always just run the schema yourself.
 #
 # Use at your own risk!
+
+# If this fails with foreign key errors, execute `ALTER SCHEMA <gatherling> DEFAULT CHARACTER SET latin1;`
 
 require '../lib.php';
 
@@ -24,6 +28,11 @@ error_reporting(E_ALL);
 $db = Database::getConnection();
 
 function do_query($query) {
+  if (!trim($query))
+  {
+    // Ignore empty queries
+    return;
+  }
   global $db;
   echo "Executing Query: $query <br />";
   $result = $db->query($query);
@@ -64,8 +73,12 @@ if (isset($_GET['deckupdate'])) {
 
 if (!$db->query("SELECT name FROM players LIMIT 1")) {
   # Version 0.  Enter the whole schema.
-  echo "DETECTED NO DATABASE.  Currently can't handle null database. Exiting. <br />";
-  exit(0);
+  echo "DETECTED NO DATABASE.  Importing schema.sql <br />";
+  $schema = file_get_contents("../schema.sql");
+  $split = explode(";", $schema);
+  foreach ($split as $line) {
+    do_query($line);
+  }
 } else if (!$db->query("SELECT version FROM db_version LIMIT 1")) {
   # Version 1.  Add our version table.
   echo "Detected VERSION 1 DATABASE. Marking as such.. <br />";

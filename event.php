@@ -489,15 +489,9 @@ function eventForm($event = NULL, $forcenew = false) {
     echo "&nbsp;/&nbsp;";
     stringField("cohost", $event->cohost, 20);
     echo "</td></tr>";
-    echo "<tr><th>Event Thread URL</th><td>";
-    stringField("threadurl", $event->threadurl, 60);
-    echo "</td></tr>";
-    echo "<tr><th>Metagame URL</th><td>";
-    stringField("metaurl", $event->metaurl, 60);
-    echo "</td></tr>";
-    echo "<tr><th>Report URL</th><td>";
-    stringField("reporturl", $event->reporturl, 60);
-    echo "</td></tr>";
+    print_text_input("Event Thread URL", "threadurl", $event->threadurl, 60);
+    print_text_input("Metagame URL", "metaurl", $event->metaurl, 60);
+    print_text_input("Report URL", "reporturl", $event->reporturl, 60);
     echo "<tr><th>Main Event Structure</th><td>";
     numDropMenu("mainrounds", "- No. of Rounds -", 10, $event->mainrounds, 1);
     echo " rounds of ";

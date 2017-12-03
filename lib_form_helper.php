@@ -63,4 +63,6 @@ function print_select_input($label, $name, $options, $selected = NULL) {
   echo "</td></tr>";
 }
 
-
+function stringField($field, $def, $len) {
+  echo "<input class=\"inputbox\" type=\"text\" name=\"$field\" value=\"$def\" size=\"$len\">";
+}

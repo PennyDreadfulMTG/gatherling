@@ -522,10 +522,6 @@ function printOrganizerSelect($player_series, $selected) {
   echo "</form>";
 }
 
-function stringField($field, $def, $len) {
-  echo "<input class=\"inputbox\" type=\"text\" name=\"$field\" value=\"$def\" size=\"$len\">";
-}
-
 function print_warning_if($conditional) {
   if ($conditional) {
     echo "<span style=\"color: red;\">⚠</span>";

@@ -3,25 +3,18 @@ require_once('../lib.php');
 
 if (PHP_SAPI != "cli"){
   session_start();
-  set_time_limit(0);
+  ini_set('max_execution_time', 300);
   if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
     redirect("index.php");
   }
 }
-$step = 0;
-if (isset($_REQUEST['step']))
-{
-  $step = $_REQUEST['step'];
-}
 
-
-if ($step < 1){
-  updateStandard();
-}
-if ($step < 2){
-  updateModern();
-}
-updatePennyDreadful($step);
+set_time_limit(0);
+updateStandard();
+set_time_limit(0);
+updateModern();
+set_time_limit(0);
+updatePennyDreadful();
 
 function info($text){
   if (PHP_SAPI == "cli"){
@@ -32,14 +25,13 @@ function info($text){
   }
 }
 
-function addSet($set, $step) {
+function addSet($set) {
   if (PHP_SAPI == "cli") {
     info("Please add {$set} to the database");
   }
   else
   {
-    $args = urlencode("step={$step}");
-    redirect("util/insertcardset.php?cardsetcode={$set}&return=updateDefaultFormats.php&ret_args={$args}");
+    redirect("util/insertcardset.php?cardsetcode={$set}&return=updateDefaultFormats.php");
   }
 }
 
@@ -147,7 +139,7 @@ function updateModern(){
   }
 }
 
-function updatePennyDreadful($step)
+function updatePennyDreadful()
 {
   $fmt = LoadFormat("Penny Dreadful");
 
@@ -156,19 +148,22 @@ function updatePennyDreadful($step)
     info("Unable to fetch legal_cards.txt");
     return;
   }
-  if ($step < 4)
-  {
-    foreach ($fmt->card_legallist as $card) {
-      $remove = true;
-      foreach ($legal_cards as $legal_card) {
-        if (strcasecmp($card, $legal_card) == 0) {  
-          $remove = false;
-        }
+  $i = 0;
+  foreach ($fmt->card_legallist as $card) {
+    $remove = true;
+    foreach ($legal_cards as $legal_card) {
+      if (strcasecmp($card, $legal_card) == 0) {  
+        $remove = false;
       }
-      if ($remove){
-        $fmt->deleteCardFromLegallist($card);
-        info("{$card} is no longer PD Legal.");      
-      }
+    }
+    if ($remove){
+      $fmt->deleteCardFromLegallist($card);
+      info("{$card} is no longer PD Legal.");      
+    }
+    
+    if ($i++ == 200) {
+      set_time_limit(0);
+      $i = 0;
     }
   }
   foreach ($legal_cards as $card) {
@@ -178,6 +173,11 @@ function updatePennyDreadful($step)
       $set = findSetForCard($card);
       addSet($set, 4);
       return; 
+    }
+
+    if ($i++ == 200) {
+      set_time_limit(0);
+      $i = 0;
     }
   }
 }
