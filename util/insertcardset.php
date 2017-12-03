@@ -32,16 +32,6 @@ else{
   }
 }
 
-if (isset($_REQUEST['return']))
-{
-  $args = '';
-  if (isset($_REQUEST['ret_args']))
-  {
-    $args = $_REQUEST['ret_args'];
-  }
-  echo "Return to <a href='{$CONFIG['base_url']}{$_REQUEST['return']}?{$args}'>{$_REQUEST['return']}</a><br/>";
-}
-
 if ($file == FALSE) {
   die("Can't open the file you uploaded: {$_FILES['cardsetfile']['tmp_name']}");
 }
@@ -177,5 +167,19 @@ function insertCard($card, $set, $rarity, $stmt) {
     echo "<tr><th colspan=\"2\" style=\"background-color: LightGreen;\">Card Inserted Successfully</th></tr>";
     echo "</table>";
   }
+}
+
+if (isset($_REQUEST['return']))
+{
+  $args = '';
+  if (isset($_REQUEST['ret_args']))
+  {
+    $args = $_REQUEST['ret_args'];
+  }
+
+  echo "Return to <a href='{$CONFIG['base_url']}{$_REQUEST['return']}?{$args}'>{$_REQUEST['return']}</a><br/>";
+  echo "<script>";
+  echo "  window.setTimeout(() => { location.href = \"{$CONFIG['base_url']}{$_REQUEST['return']}?{$args}\"}, 5000);";
+  echo "</script>";
 }
 

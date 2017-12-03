@@ -31,7 +31,7 @@ function addSet($set) {
   }
   else
   {
-    redirect("util/insertcardset.php?cardsetcode={$set}&return=updateDefaultFormats.php");
+    redirect("util/insertcardset.php?cardsetcode={$set}&return=util/updateDefaultFormats.php");
   }
 }
 
