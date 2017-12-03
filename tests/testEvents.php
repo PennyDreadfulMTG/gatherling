@@ -64,8 +64,8 @@ final class EventsTest extends TestCase
         $event->save();
 
         $event = new Event($name);
-        $this->assert($event->name == $name);
-        $this->assert($event->start == date('Y-m-d H:00:00'));
+        $this->assertEquals($event->name, $name);
+        $this->assertEquals($event->start, date('Y-m-d H:00:00'));
         return $event;
     }
 
@@ -73,13 +73,13 @@ final class EventsTest extends TestCase
      * @depends testEventCreation
      */
     public function testRegistration($event) {
-        for ($i=0; $i < ; $i++) { 
+        for ($i=0; $i < 8; $i++) { 
             $event->addPlayer("testplayer". $i);
         }
         // 8 players have expressed interest in the event.
-        $this->assert(count($event->getEntries()) == 8);
+        $this->assertEquals(count($event->getEntries()), 8);
         // No players have filled out decklists.
-        $this->assert(count($event->getRegisteredEntries()) == 8);
+        $this->assertEquals(count($event->getRegisteredEntries()), 0);
         
     }
 

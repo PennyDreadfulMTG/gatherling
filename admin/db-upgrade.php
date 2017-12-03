@@ -79,7 +79,15 @@ if (isset($_GET['deckupdate'])) {
 if (!$db->query("SELECT name FROM players LIMIT 1")) {
   # Version 0.  Enter the whole schema.
   echo "DETECTED NO DATABASE.  Importing schema.sql <br />";
-  $schema = file_get_contents("../schema.sql");
+  if (file_exists("../schema.sql")){
+    $schema = file_get_contents("../schema.sql");
+  }
+  else if (file_exists("schema.sql")){
+    $schema = file_get_contents("schema.sql");
+  }
+  else {
+    die("Could not find schema.sql");
+  }
   $split = explode(";", $schema);
   foreach ($split as $line) {
     do_query($line);
