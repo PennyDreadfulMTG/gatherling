@@ -62,8 +62,11 @@ function printAdminCPIntroduction() {
 }
 
 function printNoAdmin() { 
+  global $hasError;
+  global $errormsg;
   $hasError = true;
   $errormsg = "<center>You're not an Admin here on Gatherling.com! Access Restricted.<br />";
+  printError();
   echo "<a href=\"player.php\">Back to the Player Control Panel</a></center>";
 } 
 
@@ -179,8 +182,6 @@ function printChangePasswordForm() {
 }
 
 function handleActions() {
-  global $hasError;
-  global $errormsg;
   if (!isset($_POST['action'])) {
     return;
   }

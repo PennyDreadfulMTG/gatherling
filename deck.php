@@ -402,7 +402,6 @@ function deckInfoCell($deck) {
     $name = "** NO NAME **";
   }
   $line1 = "<b>" . strtoupper($name) . "</b>";
-  $deck_format = $event->format;
   if (!$deck->isValid()) {
     $line1 .= $rstar;
   }

@@ -1,14 +1,13 @@
 <?php
 class Decksearch {
-    
+
   public $errors = array();
   
-  private $_results = array(); 
-  private $_final_results=array(); 
+  private $_results = array();
+  private $_final_results=array();
   
   private $_eventname;
   private $_playername;
-  private $_deckid; 
 
 // holds the current deck id that info is being collected for
   
@@ -224,6 +223,7 @@ class Decksearch {
   }
   }
 
+  // TODO: Refactor this to use Database wrapper.
   public function idsToSortedInfo($id_arr) {
     // prepared statements would not work with mysql IN
     // needed a way to run the array through one query so I 
