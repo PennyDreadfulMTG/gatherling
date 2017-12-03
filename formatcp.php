@@ -93,6 +93,9 @@ function do_page() {
         case 'bandr':
         printBandR($active_format, $seriesName);
         break;
+        case 'tribal':
+        printTribalBandR($active_format, $seriesName);
+        break;
         case 'cardsets':
         printCardSets($active_format, $seriesName);
         break;
@@ -674,6 +677,9 @@ function formatCPMenu($active_format, $seriesName) {
         echo "<table><tr><td colspan=\"2\" align=\"center\">";
         echo "<a href=\"formatcp.php?view=settings&format={$escaped}\">Format Settings</a>";
         echo " | <a href=\"formatcp.php?view=bandr&format={$escaped}\">Legal, Banned & Restricted</a>";
+        if ($active_format->tribal) {
+            echo " | <a href=\"formatcp.php?view=tribal&format={$escaped}\">Tribes</a>";            
+        }
         if (!$active_format->eternal) {
             echo " | <a href=\"formatcp.php?view=cardsets&format={$escaped}\">Legal Sets</a>";
         }
@@ -690,7 +696,6 @@ function printBandR($active_format, $seriesName)
     $bandCards = $active_format->getBanList();
     $legalCards = $active_format->getLegalList();
     $restrictedCards = $active_format->getRestrictedList();
-    $restrictedToTribe = $active_format->getRestrictedToTribeList();
     
     // beginning of the restricted list
     $cardCount = count($restrictedCards);
@@ -729,47 +734,8 @@ function printBandR($active_format, $seriesName)
     echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Restricted List\" name =\"action\" /></td>";
     echo "</tr></table></form>";
 
-    // restricted list to tribe
-    if ($active_format->tribal) {
-        $cardCount = count($restrictedToTribe);
-        echo "<form action=\"formatcp.php\" method=\"post\">"; 
-        echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
-        echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
-        echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
-        echo "<h4>Restricted To Tribe List: $cardCount Cards</h4>\n";
-        echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
-        echo "<tr><th style=\"text-align: center;\">Card Name</th><th style=\"width: 50px; text-align: center;\">Delete</th></tr>";
-        if (count($restrictedToTribe)) {
-            foreach($restrictedToTribe as $card) {
-                echo "<tr><td style=\"text-align: center;\">";
-                // don't print card link if list is over 100 cards
-                if ($cardCount > 100) {
-                    echo "$card <br />";
-                } else {
-                    printCardLink($card);
-                }
-                echo "</td>";
-                echo "<td style=\"text-align: center;\">";
-                echo "<input type=\"checkbox\" name=\"delrestrictedtotribe[]\" value=\"{$card}\" /></td></tr>";
-            }
-        } else {
-            echo "<tr><td><font color=\"red\">No creatures have been restricted to tribe</font></td>";
-            echo "<td style=\"width: 100px; text-align: center;\">";
-            not_allowed("No Restricted To Tribe Creatures To Delete");            
-            echo "</td>";
-            echo "</tr>";
-        }
-        echo "<tr><td colspan=\"2\"> Add new: ";
-        echo "<textarea class=\"inputbox\" rows=\"5\" cols=\"40\" name=\"addrestrictedtotribecreature\"></textarea></td></tr>\n";
-        echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
-        echo "<tr>";
-        echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Restricted To Tribe List\" name =\"action\" /></td>";
-        echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Restricted To Tribe List\" name =\"action\" /></td>";
-        echo "</tr></table></form>";
-    }
-
-    // if the series is using a legal card list, don't show the banlist
-    if (!count($legalCards)) {
+     // if the series is using a legal card list, don't show the banlist
+     if (!count($legalCards)) {
         $cardCount = count($bandCards);
         echo "<form action=\"formatcp.php\" method=\"post\">"; 
         echo "<input type=\"hidden\" name=\"view\" value=\"bandr\" />";
@@ -843,6 +809,48 @@ function printBandR($active_format, $seriesName)
         echo "<tr>";
         echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Legal List\" name =\"action\" /></td>";
         echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Legal List\" name =\"action\" /></td>";
+        echo "</tr></table></form>";
+    }
+}
+
+function printTribalBandR($active_format, $seriesName) {
+    $restrictedToTribe = $active_format->getRestrictedToTribeList();
+    // restricted list to tribe
+    if ($active_format->tribal) {
+        $cardCount = count($restrictedToTribe);
+        echo "<form action=\"formatcp.php\" method=\"post\">";
+        echo "<input type=\"hidden\" name=\"view\" value=\"tribal\" />";
+        echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
+        echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
+        echo "<h4>Restricted To Tribe List: $cardCount Cards</h4>\n";
+        echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">"; 
+        echo "<tr><th style=\"text-align: center;\">Card Name</th><th style=\"width: 50px; text-align: center;\">Delete</th></tr>";
+        if (count($restrictedToTribe)) {
+            foreach($restrictedToTribe as $card) {
+                echo "<tr><td style=\"text-align: center;\">";
+                // don't print card link if list is over 100 cards
+                if ($cardCount > 100) {
+                    echo "$card <br />";
+                } else {
+                    printCardLink($card);
+                }
+                echo "</td>";
+                echo "<td style=\"text-align: center;\">";
+                echo "<input type=\"checkbox\" name=\"delrestrictedtotribe[]\" value=\"{$card}\" /></td></tr>";
+            }
+        } else {
+            echo "<tr><td><font color=\"red\">No creatures have been restricted to tribe</font></td>";
+            echo "<td style=\"width: 100px; text-align: center;\">";
+            not_allowed("No Restricted To Tribe Creatures To Delete");            
+            echo "</td>";
+            echo "</tr>";
+        }
+        echo "<tr><td colspan=\"2\"> Add new: ";
+        echo "<textarea class=\"inputbox\" rows=\"5\" cols=\"40\" name=\"addrestrictedtotribecreature\"></textarea></td></tr>\n";
+        echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+        echo "<tr>";
+        echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Restricted To Tribe List\" name =\"action\" /></td>";
+        echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Restricted To Tribe List\" name =\"action\" /></td>";
         echo "</tr></table></form>";
     }
 
