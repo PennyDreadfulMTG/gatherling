@@ -10,7 +10,12 @@ ini_set('max_execution_time', 300);
 
 # If this fails with foreign key errors, execute `ALTER SCHEMA <gatherling> DEFAULT CHARACTER SET latin1;`
 
-require '../lib.php';
+if (file_exists('../lib.php')) {
+  require_once '../lib.php';
+}
+else {
+  require_once 'lib.php';
+}
 
 session_start();
 # Need to be logged in as admin before you can even try this.

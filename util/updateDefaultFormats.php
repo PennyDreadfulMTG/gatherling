@@ -1,5 +1,11 @@
 <?php
-require_once('../lib.php');
+
+if (file_exists('../lib.php')) {
+  require_once '../lib.php';
+}
+else {
+  require_once 'lib.php';
+}
 
 if (PHP_SAPI != "cli"){
   session_start();
