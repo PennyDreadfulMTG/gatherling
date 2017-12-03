@@ -379,9 +379,10 @@ class Deck {
     $event = $this->getEvent(); 
     $player = new Player($username);
 
-    if ($player->isSuper() || 
-        $event->isHost($username) || 
-        $event->isOrganizer($username) || 
+    if ($player->isSuper() ||
+        $event->isHost($username) ||
+        $event->isOrganizer($username) ||
+        (!$event->finalized && !$this->isValid() && strcasecmp($username, $this->playername) == 0) ||
         (!$event->finalized && !$event->active && strcasecmp($username, $this->playername) == 0)) {
         return true;
     }
