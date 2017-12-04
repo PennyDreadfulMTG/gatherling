@@ -7,8 +7,8 @@ else {
   require_once 'lib.php';
 }
 
-if (PHP_SAPI == 'cli'){
-  if (isset($argv[1])){
+if (PHP_SAPI == 'cli') {
+  if (isset($argv[1])) {
     if (strlen($argv[1]) < 4)
     $file = file_get_contents("https://raw.githubusercontent.com/mtgjson/mtgjson/master/json/{$argv[1]}.json");
     else
@@ -18,12 +18,12 @@ if (PHP_SAPI == 'cli'){
     die("No set provided.");
   }
 }
-else{
-
+else { // CGI
+  ini_set('max_execution_time', 300);
   if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
     redirect("index.php");
   }
-  
+
   if (isset($_REQUEST['cardsetcode']))
   {
     $file = file_get_contents("https://raw.githubusercontent.com/mtgjson/mtgjson/master/json/{$_REQUEST['cardsetcode']}.json");
@@ -187,4 +187,3 @@ if (isset($_REQUEST['return']))
   echo "  window.setTimeout(() => { location.href = \"{$CONFIG['base_url']}{$_REQUEST['return']}?{$args}\"}, 5000);";
   echo "</script>";
 }
-
