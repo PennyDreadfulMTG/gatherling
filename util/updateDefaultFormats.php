@@ -54,6 +54,7 @@ function LoadFormat($format){
 }
 
 function updateStandard(){
+  info("Updating Standard...");
   $fmt = LoadFormat("Standard");
   $legal = json_decode(file_get_contents("http://whatsinstandard.com/api/v5/sets.json"));
   if (!$legal)
@@ -94,13 +95,7 @@ function updateStandard(){
     }
   }
   foreach ($fmt->getLegalCardsets() as $setName) {
-    $remove = true;
-    foreach ($expected as $legalsetName) {
-      if (strcmp($setName, $legalsetName) == 0) {  
-        $remove = false;
-      }
-    }
-    if ($remove){
+    if (!in_array($setName, $expected, true)){
       $fmt->deleteLegalCardSet($setName);
       info("{$setName} is no longer Standard Legal.");      
     }
@@ -115,8 +110,9 @@ function updateStandard(){
 }
 
 function updateModern(){
+  info("Updating Modern...");
   $fmt = LoadFormat("Modern");
-  
+
   $legal = $fmt->getLegalCardsets();
 
   $db = Database::getConnection();
@@ -147,6 +143,7 @@ function updateModern(){
 
 function updatePennyDreadful()
 {
+  info("Updating PD...");  
   $fmt = LoadFormat("Penny Dreadful");
 
   $legal_cards = parseCards(file_get_contents("http://pdmtgo.com/legal_cards.txt"));
@@ -170,6 +167,7 @@ function updatePennyDreadful()
     if ($i++ == 200) {
       set_time_limit(0);
       $i = 0;
+      info('.');
     }
   }
   foreach ($legal_cards as $card) {

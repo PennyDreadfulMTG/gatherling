@@ -3,8 +3,6 @@
 # CONFIGURATION FILE FOR GATHERLING 
 # CHANGE THE FOLLOWING VARIABLES
 #
-# AND MAKE THE FILE UNREADABLE BY HTACCESS!
-#
 # === Database ===
 $CONFIG['db_hostname'] = 'localhost';
 $CONFIG['db_username'] = 'gatherli_public';
@@ -17,7 +15,7 @@ $CONFIG['base_url'] = "http://localhost/gatherling/";
 # The name of your site.  This is used in a lot of places.
 $CONFIG['site_name'] = "Gatherling.com";
 # The Style of the site.
-$CONFIG['style'] = "default";
+$CONFIG['style'] = "Chandra";
 # A description for the ical calendar which is accessible at calendar.php
 $CONFIG['calendar_description'] = "a description for the events calendar";
 

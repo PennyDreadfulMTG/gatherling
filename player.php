@@ -1,5 +1,6 @@
 <?php session_start();
 require_once 'lib.php';
+require_once 'lib_form_helper.php';
 $player = Player::getSessionPlayer();
 
 print_header("Player Control Panel");

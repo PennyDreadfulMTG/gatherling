@@ -1,4 +1,5 @@
 <?php include 'lib.php';
+require_once 'lib_form_helper.php';
 
 print_header("Register");
 ?>

@@ -189,7 +189,7 @@ function deckForm($deck = NULL) {
 }
 
 // deckRegisterForm is part of the reg-decklist feature
-function deckRegisterForm($deck = NULL) {
+function deckRegisterForm() {
     
   $player = (isset($_POST['player'])) ? $_POST['player'] : $_GET['player'];
   $event = (isset($_POST['player'])) ? $_POST['event'] : $_GET['event'];
@@ -217,11 +217,15 @@ function deckRegisterForm($deck = NULL) {
   }
   echo "</select></td></tr>";
   echo "<tr><td><b>Name</td>\n<td>";
-  if (!isset($vals['name'])){$vals['name'] = "";}
+  if (!isset($vals['name'])) {
+    $vals['name'] = "";
+  }
   echo "<input id=\"deck-name\" class=\"inputbox\" type=\"text\" name=\"name\" value=\"{$vals['name']}\" ";
   echo "size=\"40\"></td></tr>\n";
   echo "<tr><td><b>Archetype</td>\n<td>";
-  if (!isset($vals['archetype'])) {$vals['archetype'] = "";}
+  if (!isset($vals['archetype'])) {
+    $vals['archetype'] = "";
+  }
   archetypeDropMenu($vals['archetype']);
   echo "</td></tr>\n";
   echo "<tr><td valign=\"top\"><b>Main Deck</td>\n<td>";
@@ -232,7 +236,9 @@ function deckRegisterForm($deck = NULL) {
   echo "{$vals['sideboard']}</textarea></td></tr>\n";
   echo "<tr><td valign=\"top\"><b>Comments</td>\n<td>";
   echo "<textarea class=\"inputbox\" rows=\"10\" cols=\"60\" name=\"notes\">";
-  if (!isset($vals['desc'])) {$vals['desc'] = "";}
+  if (!isset($vals['desc'])) {
+    $vals['desc'] = "";
+  }
   echo "{$vals['desc']}</textarea></td></tr>\n";
   echo "<tr><td>&nbsp;</td></tr>\n";
   echo "<tr><td colspan=\"2\" align=\"center\">\n";
@@ -508,7 +514,6 @@ function matchupTable($deck) {
             if($match->playerBye ($deck->playername)) {
                 $res = "Bye";
             }
-         $resStr = "<b><font color=\"color\">$res</font></b>";
          if ($res != 'Bye'){
                 $opp = new Player($match->otherPlayer($deck->playername));
                 $deckcell = "No Deck Found";

@@ -1,5 +1,6 @@
 <?php session_start();
-include 'lib.php';
+require_once 'lib.php';
+require_once 'lib_form_helper.php';
 
 print_header("Player Profile");
 
@@ -9,17 +10,11 @@ if(isset($_GET['player'])) {$playername = $_GET['player'];}
 if(isset($_POST['player'])) {$playername = $_POST['player'];}
 
 $profile_edit = 0;
-if (isset($_GET['profile_edit'])) {$profile_edit = $_GET['profile_edit'];}
-if (isset($_POST['profile_edit'])) {$profile_edit = $_POST['profile_edit'];}
+if (isset($_REQUEST['profile_edit'])) {$profile_edit = $_REQUEST['profile_edit'];}
 
-
-if (isset($_GET['email'])) {$email = $_GET['email'];}
-if (isset($_GET['email_public'])) {$email_public = $_GET['email_public'];}
-if (isset($_GET['time_zone'])) {$timezone = $_GET['time_zone'];}
-
-if (isset($_POST['email'])) {$email = $_POST['email'];}
-if (isset($_POST['email_public'])) {$email_public = $_POST['email_public'];}
-if (isset($_POST['time_zone'])) {$timezone = $_POST['time_zone'];}
+if (isset($_REQUEST['email'])) {$email = $_REQUEST['email'];}
+if (isset($_REQUEST['email_public'])) {$email_public = $_REQUEST['email_public'];}
+if (isset($_REQUEST['time_zone'])) {$timezone = $_REQUEST['time_zone'];}
 
 	searchForm($playername);
 ?> 
@@ -29,7 +24,7 @@ if (isset($_POST['time_zone'])) {$timezone = $_POST['time_zone'];}
 
 <?php
 
-content($profile_edit, $_GET);
+content($profile_edit);
 
 ?>
 
@@ -39,7 +34,7 @@ content($profile_edit, $_GET);
 <?php print_footer(); ?>
 
 <?php
-function content($profile_edit, $local) {
+function content($profile_edit) {
   global $playername; 
   if(chop($playername) != "") {
       $player = Player::findByName($playername); 
@@ -49,7 +44,7 @@ function content($profile_edit, $local) {
           } else if ($profile_edit == 2){
               $player->emailAddress = $_GET['email'];
               $player->emailPrivacy = $_GET['email_public'];
-              $player->timezone = $_GET['time_zone'];
+              $player->timezone = $_GET['timezone'];
               $player->save();
               profileTable($player);  
           } else {
@@ -120,7 +115,7 @@ function infoTable($player) {
   $hosted = $player->getHostedEventsCount();
   $lastevent = $player->getLastEventPlayed();
   $emailAddress = $player->emailAddress;
-  $timezone = $player->timezone;
+  // $timezone = $player->timezone;
   if($player->emailIsPublic() == 0 ){
       $emailprivacy = "Admin Viewable Only";
   } else {
@@ -163,7 +158,7 @@ function infoTable($player) {
   echo "<tr><td>Time Zone:</td>\n";
   echo "<td align=\"right\">{$player->time_zone()}</td></tr>\n";
   echo "<tr><td align=\"center\" colspan='2'><a href=\"profile.php?profile_edit=1\" class=\"borderless\">Edit Player Information</a></td></tr>\n";
-  //timeZoneDropdown($player->timezone);
+  //timeZoneDropMenu($player->timezone);
   echo "";
   echo "</table>";
 }
@@ -232,11 +227,13 @@ function bestDecksTable($player) {
 	echo "</table>\n";
 }
 
-function medalCell($medal, $n) {
-	if(is_null($n)) {$n = 0;}
+function medalCell($medal, $count) {
+	if(is_null($count)) {
+		$count = 0;
+	}
 	echo "<tr><td align=\"right\" width=130>";
         echo medalImgStr($medal);
-	echo  "<td>$n</td></tr>\n";
+	echo  "<td>$count</td></tr>\n";
 }
 
 function inlineMedal($medal) {
@@ -284,7 +281,7 @@ function editForm($timezone, $email, $public) {
 	echo "<div class=\"grid_10 prefix_1 suffix_1\"> <div class=\"box\" id=\"gatherling_simpleform\">\n";
 	echo "<form action=\"profile.php\" mode=\"POST\">\n";
 	echo "<center>Time Zone: ";
-	timeZoneDropdown($timezone);
+	timeZoneDropMenu($timezone);
 	echo "<br><label for=\"player\">Email Address: </label><input class=\"inputbox\" type=\"text\" name=\"email\" value=\"$email\" />";
 	echo "<br><input type=\"radio\" name=\"email_public\" value=\"1\"";
 	if ($public == 1){echo " checked ";};
@@ -299,128 +296,4 @@ function editForm($timezone, $email, $public) {
 	echo "</div> </div>\n";
 }
 
-function timeZoneDropdown($timezone) {
-	echo "<select name=\"time_zone\">";
-	echo "<option value=\"-12\"";
-	if ($timezone == -12){echo " selected=\"selected\"";}
-	echo ">[UTC - 12] Baker Island Time</option>";
-	echo "<option value=\"-11\"";
-	if ($timezone == -11){echo " selected=\"selected\"";}
-	echo ">[UTC - 11] Niue Time, Samoa Standard Time</option>";
-	echo "<option value=\"-10\"";
-	if ($timezone == -10){echo " selected=\"selected\"";};
-	echo ">[UTC - 10] Hawaii-Aleutian Standard Time, Cook Island Time</option>";
-	echo "<option value=\"-9.5\"";
-	if ($timezone == -9.5){echo " selected=\"selected\"";}
-	echo ">[UTC - 9:30] Marquesas Islands Time</option>";
-	echo "<option value=\"-9\"";
-	if ($timezone == -9){echo " selected=\"selected\"";}
-	echo ">[UTC - 9] Alaska Standard Time, Gambier Island Time</option>";
-	echo "<option value=\"-8\"";
-	if ($timezone == -8){echo " selected=\"selected\"";}
-	echo ">[UTC - 8] Pacific Standard Time</option>";
-	echo "<option value=\"-7\"";
-	if ($timezone == -7){echo " selected=\"selected\"";}
-	echo ">[UTC - 7] Mountain Standard Time</option>";
-	echo "<option value=\"-6\"";
-	if ($timezone == -6){echo " selected=\"selected\"";}
-	echo ">[UTC - 6] Central Standard Time</option>";
-	echo "<option value=\"-5\"";
-	if ($timezone == -5){echo " selected=\"selected\"";}
-	echo ">[UTC - 5] Eastern Standard Time</option>";
-	echo "<option value=\"-4.5\"";
-	if ($timezone == -4.5){echo " selected=\"selected\"";}
-	echo ">[UTC - 4:30] Venezuelan Standard Time</option>";
-	echo "<option value=\"-4\"";
-	if ($timezone == -4){echo " selected=\"selected\"";}
-	echo ">[UTC - 4] Atlantic Standard Time</option>";
-	echo "<option value=\"-3.5\"";
-	if ($timezone == -3.5){echo " selected=\"selected\"";}
-	echo ">[UTC - 3:30] Newfoundland Standard Time</option>";
-	echo "<option value=\"-3\"";
-	if ($timezone == -3){echo " selected=\"selected\"";}
-	echo ">[UTC - 3] Amazon Standard Time, Central Greenland Time</option>";
-	echo "<option value=\"-2\"";
-	if ($timezone == -2){echo " selected=\"selected\"";}
-	echo ">[UTC - 2] Fernando de Noronha Time, South Georgia &amp; the South Sandwich Islands Time</option>";
-	echo "<option value=\"-1\"";
-	if ($timezone == -1){echo " selected=\"selected\"";}
-	echo ">[UTC - 1] Azores Standard Time, Cape Verde Time, Eastern Greenland Time</option>";
-	echo "<option value=\"0\"";
-	if ($timezone == 0){echo " selected=\"selected\"";}
-	echo ">[UTC] Western European Time, Greenwich Mean Time</option>";
-	echo "<option value=\"1\"";
-	if ($timezone == 1){echo " selected=\"selected\"";}
-	echo ">[UTC + 1] Central European Time, West African Time</option>";
-	echo "<option value=\"2\"";
-	if ($timezone == 2){echo " selected=\"selected\"";}
-	echo ">[UTC + 2] Eastern European Time, Central African Time</option>";
-	echo "<option value=\"3\"";
-	if ($timezone == 3){echo " selected=\"selected\"";}
-	echo ">[UTC + 3] Moscow Standard Time, Eastern African Time</option>";
-	echo "<option value=\"3.5\"";
-	if ($timezone == 3.5){echo " selected=\"selected\"";}
-	echo ">[UTC + 3:30] Iran Standard Time</option>";
-	echo "<option value=\"4\"";
-	if ($timezone == 4){echo " selected=\"selected\"";}
-	echo ">[UTC + 4] Gulf Standard Time, Samara Standard Time</option>";
-	echo "<option value=\"4.5\"";
-	if ($timezone == 4.5){echo " selected=\"selected\"";}
-	echo ">[UTC + 4:30] Afghanistan Time</option>";
-	echo "<option value=\"5\"";
-	if ($timezone == 5){echo " selected=\"selected\"";}
-	echo ">[UTC + 5] Pakistan Standard Time, Yekaterinburg Standard Time</option>";
-	echo "<option value=\"5.5\"";
-	if ($timezone == 5.5){echo " selected=\"selected\"";}
-	echo ">[UTC + 5:30] Indian Standard Time, Sri Lanka Time</option>";
-	echo "<option value=\"5.75\"";
-	if ($timezone == 5.75){echo " selected=\"selected\"";}
-	echo ">[UTC + 5:45] Nepal Time</option>";
-	echo "<option value=\"6\"";
-	if ($timezone == 6){echo " selected=\"selected\"";}
-	echo ">[UTC + 6] Bangladesh Time, Bhutan Time, Novosibirsk Standard Time</option>";
-	echo "<option value=\"6.5\"";
-	if ($timezone == 6.5){echo " selected=\"selected\"";}
-	echo ">[UTC + 6:30] Cocos Islands Time, Myanmar Time</option>";
-	echo "<option value=\"7\"";
-	if ($timezone == 7){echo " selected=\"selected\"";}
-	echo ">[UTC + 7] Indochina Time, Krasnoyarsk Standard Time</option>";
-	echo "<option value=\"8\"";
-	if ($timezone == 8){echo " selected=\"selected\"";}
-	echo ">[UTC + 8] Chinese Standard Time, Australian Western Standard Time, Irkutsk Standard Time</option>";
-	echo "<option value=\"8.75\"";
-	if ($timezone == 8.75){echo " selected=\"selected\"";}
-	echo ">[UTC + 8:45] Southeastern Western Australia Standard Time</option>";
-	echo "<option value=\"9\"";
-	if ($timezone == 9){echo " selected=\"selected\"";}
-	echo ">[UTC + 9] Japan Standard Time, Korea Standard Time, Chita Standard Time</option>";
-	echo "<option value=\"9.5\"";
-	if ($timezone == 9.5){echo " selected=\"selected\"";}
-	echo ">[UTC + 9:30] Australian Central Standard Time</option>";
-	echo "<option value=\"10\"";
-	if ($timezone == 10){echo " selected=\"selected\"";}
-	echo ">[UTC + 10] Australian Eastern Standard Time, Vladivostok Standard Time</option>";
-	echo "<option value=\"10.5\"";
-	if ($timezone == 10.5){echo " selected=\"selected\"";}
-	echo ">[UTC + 10:30] Lord Howe Standard Time</option>";
-	echo "<option value=\"11\"";
-	if ($timezone == 11){echo " selected=\"selected\"";}
-	echo ">[UTC + 11] Solomon Island Time, Magadan Standard Time</option>";
-	echo "<option value=\"11.5\"";
-	if ($timezone == 11.5){echo " selected=\"selected\"";}
-	echo ">[UTC + 11:30] Norfolk Island Time</option>";
-	echo "<option value=\"12\"";
-	if ($timezone == 12){echo " selected=\"selected\"";}
-	echo ">[UTC + 12] New Zealand Time, Fiji Time, Kamchatka Standard Time</option>";
-	echo "<option value=\"12.75\"";
-	if ($timezone == 12.75){echo " selected=\"selected\"";}
-	echo ">[UTC + 12:45] Chatham Islands Time</option>";
-	echo "<option value=\"13\"";
-	if ($timezone == 13){echo " selected=\"selected\"";}
-	echo ">[UTC + 13] Tonga Time, Phoenix Islands Time</option>";
-	echo "<option value=\"14\"";
-	if ($timezone == 14){echo " selected=\"selected\"";}
-	echo ">[UTC + 14] Line Island Time</option>";
-	echo "</select>";
-}
 ?>
