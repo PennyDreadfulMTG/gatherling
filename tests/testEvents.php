@@ -34,7 +34,11 @@ final class EventsTest extends TestCase
             $number = 1;
         }
         else {
-            $number = $recentEvents[0]->number + 1;
+            $event = $recentEvents[0];
+            do {
+                $number = $event->number + 1;
+                $event = $event->findNext();
+            } while ($event != null);
         }
         $name = sprintf("%s %d.%02d", $series->name, 1, $number);
         
@@ -42,7 +46,7 @@ final class EventsTest extends TestCase
         $event->start = date('Y-m-d H:00:00');
         $event->name = $name;
 
-        $event->format = "Standard";
+        $event->format = "Modern";
         $event->host = NULL;
         $event->cohost = NULL;
         $event->kvalue = 16;
@@ -81,7 +85,28 @@ final class EventsTest extends TestCase
         // No players have filled out decklists.
         $this->assertEquals(count($event->getRegisteredEntries()), 0);
         
+        $deck = insertDeck("testplayer0", $event->name, "60 Plains", "");
+        $this->assertEmpty($deck->errors);
+        $deck = insertDeck("testplayer1", $event->name, "60 Island", "");
+        $this->assertEmpty($deck->errors);
+        $deck = insertDeck("testplayer2", $event->name, "40 Swamp", "");
+        $this->assertNotEmpty($deck->errors);
+        $deck = insertDeck("testplayer3", $event->name, "60 Swamp\n100 Relentless Rats", "15 Swamp");
+        $this->assertEmpty($deck->errors);
+        $deck = insertDeck("testplayer4", $event->name, "20 Mountain\n20 Forest\n\n\n\n\n\n\n\n\n\n\n\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n\n\n", "");
+        $this->assertEmpty($deck->errors);
+        $this->assertEquals(count($event->getRegisteredEntries()), 4);
+        return $event;
     }
+}
 
+function insertDeck($player, $eventName, $main, $side) {
+    $deck = new Deck(0);
+    $deck->playername = $player;
+    $deck->eventname = $eventName;
+    $deck->maindeck_cards = parseCardsWithQuantity($main);
+    $deck->sideboard_cards = parseCardsWithQuantity($side);
+    $deck->save();
+    return $deck;
 }
 ?>

@@ -497,7 +497,7 @@ class Deck {
     if ($this->archetype != "Unclassified" && !in_array($this->archetype, Deck::getArchetypes())) {
       $this->archetype = "Unclassified";
     }
-    
+
     // had to put this here since the constructor doesn't run entirely when a new deck is created 
     if (!is_null($this->eventname) && is_null($this->format))  {
          $this->format = Database::single_result_single_param("SELECT format 
@@ -505,7 +505,7 @@ class Deck {
                                                                WHERE name = ?", "s", $this->eventname);
      } 
     $format = new Format($this->format); 
-    
+
     if ($this->id == 0) { 
       // New record.  Set up the decks entry and the Entry.
       $stmt = $db->prepare("INSERT INTO decks (archetype, name, playername, format, tribe, notes, created_date) values(?, ?, ?, ?, ?, ?, NOW())");
@@ -744,14 +744,14 @@ class Deck {
       $stmt->bind_param("ddd", $this->id, $cardar['id'], $amt); 
       $stmt->execute();
       $newsideboard[$cardar['name']] = $amt;
-      }
+    }
 
     $this->sideboard_cards = $newsideboard;
-    
+
     // needs to be after card parsing so it can work with new decks. 
-    
+
     $this->getDeckColors(); // gets the deck colors
-    
+
     $stmt = $db->prepare("UPDATE decks SET notes = ?, deck_colors = ? WHERE id = ?");
     if (!$stmt) {
       echo $db->error;

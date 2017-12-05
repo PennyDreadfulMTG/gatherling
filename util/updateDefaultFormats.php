@@ -48,6 +48,7 @@ function LoadFormat($format){
     $active_format->name = $format;
     $active_format->type = "System";
     $active_format->series_name = "System";
+    $active_format->min_main_cards_allowed = 60;
     $success = $active_format->save();
   }
   return new Format($format);

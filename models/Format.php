@@ -61,15 +61,15 @@ class Format {
             $this->tribal = 0;
             $this->pure = 0;
             $this->underdog = 0;
-            $this->allow_commons = 0;
-            $this->allow_uncommons = 0;
-            $this->allow_rares = 0;
-            $this->allow_mythics = 0; 
-            $this->allow_timeshifted = 0;
+            $this->allow_commons = 1;
+            $this->allow_uncommons = 1;
+            $this->allow_rares = 1;
+            $this->allow_mythics = 1; 
+            $this->allow_timeshifted = 1;
             $this->min_main_cards_allowed = 0;
-            $this->max_main_cards_allowed = 0;
+            $this->max_main_cards_allowed = 2000;
             $this->min_side_cards_allowed = 0;
-            $this->max_side_cards_allowed = 0;
+            $this->max_side_cards_allowed = 15;
             $this->new = true;
             return;
         }
