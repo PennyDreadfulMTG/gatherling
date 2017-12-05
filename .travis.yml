@@ -9,6 +9,6 @@ script:
   - mysql -e 'CREATE DATABASE gatherling DEFAULT CHARACTER SET latin1;'
   - cp config.php.travisci config.php
   - php admin/db-upgrade.php
-  - php util/insertCardsets.php M10
+  - php util/insertcardset.php M10
   - php util/updateDefaultFormats.php
   - phpunit tests/*.php
