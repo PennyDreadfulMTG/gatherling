@@ -1345,4 +1345,12 @@ function getEntriesByMedal() {
             $stmt->close();
         }
     }
+
+  public function startEvent() {
+    $entries = $this->getRegisteredEntries();
+    Standings::startEvent($entries, $this->name);
+    $this->pairCurrentRound();
+    $this->active = 1;
+    $this->save();
+  }
 }

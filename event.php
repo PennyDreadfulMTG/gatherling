@@ -174,48 +174,44 @@ function content() {
       authFailed();
     } else {
       if (mode_is("Start Event")) {
-          $event->active = 1;
-          $event->save();
-          $entries = $event->getRegisteredEntries();
-          Standings::startEvent($entries, $event->name );
-          $event->pairCurrentRound();
+          $event->startEvent();
       }
 
-      if (mode_is("Recalculate Standings")) {
+      else if (mode_is("Recalculate Standings")) {
           $structure = $event->mainstruct;
           $event->recalculateScores($structure);
           Standings::updateStandings($event->name, $event->mainid, 1);
       }
 
-      if (mode_is("End Current League Round")) {
+      else if (mode_is("End Current League Round")) {
           $event->recalculateScores("League");
           Standings::updateStandings($event->name, $event->mainid, 1);
           $event->pairCurrentRound();
       }
 
-      if (mode_is("Reset Event")) {
+      else if (mode_is("Reset Event")) {
           $event->resetEvent();
       }
 
-      if (mode_is("Delete Matches and Re-Pair Round")) {
+      else if (mode_is("Delete Matches and Re-Pair Round")) {
           $event->repairRound();
       }
 
-      if (mode_is("Reactivate Event")) {
+      else if (mode_is("Reactivate Event")) {
           $event->active = 1;
           $event->finalized = 0;
           $event->save();
       }
 
-      if (mode_is("Assign Medals")) {
+      else if (mode_is("Assign Medals")) {
           $event->assignMedals();
       }
 
-      if (mode_is("Set Current Round to")) {
+      else if (mode_is("Set Current Round to")) {
           $event->repairRound();
       }
 
-      if (mode_is("Parse DCI Files")) {
+      else if (mode_is("Parse DCI Files")) {
         dciInput();
       } elseif (mode_is("Parse DCIv3 Files")) {
         dci3Input();

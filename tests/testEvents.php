@@ -95,7 +95,23 @@ final class EventsTest extends TestCase
         $this->assertEmpty($deck->errors);
         $deck = insertDeck("testplayer4", $event->name, "20 Mountain\n20 Forest\n\n\n\n\n\n\n\n\n\n\n\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n\n\n", "");
         $this->assertEmpty($deck->errors);
+        // 4 Valid decks (0, 1, 2, and 4), 1 invalid deck (3), and 3 not submitted decks.
         $this->assertEquals(count($event->getRegisteredEntries()), 4);
+        return $event;
+    }
+
+    /**
+     * @depends testRegistration
+     */
+    public function testEventStart($event) {
+        $this->assertEquals($event->active, 0);
+        $this->assertEquals($event->current_round, 0);
+        
+        $event->startEvent();
+
+        $event = new Event($event->name);
+        $this->assertEquals($event->active, 1);
+        $this->assertEquals($event->current_round, 1);
         return $event;
     }
 }

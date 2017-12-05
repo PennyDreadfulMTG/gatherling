@@ -28,7 +28,7 @@ function json_event($event) {
   $series = new Series($event->series);
   $json = array();
   // Event Properties
-  $json = populate($json, $event, array('series', 'season', 'number', 'host', 'active', 'finalized', 'current_round'));
+  $json = populate($json, $event, array('series', 'season', 'number', 'host', 'cohost', 'active', 'finalized', 'current_round'));
 
   // Series Properties
   $json = populate($json, $series, array('mtgo_room'));
