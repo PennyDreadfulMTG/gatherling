@@ -86,15 +86,15 @@ final class EventsTest extends TestCase
         $this->assertEquals(count($event->getRegisteredEntries()), 0);
         
         $deck = insertDeck("testplayer0", $event->name, "60 Plains", "");
-        $this->assertEmpty($deck->errors);
+        $this->assertEmpty($deck->errors, json_encode($deck->errors));
         $deck = insertDeck("testplayer1", $event->name, "60 Island", "");
-        $this->assertEmpty($deck->errors);
+        $this->assertEmpty($deck->errors, json_encode($deck->errors));
         $deck = insertDeck("testplayer2", $event->name, "40 Swamp", "");
-        $this->assertNotEmpty($deck->errors);
+        $this->assertNotEmpty($deck->errors, "No errors for a 40 card deck.");
         $deck = insertDeck("testplayer3", $event->name, "60 Swamp\n100 Relentless Rats", "15 Swamp");
-        $this->assertEmpty($deck->errors);
+        $this->assertEmpty($deck->errors, json_encode($deck->errors));
         $deck = insertDeck("testplayer4", $event->name, "20 Mountain\n20 Forest\n\n\n\n\n\n\n\n\n\n\n\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n\n\n", "");
-        $this->assertEmpty($deck->errors);
+        $this->assertEmpty($deck->errors, json_encode($deck->errors));
         // 4 Valid decks (0, 1, 2, and 4), 1 invalid deck (3), and 3 not submitted decks.
         $this->assertEquals(count($event->getRegisteredEntries()), 4);
         return $event;
