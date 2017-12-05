@@ -177,7 +177,7 @@ function updatePennyDreadful()
       info("Can't add {$card} to PD Legal list, it is not in the database.");
       $set = findSetForCard($card);
       addSet($set, 4);
-      return; 
+      return 0;
     }
 
     if ($i++ == 200) {
