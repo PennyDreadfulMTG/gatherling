@@ -61,7 +61,7 @@ function printAdminCPIntroduction() {
     echo "Welcome to the Admin CP! <br />";
 }
 
-function printNoAdmin() { 
+function printNoAdmin() {
   global $hasError;
   global $errormsg;
   $hasError = true;

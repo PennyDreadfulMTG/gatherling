@@ -106,15 +106,6 @@ function mode_is($str) {
 
 function content() {
   $event = NULL;
-  // Prevent surplufous warnings.   TODO: fix the code so we don't try to access these if unset.
-    if(!isset($_GET['action'])) {$_GET['action'] = '';}
-    if (strcmp($_GET['action'], "undrop") == 0) {
-        $entry = new Entry ($_GET['name'],$_GET['player']);
-        $event = new Event ($_GET['event']);
-            if($entry->deck AND $entry->deck->isValid()) {
-                $event->undropPlayer($_GET['player']);
-            }
-    }
   
   if(!isset($_POST['mode'])) {$_POST['mode'] = '';}
   if(!isset($_GET['mode'])) {$_GET['mode'] = '';}
@@ -123,7 +114,19 @@ function content() {
 
   if(isset($_GET['name'])) {
     $event = new Event($_GET['name']);
-    eventForm($event);    
+    if (!$event->authCheck(Player::loginName())) {
+      authFailed();
+      return;
+    }
+    if (isset($_GET['action'])) {
+      if (strcmp($_GET['action'], "undrop") == 0) {
+        $entry = new Entry ($_GET['name'],$_GET['player']);
+        if($entry->deck AND $entry->deck->isValid()) {
+          $event->undropPlayer($_GET['player']);
+        }
+      }
+    }
+    eventForm($event);
   } elseif (mode_is("Create New Event")) {
     $series = new Series($_POST['series']);
     if (($series->authCheck(Player::loginName())) && isset($_POST['insert'])) {
