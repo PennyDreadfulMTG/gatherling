@@ -22,6 +22,7 @@ $player = Player::findByName($_GET['username']);
 
 if (!$player) {
   echo "<UaReply>You're not registered on {$CONFIG['site_name']}!</UaReply>";
+  return;
 }
 
 $player->setChallenge($challenge);
