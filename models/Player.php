@@ -11,6 +11,7 @@ class Player {
   public $emailAddress;
   public $emailPrivacy;
   public $timezone;
+  public $verified;
 
   function __construct($name) {
     if ($name == "") {
@@ -19,6 +20,7 @@ class Player {
       $this->super = 0;
       $this->pkmember = 0;
       $this->rememberMe = 0;
+      $this->verified = 0;
       return;
     }
     $database = Database::getConnection();
