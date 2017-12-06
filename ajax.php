@@ -132,6 +132,9 @@ switch ($action){
       $result[$event->name] = json_event($event);
     }
     break;
+  case "api_version":
+    $result['version'] = 2;
+    break;
   default:
     $result['error'] = "Unknown action '{$action}'";
 }

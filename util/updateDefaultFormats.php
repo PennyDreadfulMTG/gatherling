@@ -22,13 +22,16 @@ updateModern();
 set_time_limit(0);
 updatePennyDreadful();
 
-function info($text){
-  if (PHP_SAPI == "cli"){
-    echo $text . "\n";
+function info($text, $newline = true){
+  if ($newline) {
+    if (PHP_SAPI == "cli"){
+      echo "\n";
+    }
+    else {
+      echo "<br/>";
+    }
   }
-  else{
-    echo $text . "<br/>";
-  }
+  echo $text;
 }
 
 function addSet($set) {
@@ -154,13 +157,7 @@ function updatePennyDreadful()
   }
   $i = 0;
   foreach ($fmt->card_legallist as $card) {
-    $remove = true;
-    foreach ($legal_cards as $legal_card) {
-      if (strcasecmp($card, $legal_card) == 0) {  
-        $remove = false;
-      }
-    }
-    if ($remove){
+    if (!in_array($card, $legal_cards, true)) {
       $fmt->deleteCardFromLegallist($card);
       info("{$card} is no longer PD Legal.");      
     }
@@ -168,20 +165,24 @@ function updatePennyDreadful()
     if ($i++ == 200) {
       set_time_limit(0);
       $i = 0;
-      info('.');
+      info('.', false);
     }
   }
+  info(' ', false);
   foreach ($legal_cards as $card) {
-    $success = $fmt->insertCardIntoLegallist($card);
-    if(!$success) {
-      info("Can't add {$card} to PD Legal list, it is not in the database.");
-      $set = findSetForCard($card);
-      addSet($set, 4);
-      return 0;
+    if (!in_array($card, $fmt->card_legallist)) {
+      $success = $fmt->insertCardIntoLegallist($card);
+      if(!$success) {
+        info("Can't add {$card} to PD Legal list, it is not in the database.");
+        $set = findSetForCard($card);
+        addSet($set, 4);
+        return 0;
+      }
     }
-
+    
     if ($i++ == 200) {
       set_time_limit(0);
+      info('.', false);
       $i = 0;
     }
   }
