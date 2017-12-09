@@ -65,23 +65,31 @@ if ($player == NULL) {
         $result = "Your challenge is wrong.  Get a new one by sending the message 'ua pauperkrew' to infobot on MTGO!";
       }
     }else if ($_POST['action'] == 'finalize_result') {
-    // Match::saveReport($_POST['report'], $_POST['match_id'], $_POST['player']); // MERGE CONFLICT
-       // write results to matches table
-        if(!isset($_POST['drop'])) {$_POST['drop'] = "N";}
-        if($_POST['drop'] == 'Y') {
+      // write results to matches table
+      if (!isset($_POST['drop'])) {
+        $_POST['drop'] = "N";
+      }
+      if ($_POST['drop'] == 'Y') {
             $match = new Match($_POST['match_id']);
             $eventname = $match->getEventNamebyMatchid();
             $event = new Event($eventname);
             $event->dropPlayer($player->name);
-        }
-        if ($_POST['opponent'] != '0'){
+      }
+      if ($_POST['opponent'] != '0'){
             $test = 0;
             $event = new Event($_POST['event']);
             $new_match_id = $event->addPairing($_POST['player'], $_POST['opponent'], $event->current_round, "P");
             Match::saveReport($_POST['report'], $new_match_id, "a");
-        }else{
-        Match::saveReport($_POST['report'], $_POST['match_id'], $_POST['player']);
+      }
+      else {
+        $match = new Match($_POST['match_id']);
+        if ($match->playerLetter($player->name) ==  $_POST['player']) {
+          Match::saveReport($_POST['report'], $_POST['match_id'], $_POST['player']);
         }
+        else {
+          $result = "Results appear to be tampered.  Please only submit your own results.";
+        }
+      }
 
     }else if ($_POST['action'] == 'drop') {
       // drop player from event
@@ -136,7 +144,7 @@ if ($player == NULL) {
   }  elseif ($dispmode == 'drop_form') {
       print_dropConfirm($_GET['event'], $player);
   } else {
-    print_mainPlayerCP($player);
+    print_mainPlayerCP($player, $result);
   }
 }
 ?>
@@ -422,10 +430,13 @@ function setPlayerIgnores() {
   }
 }
 
-function print_mainPlayerCP($player) {
+function print_mainPlayerCP($player, $result) {
   $upper = strtoupper(Player::loginName());
   echo "<div class=\"alpha grid_5\">\n";
   echo "<div id=\"gatherling_lefthalf\">\n";
+  if ($result) {
+    echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";    
+  }
   print_conditionalAllDecks();
   print_noDeckTable(0);  
   print_recentDeckTable();
@@ -734,7 +745,7 @@ function print_currentMatchTable($Leagues) {
                     echo "(Report Submitted)";
                 }else{
                     if ($match->player_reportable_check() == True){
-                    echo "<a href=\"player.php?mode=submit_result&match_id=".$match->id."&player=".$player_number ."\">(Report Result)</a>";
+                        echo "<a href=\"player.php?mode=submit_result&match_id=".$match->id."&player=".$player_number ."\">(Report Result)</a>";
                     } else {
                         echo "Please report results in the report channel for this event";
                     }

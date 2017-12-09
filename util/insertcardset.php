@@ -64,8 +64,6 @@ switch ($settype) {
 }
 $releasedate = $data->releaseDate;
 
-//$set = "Put cardset name here";
-//$file = fopen("Put spoiler text file name here.txt", "r");
 $card = array();
 $rarity = "Common";
 $cardsparsed = 0;
