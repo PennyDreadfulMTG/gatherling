@@ -480,9 +480,7 @@ function eventForm($event = NULL, $forcenew = false) {
     echo "<tr><th>Format</th><td>";
     formatDropMenu($event->format);
     echo "</td></tr>";
-    echo "<tr><th>K-Value</th><td>";
     kValueDropMenu($event->kvalue);
-    echo "</td></tr>";
     echo "<tr><th>Host/Cohost</th><td>";
     stringField("host", $event->host, 20);
     echo "&nbsp;/&nbsp;";
@@ -1030,15 +1028,9 @@ function medalList($event) {
 
 function kValueDropMenu($kvalue) {
   if(strcmp($kvalue, "") == 0) {$kvalue = -1;}
-  $names = array(8 => "Casual (Alt Event)", 16 => "Regular (less than 24 players)", 
+  $names = array("" => "- K-Value -", 8 => "Casual (Alt Event)", 16 => "Regular (less than 24 players)", 
                  24 => "Large (24 or more players)", 32 => "Championship");
-  echo "<select class=\"inputbox\" name=\"kvalue\">";
-  echo "<option value=\"\">- K-Value -</option>";
-  for($k = 8; $k <= 32; $k+=8) {
-    $selStr = ($kvalue == $k) ? "selected" : "";
-    echo "<option value=\"$k\" $selStr>{$names[$k]}</option>";
-  }
-  echo "</select>";
+  print_select_input("K-Value", 'kvalue', $names, $kvalue);
 }
 
 function monthDropMenu($month) {

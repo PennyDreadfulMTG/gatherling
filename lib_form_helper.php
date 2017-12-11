@@ -3,7 +3,8 @@
 require_once 'lib.php';
 
 function print_text_input($label, $name, $value = "", $len = 0, $reminder_text = null) {
-  echo "<tr><th>{$label}</th><td><input class=\"inputbox\" type=\"text\" name=\"{$name}\" value=\"{$value}\""; 
+  echo "<tr><th><label for='$name'>{$label}</label></th>";
+  echo "<td><input class=\"inputbox\" type=\"text\" name=\"{$name}\" id='$name' value=\"{$value}\""; 
   if ($len > 0) {
     echo " size=\"$len\"";
   }
@@ -15,7 +16,8 @@ function print_text_input($label, $name, $value = "", $len = 0, $reminder_text =
 }
 
 function print_checkbox_input($label, $name, $checked = false, $reminder_text = null) {
-  echo "<tr><th>{$label}</th><td><input type=\"checkbox\" name=\"{$name}\" value=\"1\"";
+  echo "<tr><th><label for='$name'>{$label}</label></th>";
+  echo "<td><input type=\"checkbox\" name=\"{$name}\" id='$name' value=\"1\"";
   if ($checked){
     echo " checked=\"yes\"";
   }
@@ -27,12 +29,13 @@ function print_checkbox_input($label, $name, $checked = false, $reminder_text = 
 }
 
 function print_password_input($label, $name, $value = "") {
-  echo "<tr><th>{$label}</th><td><input type=\"password\" name=\"{$name}\" value=\"{$value}\" /> </td></tr>";
+  echo "<tr><th><label for='$name'>{$label}</label></th>";
+  echo "<td><input type=\"password\" name=\"{$name}\" id='$name' value=\"{$value}\" /> </td></tr>";
 }
 
 function print_file_input($label, $name) {
-  echo "<tr><th>{$label}</th><td>";
-  echo "<input type=\"file\" name=\"{$name}\" /></td></tr>";
+  echo "<tr><th><label for='$name'>{$label}</label></th>";
+  echo "<input type=\"file\" name=\"{$name}\" id='$name' /></td></tr>";
 }
 
 function print_submit($label, $name = "action") {
@@ -40,7 +43,7 @@ function print_submit($label, $name = "action") {
 }
 
 function print_select($name, $options = array(), $selected = NULL) {
-  echo "<select name=\"{$name}\">";
+  echo "<select class='inputbox' name=\"{$name}\" id='$name'>";
   if (!is_assoc($options)) {
     $new_options = array();
     foreach ($options as $option) {
@@ -58,7 +61,7 @@ function print_select($name, $options = array(), $selected = NULL) {
 }
 
 function print_select_input($label, $name, $options, $selected = NULL) {
-  echo "<tr><th>{$label}</th><td>";
+  echo "<tr><th><label for='$name'>{$label}</label></th><td>";
   print_select($name, $options, $selected);
   echo "</td></tr>";
 }

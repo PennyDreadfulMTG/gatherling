@@ -65,6 +65,10 @@ class Player {
   }
 
   public static function checkPassword($username, $password) {
+    if ($username == '') {
+      return false;
+    }
+
     $db = Database::getConnection();
     $stmt = $db->prepare("SELECT password FROM players WHERE name = ?");
     $stmt->bind_param("s", $username);
@@ -79,7 +83,7 @@ class Player {
 
     return strcmp($srvpass, $hashpwd) == 0;
   }
-  
+
   public static function getClientIPAddress() {
       // this is used with the rememberMe feature to keep players logged in
       // Test if it is a shared client
