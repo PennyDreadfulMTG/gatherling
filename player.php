@@ -64,12 +64,13 @@ if ($player == NULL) {
       } else {
         $result = "Your challenge is wrong.  Get a new one by sending the message 'ua pauperkrew' to infobot on MTGO!";
       }
-    }else if ($_POST['action'] == 'finalize_result') {
+    } else if ($_POST['action'] == 'finalize_result') {
       // write results to matches table
-      if (!isset($_POST['drop'])) {
-        $_POST['drop'] = "N";
+      $drop = false;
+      if (isset($_POST['drop'])) {
+        $drop = $_POST['drop']  == 'Y';
       }
-      if ($_POST['drop'] == 'Y') {
+      if ($drop) {
             $match = new Match($_POST['match_id']);
             $eventname = $match->getEventNamebyMatchid();
             $event = new Event($eventname);
@@ -95,56 +96,86 @@ if ($player == NULL) {
       // drop player from event
       $event = new Event($_POST['event']);
       $event->dropPlayer($player->name);
-  }
+    }
   }
   // Handle modes
   $dispmode = 'playercp';
-  if (isset($_GET['mode'])) {
-    $dispmode = $_GET['mode'];
+  if (isset($_REQUEST['mode'])) {
+    $dispmode = $_REQUEST['mode'];
   }
-  if (isset($_POST['mode'])) {
-    $dispmode = $_POST['mode'];
-  }
-  //* redo this later as switch rather than elseifs, for now just kludge on
-  if ($dispmode == 'alldecks') {
+  
+  switch ($dispmode) {
+    case 'alldecks':
     print_allContainer();
-  } elseif ($dispmode == 'allratings') {
-    if(!isset($_GET['format'])) {$_GET['format'] = "Composite";}
+    break;
+
+    case 'allratings':
+    $format = "Composite";
+    if (isset($_GET['format'])) {
+        $format = $_GET['format'];
+    }
     print_ratingsTable(Player::loginName());
     echo "<br /><br />";
-    print_ratingHistoryForm($_GET['format']);
+    print_ratingHistoryForm($format);
     echo "<br />";
-    print_ratingsHistory($_GET['format']);
-  } elseif ($dispmode == 'allmatches') {
+    print_ratingsHistory($format);
+    break;
+
+    case 'allmatches':
     print_allMatchForm($player);
     print_matchTable($player);
-  } elseif ($dispmode == 'Filter Matches') {
+    break;
+
+    case 'Filter Matches':
     print_allMatchForm($player);
     print_matchTable($player);
-  } elseif ($dispmode == 'changepass') {
+    break;
+
+    case 'changepass':
     print_changePassForm($player, $result);
-  } elseif ($dispmode == 'edit_email') {
+    break;
+
+    case 'edit_email':
     print_editEmailForm($player, $result);
-  } elseif ($dispmode == 'change_timezone') {
+    break;
+
+    case 'change_timezone':
     print_editTimeZoneForm($player, $result);
-  }  elseif ($dispmode == 'submit_result') {
-      print_submit_resultForm($_GET['player'], $_GET['match_id']);
-  }  elseif ($dispmode == 'submit_league_result') {
-      League_print_submit_resultForm($_GET['event'], $_GET['round'], $player, $_GET['subevent']);
-      //print_submit_resultForm($_GET['player'], $_GET['match_id']);
-  }  elseif ($dispmode == 'verify_result') {
-      print_verify_resultForm($_POST['report'], $_POST['match_id'],$_POST['player'],(isset($_POST['drop']))?"Y":"N", 0, 0);
-  }  elseif ($dispmode == 'verify_league_result') {
-      print_verify_resultForm($_POST['report'], $_POST['match_id'],$_POST['player'], "N", $_POST['opponent'],$_POST['event']);
-  }  elseif ($dispmode == 'standings') {
-    Standings::printEventStandings($_GET['event'],Player::loginName());
-  }  elseif ($dispmode == 'verifymtgo') {
-      // print_verifyMtgoForm($player, $result);
-      print_manualverifyMtgoForm();
-  }  elseif ($dispmode == 'drop_form') {
-      print_dropConfirm($_GET['event'], $player);
-  } else {
+    break;
+
+    case 'submit_result':
+    print_submit_resultForm($_GET['player'], $_GET['match_id']);
+    break;
+
+    case 'submit_league_result':
+    League_print_submit_resultForm($_GET['event'], $_GET['round'], $player, $_GET['subevent']);
+    break;
+
+    case 'verify_result':
+    $drop = (isset($_POST['drop'])) ? "Y" : "N";
+    print_verify_resultForm($_POST['report'], $_POST['match_id'], $_POST['player'], $drop, 0, 0);
+    break;
+
+    // todo: Fold this into the above case
+    case 'verify_league_result':
+    print_verify_resultForm($_POST['report'], $_POST['match_id'], $_POST['player'], "N", $_POST['opponent'], $_POST['event']);
+    break;
+
+    case 'standings':
+    Standings::printEventStandings($_GET['event'], Player::loginName());
+    break;
+
+    case 'verifymtgo':
+    print_manualverifyMtgoForm();
+    break;
+
+    case 'drop_form':
+    print_dropConfirm($_GET['event'], $player);
+    break;
+
+    default:
     print_mainPlayerCP($player, $result);
+    break;
   }
 }
 ?>
