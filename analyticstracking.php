@@ -1,7 +1,15 @@
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-37926034-1']);
+<?php
+  include_once "lib.php";
+  global $CONFIG;
+  $account = '';
+  if (array_key_exists('analytics_account', $CONFIG))
+    $account = $CONFIG['analytics_account'];
+  echo "_gaq.push(['_setAccount', '$account']);";
+?>
+
   _gaq.push(['_trackPageview']);
 
   (function() {

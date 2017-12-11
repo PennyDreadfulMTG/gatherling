@@ -12,5 +12,6 @@ $CONFIG['base_url'] = "http://localhost/gatherling/";
 $CONFIG['site_name'] = "Gatherling.com";
 $CONFIG['style'] = "Chandra";
 $CONFIG['calendar_description'] = "Gatherling Calendar";
+$CONFIG['analytics_account'] = '';
 
 $CONFIG['infobot_passkey'] = "";
