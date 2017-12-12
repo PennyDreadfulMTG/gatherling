@@ -71,16 +71,17 @@ function do_page() {
     
     $view = "settings";
     
-    if (isset($_GET['view']) && ($_GET['view'] != "")) {$view = $_GET['view'];}
-    if (isset($_POST['view'])) {$view = $_POST['view'];}
-    
+    if (isset($_REQUEST['view']) && ($_REQUEST['view'] != "")) {
+        $view = $_REQUEST['view'];
+    }
+
     if (!isset($_REQUEST['format'])) {
-        formatCPMenu(new Format(""), $seriesName);
         printLoadFormat($seriesName);
+        formatCPMenu(new Format(""), $seriesName);
         return;
     }
     $format = $_REQUEST['format'];
-    
+
     if(Format::doesFormatExist($format)) {
         $active_format = new Format($format);
     } else {
