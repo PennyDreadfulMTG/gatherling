@@ -460,8 +460,9 @@ function formatsDropMenu($formatType="", $seriesName = "System") {
 }
 
 function printOrganizerSelect($player_series, $selected) {
+  $page = $_SERVER['PHP_SELF'];
   echo "<center>";
-  echo "<form action=\"seriescp.php\" method=\"get\">";
+  echo "<form action=\"$page\" method=\"get\">";
   echo "<select class=\"inputbox\" name=\"series\">";
   foreach ($player_series as $series) {
     echo "<option value=\"{$series}\"";

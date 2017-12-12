@@ -20,7 +20,7 @@ updateStandard();
 set_time_limit(0);
 updateModern();
 set_time_limit(0);
-updatePennyDreadful();
+updatePennyDreadful("Penny Dreadful", "http://pdmtgo.com/legal_cards.txt");
 
 function info($text, $newline = true){
   if ($newline) {
@@ -123,7 +123,7 @@ function updateModern(){
   $stmt = $db->prepare("SELECT name, type, released FROM cardsets WHERE `type` != 'extra' ORDER BY `cardsets`.`released` ASC");
   $stmt->execute();
   $stmt->bind_result($setName, $setType, $setDate);
-  
+
   $sets = array();
   while ($stmt->fetch()) {
     $sets[] = array($setName, $setType, $setDate);
@@ -145,12 +145,12 @@ function updateModern(){
   }
 }
 
-function updatePennyDreadful()
+function updatePennyDreadful($name, $url)
 {
   info("Updating PD...");  
-  $fmt = LoadFormat("Penny Dreadful");
+  $fmt = LoadFormat();
 
-  $legal_cards = parseCards(file_get_contents("http://pdmtgo.com/legal_cards.txt"));
+  $legal_cards = parseCards(file_get_contents($url));
   if (!$legal_cards){
     info("Unable to fetch legal_cards.txt");
     return;
@@ -159,9 +159,9 @@ function updatePennyDreadful()
   foreach ($fmt->card_legallist as $card) {
     if (!in_array($card, $legal_cards, true)) {
       $fmt->deleteCardFromLegallist($card);
-      info("{$card} is no longer PD Legal.");      
+      info("{$card} is no longer PD Legal.");
     }
-    
+
     if ($i++ == 200) {
       set_time_limit(0);
       $i = 0;
@@ -179,7 +179,7 @@ function updatePennyDreadful()
         return 0;
       }
     }
-    
+
     if ($i++ == 200) {
       set_time_limit(0);
       info('.', false);

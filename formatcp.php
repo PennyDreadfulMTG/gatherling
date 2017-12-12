@@ -24,11 +24,12 @@ print_header("Format Control Panel");
 
 function do_page() {
     $player = Player::getSessionPlayer();
-    if ($player->isSuper()) {
-        $seriesName = "System";
-    }
-    else if ($player->isOrganizer()){
+    if ($player->isOrganizer() || $player->isSuper()) {
         $player_series = Player::getSessionPlayer()->organizersSeries();
+        if ($player->isSuper()) {
+            array_unshift($player_series, "System");
+        }
+
         if (isset($_REQUEST['series']))
         {
             $seriesName = $_REQUEST['series'];
@@ -170,11 +171,13 @@ function handleActions($seriesName) {
             $cards = parseCards($_POST['addlegalcard']);
             if(count($cards) > 0) {
                 foreach($cards as $card) {
-                    $success = $format->insertCardIntoLegallist($card);
-                    if(!$success) {
-                        $hasError = true;
-                        $errormsg .= "Can't add {$card} to Legal list, it is either not in the database or on the ban list.";
-                        return; 
+                    if (!in_array($card, $fmt->card_legallist)) {
+                        $success = $format->insertCardIntoLegallist($card);
+                        if(!$success) {
+                            $hasError = true;
+                            $errormsg .= "Can't add {$card} to Legal list, it is either not in the database or on the ban list.";
+                            return; 
+                        }
                     }
                 }
             }
