@@ -172,7 +172,7 @@ function handleActions($seriesName) {
             $cards = parseCards($_POST['addlegalcard']);
             if(count($cards) > 0) {
                 foreach($cards as $card) {
-                    if (!in_array($card, $fmt->card_legallist)) {
+                    if (!in_array($card, $format->card_legallist)) {
                         $success = $format->insertCardIntoLegallist($card);
                         if(!$success) {
                             $hasError = true;
@@ -183,7 +183,7 @@ function handleActions($seriesName) {
                 }
             }
         }
-        
+
         if (isset($_POST['dellegalcards'])) {
             $dellegalCards = $_POST['dellegalcards'];
             foreach($dellegalCards as $cardName){

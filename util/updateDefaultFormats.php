@@ -147,7 +147,7 @@ function updateModern(){
 
 function updatePennyDreadful($name, $url)
 {
-  info("Updating PD...");  
+  info("Updating $name...");  
   $fmt = LoadFormat();
 
   $legal_cards = parseCards(file_get_contents($url));
@@ -159,7 +159,7 @@ function updatePennyDreadful($name, $url)
   foreach ($fmt->card_legallist as $card) {
     if (!in_array($card, $legal_cards, true)) {
       $fmt->deleteCardFromLegallist($card);
-      info("{$card} is no longer PD Legal.");
+      info("{$card} is no longer $name Legal.");
     }
 
     if ($i++ == 200) {
@@ -173,7 +173,7 @@ function updatePennyDreadful($name, $url)
     if (!in_array($card, $fmt->card_legallist)) {
       $success = $fmt->insertCardIntoLegallist($card);
       if(!$success) {
-        info("Can't add {$card} to PD Legal list, it is not in the database.");
+        info("Can't add {$card} to $name Legal list, it is not in the database.");
         $set = findSetForCard($card);
         addSet($set, 4);
         return 0;
