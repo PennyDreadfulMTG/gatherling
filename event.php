@@ -96,21 +96,21 @@ if (Player::isLoggedIn()) {
 <?php
 
 function mode_is($str) {
-  global $_GET, $_POST;
   $mode = NULL;
-  if (isset($_GET['mode']) and $_GET['mode'] != '') { $mode = $_GET['mode']; }
-  if (isset($_POST['mode']) and $_POST['mode'] != '') { $mode = $_POST['mode']; }
+  if (isset($_REQUEST['mode']) and $_REQUEST['mode'] != '') { $mode = $_REQUEST['mode']; }
 
   return (bool)(strcmp($mode, $str) == 0);
 }
 
 function content() {
   $event = NULL;
-  
-  if(!isset($_POST['mode'])) {$_POST['mode'] = '';}
-  if(!isset($_GET['mode'])) {$_GET['mode'] = '';}
+
   if(!isset($_GET['series'])) {$_GET['series'] = '';}
   if(!isset($_GET['season'])) {$_GET['season'] = '';}
+
+  if (isset($_GET['event']) && !isset($_GET['name'])) {
+    $_GET['name'] = $_GET['event'];
+  }
 
   if(isset($_GET['name'])) {
     $event = new Event($_GET['name']);
@@ -152,7 +152,7 @@ function content() {
     $newevent->private_decks = $oldevent->private_decks;
     $newevent->prereg_allowed = $oldevent->prereg_allowed;
     $newevent->threadurl = $oldevent->threadurl;
-    
+
     $newevent->series = $oldevent->series;
     $newevent->host = $oldevent->host;
     $newevent->cohost = $oldevent->cohost;

@@ -537,7 +537,11 @@ function print_recentDeckTable() {
       foreach ($decks as $deck) {
         echo "<tr><td>" . medalImgStr($deck->medal) . "</td>\n";
         echo "<td>" . $deck->linkTo() . "</td>\n";
-        echo "<td><a href=\"eventreport.php?event={$deck->eventname}\">{$deck->eventname}</a></a></td>\n";
+        $targetUrl = 'eventreport';
+        if ($event->isHost($player->name)) {
+          $targetUrl = "event";
+        }
+        echo "<td><a href=\"${targetUrl}.php?event={$deck->eventname}\">{$deck->eventname}</a></a></td>\n";
         echo "<td align=\"right\">" . $deck->recordString() . "</td></tr>\n";
       }
   }
@@ -608,7 +612,11 @@ function print_ActiveEvents(){
     $numberOfLeagues = 0;
     foreach ($events as $event)
     {
-        echo "<tr><td><a href=\"eventreport.php?event={$event->name}\">{$event->name}</a>";
+        $targetUrl = 'eventreport';
+        if ($event->isHost($player->name)) {
+          $targetUrl = "event";
+        }
+        echo "<tr><td><a href=\"{$targetUrl}.php?event={$event->name}\">{$event->name}</a>";
         $series = new Series($event->series);
         if ($series->mtgo_room) {
           echo " <pre style=\"cursor:help;\" title=\"To join a Chat room, use the Chat menu, or type /join #$series->mtgo_room into your game chat.\" >MTGO room #$series->mtgo_room</pre>";
@@ -699,7 +707,11 @@ function print_allDeckTable() {
     if(!$deck->isValid()) {print $rstar;}
     echo "</td>\n";
     $event = $deck->getEvent();
-    echo "<td align=\"right\"><a href=\"eventreport.php?event={$event->name}\">{$event->name}</a></td>\n";
+    $targetUrl = 'eventreport';
+    if ($event->isHost($player->name)) {
+      $targetUrl = "event";
+    }
+    echo "<td align=\"right\"><a href=\"{$targetUrl}.php?event={$event->name}\">{$event->name}</a></td>\n";
     echo "</td></tr>\n";
   }
   echo "</table>\n";
