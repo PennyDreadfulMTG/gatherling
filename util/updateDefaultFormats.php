@@ -148,7 +148,7 @@ function updateModern(){
 function updatePennyDreadful($name, $url)
 {
   info("Updating $name...");  
-  $fmt = LoadFormat();
+  $fmt = LoadFormat($name);
 
   $legal_cards = parseCards(file_get_contents($url));
   if (!$legal_cards){
