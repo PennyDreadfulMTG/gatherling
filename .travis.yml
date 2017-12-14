@@ -1,14 +1,19 @@
 language: php
 php:
-  - '5.6'
-  - '7.1'
-  - nightly
+- '5.6'
+- '7.1'
+- nightly
 services:
-  - mysql
+- mysql
 script:
-  - mysql -e 'CREATE DATABASE gatherling DEFAULT CHARACTER SET latin1;'
-  - cp config.php.travisci config.php
-  - php admin/db-upgrade.php
-  - php util/insertcardset.php M10
-  - php util/updateDefaultFormats.php
-  - phpunit tests/*.php
+- mysql -e 'CREATE DATABASE gatherling DEFAULT CHARACTER SET latin1;'
+- cp config.php.travisci config.php
+- php admin/db-upgrade.php
+- php util/insertcardset.php M10
+- php util/updateDefaultFormats.php
+- phpunit tests/*.php
+after_success: "./merge.sh $USERNAME $PASSWORD"
+env:
+  global:
+  - secure: VW/KjZhrrQgs6hJlCNoWjwpZX/2/xAB/DEu0G5uP9e8C9z+8Bf1svT9O+1HiJ6MrRH2zipV3QDsu0UppR9+zPpA4PGkFZOJycbcxDSXaakpttUl/JJL9scwyESyyqM1ZDS219pqjSgS0XYIxum4bxlKDhMppNcG33RJt+K59W8MaFDwXW0DKpTlKza9AxEgkDBzJu7z7y37i0Z2cTWik5ogiNJID+Z2Sg3WG4aE0GgFOa/e1HWwNpIO9XX4SnYNkbF9MZieyQ4sgItXuQd+QN7hb6PhJisTrNsD45W382GZkrkwfPDzUrKJOm8OLNCcSAUqU1tvJTuWEfkrOuyr9pTlhOszqcEEfVInzcXYcc4Euk0R/jrqsWJbcGIlaEVilf4PxmzMsEDcA1b/QH5b5TisYtZD0UDIfnPJPQbkSAS15fDrYwP5xuJt1KlVbZc+qCLZIKig4XkSvsbWT8SElt7f6pnIO1G/LnPDmyDSDHkTOsCtwBxVwBo18xJI0DSPZpShYDLqkxe1E+EV9AfPPWPuhnY4K/yD93Vmf6aG6c091kwAp9m/hcLc+amtmSCpdNpVwVt/mtnMDDh72gGqbRSlHEyHjMphTquIAoG0SDGqPZXVRBWfwzi6wXiYTMcyE3p3wVwLKCF0cKXiHjYXq0B0WDNqog1pM/jG3FKfnvco=
+  - secure: j+9yEgvywdNDy2pQ2MDWbxk7vfzGjaqLCqvGRvGPn4qhIBn3PKYRZE07OIWjApxrcC2kZRt2VZhh0pExskjdLQlk5gHNqH3CUkl15GDs9+AGnnr1ZOQ4YJeFxp95UfoocmrPjt8uQ9yj/NpGD4IKhA8nNeLlfh+fq01yLxxDftoPheKxiZvFxv/Taaf14o0Rjj1W0jBy9xY3Lb8+Dr+kQK/0gMHVpIni0qseP0akI78WfsYJa5CdXGoISVpLIAGRIe5NCKRYlz9qhDhO83OuWbV+Y5gXBs52sT+zxkSG+1HvXu/ZzZqDEgcwOy0c2KBmGIx6u3o7Nb9y3ImW2MNvPjwgDLQm6GRH+/KvvlG+Mwu10cHkvCExoQCttOp3JjmgHOkQxflr3IXVw6V2if9NT5lrbBNPx0iFYKw/AedxfGuAKfGUPNW4kvCoIn050LJ55Sqqmch8bozfbOzQEiXNY2fmxvfz58RGPllLRnsYB5PsJzESv9DWuhBIjIdH2dJiH1JYaTtuvW7PB2WW+5q40TxRsTxLHLOOsUtTfhP7MyMEM09LRksxrFLYsh6MU9dd4+diVSf191GctIu28b8Vu1SAlKzBiVO1zPA3wkIxaR3QMUuxWpfhh/rSm3HRVD6R1CpwxDce9VVY5GcOvFm8ZgUYB2jitlsYjpf0O0w0bSI=
