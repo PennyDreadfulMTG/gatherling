@@ -14,13 +14,17 @@ TO_BRANCH="gatherling.pennydreadfulmagic.com"
 
 # Get the current branch
 export PAGER=cat
-CURRENT_BRANCH=$(git log -n 1 --pretty=%d HEAD | cut -d"," -f3 | cut -d" " -f2 | cut -d")" -f1)
+CURRENT_BRANCH="$TRAVIS_BRANCH"
+if [ -z "$TRAVIS_BRANCH" ] 
+then
+    CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+fi
 echo "current branch is '$CURRENT_BRANCH'"
 
 # Create the URL to push merge to 
 URL=$(git remote -v | head -n1 | cut -f2 | cut -d" " -f1)
 echo "Repo url is $URL"
-PUSH_URL="https://$GIT_USER:$GIT_PASS@${URL:6}"
+PUSH_URL="https://$GIT_USER:$GIT_PASS@${URL:8}"
 
 if [ "$CURRENT_BRANCH" = "$FROM_BRANCH" ] ; then
     # Checkout the dev branch
