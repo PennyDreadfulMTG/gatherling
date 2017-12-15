@@ -781,7 +781,7 @@ function printUnverifiedPlayerCell($match, $playername) {
   if ($dropped) {
     echo "<td>{$drop_icon}";
   } else {
-    echo "<td><input type=\"checkbox\" name=\"dropplayer[]\" value=\"{$playername}\">";
+    echo "<td><input type=\"checkbox\" name=\"dropplayer[]\" value=\"{$playername}\" title='Drop $playername from the event'>";
   }
   if (($match->getPlayerWins($playername) > 0) || ($match->getPlayerLosses($playername) > 0)) {
     if ($match->getPlayerWins($playername) > $match->getPlayerLosses($playername)) {
@@ -853,12 +853,12 @@ function matchList($event) {
     $star = ($match->timing > 1) ? "*" : "";
     if ($printrnd != $thisround) {
       $thisround = $printrnd;
-      $ezypaste = "/me Pairings for Round {$thisround}<br />";
       $playersInMatches = array();
       $extraRoundTitle = "";
       if ($match->timing > 1) {
         $extraRoundTitle = "(Finals Round {$match->round})";
       }
+      $ezypaste = "/me Pairings for Round {$thisround} $extraRoundTitle<br />";
       echo "<tr><td class=\"box\" align=\"center\" colspan=\"7\" style=\"background-color: Grey;color: Black\"> <a name=\"round-{$thisround}\"></a>ROUND {$thisround} {$extraRoundTitle} </td></tr>";
     }
     echo "<tr><td align=\"center\">$printrnd$star</td>";
@@ -893,7 +893,7 @@ function matchList($event) {
       }
     }
     echo "<td align=\"center\">";
-    echo "<input type=\"checkbox\" name=\"matchdelete[]\" ";
+    echo "<input type=\"checkbox\" name=\"matchdelete[]\" title='Delete this pairing' ";
     echo "value=\"{$match->id}\"></td></tr>";
   }
   $ezypaste .= "/me Good luck everyone!<br />";
