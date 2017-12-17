@@ -452,6 +452,17 @@ function getEntriesByMedal() {
     return $entries;
   }
 
+  function dropInvalidEntries() {
+    $players = $this->getPlayers();
+    $entries = array();
+    foreach ($players as $player) {
+      $entry = new Entry($this->name, $player);
+      if (is_null($entry->deck) || !$entry->deck->isValid()) {
+        $this->removeEntry($player);
+      }
+    }
+  }
+
   function removeEntry($playername) {   
     $entry = new Entry($this->name, $playername);  
     return $entry->removeEntry();
@@ -1352,6 +1363,7 @@ function getEntriesByMedal() {
   public function startEvent() {
     $entries = $this->getRegisteredEntries();
     Standings::startEvent($entries, $this->name);
+    $this->dropInvalidEntries();
     $this->pairCurrentRound();
     $this->active = 1;
     $this->save();

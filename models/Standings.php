@@ -289,7 +289,7 @@ class Standings
 
     static function startEvent($entries,$event_name) {
         foreach ($entries as $entry) {
-            $standing = new Standings($event_name, $entry->player->name );
+            $standing = new Standings($event_name, $entry->player->name);
             $standing->save();
         }
     }
