@@ -71,18 +71,23 @@ if ($player == NULL) {
         $drop = $_POST['drop']  == 'Y';
       }
       if ($drop) {
-            $match = new Match($_POST['match_id']);
-            $eventname = $match->getEventNamebyMatchid();
-            $event = new Event($eventname);
-            $event->dropPlayer($player->name);
+        $match = new Match($_POST['match_id']);
+        $eventname = $match->getEventNamebyMatchid();
+        $event = new Event($eventname);
+        $event->dropPlayer($player->name);
       }
-      if ($_POST['opponent'] != '0'){
-            $test = 0;
-            $event = new Event($_POST['event']);
-            $new_match_id = $event->addPairing($_POST['player'], $_POST['opponent'], $event->current_round, "P");
-            Match::saveReport($_POST['report'], $new_match_id, "a");
+      if ($_POST['opponent'] != '0') {
+        if ($match->type == "League") {
+          $event = new Event($_POST['event']);
+          $new_match_id = $event->addPairing($_POST['player'], $_POST['opponent'], $event->current_round, "P");
+          Match::saveReport($_POST['report'], $new_match_id, "a");
+        }
+        else {
+          $result = "This is not a league event!";
+        }
       }
       else {
+        // Non-league matches
         $match = new Match($_POST['match_id']);
         if ($match->playerLetter($player->name) ==  $_POST['player']) {
           Match::saveReport($_POST['report'], $_POST['match_id'], $_POST['player']);
@@ -91,8 +96,8 @@ if ($player == NULL) {
           $result = "Results appear to be tampered.  Please only submit your own results.";
         }
       }
-
-    }else if ($_POST['action'] == 'drop') {
+    }
+    else if ($_POST['action'] == 'drop') {
       // drop player from event
       $event = new Event($_POST['event']);
       $event->dropPlayer($player->name);
