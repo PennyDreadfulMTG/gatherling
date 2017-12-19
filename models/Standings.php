@@ -219,7 +219,7 @@ class Standings
         $db = Database::getConnection();
         $stmt = $db->prepare("SELECT playera, playerb FROM matches where subevent = ? AND result <> 'P' AND (playera = ? OR playerb = ?)");
         $stmt->bind_param("dss", $subevent, $this->player, $this->player);
-        
+
         $stmt->execute();
         $stmt->bind_result($playera, $playerb);
         $playernames = array();
@@ -244,22 +244,22 @@ class Standings
     }
 
     function League_getAvailable_Opponents($subevent, $round) {
-        $opponentsAlreadyFaced = array();            
+        $opponentsAlreadyFaced = array();
         $playernames = array();
         $allPlayers = array();
         $opponent_names = array();
-        
+
         if ($round == "0") {
             return null;
         } else {
             $db = Database::getConnection();
             $stmt = $db->prepare("SELECT playera, playerb FROM matches where subevent = ? AND (playera = ? OR playerb = ?) AND round = ?");
             $stmt->bind_param("dssd", $subevent, $this->player, $this->player, $round);
-        
+
             //Find existing opponents
             $stmt->execute();
             $stmt->bind_result($playera, $playerb);
-                
+
             while ($stmt->fetch()) {
                 if ($playera == $this->player){
                     $opponent_name = $playerb;
@@ -274,12 +274,12 @@ class Standings
         }
 
         // Get all opponents who haven't dropped from event and exclude myself
-        $allPlayers = Database::list_result_double_param("SELECT player 
-                                                          FROM standings 
-                                                          WHERE event = ? 
-                                                          AND active = 1 
+        $allPlayers = Database::list_result_double_param("SELECT player
+                                                          FROM standings
+                                                          WHERE event = ?
+                                                          AND active = 1
                                                           AND player <> ?", "ss", $this->event, $this->player);
-        
+
         // prune all opponents by opponents I have already played
         $opponent_names = array_diff($allPlayers, $opponentsAlreadyFaced);
         return $opponent_names;

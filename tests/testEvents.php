@@ -12,14 +12,14 @@ final class EventsTest extends TestCase
         if (!Series::exists("Test")) {
             $series = new Series("");
             $series->name = "Test";
-            $series->active = true; 
+            $series->active = true;
             $series->start_time = "00:00" . ":00";
             $series->start_day = "Friday";
             $series->prereg_default = true;
             $series->pkonly_default = false;
             $series->save();
         }
-        
+
         $series = new Series("Test");
         $this->assertEquals($series->name, "Test");
         return $series;
@@ -41,7 +41,7 @@ final class EventsTest extends TestCase
             } while ($event != null);
         }
         $name = sprintf("%s %d.%02d", $series->name, 1, $number);
-        
+
         $event = new Event("");
         $event->start = date('Y-m-d H:00:00');
         $event->name = $name;
@@ -84,7 +84,7 @@ final class EventsTest extends TestCase
         $this->assertEquals(count($event->getEntries()), 8);
         // No players have filled out decklists.
         $this->assertEquals(count($event->getRegisteredEntries()), 0);
-        
+
         $deck = insertDeck("testplayer0", $event->name, "60 Plains", "");
         $this->assertEmpty($deck->errors, json_encode($deck->errors));
         $deck = insertDeck("testplayer1", $event->name, "60 Island", "");
@@ -106,7 +106,7 @@ final class EventsTest extends TestCase
     public function testEventStart($event) {
         $this->assertEquals($event->active, 0);
         $this->assertEquals($event->current_round, 0);
-        
+
         $event->startEvent();
 
         $event = new Event($event->name);

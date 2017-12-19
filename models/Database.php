@@ -1,22 +1,22 @@
-<?php 
+<?php
 
 class Database {
 
-  static public function getConnection() { 
+  static public function getConnection() {
     static $instance;
 
-    if (!isset($instance)) { 
-      global $CONFIG; 
+    if (!isset($instance)) {
+      global $CONFIG;
       $instance = new mysqli($CONFIG['db_hostname'], $CONFIG['db_username'],
                              $CONFIG['db_password'], $CONFIG['db_database']);
         if (mysqli_connect_errno()) {
             echo(mysqli_connect_error());
             die('failed to connect to db');
         }
-    } 
+    }
 
     return $instance;
-  } 
+  }
 
   static public function getPDOConnection() {
     static $pdo_instance;
@@ -42,7 +42,7 @@ class Database {
 
   // Does PHP have an arguments[] property that would allow processing of any number of parameters?
   // could I just make $paramType and $param arrays that would allow a single function to handle any number
-  // of parameters? Going to have to play with this. 
+  // of parameters? Going to have to play with this.
   static public function single_result_single_param($sql, $paramType, $param) {
     $db = Database::getConnection();
     $stmt = $db->prepare($sql);
@@ -95,7 +95,7 @@ class Database {
 
     return $list;
   }
-  
+
   static public function list_result_double_param($sql, $paramTypes, $param1, $param2) {
     $db = Database::getConnection();
     $stmt = $db->prepare($sql);
@@ -120,16 +120,16 @@ class Database {
     $stmt->close();
     return $result;
   }
-  
+
   static public function db_query() {
       $params = func_get_args();
       $query = array_shift($params);
       $paramspec = array_shift($params);
-      
+
       $db = Database::getConnection();
       $stmt = $db->prepare($query);
       $stmt or die($db->error);
-      
+
       if (count($params) == 1) {
           list($one) = $params;
           $stmt->bind_param($paramspec, $one);
@@ -167,14 +167,14 @@ class Database {
   }
 
   static public function db_query_single() {
-      $params = func_get_args();      
+      $params = func_get_args();
       $query = array_shift($params);
       $paramspec = array_shift($params);
- 
+
       $db = Database::getConnection();
       $stmt = $db->prepare($query);
       $stmt or die($db->error);
-  
+
       if (count($params) == 1) {
           list($one) = $params;
           $stmt->bind_param($paramspec, $one);
@@ -211,5 +211,5 @@ class Database {
       $stmt->fetch();
       $stmt->close();
       return $result;
-  }  
+  }
 }

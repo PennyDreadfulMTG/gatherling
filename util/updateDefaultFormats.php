@@ -101,7 +101,7 @@ function updateStandard(){
   foreach ($fmt->getLegalCardsets() as $setName) {
     if (!in_array($setName, $expected, true)){
       $fmt->deleteLegalCardSet($setName);
-      info("{$setName} is no longer Standard Legal.");      
+      info("{$setName} is no longer Standard Legal.");
     }
   }
 
@@ -147,7 +147,7 @@ function updateModern(){
 
 function updatePennyDreadful($name, $url)
 {
-  info("Updating $name...");  
+  info("Updating $name...");
   $fmt = LoadFormat($name);
 
   $legal_cards = parseCards(file_get_contents($url));

@@ -25,7 +25,7 @@ class SetScraper {
         usort($sets, 'sortSets');
 
         $dropdown = array();
-        
+
         $knowncodes = Database::list_result("SELECT code FROM cardsets;");
 
         foreach ($sets as $s) {

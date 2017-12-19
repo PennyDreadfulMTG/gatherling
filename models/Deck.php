@@ -3,7 +3,7 @@
 class Deck {
   public $id;
   public $name;
-  public $archetype; 
+  public $archetype;
   public $notes;
 
   public $sideboard_cards = array(); // Has many sideboard_cards through deckcontents (issideboard = 1)
@@ -26,39 +26,39 @@ class Deck {
 
   public $new; // is new
 
-  function __construct($id) { 
-    if ($id == 0) { 
+  function __construct($id) {
+    if ($id == 0) {
       $this->id = 0;
       $this->new = true;
       return;
-    } 
-    $database = Database::getConnection(); 
-    $stmt = $database->prepare("SELECT name, playername, archetype, format, tribe, notes, deck_hash, 
+    }
+    $database = Database::getConnection();
+    $stmt = $database->prepare("SELECT name, playername, archetype, format, tribe, notes, deck_hash,
                                        sideboard_hash, whole_hash, created_date, deck_colors
                                 FROM decks d
                                 WHERE id = ?");
     $stmt->bind_param("d", $id);
     $stmt->execute();
-    $stmt->bind_result($this->name, $this->playername, $this->archetype, $this->format, $this->tribe, $this->notes, 
+    $stmt->bind_result($this->name, $this->playername, $this->archetype, $this->format, $this->tribe, $this->notes,
                         $this->deck_hash, $this->sideboard_hash, $this->whole_hash, $this->created_date, $this->deck_color_str);
 
-    if ($stmt->fetch() == NULL) { 
+    if ($stmt->fetch() == NULL) {
       $this->id = 0;
       $this->new = true;
       return;
     }
 
     $this->new = false;
-    $this->id = $id; 
+    $this->id = $id;
 
     $stmt->close();
-    
+
     // trys to grab the playername if it was not in the decks table
     if(empty($this->playername)) {
-        $stmt = $database->prepare("SELECT p.name 
+        $stmt = $database->prepare("SELECT p.name
                             FROM players p, entries e, decks d
-                            WHERE p.name = e.player 
-                            AND d.id = e.deck 
+                            WHERE p.name = e.player
+                            AND d.id = e.deck
                             AND d.id = ?");
         $stmt->bind_param("d", $id);
         $stmt->execute();
@@ -74,19 +74,19 @@ class Deck {
         $stmt->execute();
         $stmt->bind_result($this->created_date);
         $stmt->fetch();
-        $stmt->close();       
+        $stmt->close();
     }
-    
-    
+
+
     // Retrieve cards.
     $stmt = $database->prepare("SELECT c.name, dc.qty, dc.issideboard
                                 FROM cards c, deckcontents dc, decks d
-                                WHERE d.id = dc.deck 
-                                AND c.id = dc.card 
+                                WHERE d.id = dc.deck
+                                AND c.id = dc.card
                                 AND d.id = ?
-                                ORDER BY c.name"); 
+                                ORDER BY c.name");
     $stmt->bind_param("d", $id);
-    $stmt->execute(); 
+    $stmt->execute();
     $stmt->bind_result($cardname, $cardqty, $isside);
 
     $this->maindeck_cardcount = 0;
@@ -103,13 +103,13 @@ class Deck {
 
     $stmt->close();
 
-    // Retrieve event 
+    // Retrieve event
     $stmt = $database->prepare("SELECT e.name
                                 FROM events e, entries n, decks d
-                                WHERE d.id = ? and d.id = n.deck 
-                                AND n.event = e.name"); 
+                                WHERE d.id = ? and d.id = n.deck
+                                AND n.event = e.name");
     $stmt->bind_param("d", $id);
-    $stmt->execute(); 
+    $stmt->execute();
     $stmt->bind_result($this->eventname);
     $stmt->fetch();
     $stmt->close();
@@ -121,8 +121,8 @@ class Deck {
      // Find subevent id     - ignores sub-subevents like finals, which have the same name but different subevent id
      if (!is_null($this->eventname)) {
          $this->format = Database::single_result_single_param("SELECT  events.format
-                                                               FROM entries INNER JOIN events 
-                                                               ON entries.event = events.name  
+                                                               FROM entries INNER JOIN events
+                                                               ON entries.event = events.name
                                                                WHERE entries.deck = ?", "d", $this->id);
          $this->subeventid = Database::single_result_single_param("SELECT id
                                                                    FROM subevents
@@ -131,10 +131,10 @@ class Deck {
          $this->format = "";
          $this->subeventid = NULL;
      }
-    
-    // Retrieve medal 
+
+    // Retrieve medal
     $stmt = $database->prepare("SELECT n.medal
-                                FROM entries n 
+                                FROM entries n
                                 WHERE n.deck = ?");
     $stmt->bind_param("d", $id);
     $stmt->execute();
@@ -142,20 +142,20 @@ class Deck {
     $stmt->fetch();
     $stmt->close();
     if ($this->medal == NULL) { $this->medal = "dot"; }
-    
+
     // Retrieve errors
-    $stmt = $database->prepare("Select error 
-                                FROM deckerrors 
+    $stmt = $database->prepare("Select error
+                                FROM deckerrors
                                 WHERE deck = ?");
     $stmt->bind_param("d", $this->id);
     $stmt->execute();
-    $stmt->bind_result($error);  
+    $stmt->bind_result($error);
 
     while ($stmt->fetch()) {
         $this->errors[] = $error;
     }
     $stmt->close();
-    
+
     // if there isnt a color string get one, must execute
     // after card retrival
     if(empty($this->deck_color_str)) {  $this->getDeckColors(); }
@@ -168,60 +168,60 @@ class Deck {
 
   function getEntry() {
     return new Entry($this->eventname, $this->playername);
-  } 
+  }
 
   function recordString() {
     if ($this->playername == NULL) { return "?-?"; }
     return $this->getEntry()->recordString();
-  } 
+  }
 
   function getColorImages() {
     $count = $this->getColorCounts();
-    $str = ""; 
-    foreach ($count as $color => $n) { 
-      if ($n > 0) { 
+    $str = "";
+    foreach ($count as $color => $n) {
+      if ($n > 0) {
         $str = $str . image_tag("mana{$color}.png");
-      } 
-    }  
+      }
+    }
     return $str;
-  } 
+  }
 
   function getDeckColors() {
       // First, get a list of casting costs, CC is used so we can determine
-      // if its an artifact 
-      $db = Database::getConnection(); 
-              $stmt = $db->prepare("SELECT isw 
+      // if its an artifact
+      $db = Database::getConnection();
+              $stmt = $db->prepare("SELECT isw
                           AS w, isg
                           AS g, isu
-                          AS u, isr 
-                          AS r, isb 
+                          AS u, isr
+                          AS r, isb
                           AS b, cost
-                          FROM cards c, deckcontents d 
-                          WHERE d.deck = ? 
-                          AND c.id = d.card 
-                          AND d.issideboard != 1"); 
+                          FROM cards c, deckcontents d
+                          WHERE d.deck = ?
+                          AND c.id = d.card
+                          AND d.issideboard != 1");
     $stmt->bind_param("d", $this->id);
-    $stmt->execute(); 
+    $stmt->execute();
     $stmt->bind_result($color["w"], $color["g"], $color["u"], $color["r"], $color["b"], $color['cost']);
 
     $str= array();
-    
+
     // loop through results
     while ($stmt->fetch()) {
         $hasColor=NULL;
-        
-        // if statments to capture color of card, sets hasColor 
-        // to true as long as any color is found.  Broken into multiple 
+
+        // if statments to capture color of card, sets hasColor
+        // to true as long as any color is found.  Broken into multiple
         // if's to capture cards with more then one color
-        if ($color["u"]) { $str['u'] = 'u'; $hasColor=true; } 
-        if ($color['g']) { $str['g'] = 'g'; $hasColor=true; } 
-        if ($color['b']) { $str['b'] = 'b'; $hasColor=true; } 
-        if ($color['r']) { $str['r'] = 'r'; $hasColor=true; } 
+        if ($color["u"]) { $str['u'] = 'u'; $hasColor=true; }
+        if ($color['g']) { $str['g'] = 'g'; $hasColor=true; }
+        if ($color['b']) { $str['b'] = 'b'; $hasColor=true; }
+        if ($color['r']) { $str['r'] = 'r'; $hasColor=true; }
         if ($color["w"]) { $str['w'] = 'w'; $hasColor=true; }
-       
+
     }
-    
-    // alpabetize and sets the $deck_color_str 
+
+    // alpabetize and sets the $deck_color_str
     // this should be changed to MTG Color wheel sort order of WUBRG
     ksort($str);
     $this->deck_color_str = "";
@@ -231,20 +231,20 @@ class Deck {
     $stmt->close();
   }
 
-  function getColorCounts() { 
-    $db = Database::getConnection(); 
-    $stmt = $db->prepare("SELECT sum(isw*d.qty) 
-                          AS w, sum(isg*d.qty) 
-                          AS g, sum(isu*d.qty) 
-                          AS u, sum(isr*d.qty) 
-                          AS r, sum(isb*d.qty) 
+  function getColorCounts() {
+    $db = Database::getConnection();
+    $stmt = $db->prepare("SELECT sum(isw*d.qty)
+                          AS w, sum(isg*d.qty)
+                          AS g, sum(isu*d.qty)
+                          AS u, sum(isr*d.qty)
+                          AS r, sum(isb*d.qty)
                           AS b
-                          FROM cards c, deckcontents d 
-                          WHERE d.deck = ? 
-                          AND c.id = d.card 
-                          AND d.issideboard != 1"); 
+                          FROM cards c, deckcontents d
+                          WHERE d.deck = ?
+                          AND c.id = d.card
+                          AND d.issideboard != 1");
     $stmt->bind_param("d", $this->id);
-    $stmt->execute(); 
+    $stmt->execute();
     $count = array();
     $stmt->bind_result($count["w"], $count["g"], $count["u"], $count["r"], $count["b"]);
     $stmt->fetch();
@@ -254,86 +254,86 @@ class Deck {
   }
 
   // TODO: Find a way to list the inline id as a param
-  function getCastingCosts() { 
-    $db = Database::getConnection(); 
-    $result = $db->query("SELECT convertedcost 
-                          AS cc, sum(qty) 
+  function getCastingCosts() {
+    $db = Database::getConnection();
+    $result = $db->query("SELECT convertedcost
+                          AS cc, sum(qty)
                           AS s
-                          FROM cards c, deckcontents d 
-                          WHERE d.deck = {$this->id} 
-                          AND c.id = d.card 
+                          FROM cards c, deckcontents d
+                          WHERE d.deck = {$this->id}
+                          AND c.id = d.card
                           AND d.issideboard = 0
-                          GROUP BY c.convertedcost 
-                          HAVING cc > 0"); 
+                          GROUP BY c.convertedcost
+                          HAVING cc > 0");
 
-    $convertedcosts = array(); 
-    while ($res = $result->fetch_assoc()) { 
-      $convertedcosts[$res['cc']] = $res['s']; 
-    } 
+    $convertedcosts = array();
+    while ($res = $result->fetch_assoc()) {
+      $convertedcosts[$res['cc']] = $res['s'];
+    }
 
-    return $convertedcosts; 
-  } 
+    return $convertedcosts;
+  }
 
-  function getEvent() { 
-    return new Event($this->eventname); 
-  } 
+  function getEvent() {
+    return new Event($this->eventname);
+  }
 
   function getCardCount($cards) {
     $cardCount = 0;
-    
+
     foreach($cards as $card => $amt) {
         $cardCount += $amt;
     }
     return $cardCount;
 }
 
-  function getCreatureCards() { 
-    $db = Database::getConnection(); 
+  function getCreatureCards() {
+    $db = Database::getConnection();
     $result = $db->query("SELECT dc.qty, c.name
-                          FROM deckcontents dc, cards c 
-                          WHERE c.id = dc.card 
-                          AND dc.deck = {$this->id} 
-                          AND c.type 
-                          LIKE '%Creature%' 
-                          AND dc.issideboard = 0 
-                          ORDER BY dc.qty 
-                          DESC, c.name"); 
+                          FROM deckcontents dc, cards c
+                          WHERE c.id = dc.card
+                          AND dc.deck = {$this->id}
+                          AND c.type
+                          LIKE '%Creature%'
+                          AND dc.issideboard = 0
+                          ORDER BY dc.qty
+                          DESC, c.name");
 
-    $cards = array(); 
-    while ($res = $result->fetch_assoc()) { 
+    $cards = array();
+    while ($res = $result->fetch_assoc()) {
       $cards[$res['name']] = $res['qty'];
-    } 
+    }
 
     return $cards;
-  } 
-  
+  }
+
   // find a way to list the id as a param
-  function getLandCards() { 
-    $db = Database::getConnection(); 
+  function getLandCards() {
+    $db = Database::getConnection();
     $result = $db->query("SELECT dc.qty, c.name
-                          FROM deckcontents dc, cards c 
-                          WHERE c.id = dc.card 
-                          AND dc.deck = {$this->id} 
-                          AND c.type 
-                          LIKE '%Land%' 
-                          AND dc.issideboard = 0 
-                          ORDER BY dc.qty 
-                          DESC, c.name"); 
+                          FROM deckcontents dc, cards c
+                          WHERE c.id = dc.card
+                          AND dc.deck = {$this->id}
+                          AND c.type
+                          LIKE '%Land%'
+                          AND dc.issideboard = 0
+                          ORDER BY dc.qty
+                          DESC, c.name");
 
-    $cards = array(); 
-    while ($res = $result->fetch_assoc()) { 
+    $cards = array();
+    while ($res = $result->fetch_assoc()) {
       $cards[$res['name']] = $res['qty'];
-    } 
+    }
 
     return $cards;
-  } 
+  }
 
   function getErrors() {
       $db = Database::getConnection();
       $stmt = $db->prepare("Select error FROM deckerrors WHERE deck = ?");
       $stmt->bind_param("d", $this->id);
       $stmt->execute();
-      $stmt->bind_result($error);  
+      $stmt->bind_result($error);
 
       $errors = array();
       while ($stmt->fetch()) {
@@ -341,42 +341,42 @@ class Deck {
       }
       $stmt->close();
       return $errors;
-  }    
+  }
 
   // find a way to list the id as a param
-  function getOtherCards() { 
-    $db = Database::getConnection(); 
+  function getOtherCards() {
+    $db = Database::getConnection();
     $result = $db->query("SELECT dc.qty, c.name
-                         FROM deckcontents dc, cards c 
-                         WHERE c.id = dc.card 
-                         AND dc.deck = {$this->id} 
-                         AND c.type 
-                         NOT LIKE '%Creature%' 
-                         AND c.type 
+                         FROM deckcontents dc, cards c
+                         WHERE c.id = dc.card
+                         AND dc.deck = {$this->id}
+                         AND c.type
+                         NOT LIKE '%Creature%'
+                         AND c.type
                          NOT LIKE '%Land%'
-                         AND dc.issideboard = 0 
-                         ORDER BY dc.qty 
-                         DESC, c.name"); 
+                         AND dc.issideboard = 0
+                         ORDER BY dc.qty
+                         DESC, c.name");
 
-    $cards = array(); 
-    while ($res = $result->fetch_assoc()) { 
+    $cards = array();
+    while ($res = $result->fetch_assoc()) {
       $cards[$res['name']] = $res['qty'];
-    } 
+    }
 
     return $cards;
-  } 
+  }
 
-  function getMatches() { 
+  function getMatches() {
     if ($this->playername == NULL) { return array(); }
     return $this->getEntry()->getMatches();
-  } 
+  }
 
-  function getPlayer() { 
-    return new Player($this->playername); 
-  } 
+  function getPlayer() {
+    return new Player($this->playername);
+  }
 
-  function canEdit($username) { 
-    $event = $this->getEvent(); 
+  function canEdit($username) {
+    $event = $this->getEvent();
     $player = new Player($username);
 
     if ($player->isSuper() ||
@@ -389,34 +389,34 @@ class Deck {
     return false;
    }
 
-  function canView($username) { 
-    $event = $this->getEvent(); 
+  function canView($username) {
+    $event = $this->getEvent();
     $player = new Player($username);
 
    if (($event->finalized && !$event->active)|| $event->private_decks == 0)  {
        return true;
    } else {
-       if ($player->isSuper() || 
-           $event->isHost($username) || 
-           $event->isOrganizer($username) || 
+       if ($player->isSuper() ||
+           $event->isHost($username) ||
+           $event->isOrganizer($username) ||
            strcasecmp($username, $this->playername) == 0) {
            return true;
-       } 
+       }
    }
    return false;
   }
 
-  private function getCard($cardname) { 
-    $db = Database::getConnection(); 
+  private function getCard($cardname) {
+    $db = Database::getConnection();
     $stmt = $db->prepare("SELECT id, name FROM cards WHERE name = ?");
-    $stmt->bind_param("s", $cardname); 
-    $stmt->execute(); 
+    $stmt->bind_param("s", $cardname);
+    $stmt->execute();
     $cardar = array();
-    $stmt->bind_result($cardar['id'], $cardar['name']); 
-    if (is_null($stmt->fetch())) { 
-      $cardar = NULL; 
-    } 
-    $stmt->close(); 
+    $stmt->bind_result($cardar['id'], $cardar['name']);
+    if (is_null($stmt->fetch())) {
+      $cardar = NULL;
+    }
+    $stmt->close();
 
     return $cardar;
   }
@@ -425,68 +425,68 @@ class Deck {
     return (count($this->errors) == 0);
   }
 
-  // functions to remove deck errors, otherwise when you try to delete a deck that cannot be deleted the error 
+  // functions to remove deck errors, otherwise when you try to delete a deck that cannot be deleted the error
   // will stay until you try to update the deck again
   function flushDeckErrors() {
-      $db = Database::getConnection(); 
+      $db = Database::getConnection();
       $db->autocommit(FALSE);
       $this->errors = array();
-      
+
       $succ = $db->query("DELETE FROM deckerrors WHERE deck = {$this->id}");
 
       if (!$succ) {
-          $db->rollback(); 
+          $db->rollback();
           $db->autocommit(TRUE);
-          throw new Exception("Cannot flush the deckerror content {$this->id}"); 
+          throw new Exception("Cannot flush the deckerror content {$this->id}");
     return false;
       } else {
           return true;
       }
   }
-  
+
   function delete() {
-      $db = Database::getConnection(); 
+      $db = Database::getConnection();
       $db->autocommit(FALSE);
       $this->errors = array();
-	
+
      // Checks to see if any matches have been played by the deck, if not deletes the deck
      if(count($this->getMatches()) == 0 ) {
          $succ = $db->query("DELETE FROM entries WHERE deck = {$this->id}");
          if (!$succ) {
              $db->rollback();
              $db->autocommit(TRUE);
-             throw new Exception("Can't delete deck contents {$this->id} expection 1"); 
+             throw new Exception("Can't delete deck contents {$this->id} expection 1");
          }
-                
+
          $succ = $db->query("DELETE FROM deckerrors WHERE deck = {$this->id}");
          if (!$succ) {
              $db->rollback();
              $db->autocommit(TRUE);
              throw new Exception("Can't delete deck contents {$this->id} expection 2");
          }
-                
+
          $succ = $db->query("DELETE FROM deckcontents WHERE deck = {$this->id}");
          if (!$succ) {
              $db->rollback();
              $db->autocommit(TRUE);
-             throw new Exception("Can't delete deck contents {$this->id} expection 3"); 
+             throw new Exception("Can't delete deck contents {$this->id} expection 3");
          }
-                
+
          $succ = $db->query("DELETE FROM decks WHERE id = {$this->id}");
          if (!$succ) {
              $db->rollback();
              $db->autocommit(TRUE);
-             throw new Exception("Can't delete deck contents {$this->id} expection 4"); 
+             throw new Exception("Can't delete deck contents {$this->id} expection 4");
          }
-                
+
          $db->commit();
          $db->autocommit(TRUE);
          return true;
-      } 	
+      }
    }
-  
+
   function save() {
-    $db = Database::getConnection(); 
+    $db = Database::getConnection();
     $db->autocommit(FALSE);
     $this->errors = array();
     $format = NULL; // will initialize later after I verify that eventname has been.
@@ -498,72 +498,72 @@ class Deck {
       $this->archetype = "Unclassified";
     }
 
-    // had to put this here since the constructor doesn't run entirely when a new deck is created 
+    // had to put this here since the constructor doesn't run entirely when a new deck is created
     if (!is_null($this->eventname) && is_null($this->format))  {
-         $this->format = Database::single_result_single_param("SELECT format 
-                                                               FROM events 
+         $this->format = Database::single_result_single_param("SELECT format
+                                                               FROM events
                                                                WHERE name = ?", "s", $this->eventname);
-     } 
-    $format = new Format($this->format); 
+     }
+    $format = new Format($this->format);
 
-    if ($this->id == 0) { 
+    if ($this->id == 0) {
       // New record.  Set up the decks entry and the Entry.
       $stmt = $db->prepare("INSERT INTO decks (archetype, name, playername, format, tribe, notes, created_date) values(?, ?, ?, ?, ?, ?, NOW())");
-      $stmt->bind_param("ssssss", $this->archetype, $this->name, $this->playername, $this->format, $this->tribe, $this->notes); 
+      $stmt->bind_param("ssssss", $this->archetype, $this->name, $this->playername, $this->format, $this->tribe, $this->notes);
       $stmt->execute();
       $this->id = $stmt->insert_id;
 
       $stmt = $db->prepare("UPDATE entries SET deck = ? WHERE player = ? AND event = ?");
       $stmt->bind_param("dss", $this->id, $this->playername, $this->eventname);
-      $stmt->execute(); 
-      if ($stmt->affected_rows != 1) { 
-        $db->rollback(); 
+      $stmt->execute();
+      if ($stmt->affected_rows != 1) {
+        $db->rollback();
         $db->autocommit(TRUE);
             throw new Exception('Entry for '. $this->playername .' in '. $this->eventname .' not found');
-      } 
-
-    } else { 
-      $stmt = $db->prepare("UPDATE decks SET archetype = ?, name = ?, format = ?, tribe = ?, deck_colors = ?, notes = ? WHERE id = ?"); 
-      if (!$stmt) { 
-        echo $db->error;
-      } 
-      $stmt->bind_param("ssssssd", $this->archetype, $this->name, $this->format, $this->tribe, $this->deck_color_str, $this->notes, $this->id); 
-      if (!$stmt->execute()) { 
-        $db->rollback(); 
-        $db->autocommit(TRUE);
-        throw new Exception('Can\'t update deck '. $this->id); 
       }
-      $format = new Format($this->format);      
+
+    } else {
+      $stmt = $db->prepare("UPDATE decks SET archetype = ?, name = ?, format = ?, tribe = ?, deck_colors = ?, notes = ? WHERE id = ?");
+      if (!$stmt) {
+        echo $db->error;
+      }
+      $stmt->bind_param("ssssssd", $this->archetype, $this->name, $this->format, $this->tribe, $this->deck_color_str, $this->notes, $this->id);
+      if (!$stmt->execute()) {
+        $db->rollback();
+        $db->autocommit(TRUE);
+        throw new Exception('Can\'t update deck '. $this->id);
+      }
+      $format = new Format($this->format);
     }
-   
+
    // TODO: find a way to list the id as a param
    $succ = $db->query("DELETE FROM deckcontents WHERE deck = {$this->id}");
 
     if (!$succ) {
-      $db->rollback(); 
+      $db->rollback();
       $db->autocommit(TRUE);
-      throw new Exception("Can't update deck contents {$this->id}"); 
+      throw new Exception("Can't update deck contents {$this->id}");
     }
-   
+
     // find a way to list the id as a param
     $succ = $db->query("DELETE FROM deckerrors WHERE deck = {$this->id}");
 
     if (!$succ) {
-      $db->rollback(); 
+      $db->rollback();
       $db->autocommit(TRUE);
-      throw new Exception("Can't update deck contents {$this->id}"); 
+      throw new Exception("Can't update deck contents {$this->id}");
     }
-    
-    ////// 
-    /// parsing start 
-    
-    
-    
+
+    //////
+    /// parsing start
+
+
+
     // begin parsing deck list
     $newmaindeck = array();
     $legalCards = $format->getLegalList();
     $this->maindeck_cardcount = 0;
-    
+
     foreach ($this->maindeck_cards as $card => $amt) {
       $card = stripslashes($card);
       $testcard = Format::getCardName($card);
@@ -579,10 +579,10 @@ class Deck {
       } else {
           $card = $testcard;
       }
-      
+
       // Restricted Card list. Only one of these cards is alowed in a deck
       if($format->isCardOnRestrictedList($card) && $amt > 1) {
-          $this->errors[] = "Maindeck card: {$amt} {$card} is on the restricted list. 
+          $this->errors[] = "Maindeck card: {$amt} {$card} is on the restricted list.
                              Only one of this card may be in a deck list.";
           if (!isset($this->unparsed_cards[$card])) {
               $this->unparsed_cards[$card] = 0;
@@ -590,19 +590,19 @@ class Deck {
           $this->unparsed_cards[$card] += $amt;
           continue;
       }
-      
+
       if($format->singleton) {
           if(!$format->isCardSingletonLegal($card, $amt)) {
-              $this->errors[] = "Singleton formats allow only one of any card, except basic lands. 
+              $this->errors[] = "Singleton formats allow only one of any card, except basic lands.
                                  You entered {$amt} {$card} in your mainboard.";
           }
       } else {
           if (!$format->isQuantityLegal($card, $amt)) {
-              $this->errors[] = "No more than four of any card is allowed in this format, except basic lands. 
+              $this->errors[] = "No more than four of any card is allowed in this format, except basic lands.
                                  You entered {$amt} {$card} in your mainboard.";
           }
       }
-      
+
       // You can only use the legal card list, or the ban list - not both
       if (count($legalCards)) {
           if (!$format->isCardOnLegalList($card)) {
@@ -629,7 +629,7 @@ class Deck {
               $this->unparsed_cards[$card] = 0;
           }
           $this->unparsed_cards[$card] += $amt;
-          continue;          
+          continue;
       }
       $this->maindeck_cardcount += $amt;
       $stmt = $db->prepare("INSERT INTO deckcontents (deck, card, issideboard, qty) values(?, ?, 0, ?)");
@@ -643,21 +643,21 @@ class Deck {
     // begin parsing sideboard
     $newsideboard = array();
     $this->sideboard_cardcount = 0;
-    
+
     foreach ($this->sideboard_cards as $card => $amt) {
       $card = stripslashes($card);
-      $card = Format::getCardName($card);      
+      $card = Format::getCardName($card);
       $cardar = $format->getLegalCard($card);
       if (is_null($cardar)) {
         $this->errors[] = "Could not find sideboard card: {$amt} {$card} in legal sets";
 
         if (!isset($this->unparsed_side[$card])) {
           $this->unparsed_side[$card] = 0;
-        } 
+        }
         $this->unparsed_side[$card] += $amt;
-        continue; 
+        continue;
       }
-      
+
       // Restricted Card list. Only one of these cards is alowed in a deck
       if($format->isCardOnRestrictedList($card)) {
           $restrictedError = false;
@@ -671,7 +671,7 @@ class Deck {
               }
           }
           if($restrictedError) {
-              $this->errors[] = "Sideboard card: {$amt} {$card} is on the restricted list. 
+              $this->errors[] = "Sideboard card: {$amt} {$card} is on the restricted list.
                                  Only one of this card may be in a deck list.";
               if (!isset($this->unparsed_side[$card])) {
                   $this->unparsed_side[$card] = 0;
@@ -680,36 +680,36 @@ class Deck {
               continue;
           }
       }
-      
+
       if($format->singleton) {
           if(!$format->isCardSingletonLegal($card, $amt)) {
-              $this->errors[] = "Singleton formats allow only one of any card, except basic lands. 
+              $this->errors[] = "Singleton formats allow only one of any card, except basic lands.
                                  You entered {$amt} {$card} on your sideboard.";
           }
           foreach($this->maindeck_cards as $singletonCard => $mainamt) {
               if ($singletonCard == $card) {
-                  $this->errors[] = "Singleton formats allow only one of any card, except basic lands. 
-                                     You entered {$amt} {$card} on your sideboard 
+                  $this->errors[] = "Singleton formats allow only one of any card, except basic lands.
+                                     You entered {$amt} {$card} on your sideboard
                                      and {$mainamt} {$card} in your mainboard.";
                   break;
               }
-          }          
+          }
       } else {
           if (!$format->isQuantityLegal($card, $amt)) {
-              $this->errors[] = "No more than four of any card is allowed in this format, except basic lands. 
+              $this->errors[] = "No more than four of any card is allowed in this format, except basic lands.
                                  You entered {$amt} {$card} on your sideboard.";
           } else {
               foreach($this->maindeck_cards as $quantityCard => $mainamt) {
                   if (!$format->isQuantityLegalAgainstMain($card, $amt, $quantityCard, $mainamt)) {
-                      $this->errors[] = "No more than four of any card is allowed in this format, except basic lands. 
-                                         You entered {$amt} {$card} on your sideboard 
+                      $this->errors[] = "No more than four of any card is allowed in this format, except basic lands.
+                                         You entered {$amt} {$card} on your sideboard
                                          and {$mainamt} {$card} in your mainboard.";
                       break;
                   }
               }
           }
-      }      
-            
+      }
+
       // You can only use the legal card list, or the ban list - not both
       if (count($legalCards)) {
           if (!$format->isCardOnLegalList($card)) {
@@ -734,21 +734,21 @@ class Deck {
           $this->errors[] = "Sideboard card : {$amt} {$card} is illegal by rarity.";
           if (!isset($this->unparsed_side[$card])) {
               $this->unparsed_side[$card] = 0;
-          } 
+          }
           $this->unparsed_side[$card] += $amt;
-          continue;          
+          continue;
       }
-      
+
       $this->sideboard_cardcount += $amt;
-      $stmt = $db->prepare("INSERT INTO deckcontents (deck, card, issideboard, qty) values(?, ?, 1, ?)"); 
-      $stmt->bind_param("ddd", $this->id, $cardar['id'], $amt); 
+      $stmt = $db->prepare("INSERT INTO deckcontents (deck, card, issideboard, qty) values(?, ?, 1, ?)");
+      $stmt->bind_param("ddd", $this->id, $cardar['id'], $amt);
       $stmt->execute();
       $newsideboard[$cardar['name']] = $amt;
     }
 
     $this->sideboard_cards = $newsideboard;
 
-    // needs to be after card parsing so it can work with new decks. 
+    // needs to be after card parsing so it can work with new decks.
 
     $this->getDeckColors(); // gets the deck colors
 
@@ -774,28 +774,28 @@ class Deck {
     $db->commit();
     $db->autocommit(TRUE);
     $this->calculateHashes();
-    
+
     if ($this->maindeck_cardcount < $format->min_main_cards_allowed) {
         $this->errors[] = "This format requires a minimum of {$format->min_main_cards_allowed} Maindeck Cards";
     } else if ($this->maindeck_cardcount > $format->max_main_cards_allowed) {
         $this->errors[] = "This format allows a maximum of {$format->max_main_cards_allowed} Maindeck Cards";
     }
-    
-    if ($this->sideboard_cardcount < $format->min_side_cards_allowed || 
+
+    if ($this->sideboard_cardcount < $format->min_side_cards_allowed ||
         $this->sideboard_cardcount > $format->max_side_cards_allowed) {
-            $this->errors[] = "A legal sideboard for this format has between $format->min_side_cards_allowed cards, and 
+            $this->errors[] = "A legal sideboard for this format has between $format->min_side_cards_allowed cards, and
                               $format->max_side_cards_allowed cards.";
     }
-    
+
     if ($format->commander) {
         if(!$format->isDeckCommanderLegal($this->id)) {
             $beg = $this->errors;
             $end = $format->getErrors();
             $this->errors = array();
             $this->errors = array_merge($beg, $end);
-        } 
+        }
     }
-    
+
     if ($format->tribal) {
         if(!$format->isDeckTribalLegal($this->id)) {
             $beg = $this->errors;
@@ -805,62 +805,62 @@ class Deck {
         }
         $this->tribe = Deck::getTribe();
     }
-    
+
     foreach($this->errors as $error) {
         $stmt = $db->prepare("INSERT INTO deckerrors (deck, error) values(?, ?)");
         $stmt->bind_param("ds", $this->id, $error);
-        $stmt->execute();        
+        $stmt->execute();
     }
 
     // Autonamer Function
     if($this->name == "Temp") {
         if ($format->tribal) {
-            $this->name = strtoupper($this->deck_color_str) . " " . $this->tribe;            
+            $this->name = strtoupper($this->deck_color_str) . " " . $this->tribe;
         } else {
             $this->name = strtoupper($this->deck_color_str) . " " . $this->archetype;
         }
         $stmt = $db->prepare("UPDATE decks set name = ? WHERE id = ?");
         $stmt->bind_param("ss", $this->name, $this->id);
-        $stmt->execute();        
+        $stmt->execute();
 
     }
-    
+
     return true;
   }
 
   function getTribe() {
       return Database::single_result_single_param("SELECT tribe FROM decks WHERE id = ?", "d", $this->id);
   }
-  
-  function findIdenticalDecks() { 
+
+  function findIdenticalDecks() {
     if (!isset($this->identicalDecks)) {
       $db = Database::getConnection();
-      $stmt = $db->prepare("SELECT d.id 
-                            FROM decks d, entries n, events e 
-                            WHERE deck_hash = ? 
-                            AND id != ? 
-                            AND n.deck = d.id 
-                            AND e.name = n.event 
-                            ORDER BY e.start 
+      $stmt = $db->prepare("SELECT d.id
+                            FROM decks d, entries n, events e
+                            WHERE deck_hash = ?
+                            AND id != ?
+                            AND n.deck = d.id
+                            AND e.name = n.event
+                            ORDER BY e.start
                             DESC");
       $stmt->bind_param("sd", $this->deck_hash, $this->id);
       $same_ids = array();
       $this_id = 0;
       $stmt->execute();
       $stmt->bind_result($this_id);
-      while ($stmt->fetch()) { 
+      while ($stmt->fetch()) {
         $same_ids[] = $this_id;
-      } 
-      $stmt->close(); 
+      }
+      $stmt->close();
 
       $decks = array();
 
-      foreach ($same_ids as $other_deck_id) { 
-        $possibledeck = new Deck($other_deck_id); 
-        if (isset($possibledeck->playername)) { 
-          $decks[] = $possibledeck; 
-        } 
-      } 
+      foreach ($same_ids as $other_deck_id) {
+        $possibledeck = new Deck($other_deck_id);
+        if (isset($possibledeck->playername)) {
+          $decks[] = $possibledeck;
+        }
+      }
       $this->identical_decks = $decks;
     }
     return $this->identical_decks;
@@ -875,7 +875,7 @@ class Deck {
     #  The cardnames are lexographically sorted!
     #  The amounts are NOT PADDED: 1 => 1, 10 => 10, 100 => 100
     #  There is NO SPACE BETWEEN THE amount and the cardname, or between cards
-    #  Make this string for the main deck and the sideboard. 
+    #  Make this string for the main deck and the sideboard.
     #  Concatenate these strings: maindeckStr + "<sb>" + sideboardStr
     #  Make a SHA-1 hash of this string for the whole_hash
     #  Make a SHA-1 hash of the maindeckStr for the maindeck_hash
@@ -883,18 +883,18 @@ class Deck {
     $cards = array_keys($this->maindeck_cards);
     sort($cards, SORT_STRING);
     $maindeckStr = "";
-    foreach ($cards as $cardname) { 
+    foreach ($cards as $cardname) {
       $maindeckStr .= $this->maindeck_cards[$cardname] . $cardname;
     }
     $this->deck_hash = sha1($maindeckStr);
     $sideboardStr = "";
     $cards = array_keys($this->sideboard_cards);
     sort($cards, SORT_STRING);
-    foreach ($cards as $cardname) { 
+    foreach ($cards as $cardname) {
       $sideboardStr .= $this->sideboard_cards[$cardname] . $cardname;
     }
     $this->sideboard_hash = sha1($sideboardStr);
-    $this->whole_hash = sha1($maindeckStr . "<sb>" . $sideboardStr); 
+    $this->whole_hash = sha1($maindeckStr . "<sb>" . $sideboardStr);
     $db = Database::getConnection();
     $stmt = $db->prepare("UPDATE decks SET sideboard_hash = ?, deck_hash = ?, whole_hash = ? where id = ?");
     $stmt->bind_param("sssd", $this->sideboard_hash, $this->deck_hash, $this->whole_hash, $this->id);
@@ -902,24 +902,24 @@ class Deck {
     $stmt->close();
   }
 
-  static function uniqueCount() { 
-    $db = @Database::getConnection(); 
+  static function uniqueCount() {
+    $db = @Database::getConnection();
     $stmt = $db->prepare("SELECT count(deck_hash) FROM decks GROUP BY deck_hash");
-    $stmt->execute(); 
+    $stmt->execute();
     $stmt->store_result();
     /// SLIGHTLY different than singular
     $uniquecount = $stmt->num_rows;
-    $stmt->close(); 
-    return $uniquecount; 
+    $stmt->close();
+    return $uniquecount;
   }
 
   function linkTo() {
-    $verify = "deckverified";      
+    $verify = "deckverified";
     if ($this->new) {
       return "Deck not found";
     } else {
       if (empty($this->name)) {
-          $this->name = "** NO NAME **"; 
+          $this->name = "** NO NAME **";
       }
       if (!$this->isValid()) {
           $verify = "deckunverified";

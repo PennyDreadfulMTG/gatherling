@@ -315,11 +315,11 @@ if ($version < 14) {
 if ($version < 15) {
   echo "Updating to version 15 (Reverse-engineered migrations from Dabil's tweaking)... <br />";
   do_query("ALTER TABLE `players` ADD COLUMN `rememberme` INT NULL AFTER `mtgo_challenge`, ADD COLUMN `ipaddress` INT NULL AFTER `rememberme`, ADD COLUMN `pkmember` INT NULL AFTER `ipaddress`;");
-  do_query("ALTER TABLE `events` 
+  do_query("ALTER TABLE `events`
             ADD COLUMN `pkonly` TINYINT(3) NULL AFTER `prereg_allowed`;");
   do_query("ALTER TABLE `series` ADD COLUMN `pkonly_default` TINYINT(1) NULL AFTER `prereg_default`;");
   do_query("ALTER TABLE `series_stewards` RENAME TO  `series_organizers`;");
-  do_query("ALTER TABLE `formats` 
+  do_query("ALTER TABLE `formats`
     ADD COLUMN `type` VARCHAR(45) NULL AFTER `priority`,
     ADD COLUMN `series_name` VARCHAR(40) NULL AFTER `type`,
     ADD COLUMN `singleton` TINYINT(3) NULL AFTER `series_name`,
@@ -354,7 +354,7 @@ if ($version < 15) {
     `error` TEXT NOT NULL,
     PRIMARY KEY (`id`));");
   do_query("ALTER TABLE `standings` ADD COLUMN `draws` TINYINT(3) NULL DEFAULT '0' AFTER `matches_won`;");
-  do_query("ALTER TABLE `ratings` 
+  do_query("ALTER TABLE `ratings`
   ADD COLUMN `event` VARCHAR(80) NULL AFTER `losses`;");
   do_query("UPDATE db_version SET version = 15");
   $db->commit();
@@ -395,7 +395,7 @@ if ($version < 17) {
   // isw, isu, isb, isr, isg, isp, rarity FROM `cards`;");
   // $insert = $db->prepare("INSERT INTO cards_tmp(cost, convertedcost, name, cardset, type,
   //   isw, isu, isb, isr, isg, isp, rarity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  //   ON DUPLICATE KEY UPDATE `cost` = VALUES(`cost`), `convertedcost`= VALUES(`convertedcost`), `type` = VALUES(`type`), 
+  //   ON DUPLICATE KEY UPDATE `cost` = VALUES(`cost`), `convertedcost`= VALUES(`convertedcost`), `type` = VALUES(`type`),
   //     isw = VALUES(`isw`), isu = VALUES(`isu`), isb = VALUES(`isb`),isr = VALUES(`isr`),isg = VALUES(`isg`),isp = VALUES(`isp`),
   //     `rarity` = VALUES(`rarity`);");
 
@@ -410,12 +410,12 @@ if ($version < 17) {
   // do_query("TRUNCATE `cards`;");
   do_query("ALTER TABLE `cards` ADD UNIQUE `unique_index`(`name`, `cardset`);");
   // do_query("SET FOREIGN_KEY_CHECKS=1;");
-  
+
   // $select = $db->prepare("SELECT cost, convertedcost, name, cardset, type,
   // isw, isu, isb, isr, isg, isp, rarity FROM `cards_tmp`;");
   // $insert = $db->prepare("INSERT INTO cards(cost, convertedcost, name, cardset, type,
   //   isw, isu, isb, isr, isg, isp, rarity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  //   ON DUPLICATE KEY UPDATE `cost` = VALUES(`cost`), `convertedcost`= VALUES(`convertedcost`), `type` = VALUES(`type`), 
+  //   ON DUPLICATE KEY UPDATE `cost` = VALUES(`cost`), `convertedcost`= VALUES(`convertedcost`), `type` = VALUES(`type`),
   //     isw = VALUES(`isw`), isu = VALUES(`isu`), isb = VALUES(`isb`),isr = VALUES(`isr`),isg = VALUES(`isg`),isp = VALUES(`isp`),
   //     `rarity` = VALUES(`rarity`);");
 
@@ -439,12 +439,12 @@ if ($version < 18) {
   echo "... DB now at version 18! <br />";
 }
 if ($version < 19) {
-  echo "Updating to version 19 (Fix rounding error with standings)... <br />";  
-  do_query("ALTER TABLE `standings` 
+  echo "Updating to version 19 (Fix rounding error with standings)... <br />";
+  do_query("ALTER TABLE `standings`
   CHANGE COLUMN `OP_Match` `OP_Match` DECIMAL(4,3) NULL DEFAULT '0.000',
   CHANGE COLUMN `PL_Game` `PL_Game` DECIMAL(4,3) NULL DEFAULT '0.000',
   CHANGE COLUMN `OP_Game` `OP_Game` DECIMAL(4,3) NULL DEFAULT '0.000';");
-  do_query("ALTER TABLE `events` 
+  do_query("ALTER TABLE `events`
   CHANGE COLUMN `prereg_cap` `prereg_cap` INT(11) NULL DEFAULT '0';");
   do_query("UPDATE db_version SET version = 19");
   $db->commit();
@@ -454,7 +454,7 @@ if ($version < 20) {
   // This one is messy, because we need to skip it if we're applying to the production DB on gatherling.com 😕
   if (!$db->query('select 1 from `restrictedtotribe` LIMIT 1')) {
     echo "Updating to version 20 (Tribal Wars, Player profiles, and Banned Players)... <br />";
-    do_query("ALTER TABLE `decks` 
+    do_query("ALTER TABLE `decks`
       ADD COLUMN `playername` varchar(40) NOT NULL,
       ADD COLUMN `deck_colors` varchar(6) DEFAULT NULL,
       ADD COLUMN `format` varchar(40) DEFAULT NULL,

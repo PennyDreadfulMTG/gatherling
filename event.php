@@ -322,7 +322,7 @@ function eventList($series = "", $season = "") {
         case 0:
             $kvalue = "none";
             break;
-        case 8: 
+        case 8:
             $kvalue = "Casual";
             break;
         case 16:
@@ -410,7 +410,7 @@ function eventForm($event = NULL, $forcenew = false) {
         autoInputForm($event);
     } elseif (strcmp($view, "fileinput") == 0) {
         fileInputForm($event);
-        // file3InputForm($event); DCI 3 files currently don't work. Re-enable once they do. 
+        // file3InputForm($event); DCI 3 files currently don't work. Re-enable once they do.
     } elseif (strcmp($view, "points_adj") == 0) {
         pointsAdjustmentForm($event);
     } elseif (strcmp($view,"reports") == 0) {
@@ -506,7 +506,7 @@ function eventForm($event = NULL, $forcenew = false) {
     print_checkbox_input("Allow Players to Report Results", "player_reportable", $event->player_reportable);
 
     print_text_input("Player initiatied registration cap", "prereg_cap", $event->prereg_cap, 4, "The event host may still add players beyond this limit. 0 is disabled.");
-    
+
     print_checkbox_input("Deck List Privacy", "private_decks", $event->private_decks);
     print_checkbox_input("Allow Player Reported Draws", "player_reported_draws", $event->player_reported_draws, "This allows players to report a draw result for matches.");
 
@@ -523,7 +523,7 @@ function eventForm($event = NULL, $forcenew = false) {
     echo "<tr><th>Current Round</th>";
     echo "<td>";
     roundDropMenu($event, $event->current_round);
-    echo "</td></tr>"; 
+    echo "</td></tr>";
     trophyField($event);
     echo "<tr><td>&nbsp;</td></tr>";
     echo "<tr><td colspan=\"2\" class=\"buttons\">";
@@ -549,7 +549,7 @@ function reportsForm($event) {
     $entries2 = $event->getEntriesByMedal();
     $numEntries = count($entries);
     $emailAd = "---------";
-    
+
     echo "<table style=\"border-width: 0px\" align=\"center\">";
     echo "<center><h2><b>Player Information</b></h2></center>";
     echo "<tr><td>&nbsp;</td></tr>";
@@ -714,7 +714,7 @@ function playerList($event) {
       echo "<font color= \"red\"><b><p class=\"squeeze\">Warning: Players who have not entered deck lists will be dropped automatically!</p></b></font>";
       echo "</td></tr></table>";
   }
-  
+
   echo "<div id=\"event_run_actions\">";
   echo "<form action=\"event.php\" method=\"post\">";
   echo "<input type=\"hidden\" name=\"view\" value=\"reg\" />";
@@ -722,7 +722,7 @@ function playerList($event) {
   echo "<table><th>Round Actions</th><tr>";
   if ($event->active == 0 && $event->finalized == 0) {
     echo "<td><input id=\"start_event\" class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Start Event\" /></td></tr>";
-    }else if ($event->active == 1){        
+    }else if ($event->active == 1){
     echo "<td><input id=\"start_event\" class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Recalculate Standings\" />";
     echo "<input id=\"start_event\" class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Reset Event\" />";
     echo "<input id=\"start_event\" class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Delete Matches and Re-Pair Round\" /></td></tr>";
@@ -843,7 +843,7 @@ function matchList($event) {
     // add final round to main round if in extra rounds to keep round correct
     if ($match->timing == 2) {
       $printrnd = $match->round + $rndadd;
-    } else { 
+    } else {
       $printrnd = $match->round;
     }
     $printplr = $match->getWinner();
@@ -882,7 +882,7 @@ function matchList($event) {
           $ezypaste .= "/me {$match->playera} has the BYE<br />";
           echo "<td>BYE</td>";
           echo "<td></td>";
-      } else if(($match->getPlayerWins($match->playera) == 1) && ($match->getPlayerWins($match->playerb) == 1)){
+      } else if (($match->getPlayerWins($match->playera) == 1) && ($match->getPlayerWins($match->playerb) == 1)) {
           echo "<td>{$playeradropflag} Draw {$playerbdropflag}</td>";
           $ezypaste .= "/me {$match->playera} {$playerawins}-{$playerbwins} {$match->playerb}<br />";
           echo "<td class=\"match_{$match->verification}\">{$match->playerb}</td>";
@@ -900,8 +900,8 @@ function matchList($event) {
   echo "<tr><td>&nbsp;</td></tr>";
   if ($event->active) {
       echo "<tr><td align=\"center\" colspan=\"7\"><b>Add Pairing</b></td></tr>";
-      echo "<input type=\"hidden\" name=\"newmatchround\" value=\"{$event->current_round}\">"; 
-      echo "<input type=\"hidden\" name=\"newmatchresult\" value=\"P\">"; 
+      echo "<input type=\"hidden\" name=\"newmatchround\" value=\"{$event->current_round}\">";
+      echo "<input type=\"hidden\" name=\"newmatchresult\" value=\"P\">";
       echo "<tr><td align=\"center\" colspan=\"7\">";
       playerDropMenu($event, "A", $event->active);
       echo " vs ";
@@ -1028,7 +1028,7 @@ function medalList($event) {
 
 function kValueDropMenu($kvalue) {
   if(strcmp($kvalue, "") == 0) {$kvalue = -1;}
-  $names = array("" => "- K-Value -", 8 => "Casual (Alt Event)", 16 => "Regular (less than 24 players)", 
+  $names = array("" => "- K-Value -", 8 => "Casual (Alt Event)", 16 => "Regular (less than 24 players)",
                  24 => "Large (24 or more players)", 32 => "Championship");
   print_select_input("K-Value", 'kvalue', $names, $kvalue);
 }
@@ -1071,7 +1071,7 @@ function insertEvent() {
   } else {
       $event->name = $_POST['name'];
   }
-  
+
   $event->format = $_POST['format'];
   $event->host = $_POST['host'];
   $event->cohost = $_POST['cohost'];
@@ -1094,13 +1094,13 @@ function insertEvent() {
   } else {
     $event->pkonly = $_POST['pkonly']; // Dabil added
   }
-  
+
   if (!isset($_POST['player_reportable'])) {
     $event->player_reportable = 0;
   } else {
     $event->player_reportable = $_POST['player_reportable'];
   }
-  
+
   if (!isset($_POST['late_entry_limit'])) {
     $event->late_entry_limit = 0;
   }
@@ -1143,7 +1143,7 @@ function updateEvent() {
   $event->private_decks = $_POST['private_decks'];
   $event->player_reported_draws = $_POST['player_reported_draws'];
   $event->late_entry_limit = $_POST['late_entry_limit'];
-  
+
   if ($event->format != $_POST['format']) {
       $event->format = $_POST['format'];
       $event->updateDecksFormat($_POST['format']);
@@ -1209,7 +1209,7 @@ function insertTrophy() {
     $stmt->bindParam(4, $f, PDO::PARAM_LOB);
     $stmt->execute() or die($stmt->errorCode());
     fclose($f);
-    
+
     return true;
   }
 }
@@ -1242,17 +1242,17 @@ function playerByeMenu($event, $def="\n") {
 }
 
 function playerDropMenu($event, $letter, $active, $def="\n") {
-  // If $acive is set to one, function assumes event is active 
-  // and will only use registered players who are still active 
+  // If $acive is set to one, function assumes event is active
+  // and will only use registered players who are still active
   // (ie. who haven't dropped)
-  // if $active is not set, function will return all registered 
+  // if $active is not set, function will return all registered
   // players
   if($active) {
       $playernames = $event->getActiveRegisteredPlayers();
   } else {
-      $playernames = $event->getRegisteredPlayers();      
+      $playernames = $event->getRegisteredPlayers();
   }
-  
+
   echo "<select class=\"inputbox\" name=\"newmatchplayer$letter\">";
   if(strcmp("\n", $def) == 0) {
     echo "<option value=\"\">- Player $letter -</option>";
@@ -1312,7 +1312,7 @@ function controlPanel($event, $cur = "") {
 
 function updateReg() {
   $event = new Event($_POST['name']);
-  
+
   if (isset($_POST['delentries'])) {
     foreach ($_POST['delentries'] as $playername) {
       $event->removeEntry($playername);
@@ -1339,7 +1339,7 @@ function updateMatches() {
   $event = new Event($_POST['name']);
   if(isset($_POST['matchdelete'])) {
     foreach ($_POST['matchdelete'] as $matchid) {
-      Match::destroy($matchid); 
+      Match::destroy($matchid);
       }
   }
 
@@ -1352,9 +1352,9 @@ function updateMatches() {
   if(isset($_POST['hostupdatesmatches'])) {
       for($ndx = 0; $ndx < sizeof($_POST['hostupdatesmatches']); $ndx++) {
           $result = $_POST['matchresult'][$ndx];
-          $resultForA="notset"; 
+          $resultForA="notset";
           $resultForB="notset";
-      
+
           if ($result == "2-0") {
               $resultForA = "W20"; $resultForB = "L20";
           } elseif ($result == "2-1") {
@@ -1374,7 +1374,7 @@ function updateMatches() {
           }
       }
   }
-      
+
   if(isset($_POST['newmatchplayerA'])) {$pA = $_POST['newmatchplayerA'];} else {$pA = "";}
   if(isset($_POST['newmatchplayerB'])) {$pB = $_POST['newmatchplayerB'];} else {$pB = "";}
   if (isset($_POST['newmatchresult'])) {
@@ -1406,7 +1406,7 @@ function updateMatches() {
   if (isset($_POST['newbyeplayer']) && (strcmp($_POST['newbyeplayer'], "") != 0)) {
     $p = $_POST['newbyeplayer'];
       $event->addMatch($p, $p, $rnd, 'BYE');
-  }       
+  }
 }
 
 function updateMedals() {
@@ -1755,7 +1755,7 @@ function dciregister($data) {
   for($ndx = 0; $ndx < sizeof($lines); $ndx++) {
     $tokens = explode(",", $lines[$ndx]);
     if(preg_match("/\"(.*)\"/", $tokens[3], $matches)) {
-      $didadd = $event->addPlayer($matches[1]); 
+      $didadd = $event->addPlayer($matches[1]);
       if ($didadd) {
           echo "Adding player: {$matches[1]}.<br />";
       } else {
@@ -1785,7 +1785,7 @@ function dciinputmatches($reg, $data) {
         $playera = Player::findByName($reg[$playeraresults[$round - 1] - 1]); // find by name returns player object! not just a name!
         $playerb = Player::findByName($reg[$playerbresults[$round - 1] - 1]); // may want to write a custom function later that just returns name
         // should probably do a check to for NULL here for to see if player object
-        // was in fact returned for playera and playerb, just in case the dciregister 
+        // was in fact returned for playera and playerb, just in case the dciregister
         // function above failed to register
         $result = 'D';
         // need to do a check for a bye here

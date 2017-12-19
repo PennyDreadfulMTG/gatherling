@@ -36,7 +36,7 @@ class Entry {
     $this->ignored = 0;
     $stmt->bind_result($deckid, $this->medal, $this->ignored, $this->drop_round);
 
-    if ($stmt->fetch() == NULL) { 
+    if ($stmt->fetch() == NULL) {
             throw new Exception('Entry for '. $playername .' in '. $eventname .' not found');
     }
     $stmt->close();
@@ -93,9 +93,9 @@ class Entry {
   function canCreateDeck($username) {
     $player = new Player($username);
 
-    if ($player->isSuper() || 
-        $this->event->isHost($username) || 
-        $this->event->isOrganizer($username) || 
+    if ($player->isSuper() ||
+        $this->event->isHost($username) ||
+        $this->event->isOrganizer($username) ||
         strcasecmp($username, $this->player->name) == 0) {
       return true;
     }
@@ -116,7 +116,7 @@ class Entry {
   function removeEntry() {
     $db = Database::getConnection();
     if ($this->deck) {$this->deck->delete();} // if the player being unreg'd entered a deck list, remove it
-    
+
     $stmt = $db->prepare("DELETE FROM entries WHERE event = ? AND player = ?");
     $stmt->bind_param("ss", $this->event->name, $this->player->name);
     $stmt->execute();
@@ -129,8 +129,8 @@ class Entry {
     $stmt->execute();
     $stmt->close();
     return $removed;
-  }  
-  
+  }
+
   function createDeckLink() { // creates a link to enter a deck list once a player is registered for the event
     if ($this->canCreateDeck(Player::loginName())) {
       return "<a class=\"create_deck_link\" href=\"deck.php?player=" . urlencode($this->player->name) . "&event=" . urlencode($this->event->name) . "&mode=create\">[Create Deck]</a>";
