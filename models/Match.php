@@ -368,37 +368,36 @@ function matchInProgress() {
             $playerb_standing->score += 3;
             $playerb_standing->byes++;
             $playerb_standing->save();
-        }else if($this->isDraw()){ 
+        } else if($this->isDraw()) {
             $playerb_standing->score += 1;
             $playerb_standing->save();
             $playera_standing->score += 1;
             $playera_standing->save();
             $this->result = 'D';
-        }else {
-        if ($this->playera_wins > $this->playerb_wins){
-            if ($structure == "Single Elimination"){
+        } else {
+        if ($this->playera_wins > $this->playerb_wins) {
+            if ($structure == "Single Elimination") {
                 $playerb_standing->active = 0;
-                }else if ($structure == "Swiss"){
+                } else if ($structure == "Swiss") {
                     $playera_standing->score += 3;
-                }else if ($structure == "League"){
+                } else if ($structure == "League") {
                     $playera_standing->score += 3;
                     $playerb_standing->score += $seasonRules["loss_pts"];
-            }
-            $this->result = 'A';
-        }else{
-
-            if ($structure == "Single Elimination"){
-                $playera_standing->active = 0;
-                }else if ($structure == "Swiss"){
+                }
+                $this->result = 'A';
+            } else {
+                if ($structure == "Single Elimination") {
+                    $playera_standing->active = 0;
+                } else if ($structure == "Swiss") {
                     $playerb_standing->score += 3;
-                }else if ($structure == "League"){
+                } else if ($structure == "League") {
                     $playerb_standing->score += 3;
                     $playera_standing->score += $seasonRules["loss_pts"];
                 }
                 $this->result = 'B';
             }
         }
-        if (strcmp($playera_standing->player, $playerb_standing->player) == 0){
+        if (strcmp($playera_standing->player, $playerb_standing->player) == 0) {
                     // Moved to above
         }else {
             $playera_standing->matches_played++;
@@ -522,21 +521,21 @@ function matchInProgress() {
         return $name;
     }
 
-  public function isDraw() {
-    return ($this->playera_wins == $this->playerb_wins);
-  }
-
-  public function isReportable() {
-    $event = $this->getEvent();
-    return ($event->player_reportable == 1);
-  }
-
-	public function allowsPlayerReportedDraws() {
-		$event = new Event($this->eventname);
-		if ($event->player_reported_draws == 1){
-			return 1;
-		}else{
-			return 2;
+    public function isDraw() {
+        return ($this->playera_wins == $this->playerb_wins);
     }
-	}
+    
+    public function isReportable() {
+        $event = $this->getEvent();
+        return ($event->player_reportable == 1);
+    }
+    
+    public function allowsPlayerReportedDraws() {
+        $event = new Event($this->eventname);
+        if ($event->player_reported_draws == 1) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
 }
