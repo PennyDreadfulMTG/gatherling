@@ -114,6 +114,25 @@ final class EventsTest extends TestCase
         $this->assertEquals($event->current_round, 1);
         return $event;
     }
+
+    /**
+     * @depends testEventStart
+     */
+    public function testReporting($event) {
+        $matches = $event->getRoundMatches(1);
+        $this->assertEquals(count($matches), 2);
+        Match::saveReport("W20", $matches[0]->id, 'a');
+        Match::saveReport("L20", $matches[0]->id, 'b');
+        Match::saveReport("W20", $matches[1]->id, 'a');
+        Match::saveReport("W20", $matches[1]->id, 'b');
+        $matches = $event->getRoundMatches(1);
+        $this->assertEquals($matches[0]->verification, "verified");
+        $this->assertEquals($matches[1]->verification, "failed");
+        Match::saveReport("L20", $matches[1]->id, 'b');
+        $matches = $event->getRoundMatches(1);
+        $this->assertEquals($matches[1]->verification, "verified");
+        return $event;
+    }
 }
 
 function insertDeck($player, $eventName, $main, $side) {

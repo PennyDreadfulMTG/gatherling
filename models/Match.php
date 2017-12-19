@@ -504,8 +504,7 @@ function matchInProgress() {
         }else{
             return False;
         }
-
-}
+  }
 
     public function getEventNamebyMatchid() {
         $db = Database::getConnection();
@@ -523,20 +522,21 @@ function matchInProgress() {
         return $name;
     }
 
-    public function isDraw() {
-        return ($this->playera_wins == $this->playerb_wins);
-    }
+  public function isDraw() {
+    return ($this->playera_wins == $this->playerb_wins);
+  }
 
-    public function isReportable() {
-        $event = $this->getEvent();
-        return ($event->player_reportable == 1);
-      }
+  public function isReportable() {
+    $event = $this->getEvent();
+    return ($event->player_reportable == 1);
+  }
+
 	public function allowsPlayerReportedDraws() {
 		$event = new Event($this->eventname);
 		if ($event->player_reported_draws == 1){
 			return 1;
 		}else{
 			return 2;
-                }
+    }
 	}
 }
