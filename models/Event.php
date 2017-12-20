@@ -845,6 +845,22 @@ function getEntriesByMedal() {
     return "<img style=\"border-width: 0px\" src=\"displayTrophy.php?event={$eventname}\" />";
   }
 
+  public function isLeague() {
+    $test = $this->current_round;
+    if ($test < ($this->finalrounds + $this->mainrounds)) {
+      if ($test >= $this->mainrounds) {
+        $structure  = $this->finalstruct;
+        $subevent_id = $this->finalid;
+        $round = "final";
+      } else {
+        $structure = $this->mainstruct;
+        $subevent_id = $this->mainid;
+        $round = "main";
+      }
+    }
+    return $structure == "League";
+  }
+
     // All this should probably go somewhere else
     // Pairs the round which is currently running.
     // This should probably be in Standings?

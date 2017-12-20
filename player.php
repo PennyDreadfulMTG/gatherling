@@ -77,8 +77,8 @@ if ($player == NULL) {
         $event->dropPlayer($player->name);
       }
       if ($_POST['opponent'] != '0') {
-        if ($match->type == "League") {
-          $event = new Event($_POST['event']);
+        $event = new Event($_POST['event']);
+        if ($event->isLeague()) {
           $new_match_id = $event->addPairing($_POST['player'], $_POST['opponent'], $event->current_round, "P");
           Match::saveReport($_POST['report'], $new_match_id, "a");
         }
