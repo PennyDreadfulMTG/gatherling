@@ -5,3 +5,4 @@ gatherling
 nav/
 tmp/
 .vscode/
+vendor/

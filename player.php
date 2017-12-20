@@ -108,7 +108,7 @@ if ($player == NULL) {
   if (isset($_REQUEST['mode'])) {
     $dispmode = $_REQUEST['mode'];
   }
-  
+
   switch ($dispmode) {
     case 'alldecks':
     print_allContainer();
@@ -412,7 +412,7 @@ function print_editTimeZoneForm($player, $result) {
   echo $player->time_zone();
   echo "</td></tr>";
   echo "<tr><th>Desired Time Zone</th>\n";
-  echo "<td>";  
+  echo "<td>";
   echo timeZoneDropMenu();
   echo "<tr><td colspan=\"2\" class=\"buttons\">\n";
   echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Change Time Zone\" />\n";
@@ -471,13 +471,13 @@ function print_mainPlayerCP($player, $result) {
   echo "<div class=\"alpha grid_5\">\n";
   echo "<div id=\"gatherling_lefthalf\">\n";
   if ($result) {
-    echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";    
+    echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
   }
-  print_conditionalAllDecks();
-  print_noDeckTable(0);  
-  print_recentDeckTable();
   $Leagues = print_ActiveEvents();
   print_currentMatchTable($Leagues);
+  print_conditionalAllDecks();
+  print_noDeckTable(0);
+  print_recentDeckTable();
   print_preRegistration();
   if ($player->pkmember == 1) {
       print_PKpreRegistration();
@@ -499,7 +499,7 @@ function print_mainPlayerCP($player, $result) {
   if ($player->emailAddress == "") {
       echo "<li><a href=\"player.php?mode=edit_email\">Add Email Address</a></li>\n";
   } else {
-      echo "<li><a href=\"player.php?mode=edit_email\">Change Email Address: {$player->emailAddress}</a></li>\n";      
+      echo "<li><a href=\"player.php?mode=edit_email\">Change Email Address: {$player->emailAddress}</a></li>\n";
   }
   echo "<li><a href=\"player.php?mode=change_timezone\">Change Your Time Zone</a></li>\n";
   echo "</ul>\n";
@@ -528,7 +528,7 @@ function print_recentDeckTable() {
   echo "<tr><td colspan=2><b>RECENT DECKS</td>\n";
   echo "<td colspan=2 align=\"right\">";
   echo "<a href=\"player.php?mode=alldecks\">(see all)</a></td>\n";
-  
+
   $event = $player->getLastEventPlayed();
   if (is_null($event)) {
     echo "<tr><td>No Decks Found!</td>\n";
@@ -577,24 +577,24 @@ function print_preRegistration() {
   echo "</table>";
 }
 
-function print_PKpreRegistration() 
+function print_PKpreRegistration()
 {
   global $player;
   $events = Event::getNextPKPreRegister();
   echo "<table><tr><td colspan=\"3\"><b>PREREGISTER FOR PAUPER KREW EVENTS</b></td></tr>";
-  if (count($events) == 0) 
-      { 
+  if (count($events) == 0)
+      {
       echo "<tr><td colspan=\"3\"> No Upcoming Pauper Krew Events! </td> </tr>";
       }
-  foreach ($events as $event) 
+  foreach ($events as $event)
       {
       echo "<tr><td>{$event->name}</td>";
       echo "<td>" . distance_of_time_in_words(time(), strtotime($event->start)) . "</td>";
       if ($event->hasRegistrant($player->name))
           {
           echo "<td>Registered <a href=\"prereg.php?action=unreg&event={$event->name}\">(Unreg)</a></td>";
-          } 
-      else 
+          }
+      else
           {
           echo "<td><a href=\"prereg.php?action=reg&event={$event->name}\">Register</a></td>";
           }
@@ -659,15 +659,15 @@ function print_ActiveEvents(){
 function print_noDeckTable($allDecks) {
   global $player;
   $entriesNoDecks = $player->getNoDeckEntries();
-  
+
   if (count($entriesNoDecks) OR $allDecks) {
       // don't print the unentered decks part of player cp if player has no unentered decks
-      // OR if we are on the $allDecks page. Then always print it. 
+      // OR if we are on the $allDecks page. Then always print it.
       echo "<form action=\"player.php\" method=\"post\">";
       // TODO: Remove deck ignore functionality
       echo "<input type=\"hidden\" name=\"action\" value=\"setIgnores\" />";
       echo "<table style=\"border-width: 0px;\" width=275>\n";
-      If (!$allDecks) { 
+      If (!$allDecks) {
           // print this on the player cp
           echo "<tr><td colspan=2 style=\"font-size: 14px; color: red;\">";
           echo "<b>UNENTERED DECKS</td>";
@@ -677,7 +677,7 @@ function print_noDeckTable($allDecks) {
           // print this on the all decks page
           echo "<tr><td colspan=4 style=\"font-size: 14px; color: red;\">";
           echo "<b>UNENTERED DECKS</td></tr>";
-          
+
       }
       if (count($entriesNoDecks)) {
           foreach ($entriesNoDecks as $entry) {
@@ -745,7 +745,7 @@ function print_recentMatchTable() {
       $opp = $match->playerb;
     }
     $event = new Event($match->getEventNamebyMatchid());
-    
+
     echo "<td>".$event->name."</td><td>Round: ".$match->round."</td>";
     echo "<td width=\"4\"><b>$res</b> <b>{$match->getPlayerWins($player->name)}</b><b> - </b><b>{$match->getPlayerLosses($player->name)}</b></td>";
     echo "<td>vs.</td>\n";
@@ -775,7 +775,7 @@ function print_currentMatchTable($Leagues) {
         if ($match->result == "League") {
             leagueResultDropMenu();
             echo "<table><tr><td align=\"left\" colspan=\"2\">";
-            leagueOpponentDropMenu($event, $round = 1); 
+            leagueOpponentDropMenu($event, $round = 1);
             echo "</td></tr></table>";
         }
 
@@ -820,22 +820,22 @@ function print_currentMatchTable($Leagues) {
     foreach ($Leagues as $League) {
         echo $League;
     }
-    
+
     echo "</table>\n";
 }
 
 function leagueOpponentDropMenu($event, $round, $player, $subevent) {
   $player_standings = new Standings($event, $player->name);
   $playernames = $player_standings->League_getAvailable_Opponents($subevent, $round);
-    
+
   echo "<select class=\"inputbox\" name=\"opponent\"> Opponent";
-  
+
   if (count($playernames)) {
       foreach ($playernames as $playername) {
       echo "<option value=\"{$playername}\">{$playername}</option>";
       }
   } else {
-      echo "<option value=\"\">-No Available Opponents-</option>";      
+      echo "<option value=\"\">-No Available Opponents-</option>";
   }
   echo "</select>";
 }
@@ -876,11 +876,11 @@ function print_matchTable($player, $limit=0) {
     if($match->timing == 2 && $match->type == "Single Elimination") {
       $rnd = "T" . pow(2, $match->rounds + 1 - $match->round);
     }
-    
+
     if($match->type == "League") {
         $rnd = "L";
     }
-    
+
     $opp = $match->otherPlayer($player->name);
     $res = "D";
     if ($match->playerWon($player->name)) {
@@ -895,11 +895,11 @@ function print_matchTable($player, $limit=0) {
     $oppRating = $opponent->getRating("Composite", $event->start);
     $oppDeck = $opponent->getDeckEvent($event->name);
     $deckStr = "No Deck Found";
-    
+
     if (!is_null($oppDeck)) {
         $deckStr = $oppDeck->linkTo();
     }
-        
+
     if($oldname != $event->name) {
       if ($Count % 2 != 0) {
         $rowcolor = "odd";
@@ -932,7 +932,7 @@ function print_ratingsTableSmall() {
   }
   $names[] = "Other Formats";
 
-  
+
   echo "<table style=\"border-width: 0px;\" width=300>";
   echo "<tr><td colspan=1><b>MY RATINGS</td>\n";
   echo "<td colspan=1 align=\"right\">";
