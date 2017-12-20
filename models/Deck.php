@@ -213,12 +213,26 @@ class Deck {
         // if statments to capture color of card, sets hasColor
         // to true as long as any color is found.  Broken into multiple
         // if's to capture cards with more then one color
-        if ($color["u"]) { $str['u'] = 'u'; $hasColor=true; }
-        if ($color['g']) { $str['g'] = 'g'; $hasColor=true; }
-        if ($color['b']) { $str['b'] = 'b'; $hasColor=true; }
-        if ($color['r']) { $str['r'] = 'r'; $hasColor=true; }
-        if ($color["w"]) { $str['w'] = 'w'; $hasColor=true; }
-
+        if ($color["u"]) {
+            $str['u'] = 'u';
+            $hasColor=true;
+        }
+        if ($color['g']) {
+            $str['g'] = 'g';
+            $hasColor=true;
+        }
+        if ($color['b']) {
+            $str['b'] = 'b';
+            $hasColor=true;
+        }
+        if ($color['r']) {
+            $str['r'] = 'r';
+            $hasColor=true;
+        }
+        if ($color["w"]) {
+            $str['w'] = 'w';
+            $hasColor=true;
+        }
     }
 
     // alpabetize and sets the $deck_color_str
@@ -231,7 +245,7 @@ class Deck {
     $stmt->close();
   }
 
-  function getColorCounts() {
+  public function getColorCounts() {
     $db = Database::getConnection();
     $stmt = $db->prepare("SELECT sum(isw*d.qty)
                           AS w, sum(isg*d.qty)
@@ -254,7 +268,7 @@ class Deck {
   }
 
   // TODO: Find a way to list the inline id as a param
-  function getCastingCosts() {
+  public function getCastingCosts() {
     $db = Database::getConnection();
     $result = $db->query("SELECT convertedcost
                           AS cc, sum(qty)
@@ -274,11 +288,11 @@ class Deck {
     return $convertedcosts;
   }
 
-  function getEvent() {
+  public function getEvent() {
     return new Event($this->eventname);
   }
 
-  function getCardCount($cards) {
+  public function getCardCount($cards) {
     $cardCount = 0;
 
     foreach($cards as $card => $amt) {
@@ -287,7 +301,7 @@ class Deck {
     return $cardCount;
 }
 
-  function getCreatureCards() {
+  public function getCreatureCards() {
     $db = Database::getConnection();
     $result = $db->query("SELECT dc.qty, c.name
                           FROM deckcontents dc, cards c
@@ -308,7 +322,7 @@ class Deck {
   }
 
   // find a way to list the id as a param
-  function getLandCards() {
+  public function getLandCards() {
     $db = Database::getConnection();
     $result = $db->query("SELECT dc.qty, c.name
                           FROM deckcontents dc, cards c
@@ -328,7 +342,7 @@ class Deck {
     return $cards;
   }
 
-  function getErrors() {
+  public function getErrors() {
       $db = Database::getConnection();
       $stmt = $db->prepare("Select error FROM deckerrors WHERE deck = ?");
       $stmt->bind_param("d", $this->id);
@@ -344,7 +358,7 @@ class Deck {
   }
 
   // find a way to list the id as a param
-  function getOtherCards() {
+  public function getOtherCards() {
     $db = Database::getConnection();
     $result = $db->query("SELECT dc.qty, c.name
                          FROM deckcontents dc, cards c
@@ -366,7 +380,7 @@ class Deck {
     return $cards;
   }
 
-  function getMatches() {
+  public function getMatches() {
     if ($this->playername == NULL) { return array(); }
     return $this->getEntry()->getMatches();
   }
