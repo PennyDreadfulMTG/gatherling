@@ -2,8 +2,7 @@
 $gatherlingoutofservice = 0;
 if ($gatherlingoutofservice != 1)
 {
-    // header('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">');
-    include 'lib.php'; 
+    include 'lib.php';
     include 'config.php';
     session_start();
     print_header("Home");
@@ -28,7 +27,7 @@ if ($gatherlingoutofservice != 1)
                 <ul>
 
                     <li> Current Session Timeout: <?php echo (Event::session_timeout_stat() / 60) ?> minutes.</li>
-                    
+
                     <li> There are <?php echo Deck::uniqueCount() ?> unique decks. </li>
                     <li> We have recorded <?php echo Match::count() ?> matches from <?php echo Event::count() ?> events.</li>
                     <li> There are <?php echo Player::activeCount() ?> active players in gatherling. (<?php echo Player::verifiedCount() ?> verified) </li>
@@ -40,7 +39,7 @@ if ($gatherlingoutofservice != 1)
             <div class="clear"></div>
                     <?php require_once ("news.php"); ?>
             <div class="clear"></div>
-        </div> <!-- box gatherlingnews -->   
+        </div> <!-- box gatherlingnews -->
 
         <div class="gatherling_news box grid_8">
             <div class=" alpha omega uppertitle"> Bug Report: Know of a bug not listed here? <a href="message.php?mode=Send&type=Bug Report">Message Dabil!</a></div>
@@ -49,7 +48,7 @@ if ($gatherlingoutofservice != 1)
                     <?php require_once ("bugs.php"); ?>
                 </ul>
             <div class="clear"></div>
-        </div> <!-- box gatherlingnews -->   
+        </div> <!-- box gatherlingnews -->
 
         <div class="gatherling_news box grid_8">
             <div class=" alpha omega uppertitle"> Planned Updates: Got an idea you would like to see added? <a href="message.php?mode=Send&type=Update Request">Message Dabil!</a></div>
@@ -106,13 +105,13 @@ if ($gatherlingoutofservice != 1)
     </div> <!-- Sidebar -->
     <div class="clear"></div>
 
-   
-        
+
+
     </div>
 
-    <?php print_footer(); ?> 
-    
-<?php 
+    <?php print_footer(); ?>
+
+<?php
 }
 else
 {

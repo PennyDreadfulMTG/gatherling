@@ -1,5 +1,6 @@
 <?php
 require_once 'bootstrap.php';
+header('Strict-Transport-Security: max-age=63072000');
 
 $HC = "#DDDDDD";
 $R1 = "#EEEEEE";

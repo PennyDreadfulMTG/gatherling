@@ -1,6 +1,6 @@
 <?php
 
-# CONFIGURATION FILE FOR GATHERLING 
+# CONFIGURATION FILE FOR GATHERLING
 # CHANGE THE FOLLOWING VARIABLES
 #
 # === Database ===
@@ -10,19 +10,25 @@ $CONFIG['db_password'] = 'Lk33;=a4IZEh';
 $CONFIG['db_database'] = 'gatherli_gatherling';
 
 # === Website ===
-# The base url where gatherling is installed.  This should be an absolute URL.
+
+# The base url where gatherling is installed.  This should be an absolute URL, with HTTPS.
+// $CONFIG['base_url'] = "https://gatherling.com";
 $CONFIG['base_url'] = "http://localhost/gatherling/";
+
 # The name of your site.  This is used in a lot of places.
 $CONFIG['site_name'] = "Gatherling.com";
+
 # The Style of the site.
 $CONFIG['style'] = "Chandra";
+
 # A description for the ical calendar which is accessible at calendar.php
 $CONFIG['calendar_description'] = "a description for the events calendar";
+
 # Google Analytics account ID.
 $CONFIG['analytics_account'] = 'UA-37926034-1';
 
 # === Infobot PARAMETERS ==
-# If you have set it up with infobot to contact the site, you can change the passkey here.
+# If you have set it up with infobot or PDBot to contact the site, you can change the passkey here.
 # If you haven't set it up with infobot, leave this blank.
 $CONFIG['infobot_passkey'] = "";
 
