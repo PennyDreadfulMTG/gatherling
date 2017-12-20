@@ -26,9 +26,9 @@ function theme_file($name) {
 
 function print_header($title, $js = null, $extra_head_content = "") {
   global $CONFIG;
-  
-  // if player ip address changes could be a hacker breaking in. 
-  // Once you implement a remember me cookie, this will also 
+
+  // if player ip address changes could be a hacker breaking in.
+  // Once you implement a remember me cookie, this will also
   // destroy the remember me cookie if the IP's don't match
   // if (Player::isLoggedIn()) {
   //     $player = new Player(Player::loginName());
@@ -37,7 +37,7 @@ function print_header($title, $js = null, $extra_head_content = "") {
   //         redirect("login.php?ipaddresschanged=true");
   //     }
   // }
-  
+
   ini_set('session.gc_maxlifetime',10*60*60); // sets session timer to 10 hours, format is N hr * 60 minutes * 60 seconds
   ini_set('session.cookie_lifetime', 0); // sets the session cookie timer to only timeout when browser is closed
   echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
@@ -48,12 +48,12 @@ function print_header($title, $js = null, $extra_head_content = "") {
   echo "    <meta name=\"google-site-verification\" content=\"VWE-XX0CgPTHYgUqJ6t13N75y-p_Q9dgtqXikM3EsBo\" />\n";
   echo "    <title>{$CONFIG['site_name']} | {$title}</title>\n";
   echo "    <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"". theme_file("css/stylesheet.css") . "\" />\n";
-  echo "    <script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js\"></script>\n";
+  echo "     <script src=\"//code.jquery.com/jquery-latest.min.js\"></script>\n";
 
   if ($js) {
-    echo "<script type=\"text/javascript\">";
+    echo "    <script type=\"text/javascript\">";
     echo $js;
-    echo "</script>";
+    echo "    </script>";
   }
   echo $extra_head_content;
   echo <<<EOT
@@ -72,7 +72,7 @@ EOT;
   echo image_tag("header_logo.png");
   echo <<<EOT
             </div>
-        </div>      
+        </div>
         <div id="mainmenu_submenu" class="grid_12 menubar">
         <ul>
           <li><span class=\"inputbutton\"><a href="./index.php">Home</a></span></li>
@@ -148,7 +148,7 @@ function print_footer() {
   echo "</div><!-- prefix_1 suffix_1 -->\n";
   echo "</div><!-- gatherling_footer -->\n";
   echo "<div class=\"clear\"></div>\n";
-  echo "</div> <!-- container -->\n"; 
+  echo "</div> <!-- container -->\n";
   echo "</body>\n";
   echo "</html>\n";
 }
@@ -229,17 +229,17 @@ function formatDropMenu($format, $useAll = 0, $form_name = 'format') {
 
 function emailStatusDropDown($currentStatus = 1) {
     echo "<select class=\"inputbox\" name=\"emailstatus\">";
-    if ($currentStatus == 0) {        
+    if ($currentStatus == 0) {
         echo "<option value=\"0\" selected>Private</option>";
-    } else {        
+    } else {
         echo "<option value=\"0\">Private</option>";
     }
     if ($currentStatus == 1) {
-        echo "<option value=\"1\" selected>Public</option>";        
+        echo "<option value=\"1\" selected>Public</option>";
     } else {
         echo "<option value=\"1\">Public</option>";
     }
-    echo "</select>";    
+    echo "</select>";
 }
 
 function dropMenu($name, $options, $selected = NULL) {
@@ -348,7 +348,7 @@ function distance_of_time_in_words($from_time,$to_time = 0, $include_seconds = f
     /*$ds = $distance_in_seconds = abs(($from_time - $to_time));
     $dm = $distance_in_minutes = abs(($from_time - $to_time))/60;
     $ds = $distance_in_seconds = abs(($from_time - $to_time));
-  
+
   switch ($distance_in_minutes) {
     case $dm > 0 && $dm < 1:
     if($include_seconds == false) {
@@ -422,7 +422,7 @@ function tribeBanDropMenu ($format) {
     $allTribes = Format::getTribesList();
     $bannedTribes = $format->getTribesBanned();
     $tribes = array_diff($allTribes, $bannedTribes); // remove tribes banned from drop menu
-    
+
     echo "<select class=\"inputbox\" name=\"tribeban\">";
     echo "<option value=\"Unclassified\">- Tribe to Ban - </option>";
     foreach ($tribes as $tribe) {
@@ -435,7 +435,7 @@ function subTypeBanDropMenu ($format) {
     $allSubTypes = Format::getTribesList();
     $bannedSubTypes = $format->getSubTypesBanned();
     $subTypes = array_diff($allSubTypes, $bannedSubTypes); // remove sub types banned from drop menu
-    
+
     echo "<select class=\"inputbox\" name=\"subtypeban\">";
     echo "<option value=\"Unclassified\">- Subtype to Ban - </option>";
     foreach ($subTypes as $subType) {
@@ -446,12 +446,12 @@ function subTypeBanDropMenu ($format) {
 
 function formatsDropMenu($formatType="", $seriesName = "System") {
   $formatNames = array();
-  
+
   if ($formatType == "System")  {$formatNames = Format::getSystemFormats();}
   if ($formatType == "Public")  {$formatNames = Format::getPublicFormats();}
   if ($formatType == "Private") {$formatNames = Format::getPrivateFormats($seriesName);}
   if ($formatType == "All")     {$formatNames = Format::getAllFormats();}
-  
+
   echo "<select class=\"inputbox\" name=\"format\" STYLE=\"width: 250px\">\n";
   echo "<option value=\"Unclassified\">- {$formatType} Format Name -</option>\n";
   foreach ($formatNames as $formatName) {
@@ -472,7 +472,7 @@ function printOrganizerSelect($player_series, $selected) {
     echo ">{$series}</option>";
   }
   echo "</select>";
-  echo "<input class=\"inputbutton\" type=\"submit\" value=\"Select Series\">";  
+  echo "<input class=\"inputbutton\" type=\"submit\" value=\"Select Series\">";
   echo "</form>";
 }
 

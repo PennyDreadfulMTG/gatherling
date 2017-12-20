@@ -2,9 +2,15 @@
 
 require_once 'lib.php';
 
-function print_text_input($label, $name, $value = "", $len = 0, $reminder_text = null) {
-  echo "<tr><th><label for='$name'>{$label}</label></th>";
-  echo "<td><input class=\"inputbox\" type=\"text\" name=\"{$name}\" id='$name' value=\"{$value}\""; 
+function print_text_input($label, $name, $value = "", $len = 0, $reminder_text = null, $id = null) {
+  if (is_null($id)) {
+    $id = $name;
+  }
+  if (!isset($value)) {
+    $value = '';
+  }
+  echo "<tr><th><label for='$id'>{$label}</label></th>";
+  echo "<td><input class=\"inputbox\" type=\"text\" name=\"{$name}\" id='$id' value=\"{$value}\"";
   if ($len > 0) {
     echo " size=\"$len\"";
   }
@@ -12,7 +18,7 @@ function print_text_input($label, $name, $value = "", $len = 0, $reminder_text =
   if ($reminder_text) {
     echo $reminder_text;
   }
-  echo "</td></tr>";
+  echo "</td></tr>\n";
 }
 
 function print_checkbox_input($label, $name, $checked = false, $reminder_text = null) {
@@ -25,7 +31,7 @@ function print_checkbox_input($label, $name, $checked = false, $reminder_text = 
   if ($reminder_text) {
     echo $reminder_text;
   }
-  echo "</td></tr>";
+  echo "</td></tr>\n";
 }
 
 function print_password_input($label, $name, $value = "") {
@@ -35,15 +41,18 @@ function print_password_input($label, $name, $value = "") {
 
 function print_file_input($label, $name) {
   echo "<tr><th><label for='$name'>{$label}</label></th>";
-  echo "<input type=\"file\" name=\"{$name}\" id='$name' /></td></tr>";
+  echo "<td><input type=\"file\" name=\"{$name}\" id='$name' /></td></tr>";
 }
 
 function print_submit($label, $name = "action") {
-  echo "<tr><td colspan=\"2\" class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" name=\"{$name}\" value=\"{$label}\" /></td></tr>";
+  echo "<tr><td colspan=\"2\" class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" name=\"{$name}\" value=\"{$label}\" /></td></tr>\n";
 }
 
-function print_select($name, $options = array(), $selected = NULL) {
-  echo "<select class='inputbox' name=\"{$name}\" id='$name'>";
+function print_select($name, $options = array(), $selected = NULL, $id = null) {
+  if (is_null($id)) {
+    $id = $name;
+  }
+  echo "<select class='inputbox' name=\"{$name}\" id='$id'>";
   if (!is_assoc($options)) {
     $new_options = array();
     foreach ($options as $option) {
@@ -60,10 +69,13 @@ function print_select($name, $options = array(), $selected = NULL) {
   echo "</select>";
 }
 
-function print_select_input($label, $name, $options, $selected = NULL) {
-  echo "<tr><th><label for='$name'>{$label}</label></th><td>";
-  print_select($name, $options, $selected);
-  echo "</td></tr>";
+function print_select_input($label, $name, $options, $selected = NULL, $id = null) {
+  if (is_null($id)) {
+    $id = $name;
+  }
+  echo "<tr><th><label for='$id'>{$label}</label></th><td>";
+  print_select($name, $options, $selected, $id);
+  echo "</td></tr>\n";
 }
 
 function stringField($field, $def, $len) {
@@ -113,4 +125,4 @@ function timeZoneDropMenu($selected=NULL) {
   $timezones["13"]    = "[UTC + 13] Tonga Time, Phoenix Islands Time";
   $timezones["14"]    = "[UTC + 14] Line Island Time";
   print_select("timezone", $timezones, $selected);
-  }
+}
