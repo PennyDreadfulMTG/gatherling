@@ -75,6 +75,9 @@ if ($gatherlingoutofservice != 1)
                         <?php if ($player->isHost()) { ?>
                             <li> <a href="event.php">Host Control Panel</a></li>
                         <?php } ?>
+                        <?php if (!$player->verified && $CONFIG['infobot_passkey'] != "") { ?>
+                            <li> <a href="player.php?mode=verifymtgo">Verify your account</a></li>
+                        <?php } ?>
                     </ul>
                 </div>
             <?php else: ?>

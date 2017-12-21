@@ -32,4 +32,8 @@ $CONFIG['analytics_account'] = 'UA-37926034-1';
 # If you haven't set it up with infobot, leave this blank.
 $CONFIG['infobot_passkey'] = "";
 
+# Infobot/PDBot need to know which gatherling server to verify a user on.
+# Put your unique key here
+$CONFIG['infobot_prefix'] = "";
+
 # THAT'S ALL FOLKS!

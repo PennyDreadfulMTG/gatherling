@@ -171,7 +171,11 @@ if ($player == NULL) {
     break;
 
     case 'verifymtgo':
-    print_manualverifyMtgoForm();
+    if ($CONFIG['infobot_passkey'] == "") {
+      print_manualverifyMtgoForm();
+    } else {
+      print_verifyMtgoForm($player, $result);
+    }
     break;
 
     case 'drop_form':
@@ -422,15 +426,21 @@ function print_editTimeZoneForm($player, $result) {
 }
 
 function print_manualverifyMtgoForm() {
+  if ($player->verified == 1) {
+    echo "<center>You are already verified!</center>\n";
+    echo "<a href=\"player.php\">Go back to the Player CP</a>\n";
+  } else {
     echo "<center><h3>Verifying your MTGO account</h3>
         Verify your MTGO account in one simple step:<br />
         1. Leave an offline message for Dabil on MTGO.<br />\n";
+  }
 }
 
 function print_verifyMtgoForm($player, $result) {
+  global $CONFIG;
   echo "<center><h3>Verifying your MTGO account</h3>
     Verify your MTGO account by following these simple steps:<br />
-    1. Chat '!verify gatherling' to pdbot to get a verification code <br />
+    1. Chat '!verify {$CONFIG['infobot_prefix']}' to pdbot to get a verification code <br />
     2. Enter the verification code here to be verified <br />
     \n";
   echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
