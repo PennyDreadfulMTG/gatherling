@@ -42,13 +42,13 @@ if ($gatherlingoutofservice != 1)
               <li>Added ability to load decklist from file.</li>
               <li>When submitting a late entry deck, allow players to continue to edit their decks until it has no errors</li>
             </ul>
-            <h4>Format Editor</h4>
+            <h4>Format Control Panel</h4>
             <ul>
               <li>This is a separate control panel now!</li>
+              <li>Split Format Editor into separate tabs, which was sorely needed for any format with
+                  <a href="https://scryfall.com/search?q=f%3Apd">10,000+</a> explicitly defined legal cards.</li>
               <li>Better support for Eternal Formats - You can now tick a checkbox that means "All sets are legal".</li>
               <li>Added an "Add all cardsets" button, if Eternal mode doesn't quite work for you.</li>
-              <li>Split Format CP into separate tabs, which was sorely needed for any format with
-                  <a href="https://scryfall.com/search?q=f%3Apd">10,000+</a> explicitly defined legal cards.</li>
               <li>Increased speed of inserting legal cards, so you no longer need to insert those ten-thousand cards 500 at a time.</li>
               <li>Added some sensible defaults when creating a new format.</li>
             </ul>
