@@ -1112,7 +1112,7 @@ function insertEvent() {
   if($_POST['mainstruct'] == "") {$_POST['mainstruct'] = "Swiss";}
   $event->mainrounds = $_POST['mainrounds'];
   $event->mainstruct = $_POST['mainstruct'];
-  if($_POST['finalrounds'] == "") {$_POST['finalrounds'] = 3;}
+  if($_POST['finalrounds'] == "") {$_POST['finalrounds'] = 0;}
   if($_POST['finalstruct'] == "") {$_POST['finalstruct'] = "Single Elimination";}
   $event->finalrounds = $_POST['finalrounds'];
   $event->finalstruct = $_POST['finalstruct'];
@@ -1163,7 +1163,7 @@ function updateEvent() {
   if($_POST['mainstruct'] == "") {$_POST['mainstruct'] = "Swiss";}
   $event->mainrounds = $_POST['mainrounds'];
   $event->mainstruct = $_POST['mainstruct'];
-  if($_POST['finalrounds'] == "") {$_POST['finalrounds'] = 3;}
+  if($_POST['finalrounds'] == "") {$_POST['finalrounds'] = 0;}
   if($_POST['finalstruct'] == "") {$_POST['finalstruct'] = "Single Elimination";}
   $event->finalrounds = $_POST['finalrounds'];
   $event->finalstruct = $_POST['finalstruct'];

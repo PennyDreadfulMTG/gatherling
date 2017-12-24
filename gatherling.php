@@ -18,7 +18,7 @@ if ($gatherlingoutofservice != 1)
         </p>
         <p>
             After a year of running Penny Dreadful tournaments and dealing with Gatherling's quirks,
-            I present you with Gatherling 1.8.0, an attempt to improve the Quality of Life for Hosts and Players alike.<br />
+            I present you with Gatherling 4.8.0, an attempt to improve the Quality of Life for Hosts and Players alike.<br />
             I have upgraded the format editor to be a much nicer experience, cleaned up the codebase significantly,
             and made the deck editor a much nicer (and more forgiving) experience.<br />
             Full list of changes:
@@ -40,7 +40,7 @@ if ($gatherlingoutofservice != 1)
             <ul>
               <li>Added Support for more liagatures, both forms of split card notation, and other common name variations.</li>
               <li>Added ability to load decklist from file.</li>
-              <li>When submitting a late entry deck, allow players to continue to edit their decks until it has no errors</li>
+              <li>When submitting a late entry deck, players may continue to edit their decks until there are no errors</li>
             </ul>
             <h4>Format Control Panel</h4>
             <ul>
