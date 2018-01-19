@@ -201,13 +201,13 @@ class Format {
             case "Public":
                 // Only Series Organizer of the series that created the format
                 // and Supers can save or delete Public formats
-                if($player->isOrganizer($this->series_name) || $player->isSuper()) {$athorized = true;}
+                if($player->isOrganizer($this->series_name) || $player->isSuper()) {$authorized = true;}
                 break;
             case "Private":
                 // The only difference in access between a public and private format is that private formats can be
                 // viewed only by the series organizers of the series it belongs to
                 // the save and delete access is the same
-                if($player->isOrganizer($this->series_name) || $player->isSuper()) {$athorized = true;}
+                if($player->isOrganizer($this->series_name) || $player->isSuper()) {$authorized = true;}
                 break;
         }
         return $authorized;
@@ -225,11 +225,11 @@ class Format {
                 $authorized = true; // anyone can view a system format
                 break;
             case "Public":
-                $athorized = true; // anyone can view a public format
+                $authorized = true; // anyone can view a public format
                 break;
             case "Private":
                 // Only supers and organizers can view private formats
-                if($player->isOrganizer($this->series_name) || $player->isSuper()) {$athorized = true;}
+                if($player->isOrganizer($this->series_name) || $player->isSuper()) {$authorized = true;}
                 break;
         }
         return $authorized;
