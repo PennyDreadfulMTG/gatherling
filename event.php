@@ -865,7 +865,7 @@ function matchList($event) {
     $playersInMatches[] = $match->playera;
     $playersInMatches[] = $match->playerb;
     if (strcasecmp($match->verification, 'verified') != 0 && $event->finalized == 0) {
-      $ezypaste .= "/me {$match->playera} vs. {$match->playerb}<br />";
+      $ezypaste .= "{$match->playera} vs. {$match->playerb}<br />";
       printUnverifiedPlayerCell($match, $match->playera);
       echo "<td>";
       echo "<input type=\"hidden\" name=\"hostupdatesmatches[]\" value=\"{$match->id}\">";
