@@ -155,7 +155,7 @@ class Event {
       $stmt->bind_param("sssssdddssssdddddddd", $this->name, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
                                              $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl,
                                              $this->metaurl, $this->prereg_allowed, $this->pkonly, $this->player_reportable,
-                                             $this->prereg_cap, $this->player_editdecks, $this->private_decks, $this->player_reported_draws, late_entry_limit);
+                                             $this->prereg_cap, $this->player_editdecks, $this->private_decks, $this->player_reported_draws, $late_entry_limit);
       $stmt->execute() or die($stmt->error);
       $stmt->close();
 
