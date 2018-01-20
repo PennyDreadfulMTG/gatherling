@@ -654,8 +654,8 @@ function print_ActiveEvents(){
             echo "<td><a href=\"player.php?mode=drop_form&event={$event->name}\">Drop From Event</a></td>";
         }
         else {
-          // TODO: This doesn't account for the small amount of time where Event Start time has elapsed, but Round 1 hasn't started
-          if ($event->late_entry_limit <= $event->current_round){
+          // This doesn't account for the small amount of time where Event Start time has elapsed, but Round 1 hasn't started
+          if ($event->late_entry_limit > 0 && $event->late_entry_limit >= $event->current_round) {
             echo "<td><a href=\"prereg.php?action=reg&event={$event->name}\">Submit Late Entry</a></td>";
           }
         }

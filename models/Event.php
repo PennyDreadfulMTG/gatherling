@@ -70,19 +70,25 @@ class Event {
       $this->player_editdecks = 1;
       $this->private_decks = 1;
       $this->player_reported_draws = 0;
-
+      $this->late_entry_limit = 0;
       return;
     }
 
     if (!$this->new) {
       $db = Database::getConnection();
-      $stmt = $db->prepare("SELECT format, host, cohost, series, season, number, start, kvalue, finalized, prereg_allowed, pkonly, threadurl, metaurl, reporturl, active, current_round, player_reportable, player_editdecks, prereg_cap, private_decks, player_reported_draws FROM events WHERE name = ?");
+      $stmt = $db->prepare("SELECT format, host, cohost, series, season, number,
+                                   start, kvalue, finalized, prereg_allowed, pkonly, threadurl,
+                                   metaurl, reporturl, active, current_round, player_reportable, player_editdecks,
+                                    prereg_cap, private_decks, player_reported_draws, late_entry_limit FROM events WHERE name = ?");
       if (!$stmt) {
         die($db->error);
       }
       $stmt->bind_param("s", $name);
       $stmt->execute();
-      $stmt->bind_result($this->format, $this->host, $this->cohost, $this->series, $this->season, $this->number, $this->start, $this->kvalue, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->threadurl, $this->metaurl, $this->reporturl, $this->active, $this->current_round, $this->player_reportable, $this->player_editdecks, $this->prereg_cap, $this->private_decks, $this->player_reported_draws);
+      $stmt->bind_result($this->format, $this->host, $this->cohost, $this->series, $this->season, $this->number,
+                         $this->start, $this->kvalue, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->threadurl,
+                          $this->metaurl, $this->reporturl, $this->active, $this->current_round, $this->player_reportable, $this->player_editdecks,
+                          $this->prereg_cap, $this->private_decks, $this->player_reported_draws, $this->late_entry_limit);
       if ($stmt->fetch() == NULL) {
         throw new Exception('Event '. $name .' not found in DB');
       }
@@ -144,12 +150,12 @@ class Event {
       $stmt = $db->prepare("INSERT INTO events(name, start, format, host, cohost, kvalue,
                                                number, season, series, threadurl, reporturl,
                                                metaurl, prereg_allowed, finalized, pkonly, player_reportable,
-                                               prereg_cap, player_editdecks, private_decks, player_reported_draws)
-                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?)");
-      $stmt->bind_param("sssssdddssssddddddd", $this->name, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
+                                               prereg_cap, player_editdecks, private_decks, player_reported_draws, late_entry_limit)
+                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?)");
+      $stmt->bind_param("sssssdddssssdddddddd", $this->name, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
                                              $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl,
                                              $this->metaurl, $this->prereg_allowed, $this->pkonly, $this->player_reportable,
-                                             $this->prereg_cap, $this->player_editdecks, $this->private_decks, $this->player_reported_draws);
+                                             $this->prereg_cap, $this->player_editdecks, $this->private_decks, $this->player_reported_draws, late_entry_limit);
       $stmt->execute() or die($stmt->error);
       $stmt->close();
 
@@ -162,16 +168,15 @@ class Event {
       number = ?, season = ?, series = ?, threadurl = ?, reporturl = ?,
       metaurl = ?, finalized = ?, prereg_allowed = ?, pkonly = ?, active = ?,
       current_round = ?, player_reportable = ?, prereg_cap = ?,
-      player_editdecks = ?, private_decks = ?, player_reported_draws = ?
+      player_editdecks = ?, private_decks = ?, player_reported_draws = ?, late_entry_limit = ?
       WHERE name = ?");
       $stmt or die($db->error);
-      $stmt->bind_param("ssssdddssssdddddddddds", $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
+      $stmt->bind_param("ssssdddssssddddddddddds", $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
         $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl,
         $this->metaurl, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->active,
         $this->current_round, $this->player_reportable, $this->prereg_cap,
-        $this->player_editdecks, $this->private_decks, $this->player_reported_draws,
+        $this->player_editdecks, $this->private_decks, $this->player_reported_draws, $this->late_entry_limit,
         $this->name );
-
 
       $stmt->execute() or die($stmt->error);
       $stmt->close();
