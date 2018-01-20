@@ -1159,6 +1159,7 @@ class Format {
 
     public function insertCardIntoBanlist($card) {
         $card = stripslashes($card);
+        $card = normaliseCardName($card);
         $card = $this->getCardName($card);
         $cardID = $this->getCardID($card);
         if (is_null($cardID)) {
@@ -1179,6 +1180,7 @@ class Format {
 
     public function insertCardIntoLegallist($card) {
         $card = stripslashes($card);
+        $card = normaliseCardName($card);
         $card = $this->getCardName($card);
         $cardID = $this->getCardID($card);
         if (is_null($cardID)) {
@@ -1201,6 +1203,7 @@ class Format {
 
     public function insertCardIntoRestrictedlist($card) {
         $card = stripslashes($card);
+        $card = normaliseCardName($card);
         $card = $this->getCardName($card);
         $cardID = $this->getCardID($card);
         if (is_null($cardID)) {
