@@ -42,7 +42,7 @@ if ($gatherlingoutofservice != 1)
         </div> <!-- box gatherlingnews -->
 
         <div class="gatherling_news box grid_8">
-            <div class=" alpha omega uppertitle"> Bug Report: Know of a bug not listed here? <a href="message.php?mode=Send&type=Bug Report">Message Dabil!</a></div>
+            <div class=" alpha omega uppertitle"> Bug Report: Know of a bug not listed here? <a href="message.php?mode=Send&type=Bug Report">Message us!</a></div>
             <div class="clear"></div>
                 <ul>
                     <?php require_once ("bugs.php"); ?>
@@ -51,7 +51,7 @@ if ($gatherlingoutofservice != 1)
         </div> <!-- box gatherlingnews -->
 
         <div class="gatherling_news box grid_8">
-            <div class=" alpha omega uppertitle"> Planned Updates: Got an idea you would like to see added? <a href="message.php?mode=Send&type=Update Request">Message Dabil!</a></div>
+            <div class=" alpha omega uppertitle"> Planned Updates: Got an idea you would like to see added? <a href="message.php?mode=Send&type=Update Request">Message us!</a></div>
             <div class="clear"></div>
                 <ul>
                     <?php require_once ("updates.php"); ?>
