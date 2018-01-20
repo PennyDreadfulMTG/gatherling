@@ -535,4 +535,11 @@ if ($version < 24) {
   $db->commit();
   echo "... DB now at version 24! <br />";
 }
+if ($version < 25) {
+  echo "Updating to version 24 (Masterpiece sets have a longer code)... <br />";
+  do_query("ALTER TABLE `cardsets` CHANGE COLUMN `code` `code` VARCHAR(7) NULL DEFAULT NULL ;");
+  do_query("UPDATE db_version SET version = 25");
+  $db->commit();
+  echo "... DB now at version 25! <br />";
+}
 $db->autocommit(TRUE);
