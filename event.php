@@ -858,7 +858,7 @@ function matchList($event) {
       if ($match->timing > 1) {
         $extraRoundTitle = "(Finals Round {$match->round})";
       }
-      $ezypaste = "/me Pairings for Round {$thisround} $extraRoundTitle<br />";
+      $ezypaste = "Pairings for Round {$thisround} $extraRoundTitle<br />";
       echo "<tr><td class=\"box\" align=\"center\" colspan=\"7\" style=\"background-color: Grey;color: Black\"> <a name=\"round-{$thisround}\"></a>ROUND {$thisround} {$extraRoundTitle} </td></tr>";
     }
     echo "<tr><td align=\"center\">$printrnd$star</td>";
@@ -879,16 +879,16 @@ function matchList($event) {
       $playerbdropflag = $match->playerDropped($match->playerb) ? $drop_icon : "";
       echo "<td class=\"match_{$match->verification}\">{$match->playera}</td>";
       if ($match->playera == $match->playerb) {
-          $ezypaste .= "/me {$match->playera} has the BYE<br />";
+          $ezypaste .= "{$match->playera} has the BYE<br />";
           echo "<td>BYE</td>";
           echo "<td></td>";
       } else if (($match->getPlayerWins($match->playera) == 1) && ($match->getPlayerWins($match->playerb) == 1)) {
           echo "<td>{$playeradropflag} Draw {$playerbdropflag}</td>";
-          $ezypaste .= "/me {$match->playera} {$playerawins}-{$playerbwins} {$match->playerb}<br />";
+          $ezypaste .= "{$match->playera} {$playerawins}-{$playerbwins} {$match->playerb}<br />";
           echo "<td class=\"match_{$match->verification}\">{$match->playerb}</td>";
       } else {
           echo "<td>{$playeradropflag} {$playerawins}-{$playerbwins} {$playerbdropflag}</td>";
-          $ezypaste .= "/me {$match->playera} {$playerawins}-{$playerbwins} {$match->playerb}<br />";
+          $ezypaste .= "{$match->playera} {$playerawins}-{$playerbwins} {$match->playerb}<br />";
           echo "<td class=\"match_{$match->verification}\">{$match->playerb}</td>";
       }
     }
@@ -896,7 +896,7 @@ function matchList($event) {
     echo "<input type=\"checkbox\" name=\"matchdelete[]\" title='Delete this pairing' ";
     echo "value=\"{$match->id}\"></td></tr>";
   }
-  $ezypaste .= "/me Good luck everyone!<br />";
+  $ezypaste .= "Good luck everyone!<br />";
   echo "<tr><td>&nbsp;</td></tr>";
   if ($event->active) {
       echo "<tr><td align=\"center\" colspan=\"7\"><b>Add Pairing</b></td></tr>";
