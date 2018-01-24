@@ -553,7 +553,7 @@ function print_recentDeckTable() {
         echo "<tr><td>" . medalImgStr($deck->medal) . "</td>\n";
         echo "<td>" . $deck->linkTo() . "</td>\n";
         $targetUrl = 'eventreport';
-        if ($event->isHost($player->name)) {
+        if ($event->authCheck($player->name)) {
           $targetUrl = "event";
         }
         echo "<td><a href=\"${targetUrl}.php?event={$deck->eventname}\">{$deck->eventname}</a></a></td>\n";
@@ -628,7 +628,7 @@ function print_ActiveEvents(){
     foreach ($events as $event)
     {
         $targetUrl = 'eventreport';
-        if ($event->isHost($player->name)) {
+        if ($event->authCheck($player->name)) {
           $targetUrl = "event";
         }
         echo "<tr><td><a href=\"{$targetUrl}.php?event={$event->name}\">{$event->name}</a>";
@@ -723,7 +723,7 @@ function print_allDeckTable() {
     echo "</td>\n";
     $event = $deck->getEvent();
     $targetUrl = 'eventreport';
-    if ($event->isHost($player->name)) {
+    if ($event->authCheck($player->name)) {
       $targetUrl = "event";
     }
     echo "<td align=\"right\"><a href=\"{$targetUrl}.php?event={$event->name}\">{$event->name}</a></td>\n";
