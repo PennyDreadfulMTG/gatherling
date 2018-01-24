@@ -40,7 +40,7 @@ function json_event($event) {
         $roundnum = 0;
         $timing = 0;
         foreach ($matches as $m) {
-            $data = populate(array(), $m, array('playera', 'playerb', 'timing', 'round', 'verification'));
+            $data = populate(array(), $m, array('playera', 'playera_wins', 'playerb', 'playerb_wins', 'timing', 'round', 'verification'));
             if ($m->timing > $timing) {
                 $timing = $m->timing;
                 $addrounds += $roundnum;
