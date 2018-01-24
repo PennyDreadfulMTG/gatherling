@@ -813,7 +813,7 @@ function print_currentMatchTable($Leagues) {
             } else if ($match->result == "BYE") {
 
             } else {
-                echo "(Report Submitted)";
+                echo "(Reported)";
             }
             echo "</td></tr>\n";
 
