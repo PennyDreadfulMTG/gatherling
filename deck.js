@@ -34,7 +34,12 @@ $('input[type=file]').on("change", function(e) {
     var file = e.target.files[0];
     reader = new FileReader();
     reader.onload = function (e) {
-        $("#deck-contents").val(e.target.result);
+        txt = e.target.result.replace(/\n\r/g, '\n');
+        split = txt.split('\n\n');
+        $("#deck-contents").val(split[0]);
+        if (split.length > 1) {
+            $("#deck-sideboard").val(split[1]);
+        }
         $("#deck-name").val(file.name.beforeLastIndex('.'));
         // TODO: Put sideboard in the right place
     };
