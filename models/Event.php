@@ -36,6 +36,7 @@ class Event {
   public $current_round;
   public $standing;
   public $player_reportable;
+  public $player_reported_draws;
   public $prereg_cap; // Cap on player initiated registration
   public $late_entry_limit; // How many rounds we let people perform late entries
 
@@ -43,7 +44,6 @@ class Event {
 
   public $hastrophy;
   private $new;
-  public $player_reported_draws;
 
   function __construct($name) {
     if ($name == "") {

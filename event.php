@@ -143,15 +143,17 @@ function content() {
     $newevent->season = $oldevent->season;
     $newevent->number = $oldevent->number + 1;
     $newevent->format = $oldevent->format;
+
     $newevent->start = strftime("%Y-%m-%d %H:%M:00", strtotime($oldevent->start) + (86400 * 7));
     $newevent->kvalue = $oldevent->kvalue;
     $newevent->finalized = 0;
-    $newevent->pkonly = $oldevent->pkonly;
-    $newevent->player_reportable = $oldevent->player_reportable;
-    $newevent->prereg_cap = $oldevent->prereg_cap;
-    $newevent->private_decks = $oldevent->private_decks;
     $newevent->prereg_allowed = $oldevent->prereg_allowed;
+    $newevent->pkonly = $oldevent->pkonly;
     $newevent->threadurl = $oldevent->threadurl;
+    $newevent->reporturl = $oldevent->reporturl;
+    $newevent->metaurl = $oldevent->metaurl;
+
+    $newevent->player_editdecks = $oldevent->player_editdecks;
 
     $newevent->series = $oldevent->series;
     $newevent->host = $oldevent->host;
@@ -161,9 +163,17 @@ function content() {
     $newevent->mainstruct = $oldevent->mainstruct;
     $newevent->finalrounds = $oldevent->finalrounds;
     $newevent->finalstruct = $oldevent->finalstruct;
+
+    $newevent->player_reportable = $oldevent->player_reportable;
+    $newevent->prereg_cap = $oldevent->prereg_cap;
+    $newevent->private_decks = $oldevent->private_decks;
+
+    $newevent->player_reportable = $oldevent->player_reportable;
     $newevent->player_reported_draws = $oldevent->player_reported_draws;
     $newevent->prereg_cap = $oldevent->prereg_cap;
+    $newevent->late_entry_limit = $oldevent->late_entry_limit;
 
+    $newevent->private_decks = $oldevent->private_decks;
     $newevent->name = sprintf("%s %d.%02d",$newevent->series, $newevent->season, $newevent->number);
 
     eventForm($newevent, true);
