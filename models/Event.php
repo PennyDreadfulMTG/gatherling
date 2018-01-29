@@ -145,6 +145,9 @@ class Event {
     if ($this->host == '') {
       $this->host = NULL;
     }
+    if ($this->finalized) {
+      $this->active = 0;
+    }
 
     if ($this->new) {
       $stmt = $db->prepare("INSERT INTO events(name, start, format, host, cohost, kvalue,
