@@ -843,12 +843,12 @@ class Format {
         }
 
         // underdog format allows shapeshifters to use as many changelings as they want
-        // undersog format allows Tribes with only 3 members to
+        // underdog format allows Tribes with only 3 members to
         // underdog allows only 4 changelings per deck list
         if ($this->underdog) {
             echo "Underdog Key is: $underdogKey<br />";
             if ($underdogKey != "Shapeshifter") {
-                echo "No Shapeshifter<br />";
+                // echo "Tribe is not Shapeshifter<br />";
                 if ((strpos($underdogKey,'Homarid') !== false) OR (strpos($underdogKey,'Harpy') !== false) OR
                     (strpos($underdogKey,'Mongoose') !== false) OR (strpos($underdogKey,'Squid') !== false) OR
                     (strpos($underdogKey,'Whale') !== false) OR (strpos($underdogKey,'Badger') !== false) OR (strpos($underdogKey,'Masticore') !== false)) {
@@ -857,7 +857,7 @@ class Format {
                         $this->error[] = "Tribe $underdogKey is allowed a maximum of 8 changeling's per deck in underdog format";
                     }
                 } else {
-                    echo "I am not a 3 card tribe<br />";
+                    // echo "I am not a 3 card tribe<br />";
                     if ($subTypeChangeling > 4) {
                         $this->error[] = "This tribe can't include more than 4 Changeling creatures because it's not a 3-member tribe. The 3 member tribes are: Badger,Harpy, Homarid, Masticore, Mongoose, Octopus, Rabbit, Squid, and Whale";
                     }
