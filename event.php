@@ -23,7 +23,7 @@ function addPlayerRow(data) {
   html += '</td><td>' + data.player + '</td>';
   html += '<td>';
   if (data.verified) {
-    html += '<img src="$verified_url" alt="Verified" />';
+    html += '<img src="$verified_url" />';
   }
   html += '</td>';
   html += '<td align="center"><img src="$dot_url" alt="dot" /></td>';
@@ -661,7 +661,7 @@ function playerList($event) {
         displayPlayerEmailPopUp($entry->player->name, $entry->player->emailAddress);
     }
     if ($entry->player->verified) {
-      echo image_tag("verified.png", array("alt" => "Verified", "title" => "Player Verified on MTGO"));
+      echo image_tag("verified.png", array( "title" => "Player Verified on MTGO"));
     }
     echo "</td>";
     if ($entry->deck) {
@@ -766,7 +766,7 @@ function pointsAdjustmentForm($event) {
         echo "<td></td>";
     }
     if ($entry->deck != NULL) {
-        $img = image_tag("verified.png", array("alt" => "Verified", "title" => "Player posted deck"));
+        $img = image_tag("verified.png", array("title" => "Player posted deck"));
         echo "<td>{$img}</td>";
     } else {
         echo "<td> </td>";
