@@ -846,13 +846,13 @@ class Format {
         // underdog format allows Tribes with only 3 members to
         // underdog allows only 4 changelings per deck list
         if ($this->underdog) {
-            echo "Underdog Key is: $underdogKey<br />";
+            echo "Tribe is: $underdogKey<br />";
             if ($underdogKey != "Shapeshifter") {
                 // echo "Tribe is not Shapeshifter<br />";
                 if ((strpos($underdogKey,'Homarid') !== false) OR (strpos($underdogKey,'Harpy') !== false) OR
                     (strpos($underdogKey,'Mongoose') !== false) OR (strpos($underdogKey,'Squid') !== false) OR
                     (strpos($underdogKey,'Whale') !== false) OR (strpos($underdogKey,'Badger') !== false) OR (strpos($underdogKey,'Masticore') !== false)) {
-                    echo "I am a 3 card tribe<br />";
+                    echo "$underdogKey is a 3 card tribe<br />";
                     if ($subTypeChangeling > 8) {
                         $this->error[] = "Tribe $underdogKey is allowed a maximum of 8 changeling's per deck in underdog format";
                     }
