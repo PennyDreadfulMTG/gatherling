@@ -852,7 +852,7 @@ function printTribalBandR($active_format, $seriesName) {
         }
         echo "<tr><td colspan=\"2\"> Add new: ";
         echo "<textarea class=\"inputbox\" rows=\"5\" cols=\"40\" name=\"addrestrictedtotribecreature\"></textarea></td></tr>\n";
-        echo "<input type=\"hidden\" name=\"view\" value=\"format_editor\" />";
+        echo "<input type=\"hidden\" name=\"view\" value=\"tribal\" />";
         echo "<tr>";
         echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Restricted To Tribe List\" name =\"action\" /></td>";
         echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Restricted To Tribe List\" name =\"action\" /></td>";
@@ -865,7 +865,7 @@ function printTribalBandR($active_format, $seriesName) {
         $tribesBanned = $active_format->getTribesBanned();
         echo "<h4>Tribe Banlist</h4>\n";
         echo "<form action=\"formatcp.php\" method=\"post\">";
-        echo "<input type=\"hidden\" name=\"view\" value=\"bandr\" />";
+        echo "<input type=\"hidden\" name=\"view\" value=\"tribal\" />";
         echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
         echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
         echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
@@ -900,7 +900,7 @@ function printTribalBandR($active_format, $seriesName) {
         $subTypesBanned = $active_format->getSubTypesBanned();
         echo "<h4>Subtype Banlist</h4>\n";
         echo "<form action=\"formatcp.php\" method=\"post\">";
-        echo "<input type=\"hidden\" name=\"view\" value=\"bandr\" />";
+        echo "<input type=\"hidden\" name=\"view\" value=\"tribal\" />";
         echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
         echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
         echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
@@ -922,7 +922,7 @@ function printTribalBandR($active_format, $seriesName) {
         subTypeBanDropMenu($active_format);
         echo "</td>";
         echo "<td colspan=\"2\" class=\"buttons\">";
-        echo "<input type=\"hidden\" name=\"view\" value=\"bandr\" />";
+        echo "<input type=\"hidden\" name=\"view\" value=\"tribal\" />";
         echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Subtype Ban\" name =\"action\" />";
         echo"</td></tr></table></form>";
     }
