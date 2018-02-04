@@ -767,8 +767,6 @@ function printBandR($active_format, $seriesName)
     echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Restricted List\" name =\"action\" /></td>";
     echo "</tr></table></form>";
 
-     // if the series is using a legal card list, don't show the banlist
-     if (!count($legalCards)) {
         $cardCount = count($bandCards);
         echo "<form action=\"formatcp.php\" method=\"post\">";
         echo "<input type=\"hidden\" name=\"view\" value=\"bandr\" />";
@@ -804,10 +802,7 @@ function printBandR($active_format, $seriesName)
         echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Banlist\" name =\"action\" /></td>";
         echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Banlist\" name =\"action\" /></td>";
         echo "</tr></table></form>";
-    }
 
-    // if the series is using a ban list, then don't show the legal card list
-    if (!count($bandCards)) {
         $cardCount = count($legalCards);
         echo "<form action=\"formatcp.php\" method=\"post\">";
         echo "<input type=\"hidden\" name=\"view\" value=\"bandr\" />";
@@ -843,7 +838,6 @@ function printBandR($active_format, $seriesName)
         echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Legal List\" name =\"action\" /></td>";
         echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Legal List\" name =\"action\" /></td>";
         echo "</tr></table></form>";
-    }
 }
 
 function printTribalBandR($active_format, $seriesName) {

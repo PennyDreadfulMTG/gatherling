@@ -1166,15 +1166,18 @@ class Format {
             return false; // card not found in database
         }
 
-        if($this->isCardOnBanList($card) || $this->isCardOnLegalList($card) || $this->isCardOnLegalList($card)) {
-            return false;
+        if($this->isCardOnBanList($card)) {
+          return true;
+        }
+        else if ($this->isCardOnLegalList($card)) {
+          return false;
         } else {
-            $db = Database::getConnection();
-            $stmt = $db->prepare("INSERT INTO bans(card_name, card, format, allowed) VALUES(?, ?, ?, 0)");
-            $stmt->bind_param("sds", $card, $cardID, $this->name);
-            $stmt->execute() or die($stmt->error);
-            $stmt->close();
-            return true;
+          $db = Database::getConnection();
+          $stmt = $db->prepare("INSERT INTO bans(card_name, card, format, allowed) VALUES(?, ?, ?, 0)");
+          $stmt->bind_param("sds", $card, $cardID, $this->name);
+          $stmt->execute() or die($stmt->error);
+          $stmt->close();
+          return true;
         }
     }
 
@@ -1189,7 +1192,7 @@ class Format {
 
         if ($this->isCardOnLegalList($card)){
             return true;
-        } else if ($this->isCardOnBanList($card) || $this->isCardOnLegalList($card)) {
+        } else if ($this->isCardOnBanList($card)) {
             return false;
         } else {
             $db = Database::getConnection();

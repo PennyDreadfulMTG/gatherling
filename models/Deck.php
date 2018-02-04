@@ -617,19 +617,17 @@ class Deck {
           }
       }
 
-      // You can only use the legal card list, or the ban list - not both
+      if($format->isCardOnBanList($card)) {
+          $this->errors[] = "Maindeck card: {$amt} {$card} is banned in {$format->name}";
+          if (!isset($this->unparsed_cards[$card])) {
+              $this->unparsed_cards[$card] = 0;
+          }
+          $this->unparsed_cards[$card] += $amt;
+          continue;
+      }
       if (count($legalCards)) {
           if (!$format->isCardOnLegalList($card)) {
               $this->errors[] = "Maindeck card: {$amt} {$card} is not on the legal card list";
-              if (!isset($this->unparsed_cards[$card])) {
-                  $this->unparsed_cards[$card] = 0;
-              }
-              $this->unparsed_cards[$card] += $amt;
-              continue;
-          }
-      } else {
-          if($format->isCardOnBanList($card)) {
-              $this->errors[] = "Maindeck card: {$amt} {$card} is banned in {$format->name}";
               if (!isset($this->unparsed_cards[$card])) {
                   $this->unparsed_cards[$card] = 0;
               }
@@ -724,19 +722,17 @@ class Deck {
           }
       }
 
-      // You can only use the legal card list, or the ban list - not both
+      if($format->isCardOnBanList($card)) {
+        $this->errors[] = "Sideboard card: {$amt} {$card} is banned in {$format->name}";
+        if (!isset($this->unparsed_side[$card])) {
+          $this->unparsed_side[$card] = 0;
+        }
+        $this->unparsed_side[$card] += $amt;
+        continue;
+      }
       if (count($legalCards)) {
           if (!$format->isCardOnLegalList($card)) {
               $this->errors[] = "Sideboard card: {$amt} {$card} is not on the legal card list";
-              if (!isset($this->unparsed_side[$card])) {
-                  $this->unparsed_side[$card] = 0;
-              }
-              $this->unparsed_side[$card] += $amt;
-              continue;
-          }
-      } else {
-          if($format->isCardOnBanList($card)) {
-              $this->errors[] = "Sideboard card: {$amt} {$card} is banned in {$format->name}";
               if (!isset($this->unparsed_side[$card])) {
                   $this->unparsed_side[$card] = 0;
               }
