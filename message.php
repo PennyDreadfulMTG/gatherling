@@ -4,8 +4,8 @@
 // Mode: Used to select between send and read modes
 // Type: Type of message being sent. Options are: Bug Report and Update Request
 
-session_start();
 include 'lib.php';
+session_start();
 
 print_header("Message");
 
@@ -14,11 +14,11 @@ print_header("Message");
 <div class="grid_10 suffix_1 prefix_1">
 <div id="gatherling_main" class="box">
 
-<?php    
+<?php
 
-if (Player::isLoggedIn()) 
+if (Player::isLoggedIn())
     {message_content();}
-else 
+else
     {linkToLogin();}
 
 function message_content() {
@@ -64,7 +64,7 @@ function submit_message() {
     $email    = $_POST['email'];
     $content  = $_POST['content'];
     $msg_type = str_replace('Send ','',$_POST['submit']); // grabbing the type of message
-    
+
     // Create and output confirmation message to user
     echo '<div class="uppertitle">' . $msg_type . ' Submission</div>';
     echo '<p><br />Thanks for submitting a ' . $msg_type . ' form ' . $mtgo_id . '<br />';
@@ -79,7 +79,7 @@ function submit_message() {
     $subject = $msg_type;
     $bcc = "allthegoodnamesaretaken@ymail.com";
     $from = "Gatherling.com <no-reply@Gatherling.com>";
-    
+
     $accepted_for_delivery = mail($email, $subject, $msg, 'From:' . $from . "\r\nBcc:" . $bcc);
     if ($accepted_for_delivery)
         echo 'Message was accepted by the server for delivery.</p><br />';
@@ -91,4 +91,4 @@ function submit_message() {
 </div> <!-- gatherling_main -->
 </div> <!-- grid_10 suffix_1 prefix_1 -->
 
-<?php print_footer(); ?> 
+<?php print_footer(); ?>

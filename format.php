@@ -1,6 +1,6 @@
 <?php
-session_start();
 include 'lib.php';
+session_start();
 
 print_header("Format Information");
 ?>
@@ -14,4 +14,4 @@ print_header("Format Information");
 </div> <!-- gatherling_main -->
 </div> <!-- grid_10 suffix_1 prefix_1 -->
 
-<?php print_footer(); ?> 
+<?php print_footer(); ?>

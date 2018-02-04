@@ -1,8 +1,9 @@
-<?php session_start();
+<?php
 require_once 'lib.php';
+session_start();
 
 print_header("Deck Search");
-?> 
+?>
 <script src="/styles/Chandra/js/sorttable.js"></script>
 
 <div class="grid_10 suffix_1 prefix_1">
@@ -14,7 +15,7 @@ handleRequest();
 
 ?>
 
-</div> 
+</div>
 </div>
 
 <?php print_footer();?>
@@ -28,8 +29,8 @@ function handleRequest() {
     $decksearch = new Decksearch();
     if (!isset($_GET['mode'])) { $_GET['mode'] = ''; }
 
-    if (strcmp($_GET['mode'], "search") == 0 && !isset($_GET['page'])) { 
-        
+    if (strcmp($_GET['mode'], "search") == 0 && !isset($_GET['page'])) {
+
        if (!empty($_POST['format'])) {
            $decksearch->searchByFormat($_POST['format']);
            $_SESSION['format'] = $_POST['format'];
@@ -72,11 +73,11 @@ function handleRequest() {
            foreach ($decksearch->errors as $value) {
            echo $value . "<br />";
            }
-       }    
-    } else {   
-        if(isset($_GET['page']) && isset($_SESSION['search_results'])) {      
+       }
+    } else {
+        if(isset($_GET['page']) && isset($_SESSION['search_results'])) {
             showSearchForm(count($_SESSION['search_results']));
-            displayDecksFromID($_SESSION['search_results']);   
+            displayDecksFromID($_SESSION['search_results']);
         } else {
             unset($_SESSION['search_results']);
             unset($_SESSION['archetype']);
@@ -85,7 +86,7 @@ function handleRequest() {
             unset($_SESSION['name']);
             unset($_SESSION['player']);
             unset($_SESSION['cardname']);
-            unset($_SESSION['color']);          
+            unset($_SESSION['color']);
             showSearchForm();
             showMostPlayedDecks();
         }
@@ -106,19 +107,19 @@ function showMostPlayedDecks() {
     echo "<th>Created</th>";
     echo "</thead>";
     echo "<tbody>";
-    $db = Database::getConnection(); 
-    $stmt = $db->prepare("SELECT count(d.deck_hash) as cnt, d.playername, d.name, d.archetype, d.format, d.created_date, d.id 
-                          FROM decks d, entries n 
-                          WHERE n.deck = d.id 
-                          AND 5 < (SELECT count(*) 
-                          FROM deckcontents 
-                          WHERE deck = d.id 
-                          GROUP BY deck) 
-                          GROUP BY d.deck_hash 
-                          ORDER BY cnt DESC 
+    $db = Database::getConnection();
+    $stmt = $db->prepare("SELECT count(d.deck_hash) as cnt, d.playername, d.name, d.archetype, d.format, d.created_date, d.id
+                          FROM decks d, entries n
+                          WHERE n.deck = d.id
+                          AND 5 < (SELECT count(*)
+                          FROM deckcontents
+                          WHERE deck = d.id
+                          GROUP BY deck)
+                          GROUP BY d.deck_hash
+                          ORDER BY cnt DESC
                           LIMIT 20");
-    $stmt->execute(); 
-    $stmt->bind_result($count, $playerName, $deckName, $archetype, $format, $created, $deckid); 
+    $stmt->execute();
+    $stmt->bind_result($count, $playerName, $deckName, $archetype, $format, $created, $deckid);
 
     while ($stmt->fetch()) {
         echo "<td>{$count} times</td>";
@@ -134,7 +135,7 @@ function showMostPlayedDecks() {
     echo "</tbody>";
     echo "</table>";
     echo "</div>";
-    echo "<br />";   
+    echo "<br />";
 }
 
 function showSearchForm($res_num=NULL) {
@@ -142,69 +143,69 @@ function showSearchForm($res_num=NULL) {
     echo "<div class=\"ds_inputbox group\">";
     echo "<div class=\"ds_left group\">";
     echo "<form  method=\"post\" action=\"" . htmlspecialchars($_SERVER["PHP_SELF"]) . "?mode=search\">";
-    echo "<label class=\"ds_label\" for=\"player\">Player Name: <input class=\"ds_input\" type=\"text\" name=\"player\"  value=\"";  
+    echo "<label class=\"ds_label\" for=\"player\">Player Name: <input class=\"ds_input\" type=\"text\" name=\"player\"  value=\"";
     if(isset($_SESSION['player'])) { echo $_SESSION['player']; }
     echo "\"/></label>";
-    
+
     echo "<label class=\"ds_label\" for=\"cardname\">Card name:   <input class=\"ds_input\" type=\"text\" name=\"cardname\" value=\"";
     if(isset($_SESSION['cardname'])) { echo $_SESSION['cardname']; }
     echo "\"/></label>";
-    
+
     echo "<div class=\"ds_select group\">";
-    if(isset($_SESSION['format'])) { 
-        formatDropMenuDS($_SESSION['format']); 
+    if(isset($_SESSION['format'])) {
+        formatDropMenuDS($_SESSION['format']);
     } else { formatDropMenuDS($arg=NULL); }
-    
+
     if(isset($_SESSION['archetype'])) {
-       archetypeDropMenu($_SESSION['archetype']); 
+       archetypeDropMenu($_SESSION['archetype']);
     } else { archetypeDropMenu(); }
-    
-    if(isset($_SESSION['series'])) { 
-       seriesDropMenu($_SESSION['series']); 
+
+    if(isset($_SESSION['series'])) {
+       seriesDropMenu($_SESSION['series']);
     } else { seriesDropMenu(); }
-     
-    if(isset($_SESSION['medals'])) { 
-       medalsDropMenu('medals', array('1st','2nd','t4','t8'), $_SESSION['medals']); 
+
+    if(isset($_SESSION['medals'])) {
+       medalsDropMenu('medals', array('1st','2nd','t4','t8'), $_SESSION['medals']);
     } else { medalsDropMenu('medals', array('1st','2nd','t4','t8')); }
-    
+
     echo "</div>";
-     
-    echo "<div class=\"ds_color\">";   
-    if(isset($_SESSION['color'])) { 
-       checkboxMenu($_SESSION['color']); 
+
+    echo "<div class=\"ds_color\">";
+    if(isset($_SESSION['color'])) {
+       checkboxMenu($_SESSION['color']);
     } else { checkboxMenu(); }
     echo "</div>";
-    
-    echo "</div>";   
+
+    echo "</div>";
     echo "<div class=\"ds_right group\">";
-    echo "<input class=\"ds_submit\"type=\"submit\" name=\"submitbuttom\" value=\"Submit\">"; 
+    echo "<input class=\"ds_submit\"type=\"submit\" name=\"submitbuttom\" value=\"Submit\">";
     echo "<br /><center>";
     echo image_tag("search.png", array("class" => "ds_image", "height" => "75", "width" => "75"));
     echo "</center>";
     echo "<div class=\"ds_results group\">";
-    if ($res_num) { echo $res_num . " decks found"; } 
-    echo "</div>"; 
+    if ($res_num) { echo $res_num . " decks found"; }
+    echo "</div>";
     echo "</div>";
     echo "</form>";
     echo "</div>";
-    
+
 }
 
 function checkboxMenu($colors=NULL) {
-    
+
     //check it see if the colors were set and check any boxes that were
     if(isset($colors['w'])) { $w = "checked"; } else { $w = ""; }
     if(isset($colors['b'])) { $b = "checked"; } else { $b = ""; }
     if(isset($colors['u'])) { $u = "checked"; } else { $u = ""; }
     if(isset($colors['g'])) { $g = "checked"; } else { $g = ""; }
-    if(isset($colors['r'])) { $r = "checked"; } else { $r = ""; } 
-    
+    if(isset($colors['r'])) { $r = "checked"; } else { $r = ""; }
+
     echo "<label class=\"ds_checkbox\" for=\"color[g]\"><input type=\"checkbox\" name=\"color[g]\" value=\"g\" $g/>" . image_tag("manag.png", array("class" => "ds_mana_image")) . "</label>";
     echo "<label class=\"ds_checkbox\" for=\"color[u]\"><input type=\"checkbox\" name=\"color[u]\" value=\"u\" $u/>" . image_tag("manau.png", array("class" => "ds_mana_image")) . "</label>";
     echo "<label class=\"ds_checkbox\" for=\"color[w]\"><input type=\"checkbox\" name=\"color[w]\" value=\"w\" $w/>" . image_tag("manaw.png", array("class" => "ds_mana_image")) . "</label>";
     echo "<label class=\"ds_checkbox\" for=\"color[b]\"><input type=\"checkbox\" name=\"color[b]\" value=\"b\" $b/>" . image_tag("manab.png", array("class" => "ds_mana_image")) . "</label>";
     echo "<label class=\"ds_checkbox\" for=\"color[r]\"><input type=\"checkbox\" name=\"color[r]\" value=\"r\" $r/>" . image_tag("manar.png", array("class" => "ds_mana_image")) . "</label>";
-       
+
 }
 
 function archetypeDropMenu($archetype=NULL, $useAll = 0, $form_name = 'archetype') {
@@ -275,18 +276,18 @@ function displayDecksFromID($id_arr) {
     // grab an array of the values of the decks with matching id's
     $decksearch = new Decksearch();
     $ids_populated = $decksearch->idsToSortedInfo($id_arr);
-  
-    $records_per_page = 25; 
-    
+
+    $records_per_page = 25;
+
     $pagination = new Pagination();
     $pagination->records(count($ids_populated));
     $pagination->records_per_page($records_per_page);
     $pagination->avoid_duplicate_content(false);
-    
+
     //get the ids for the current page
-    $ids_populated = array_slice( $ids_populated,(($pagination->get_page() - 1) 
+    $ids_populated = array_slice( $ids_populated,(($pagination->get_page() - 1)
                                     * $records_per_page), $records_per_page);
-    
+
     echo "<br />";
     echo "<div class=\"ds_inputbox group\">";
     echo "<table class=\"sortable\" id=\"table-decksearch\"\">";
@@ -302,7 +303,7 @@ function displayDecksFromID($id_arr) {
 
     foreach ($ids_populated as $index => $deckinfo) {
             $display_date = date("d-m-Y", strtotime($deckinfo['created_date']));
-            
+
         ?>
         <tr<?php echo ($index % 2 ? ' class="even"' : '')?>>
         <?php
@@ -318,12 +319,12 @@ function displayDecksFromID($id_arr) {
             echo "<td align=center>" . $deckinfo['record'] . "</td>";
         echo "</tr>";
     }
-    
+
     echo "</tbody>";
     echo "</table>";
     echo "</div>";
-    echo "<br />";   
+    echo "<br />";
     $pagination->render();
     echo "<br />";
-    echo "<br />";    
+    echo "<br />";
 }

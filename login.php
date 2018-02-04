@@ -1,4 +1,6 @@
-<?php include 'lib.php';
+<?php
+include 'lib.php';
+session_start();
 $in = testLogin();
 print_header("Login");
 
@@ -29,7 +31,7 @@ print_header("Login");
                 </tr>
             </table>
         </form>
-    </div> <!-- gatherling_main --> 
+    </div> <!-- gatherling_main -->
 </div> <!-- grid 10 pre 1 suff 1 -->
 
 <?php print_footer(); ?>
@@ -47,11 +49,10 @@ function printIPAddressChanged() {
 
 function testLogin() {
     $success = 0;
-    
+
     if(isset($_POST['username']) && isset($_POST['password'])) {
         $auth = Player::checkPassword($_POST['username'], $_POST['password']);
-    session_start();
-    // The $admin check allows an admin to su into any user without a password.  
+    // The $admin check allows an admin to su into any user without a password.
     $admin = Player::isLoggedIn() && Player::getSessionPlayer()->isSuper();
     if ($auth || $admin) {
             header("Cache-control: private");

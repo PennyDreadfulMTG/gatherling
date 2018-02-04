@@ -1,6 +1,7 @@
-<?php session_start();
+<?php
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
+session_start();
 
 print_header("Player Profile");
 
@@ -16,8 +17,8 @@ if (isset($_REQUEST['email'])) {$email = $_REQUEST['email'];}
 if (isset($_REQUEST['email_public'])) {$email_public = $_REQUEST['email_public'];}
 if (isset($_REQUEST['time_zone'])) {$timezone = $_REQUEST['time_zone'];}
 
-	searchForm($playername);
-?> 
+    searchForm($playername);
+?>
 <div class="grid_10 suffix_1 prefix_1">
 <div id="gatherling_main" class="box">
 <div class="uppertitle"> Player Profile </div>
@@ -28,17 +29,17 @@ content($profile_edit);
 
 ?>
 
-</div> 
-</div> 
+</div>
+</div>
 
 <?php print_footer(); ?>
 
 <?php
 function content($profile_edit) {
-  global $playername; 
+  global $playername;
   if(chop($playername) != "") {
-      $player = Player::findByName($playername); 
-      if (!is_null($player)) { 
+      $player = Player::findByName($playername);
+      if (!is_null($player)) {
           if ($profile_edit == 1){
               editForm($player->timezone, $player->emailAddress, $player->emailPrivacy);
           } else if ($profile_edit == 2){
@@ -46,10 +47,10 @@ function content($profile_edit) {
               $player->emailPrivacy = $_GET['email_public'];
               $player->timezone = $_GET['timezone'];
               $player->save();
-              profileTable($player);  
+              profileTable($player);
           } else {
               profileTable($player);
-	  }
+      }
       } else {
           echo "<center>\n";
           echo "$playername could not be found in the database. Please check";
@@ -72,7 +73,7 @@ function profileTable($player) {
   bestDecksTable($player);
   echo "</div></div>\n";
   echo "<div class=\"grid_5 omega\"> <div id=\"gatherling_righthalf\">\n";
-  medalTable($player); 
+  medalTable($player);
   trophyTable($player);
   echo "</div> </div>\n";
   echo "<div class=\"clear\"></div>";
@@ -80,19 +81,19 @@ function profileTable($player) {
 
 function infoTable($player) {
   $ndx = 0; $sum = 0; $favF = "";
-  foreach ($player->getFormatsPlayedStats() as $tmprow) { 
-		$sum += $tmprow['cnt'];
-		if ($ndx == 0) {
-			$max = $tmprow['cnt'];
-			$favF = $tmprow['format'];
-		}
-		$ndx++;
-	}
-	$pcgF = 0;
-	if($sum > 0) {$pcgF = round(($max/$sum)*100);}
+  foreach ($player->getFormatsPlayedStats() as $tmprow) {
+        $sum += $tmprow['cnt'];
+        if ($ndx == 0) {
+            $max = $tmprow['cnt'];
+            $favF = $tmprow['format'];
+        }
+        $ndx++;
+    }
+    $pcgF = 0;
+    if($sum > 0) {$pcgF = round(($max/$sum)*100);}
 
   $ndx = 0; $sum = 0; $favS = "";
-  foreach ($player->getSeriesPlayedStats() as $tmprow) { 
+  foreach ($player->getSeriesPlayedStats() as $tmprow) {
     $sum += $tmprow['cnt'];
     if ($ndx == 0) {
       $max = $tmprow['cnt'];
@@ -100,18 +101,18 @@ function infoTable($player) {
     }
     $ndx++;
   }
-	$pcgS = 0;
+    $pcgS = 0;
   if($sum > 0) {$pcgS = round(($max/$sum)*100);}
 
   $line1 = strtoupper($player->name);
-  if ($player->verified) { 
+  if ($player->verified) {
     $line1 .= image_tag("verified.png", array("title" => "Verified their MTGO account"));
   }
 
-  $matches = $player->getAllMatches(); 
+  $matches = $player->getAllMatches();
   $nummatches = count($matches);
 
-  $rating = $player->getRating(); 
+  $rating = $player->getRating();
   $hosted = $player->getHostedEventsCount();
   $lastevent = $player->getLastEventPlayed();
   $emailAddress = $player->emailAddress;
@@ -131,7 +132,7 @@ function infoTable($player) {
   echo "<td align=\"right\">$nummatches</td></tr>\n";
   echo "<tr><td>Record:</td>\n";
   echo "<td align=\"right\">{$player->getRecord()}<td>";
-  echo "</tr>\n";	
+  echo "</tr>\n";
   if($hosted > 0) {
       echo "<tr><td>Events Hosted:</td>\n";
       echo "<td align=\"right\">$hosted</td></tr>\n";
@@ -141,10 +142,10 @@ function infoTable($player) {
   echo "<tr><td>Favorite Series:</td>\n";
   echo "<td align=\"right\">$favS ($pcgS%)</td></tr>\n";
   echo "<tr><td>Last Active:</td>\n";
-  if (!is_null($lastevent)) { 
+  if (!is_null($lastevent)) {
     $lastActive = date("F j, Y", strtotime($lastevent->start));
     echo "<td align=\"right\">$lastActive ({$lastevent->name})</td></tr>\n";
-  } else { 
+  } else {
     echo "<td align=\"right\">Never</td></tr>\n";
   }
 
@@ -154,7 +155,7 @@ function infoTable($player) {
   } else {
       echo "<td align=\"right\">$emailAddress ($emailprivacy)</td></tr>\n";
   }
-  
+
   echo "<tr><td>Time Zone:</td>\n";
   echo "<td align=\"right\">{$player->time_zone()}</td></tr>\n";
   echo "<tr><td align=\"center\" colspan='2'><a href=\"profile.php?profile_edit=1\" class=\"borderless\">Edit Player Information</a></td></tr>\n";
@@ -167,19 +168,19 @@ function medalTable($player) {
 
   $medalcount = $player->getMedalStats();
 
-	echo "<table style=\"border-width: 0px\" width=260>\n";
-	echo "<tr><td align=\"center\" colspan=4><b>MEDALS EARNED</td></tr>\n";
-	if(count($medalcount) == 0) {
-		echo "<tr><td align=\"center\" colspan=2>";
-		echo "<i>{$player->name} has not earned any medals.</td></tr>\n";
-	}
-	else {
-		medalCell("1st", $medalcount['1st']);
-		medalCell("2nd", $medalcount['2nd']);
-		medalCell("t4", $medalcount['t4']);
-		medalCell("t8", $medalcount['t8']);
-	}
-	echo "</table>\n";
+    echo "<table style=\"border-width: 0px\" width=260>\n";
+    echo "<tr><td align=\"center\" colspan=4><b>MEDALS EARNED</td></tr>\n";
+    if(count($medalcount) == 0) {
+        echo "<tr><td align=\"center\" colspan=2>";
+        echo "<i>{$player->name} has not earned any medals.</td></tr>\n";
+    }
+    else {
+        medalCell("1st", $medalcount['1st']);
+        medalCell("2nd", $medalcount['2nd']);
+        medalCell("t4", $medalcount['t4']);
+        medalCell("t8", $medalcount['t8']);
+    }
+    echo "</table>\n";
 }
 
 function trophyTable($player) {
@@ -200,40 +201,40 @@ function trophyTable($player) {
 }
 
 function bestDecksTable($player) {
-	echo "<table style=\"border-width: 0px\" width=250>\n";
-	echo "<tr><td align=\"left\" colspan=3><b>MEDAL WINNING DECKS</td></tr>\n";
+    echo "<table style=\"border-width: 0px\" width=250>\n";
+    echo "<tr><td align=\"left\" colspan=3><b>MEDAL WINNING DECKS</td></tr>\n";
   $printed = 0;
-  foreach ($player->getBestDeckStats() as $row) { 
+  foreach ($player->getBestDeckStats() as $row) {
     if($row['score'] > 0) {
-			$record = deckRecordString($row['name'], $player);
-			if(chop($row['name']) == "") {$row['name'] = "* NO NAME *";}
-			echo "<tr><td>";
-			echo "<a href=\"deck.php?mode=view&id={$row['id']}\">";
-			echo "{$row['name']}</a></td>\n";
-			echo "<td align=\"center\" width=50>$record</td>";
-			echo "<td align=\"right\">";
-			for($i = 0; $i < $row['1st']; $i++) {inlineMedal('1st');}
-			for($i = 0; $i < $row['2nd']; $i++) {inlineMedal('2nd');}
-			for($i = 0; $i < $row['t4']; $i++) {inlineMedal('t4');}
-			for($i = 0; $i < $row['t8']; $i++) {inlineMedal('t8');}
-			echo "</td></tr>\n";
-			$printed++;
-		}
-	}
-	if($printed == 0) {
-		echo "<tr><td colspan=3><i>{$player->name} has no medal winning decks.";
-		echo "</td></tr>\n";
-	}
-	echo "</table>\n";
+            $record = deckRecordString($row['name'], $player);
+            if(chop($row['name']) == "") {$row['name'] = "* NO NAME *";}
+            echo "<tr><td>";
+            echo "<a href=\"deck.php?mode=view&id={$row['id']}\">";
+            echo "{$row['name']}</a></td>\n";
+            echo "<td align=\"center\" width=50>$record</td>";
+            echo "<td align=\"right\">";
+            for($i = 0; $i < $row['1st']; $i++) {inlineMedal('1st');}
+            for($i = 0; $i < $row['2nd']; $i++) {inlineMedal('2nd');}
+            for($i = 0; $i < $row['t4']; $i++) {inlineMedal('t4');}
+            for($i = 0; $i < $row['t8']; $i++) {inlineMedal('t8');}
+            echo "</td></tr>\n";
+            $printed++;
+        }
+    }
+    if($printed == 0) {
+        echo "<tr><td colspan=3><i>{$player->name} has no medal winning decks.";
+        echo "</td></tr>\n";
+    }
+    echo "</table>\n";
 }
 
 function medalCell($medal, $count) {
-	if(is_null($count)) {
-		$count = 0;
-	}
-	echo "<tr><td align=\"right\" width=130>";
+    if(is_null($count)) {
+        $count = 0;
+    }
+    echo "<tr><td align=\"right\" width=130>";
         echo medalImgStr($medal);
-	echo  "<td>$count</td></tr>\n";
+    echo  "<td>$count</td></tr>\n";
 }
 
 function inlineMedal($medal) {
@@ -241,59 +242,59 @@ function inlineMedal($medal) {
 }
 
 function deckRecordString($deckname, $player) {
-  $matches = $player->getMatchesByDeckName($deckname); 
-  $wins = 0; 
-  $losses = 0; 
+  $matches = $player->getMatchesByDeckName($deckname);
+  $wins = 0;
+  $losses = 0;
   $draws = 0;
 
-  foreach ($matches as $match) { 
+  foreach ($matches as $match) {
     if($match->playerWon($player->name)) {
-      $wins++; 
-    } elseif ($match->playerLost($player->name)) { 
-      $losses++; 
+      $wins++;
+    } elseif ($match->playerLost($player->name)) {
+      $losses++;
     } else if ($match->playerBye($player->name)) {
       $wins = $wins + 1;
     } else if ($match->playerMatchInProgress($player->name)) {
       ; // do nothing since match is in progress and there are no results
     } else {
-      $draws++; 
-    }    
+      $draws++;
+    }
   }
   $recordString = $wins . "-" . $losses;
-  if ($draws > 0) { 
+  if ($draws > 0) {
     $recordString .= "-" . $draws;
-  } 
+  }
   return $recordString;
 }
 
 function searchForm($name) {
-  echo "<div class=\"grid_10 prefix_1 suffix_1\"> <div class=\"box\" id=\"gatherling_simpleform\">\n"; 
-	echo "<form action=\"profile.php\" mode=\"post\">\n";
+  echo "<div class=\"grid_10 prefix_1 suffix_1\"> <div class=\"box\" id=\"gatherling_simpleform\">\n";
+    echo "<form action=\"profile.php\" mode=\"post\">\n";
   echo "<center>Player Lookup: ";
-	echo "<input class=\"inputbox\" type=\"text\" name=\"player\" value=\"$name\" />";
-	echo "<input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Lookup Profile\" />\n";
+    echo "<input class=\"inputbox\" type=\"text\" name=\"player\" value=\"$name\" />";
+    echo "<input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Lookup Profile\" />\n";
   echo "</form></center>\n";
   echo "<div class=\"clear\"></div>\n";
   echo "</div> </div>\n";
 }
 
 function editForm($timezone, $email, $public) {
-	echo "<div class=\"grid_10 prefix_1 suffix_1\"> <div class=\"box\" id=\"gatherling_simpleform\">\n";
-	echo "<form action=\"profile.php\" mode=\"POST\">\n";
-	echo "<center>Time Zone: ";
-	timeZoneDropMenu($timezone);
-	echo "<br><label for=\"player\">Email Address: </label><input class=\"inputbox\" type=\"text\" name=\"email\" value=\"$email\" />";
-	echo "<br><input type=\"radio\" name=\"email_public\" value=\"1\"";
-	if ($public == 1){echo " checked ";};
-	echo">Make my email publicly viewable";
-	echo "<br><input type=\"radio\" name=\"email_public\" value=\"0\"";
-	if ($public == 0){echo " checked ";};
-	echo">Only allow admininstrators and event hosts to view my email";
-	echo "<br><input type=\"hidden\" name=\"profile_edit\" value=\"2\">";
-	echo "<br><input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Sumbit Changes\" />\n";
-	echo "</form></center>\n";
-	echo "<div class=\"clear\"></div>\n";
-	echo "</div> </div>\n";
+    echo "<div class=\"grid_10 prefix_1 suffix_1\"> <div class=\"box\" id=\"gatherling_simpleform\">\n";
+    echo "<form action=\"profile.php\" mode=\"POST\">\n";
+    echo "<center>Time Zone: ";
+    timeZoneDropMenu($timezone);
+    echo "<br><label for=\"player\">Email Address: </label><input class=\"inputbox\" type=\"text\" name=\"email\" value=\"$email\" />";
+    echo "<br><input type=\"radio\" name=\"email_public\" value=\"1\"";
+    if ($public == 1){echo " checked ";};
+    echo">Make my email publicly viewable";
+    echo "<br><input type=\"radio\" name=\"email_public\" value=\"0\"";
+    if ($public == 0){echo " checked ";};
+    echo">Only allow admininstrators and event hosts to view my email";
+    echo "<br><input type=\"hidden\" name=\"profile_edit\" value=\"2\">";
+    echo "<br><input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Sumbit Changes\" />\n";
+    echo "</form></center>\n";
+    echo "<div class=\"clear\"></div>\n";
+    echo "</div> </div>\n";
 }
 
 ?>

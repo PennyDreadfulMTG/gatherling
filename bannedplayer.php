@@ -1,5 +1,6 @@
-<?php session_start();
+<?php
 require_once 'lib.php';
+session_start();
 $player = Player::getSessionPlayer();
 
 print_header("You have been banned");

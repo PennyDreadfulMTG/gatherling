@@ -1,5 +1,6 @@
-<?php session_start();
+<?php
 require_once 'lib.php';
+session_start();
 
 $action = '';
 if (isset($_REQUEST['action']))

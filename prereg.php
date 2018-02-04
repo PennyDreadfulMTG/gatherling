@@ -1,5 +1,6 @@
-<?php session_start();
+<?php
 require_once 'lib.php';
+session_start();
 $stop = 0;
 $player = Player::getSessionPlayer();
 
@@ -12,7 +13,7 @@ $event = new Event($_GET['event']);
 $series = new Series($event->series);
 
 $playerIsBanned = $series->isPlayerBanned($player->name);
-if($playerIsBanned) {    
+if($playerIsBanned) {
   header("Location: bannedplayer.php");
   exit;
 }
@@ -30,7 +31,7 @@ if ($event->is_full()){
 
 $location = 'player.php';
 if ($_GET['action'] == "reg" and $stop != 1) {
-    // part of the reg-decklist feature, the header call to deck.php is the switch that turns it on. Not sure if the call is 
+    // part of the reg-decklist feature, the header call to deck.php is the switch that turns it on. Not sure if the call is
     // correct exactly. It works for the super but not non-supers
     $event->addPlayer($player->name);
   $ename = urlencode($event->name);

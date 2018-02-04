@@ -1,6 +1,6 @@
 <?php
-session_start();
 require_once('lib.php');
+session_start();
 
 $player = Player::getSessionPlayer();
 if (!$player->isSuper()) {

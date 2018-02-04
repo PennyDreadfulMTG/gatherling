@@ -1,14 +1,12 @@
 <?php
-
-require 'lib.php'; 
-
-session_start(); 
+require 'lib.php';
+session_start();
 
 $some_admin = Player::getSessionPlayer();
-if (!$some_admin->isSuper()) { 
-  header("Location: gatherling.php"); 
+if (!$some_admin->isSuper()) {
+  header("Location: gatherling.php");
   exit(0);
-} 
+}
 
 $ndx = 7000;
 $totalHangingDecks = 0;
@@ -27,7 +25,7 @@ while($ndx > 0) {
         }
     }
     $ndx--;
-} 
+}
 
 echo "Total hanging decks found and removed: $totalHangingDecks<br />\n";
 echo "Total decks checked: $decksChecked<br />\n";

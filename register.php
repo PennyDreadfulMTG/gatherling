@@ -1,4 +1,5 @@
-<?php include 'lib.php';
+<?php
+include 'lib.php';
 require_once 'lib_form_helper.php';
 
 print_header("Register");
@@ -34,29 +35,29 @@ function content() {
 }
 
 function regForm() {
-	echo "<form action=\"register.php\" method=\"post\">\n";
-	echo "<table align=\"center\" style=\"border-width: 0px\">\n";
-	echo "<tr><td><b>MTGO Username</td>\n";
-	echo "<td><input class=\"inputbox\" type=\"text\" name=\"username\" value=\"\">\n";
-	echo "</td></tr>\n";
-	echo "<tr><td><b>Password</td>\n";
-	echo "<td><input class=\"inputbox\" type=\"password\" name=\"pw1\" value=\"\">\n";
-	echo "</td></tr>";
-	echo "<tr><td><b>Confirm Password</td>\n";
-	echo "<td><input class=\"inputbox\" type=\"password\" name=\"pw2\" value=\"\">\n";
-	echo "</td></tr>\n";
-	echo "<tr><td><b>Email</td>\n";
-	echo "<td><input class=\"inputbox\" type=\"email\" name=\"email\" value=\"\">\n";
+    echo "<form action=\"register.php\" method=\"post\">\n";
+    echo "<table align=\"center\" style=\"border-width: 0px\">\n";
+    echo "<tr><td><b>MTGO Username</td>\n";
+    echo "<td><input class=\"inputbox\" type=\"text\" name=\"username\" value=\"\">\n";
+    echo "</td></tr>\n";
+    echo "<tr><td><b>Password</td>\n";
+    echo "<td><input class=\"inputbox\" type=\"password\" name=\"pw1\" value=\"\">\n";
+    echo "</td></tr>";
+    echo "<tr><td><b>Confirm Password</td>\n";
+    echo "<td><input class=\"inputbox\" type=\"password\" name=\"pw2\" value=\"\">\n";
+    echo "</td></tr>\n";
+    echo "<tr><td><b>Email</td>\n";
+    echo "<td><input class=\"inputbox\" type=\"email\" name=\"email\" value=\"\">\n";
         echo emailStatusDropDown();
         echo "</td></tr>\n";
-	echo "<tr><td><b>Time Zone</td>\n";
+    echo "<tr><td><b>Time Zone</td>\n";
         echo "<td>";
         echo timeZoneDropMenu();
         echo "</td></tr>\n";
-	echo "<tr><td>&nbsp;</td></tr>\n";
-	echo "<tr><td align=\"center\" colspan=\"2\">\n";
-	echo "<input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Register Account\">";
-	echo "</td></tr></table></form>\n";
+    echo "<tr><td>&nbsp;</td></tr>\n";
+    echo "<tr><td align=\"center\" colspan=\"2\">\n";
+    echo "<input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Register Account\">";
+    echo "</td></tr></table></form>\n";
 }
 
 function doRegister() {

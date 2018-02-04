@@ -1,6 +1,7 @@
-<?php session_start();
+<?php
 include 'lib.php';
 include 'lib_form_helper.php';
+session_start();
 
 $verified_url = theme_file("images/verified.png");
 $dot_url = theme_file("images/dot.png");

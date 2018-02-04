@@ -1,6 +1,6 @@
 <?php
-session_start();
 include 'lib.php';
+session_start();
 
 print_header("Season Report");
 
