@@ -144,7 +144,7 @@ function handleActions($seriesName) {
                 }
                 if(!$success) {
                     $hasError = true;
-                    $errormsg .= "Can't add {$card} to Ban list, it is either not in the database, on the legal card list, or already on the ban list";
+                    $errormsg .= "Can't add {$card} to Ban list, it is either not in the database, or on the legal card list";
                     return;
                 }
             }
@@ -275,6 +275,9 @@ function handleActions($seriesName) {
         if(isset($_POST['planechase']))       {$format->planechase = 1;}        else {$format->planechase = 0;}
         if(isset($_POST['prismatic']))        {$format->prismatic = 1;}         else {$format->prismatic = 0;}
         if(isset($_POST['tribal']))           {$format->tribal = 1;}            else {$format->tribal = 0;}
+
+        if(isset($_POST['underdog']))         {$format->underdog = 1;}          else {$format->underdog = 0;}
+        if(isset($_POST['pure']))             {$format->pure = 1;}              else {$format->pure = 0;}
 
         if(isset($_POST['allowcommons']))     {$format->allow_commons = 1;}     else {$format->allow_commons = 0;}
         if(isset($_POST['allowuncommons']))   {$format->allow_uncommons = 1;}   else {$format->allow_uncommons = 0;}
@@ -517,6 +520,9 @@ function handleActions($seriesName) {
 
         $format->banAllTribes();
     }
+    else if ($_POST['action'] == "Continue") {
+
+    }
     else {
         $hasError = true;
         $errormsg = "Unknown action '{$_POST['action']}'";
@@ -646,11 +652,33 @@ function printFormatSettings($active_format, $seriesName) {
     echo "</tr>";
     echo "</table>";
 
+    if ($active_format->tribal) {
+      echo "<h4>Tribal Modifiers</h4>";
+      echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
+      echo "<tr><th style=\"width: 100px; text-align: center;\">";
+      print_tooltip("Underdog", "Restrict usage of Changelings to 4 cards (8 for tribes with only 3 members).");
+      echo "</th>";
+      echo "<th style=\"width: 100px; text-align: center;\">";
+      print_tooltip("Pure", "Don't allow for off-tribe creatures or Changelings.\nAll creatures in the deck must share at least one creature type.");
+      echo "</th>";
+      echo "</tr><tr>";
+      echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"underdog\" value=\"1\" ";
+      if($active_format->underdog == 1) {echo "checked=\"yes\" ";}
+      echo " /></td>";
+      echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"pure\" value=\"1\" ";
+      if($active_format->pure == 1) {echo "checked=\"yes\" ";}
+      echo " /></td>";
+
+      echo "</table>";
+    }
+
     echo "<h4>Format Modifiers</h4>";
     echo "<table class=\"form\" style=\"border-width: 0px;\" align=\"center\">";
     echo "<tr><th style=\"width: 100px; text-align: center;\">";
     print_tooltip("Eternal", "Eternal Formats treat all cardsets as legal.");
-    echo " Format</th></tr>";
+    echo " Format</th>";
+
+    echo "</tr><tr>";
     echo "<td style=\"width: 100px; text-align: center;\"><input type=\"checkbox\" name=\"eternal\" value=\"1\" ";
     if($active_format->eternal == 1) {echo "checked=\"yes\" ";}
     echo " /></td>";
@@ -821,7 +849,6 @@ function printBandR($active_format, $seriesName)
 function printTribalBandR($active_format, $seriesName) {
     $restrictedToTribe = $active_format->getRestrictedToTribeList();
     // restricted list to tribe
-    if ($active_format->tribal) {
         $cardCount = count($restrictedToTribe);
         echo "<form action=\"formatcp.php\" method=\"post\">";
         echo "<input type=\"hidden\" name=\"view\" value=\"tribal\" />";
@@ -857,11 +884,9 @@ function printTribalBandR($active_format, $seriesName) {
         echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Update Restricted To Tribe List\" name =\"action\" /></td>";
         echo "<td class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" value=\"Delete Entire Restricted To Tribe List\" name =\"action\" /></td>";
         echo "</tr></table></form>";
-    }
 
     // tribe ban
     // tribe will be banned, subtype will still be allowed in other tribes decks
-    if ($active_format->tribal) {
         $tribesBanned = $active_format->getTribesBanned();
         echo "<h4>Tribe Banlist</h4>\n";
         echo "<form action=\"formatcp.php\" method=\"post\">";
@@ -892,11 +917,9 @@ function printTribalBandR($active_format, $seriesName) {
         echo "</td><td>";
         echo "<input class=\"inputbutton\" type=\"submit\" value=\"Ban All Tribes\" name =\"action\" />";
         echo"</td></tr></table></form>";
-    }
 
     // subtype ban
     // subtype is banned and is not allowed to be used by any deck
-    if ($active_format->tribal) {
         $subTypesBanned = $active_format->getSubTypesBanned();
         echo "<h4>Subtype Banlist</h4>\n";
         echo "<form action=\"formatcp.php\" method=\"post\">";
@@ -925,7 +948,6 @@ function printTribalBandR($active_format, $seriesName) {
         echo "<input type=\"hidden\" name=\"view\" value=\"tribal\" />";
         echo "<input class=\"inputbutton\" type=\"submit\" value=\"Update Subtype Ban\" name =\"action\" />";
         echo"</td></tr></table></form>";
-    }
 }
 
 function printCardSets($active_format, $seriesName) {
