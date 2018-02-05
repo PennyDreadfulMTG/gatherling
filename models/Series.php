@@ -324,14 +324,16 @@ class Series {
       'format' => "");
 
     $db = Database::getConnection();
-    $stmt = $db->prepare("SELECT series, season, first_pts, second_pts, semi_pts, quarter_pts, participation_pts,
+    $stmt = $db->prepare("SELECT series, first_pts, second_pts, semi_pts, quarter_pts, participation_pts,
                                  rounds_pts, decklist_pts, win_pts, loss_pts, bye_pts, must_decklist, cutoff_ord,
                                  master_link, format FROM series_seasons
                           WHERE series = ?
-                          AND season = ?");
+                          AND season <= ?
+                          ORDER BY season DESC
+                          LIMIT 1");
     $stmt->bind_param("ss", $this->name, $season_number);
     $stmt->execute();
-    $stmt->bind_result($seriesname, $season_number, $season_rules['first_pts'], $season_rules['second_pts'],
+    $stmt->bind_result($seriesname, $season_rules['first_pts'], $season_rules['second_pts'],
                        $season_rules['semi_pts'], $season_rules['quarter_pts'], $season_rules['participation_pts'],
                        $season_rules['rounds_pts'], $season_rules['decklist_pts'], $season_rules['win_pts'],
                        $season_rules['loss_pts'], $season_rules['bye_pts'], $season_rules['must_decklist'],
