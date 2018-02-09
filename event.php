@@ -661,9 +661,6 @@ function playerList($event) {
     } else {
         displayPlayerEmailPopUp($entry->player->name, $entry->player->emailAddress);
     }
-    if ($entry->player->verified) {
-      echo image_tag("verified.png", array( "title" => "Player Verified on MTGO"));
-    }
     echo "</td>";
     if ($entry->deck) {
       $decklink = $entry->deck->linkTo();
