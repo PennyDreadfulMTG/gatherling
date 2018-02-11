@@ -321,6 +321,7 @@ function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, 
     echo "<td> ";
     echo "<form action=\"player.php\" method=\"get\">\n";
     echo "<input name=\"match_id\" type=\"hidden\" value=\"{$match_id}\" />\n";
+    echo "<input name=\"player\" type=\"hidden\" value=\"{$player}\" />\n";
     echo "<input name=\"mode\" type=\"hidden\" value=\"submit_result\" />\n";
     echo "<input name=\"submit\" type=\"submit\" value=\"Go Back and Correct\" />\n";
     echo "</form>\n";
