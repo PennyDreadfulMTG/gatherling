@@ -113,22 +113,7 @@ function content() {
     $_GET['name'] = $_GET['event'];
   }
 
-  if(isset($_GET['name'])) {
-    $event = new Event($_GET['name']);
-    if (!$event->authCheck(Player::loginName())) {
-      authFailed();
-      return;
-    }
-    if (isset($_GET['action'])) {
-      if (strcmp($_GET['action'], "undrop") == 0) {
-        $entry = new Entry ($_GET['name'],$_GET['player']);
-        if($entry->deck AND $entry->deck->isValid()) {
-          $event->undropPlayer($_GET['player']);
-        }
-      }
-    }
-    eventForm($event);
-  } elseif (mode_is("Create New Event")) {
+  if (mode_is("Create New Event")) {
     $series = new Series($_POST['series']);
     if (($series->authCheck(Player::loginName())) && isset($_POST['insert'])) {
       insertEvent();
@@ -139,7 +124,7 @@ function content() {
   } elseif (mode_is("Create A New Event")) {
       eventForm(NULL, true);
   } elseif (mode_is("Create Next Event")) {
-    $oldevent = new Event($_POST['name']);
+    $oldevent = new Event($_REQUEST['name']);
     $newevent = new Event("");
     $newevent->season = $oldevent->season;
     $newevent->number = $oldevent->number + 1;
@@ -178,6 +163,21 @@ function content() {
     $newevent->name = sprintf("%s %d.%02d",$newevent->series, $newevent->season, $newevent->number);
 
     eventForm($newevent, true);
+  } elseif (isset($_GET['name'])) {
+    $event = new Event($_GET['name']);
+    if (!$event->authCheck(Player::loginName())) {
+      authFailed();
+      return;
+    }
+    if (isset($_GET['action'])) {
+      if (strcmp($_GET['action'], "undrop") == 0) {
+        $entry = new Entry ($_GET['name'],$_GET['player']);
+        if($entry->deck AND $entry->deck->isValid()) {
+          $event->undropPlayer($_GET['player']);
+        }
+      }
+    }
+    eventForm($event);
   } elseif (isset($_POST['name'])) {
     $event = new Event($_POST['name']);
 

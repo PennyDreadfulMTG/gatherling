@@ -798,7 +798,7 @@ function print_currentMatchTable($Leagues) {
             echo "</td>";
             echo "<td>vs.</td>\n";
             echo "<td>" . $oppplayer->linkTo() ."</td><td>";
-            if ($match->verification == "unverified"){
+            if ($match->verification == "unverified") {
                 if ($player_number=="b" AND ($match->playerb_wins + $match->playerb_losses) > 0){
                     echo "(Report Submitted)";
                 }else if ($player_number=="a" AND ($match->playera_wins + $match->playera_losses) > 0){

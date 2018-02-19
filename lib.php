@@ -74,6 +74,7 @@ EOT;
   echo image_tag("header_logo.png");
   echo <<<EOT
             </div>
+            <div id="action"></div>
         </div>
         <div id="mainmenu_submenu" class="grid_12 menubar">
         <ul>
@@ -151,6 +152,7 @@ function print_footer() {
   echo "</div><!-- gatherling_footer -->\n";
   echo "<div class=\"clear\"></div>\n";
   echo "</div> <!-- container -->\n";
+  echo "<script src=\"action.js\" defer></script>\n";
   echo "</body>\n";
   echo "</html>\n";
 }

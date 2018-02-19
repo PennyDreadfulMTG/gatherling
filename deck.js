@@ -4,12 +4,12 @@ function deckAjaxResult(data) {
         $("#deck-archetype").val(data.archetype);
         var decktext =  "";
         for (var card in data.maindeck) {
-            decktext = decktext + data.maindeck[card] + " " + card + "\\n";
+            decktext = decktext + data.maindeck[card] + " " + card + "\n";
         }
         $("#deck-contents").val(decktext);
         decktext = "";
         for (var card in data.sideboard) {
-            decktext = decktext + data.sideboard[card] + " " + card + "\\n";
+            decktext = decktext + data.sideboard[card] + " " + card + "\n";
         }
         $("#deck-sideboard").val(decktext);
     }

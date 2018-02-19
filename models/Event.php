@@ -855,7 +855,7 @@ function getEntriesByMedal() {
 
   public function isLeague() {
     $test = $this->current_round;
-    if ($test < ($this->finalrounds + $this->mainrounds)) {
+    if ($test <= ($this->finalrounds + $this->mainrounds)) {
       if ($test >= $this->mainrounds) {
         $structure  = $this->finalstruct;
         $subevent_id = $this->finalid;
@@ -865,8 +865,9 @@ function getEntriesByMedal() {
         $subevent_id = $this->mainid;
         $round = "main";
       }
+      return $structure == "League";
     }
-    return $structure == "League";
+    return false;
   }
 
     // All this should probably go somewhere else
