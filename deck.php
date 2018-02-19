@@ -119,13 +119,9 @@ function deckForm($deck = NULL) {
   echo "<select class=\"inputbox\" id=\"autoenter-deck\">\n";
   echo "<option value=\"0\">Select a recent deck to start from there</option>\n";
   $deckplayer = new Player($player);
-  if (!is_null($deck)) {
-    if (count($deck->errors) == 0 && count($deck->maindeck_cards) == 0) {
-      $recentdecks = $deckplayer->getRecentDecks();
-      foreach ($recentdecks as $adeck) {
-        echo "<option value=\"{$adeck->id}\">{$adeck->name}</option>\n";
-      }
-    }
+  $recentdecks = $deckplayer->getRecentDecks();
+  foreach ($recentdecks as $adeck) {
+    echo "<option value=\"{$adeck->id}\">{$adeck->name}</option>\n";
   }
 
   echo "</select></td></tr>";
