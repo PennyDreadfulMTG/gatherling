@@ -170,9 +170,13 @@ function rowColor() {
   return $CC;
 }
 
-function linkToLogin() {
+function linkToLogin($pagename=null) {
+  if (is_null($pagename)) $pagename = $_SERVER['REQUEST_URI'];
+  redirect("login.php?target={$_SERVER['REQUEST_URI']}&message=You must log in to access $pagename.");
+
   echo "<center>\n";
-  echo "Please <a href=\"login.php\">Click Here</a> to log in.\n";
+  echo "<div class=\"error\">You must log in to access $pagename.</div>";
+  echo "Please <a href=\"login.php?target={$_SERVER['REQUEST_URI']}\">Click Here</a> to log in.\n";
   echo "</center>\n";
 }
 

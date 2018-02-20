@@ -10,6 +10,12 @@ print_header("Login");
         <div class="uppertitle"> Login to Gatherling </div>
 <?php if (isset($_POST['mode'])) {printLoginFailed();} ?>
 <?php if (isset($_GET['ipaddresschanged'])){printIPAddressChanged();}?>
+<?php
+  if (isset($_REQUEST['message'])) {
+    $message = filter_var($_REQUEST['message'], FILTER_SANITIZE_STRING);
+    echo "<div align=\"center\" class=\"error\">$message</div>";
+  }
+?>
         <form action="login.php" method="post">
             <table class="form" align="center" style="border-width: 0px" cellpadding="3">
                 <tr>
@@ -25,6 +31,12 @@ print_header("Login");
                 </tr>
                 <tr>
                     <td colspan="2" class="buttons">
+                    <?php
+                      if (isset($_REQUEST['target'])) {
+                        $target = filter_var($_REQUEST['target'], FILTER_SANITIZE_STRING);
+                        echo "<input type=\"hidden\" name=\"target\" value=\"$target\">";
+                      }
+                    ?>
                         <input class="inputbutton" type="submit" name="mode" value="Log In"><br />
                         Please <a href="register.php">Click Here</a> if you need to register.
                     </td>
@@ -57,7 +69,11 @@ function testLogin() {
     if ($auth || $admin) {
             header("Cache-control: private");
             $_SESSION['username'] = $_POST['username'];
-            header("location: player.php");
+            $target = 'player.php';
+            if (isset($_REQUEST['target'])) {
+              $target = $_REQUEST['target'];
+            }
+            header("location: $target");
             $success = 1;
         }
         return $success;

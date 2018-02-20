@@ -6,7 +6,7 @@ $hasError = false;
 $errormsg = "";
 
 if (!Player::isLoggedIn()) {
-    redirect("login.php");
+  linkToLogin("Format Control Panel");
 }
 
 print_header("Format Control Panel");

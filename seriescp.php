@@ -15,7 +15,7 @@ print_header("Series Control Panel");
 
 <?php
 if (!Player::isLoggedIn()) {
-  linkToLogin();
+  linkToLogin("Series Control Panel");
 } else {
   do_page();
 }

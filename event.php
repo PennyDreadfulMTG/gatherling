@@ -85,7 +85,7 @@ print_header("Event Host Control Panel");
 if (Player::isLoggedIn()) {
   content();
 } else {
-  linkToLogin();
+  linkToLogin("Host Control Panel");
 }
 ?>
 

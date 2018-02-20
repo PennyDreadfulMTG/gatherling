@@ -12,7 +12,8 @@ print_header("Player Control Panel");
 <?php
 $result="";
 if ($player == NULL) {
-  echo "<center> You must <a href=\"login.php\">log in</a> to use your player control panel.</center>\n";
+  linkToLogin("your Player Control Panel");
+  // echo "<center> You must <a href=\"login.php\">log in</a> to use your player control panel.</center>\n";
 } else {
   $result = '';
   // Handle actions
