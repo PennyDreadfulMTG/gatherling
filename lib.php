@@ -2,7 +2,8 @@
 require_once 'bootstrap.php';
 ini_set('session.gc_maxlifetime',10*60*60); // sets session timer to 10 hours, format is N hr * 60 minutes * 60 seconds
 ini_set('session.cookie_lifetime', 10*60*60); // sets the session cookie timer to 10 hours.
-header('Strict-Transport-Security: max-age=63072000');
+header('Strict-Transport-Security: max-age=63072000; includeSubDomains; preload');
+header('Referrer-Policy: strict-origin-when-cross-origin');
 
 
 $HC = "#DDDDDD";

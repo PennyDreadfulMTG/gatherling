@@ -22,7 +22,7 @@ if(isset($_GET['format'])) {
   $cardsets[] = $_GET['set'];
 }
 
-$stmt = $db->prepare("SELECT id , (isw + isg + isu + isr + isb) AS n,
+$stmt = $db->prepare("SELECT id, name , (isw + isg + isu + isr + isb) AS n,
   isw, isg, isu, isb, isr
   FROM cards WHERE cardset = ? ORDER BY n , isw desc, isg desc, isu desc,
   isr desc, isb desc, name");
@@ -33,13 +33,13 @@ $w = $g = $u = $r = $b = 0;
 foreach ($cardsets as $cardset) {
   $stmt->bind_param("s", $cardset);
   $stmt->execute() or die($stmt->error);
-  $stmt->bind_result($id, $total, $isw, $isg, $isu, $isb, $isr);
+  $stmt->bind_result($id, $name, $total, $isw, $isg, $isu, $isb, $isr);
   while ($stmt->fetch()) {
     if( $isw != $w || $isg != $g || $isu != $u || $isr != $r || $isb != $b) {
       echo "<br><br>";
       $n = 0;
     }
-    printf("<img src=\"/cards/%d.jpg\" alt=\"Card Image\" />\n", $id);
+    printf("<img src=\"/cards/%d.jpg\" alt=\"$name\" />\n", $id);
     $w = $isw;
     $g = $isg;
     $u = $isu;
