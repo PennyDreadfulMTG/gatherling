@@ -49,6 +49,12 @@ function do_query($query) {
   return $result;
 }
 
+function set_version($version) {
+do_query("UPDATE db_version SET version = {$version}");
+  $db->commit();
+  echo "... DB now at version {$version}! <br />";
+}
+
 function redirect_deck_update($latest_id = 0) {
   $url = explode('?', $_SERVER['REQUEST_URI']);
   $url = $url[0] . "?deckupdate=" . $latest_id;
@@ -536,11 +542,20 @@ if ($version < 24) {
   echo "... DB now at version 24! <br />";
 }
 if ($version < 25) {
-  echo "Updating to version 24 (Masterpiece sets have a longer code)... <br />";
+  echo "Updating to version 25 (Masterpiece sets have a longer code)... <br />";
   do_query("ALTER TABLE `cardsets` CHANGE COLUMN `code` `code` VARCHAR(7) NULL DEFAULT NULL ;");
   do_query("ALTER TABLE `events` ADD COLUMN `late_entry_limit` smallint(5) UNSIGNED NOT NULL DEFAULT '0';");
   do_query("UPDATE db_version SET version = 25");
   $db->commit();
   echo "... DB now at version 25! <br />";
 }
+if ($version < 26) {
+  echo "Updating to version 26 (Standard and Modern flags)... <br />";
+  do_query("ALTER TABLE `cardsets`
+    ADD COLUMN `standard_legal` tinyint(4) DEFAULT '0',
+    ADD COLUMN `modern_legal` tinyint(4) DEFAULT '0';");
+  set_version(26);
+}
 $db->autocommit(TRUE);
+
+echo "DB is up to date!<br />";
