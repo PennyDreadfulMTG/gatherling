@@ -21,6 +21,12 @@ function is_assoc($array) {
  */
 function theme_file($name) {
   global $CONFIG;
+  if (Player::isLoggedIn()) {
+    $user_dir = "styles/" . Player::getSessionPlayer()->theme . "/";
+    if (file_exists($user_dir . $name)) {
+      return $user_dir . $name;
+    }
+  }
   $theme_dir = "styles/{$CONFIG['style']}/";
   $default_dir = "styles/default/";
   if (file_exists($theme_dir . $name)) {

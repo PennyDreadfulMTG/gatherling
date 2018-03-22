@@ -12,6 +12,7 @@ class Player {
   public $emailPrivacy;
   public $timezone;
   public $verified;
+  public $theme;
 
   function __construct($name) {
     if ($name == "") {
@@ -21,17 +22,18 @@ class Player {
       $this->pkmember = 0;
       $this->rememberMe = 0;
       $this->verified = 0;
+      $this->theme = NULL;
       return;
     }
     $database = Database::getConnection();
     $stmt = $database->prepare("SELECT name, password, rememberme, INET_NTOA(ipaddress), host, super,
-                pkmember, mtgo_confirmed, email, email_privacy, timezone FROM players WHERE name = ?");
+                pkmember, mtgo_confirmed, email, email_privacy, timezone, theme FROM players WHERE name = ?");
     $stmt or die($database->error);
 
     $stmt->bind_param("s", $name);
     $stmt->execute();
     $stmt->bind_result($this->name, $this->password, $this->rememberMe, $this->ipAddress, $this->host, $this->super,
-                $this->pkmember, $this->verified, $this->emailAddress, $this->emailPrivacy, $this->timezone);
+                $this->pkmember, $this->verified, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->theme);
     if ($stmt->fetch() == null) {
       throw new Exception('Player '. $name .' is not found.');
     }
