@@ -18,16 +18,6 @@ else {
 }
 
 session_start();
-# Need to be logged in as admin before you can even try this.
-# Katelyn: I question the validity of the above, and would recommend commenting out the below code.
-
-// $some_admin = Player::getSessionPlayer();
-
-// if (!$some_admin->isSuper()) {
-//   header("Location: index.php");
-//   exit(0);
-// }
-
 error_reporting(E_ALL);
 
 $db = Database::getConnection();
@@ -50,7 +40,8 @@ function do_query($query) {
 }
 
 function set_version($version) {
-do_query("UPDATE db_version SET version = {$version}");
+  do_query("UPDATE db_version SET version = {$version}");
+  global $db;
   $db->commit();
   echo "... DB now at version {$version}! <br />";
 }
@@ -554,6 +545,11 @@ if ($version < 26) {
   do_query("ALTER TABLE `cardsets`
     ADD COLUMN `standard_legal` tinyint(4) DEFAULT '0',
     ADD COLUMN `modern_legal` tinyint(4) DEFAULT '0';");
+  do_query("ALTER TABLE `formats`
+    ADD COLUMN `standard` TINYINT NOT NULL DEFAULT '0' AFTER `eternal`,
+    ADD COLUMN `modern` TINYINT NOT NULL DEFAULT '0' AFTER `standard`;");
+  do_query("ALTER TABLE `gatherling`.`players`
+    ADD COLUMN `theme` VARCHAR(45) NULL;");
   set_version(26);
 }
 $db->autocommit(TRUE);
