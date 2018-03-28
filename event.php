@@ -737,7 +737,12 @@ function playerList($event) {
 }else{
     echo "<td><input id=\"start_event\" class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Reactivate Event\" />";
     echo "<input id=\"start_event\" class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Recalculate Standings\" />";
-    echo "<input id=\"start_event\" class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Assign Medals\" /></td></tr>";
+    echo "<input id=\"start_event\" class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Assign Medals\" />";
+    $nexteventname = sprintf("%s %d.%02d",$event->series, $event->season, $event->number + 1);
+    if (!Event::exists($nexteventname)) {
+      echo "<input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Create Next Event\" />";
+    }
+    echo "</td></tr>";
   }
   echo "</table>";
   echo "</form>";
