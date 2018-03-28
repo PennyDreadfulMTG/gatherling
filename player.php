@@ -556,6 +556,7 @@ function print_recentDeckTable() {
         echo "<tr><td>" . medalImgStr($deck->medal) . "</td>\n";
         echo "<td>" . $deck->linkTo() . "</td>\n";
         $targetUrl = 'eventreport';
+        $event = new Event($deck->eventname);
         if ($event->authCheck($player->name)) {
           $targetUrl = "event";
         }
