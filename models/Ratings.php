@@ -1,6 +1,7 @@
-<?PHP
+<?php
 
-class Ratings {
+class Ratings
+{
     public $player;
     public $rating;
     public $format;
@@ -10,43 +11,50 @@ class Ratings {
 
     public $ratingNames;
 
-    function __construct($format = "") {
-        if ($format == "") {
-            $this->player = "";
+    public function __construct($format = '')
+    {
+        if ($format == '') {
+            $this->player = '';
             $this->rating = 0;
-            $this->format = "";
-            $this->updated = NULL;
+            $this->format = '';
+            $this->updated = null;
             $this->wins = 0;
             $this->losses = 0;
-            $this->ratingNames = array("Standard", "Extended", "Modern", "Classic", "Legacy",
-                                       "Pauper", "SilverBlack", "Heirloom", "Commander", "Tribal Wars",
-                                       "Penny Dreadful");
+            $this->ratingNames = ['Standard', 'Extended', 'Modern', 'Classic', 'Legacy',
+                                       'Pauper', 'SilverBlack', 'Heirloom', 'Commander', 'Tribal Wars',
+                                       'Penny Dreadful', ];
+
             return;
         }
     }
 
-    function formatDropMenuR($format = "") {
-        $names = array("Composite", "Standard", "Extended", "Modern",
-                       "Classic", "Legacy", "Pauper", "SilverBlack", "Heirloom",
-                       "Commander", "Tribal Wars", "Other Formats");
-    echo "<select class=\"inputbox\" name=\"format\">";
+    public function formatDropMenuR($format = '')
+    {
+        $names = ['Composite', 'Standard', 'Extended', 'Modern',
+                       'Classic', 'Legacy', 'Pauper', 'SilverBlack', 'Heirloom',
+                       'Commander', 'Tribal Wars', 'Other Formats', ];
+        echo '<select class="inputbox" name="format">';
         foreach ($names as $name) {
-           $sel = (strcmp($name, $format) == 0) ? "selected" : "";
-           echo "<option value=\"{$name}\" $sel>{$name}</option>";
-    }
-    echo "</select>";
-    }
-
-    function deleteAllRatings() {
-        $db = Database::getConnection();
-        $db->query("DELETE FROM ratings") or die($db->error);
+            $sel = (strcmp($name, $format) == 0) ? 'selected' : '';
+            echo "<option value=\"{$name}\" $sel>{$name}</option>";
+        }
+        echo '</select>';
     }
 
-    function deleteRatingByFormat($format) {
+    public function deleteAllRatings()
+    {
         $db = Database::getConnection();
-        $stmt = $db->prepare("Delete FROM ratings WHERE format = ?");
-        if (!$stmt) {die($db->error);}
-        $stmt->bind_param("s", $format);
+        $db->query('DELETE FROM ratings') or die($db->error);
+    }
+
+    public function deleteRatingByFormat($format)
+    {
+        $db = Database::getConnection();
+        $stmt = $db->prepare('Delete FROM ratings WHERE format = ?');
+        if (!$stmt) {
+            die($db->error);
+        }
+        $stmt->bind_param('s', $format);
         $stmt->execute();
         $removed = $stmt->affected_rows > 0;
         $stmt->close();
@@ -54,41 +62,44 @@ class Ratings {
         return $removed;
     }
 
-    function calcAllRatings() {
+    public function calcAllRatings()
+    {
         $this->calcCompositeRating();
-        foreach($this->ratingNames as $format) {
+        foreach ($this->ratingNames as $format) {
             $this->calcRatingByFormat($format);
         }
         $this->calcOtherRating();
     }
 
-    function calcCompositeRating() {
+    public function calcCompositeRating()
+    {
         $db = Database::getConnection();
 
         $result = $db->query("SELECT name, start FROM events WHERE finalized = '1' ORDER BY start") or die($db->error);
-        echo "<h3>Calculating Composite Ratings</h3>";
+        echo '<h3>Calculating Composite Ratings</h3>';
 
-        while($row = $result->fetch_assoc()) {
+        while ($row = $result->fetch_assoc()) {
             $event = $row['name'];
             echo "Calculating for Event: $event <br /><br />";
-            $players = $this->calcPostEventRatings($event, "Composite");
-            $this->insertRatings($event, $players, "Composite", $row['start']);
+            $players = $this->calcPostEventRatings($event, 'Composite');
+            $this->insertRatings($event, $players, 'Composite', $row['start']);
         }
         $result->close();
     }
 
-    function calcRatingByFormat($format) {
+    public function calcRatingByFormat($format)
+    {
         $db = Database::getConnection();
-        $searchString = "%" . $format . "%";
+        $searchString = '%'.$format.'%';
 
         $stmt = $db->prepare("SELECT name, start FROM events WHERE finalized = '1' AND format LIKE ? ORDER BY start");
-        $stmt->bind_param("s", $searchString);
+        $stmt->bind_param('s', $searchString);
         $stmt->execute();
         $stmt->bind_result($eventname, $eventstart);
 
-        $eventar = array();
+        $eventar = [];
         $index = 1;
-        while($stmt->fetch()) {
+        while ($stmt->fetch()) {
             $eventar[$index] = $eventname;
             $eventar[$index + 1] = $eventstart;
             $index += 2;
@@ -97,7 +108,7 @@ class Ratings {
 
         echo "<h3>Calculating $format Ratings</h3>";
 
-        for($index = 1, $size = count($eventar);$index <= $size; $index+=2) {
+        for ($index = 1, $size = count($eventar); $index <= $size; $index += 2) {
             echo "Format: $format<br />";
             echo "Event: {$eventar[$index]}<br />";
             echo "Start: {$eventar[$index + 1]}<br /><br />";
@@ -107,12 +118,13 @@ class Ratings {
         }
     }
 
-    function calcOtherRating() {
+    public function calcOtherRating()
+    {
         $db = Database::getConnection();
 
         $notlike = '';
-        foreach($this->ratingNames as $format) {
-            $notlike = $notlike . " AND format NOT LIKE \"%" . $format . "%\" ";
+        foreach ($this->ratingNames as $format) {
+            $notlike = $notlike.' AND format NOT LIKE "%'.$format.'%" ';
         }
 
         $result = $db->query("SELECT name, start
@@ -120,22 +132,23 @@ class Ratings {
                               WHERE finalized = '1'
                               $notlike
                               ORDER BY start") or die($db->error);
-        echo "<h3>Calculating Other Formats Ratings</h3>";
+        echo '<h3>Calculating Other Formats Ratings</h3>';
 
-        while($row = $result->fetch_assoc()) {
+        while ($row = $result->fetch_assoc()) {
             $event = $row['name'];
             echo "Calculating for Event: $event <br />";
-            $players = $this->calcPostEventRatings($event, "Other Formats");
-            $this->insertRatings($event, $players, "Other Formats", $row['start']);
+            $players = $this->calcPostEventRatings($event, 'Other Formats');
+            $this->insertRatings($event, $players, 'Other Formats', $row['start']);
         }
         $result->close();
     }
 
-    function calcFinalizedEventRatings($event, $format, $start) {
-        $players = $this->calcPostEventRatings($event, "Composite");
-        $this->insertRatings($event, $players, "Composite", $start);
+    public function calcFinalizedEventRatings($event, $format, $start)
+    {
+        $players = $this->calcPostEventRatings($event, 'Composite');
+        $this->insertRatings($event, $players, 'Composite', $start);
         $noEventRatingAvail = true;
-        foreach($this->ratingNames as $rating) {
+        foreach ($this->ratingNames as $rating) {
             if (strpos($format, $rating) === false) {
                 continue;
             } else {
@@ -144,23 +157,27 @@ class Ratings {
                 $noEventRatingAvail = false;
             }
         }
-        if($noEventRatingAvail) {
-            $players = $this->calcPostEventRatings($event, "Other Formats");
-            $this->insertRatings($event, $players, "Other Formats", $start);
+        if ($noEventRatingAvail) {
+            $players = $this->calcPostEventRatings($event, 'Other Formats');
+            $this->insertRatings($event, $players, 'Other Formats', $start);
         }
     }
 
-    function calcPostEventRatings($event, $format) {
+    public function calcPostEventRatings($event, $format)
+    {
         $players = $this->getEntryRatings($event, $format);
         $matches = $this->getMatches($event);
-        for($ndx = 0; $ndx < sizeof($matches); $ndx++) {
-            $aPts = 0.5; $bPts = 0.5;
-            if(strcmp($matches[$ndx]['result'], 'A') == 0) {
-                $aPts = 1.0; $bPts = 0.0;
+        for ($ndx = 0; $ndx < count($matches); $ndx++) {
+            $aPts = 0.5;
+            $bPts = 0.5;
+            if (strcmp($matches[$ndx]['result'], 'A') == 0) {
+                $aPts = 1.0;
+                $bPts = 0.0;
                 $players[$matches[$ndx]['playera']]['wins']++;
                 $players[$matches[$ndx]['playerb']]['losses']++;
-            } elseif(strcmp($matches[$ndx]['result'], 'B') == 0) {
-                $aPts = 0.0; $bPts = 1.0;
+            } elseif (strcmp($matches[$ndx]['result'], 'B') == 0) {
+                $aPts = 0.0;
+                $bPts = 1.0;
                 $players[$matches[$ndx]['playerb']]['wins']++;
                 $players[$matches[$ndx]['playera']]['losses']++;
             }
@@ -174,62 +191,73 @@ class Ratings {
             $players[$matches[$ndx]['playera']]['rating'] = $newA;
             $players[$matches[$ndx]['playerb']]['rating'] = $newB;
         }
+
         return $players;
     }
 
-    function insertRatings($event, $players, $format, $date) {
+    public function insertRatings($event, $players, $format, $date)
+    {
         $db = Database::getConnection();
 
-        foreach($players as $player=>$data) {
+        foreach ($players as $player=>$data) {
             $rating = $data['rating'];
             $wins = $data['wins'];
             $losses = $data['losses'];
-            $stmt = $db->prepare("INSERT INTO ratings VALUES(?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssdssdd", $event, $player, $rating, $format, $date, $wins, $losses);
+            $stmt = $db->prepare('INSERT INTO ratings VALUES(?, ?, ?, ?, ?, ?, ?)');
+            $stmt->bind_param('ssdssdd', $event, $player, $rating, $format, $date, $wins, $losses);
             $stmt->execute() or die($stmt->error);
             $stmt->close();
         }
     }
 
-    function newRating($old, $opp, $pts, $k) {
+    public function newRating($old, $opp, $pts, $k)
+    {
         $new = $old + ($k * ($pts - $this->winProb($old, $opp)));
-        if($old < $new) {$new = ceil($new);}
-        elseif($old > $new) {$new = floor($new);}
+        if ($old < $new) {
+            $new = ceil($new);
+        } elseif ($old > $new) {
+            $new = floor($new);
+        }
+
         return $new;
     }
 
-    function winProb($rating, $oppRating) {
-        return 1/(pow(10, ($oppRating - $rating)/400) + 1);
+    public function winProb($rating, $oppRating)
+    {
+        return 1 / (pow(10, ($oppRating - $rating) / 400) + 1);
     }
 
-    function getMatches($event) {
+    public function getMatches($event)
+    {
         $db = Database::getConnection();
 
-        $stmt = $db->prepare("SELECT LCASE(m.playera) AS playera, LCASE(m.playerb) AS playerb, m.result, e.kvalue
+        $stmt = $db->prepare('SELECT LCASE(m.playera) AS playera, LCASE(m.playerb) AS playerb, m.result, e.kvalue
                               FROM matches AS m, subevents AS s, events AS e
                               WHERE m.subevent=s.id
                               AND s.parent=e.name
                               AND e.name = ?
-                              ORDER BY s.timing, m.round");
-        $stmt->bind_param("s", $event);
+                              ORDER BY s.timing, m.round');
+        $stmt->bind_param('s', $event);
         $stmt->execute();
         $stmt->bind_result($playera, $playerb, $result, $kvalue);
 
-        $data = array();
+        $data = [];
         while ($stmt->fetch()) {
-            $data[] = array('playera' => $playera,
+            $data[] = ['playera'      => $playera,
                             'playerb' => $playerb,
-                            'result' => $result,
-                            'kvalue' => $kvalue);
+                            'result'  => $result,
+                            'kvalue'  => $kvalue, ];
         }
         $stmt->close();
+
         return $data;
     }
 
-    function getEntryRatings($event, $format) {
+    public function getEntryRatings($event, $format)
+    {
         $db = Database::getConnection();
 
-        $stmt = $db->prepare("SELECT LCASE(n.player) AS player, r.rating, q.qmax, r.wins, r.losses
+        $stmt = $db->prepare('SELECT LCASE(n.player) AS player, r.rating, q.qmax, r.wins, r.losses
                               FROM entries AS n
                               LEFT OUTER JOIN ratings AS r ON r.player = n.player
                               LEFT OUTER JOIN
@@ -240,15 +268,15 @@ class Ratings {
                               ON q.qplayer=r.player
                               WHERE n.event = ? AND ((q.qmax=r.updated AND q.qplayer=r.player AND r.format = ?)
                               OR q.qmax IS NULL)
-                              GROUP BY n.player ORDER BY n.player");
-        $stmt->bind_param("ssss", $event, $format, $event, $format);
+                              GROUP BY n.player ORDER BY n.player');
+        $stmt->bind_param('ssss', $event, $format, $event, $format);
         $stmt->execute();
         $stmt->bind_result($player, $rating, $qmax, $wins, $losses);
 
-        $data = array();
+        $data = [];
         while ($stmt->fetch()) {
-            $datum = array();
-            if(!is_null($qmax)) {
+            $datum = [];
+            if (!is_null($qmax)) {
                 $datum['rating'] = $rating;
                 $datum['wins'] = $wins;
                 $datum['losses'] = $losses;
@@ -260,6 +288,7 @@ class Ratings {
             $data[$player] = $datum;
         }
         $stmt->close();
+
         return $data;
     }
 }

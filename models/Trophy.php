@@ -1,9 +1,9 @@
 <?php
 
-class Trophy {
-  public $event;
-  public $image;
-  public $type;
-  public $size;
+class Trophy
+{
+    public $event;
+    public $image;
+    public $type;
+    public $size;
 }
-
