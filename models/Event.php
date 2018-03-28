@@ -920,6 +920,17 @@ function getEntriesByMedal() {
     function swissPairing($subevent_id) {
         Standings::resetMatched($this->name);
 
+        // Invalid entries get a fake
+        $players = $this->getPlayers();
+        foreach ($players as $player) {
+          $entry = new Entry($this->name, $player);
+          if (is_null($entry->deck) || !$entry->deck->isValid()) {
+            $playerStandings = new Standings($this->name, $player);
+            $playerStandings->matched = 1;
+            $playerStandings->save();
+          }
+        }
+
         // This section should really be replaced by an implementation of a stable roommates algorithm or something similar
         while (Standings::checkUnmatchedPlayers($this->name) > 0){
             //echo "found an unmatched player";
