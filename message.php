@@ -7,7 +7,7 @@
 include 'lib.php';
 session_start();
 
-print_header("Message");
+print_header('Message');
 
 ?>
 
@@ -16,26 +16,43 @@ print_header("Message");
 
 <?php
 
-if (Player::isLoggedIn())
-    {message_content();}
-else
-    {linkToLogin();}
+if (Player::isLoggedIn()) {
+    message_content();
+} else {
+    linkToLogin();
+}
 
-function message_content() {
-if(isset($_POST['submit'])) {submit_message();}
-if(isset($_GET['mode'])) {$mode = $_GET['mode'];} else {$mode = "";}
+function message_content()
+{
+    if (isset($_POST['submit'])) {
+        submit_message();
+    }
+    if (isset($_GET['mode'])) {
+        $mode = $_GET['mode'];
+    } else {
+        $mode = '';
+    }
 
-if (strcmp($mode, "Send") == 0) {message_form();}
-
+    if (strcmp($mode, 'Send') == 0) {
+        message_form();
+    }
 } // message_content
 
-function message_form() {
-if(isset($_GET['mode'])) {$mode = $_GET['mode'];} else {$mode = "";}
-if(isset($_GET['type'])) {$msg_type = $_GET['type'];} else {$msg_type = "";}
+function message_form()
+{
+    if (isset($_GET['mode'])) {
+        $mode = $_GET['mode'];
+    } else {
+        $mode = '';
+    }
+    if (isset($_GET['type'])) {
+        $msg_type = $_GET['type'];
+    } else {
+        $msg_type = '';
+    } ?>
 
-?>
-
-<div class="uppertitle"> Message Center: <?php echo $mode . " "; echo $msg_type; ?> </div>
+<div class="uppertitle"> Message Center: <?php echo $mode.' ';
+    echo $msg_type; ?> </div>
 
 <form method="post" action="message.php">
     <table>
@@ -58,33 +75,35 @@ if(isset($_GET['type'])) {$msg_type = $_GET['type'];} else {$msg_type = "";}
 <?php
 } // message_form;
 
-function submit_message() {
+function submit_message()
+{
     // collect message information
-    $mtgo_id  = $_POST['mtgoid'];
-    $email    = $_POST['email'];
-    $content  = $_POST['content'];
-    $msg_type = str_replace('Send ','',$_POST['submit']); // grabbing the type of message
+    $mtgo_id = $_POST['mtgoid'];
+    $email = $_POST['email'];
+    $content = $_POST['content'];
+    $msg_type = str_replace('Send ', '', $_POST['submit']); // grabbing the type of message
 
     // Create and output confirmation message to user
-    echo '<div class="uppertitle">' . $msg_type . ' Submission</div>';
-    echo '<p><br />Thanks for submitting a ' . $msg_type . ' form ' . $mtgo_id . '<br />';
-    echo 'We will respond to you about your ' . $msg_type . ' at ' . $email . '<br /><br />';
+    echo '<div class="uppertitle">'.$msg_type.' Submission</div>';
+    echo '<p><br />Thanks for submitting a '.$msg_type.' form '.$mtgo_id.'<br />';
+    echo 'We will respond to you about your '.$msg_type.' at '.$email.'<br /><br />';
     echo 'Here was the contents of your message: <br />';
-    echo $content . '<br /><br />';
+    echo $content.'<br /><br />';
 
     // prepare and send data in an email to myself
-    $msg = "*** This is a copy of the $msg_type that $mtgo_id submitted to Gatherling.com\n" .
-            "$mtgo_id's email address is: $email.\n" .
+    $msg = "*** This is a copy of the $msg_type that $mtgo_id submitted to Gatherling.com\n".
+            "$mtgo_id's email address is: $email.\n".
             "Here is the $msg_type: \n\n$content";
     $subject = $msg_type;
-    $bcc = "allthegoodnamesaretaken@ymail.com";
-    $from = "Gatherling.com <no-reply@Gatherling.com>";
+    $bcc = 'allthegoodnamesaretaken@ymail.com';
+    $from = 'Gatherling.com <no-reply@Gatherling.com>';
 
-    $accepted_for_delivery = mail($email, $subject, $msg, 'From:' . $from . "\r\nBcc:" . $bcc);
-    if ($accepted_for_delivery)
+    $accepted_for_delivery = mail($email, $subject, $msg, 'From:'.$from."\r\nBcc:".$bcc);
+    if ($accepted_for_delivery) {
         echo 'Message was accepted by the server for delivery.</p><br />';
-    else
+    } else {
         echo 'Error: Message was not accepted by the server for delivery.</p><br />';
+    }
 }
 ?>
 

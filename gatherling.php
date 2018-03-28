@@ -1,12 +1,10 @@
 <?php
 $gatherlingoutofservice = 0;
-if ($gatherlingoutofservice != 1)
-{
+if ($gatherlingoutofservice != 1) {
     include 'lib.php';
     include 'config.php';
     session_start();
-    print_header("Home");
-    ?>
+    print_header('Home'); ?>
 
     <div id="maincolumn" class="grid_8">
 
@@ -266,9 +264,7 @@ if ($gatherlingoutofservice != 1)
     <?php print_footer(); ?>
 
 <?php
-}
-else
-{
-    require ("outofservice.php");
+} else {
+    require 'outofservice.php';
 }
 ?>

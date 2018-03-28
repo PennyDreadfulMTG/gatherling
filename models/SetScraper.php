@@ -1,36 +1,37 @@
 <?php
 
-function sortSets($a, $b) {
+function sortSets($a, $b)
+{
     return strtotime($a->releaseDate) < strtotime($b->releaseDate);
 }
 
-class SetScraper {
+class SetScraper
+{
+    public static function getSetList()
+    { // gets a list of sets from magicthegathering.io
 
+        $url = 'https://api.magicthegathering.io/v1/sets';
 
-    static function getSetList() { // gets a list of sets from magicthegathering.io
-
-        $url = "https://api.magicthegathering.io/v1/sets";
-
-        $options = array(
-            'http'=>array(
-                'method'=>"GET",
-                'header'=>"Accept-language: en\r\n" .
-                    "User-Agent: Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b Safari/531.21.102011-10-16 20:23:10\r\n" // i.e. An iPad
-            )
-        );
+        $options = [
+            'http'=> [
+                'method'=> 'GET',
+                'header'=> "Accept-language: en\r\n".
+                    "User-Agent: Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b Safari/531.21.102011-10-16 20:23:10\r\n", // i.e. An iPad
+            ],
+        ];
 
         $context = stream_context_create($options);
         $sets = json_decode(file_get_contents($url, false, $context));
         $sets = $sets->sets;
         usort($sets, 'sortSets');
 
-        $dropdown = array();
+        $dropdown = [];
 
-        $knowncodes = Database::list_result("SELECT code FROM cardsets;");
+        $knowncodes = Database::list_result('SELECT code FROM cardsets;');
 
         foreach ($sets as $s) {
             $installed = false;
-            foreach ($knowncodes as $c){
+            foreach ($knowncodes as $c) {
                 if (strcasecmp($s->code, $c) == 0) {
                     $installed = true;
                 }
@@ -39,6 +40,7 @@ class SetScraper {
                 $dropdown[$s->code] = $s->name;
             }
         }
+
         return $dropdown;
     }
 }

@@ -1,14 +1,14 @@
 <?php
+
 require_once 'lib.php';
 session_start();
 
 $action = '';
-if (isset($_REQUEST['action']))
-{
+if (isset($_REQUEST['action'])) {
     $action = $_REQUEST['action'];
 }
 // The below is for backwards compat
-else if (isset($_GET['deck'])) {
+elseif (isset($_GET['deck'])) {
     $action = 'deckinfo';
 } elseif (isset($_GET['addplayer']) && isset($_GET['event'])) {
     $action = 'addplayer';
@@ -18,30 +18,33 @@ else if (isset($_GET['deck'])) {
     $action = 'dropplayer';
 }
 
-function populate($array, $src, $keys) {
-    foreach ($keys as $key){
+function populate($array, $src, $keys)
+{
+    foreach ($keys as $key) {
         $array[$key] = $src->{$key};
     }
+
     return $array;
 }
 
-function json_event($event) {
+function json_event($event)
+{
     $series = new Series($event->series);
-    $json = array();
+    $json = [];
     // Event Properties
-    $json = populate($json, $event, array('series', 'season', 'number', 'host', 'cohost', 'active', 'finalized', 'current_round', 'start'));
+    $json = populate($json, $event, ['series', 'season', 'number', 'host', 'cohost', 'active', 'finalized', 'current_round', 'start']);
 
     // Series Properties
-    $json = populate($json, $series, array('mtgo_room'));
+    $json = populate($json, $series, ['mtgo_room']);
 
     $matches = $event->getMatches();
-    if ($matches){
-        $json['matches'] = array();
+    if ($matches) {
+        $json['matches'] = [];
         $addrounds = 0;
         $roundnum = 0;
         $timing = 0;
         foreach ($matches as $m) {
-            $data = populate(array(), $m, array('playera', 'playera_wins', 'playerb', 'playerb_wins', 'timing', 'round', 'verification'));
+            $data = populate([], $m, ['playera', 'playera_wins', 'playerb', 'playerb_wins', 'timing', 'round', 'verification']);
             if ($m->timing > $timing) {
                 $timing = $m->timing;
                 $addrounds += $roundnum;
@@ -57,20 +60,20 @@ function json_event($event) {
     return $json;
 }
 
-$result = array();
-switch ($action){
+$result = [];
+switch ($action) {
     case 'deckinfo':
     $deckid = $_GET['deck'];
     $deck = new Deck($deckid);
-    $result["id"] = $deckid;
+    $result['id'] = $deckid;
     if ($deck->id != 0) {
-        $result["found"] = 1;
-        $result["name"] = $deck->name;
-        $result["archetype"] = $deck->archetype;
-        $result["maindeck"] = $deck->maindeck_cards;
-        $result["sideboard"] = $deck->sideboard_cards;
+        $result['found'] = 1;
+        $result['name'] = $deck->name;
+        $result['archetype'] = $deck->archetype;
+        $result['maindeck'] = $deck->maindeck_cards;
+        $result['sideboard'] = $deck->sideboard_cards;
     } else {
-        $result["found"] = 0;
+        $result['found'] = 0;
     }
     break;
 
@@ -80,18 +83,16 @@ switch ($action){
         $new = $_GET['addplayer'];
         if ($event->addPlayer($new)) {
             $player = new Player($new);
-            $result["success"] = true;
-            $result["player"] = $player->name;
-            $result["verified"] = $player->verified;
-            $result["event_running"] = $event->active == 1;
+            $result['success'] = true;
+            $result['player'] = $player->name;
+            $result['verified'] = $player->verified;
+            $result['event_running'] = $event->active == 1;
         } else {
-            $result["success"] = false;
+            $result['success'] = false;
         }
-    }
-    else
-    {
+    } else {
         $result['error'] = 'Unauthorized';
-        $result["success"] = false;
+        $result['success'] = false;
     }
     break;
 
@@ -99,14 +100,12 @@ switch ($action){
     $event = new Event($_GET['event']);
     if ($event->authCheck($_SESSION['username'])) {
         $old = $_GET['delplayer'];
-        $result = array();
+        $result = [];
         $result['success'] = $event->removeEntry($old);
         $result['player'] = $old;
-    }
-    else
-    {
+    } else {
         $result['error'] = 'Unauthorized';
-        $result["success"] = false;
+        $result['success'] = false;
     }
     break;
 
@@ -119,11 +118,9 @@ switch ($action){
         $result['player'] = $playername;
         $result['eventname'] = $event->name;
         $result['round'] = $event->current_round;
-    }
-    else
-    {
+    } else {
         $result['error'] = 'Unauthorized';
-        $result["success"] = false;
+        $result['success'] = false;
     }
     break;
 
@@ -133,7 +130,7 @@ switch ($action){
         $result[$event->name] = json_event($event);
     }
     break;
-    case "api_version":
+    case 'api_version':
     $result['version'] = 2;
     break;
     default:

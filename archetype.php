@@ -1,12 +1,12 @@
 <?php
-    include 'lib.php'; 
+    include 'lib.php';
     include 'config.php';
     session_start();
-    print_header("Archetype Descriptions");
+    print_header('Archetype Descriptions');
     // TODO: This file is called from function deckForm and function deckRegisterForm of deck.php. Need to add $_POST
     // passing of to and from this file of (name, archetype, maindeck, sideboard, and comments fields) so that players
-    // do not loose their progress during deck entry. 
-    // 
+    // do not loose their progress during deck entry.
+    //
     // Also need to populate this page with data from the archetypes table in the database. Name would be the heading
     // and description field would go between the <p>
     ?>
