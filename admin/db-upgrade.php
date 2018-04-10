@@ -548,7 +548,7 @@ if ($version < 26) {
     do_query("ALTER TABLE `formats`
     ADD COLUMN `standard` TINYINT NOT NULL DEFAULT '0' AFTER `eternal`,
     ADD COLUMN `modern` TINYINT NOT NULL DEFAULT '0' AFTER `standard`;");
-    do_query('ALTER TABLE `gatherling`.`players`
+    do_query('ALTER TABLE `players`
     ADD COLUMN `theme` VARCHAR(45) NULL;');
     set_version(26);
 }

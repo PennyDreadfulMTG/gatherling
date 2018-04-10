@@ -64,7 +64,7 @@ if ($player == null) {
                 $result = 'Successfully verified your account with MTGO.';
                 $success = true;
             } else {
-                $result = "Your challenge is wrong.  Get a new one by sending the message 'ua pauperkrew' to infobot on MTGO!";
+                $result = "Your challenge is wrong.  Get a new one by sending the message '!verify {$CONFIG['infobot_prefix']}' to pdbot on MTGO!";
             }
         } elseif ($_POST['action'] == 'finalize_result') {
             // write results to matches table
