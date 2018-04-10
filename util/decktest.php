@@ -56,7 +56,7 @@ function scoredeck($id, $type, $db)
 {
     $score = 0;
     $convarr = ['Weak' => 1,   'Moderate' => 2,
-           'Strong'  => 4, 'Required' => 4, ];
+           'Strong'    => 4, 'Required' => 4, ];
     $query = "SELECT ti.strength, dc.qty
     FROM typeinfo ti
     LEFT OUTER JOIN deckcontents AS dc

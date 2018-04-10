@@ -1056,7 +1056,7 @@ function kValueDropMenu($kvalue)
         $kvalue = -1;
     }
     $names = [''      => '- K-Value -', 8 => 'Casual (Alt Event)', 16 => 'Regular (less than 24 players)',
-                 24 => 'Large (24 or more players)', 32 => 'Championship', ];
+                 24   => 'Large (24 or more players)', 32 => 'Championship', ];
     print_select_input('K-Value', 'kvalue', $names, $kvalue);
 }
 
@@ -1932,13 +1932,13 @@ function dciinputmatches($reg, $data)
         // function above failed to register
         $result = 'D';
                 // need to do a check for a bye here
-        if ($playerawins[$round - 1] > $playerbwins[$round - 1]) {
-            $result = 'A';
-        } // player A wins
-        if ($playerbwins[$round - 1] > $playerawins[$round - 1]) {
-            $result = 'B';
-        } // player B wins
-        echo "{$playera->name} vs {$playerb->name} in Round: {$round} and ";
+                if ($playerawins[$round - 1] > $playerbwins[$round - 1]) {
+                    $result = 'A';
+                } // player A wins
+                if ($playerbwins[$round - 1] > $playerawins[$round - 1]) {
+                    $result = 'B';
+                } // player B wins
+                echo "{$playera->name} vs {$playerb->name} in Round: {$round} and ";
                 if ($result == 'A') {
                     echo "{$playera->name} wins {$playerawins[$round - 1]} - {$playeralosses[$round - 1]}<br />";
                 }
