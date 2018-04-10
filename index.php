@@ -120,6 +120,6 @@ if ($gatherlingoutofservice != 1) {
 
 <?php
 } else {
-    require('outofservice.php');
-}
+        require 'outofservice.php';
+    }
 ?>
