@@ -7,7 +7,6 @@ echo "<h4>ACTIVE EVENTS</h4>\n";
 activeEvents();
 echo '</div>';
 
-
 echo "<div class=\"box sidecolumn\">\n";
 echo "<h4>UPCOMING EVENTS</h4>\n";
 upcomingEvents();
@@ -37,7 +36,7 @@ function activeEvents()
         $room = '';
         $series = new Series($event->series);
         if ($series->mtgo_room) {
-            $room = '#' . $series->mtgo_room;
+            $room = '#'.$series->mtgo_room;
         }
         echo "<table class=\"center\">\n";
         if (strcmp($threadurl, '') != 0) {
