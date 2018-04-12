@@ -2,7 +2,7 @@
 
 require_once 'lib.php';
 session_start();
-$stop = 0;
+$prevent_registration = 0;
 $player = Player::getSessionPlayer();
 
 if (!isset($_GET['event']) || !isset($_GET['action'])) {
@@ -24,14 +24,19 @@ if ($event->prereg_allowed != 1) {
     exit;
 }
 
+if ($event->finalized) {
+    // No more changes
+    header('Location: player.php');
+    exit;
+}
+
 // check for max registerd players
 if ($event->is_full()) {
-    header('Location: player.php');
-    $stop = 1;
+    $prevent_registration = 1;
 }
 
 $location = 'player.php';
-if ($_GET['action'] == 'reg' and $stop != 1) {
+if ($_GET['action'] == 'reg' and $prevent_registration != 1) {
     // part of the reg-decklist feature, the header call to deck.php is the switch that turns it on. Not sure if the call is
     // correct exactly. It works for the super but not non-supers
     $event->addPlayer($player->name);

@@ -850,7 +850,7 @@ class Event
     public static function getNextPreRegister($num = 20)
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE prereg_allowed = 1 AND pkonly = 0 AND DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() ORDER BY start LIMIT ?');
+        $stmt = $db->prepare('SELECT name FROM events WHERE prereg_allowed = 1 AND pkonly = 0 AND finalized = 0 AND DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() ORDER BY start LIMIT ?');
         // 180 minute interal in Date_Sub is to compensate for time zone difference from Server and Eastern Standard Time which is what all events are quoted in
         $stmt->bind_param('d', $num);
         $stmt->execute();
