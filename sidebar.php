@@ -3,6 +3,12 @@
 include_once 'lib.php';
 
 echo "<div class=\"box sidecolumn\">\n";
+echo "<h4>ACTIVE EVENTS</h4>\n";
+activeEvents();
+echo '</div>';
+
+
+echo "<div class=\"box sidecolumn\">\n";
 echo "<h4>UPCOMING EVENTS</h4>\n";
 upcomingEvents();
 echo '</div>';
@@ -17,10 +23,38 @@ echo "</div>\n";
 // recentTrophies();
 // echo "</div>\n";
 
+function activeEvents()
+{
+    $db = Database::getConnection();
+    $events = Event::getActiveEvents();
+    foreach ($events as $event) {
+        $name = $event->name;
+        $series = $event->series;
+        $threadurl = $event->threadurl;
+        $format = $event->format;
+        $round = $event->current_round;
+        $col2 = $name;
+        $room = '';
+        $series = new Series($event->series);
+        if ($series->mtgo_room) {
+            $room = '#' . $series->mtgo_room;
+        }
+        echo "<table class=\"center\">\n";
+        if (strcmp($threadurl, '') != 0) {
+            $col2 = "<a href=\"$threadurl\">".$name.'</a>';
+        }
+        echo "<tr><td width=60>$format</td>\n";
+        echo "<td width=100>$col2<br />$room</td>\n";
+        echo "<td width=50>Round $round</td></tr></table>\n";
+    }
+    echo "<table class=\"center\">\n";
+    echo '</table>';
+}
+
 function upcomingEvents()
 {
     $db = Database::getConnection();
-    $result = $db->query('SELECT UNIX_TIMESTAMP(DATE_SUB(start, INTERVAL 0 MINUTE)) AS d, 
+    $result = $db->query('SELECT UNIX_TIMESTAMP(DATE_SUB(start, INTERVAL 0 MINUTE)) AS d,
     format, series, name, threadurl FROM events
     WHERE DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() ORDER BY start ASC LIMIT 20');
     // interval in DATE_SUB was used to select eastern standard time, but since the server is now in Washington DC it is not needed
@@ -51,11 +85,11 @@ function recentWinners()
 {
     $db = Database::getConnection();
     $result = $db->query("SELECT b.event, b.player, d.name, d.id
-                        FROM entries b, decks d, events e 
-                        WHERE b.medal='1st' 
-                        AND d.id=b.deck 
+                        FROM entries b, decks d, events e
+                        WHERE b.medal='1st'
+                        AND d.id=b.deck
                         AND e.name=b.event
-                        ORDER BY e.start 
+                        ORDER BY e.start
                         DESC LIMIT 10");
     $result or die($db->error);
     while ($row = $result->fetch_assoc()) {
@@ -83,7 +117,7 @@ function recentTrophies()
              WHERE b.medal='1st'
              AND e.name=b.event
              AND t.event=b.event
-             ORDER BY e.start 
+             ORDER BY e.start
              DESC LIMIT 20";
     $results = Database::list_result($sql);
     if (count($results) > 0) {
