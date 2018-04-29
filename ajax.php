@@ -63,7 +63,6 @@ function json_event($event)
             }
         }
     }
-
     if ($event->finalized) {
         $decks = $event->getDecks();
         $json['decks'] = [];
