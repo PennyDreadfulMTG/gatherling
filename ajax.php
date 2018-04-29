@@ -61,7 +61,6 @@ function json_event($event)
             if (!$m->reportSubmitted($m->playerb)) {
                 $json['unreported'][] = $m->playerb;
             }
-
         }
     }
 
