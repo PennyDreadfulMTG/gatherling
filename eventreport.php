@@ -1,9 +1,10 @@
-<?php session_start();
+<?php
 include 'lib.php';
+session_start();
 
 print_header('Event Report');
 
-?> 
+?>
 <div class="grid_10 prefix_1 suffix_1">
 <div id="gatherling_main" class="box">
 <div class="uppertitle"> Event Report </div>
@@ -16,10 +17,10 @@ if (isset($_GET['event'])) {
     eventList();
 }
 
-?> 
+?>
 
-</div> 
-</div> 
+</div>
+</div>
 
 <?php print_footer(); ?>
 
@@ -32,7 +33,7 @@ function eventList($series = '', $season = '')
         COUNT(DISTINCT n.player) AS players, e.host AS host, e.start AS start,
         e.finalized, e.cohost, e.series, e.season
         FROM events e
-        LEFT OUTER JOIN entries AS n ON n.event = e.name 
+        LEFT OUTER JOIN entries AS n ON n.event = e.name
         WHERE 1=1 AND e.start < NOW() GROUP BY e.name ORDER BY e.start DESC');
 
     if (!isset($_GET['format'])) {
