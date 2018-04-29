@@ -18,6 +18,5 @@ final class NamesTest extends TestCase
         $this->assertEquals(normaliseCardName('Ifh-Bíff Efreet'), 'Ifh-Biff Efreet');
         $this->assertEquals(normaliseCardName('Ifh-Bíff Efreet'), 'Ifh-Biff Efreet');
         $this->assertEquals(normaliseCardName('Lim-Dûl'), 'Lim-Dul');
-
     }
 }
