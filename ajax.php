@@ -52,6 +52,7 @@ function json_event($event)
             }
             if ($roundnum != $m->round) {
                 $roundnum = $m->round;
+                $json['unreported'] = [];
             }
             $data['round'] = $m->round + $addrounds;
             $json['matches'][] = $data;
