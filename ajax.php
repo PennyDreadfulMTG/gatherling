@@ -80,7 +80,8 @@ function json_event($event)
     return $json;
 }
 
-function json_deck($deck) {
+function json_deck($deck)
+{
     $json = [];
     $json['id'] = $deck->id;
     if ($deck->id != 0) {
@@ -92,6 +93,7 @@ function json_deck($deck) {
     } else {
         $json['found'] = 0;
     }
+
     return $json;
 }
 
