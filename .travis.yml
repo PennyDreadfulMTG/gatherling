@@ -11,7 +11,7 @@ script:
 - php admin/db-upgrade.php
 - php util/insertcardset.php M10
 - php util/updateDefaultFormats.php
-- phpunit -v tests/*.php
+- phpunit -v tests/
 after_success: "./util/merge.sh $USERNAME $PASSWORD"
 env:
   global:
