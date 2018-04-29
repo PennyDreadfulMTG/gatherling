@@ -1,6 +1,6 @@
 <?php
 
-require 'lib.php';
+require_once 'lib.php';
 
 // declare(strict_types=1);
 
