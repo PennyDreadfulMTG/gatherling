@@ -40,6 +40,7 @@ function json_event($event)
     $matches = $event->getMatches();
     if ($matches) {
         $json['matches'] = [];
+        $json['unreported'] = [];
         $addrounds = 0;
         $roundnum = 0;
         $timing = 0;
@@ -54,6 +55,13 @@ function json_event($event)
             }
             $data['round'] = $m->round + $addrounds;
             $json['matches'][] = $data;
+            if (!$m->reportSubmitted($m->playera)) {
+                $json['unreported'][] = $m->playera;
+            }
+            if (!$m->reportSubmitted($m->playerb)) {
+                $json['unreported'][] = $m->playerb;
+            }
+
         }
     }
 
