@@ -8,22 +8,22 @@ class Deck
     public $notes;
 
     public $sideboard_cards = []; // Has many sideboard_cards through deckcontents (issideboard = 1)
-  public $maindeck_cards = []; // Has many maindeck_cards through deckcontents (issideboard = 0)
+    public $maindeck_cards = []; // Has many maindeck_cards through deckcontents (issideboard = 0)
 
-  public $maindeck_cardcount = 0;
+    public $maindeck_cardcount = 0;
     public $sideboard_cardcount = 0;
 
     public $errors = [];
 
     public $playername; // Belongs to player through entries, now held in decks table
-  public $eventname; // Belongs to event through entries
-  public $subeventid; // Belongs to event
-  public $format; // Belongs to event..  now held in decks table
-  public $tribe; // used only for tribal events
-  public $deck_color_str;  // Holds the final string color string
-  public $created_date; // Date deck was created
+    public $eventname; // Belongs to event through entries
+    public $subeventid; // Belongs to event
+    public $format; // Belongs to event..  now held in decks table
+    public $tribe; // used only for tribal events
+    public $deck_color_str;  // Holds the final string color string
+    public $created_date; // Date deck was created
 
-  public $medal; // has a medal
+    public $medal; // has a medal
 
     public $new; // is new
 

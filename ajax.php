@@ -61,28 +61,53 @@ function json_event($event)
             if (!$m->reportSubmitted($m->playerb)) {
                 $json['unreported'][] = $m->playerb;
             }
+        }
+    }
 
+    if ($event->finalized) {
+        $decks = $event->getDecks();
+        $json['decks'] = [];
+        foreach ($decks as $d) {
+            $json['decks'][] = json_deck($d);
+        }
+
+        $json['finalists'] = $event->getFinalists();
+        $json['standings'] = [];
+        foreach (Standings::getEventStandings($event->name, $event->active) as $s) {
+            $json['standings'][] = populate([], $s, ['player', 'active', 'score', 'matches_played', 'matches_won', 'draws', 'games_won', 'games_played', 'byes', 'OP_Match', 'PL_Game', 'OP_Game', 'seed']);
         }
     }
 
     return $json;
 }
 
+function json_deck($deck) {
+    $json = [];
+    $json['id'] = $deck->id;
+    if ($deck->id != 0) {
+        $json['found'] = 1;
+        $json['name'] = $deck->name;
+        $json['archetype'] = $deck->archetype;
+        $json['maindeck'] = $deck->maindeck_cards;
+        $json['sideboard'] = $deck->sideboard_cards;
+    } else {
+        $json['found'] = 0;
+    }
+    return $json;
+}
+
 $result = [];
 switch ($action) {
     case 'deckinfo':
-    $deckid = $_GET['deck'];
+    $deckid = $_REQUEST['deck'];
     $deck = new Deck($deckid);
-    $result['id'] = $deckid;
-    if ($deck->id != 0) {
-        $result['found'] = 1;
-        $result['name'] = $deck->name;
-        $result['archetype'] = $deck->archetype;
-        $result['maindeck'] = $deck->maindeck_cards;
-        $result['sideboard'] = $deck->sideboard_cards;
-    } else {
-        $result['found'] = 0;
-    }
+    $result = json_deck($deck);
+    break;
+
+    case 'eventinfo':
+    $eventname = $_REQUEST['event'];
+    $event = new Event($eventname);
+    $result = json_event($event);
     break;
 
     case 'addplayer':
@@ -138,11 +163,30 @@ switch ($action) {
         $result[$event->name] = json_event($event);
     }
     break;
+
+    case 'recent_events':
+    $events = [];
+    $db = Database::getConnection();
+    $query = $db->query('SELECT e.name as name FROM events e
+                         WHERE e.finalized AND e.start < NOW()
+                         ORDER BY e.start DESC LIMIT 10');
+    while ($row = $query->fetch_assoc()) {
+        $events[] = $row['name'];
+    }
+    $query->close();
+    foreach ($events as $eventname) {
+        $event = new Event($eventname);
+        $result[$event->name] = json_event($event);
+    }
+    break;
+
     case 'api_version':
     $result['version'] = 2;
     break;
+
     default:
     $result['error'] = "Unknown action '{$action}'";
+    break;
 }
 
 json_headers();
