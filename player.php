@@ -147,7 +147,11 @@ if ($player == null) {
     break;
 
     case 'submit_result':
-    print_submit_resultForm($_GET['player'], $_GET['match_id']);
+    if (!isset($_GET['match_id'])){
+        print_mainPlayerCP($player, '');
+        return;
+    }
+    print_submit_resultForm($_GET['match_id']);
     break;
 
     case 'submit_league_result':
@@ -177,7 +181,37 @@ if ($player == null) {
     break;
 
     case 'drop_form':
-    print_dropConfirm($_GET['event'], $player);
+        $matches = $player->getCurrentMatches();
+        $event_name = $_REQUEST['event'];
+        $can_drop = true;
+        foreach ($matches as $match) {
+            if (strcasecmp($event_name, $match->getEventNamebyMatchid()) != 0)
+            {
+                continue;
+            }
+            if ($match->verification == 'unverified') {
+                $player_number = $match->playerLetter($player->name);
+                if ($player_number == 'b' and ($match->playerb_wins + $match->playerb_losses) > 0) {
+                    // Fine.
+                } elseif ($player_number == 'a' and ($match->playera_wins + $match->playera_losses) > 0) {
+                    // Also Fine
+                } else {
+                    if ($match->player_reportable_check() == true) {
+                        $can_drop = false;
+                    }
+                }
+            } elseif ($match->verification == 'failed') {
+                $can_drop = false;
+            }
+        }
+
+        if ($can_drop) {
+            print_dropConfirm($event_name, $player);
+        }
+        else
+        {
+            print_submit_resultForm($match->id, true);
+        }
     break;
 
     default:
@@ -216,16 +250,25 @@ function print_dropConfirm($event_name, $player)
     echo "</form>\n";
 }
 
-function print_submit_resultForm($player, $match_id)
+function print_submit_resultForm($match_id, $drop = false)
 {
-    echo "<center><h3>Report Game Results</h3>
-    Enter results for this match</center>\n";
     $match = new Match($match_id);
+    $event = new Event($match->getEventNamebyMatchid());
+    $letter = $match->playerLetter(Player::getSessionPlayer()->name);
+    if ($letter == 'a') {
+        $opp = $match->playerb;
+    }
+    else {
+        $opp = $match->playera;
+    }
+    $oppplayer = new Player($opp);
+    echo "<center><h3>Report Game Results</h3>
+    Enter results for <em>$event->name</em> round $event->current_round vs. $oppplayer->name</center>\n";
 
     echo "<form action=\"player.php\" method=\"post\">\n";
     echo "<input name=\"mode\" type=\"hidden\" value=\"verify_result\" />\n";
     echo "<input name=\"match_id\" type=\"hidden\" value=\"{$match_id}\" />\n";
-    echo "<input name=\"player\" type=\"hidden\" value=\"{$player}\" />\n";
+    echo "<input name=\"player\" type=\"hidden\" value=\"{$letter}\" />\n";
     echo '<table class="form">';
     echo "<tr><td><input type='radio' name='report' value='W20' /> I won the match 2-0</td> </tr>";
     echo "<tr><td><input type='radio' name='report' value='W21' />I won the match 2-1</td> </tr>";
@@ -235,7 +278,7 @@ function print_submit_resultForm($player, $match_id)
         echo "<tr><td><input type='radio' name='report' value='D' />The match was a draw</td> </tr>";
     }
     echo '<tr><td></td></tr>';
-    echo "<tr><th><input type='checkbox' name='drop' value='Y' />I want to drop from this event</th> </tr>";
+    print_checkbox_input("I want to drop from this event", 'drop', $drop);
     echo '<tr><td></td></tr>';
     echo '<tr><td class="buttons">';
     echo '<input class="inputbutton" name="submit" type="submit" value="Submit Match Report" />';
@@ -299,6 +342,8 @@ function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, 
             echo 'The match was a draw';
         break;
     }
+    if ($drop == 1)
+        $drop = 'Y';
     if ($drop == 'Y') {
         echo "</p><center style=\"color: red; font-weight: bold;\">I want to drop out of this event.</center>\n";
     }
