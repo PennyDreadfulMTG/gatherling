@@ -147,8 +147,9 @@ if ($player == null) {
     break;
 
     case 'submit_result':
-    if (!isset($_GET['match_id'])){
+    if (!isset($_GET['match_id'])) {
         print_mainPlayerCP($player, '');
+
         return;
     }
     print_submit_resultForm($_GET['match_id']);
@@ -185,8 +186,7 @@ if ($player == null) {
         $event_name = $_REQUEST['event'];
         $can_drop = true;
         foreach ($matches as $match) {
-            if (strcasecmp($event_name, $match->getEventNamebyMatchid()) != 0)
-            {
+            if (strcasecmp($event_name, $match->getEventNamebyMatchid()) != 0) {
                 continue;
             }
             if ($match->verification == 'unverified') {
@@ -207,9 +207,7 @@ if ($player == null) {
 
         if ($can_drop) {
             print_dropConfirm($event_name, $player);
-        }
-        else
-        {
+        } else {
             print_submit_resultForm($match->id, true);
         }
     break;
@@ -257,8 +255,7 @@ function print_submit_resultForm($match_id, $drop = false)
     $letter = $match->playerLetter(Player::getSessionPlayer()->name);
     if ($letter == 'a') {
         $opp = $match->playerb;
-    }
-    else {
+    } else {
         $opp = $match->playera;
     }
     $oppplayer = new Player($opp);
@@ -278,7 +275,7 @@ function print_submit_resultForm($match_id, $drop = false)
         echo "<tr><td><input type='radio' name='report' value='D' />The match was a draw</td> </tr>";
     }
     echo '<tr><td></td></tr>';
-    print_checkbox_input("I want to drop from this event", 'drop', $drop);
+    print_checkbox_input('I want to drop from this event', 'drop', $drop);
     echo '<tr><td></td></tr>';
     echo '<tr><td class="buttons">';
     echo '<input class="inputbutton" name="submit" type="submit" value="Submit Match Report" />';
@@ -342,8 +339,9 @@ function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, 
             echo 'The match was a draw';
         break;
     }
-    if ($drop == 1)
+    if ($drop == 1) {
         $drop = 'Y';
+    }
     if ($drop == 'Y') {
         echo "</p><center style=\"color: red; font-weight: bold;\">I want to drop out of this event.</center>\n";
     }
