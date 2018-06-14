@@ -298,8 +298,7 @@ function fullmetagame($event)
             echo "{$row['deckname']}</a></td>\n";
             echo "<td align=\"right\">{$row['archetype']}</td></tr>\n";
         }
-    }
-    else {
+    } else {
         echo "<td colspan=5 align=\"center\"><b><h3>Registered Players</h3></td></tr>\n";
         echo '<center><h2><em>Deck lists are not shown for privacy until event is finalized.</em></h2></center>';
         while ($row = $result->fetch_assoc()) {
