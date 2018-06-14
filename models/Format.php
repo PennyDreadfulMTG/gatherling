@@ -946,11 +946,10 @@ class Format
         // underdog allows only 4 changelings per deck list
         if ($this->underdog) {
             echo "Tribe is: $underdogKey<br />";
-            if ($underdogKey != 'Shapeshifter') {
-                // echo "Tribe is not Shapeshifter<br />";
-                if ((strpos($underdogKey, 'Homarid') !== false) or (strpos($underdogKey, 'Harpy') !== false) or
-                    (strpos($underdogKey, 'Mongoose') !== false) or (strpos($underdogKey, 'Squid') !== false) or
-                    (strpos($underdogKey, 'Whale') !== false) or (strpos($underdogKey, 'Badger') !== false) or (strpos($underdogKey, 'Masticore') !== false)) {
+            if ($underdogKey != 'Shapeshifter') { // TODO: Stop hardcoding this list.
+                if ((strpos($underdogKey, 'Badger') !== false) or (strpos($underdogKey, 'Cocatrice') !== false) or
+                    (strpos($underdogKey, 'Hyena') !== false) or (strpos($underdogKey, 'Masticore') !== false) or
+                    (strpos($underdogKey, 'Mongoose') !== false) or (strpos($underdogKey, 'Rabbit') !== false)) {
                     echo "$underdogKey is a 3 card tribe<br />";
                     if ($subTypeChangeling > 8) {
                         $this->error[] = "Tribe $underdogKey is allowed a maximum of 8 changeling's per deck in underdog format";
@@ -958,7 +957,7 @@ class Format
                 } else {
                     // echo "I am not a 3 card tribe<br />";
                     if ($subTypeChangeling > 4) {
-                        $this->error[] = "This tribe can't include more than 4 Changeling creatures because it's not a 3-member tribe. The 3 member tribes are: Badger,Harpy, Homarid, Masticore, Mongoose, Octopus, Rabbit, Squid, and Whale";
+                        $this->error[] = "This tribe can't include more than 4 Changeling creatures because it's not a 3-member tribe. The 3-member tribes are: Badger, Cocatrice, Hyena, Masticore, Mongoose, and Rabbit";
                     }
                 }
             }
