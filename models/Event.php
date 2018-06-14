@@ -20,11 +20,11 @@ class Event
     public $player_editdecks;
 
     // Class associations
-  public $series; // belongs to Series
-  public $host; // has one Player - host
-  public $cohost; // has one Player - cohost
+    public $series; // belongs to Series
+    public $host; // has one Player - host
+    public $cohost; // has one Player - cohost
 
-  // Subevents
+    // Subevents
     public $mainrounds;
     public $mainstruct;
     public $mainid; // Has one main subevent
@@ -39,9 +39,9 @@ class Event
     public $player_reportable;
     public $player_reported_draws;
     public $prereg_cap; // Cap on player initiated registration
-  public $late_entry_limit; // How many rounds we let people perform late entries
+    public $late_entry_limit; // How many rounds we let people perform late entries
 
-  public $private_decks; // Toggle to disable deck privacy for active events. Allows the metagame page to display during an active event and lets deck lists be viewed if disabled.
+    public $private_decks; // Toggle to disable deck privacy for active events. Allows the metagame page to display during an active event and lets deck lists be viewed if disabled.
 
     public $hastrophy;
     private $new;

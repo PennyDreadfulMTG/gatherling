@@ -168,7 +168,7 @@ class Format
         $success = false;
         $formatName = [];
         $formatName = Database::single_result_single_param('SELECT name FROM formats WHERE name = ?', 's', $format);
-        if (count($formatName)) {
+        if ($formatName) {
             $success = true;
         }
 
@@ -946,10 +946,9 @@ class Format
         // underdog allows only 4 changelings per deck list
         if ($this->underdog) {
             echo "Tribe is: $underdogKey<br />";
-            if ($underdogKey != 'Shapeshifter') { // TODO: Stop hardcoding this list.
-                if ((strpos($underdogKey, 'Badger') !== false) or (strpos($underdogKey, 'Cocatrice') !== false) or
-                    (strpos($underdogKey, 'Hyena') !== false) or (strpos($underdogKey, 'Masticore') !== false) or
-                    (strpos($underdogKey, 'Mongoose') !== false) or (strpos($underdogKey, 'Rabbit') !== false)) {
+            if ($underdogKey != 'Shapeshifter') {
+                $frequency = Database::single_result("SELECT Count(*) FROM cards WHERE type LIKE '%{$underdogKey}%'");
+                if ($frequency < 4) {
                     echo "$underdogKey is a 3 card tribe<br />";
                     if ($subTypeChangeling > 8) {
                         $this->error[] = "Tribe $underdogKey is allowed a maximum of 8 changeling's per deck in underdog format";
@@ -957,7 +956,7 @@ class Format
                 } else {
                     // echo "I am not a 3 card tribe<br />";
                     if ($subTypeChangeling > 4) {
-                        $this->error[] = "This tribe can't include more than 4 Changeling creatures because it's not a 3-member tribe. The 3-member tribes are: Badger, Cocatrice, Hyena, Masticore, Mongoose, and Rabbit";
+                        $this->error[] = "This tribe can't include more than 4 Changeling creatures because it's not a 3-member tribe.";
                     }
                 }
             }
