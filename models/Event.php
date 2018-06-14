@@ -42,6 +42,7 @@ class Event
     public $late_entry_limit; // How many rounds we let people perform late entries
 
     public $private_decks; // Toggle to disable deck privacy for active events. Allows the metagame page to display during an active event and lets deck lists be viewed if disabled.
+    public $private_finals; // As above, but for finals
 
     public $hastrophy;
     private $new;
@@ -71,6 +72,7 @@ class Event
             $this->prereg_cap = 0;
             $this->player_editdecks = 1;
             $this->private_decks = 1;
+            $this->private_finals = 1;
             $this->player_reported_draws = 0;
             $this->late_entry_limit = 0;
 
@@ -82,7 +84,7 @@ class Event
             $stmt = $db->prepare('SELECT format, host, cohost, series, season, number,
                                    start, kvalue, finalized, prereg_allowed, pkonly, threadurl,
                                    metaurl, reporturl, active, current_round, player_reportable, player_editdecks,
-                                    prereg_cap, private_decks, player_reported_draws, late_entry_limit FROM events WHERE name = ?');
+                                    prereg_cap, private_decks, private_finals, player_reported_draws, late_entry_limit FROM events WHERE name = ?');
             if (!$stmt) {
                 die($db->error);
             }
@@ -91,7 +93,7 @@ class Event
             $stmt->bind_result($this->format, $this->host, $this->cohost, $this->series, $this->season, $this->number,
                          $this->start, $this->kvalue, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->threadurl,
                           $this->metaurl, $this->reporturl, $this->active, $this->current_round, $this->player_reportable, $this->player_editdecks,
-                          $this->prereg_cap, $this->private_decks, $this->player_reported_draws, $this->late_entry_limit);
+                          $this->prereg_cap, $this->private_decks, $this->private_finals, $this->player_reported_draws, $this->late_entry_limit);
             if ($stmt->fetch() == null) {
                 throw new Exception('Event '.$name.' not found in DB');
             }
@@ -163,12 +165,12 @@ class Event
             $stmt = $db->prepare('INSERT INTO events(name, start, format, host, cohost, kvalue,
                                                number, season, series, threadurl, reporturl,
                                                metaurl, prereg_allowed, finalized, pkonly, player_reportable,
-                                               prereg_cap, player_editdecks, private_decks, player_reported_draws, late_entry_limit)
+                                               prereg_cap, player_editdecks, private_decks, private_finals, player_reported_draws, late_entry_limit)
                             VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?)');
-            $stmt->bind_param('sssssdddssssdddddddd', $this->name, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
+            $stmt->bind_param('sssssdddssssddddddddd', $this->name, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
                                              $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl,
                                              $this->metaurl, $this->prereg_allowed, $this->pkonly, $this->player_reportable,
-                                             $this->prereg_cap, $this->player_editdecks, $this->private_decks, $this->player_reported_draws, $this->late_entry_limit);
+                                             $this->prereg_cap, $this->player_editdecks, $this->private_decks, $this->private_finals, $this->player_reported_draws, $this->late_entry_limit);
             $stmt->execute() or die($stmt->error);
             $stmt->close();
 
@@ -180,14 +182,14 @@ class Event
       number = ?, season = ?, series = ?, threadurl = ?, reporturl = ?,
       metaurl = ?, finalized = ?, prereg_allowed = ?, pkonly = ?, active = ?,
       current_round = ?, player_reportable = ?, prereg_cap = ?,
-      player_editdecks = ?, private_decks = ?, player_reported_draws = ?, late_entry_limit = ?
+      player_editdecks = ?, private_decks = ?, private_finals = ?, player_reported_draws = ?, late_entry_limit = ?
       WHERE name = ?');
             $stmt or die($db->error);
-            $stmt->bind_param('ssssdddssssddddddddddds', $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
+            $stmt->bind_param('ssssdddssssdddddddddddds', $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
         $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl,
         $this->metaurl, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->active,
         $this->current_round, $this->player_reportable, $this->prereg_cap,
-        $this->player_editdecks, $this->private_decks, $this->player_reported_draws, $this->late_entry_limit,
+        $this->player_editdecks, $this->private_decks, $this->private_finals, $this->player_reported_draws, $this->late_entry_limit,
         $this->name);
 
             $stmt->execute() or die($stmt->error);
