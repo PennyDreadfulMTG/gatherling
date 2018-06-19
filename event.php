@@ -516,7 +516,7 @@ function eventForm($event = null, $forcenew = false)
         echo '</td></tr>';
         print_checkbox_input('Allow Pre-Registration', 'prereg_allowed', $event->prereg_allowed);
         print_text_input('Late Entry Limit', 'late_entry_limit', $event->late_entry_limit, 4, 'The event host may still add players after this round.');
-        print_checkbox_input('Pauper Krew Members Only', 'pkonly', $event->pkonly);
+        // print_checkbox_input('Pauper Krew Members Only', 'pkonly', $event->pkonly);
 
         print_checkbox_input('Allow Players to Report Results', 'player_reportable', $event->player_reportable);
 
