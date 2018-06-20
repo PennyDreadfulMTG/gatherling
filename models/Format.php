@@ -168,7 +168,7 @@ class Format
         $success = false;
         $formatName = [];
         $formatName = Database::single_result_single_param('SELECT name FROM formats WHERE name = ?', 's', $format);
-        if (count($formatName)) {
+        if ($formatName) {
             $success = true;
         }
 
@@ -947,10 +947,8 @@ class Format
         if ($this->underdog) {
             echo "Tribe is: $underdogKey<br />";
             if ($underdogKey != 'Shapeshifter') {
-                // echo "Tribe is not Shapeshifter<br />";
-                if ((strpos($underdogKey, 'Homarid') !== false) or (strpos($underdogKey, 'Harpy') !== false) or
-                    (strpos($underdogKey, 'Mongoose') !== false) or (strpos($underdogKey, 'Squid') !== false) or
-                    (strpos($underdogKey, 'Whale') !== false) or (strpos($underdogKey, 'Badger') !== false) or (strpos($underdogKey, 'Masticore') !== false)) {
+                $frequency = Database::single_result("SELECT Count(*) FROM cards WHERE type LIKE '%{$underdogKey}%'");
+                if ($frequency < 4) {
                     echo "$underdogKey is a 3 card tribe<br />";
                     if ($subTypeChangeling > 8) {
                         $this->error[] = "Tribe $underdogKey is allowed a maximum of 8 changeling's per deck in underdog format";
@@ -958,7 +956,7 @@ class Format
                 } else {
                     // echo "I am not a 3 card tribe<br />";
                     if ($subTypeChangeling > 4) {
-                        $this->error[] = "This tribe can't include more than 4 Changeling creatures because it's not a 3-member tribe. The 3 member tribes are: Badger,Harpy, Homarid, Masticore, Mongoose, Octopus, Rabbit, Squid, and Whale";
+                        $this->error[] = "This tribe can't include more than 4 Changeling creatures because it's not a 3-member tribe.";
                     }
                 }
             }

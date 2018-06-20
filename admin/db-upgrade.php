@@ -552,6 +552,12 @@ if ($version < 26) {
     ADD COLUMN `theme` VARCHAR(45) NULL;');
     set_version(26);
 }
+if ($version < 27) {
+    echo 'Updating to version 27 (Separate setting for hiding decklists during the finals)... <br />';
+    do_query("ALTER TABLE `events`
+    ADD COLUMN `private_finals` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `private_decks`;");
+    set_version(27);
+}
 $db->autocommit(true);
 
 echo 'DB is up to date!<br />';

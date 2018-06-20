@@ -149,8 +149,7 @@ if ($player == null) {
     case 'submit_result':
     if (!isset($_GET['match_id'])) {
         print_mainPlayerCP($player, '');
-
-        return;
+        break;
     }
     print_submit_resultForm($_GET['match_id']);
     break;

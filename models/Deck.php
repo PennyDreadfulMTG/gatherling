@@ -443,6 +443,8 @@ class Deck
 
         if (($event->finalized && !$event->active) || $event->private_decks == 0) {
             return true;
+        } elseif ($event->current_round > $event->mainrounds && !$event->private_finals) {
+            return true;
         } else {
             if ($player->isSuper() ||
            $event->isHost($username) ||

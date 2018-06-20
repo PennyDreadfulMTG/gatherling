@@ -268,22 +268,7 @@ function fullmetagame($event)
     echo '<table style="border-width: 0px;" align="center">';
     $hg = headerColor();
     echo '<tr style="">';
-    if ($event->finalized == '0' and $event->private_decks == 1) {
-        echo "<td colspan=5 align=\"center\"><b><h3>Registered Players</h3></td></tr>\n";
-        echo '<center><h2><em>Deck lists are not shown for privacy until event is finalized.</em></h2></center>';
-        while ($row = $result->fetch_assoc()) {
-            $play = new Player($row['player']);
-            $entry = new Entry($event->name, $play->name);
-            $format = new Format($event->format);
-            // $deck = new Deck($entry->deck);
-
-            echo '<tr><td>';
-            if ($format->tribal && ($event->current_round > 1)) {
-                echo '<td>'.$entry->deck->tribe.'</td>';
-            }
-            echo '<td>'.$play->linkTo()."</td><td align=\left\">{$entry->recordString()}</td></tr>";
-        }
-    } else {
+    if (($event->finalized && !$event->active) || $event->private_decks == 0 || ($event->current_round > $event->mainrounds && !$event->private_finals)) {
         echo "<td colspan=5 align=\"center\"><b>Metagame Breakdown</td></tr>\n";
         while ($row = $result->fetch_assoc()) {
             if ($row['colors'] != $color) {
@@ -312,6 +297,21 @@ function fullmetagame($event)
             echo "<a href=\"deck.php?mode=view&id={$row['id']}\">";
             echo "{$row['deckname']}</a></td>\n";
             echo "<td align=\"right\">{$row['archetype']}</td></tr>\n";
+        }
+    } else {
+        echo "<td colspan=5 align=\"center\"><b><h3>Registered Players</h3></td></tr>\n";
+        echo '<center><h2><em>Deck lists are not shown for privacy until event is finalized.</em></h2></center>';
+        while ($row = $result->fetch_assoc()) {
+            $play = new Player($row['player']);
+            $entry = new Entry($event->name, $play->name);
+            $format = new Format($event->format);
+            // $deck = new Deck($entry->deck);
+
+            echo '<tr><td>';
+            if ($format->tribal && ($event->current_round > 1)) {
+                echo '<td>'.$entry->deck->tribe.'</td>';
+            }
+            echo '<td>'.$play->linkTo()."</td><td align=\left\">{$entry->recordString()}</td></tr>";
         }
     }
     if (isset($_SESSION['username'])) {
