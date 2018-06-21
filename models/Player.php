@@ -846,7 +846,7 @@ class Player
         $stmt = $db->prepare("SELECT c.name, sum(t.qty) AS qty
       FROM cards c, deckcontents t, entries n
       WHERE n.player = ? AND t.deck = n.deck AND t.issideboard = 0
-       AND t.card = c.id AND c.type LIKE 'Basic%'
+       AND t.card = c.id AND c.type LIKE '%Land%'
       GROUP BY c.name ORDER BY qty DESC, c.name LIMIT 1");
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
