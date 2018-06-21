@@ -35,7 +35,7 @@ if ($gatherlingoutofservice != 1) {
         <div class="gatherling_news box grid_8">
             <div class=" alpha omega uppertitle"> Gatherling News: Update to Gatherling 4! </div>
             <div class="clear"></div>
-                    <?php require_once 'news.php'; ?>
+                <?php require_once 'news.php'; ?>
             <div class="clear"></div>
         </div> <!-- box gatherlingnews -->
 
@@ -100,7 +100,8 @@ if ($gatherlingoutofservice != 1) {
                             <tr>
                                 <td colspan="2" class="buttons">
                                 <input class="inputbutton" type="submit" name="mode" value="Log In" /> <br />
-                                <a href="register.php">Need to register?</a>
+                                <a href="register.php">Need to register?</a><br />
+                                <a href="forgot.php">Forgot your password?</a>
                                 </td>
                             </tr>
                         </form>

@@ -64,7 +64,7 @@ if ($player == null) {
                 $result = 'Successfully verified your account with MTGO.';
                 $success = true;
             } else {
-                $result = "Your challenge is wrong.  Get a new one by sending the message '!verify {$CONFIG['infobot_prefix']}' to pdbot on MTGO!";
+                $result = "Your challenge is wrong.  Get a new one by sending the message '<code>!verify {$CONFIG['infobot_prefix']}</code>' to pdbot on MTGO!";
             }
         } elseif ($_POST['action'] == 'finalize_result') {
             // write results to matches table
@@ -490,7 +490,7 @@ function print_verifyMtgoForm($player, $result)
     global $CONFIG;
     echo "<center><h3>Verifying your MTGO account</h3>
     Verify your MTGO account by following these simple steps:<br />
-    1. Chat '!verify {$CONFIG['infobot_prefix']}' to pdbot to get a verification code <br />
+    1. Chat <code>!verify {$CONFIG['infobot_prefix']}</code> to pdbot to get a verification code <br />
     2. Enter the verification code here to be verified <br />
     \n";
     echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
