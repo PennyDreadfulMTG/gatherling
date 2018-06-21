@@ -81,6 +81,9 @@ function testLogin()
             if (isset($_REQUEST['target'])) {
                 $target = $_REQUEST['target'];
             }
+            if (strlen($_POST['password']) < 8 && !$admin) {
+                $target = 'player.php?mode=changepass&tooshort=true';
+            }
             header("location: $target");
             $success = 1;
         }

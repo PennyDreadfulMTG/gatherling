@@ -13,7 +13,6 @@ print_header('Player Control Panel');
 $result = '';
 if ($player == null) {
     linkToLogin('your Player Control Panel');
-// echo "<center> You must <a href=\"login.php\">log in</a> to use your player control panel.</center>\n";
 } else {
     $result = '';
     // Handle actions
@@ -24,7 +23,7 @@ if ($player == null) {
         } elseif ($_POST['action'] == 'changePassword') {
             $success = false;
             if ($_POST['newPassword2'] == $_POST['newPassword']) {
-                if (strlen($_POST['newPassword']) >= 6) {
+                if (strlen($_POST['newPassword']) >= 8) {
                     $authenticated = Player::checkPassword($_POST['username'], $_POST['oldPassword']);
                     if ($authenticated) {
                         $player = new Player($_POST['username']);
@@ -378,8 +377,13 @@ function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, 
 
 function print_changePassForm($player, $result)
 {
-    echo "<center><h3>Changing your password</h3></center>\n";
-    echo "<center>New passwords are required to be at least 6 characters long.</center>\n";
+    if (isset($_REQUEST['tooshort'])) {
+        echo "<center><h3>You must change your password to continue</h3></center>\n";
+    }
+    else {
+        echo "<center><h3>Changing your password</h3></center>\n";
+    }
+    echo "<center>Passwords are required to be at least 8 characters long.</center>\n";
     echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
     echo "<form action=\"player.php\" method=\"post\">\n";
     echo "<input name=\"action\" type=\"hidden\" value=\"changePassword\" />\n";
