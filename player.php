@@ -379,8 +379,7 @@ function print_changePassForm($player, $result)
 {
     if (isset($_REQUEST['tooshort'])) {
         echo "<center><h3>You must change your password to continue</h3></center>\n";
-    }
-    else {
+    } else {
         echo "<center><h3>Changing your password</h3></center>\n";
     }
     echo "<center>Passwords are required to be at least 8 characters long.</center>\n";

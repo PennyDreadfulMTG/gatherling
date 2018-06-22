@@ -550,13 +550,14 @@ function print_warning_if($conditional)
     }
 }
 
-function version_number() {
-    return "4.8.3";
+function version_number()
+{
+    return '4.8.3';
 }
 
 function version_tagline()
 {
-    echo "Gatherling version 4.8.3 (\"These violent delights have violent ends.\")";
+    echo 'Gatherling version 4.8.3 ("These violent delights have violent ends.")';
     // print "Gatherling version 4.8.2 (\"Zagreus taking time apart. / Zagreus fears the hero heart. / Zagreus seeks the final part. / The reward that he is reaping..\")";
     // print "Gatherling version 4.8.1 (\"Zagreus at the end of days / Zagreus lies all other ways / Zagreus comes when time's a maze / And all of history is weeping.\")";
     // print "Gatherling version 4.8.0 (\"Zagreus sits inside your head / Zagreus lives among the dead / Zagreus sees you in your bed / And eats you when you're sleeping.\")";
