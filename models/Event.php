@@ -764,6 +764,7 @@ class Event
 
     public static function findMostRecentByHost($host_name)
     {
+        // TODO: This should show the closest non-finalized event.
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT name FROM events WHERE host = ? OR cohost = ? ORDER BY start DESC LIMIT 1');
         $stmt->bind_param('ss', $host_name, $host_name);

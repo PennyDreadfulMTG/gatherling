@@ -13,7 +13,6 @@ print_header('Player Control Panel');
 $result = '';
 if ($player == null) {
     linkToLogin('your Player Control Panel');
-// echo "<center> You must <a href=\"login.php\">log in</a> to use your player control panel.</center>\n";
 } else {
     $result = '';
     // Handle actions
@@ -24,7 +23,7 @@ if ($player == null) {
         } elseif ($_POST['action'] == 'changePassword') {
             $success = false;
             if ($_POST['newPassword2'] == $_POST['newPassword']) {
-                if (strlen($_POST['newPassword']) >= 6) {
+                if (strlen($_POST['newPassword']) >= 8) {
                     $authenticated = Player::checkPassword($_POST['username'], $_POST['oldPassword']);
                     if ($authenticated) {
                         $player = new Player($_POST['username']);
@@ -64,7 +63,7 @@ if ($player == null) {
                 $result = 'Successfully verified your account with MTGO.';
                 $success = true;
             } else {
-                $result = "Your challenge is wrong.  Get a new one by sending the message '!verify {$CONFIG['infobot_prefix']}' to pdbot on MTGO!";
+                $result = "Your challenge is wrong.  Get a new one by sending the message '<code>!verify {$CONFIG['infobot_prefix']}</code>' to pdbot on MTGO!";
             }
         } elseif ($_POST['action'] == 'finalize_result') {
             // write results to matches table
@@ -378,8 +377,12 @@ function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, 
 
 function print_changePassForm($player, $result)
 {
-    echo "<center><h3>Changing your password</h3></center>\n";
-    echo "<center>New passwords are required to be at least 6 characters long.</center>\n";
+    if (isset($_REQUEST['tooshort'])) {
+        echo "<center><h3>You must change your password to continue</h3></center>\n";
+    } else {
+        echo "<center><h3>Changing your password</h3></center>\n";
+    }
+    echo "<center>Passwords are required to be at least 8 characters long.</center>\n";
     echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
     echo "<form action=\"player.php\" method=\"post\">\n";
     echo "<input name=\"action\" type=\"hidden\" value=\"changePassword\" />\n";
@@ -490,7 +493,7 @@ function print_verifyMtgoForm($player, $result)
     global $CONFIG;
     echo "<center><h3>Verifying your MTGO account</h3>
     Verify your MTGO account by following these simple steps:<br />
-    1. Chat '!verify {$CONFIG['infobot_prefix']}' to pdbot to get a verification code <br />
+    1. Chat <code>!verify {$CONFIG['infobot_prefix']}</code> to pdbot to get a verification code <br />
     2. Enter the verification code here to be verified <br />
     \n";
     echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";

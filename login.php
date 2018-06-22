@@ -42,7 +42,8 @@ print_header('Login');
                       }
                     ?>
                         <input class="inputbutton" type="submit" name="mode" value="Log In"><br />
-                        Please <a href="register.php">Click Here</a> if you need to register.
+                        Please <a href="register.php">Click Here</a> if you need to register.<br />
+                        <a href="forgot.php">Forgot your password?</a>
                     </td>
                 </tr>
             </table>
@@ -79,6 +80,9 @@ function testLogin()
             $target = 'player.php';
             if (isset($_REQUEST['target'])) {
                 $target = $_REQUEST['target'];
+            }
+            if (strlen($_POST['password']) < 8 && !$admin) {
+                $target = 'player.php?mode=changepass&tooshort=true';
             }
             header("location: $target");
             $success = 1;
