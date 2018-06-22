@@ -32,5 +32,5 @@ elseif (strncmp($_REQUEST['action'], 'reset') == 0)
     echo "<UaReply>Your temporary password for {$CONFIG['site_name']} is $challenge</UaReply>";
 }
 else {
-    echo "<UaReply>Unknown Error</UaReply>";
+    echo "<error>Unknown Action</error>";
 }
