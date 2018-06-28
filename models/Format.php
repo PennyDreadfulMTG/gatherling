@@ -700,8 +700,7 @@ class Format
 
     public function isCardBasic($card)
     {
-        switch ($card)
-        {
+        switch ($card) {
             case 'Relentless Rats':
             case 'Rat Colony':
             case 'Shadowborn Apostle':
@@ -720,7 +719,6 @@ class Format
             default:
                 return false;
         }
-
     }
 
     public function isCardSingletonLegal($card, $amt)
