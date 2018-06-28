@@ -482,7 +482,9 @@ function eventForm($event = null, $forcenew = false)
         echo '</td></tr>';
         echo '<tr><th>Series</th><td>';
         $seriesList = Player::getSessionPlayer()->organizersSeries();
-        $seriesList[] = $event->series;
+        if ($event->series) {
+            $seriesList[] = $event->series;
+        }
         $seriesList = array_unique($seriesList);
         Series::dropMenu($event->series, 0, $seriesList);
         echo '</td></tr>';
