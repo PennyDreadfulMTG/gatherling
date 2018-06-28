@@ -698,6 +698,31 @@ class Format
         return false;
     }
 
+    public function isCardBasic($card)
+    {
+        switch ($card)
+        {
+            case 'Relentless Rats':
+            case 'Rat Colony':
+            case 'Shadowborn Apostle':
+             case 'Swamp':
+             case 'Plains':
+             case 'Island':
+             case 'Mountain':
+             case 'Forest':
+             case 'Wastes':
+             case 'Snow-Covered Swamp':
+             case 'Snow-Covered Plains':
+             case 'Snow-Covered Island':
+             case 'Snow-Covered Mountain':
+             case 'Snow-Covered Forest':
+                 return true;
+            default:
+                return false;
+        }
+
+    }
+
     public function isCardSingletonLegal($card, $amt)
     {
         $isLegal = false;
@@ -706,46 +731,8 @@ class Format
             $isLegal = true;
         }
 
-        switch ($card) {
-           case 'Relentless Rats':
-                $isLegal = true;
-                break;
-            case 'Shadowborn Apostle':
-                $isLegal = true;
-                break;
-            case 'Swamp':
-                $isLegal = true;
-                break;
-            case 'Plains':
-                $isLegal = true;
-                break;
-            case 'Island':
-                $isLegal = true;
-                break;
-            case 'Mountain':
-                $isLegal = true;
-                break;
-            case 'Forest':
-                $isLegal = true;
-                break;
-            case 'Snow-Covered Swamp':
-                $isLegal = true;
-                break;
-            case 'Snow-Covered Plains':
-                $isLegal = true;
-                break;
-            case 'Snow-Covered Island':
-                $isLegal = true;
-                break;
-            case 'Snow-Covered Mountain':
-                $isLegal = true;
-                break;
-            case 'Snow-Covered Forest':
-                $isLegal = true;
-                break;
-            case 'Wastes':
-                $isLegal = true;
-                break;
+        if ($this->isCardBasic($card)) {
+            $isLegal = true;
         }
 
         return $isLegal;
@@ -1170,46 +1157,8 @@ class Format
             $isLegal = true;
         }
 
-        switch ($card) {
-            case 'Relentless Rats':
-                $isLegal = true;
-                break;
-            case 'Shadowborn Apostle':
-                $isLegal = true;
-                break;
-            case 'Swamp':
-                $isLegal = true;
-                break;
-            case 'Plains':
-                $isLegal = true;
-                break;
-            case 'Island':
-                $isLegal = true;
-                break;
-            case 'Mountain':
-                $isLegal = true;
-                break;
-            case 'Forest':
-                $isLegal = true;
-                break;
-            case 'Snow-Covered Swamp':
-                $isLegal = true;
-                break;
-            case 'Snow-Covered Plains':
-                $isLegal = true;
-                break;
-            case 'Snow-Covered Island':
-                $isLegal = true;
-                break;
-            case 'Snow-Covered Mountain':
-                $isLegal = true;
-                break;
-            case 'Snow-Covered Forest':
-                $isLegal = true;
-                break;
-            case 'Wastes':
-                $isLegal = true;
-                break;
+        if ($this->isCardBasic($card)) {
+            $isLegal = true;
         }
 
         return $isLegal;
@@ -1224,47 +1173,9 @@ class Format
                 $isLegal = true;
             }
 
-            switch ($sideCard) {
-                case 'Relentless Rats':
-                    $isLegal = true;
-                    break;
-                case 'Shadowborn Apostle':
-                    $isLegal = true;
-                    break;
-                case 'Swamp':
-                    $isLegal = true;
-                    break;
-                case 'Plains':
-                    $isLegal = true;
-                    break;
-                case 'Island':
-                    $isLegal = true;
-                    break;
-                case 'Mountain':
-                    $isLegal = true;
-                    break;
-                case 'Forest':
-                    $isLegal = true;
-                    break;
-                case 'Snow-Covered Swamp':
-                    $isLegal = true;
-                    break;
-                case 'Snow-Covered Plains':
-                    $isLegal = true;
-                    break;
-                case 'Snow-Covered Island':
-                    $isLegal = true;
-                    break;
-                case 'Snow-Covered Mountain':
-                    $isLegal = true;
-                    break;
-                case 'Snow-Covered Forest':
-                    $isLegal = true;
-                    break;
-                case 'Wastes':
-                    $isLegal = true;
-                    break;
-                }
+            if ($this->isCardBasic($card)) {
+                $isLegal = true;
+            }
         } else {
             $isLegal = true; // mainCard and sideCard don't match so is automatically legal
                              // individual quantity check has already been done. We are only
