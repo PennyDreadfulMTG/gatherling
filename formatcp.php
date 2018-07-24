@@ -84,23 +84,28 @@ function do_page()
         $active_format = new Format('');
     }
     formatCPMenu($active_format, $seriesName);
-    switch ($view) {
-        case 'settings':
-        printFormatSettings($active_format, $seriesName);
-        break;
-        case 'bandr':
-        printBandR($active_format, $seriesName);
-        break;
-        case 'tribal':
-        printTribalBandR($active_format, $seriesName);
-        break;
-        case 'cardsets':
-        printCardSets($active_format, $seriesName);
-        break;
-        case 'no_view':
-        break;
-        default:
-        echo 'Unknown View!';
+    if ($active_format->is_meta_format) {
+        printMetaFormatSettings($active_format, $seriesName);
+    }
+    else {
+        switch ($view) {
+            case 'settings':
+            printFormatSettings($active_format, $seriesName);
+            break;
+            case 'bandr':
+            printBandR($active_format, $seriesName);
+            break;
+            case 'tribal':
+            printTribalBandR($active_format, $seriesName);
+            break;
+            case 'cardsets':
+            printCardSets($active_format, $seriesName);
+            break;
+            case 'no_view':
+            break;
+            default:
+            echo 'Unknown View!';
+        }
     }
     echo '</center><div class="clear"></div></div>';
 }
@@ -220,6 +225,26 @@ function handleActions($seriesName)
                 if (!$success) {
                     $hasError = true;
                     $errormsg .= "Can't delete {$cardset} from allowed cardsets";
+
+                    return;
+                }
+            }
+        }
+    } elseif ($_POST['action'] == 'Update Children') {
+        $format = new Format($_POST['format']);
+
+        if (isset($_POST['addchild'])) {
+            $formatName = $_POST['addchild'];
+            $format->insertSubFormat($formatName);
+        }
+
+        if (isset($_POST['delchild'])) {
+            $delcardsets = $_POST['delchild'];
+            foreach ($delcardsets as $cardset) {
+                $success = $format->deleteSubFormat($cardset);
+                if (!$success) {
+                    $hasError = true;
+                    $errormsg .= "Can't delete {$cardset} from child formats";
 
                     return;
                 }
@@ -357,6 +382,12 @@ function handleActions($seriesName)
             $format->eternal = 1;
         } else {
             $format->eternal = 0;
+        }
+
+        if (isset($_POST['is_meta_format'])) {
+            $format->is_meta_format = 1;
+        } else {
+            $format->is_meta_format = 0;
         }
 
         $format->save();
@@ -784,12 +815,20 @@ function printFormatSettings($active_format, $seriesName)
     echo '<h4>Format Modifiers</h4>';
     echo '<table class="form" style="border-width: 0px;" align="center">';
     echo '<tr><th style="width: 100px; text-align: center;">';
-    print_tooltip('Eternal', 'Eternal Formats treat all cardsets as legal.');
-    echo ' Format</th>';
+    print_tooltip('Eternal Format', 'Eternal Formats treat all cardsets as legal.');
+    echo '</th>';
+    echo '<th style="width: 100px; text-align: center;">';
+    print_tooltip('Meta Format', 'A meta-format allows players to submit a deck legal under one of several possible legal lists.');
+    echo '</th>';
 
     echo '</tr><tr>';
     echo '<td style="width: 100px; text-align: center;"><input type="checkbox" name="eternal" value="1" ';
     if ($active_format->eternal == 1) {
+        echo 'checked="yes" ';
+    }
+    echo ' /></td>';
+    echo '<td style="width: 100px; text-align: center;"><input type="checkbox" name="is_meta_format" value="1" ';
+    if ($active_format->is_meta_format == 1) {
         echo 'checked="yes" ';
     }
     echo ' /></td>';
@@ -818,7 +857,7 @@ function formatCPMenu($active_format, $seriesName)
     echo '<input class="inputbutton" style="width: 75px" type="submit" value="Rename" name ="action" />';
     echo '<input class="inputbutton" style="width: 75px" type="submit" value="Delete" name ="action" /></tr>';
     echo '</table></form>';
-    if ($active_format->name != '') {
+    if ($active_format->name != '' && !$active_format->is_meta_format) {
         $escaped = urlencode($active_format->name);
         echo '<table><tr><td colspan="2" align="center">';
         echo "<a href=\"formatcp.php?view=settings&format={$escaped}\">Format Settings</a>";
@@ -1146,6 +1185,74 @@ function printCardSets($active_format, $seriesName)
     echo '<input type="hidden" name="view" value="cardsets" />';
     echo '<input class="inputbutton" type="submit" value="Update Cardsets" name ="action" />';
     echo'</td></tr></table></form></center>';
+}
+
+function printMetaFormatSettings($active_format, $seriesName)
+{
+    echo "<p style=\"width: 75%; text-align: left;\">A meta format is a container for other formats.
+    First, create a number of regular formats, then add them as children to the meta format below.
+    When you use a meta format on an event, a player may submit a decklist so long as it is legal in one of the child formats.</p>";
+    echo '<p style="width: 75%; text-align: left;">The name of this filter will default to the name of the series.
+    To use this filter, go to the Season Points Management->Season Format and select this filter. This sets the
+    filter to be used for the entire season. You can also set this filter by going to Host CP->Format. This only
+    sets the filter to be used for that single event.</p>';
+
+    echo '<form action="formatcp.php" method="post">';
+    echo '<input type="hidden" name="view" value="settings" />';
+    echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
+    echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
+
+    echo '<h4>Format Description</h4>';
+    echo '<table class="form" style="border-width: 0px;" align="center">';
+
+    echo '<tr><td>';
+    echo '<textarea class="inputbox" rows="10" cols="60" name="formatdescription">';
+    echo "$active_format->description";
+    echo '</textarea>';
+    echo "</td></tr>\n";
+    echo '</table>';
+
+    $subFormats = $active_format->sub_formats;
+    echo "<h4>Allowed Formats</h4>\n";
+    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<tr><th style="text-align: center;">Format Name</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
+    if (count($subFormats)) {
+        foreach ($subFormats as $childName) {
+            echo "<tr><td style=\"text-align: center;\">{$childName}</td>";
+            echo "<td style=\"text-align: center; width: 50px; \"><input type=\"checkbox\" name=\"delcardsetname[]\" value=\"{$childName}\" />";
+            echo '</td></tr>';
+        }
+    } else {
+        echo '<tr><td><font color="red">No Sub Formats added</font></td>';
+        echo '<td style="width: 100px; text-align: center;">';
+        not_allowed('No Selected Format to Delete');
+        echo '</td>';
+        echo '</tr>';
+    }
+    echo '<tr><td>';
+    formatDropMenu(null, 0, 'addchild', false);
+    echo '</td>';
+    echo '<td colspan="2" class="buttons">';
+    echo '<input class="inputbutton" type="submit" value="Update Children" name ="action" />';
+    echo'</td></tr></table>';
+
+    echo '<h4>Format Modifiers</h4>';
+    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<tr><th style="width: 100px; text-align: center;">';
+    print_tooltip('Meta Format', 'A meta-format allows players to submit a deck legal under one of several possible legal lists.');
+    echo '</th>';
+
+    echo '</tr><tr>';
+    echo '<td style="width: 100px; text-align: center;"><input type="checkbox" name="is_meta_format" value="1" ';
+    if ($active_format->is_meta_format == 1) {
+        echo 'checked="yes" ';
+    }
+    echo ' /></td>';
+    echo '</tr>';
+    echo '<tr>';
+    echo '<td colspan="5" class="buttons"><input class="inputbutton" type="submit" value="Update Format" name ="action" /></td>';
+    echo '</tr>';
+    echo '</table></form>';
 }
 
 function cardsetDropMenu($cardsetType, $format, $disabled)

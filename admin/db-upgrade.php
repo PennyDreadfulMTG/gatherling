@@ -21,6 +21,18 @@ error_reporting(E_ALL);
 
 $db = Database::getConnection();
 
+function info($text, $newline = true)
+{
+    if ($newline) {
+        if (PHP_SAPI == 'cli') {
+            echo "\n";
+        } else {
+            echo '<br/>';
+        }
+    }
+    echo $text;
+}
+
 function do_query($query)
 {
     if (!trim($query)) {
@@ -28,7 +40,7 @@ function do_query($query)
         return;
     }
     global $db;
-    echo "Executing Query: $query <br />";
+    info("Executing Query: $query");
     $result = $db->query($query);
     if (!$result) {
         echo '!!!! - Error: ';
@@ -44,7 +56,7 @@ function set_version($version)
     do_query("UPDATE db_version SET version = {$version}");
     global $db;
     $db->commit();
-    echo "... DB now at version {$version}! <br />";
+    info("... DB now at version {$version}!");
 }
 
 function redirect_deck_update($latest_id = 0)
@@ -77,7 +89,7 @@ if (isset($_GET['deckupdate'])) {
 
 if (!$db->query('SELECT name FROM players LIMIT 1')) {
     // Version 0.  Enter the whole schema.
-    echo 'DETECTED NO DATABASE.  Importing schema.sql <br />';
+    info('DETECTED NO DATABASE.  Importing schema.sql');
     if (file_exists('../schema.sql')) {
         $schema = file_get_contents('../schema.sql');
     } elseif (file_exists('schema.sql')) {
@@ -91,10 +103,9 @@ if (!$db->query('SELECT name FROM players LIMIT 1')) {
     }
 } elseif (!$db->query('SELECT version FROM db_version LIMIT 1')) {
     // Version 1.  Add our version table.
-    echo 'Detected VERSION 1 DATABASE. Marking as such.. <br />';
+    info('Detected VERSION 1 DATABASE. Marking as such..');
     $db->query('CREATE TABLE db_version (version integer);');
-    $db->query('INSERT INTO db_version(version) values(1)');
-    echo '.. DB now at version 1!<br />';
+    set_version(1);
 }
 
 if (!isset($_GET['version'])) {
@@ -108,7 +119,7 @@ if (!isset($_GET['version'])) {
 $db->autocommit(false);
 
 if ($version < 2) {
-    echo 'Updating to version 2... <br />';
+    info('Updating to version 2..');
     // Version 2 Changes:
     //  - Add 'mtgo_confirmed', 'mtgo_challenge' field to players, and initialize them
     do_query('ALTER TABLE players ADD COLUMN (mtgo_confirmed tinyint(1), mtgo_challenge varchar(5))');
@@ -120,7 +131,7 @@ if ($version < 2) {
     while ($deckid = $deckquery->fetch_array()) {
         $deck = new Deck($deckid[0]);
         $deck->calculateHashes();
-        echo "-> Calculating deck hash for {$deck->id}... <br />";
+        info("-> Calculating deck hash for {$deck->id}...");
         flush();
     }
 
@@ -129,9 +140,7 @@ if ($version < 2) {
     do_query('UPDATE entries e, decks d SET e.notes = d.notes WHERE e.deck = d.id');
 
     //  - and of course, set the version number to 2.
-    do_query('UPDATE db_version SET version = 2');
-    $db->commit();
-    echo '.. DB now at version 2! <br />';
+    set_version(2);
 }
 
 if ($version < 3) {
@@ -553,11 +562,26 @@ if ($version < 26) {
     set_version(26);
 }
 if ($version < 27) {
-    echo 'Updating to version 27 (Separate setting for hiding decklists during the finals)... <br />';
+    info('Updating to version 27 (Separate setting for hiding decklists during the finals)...');
     do_query("ALTER TABLE `events`
     ADD COLUMN `private_finals` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `private_decks`;");
     set_version(27);
 }
+if ($version < 28) {
+    info('Updating to version 28 (Metaformats)...');
+    do_query("ALTER TABLE `formats`
+    ADD COLUMN `is_meta_format` TINYINT NOT NULL DEFAULT '0';");
+    do_query("CREATE TABLE `subformats` (
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `parentformat` VARCHAR(40) NOT NULL,
+        `childformat` VARCHAR(40) NOT NULL,
+        PRIMARY KEY (`id`),
+        INDEX `_idx` (`parentformat` ASC, `childformat` ASC)
+        );");
+        do_query("ALTER TABLE `subformats` ADD FOREIGN KEY (`parentformat`) REFERENCES `formats`(`name`) ON DELETE CASCADE ON UPDATE CASCADE;");
+        do_query("ALTER TABLE `subformats` ADD FOREIGN KEY (`childformat`) REFERENCES `formats`(`name`) ON DELETE CASCADE ON UPDATE CASCADE;");
+        set_version(28);
+}
 $db->autocommit(true);
 
-echo 'DB is up to date!<br />';
+info('DB is up to date!');
