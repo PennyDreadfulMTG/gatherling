@@ -838,7 +838,7 @@ function matchList($event)
     echo ' check box next to the players name.</i></p>';
     // Quick links to rounds
     echo '<p style="text-align: center">';
-    for ($r = 1; $r < $event->current_round; $r++) {
+    for ($r = 1; $r <= $event->current_round; $r++) {
         echo "<a href=\"event.php?view=match&name={$event->name}#round-{$r}\">Round {$r}</a> ";
     }
     echo '</p>';
