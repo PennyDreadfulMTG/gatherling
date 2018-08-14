@@ -817,9 +817,9 @@ function printFormatSettings($active_format, $seriesName)
     echo '<tr><th style="width: 100px; text-align: center;">';
     print_tooltip('Eternal Format', 'Eternal Formats treat all cardsets as legal.');
     echo '</th>';
-    echo '<th style="width: 100px; text-align: center;">';
-    print_tooltip('Meta Format', 'A meta-format allows players to submit a deck legal under one of several possible legal lists.');
-    echo '</th>';
+    // echo '<th style="width: 100px; text-align: center;">';
+    // print_tooltip('Meta Format', 'A meta-format allows players to submit a deck legal under one of several possible legal lists.');
+    // echo '</th>';
 
     echo '</tr><tr>';
     echo '<td style="width: 100px; text-align: center;"><input type="checkbox" name="eternal" value="1" ';
@@ -827,11 +827,11 @@ function printFormatSettings($active_format, $seriesName)
         echo 'checked="yes" ';
     }
     echo ' /></td>';
-    echo '<td style="width: 100px; text-align: center;"><input type="checkbox" name="is_meta_format" value="1" ';
-    if ($active_format->is_meta_format == 1) {
-        echo 'checked="yes" ';
-    }
-    echo ' /></td>';
+    // echo '<td style="width: 100px; text-align: center;"><input type="checkbox" name="is_meta_format" value="1" ';
+    // if ($active_format->is_meta_format == 1) {
+    //     echo 'checked="yes" ';
+    // }
+    // echo ' /></td>';
     echo '</tr>';
     echo '<tr>';
     echo '<td colspan="5" class="buttons"><input class="inputbutton" type="submit" value="Update Format" name ="action" /></td>';
