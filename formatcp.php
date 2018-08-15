@@ -86,8 +86,7 @@ function do_page()
     formatCPMenu($active_format, $seriesName);
     if ($active_format->is_meta_format) {
         printMetaFormatSettings($active_format, $seriesName);
-    }
-    else {
+    } else {
         switch ($view) {
             case 'settings':
             printFormatSettings($active_format, $seriesName);
@@ -1189,9 +1188,9 @@ function printCardSets($active_format, $seriesName)
 
 function printMetaFormatSettings($active_format, $seriesName)
 {
-    echo "<p style=\"width: 75%; text-align: left;\">A meta format is a container for other formats.
+    echo '<p style="width: 75%; text-align: left;">A meta format is a container for other formats.
     First, create a number of regular formats, then add them as children to the meta format below.
-    When you use a meta format on an event, a player may submit a decklist so long as it is legal in one of the child formats.</p>";
+    When you use a meta format on an event, a player may submit a decklist so long as it is legal in one of the child formats.</p>';
     echo '<p style="width: 75%; text-align: left;">The name of this filter will default to the name of the series.
     To use this filter, go to the Season Points Management->Season Format and select this filter. This sets the
     filter to be used for the entire season. You can also set this filter by going to Host CP->Format. This only

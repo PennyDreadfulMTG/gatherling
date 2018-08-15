@@ -571,16 +571,16 @@ if ($version < 28) {
     info('Updating to version 28 (Metaformats)...');
     do_query("ALTER TABLE `formats`
     ADD COLUMN `is_meta_format` TINYINT NOT NULL DEFAULT '0';");
-    do_query("CREATE TABLE `subformats` (
+    do_query('CREATE TABLE `subformats` (
         `id` INT NOT NULL AUTO_INCREMENT,
         `parentformat` VARCHAR(40) NOT NULL,
         `childformat` VARCHAR(40) NOT NULL,
         PRIMARY KEY (`id`),
         INDEX `_idx` (`parentformat` ASC, `childformat` ASC)
-        );");
-        do_query("ALTER TABLE `subformats` ADD FOREIGN KEY (`parentformat`) REFERENCES `formats`(`name`) ON DELETE CASCADE ON UPDATE CASCADE;");
-        do_query("ALTER TABLE `subformats` ADD FOREIGN KEY (`childformat`) REFERENCES `formats`(`name`) ON DELETE CASCADE ON UPDATE CASCADE;");
-        set_version(28);
+        );');
+    do_query('ALTER TABLE `subformats` ADD FOREIGN KEY (`parentformat`) REFERENCES `formats`(`name`) ON DELETE CASCADE ON UPDATE CASCADE;');
+    do_query('ALTER TABLE `subformats` ADD FOREIGN KEY (`childformat`) REFERENCES `formats`(`name`) ON DELETE CASCADE ON UPDATE CASCADE;');
+    set_version(28);
 }
 $db->autocommit(true);
 

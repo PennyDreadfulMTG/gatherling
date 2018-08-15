@@ -1437,7 +1437,8 @@ class Format
         return true;
     }
 
-    public function insertSubFormat($subformat) {
+    public function insertSubFormat($subformat)
+    {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO subformats(parentformat, childformat) VALUES(?, ?)');
         $stmt->bind_param('ss', $this->name, $subformat);
@@ -1445,7 +1446,6 @@ class Format
         $stmt->close();
 
         return true;
-
     }
 
     public function banAllTribes()
