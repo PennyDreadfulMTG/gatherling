@@ -638,7 +638,7 @@ function print_preRegistration()
             if ($event->is_full()) {
                 echo '<td>This event is currently at capacity.</td>';
             } else {
-                echo "<td><a href=\"prereg.php?action=reg&event=".rawurlencode($event->name)."\">Register</a></td>";
+                echo '<td><a href="prereg.php?action=reg&event='.rawurlencode($event->name).'">Register</a></td>';
             }
         }
         echo '</tr>';
