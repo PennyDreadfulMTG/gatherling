@@ -1365,7 +1365,7 @@ class Event
         $this->current_round--;
         $this->save();
         $this->recalculateScores('Swiss');
-        Standings::updateStandings($this->name, $event->this, 1);
+        Standings::updateStandings($this->name, $this->mainid, 1);
         $this->pairCurrentRound();
     }
 
