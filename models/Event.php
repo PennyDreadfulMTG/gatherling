@@ -1110,7 +1110,7 @@ class Event
             } else {
                 $this->addPairing($playera, $playerb, ($this->current_round + 1), 'P');
             }
-            
+
             $counter++;
         }
     }
