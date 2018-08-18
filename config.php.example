@@ -29,7 +29,7 @@ $CONFIG['analytics_account'] = 'UA-37926034-1';
 
 # === Infobot PARAMETERS ==
 # If you have set it up with infobot or PDBot to contact the site, you can change the passkey here.
-# If you haven't set it up with infobot, leave this blank.
+# If you haven't set it up, leave this blank.
 $CONFIG['infobot_passkey'] = "";
 
 # Infobot/PDBot need to know which gatherling server to verify a user on.

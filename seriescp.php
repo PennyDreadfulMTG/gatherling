@@ -218,12 +218,12 @@ function printSeriesForm($series)
         echo 'checked ';
     }
     echo '/></td></tr>';
-    echo '<tr><th>Pauper Krew Members Only Default</th>';
-    echo '<td><input type="checkbox" value="1" name="pkonlydefault" ';
-    if ($series->pkonly_default == 1) {
-        echo 'checked ';
-    }
-    echo '/></td></tr>';
+    // echo '<tr><th>Pauper Krew Members Only Default</th>';
+    // echo '<td><input type="checkbox" value="1" name="pkonlydefault" ';
+    // if ($series->pkonly_default == 1) {
+    //     echo 'checked ';
+    // }
+    // echo '/></td></tr>';
     print_text_input('MTGO Room', 'mtgo_room', $series->mtgo_room);
 
     // Submit button

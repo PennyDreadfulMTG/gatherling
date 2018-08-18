@@ -161,13 +161,13 @@ function content()
         $newevent->player_reportable = $oldevent->player_reportable;
         $newevent->prereg_cap = $oldevent->prereg_cap;
         $newevent->private_decks = $oldevent->private_decks;
+        $newevent->private_finals = $oldevent->private_finals;
 
         $newevent->player_reportable = $oldevent->player_reportable;
         $newevent->player_reported_draws = $oldevent->player_reported_draws;
         $newevent->prereg_cap = $oldevent->prereg_cap;
         $newevent->late_entry_limit = $oldevent->late_entry_limit;
 
-        $newevent->private_decks = $oldevent->private_decks;
         $newevent->name = sprintf('%s %d.%02d', $newevent->series, $newevent->season, $newevent->number);
 
         eventForm($newevent, true);
@@ -482,7 +482,9 @@ function eventForm($event = null, $forcenew = false)
         echo '</td></tr>';
         echo '<tr><th>Series</th><td>';
         $seriesList = Player::getSessionPlayer()->organizersSeries();
-        $seriesList[] = $event->series;
+        if ($event->series) {
+            $seriesList[] = $event->series;
+        }
         $seriesList = array_unique($seriesList);
         Series::dropMenu($event->series, 0, $seriesList);
         echo '</td></tr>';
@@ -516,13 +518,14 @@ function eventForm($event = null, $forcenew = false)
         echo '</td></tr>';
         print_checkbox_input('Allow Pre-Registration', 'prereg_allowed', $event->prereg_allowed);
         print_text_input('Late Entry Limit', 'late_entry_limit', $event->late_entry_limit, 4, 'The event host may still add players after this round.');
-        print_checkbox_input('Pauper Krew Members Only', 'pkonly', $event->pkonly);
+        // print_checkbox_input('Pauper Krew Members Only', 'pkonly', $event->pkonly);
 
         print_checkbox_input('Allow Players to Report Results', 'player_reportable', $event->player_reportable);
 
         print_text_input('Player initiatied registration cap', 'prereg_cap', $event->prereg_cap, 4, 'The event host may still add players beyond this limit. 0 is disabled.');
 
         print_checkbox_input('Deck List Privacy', 'private_decks', $event->private_decks);
+        print_checkbox_input('Finals List Privacy', 'private_finals', $event->private_finals);
         print_checkbox_input('Allow Player Reported Draws', 'player_reported_draws', $event->player_reported_draws, 'This allows players to report a draw result for matches.');
 
         if ($edit == 0) {
@@ -835,7 +838,7 @@ function matchList($event)
     echo ' check box next to the players name.</i></p>';
     // Quick links to rounds
     echo '<p style="text-align: center">';
-    for ($r = 1; $r < $event->current_round; $r++) {
+    for ($r = 1; $r <= $event->current_round; $r++) {
         echo "<a href=\"event.php?view=match&name={$event->name}#round-{$r}\">Round {$r}</a> ";
     }
     echo '</p>';
@@ -1186,6 +1189,9 @@ function updateEvent()
     if (!isset($_POST['private_decks'])) {
         $_POST['private_decks'] = 0;
     }
+    if (!isset($_POST['private_finals'])) {
+        $_POST['private_finals'] = 0;
+    }
     if (!isset($_POST['player_reported_draws'])) {
         $_POST['player_reported_draws'] = 0;
     }
@@ -1203,6 +1209,7 @@ function updateEvent()
     $event->player_reportable = $_POST['player_reportable'];
     $event->prereg_cap = $_POST['prereg_cap'];
     $event->private_decks = $_POST['private_decks'];
+    $event->private_finals = $_POST['private_finals'];
     $event->player_reported_draws = $_POST['player_reported_draws'];
     $event->late_entry_limit = $_POST['late_entry_limit'];
 
