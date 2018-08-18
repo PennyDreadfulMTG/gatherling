@@ -3,11 +3,7 @@ require_once 'lib.php';
 require_once 'lib_form_helper.php';
 session_start();
 
-if (isset($_GET['event'])) {
-    print_header('Your Deck For '.$_GET['event']);
-} else {
-    print_header('Deck Database');
-}
+print_header('Deck Database');
 
 ?>
 <div class="grid_10 suffix_1 prefix_1">
