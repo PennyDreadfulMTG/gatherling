@@ -35,7 +35,6 @@ class Event
     // Pairing/event related
     public $active;
     public $current_round;
-    public $current_structure;
     public $standing;
     public $player_reportable;
     public $player_reported_draws;
@@ -943,16 +942,28 @@ class Event
         $test = $this->current_round;
         if ($test <= ($this->finalrounds + $this->mainrounds)) {
             if ($test >= $this->mainrounds) {
-                $this->current_structure = $this->finalstruct;
-                $subevent_id = $this->finalid;
-                $round = 'final';
+                $structure = $this->finalstruct;
             } else {
-                $this->current_structure = $this->mainstruct;
-                $subevent_id = $this->mainid;
-                $round = 'main';
+                $structure = $this->mainstruct;
             }
 
-            return $this->current_structure == 'League';
+            return $structure == 'League';
+        }
+
+        return false;
+    }
+
+    public function inSingleEliminationRound()
+    {
+        $test = $this->current_round;
+        if ($test <= ($this->finalrounds + $this->mainrounds)) {
+            if ($test >= $this->mainrounds) {
+                $structure = $this->finalstruct;
+            } else {
+                $structure = $this->mainstruct;
+            }
+
+            return $structure == 'Single Elimination';
         }
 
         return false;
@@ -968,16 +979,16 @@ class Event
         if ($test < ($this->finalrounds + $this->mainrounds)) {
             if ($test >= $this->mainrounds) {
                 // In the final rounds.
-                $this->current_structure = $this->finalstruct;
+                $structure = $this->finalstruct;
                 $subevent_id = $this->finalid;
                 $round = 'final';
             } else {
-                $this->current_structure = $this->mainstruct;
+                $structure = $this->mainstruct;
                 $subevent_id = $this->mainid;
                 $round = 'main';
             }
             // Run matching function
-            switch ($this->current_structure) {
+            switch ($structure) {
                 case 'Swiss':
                     $this->swissPairing($subevent_id);
                     break;
@@ -1110,7 +1121,7 @@ class Event
             } else {
                 $this->addPairing($playera, $playerb, ($this->current_round + 1), 'P');
             }
-
+            
             $counter++;
         }
     }
