@@ -3,13 +3,22 @@ require_once 'lib.php';
 require_once 'lib_form_helper.php';
 session_start();
 
-print_header('Deck Database');
+if (isset($_GET['event'])) {
+    print_header('Your Deck For '.$_GET['event']);
+} else {
+    print_header('Deck Database');
+}
 
 ?>
 <div class="grid_10 suffix_1 prefix_1">
 <div id="gatherling_main" class="box">
-<div class="uppertitle">Deck Database</div>
+
 <?php
+if (isset($_GET['event'])) {
+    echo '<div class="uppertitle">Your Deck For '.$_GET['event'].'</div>';
+} else {
+    echo '<div class="uppertitle">Deck Database</div>';
+}
 if (!isset($_GET['mode'])) {
     $_GET['mode'] = '';
 }
