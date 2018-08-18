@@ -952,22 +952,6 @@ class Event
         return false;
     }
 
-    public function inSingleEliminationRound()
-    {
-        $test = $this->current_round;
-        if ($test <= ($this->finalrounds + $this->mainrounds)) {
-            if ($test >= $this->mainrounds) {
-                $structure = $this->finalstruct;
-            } else {
-                $structure = $this->mainstruct;
-            }
-
-            return $structure == 'Single Elimination';
-        }
-
-        return false;
-    }
-
     // All this should probably go somewhere else
     // Pairs the round which is currently running.
     // This should probably be in Standings?
