@@ -347,7 +347,7 @@ function eventList($series = '', $season = '')
             break;
     }
         echo '<tr><td>';
-        echo "<a href=\"event.php?name=".rawurlencode($thisEvent['name'])."\">";
+        echo '<a href="event.php?name='.rawurlencode($thisEvent['name']).'">';
         echo "{$thisEvent['name']}</a></td>";
         echo "<td>{$thisEvent['format']}</td>";
         echo "<td>{$kvalue}</td>";
@@ -1239,7 +1239,7 @@ function updateEvent()
             $event->mainrounds = $_POST['mainrounds'];
             $event->mainstruct = $_POST['mainstruct'];
         }
-        
+
         if ($_POST['finalrounds'] == '') {
             $_POST['finalrounds'] = 0;
         }
@@ -1249,7 +1249,6 @@ function updateEvent()
         $event->finalrounds = $_POST['finalrounds'];
         $event->finalstruct = $_POST['finalstruct'];
     }
-    
 
     $event->save();
 
@@ -1390,15 +1389,15 @@ function controlPanel($event, $cur = '')
 {
     $name = $event->name;
     echo '<tr><td colspan="2" align="center">';
-    echo "<a href=\"event.php?name=".rawurlencode($name)."&view=settings\">Event Settings</a>";
-    echo " | <a href=\"event.php?name=".rawurlencode($name)."&view=reg\">Registration</a>";
-    echo " | <a href=\"event.php?name=".rawurlencode($name)."&view=match\">Match Listing</a>";
-    echo " | <a href=\"event.php?name=".rawurlencode($name)."&view=standings\">Standings</a>";
-    echo " | <a href=\"event.php?name=".rawurlencode($name)."&view=medal\">Medals</a>";
+    echo '<a href="event.php?name='.rawurlencode($name).'&view=settings">Event Settings</a>';
+    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=reg">Registration</a>';
+    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=match">Match Listing</a>';
+    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=standings">Standings</a>';
+    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=medal">Medals</a>';
     // echo " | <a href=\"event.php?name=$name&view=autoinput\">Auto-Input</a>"; hiding until I fix the auto-input feature
-    echo " | <a href=\"event.php?name=".rawurlencode($name)."&view=fileinput\">DCI-R File Input</a>";
-    echo " | <a href=\"event.php?name=".rawurlencode($name)."&view=points_adj\">Season Points Adj.</a>";
-    echo " | <a href=\"event.php?name=".rawurlencode($name)."&view=reports\">Reports</a>";
+    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=fileinput">DCI-R File Input</a>';
+    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=points_adj">Season Points Adj.</a>';
+    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=reports">Reports</a>';
     echo '</td></tr>';
 }
 
