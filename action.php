@@ -19,6 +19,20 @@ if (!is_null($player)) {
         }
     }
 
+    $active_events = Event::getActiveEvents();
+    foreach ($active_events as $event) {
+        if ($event->authCheck($player->name)) {
+            $message = "Your event <a href=\"event.php?event={$event->name}\">{$event->name}</a> is currently active.";
+            // if ($event->current_round > ($event->mainrounds)) {
+            //     $subevent_id = $event->finalid;
+            // } else {
+            //     $subevent_id = $event->mainid;
+            // }
+            // $matches_remaining = Match::unresolvedMatchesCheck($subevent_id, $event->current_round);
+            // $message = $message . "There are $matches_remaining unreported matches.";
+        }
+    }
+
     $matches = $player->getCurrentMatches();
     foreach ($matches as $match) {
         $event = new Event($match->getEventNamebyMatchid());
@@ -44,6 +58,21 @@ if (!is_null($player)) {
                 } else {
                     $message = "You have an unreported match in $match->eventname.";
                 }
+            }
+        } elseif ($match->result != 'BYE' && $match->verification == 'failed') {
+            $opp = $match->playera;
+            $player_number = 'b';
+            if (strcasecmp($player->name, $opp) == 0) {
+                $opp = $match->playerb;
+                $player_number = 'a';
+            }
+            $oppplayer = new Player($opp);
+
+            if ($match->player_reportable_check() == true) {
+                $message = "The reported result wasn't consistent with your opponent's, please resubmit $event->name vs. ".$oppplayer->linkTo().'.';
+                $message = $message.'<a href="player.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
+            } else {
+                $message = "You have an unreported match in $match->eventname.";
             }
         }
     }

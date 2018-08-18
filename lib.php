@@ -247,10 +247,14 @@ function seasonDropMenu($season, $useall = 0)
     numDropMenu('season', $title, max(10, $max + 1), $season);
 }
 
-function formatDropMenu($format, $useAll = 0, $form_name = 'format')
+function formatDropMenu($format, $useAll = 0, $form_name = 'format', $show_meta = true)
 {
     $db = Database::getConnection();
-    $query = 'SELECT name FROM formats ORDER BY priority desc, name';
+    $query = 'SELECT name FROM formats';
+    if (!$show_meta) {
+        $query .= ' WHERE NOT is_meta_format ';
+    }
+    $query .= ' ORDER BY priority desc, name';
     $result = $db->query($query) or die($db->error);
     echo "<select class=\"inputbox\" name=\"{$form_name}\">";
     $title = ($useAll == 0) ? '- Format -' : 'All';
@@ -513,6 +517,13 @@ function formatsDropMenu($formatType = '', $seriesName = 'System')
     }
     if ($formatType == 'Private') {
         $formatNames = Format::getPrivateFormats($seriesName);
+    }
+    if ($formatType == 'Private+') {
+        $formatNames = array_merge(
+            Format::getSystemFormats(),
+            Format::getPublicFormats(),
+            Format::getPrivateFormats($seriesName)
+        );
     }
     if ($formatType == 'All') {
         $formatNames = Format::getAllFormats();

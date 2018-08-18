@@ -482,7 +482,9 @@ function eventForm($event = null, $forcenew = false)
         echo '</td></tr>';
         echo '<tr><th>Series</th><td>';
         $seriesList = Player::getSessionPlayer()->organizersSeries();
-        $seriesList[] = $event->series;
+        if ($event->series) {
+            $seriesList[] = $event->series;
+        }
         $seriesList = array_unique($seriesList);
         Series::dropMenu($event->series, 0, $seriesList);
         echo '</td></tr>';
@@ -836,7 +838,7 @@ function matchList($event)
     echo ' check box next to the players name.</i></p>';
     // Quick links to rounds
     echo '<p style="text-align: center">';
-    for ($r = 1; $r < $event->current_round; $r++) {
+    for ($r = 1; $r <= $event->current_round; $r++) {
         echo "<a href=\"event.php?view=match&name={$event->name}#round-{$r}\">Round {$r}</a> ";
     }
     echo '</p>';
