@@ -68,7 +68,6 @@ class Event
             $this->new = true;
             $this->active = 0;
             $this->current_round = 0;
-            $this->current_structure = null;
             $this->player_reportable = 0;
             $this->prereg_cap = 0;
             $this->player_editdecks = 1;
@@ -1121,7 +1120,7 @@ class Event
             } else {
                 $this->addPairing($playera, $playerb, ($this->current_round + 1), 'P');
             }
-
+            
             $counter++;
         }
     }
