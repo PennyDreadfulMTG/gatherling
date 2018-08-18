@@ -1239,7 +1239,7 @@ function updateEvent()
             $event->mainrounds = $_POST['mainrounds'];
             $event->mainstruct = $_POST['mainstruct'];
         }
-        
+
         if ($_POST['finalrounds'] == '') {
             $_POST['finalrounds'] = 0;
         }
@@ -1249,7 +1249,6 @@ function updateEvent()
         $event->finalrounds = $_POST['finalrounds'];
         $event->finalstruct = $_POST['finalstruct'];
     }
-    
 
     $event->save();
 
