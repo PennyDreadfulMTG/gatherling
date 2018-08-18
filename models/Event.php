@@ -35,6 +35,7 @@ class Event
     // Pairing/event related
     public $active;
     public $current_round;
+    public $current_structure;
     public $standing;
     public $player_reportable;
     public $player_reported_draws;
@@ -68,6 +69,7 @@ class Event
             $this->new = true;
             $this->active = 0;
             $this->current_round = 0;
+            $this->current_structure = null;
             $this->player_reportable = 0;
             $this->prereg_cap = 0;
             $this->player_editdecks = 1;
@@ -941,16 +943,16 @@ class Event
         $test = $this->current_round;
         if ($test <= ($this->finalrounds + $this->mainrounds)) {
             if ($test >= $this->mainrounds) {
-                $structure = $this->finalstruct;
+                $this->current_structure = $this->finalstruct;
                 $subevent_id = $this->finalid;
                 $round = 'final';
             } else {
-                $structure = $this->mainstruct;
+                $this->current_structure = $this->mainstruct;
                 $subevent_id = $this->mainid;
                 $round = 'main';
             }
 
-            return $structure == 'League';
+            return $this->current_structure == 'League';
         }
 
         return false;
@@ -966,16 +968,16 @@ class Event
         if ($test < ($this->finalrounds + $this->mainrounds)) {
             if ($test >= $this->mainrounds) {
                 // In the final rounds.
-                $structure = $this->finalstruct;
+                $this->current_structure = $this->finalstruct;
                 $subevent_id = $this->finalid;
                 $round = 'final';
             } else {
-                $structure = $this->mainstruct;
+                $this->current_structure = $this->mainstruct;
                 $subevent_id = $this->mainid;
                 $round = 'main';
             }
             // Run matching function
-            switch ($structure) {
+            switch ($this->current_structure) {
                 case 'Swiss':
                     $this->swissPairing($subevent_id);
                     break;
