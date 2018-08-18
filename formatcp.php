@@ -161,9 +161,7 @@ function handleActions($seriesName)
                 $success = $format->deleteCardFromBanlist($cardName);
                 if (!$success) {
                     $hasError = true;
-                    $errormsg .= "Can't delete {$cardName} from ban list";
-
-                    return;
+                    $errormsg .= "Can't delete {$cardName} from ban list<br />";
                 }
             }
         }
@@ -183,9 +181,7 @@ function handleActions($seriesName)
                         $success = $format->insertCardIntoLegallist($card);
                         if (!$success) {
                             $hasError = true;
-                            $errormsg .= "Can't add {$card} to Legal list, it is either not in the database or on the ban list.";
-
-                            return;
+                            $errormsg .= "Can't add {$card} to Legal list, it is either not in the database or on the ban list.<br />";
                         }
                     }
                 }
@@ -198,9 +194,7 @@ function handleActions($seriesName)
                 $success = $format->deleteCardFromLegallist($cardName);
                 if (!$success) {
                     $hasError = true;
-                    $errormsg .= "Can't delete {$cardName} from legal list";
-
-                    return;
+                    $errormsg .= "Can't delete {$cardName} from legal list<br />";
                 }
             }
         }
@@ -223,9 +217,7 @@ function handleActions($seriesName)
                 $success = $format->deleteLegalCardSet($cardset);
                 if (!$success) {
                     $hasError = true;
-                    $errormsg .= "Can't delete {$cardset} from allowed cardsets";
-
-                    return;
+                    $errormsg .= "Can't delete {$cardset} from allowed cardsets<br />";
                 }
             }
         }
@@ -243,9 +235,7 @@ function handleActions($seriesName)
                 $success = $format->deleteSubFormat($cardset);
                 if (!$success) {
                     $hasError = true;
-                    $errormsg .= "Can't delete {$cardset} from child formats";
-
-                    return;
+                    $errormsg .= "Can't delete {$cardset} from child formats<br />";
                 }
             }
         }
@@ -281,9 +271,7 @@ function handleActions($seriesName)
                 $success = $format->deleteCardFromRestrictedlist($cardName);
                 if (!$success) {
                     $hasError = true;
-                    $errormsg .= "Can't delete {$cardName} from restricted list";
-
-                    return;
+                    $errormsg .= "Can't delete {$cardName} from restricted list<br />";
                 }
             }
         }
