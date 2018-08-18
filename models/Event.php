@@ -1104,9 +1104,13 @@ class Event
             $counter++;
             $playerb = $players[$counter]->player;
             if ($playerb == null) {
+                $counter--;
                 $this->award_bye($players[$counter]);
+                $counter++;
+            } else {
+                $this->addPairing($playera, $playerb, ($this->current_round + 1), 'P');
             }
-            $this->addPairing($playera, $playerb, ($this->current_round + 1), 'P');
+            
             $counter++;
         }
     }
