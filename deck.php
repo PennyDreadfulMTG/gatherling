@@ -8,8 +8,13 @@ print_header('Deck Database');
 ?>
 <div class="grid_10 suffix_1 prefix_1">
 <div id="gatherling_main" class="box">
-<div class="uppertitle">Deck Database</div>
+
 <?php
+if (isset($_GET['event'])) {
+    echo '<div class="uppertitle">Your Deck For '.$_GET['event'].'</div>';
+} else {
+    echo '<div class="uppertitle">Deck Database</div>';
+}
 if (!isset($_GET['mode'])) {
     $_GET['mode'] = '';
 }

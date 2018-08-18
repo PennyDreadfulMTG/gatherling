@@ -902,6 +902,7 @@ class Deck
                             AND id != ?
                             AND n.deck = d.id
                             AND e.name = n.event
+                            AND e.finalized = 1
                             ORDER BY e.start
                             DESC');
             $stmt->bind_param('sd', $this->deck_hash, $this->id);
