@@ -1228,27 +1228,25 @@ function updateEvent()
     $event->metaurl = $_POST['metaurl'];
     $event->reporturl = $_POST['reporturl'];
 
-    if (!$event->inSingleEliminationRound()) {
-        if ($_POST['mainrounds'] == '') {
-            $_POST['mainrounds'] = 3;
-        }
-        if ($_POST['mainstruct'] == '') {
-            $_POST['mainstruct'] = 'Swiss';
-        }
-        if ($_POST['mainrounds'] >= $event->current_round) {
-            $event->mainrounds = $_POST['mainrounds'];
-            $event->mainstruct = $_POST['mainstruct'];
-        }
-
-        if ($_POST['finalrounds'] == '') {
-            $_POST['finalrounds'] = 0;
-        }
-        if ($_POST['finalstruct'] == '') {
-            $_POST['finalstruct'] = 'Single Elimination';
-        }
-        $event->finalrounds = $_POST['finalrounds'];
-        $event->finalstruct = $_POST['finalstruct'];
+    if ($_POST['mainrounds'] == '') {
+        $_POST['mainrounds'] = 3;
     }
+    if ($_POST['mainstruct'] == '') {
+        $_POST['mainstruct'] = 'Swiss';
+    }
+    if ($_POST['mainrounds'] >= $event->current_round) {
+        $event->mainrounds = $_POST['mainrounds'];
+        $event->mainstruct = $_POST['mainstruct'];
+    }
+
+    if ($_POST['finalrounds'] == '') {
+        $_POST['finalrounds'] = 0;
+    }
+    if ($_POST['finalstruct'] == '') {
+        $_POST['finalstruct'] = 'Single Elimination';
+    }
+    $event->finalrounds = $_POST['finalrounds'];
+    $event->finalstruct = $_POST['finalstruct'];
 
     $event->save();
 
