@@ -1,11 +1,24 @@
 <?php
 
-session_start();
 if (file_exists('../lib.php')) {
     require_once '../lib.php';
 } else {
     require_once 'lib.php';
 }
+
+function info($text, $newline = true)
+{
+    if ($newline) {
+        if (PHP_SAPI == 'cli') {
+            echo "\n";
+        } else {
+            echo '<br/>';
+        }
+    }
+    echo $text;
+}
+
+session_start();
 
 if (PHP_SAPI == 'cli') {
     if (isset($argv[1])) {
@@ -72,12 +85,24 @@ $stmt->bind_param('s', $set);
 $set_already_in = false;
 
 if (!$stmt->execute()) {
-    echo '!!!!!!!!!! Set Insertion Error !!!!!!!!!<br /><br /><br />';
+    info('!!!!!!!!!! Set Insertion Error !!!!!!!!!');
     die($stmt->error);
 } else {
     $result = $stmt->get_result();
     if ($result->num_rows === 1) {
         $set_already_in = true;
+
+        $row = $result->fetch_array();
+        // print(json_encode($row));
+        if (is_null($row['code'])) {
+            info("$set is missing code ($data->code) in db.");
+            $stmt = $database->prepare('UPDATE cardsets SET code = ? WHERE name = ?');
+            $stmt->bind_param('ss', $data->code, $row['name']);
+            if (!$stmt->execute()) {
+                info('!!!!!!!!!! Set Insertion Error !!!!!!!!!');
+                die($stmt->error);
+            }
+        }
     }
 }
 
