@@ -633,12 +633,12 @@ function print_preRegistration()
         echo "<tr><td><a href=\"{$event->threadurl}\">{$event->name}</a></td>";
         echo '<td>'.distance_of_time_in_words(time(), strtotime($event->start)).'</td>';
         if ($event->hasRegistrant($player->name)) {
-            echo '<td>Registered <a href="prereg.php?action=unreg&event='.urlencode($event->name).'">(Unreg)</a></td>';
+            echo '<td>Registered <a href="prereg.php?action=unreg&event='.rawurlencode($event->name).'">(Unreg)</a></td>';
         } else {
             if ($event->is_full()) {
                 echo '<td>This event is currently at capacity.</td>';
             } else {
-                echo "<td><a href=\"prereg.php?action=reg&event={$event->name}\">Register</a></td>";
+                echo '<td><a href="prereg.php?action=reg&event='.rawurlencode($event->name).'">Register</a></td>';
             }
         }
         echo '</tr>';
