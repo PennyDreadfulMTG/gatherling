@@ -1161,7 +1161,7 @@ class Format
                 $isLegal = true;
             }
 
-            if ($this->isCardBasic($card)) {
+            if ($this->isCardBasic($sideCard)) {
                 $isLegal = true;
             }
         } else {
