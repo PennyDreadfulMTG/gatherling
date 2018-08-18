@@ -901,6 +901,10 @@ function printBandR($active_format, $seriesName)
     echo "<textarea class=\"inputbox\" rows=\"5\" cols=\"40\" name=\"addrestrictedcard\"></textarea></td></tr>\n";
     echo '<input type="hidden" name="view" value="bandr" />';
     echo '<tr>';
+    echo '<td colspan="2"><label>Load txt</label><input class="inputbutton" type="file" ';
+    echo 'value="Upload Restricted List" link="addrestrictedcard" accept=".txt"/></td>';
+    echo '</tr>';
+    echo '<tr>';
     echo '<td class="buttons"><input class="inputbutton" type="submit" value="Update Restricted List" name ="action" /></td>';
     echo '<td class="buttons"><input class="inputbutton" type="submit" value="Delete Entire Restricted List" name ="action" /></td>';
     echo '</tr></table></form>';
@@ -936,6 +940,10 @@ function printBandR($active_format, $seriesName)
     echo '<tr><td colspan="2"> Add new: ';
     echo "<textarea class=\"inputbox\" rows=\"5\" cols=\"40\" name=\"addbancard\"></textarea></td></tr>\n";
     echo '<input type="hidden" name="view" value="bandr" />';
+    echo '<tr>';
+    echo '<td colspan="2"><label>Load txt</label><input class="inputbutton" type="file" ';
+    echo 'value="Upload Banned List" link="addbancard" accept=".txt"/></td>';
+    echo '</tr>';
     echo '<tr>';
     echo '<td class="buttons"><input class="inputbutton" type="submit" value="Update Banlist" name ="action" /></td>';
     echo '<td class="buttons"><input class="inputbutton" type="submit" value="Delete Entire Banlist" name ="action" /></td>';
@@ -973,9 +981,22 @@ function printBandR($active_format, $seriesName)
     echo "<textarea class=\"inputbox\" rows=\"5\" cols=\"40\" name=\"addlegalcard\"></textarea></td></tr>\n";
     echo '<input type="hidden" name="view" value="bandr" />';
     echo '<tr>';
+    echo '<td colspan="2"><label>Load txt</label><input class="inputbutton" type="file" ';
+    echo 'value="Upload Legal List" link="addlegalcard" accept=".txt"/></td>';
+    echo '</tr>';
+    echo '<tr>';
     echo '<td class="buttons"><input class="inputbutton" type="submit" value="Update Legal List" name ="action" /></td>';
     echo '<td class="buttons"><input class="inputbutton" type="submit" value="Delete Entire Legal List" name ="action" /></td>';
     echo '</tr></table></form>';
+    echo '<script>
+        $(\'input[type=file]\').on("change", function(e) {
+        var file = e.target.files[0];
+        reader = new FileReader();
+        reader.onload = function (e1) {
+            $("textarea[name="+e.target.attributes.link.nodeValue+"]").val(e1.target.result);
+        };
+        reader.readAsText(file);
+    });</script>';
 }
 
 function printTribalBandR($active_format, $seriesName)
