@@ -942,12 +942,8 @@ class Event
         if ($test <= ($this->finalrounds + $this->mainrounds)) {
             if ($test >= $this->mainrounds) {
                 $structure = $this->finalstruct;
-                $subevent_id = $this->finalid;
-                $round = 'final';
             } else {
                 $structure = $this->mainstruct;
-                $subevent_id = $this->mainid;
-                $round = 'main';
             }
 
             return $structure == 'League';
@@ -1102,9 +1098,12 @@ class Event
             $counter++;
             $playerb = $players[$counter]->player;
             if ($playerb == null) {
+                $counter--;
                 $this->award_bye($players[$counter]);
+                $counter++;
+            } else {
+                $this->addPairing($playera, $playerb, ($this->current_round + 1), 'P');
             }
-            $this->addPairing($playera, $playerb, ($this->current_round + 1), 'P');
             $counter++;
         }
     }
@@ -1365,6 +1364,7 @@ class Event
         $this->current_round--;
         $this->save();
         $this->recalculateScores('Swiss');
+        Standings::updateStandings($this->name, $this->mainid, 1);
         $this->pairCurrentRound();
     }
 
