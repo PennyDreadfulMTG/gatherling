@@ -942,12 +942,8 @@ class Event
         if ($test <= ($this->finalrounds + $this->mainrounds)) {
             if ($test >= $this->mainrounds) {
                 $structure = $this->finalstruct;
-                $subevent_id = $this->finalid;
-                $round = 'final';
             } else {
                 $structure = $this->mainstruct;
-                $subevent_id = $this->mainid;
-                $round = 'main';
             }
 
             return $structure == 'League';

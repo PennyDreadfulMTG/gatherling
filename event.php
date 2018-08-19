@@ -1234,8 +1234,11 @@ function updateEvent()
     if ($_POST['mainstruct'] == '') {
         $_POST['mainstruct'] = 'Swiss';
     }
-    $event->mainrounds = $_POST['mainrounds'];
-    $event->mainstruct = $_POST['mainstruct'];
+    if ($_POST['mainrounds'] >= $event->current_round) {
+        $event->mainrounds = $_POST['mainrounds'];
+        $event->mainstruct = $_POST['mainstruct'];
+    }
+
     if ($_POST['finalrounds'] == '') {
         $_POST['finalrounds'] = 0;
     }
