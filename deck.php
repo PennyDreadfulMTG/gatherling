@@ -391,7 +391,12 @@ function deckInfoCell($deck)
     if ($deck->playername != null) {
         $deckplayer = new Player($deck->playername);
         $line3 .= $deckplayer->linkTo();
-        $line3 .= " in <span class=\"eventname\" title=\"{$day}\">{$event->name}</span>\n";
+        $targetUrl = 'eventreport';
+        $player = Player::getSessionPlayer();
+        if ($event->authCheck($player->name)) {
+            $targetUrl = 'event';
+        }
+        $line3 .= " in <a href=\"${targetUrl}.php?event=".rawurlencode($deck->eventname)."\"><span class=\"eventname\" title=\"{$day}\">{$event->name}</span></a>\n";
     } else {
         $line3 .= 'Never played (?) according to records.';
     }
