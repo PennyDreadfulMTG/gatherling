@@ -631,7 +631,7 @@ function print_preRegistration()
     }
     foreach ($events as $event) {
         echo "<tr><td><a href=\"{$event->threadurl}\">{$event->name}</a></td>";
-        echo '<td>'.distance_of_time_in_words(time(), strtotime($event->start)).'</td>';
+        echo '<td class="eventtime" start="'.$event->start.'"> Starts in '.distance_of_time_in_words(time(), strtotime($event->start), true).'</td>';
         if ($event->hasRegistrant($player->name)) {
             echo '<td>Registered <a href="prereg.php?action=unreg&event='.rawurlencode($event->name).'">(Unreg)</a></td>';
         } else {
@@ -644,6 +644,15 @@ function print_preRegistration()
         echo '</tr>';
     }
     echo '</table>';
+    echo'<script>
+        window.onload = function(){
+            $(\'.eventtime\').each(function(i, obj) {
+                $strStartTime = $(this).attr("start");
+                mStart = moment.tz($strStartTime,"America/New_York");
+                $(this).html(mStart.tz(moment.tz.guess()).format("D MMM Y HH:mm z")+" <br/> "+$(this).html());
+            });
+        }
+        </script>';
 }
 
 function print_PKpreRegistration()
