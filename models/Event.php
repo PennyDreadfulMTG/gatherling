@@ -10,6 +10,7 @@ class Event
 
     public $start;
     public $kvalue;
+    public $active;
     public $finalized;
     public $prereg_allowed;
     public $pkonly;
@@ -33,7 +34,6 @@ class Event
     public $finalid; // Has one final subevent
 
     // Pairing/event related
-    public $active;
     public $current_round;
     public $standing;
     public $player_reportable;
