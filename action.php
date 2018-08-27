@@ -17,6 +17,13 @@ if (!is_null($player)) {
                 $message = $message."<a href=\"$createLink\">Create one</a> or set the series as inactive.";
             }
         }
+        $recent = $series->mostRecentEvent();
+        if (!$recent->finalized) {
+            $message = "Your event <a href=\"event.php?event={$recent->name}\">{$recent->name}</a> is ready to start. <br />";
+            $reg = count($recent->getPlayers());
+            $valid = count($recent->getRegisteredPlayers());
+            $message .= "It has $reg entries, of whom $valid have valid decklists.";
+        }
     }
 
     $active_events = Event::getActiveEvents();
