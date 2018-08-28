@@ -812,10 +812,10 @@ function print_recentMatchTable()
     foreach ($matches as $match) {
         $res = 'Draw';
         if ($match->playerWon($player->name)) {
-            $res = 'Win'.($match->result=="WO"?' Noshow':'');
+            $res = 'Win'.($match->result == 'WO' ? ' Noshow' : '');
         }
         if ($match->playerLost($player->name)) {
-            $res = 'Loss'.($match->result=="WO"?' Noshow':'');
+            $res = 'Loss'.($match->result == 'WO' ? ' Noshow' : '');
         }
         if ($match->playera == $match->playerb) {
             $res = 'BYE';
@@ -859,7 +859,7 @@ function print_currentMatchTable($Leagues)
             leagueOpponentDropMenu($event, $round = 1);
             echo '</td></tr></table>';
         }
-        
+
         if ($match->result != 'BYE') {
             $oppplayer = new Player($opp);
             echo '<tr><td>';
