@@ -269,7 +269,6 @@ function print_submit_resultForm($match_id, $drop = false)
     echo "<tr><td><input type='radio' name='report' value='W21' />I won the match 2-1</td> </tr>";
     echo "<tr><td><input type='radio' name='report' value='L20' />I lost the match 0-2 </td> </tr>";
     echo "<tr><td><input type='radio' name='report' value='L21' />I lost the match 1-2</td> </tr>";
-    echo "<tr><td><input type='radio' name='report' value='WO' />My opponent doesn't shows up</td> </tr>";
     if ($match->allowsPlayerReportedDraws() == 1) {
         echo "<tr><td><input type='radio' name='report' value='D' />The match was a draw</td> </tr>";
     }
@@ -333,9 +332,6 @@ function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, 
             break;
         case 'L21':
             echo 'I lost the match 1-2';
-            break;
-        case 'WO':
-            echo 'My opponent doesn\'t show up';
             break;
         case 'D':
             echo 'The match was a draw';
@@ -812,10 +808,10 @@ function print_recentMatchTable()
     foreach ($matches as $match) {
         $res = 'Draw';
         if ($match->playerWon($player->name)) {
-            $res = 'Win'.($match->result == 'WO' ? ' Noshow' : '');
+            $res = 'Win';
         }
         if ($match->playerLost($player->name)) {
-            $res = 'Loss'.($match->result == 'WO' ? ' Noshow' : '');
+            $res = 'Loss';
         }
         if ($match->playera == $match->playerb) {
             $res = 'BYE';
