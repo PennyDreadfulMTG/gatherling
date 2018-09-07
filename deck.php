@@ -55,11 +55,19 @@ if (strcmp($_GET['mode'], 'view') == 0) {
     } elseif (checkDeckAuth($_POST['event'], $deck_player, $deck)) {
         if (strcmp($_POST['mode'], 'Create Deck') == 0) {
             $deck = insertDeck();
-            deckProfile($deck);
+            if ($deck->isValid()) {
+                deckProfile($deck);
+            } else {
+                deckForm($deck);
+            }
         } elseif (strcmp($_POST['mode'], 'Update Deck') == 0) {
             $deck = updateDeck($deck);
             $deck = new Deck($deck->id); // had to do this to get the constructor to run, otherwise errors weren't loading
-            deckProfile($deck);
+            if ($deck->isValid()) {
+                deckProfile($deck);
+            } else {
+                deckForm($deck);
+            }
         } elseif (strcmp($_POST['mode'], 'Edit Deck') == 0) {
             deckForm($deck);
         } elseif (strcmp($_GET['mode'], 'create') == 0) {
