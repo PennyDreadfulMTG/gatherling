@@ -1515,8 +1515,10 @@ function updateMatches()
 
     if (strcmp($pA, '') != 0 && strcmp($pB, '') != 0
     && strcmp($res, '') != 0 && strcmp($rnd, '') != 0) {
+        $playerA = new Standings($event->name, $pA);
+        $playerB = new Standings($event->name, $pB);
         if ($res == 'P') {
-            $event->addPairing($pA, $pB, $rnd, $res);
+            $event->addPairing($playerA, $playerB, $rnd, $res);
         } else {
             $event->addMatch($pA, $pB, $rnd, $res, $pAWins, $pBWins);
         }

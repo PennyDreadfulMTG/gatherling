@@ -80,7 +80,9 @@ if ($player == null) {
             if ($_POST['opponent'] != '0') {
                 $event = new Event($_POST['event']);
                 if ($event->isLeague()) {
-                    $new_match_id = $event->addPairing($_POST['player'], $_POST['opponent'], $event->current_round, 'P');
+                    $player = new Standings($event->name, $_POST['player']);
+                    $opponent = new Standings($event->name, $_POST['opponent']);
+                    $new_match_id = $event->addPairing($player, $opponent, $event->current_round, 'P');
                     Match::saveReport($_POST['report'], $new_match_id, 'a');
                 } else {
                     $result = 'This is not a league event!';

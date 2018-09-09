@@ -659,7 +659,7 @@ class Event
         }
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO matches(playera, playerb, round, subevent, result, verification) VALUES(?, ?, ?, ?, ?, ?)');
-        $stmt->bind_param('ssddss', $playera, $playerb, $round, $id, $result, $verification);
+        $stmt->bind_param('ssddss', $playera->player, $playerb->player, $round, $id, $result, $verification);
         $stmt->execute();
         $newmatch = $stmt->insert_id;
         $stmt->close();
@@ -1046,17 +1046,15 @@ class Event
         if ($stmt->fetch() == null) { // No players left to match against, award bye
             $stmt->close();
             $this->award_bye($player[0]);
-            $player[0]->matched = 1;
-            $player[0]->save();
         } else {
             $stmt->close();
             $playerbStandings = new Standings($this->name, $playerb);
-            $this->addPairing($player[0]->player, $playerb, ($this->current_round + 1), 'P');
-            $player[0]->matched = 1;
-            $player[0]->save();
+            $this->addPairing($player[0], $playerbStandings, ($this->current_round + 1), 'P');
             $playerbStandings->matched = 1;
             $playerbStandings->save();
         }
+        $player[0]->matched = 1;
+        $player[0]->save();
     }
 
     // I'm sure there is a proper algorithm to single or double elim with an arbitrary number of players
@@ -1091,18 +1089,15 @@ class Event
         $players = array_slice($players, 0, $top_cut);
         $counter = 0;
         while ($counter < (count($players) - 1)) {
-            $playera = $players[$counter]->player;
-            if ($playera == null) {
+            $playera = $players[$counter];
+            if ($playera->player == null) {
                 exit;
             }
             $counter++;
-            $playerb = $players[$counter]->player;
-            if ($playerb == null) {
-                $counter--;
-                $this->award_bye($players[$counter]);
-                $counter++;
+            if ($players[$counter] == null || $players[$counter]->player == null) {
+                $this->award_bye($playera);
             } else {
-                $this->addPairing($playera, $playerb, ($this->current_round + 1), 'P');
+                $this->addPairing($playera, $players[$counter], ($this->current_round + 1), 'P');
             }
             $counter++;
         }
@@ -1129,13 +1124,13 @@ class Event
 
             $counter = 0;
             while ($counter < (count($players) - 1)) {
-                $playera = $players[$counter]->player;
+                $playera = $players[$counter];
                 $counter++;
-                $playerb = $players[$counter]->player;
+                $playerb = $players[$counter];
                 $this->addPairing($playera, $playerb, ($this->current_round + 1), 'P');
-                Standings::writeSeed($this->name, $playera, $seedcounter);
+                Standings::writeSeed($this->name, $playera->player, $seedcounter);
                 $seedcounter++;
-                Standings::writeSeed($this->name, $playerb, $seedcounter);
+                Standings::writeSeed($this->name, $playerb->player, $seedcounter);
                 $seedcounter++;
                 $counter++;
             }
@@ -1154,7 +1149,7 @@ class Event
     public function top2Seeding()
     {
         $players = $this->standing->getEventStandings($this->name, 3);
-        $this->addPairing($players[0]->player, $players[1]->player, ($this->current_round + 1), 'P');
+        $this->addPairing($players[0], $players[1], ($this->current_round + 1), 'P');
         Standings::writeSeed($this->name, $players[0]->player, 1);
         Standings::writeSeed($this->name, $players[1]->player, 2);
     }
@@ -1165,8 +1160,8 @@ class Event
         if (count($players) < 4) {
             $this->top2Seeding();
         } else {
-            $this->addPairing($players[0]->player, $players[3]->player, ($this->current_round + 1), 'P');
-            $this->addPairing($players[1]->player, $players[2]->player, ($this->current_round + 1), 'P');
+            $this->addPairing($players[0], $players[3], ($this->current_round + 1), 'P');
+            $this->addPairing($players[1], $players[2], ($this->current_round + 1), 'P');
             Standings::writeSeed($this->name, $players[0]->player, 1);
             Standings::writeSeed($this->name, $players[1]->player, 3);
             Standings::writeSeed($this->name, $players[2]->player, 2);
@@ -1180,10 +1175,10 @@ class Event
         if (count($players) < 8) {
             $this->top4Seeding();
         } else {
-            $this->addPairing($players[0]->player, $players[7]->player, ($this->current_round + 1), 'P');
-            $this->addPairing($players[3]->player, $players[4]->player, ($this->current_round + 1), 'P');
-            $this->addPairing($players[1]->player, $players[6]->player, ($this->current_round + 1), 'P');
-            $this->addPairing($players[2]->player, $players[5]->player, ($this->current_round + 1), 'P');
+            $this->addPairing($players[0], $players[7], ($this->current_round + 1), 'P');
+            $this->addPairing($players[3], $players[4], ($this->current_round + 1), 'P');
+            $this->addPairing($players[1], $players[6], ($this->current_round + 1), 'P');
+            $this->addPairing($players[2], $players[5], ($this->current_round + 1), 'P');
             Standings::writeSeed($this->name, $players[0]->player, 1);
             Standings::writeSeed($this->name, $players[7]->player, 2);
             Standings::writeSeed($this->name, $players[3]->player, 3);
@@ -1197,7 +1192,7 @@ class Event
 
     public function award_bye($player)
     {
-        $this->addPairing($player->player, $player->player, ($this->current_round + 1), 'BYE');
+        $this->addPairing($player, $player, ($this->current_round + 1), 'BYE');
     }
 
     public static function getActiveEvents()
