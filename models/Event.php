@@ -689,7 +689,7 @@ class Event
 
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO matches(playera, playerb, round, subevent, result, playera_wins, playera_losses, playera_draws, playerb_wins, playerb_losses, playerb_draws, verification) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-        $stmt->bind_param('ssddsdddddds', $playera, $playerb, $round, $id, $result, $playera_wins, $playerb_wins, $draws, $playerb_wins, $playera_wins, $draws, $verification); // draws have not been implemented yet so I just assign a zero for now
+        $stmt->bind_param('ssddsdddddds', $playera->player, $playerb->player, $round, $id, $result, $playera_wins, $playerb_wins, $draws, $playerb_wins, $playera_wins, $draws, $verification); // draws have not been implemented yet so I just assign a zero for now
         $stmt->execute();
         $stmt->close();
     }
