@@ -1520,13 +1520,13 @@ function updateMatches()
         if ($res == 'P') {
             $event->addPairing($playerA, $playerB, $rnd, $res);
         } else {
-            $event->addMatch($pA, $pB, $rnd, $res, $pAWins, $pBWins);
+            $event->addMatch($playerA, $playerB, $rnd, $res, $pAWins, $pBWins);
         }
     }
 
     if (isset($_POST['newbyeplayer']) && (strcmp($_POST['newbyeplayer'], '') != 0)) {
-        $p = $_POST['newbyeplayer'];
-        $event->addMatch($p, $p, $rnd, 'BYE');
+        $playerBye = new Standings($event->name, $_POST['newbyeplayer']);
+        $event->addMatch($playerBye, $playerBye, $rnd, 'BYE');
     }
 }
 
@@ -1696,7 +1696,9 @@ function autoInput()
             $event->addPlayer($playerA);
             $event->addPlayer($playerB);
 
-            $event->addMatch($playerA, $playerB, $rnd + 1, $winner, 0, 0);
+            $playerAStanding = new Standings($event->name, $playerA);
+            $playerBStanding = new Standings($event->name, $playerB);
+            $event->addMatch($playerAStanding, $playerBStanding, $rnd + 1, $winner, 0, 0);
         }
     }
     $finals = [];
@@ -1726,7 +1728,9 @@ function autoInput()
             if (strcmp($winner, $playerB) == 0) {
                 $res = 'B';
             }
-            $event->addMatch($playerA, $playerB, $ndx + 1 + $event->mainrounds, $res, 0, 0);
+            $playerAStanding = new Standings($event->name, $playerA);
+            $playerBStanding = new Standings($event->name, $playerB);
+            $event->addMatch($playerAStanding, $playerBStanding, $ndx + 1 + $event->mainrounds, $res, 0, 0);
             $loser = (strcmp($winner, $playerA) == 0) ? $playerB : $playerA;
             if ($ndx == count($finals) - 1) {
                 $win = $winner;
@@ -1960,7 +1964,9 @@ function dciinputmatches($reg, $data)
                 if ($result == 'D') {
                     echo ' match is a draw<br />';
                 }
-                $event->addMatch($playera->name, $playerb->name, $round, $result, $playerawins[$round - 1], $playerbwins[$round - 1]);
+                $playerAStanding = new Standings($event->name, $playera->name);
+                $playerBStanding = new Standings($event->name, $playerb->name);
+                $event->addMatch($playerAStanding, $playerBStanding, $round, $result, $playerawins[$round - 1], $playerbwins[$round - 1]);
             }
         }
     }
@@ -1991,7 +1997,9 @@ function dciinputplayoffs($reg, $data)
             if ($winner == $playerb) {
                 $res = 'B';
             }
-            $event->addMatch($pa, $pb, $rnd + $event->mainrounds, $res, 0, 0);
+            $playerAStanding = new Standings($event->name, $pa);
+            $playerBStanding = new Standings($event->name, $pb);
+            $event->addMatch($playerAStanding, $playerBStanding, $rnd + $event->mainrounds, $res, 0, 0);
         }
     }
     $event->assignTropiesFromMatches();
@@ -2061,7 +2069,9 @@ function dci3makematches($data, $regmap)
             } elseif ($win == 0) {
                 $res = 'B';
             }
-            $event->addMatch($regmap[$playernumber], $regmap[$opponentnum], $roundnum, $res, 0, 0);
+            $playerAStanding = new Standings($event->name, $regmap[$playernumber]);
+            $playerBStanding = new Standings($event->name, $regmap[$opponentnum]);
+            $event->addMatch($playerAStanding, $playerBStanding, $roundnum, $res, 0, 0);
             $alreadyin["{$playernumber}-{$opponentnum}-{$roundnum}"] = 1;
         }
         $lastroundnum = $roundnum;
