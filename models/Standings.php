@@ -179,16 +179,17 @@ class Standings
         foreach ($opponents as $opponent) {
             // do calc
             if ($opponent->byes > 0) {
-                //$opponent->score =- ($opponent->byes * 3);
-                $opp_score = ($opponent->matches_won - ($opponent->byes)) + ($opponent->draws * .333);
-                $opp_win_percentage = (($opp_score) / $opponent->matches_played);
-                if ($opp_win_percentage < .33) {
-                    $opp_win_percentage = .33;
-                }
-                $OMW += $opp_win_percentage;
-                if ($opponent->games_played == 0) {
-                    $OGW += 0;
+                if ($opponent->matches_played != 0) {
+                    $opp_score = ($opponent->matches_won - ($opponent->byes)) + ($opponent->draws * .333);
+                    $opp_win_percentage = (($opp_score) / $opponent->matches_played);
+                    if ($opp_win_percentage < .33) {
+                        $opp_win_percentage = .33;
+                    }
+                    $OMW += $opp_win_percentage;
                 } else {
+                    $OMW += .33;
+                }
+                if ($opponent->games_played != 0) {
                     $OGW += ($opponent->games_won / $opponent->games_played);
                 }
                 $number_of_opponents++;
