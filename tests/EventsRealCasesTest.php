@@ -1,5 +1,6 @@
 <?php
-ini_set("max_execution_time","0");
+
+ini_set('max_execution_time', '0');
 require_once __DIR__.'/../lib.php';
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
@@ -27,10 +28,10 @@ foreach ($players as $player) {
 foreach ($players as $player) {
     $deck = insertDeck($player, $event->name, '60 Plains', '');
 }
-echo count($players).' players registered and deck valid '.(count($event->getRegisteredEntries()) === count($players)?"&#9745;":"&#9746;").'<br />';
+echo count($players).' players registered and deck valid '.(count($event->getRegisteredEntries()) === count($players) ? '&#9745;' : '&#9746;').'<br />';
 
 //Pairing for Event 1 Round 1
-echo "Inputing Test 1 round 1<br />";
+echo 'Inputing Test 1 round 1<br />';
 $event->addMatch(new Standings($event->name, 'mrrphy'), new Standings($event->name, 'drikorf'), 1, 'B', 0, 2);
 $event->addMatch(new Standings($event->name, 'ttacocatt'), new Standings($event->name, 'jace365'), 1, 'A', 2, 1);
 $event->addMatch(new Standings($event->name, 'narumin'), new Standings($event->name, 'nerdyjoe'), 1, 'A', 2, 0);
@@ -41,7 +42,7 @@ $event->addMatch(new Standings($event->name, 'MyGaZz'), new Standings($event->na
 $event->addMatch(new Standings($event->name, 'Pseudodude'), new Standings($event->name, 'Pseudodude'), 1, 'BYE');
 
 //Pairing for Event 1 Round 2
-echo "Inputing Test 1 round 2<br />";
+echo 'Inputing Test 1 round 2<br />';
 $event->addMatch(new Standings($event->name, 'Pseudodude'), new Standings($event->name, 'bakert99'), 2, 'B', 0, 2);
 $event->addMatch(new Standings($event->name, 'Patalam'), new Standings($event->name, 'drikorf'), 2, 'A', 2, 1);
 $event->addMatch(new Standings($event->name, 'ambienceinvoker'), new Standings($event->name, 'narumin'), 2, 'B', 0, 2);
@@ -52,7 +53,7 @@ $event->addMatch(new Standings($event->name, 'mrrphy'), new Standings($event->na
 $event->addMatch(new Standings($event->name, 'MyGaZz'), new Standings($event->name, 'MyGaZz'), 2, 'BYE');
 
 //Pairing for Event 1 Round 3
-echo "Inputing Test 1 round 3<br />";
+echo 'Inputing Test 1 round 3<br />';
 $event->addMatch(new Standings($event->name, 'thejacob'), new Standings($event->name, 'narumin'), 3, 'A', 2, 0);
 $event->addMatch(new Standings($event->name, 'bakert99'), new Standings($event->name, 'Patalam'), 3, 'A', 2, 1);
 $event->addMatch(new Standings($event->name, 'MyGaZz'), new Standings($event->name, 'nerdyjoe'), 3, 'B', 0, 2);
@@ -88,17 +89,17 @@ foreach ($players as $player) {
 foreach ($players as $player) {
     $deck = insertDeck($player, $event->name, '60 Plains', '');
 }
-echo count($players).' players registered and deck valid '.(count($event->getRegisteredEntries()) === count($players)?"&#9745;":"&#9746;").'<br />';
+echo count($players).' players registered and deck valid '.(count($event->getRegisteredEntries()) === count($players) ? '&#9745;' : '&#9746;').'<br />';
 
 //Pairing for Event 2 Round 1
-echo "Inputing Test 2 round 1<br />";
+echo 'Inputing Test 2 round 1<br />';
 $event->addMatch(new Standings($event->name, 'Teylows'), new Standings($event->name, 'Maluc'), 1, 'B', 0, 2);
 $event->addMatch(new Standings($event->name, 'rremedio1'), new Standings($event->name, 'brian1234'), 1, 'A', 2, 0);
 $event->addMatch(new Standings($event->name, 'TheWhetherMan1'), new Standings($event->name, 'Farfishere'), 1, 'A', 2, 1);
 $event->addMatch(new Standings($event->name, 'TheUsualSuspect'), new Standings($event->name, 'TheUsualSuspect'), 1, 'BYE');
 
 //Pairing for Event 2 Round 2
-echo "Inputing Test 2 round 2<br />";
+echo 'Inputing Test 2 round 2<br />';
 $event->addMatch(new Standings($event->name, 'TheUsualSuspect'), new Standings($event->name, 'TheWhetherMan1'), 2, 'B', 1, 2);
 $event->addMatch(new Standings($event->name, 'rremedio1'), new Standings($event->name, 'Maluc'), 2, 'B', 0, 2);
 $event->addMatch(new Standings($event->name, 'Farfishere'), new Standings($event->name, 'Farfishere'), 2, 'BYE');
@@ -116,7 +117,6 @@ $event->repairRound();
 
 echo runTheTest($event);
 
-
 //Cretae Event 3
 echo '<br /><br /><h3>For our third event we are replicating Round 3 of this event http://www.gatherling.com/eventreport.php?event=Classic%20Heirloom%2012.74</h3> <br />';
 $players = ['Tarrons', 'Yokai_', 'Rakura', 'Pink_Person', 'TheWhetherMan1', 'wiltay0494', 'BoozeMongoose', 'rremedio1'];
@@ -127,17 +127,17 @@ foreach ($players as $player) {
 foreach ($players as $player) {
     $deck = insertDeck($player, $event->name, '60 Plains', '');
 }
-echo count($players).' players registered and deck valid '.(count($event->getRegisteredEntries()) === count($players)?"&#9745;":"&#9746;").'<br />';
+echo count($players).' players registered and deck valid '.(count($event->getRegisteredEntries()) === count($players) ? '&#9745;' : '&#9746;').'<br />';
 
 //Pairing for Event 3 Round 1
-echo "Inputing Test 3 round 1<br />";
+echo 'Inputing Test 3 round 1<br />';
 $event->addMatch(new Standings($event->name, 'Tarrons'), new Standings($event->name, 'Yokai_'), 1, 'A', 2, 1);
 $event->addMatch(new Standings($event->name, 'Rakura'), new Standings($event->name, 'Pink_Person'), 1, 'B', 0, 2);
 $event->addMatch(new Standings($event->name, 'TheWhetherMan1'), new Standings($event->name, 'wiltay0494'), 1, 'A', 2, 1);
 $event->addMatch(new Standings($event->name, 'rremedio1'), new Standings($event->name, 'BoozeMongoose'), 1, 'B', 1, 2);
 
 //Pairing for Event 3 Round 2
-echo "Inputing Test 3 round 2<br />";
+echo 'Inputing Test 3 round 2<br />';
 $event->addMatch(new Standings($event->name, 'Tarrons'), new Standings($event->name, 'TheWhetherMan1'), 2, 'A', 2, 0);
 $event->addMatch(new Standings($event->name, 'Pink_Person'), new Standings($event->name, 'BoozeMongoose'), 2, 'B', 1, 2);
 $event->addMatch(new Standings($event->name, 'rremedio1'), new Standings($event->name, 'wiltay0494'), 2, 'A', 2, 0);
@@ -155,7 +155,6 @@ $event->repairRound();
 
 echo runTheTest($event);
 
-
 //Cretae Event 4
 echo '<br /><br /><h3>For our fourth event we are replicating Round 3 of this event http://www.gatherling.com/eventreport.php?event=Classic%20Heirloom%2012.49</h3> <br />';
 $players = ['br_laern', 'Yokai_', 'Jota_F', 'Farfishere', 'TheWhetherMan1'];
@@ -166,16 +165,16 @@ foreach ($players as $player) {
 foreach ($players as $player) {
     $deck = insertDeck($player, $event->name, '60 Plains', '');
 }
-echo count($players).' players registered and deck valid '.(count($event->getRegisteredEntries()) === count($players)?"&#9745;":"&#9746;").'<br />';
+echo count($players).' players registered and deck valid '.(count($event->getRegisteredEntries()) === count($players) ? '&#9745;' : '&#9746;').'<br />';
 
 //Pairing for Event 4 Round 1
-echo "Inputing Test 4 round 1<br />";
+echo 'Inputing Test 4 round 1<br />';
 $event->addMatch(new Standings($event->name, 'br_laern'), new Standings($event->name, 'br_laern'), 1, 'BYE', 2, 0);
 $event->addMatch(new Standings($event->name, 'Farfishere'), new Standings($event->name, 'TheWhetherMan1'), 1, 'B', 1, 2);
 $event->addMatch(new Standings($event->name, 'Yokai_'), new Standings($event->name, 'Jota_F'), 1, 'B', 0, 2);
 
 //Pairing for Event 4 Round 2
-echo "Inputing Test 4 round 2<br />";
+echo 'Inputing Test 4 round 2<br />';
 $event->addMatch(new Standings($event->name, 'br_laern'), new Standings($event->name, 'Jota_F'), 2, 'B', 1, 2);
 $event->addMatch(new Standings($event->name, 'Farfishere'), new Standings($event->name, 'Farfishere'), 2, 'BYE', 2, 0);
 $event->addMatch(new Standings($event->name, 'Yokai_'), new Standings($event->name, 'TheWhetherMan1'), 2, 'A', 2, 1);
@@ -189,7 +188,6 @@ $event->save();
 $event->repairRound();
 
 echo runTheTest($event);
-
 
 function runTheTest(&$event)
 {
@@ -232,7 +230,7 @@ function runTheTest(&$event)
         $matches = $event->getRoundMatches($event->current_round);
         $noOfByes = numberForByes($matches);
         if ($noOfByes > 0) {
-           if ($noOfByes > 1) {
+            if ($noOfByes > 1) {
                 echo 'x';
                 $bruteDoubleBye++;
             }
@@ -294,7 +292,7 @@ function testEventCreation()
         $event->save();
 
         $db = Database::getConnection();
-        $stmt = $db->prepare("SELECT deck FROM entries where event = ?");
+        $stmt = $db->prepare('SELECT deck FROM entries where event = ?');
         $stmt->bind_param('s', $event->name);
 
         $stmt->execute();
@@ -305,8 +303,8 @@ function testEventCreation()
         }
 
         if (count($deckids) > 0) {
-            $stmt = $db->prepare("DELETE FROM entries, deckerrors, deckcontents, decks USING entries LEFT JOIN deckerrors ON entries.deck=deckerrors.deck LEFT JOIN deckcontents ON entries.deck=deckcontents.deck LEFT JOIN decks ON entries.deck=decks.id WHERE entries.deck=?");
-            
+            $stmt = $db->prepare('DELETE FROM entries, deckerrors, deckcontents, decks USING entries LEFT JOIN deckerrors ON entries.deck=deckerrors.deck LEFT JOIN deckcontents ON entries.deck=deckcontents.deck LEFT JOIN decks ON entries.deck=decks.id WHERE entries.deck=?');
+
             foreach ($deckids as $idDelete) {
                 $stmt->bind_param('s', $idDelete);
                 $stmt->execute();
@@ -315,8 +313,9 @@ function testEventCreation()
 
         $stmt->close();
     }
-    
+
     $event = new Event($name);
+
     return $event;
 }
 
