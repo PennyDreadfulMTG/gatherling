@@ -13,7 +13,12 @@ if (!is_null($player)) {
         if ($series->active) {
             if (is_null($series->nextEvent())) {
                 $message = "Your series <a href=\"seriescp.php?series=$player_series\">$player_series</a> doesn't have an upcoming event.<br/>";
-                $createLink = 'event.php?mode=Create Next Event&name='.$series->mostRecentEvent()->name;
+                $nameMostRecent = $series->mostRecentEvent()->name;
+                if (is_null($nameMostRecent) || $nameMostRecent == '') {
+                    $createLink = 'event.php?mode=Create Next Event&name='.$series->name.' 1.00';
+                } else {
+                    $createLink = 'event.php?mode=Create Next Event&name='.$nameMostRecent;
+                }
                 $message = $message."<a href=\"$createLink\">Create one</a> or set the series as inactive.";
             }
         }
