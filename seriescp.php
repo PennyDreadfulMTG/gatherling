@@ -506,7 +506,7 @@ function handleActions()
             return;
         }
         $addition = $_POST['addbannedplayer'];
-        $addplayer = Player::findByName($addition);
+        $$addplayer = Player::findOrCreateByName($addition);
         if ($addplayer == null) {
             $hasError = true;
             $errormsg .= "Can't add {$addition} to Banned Players, they don't exist!";
