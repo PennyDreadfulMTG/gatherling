@@ -1059,12 +1059,12 @@ class Event
         $player[0]->matched = 1;
         $player[0]->save();
     }
-    
+
     // Pairs the current swiss round by using the Blossom method
     public function swissPairingBlossom($subevent_id)
     {
         Standings::resetMatched($this->name);
-        
+
         // Invalid entries get a fake
         $players = $this->getPlayers();
         foreach ($players as $player) {
@@ -1084,7 +1084,7 @@ class Event
         $resultSet = $stmt->get_result();
         $active_players = $resultSet->fetch_all(MYSQLI_ASSOC);
         $stmt->close();
-        
+
         if (count($active_players) > 0) {
             $bye_data = [];
             if (count($active_players) % 2 != 0) {
@@ -1136,12 +1136,11 @@ class Event
             }
 
             $db = Database::getConnection();
-            $stmt = $db->prepare("UPDATE standings SET matched = 1 WHERE event = ? AND matched = 2 AND active = 1");
+            $stmt = $db->prepare('UPDATE standings SET matched = 1 WHERE event = ? AND matched = 2 AND active = 1');
             $stmt->bind_param('s', $this->name);
             $stmt->execute() or die($stmt->error);
             $stmt->close();
         }
-        
     }
 
     // I'm sure there is a proper algorithm to single or double elim with an arbitrary number of players
