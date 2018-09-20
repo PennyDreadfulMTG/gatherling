@@ -582,6 +582,20 @@ if ($version < 28) {
     do_query('ALTER TABLE `subformats` ADD FOREIGN KEY (`childformat`) REFERENCES `formats`(`name`) ON DELETE CASCADE ON UPDATE CASCADE;');
     set_version(28);
 }
+if ($version < 29) {
+    info('Updating to version 29 (Add "Swiss (Blossom)" as new structure type for subevent)...');
+    do_query("ALTER TABLE `subevents`
+        MODIFY COLUMN
+        `type` enum(
+            'Swiss',
+            'Swiss (Blossom)',
+            'Single Elimination',
+            'League',
+            'Round Robin'
+        )
+        DEFAULT NULL AFTER `timing`;");
+    set_version(29);
+}
 $db->autocommit(true);
 
 info('DB is up to date!');
