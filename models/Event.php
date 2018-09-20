@@ -975,6 +975,9 @@ class Event
                 case 'Swiss':
                     $this->swissPairing($subevent_id);
                     break;
+                case 'Swiss (Blossom)':
+                    $this->swissPairingBlossom($subevent_id);
+                    break;
                 case 'Single Elimination':
                     $this->singleElimination($round);
                     break;
@@ -1055,6 +1058,90 @@ class Event
         }
         $player[0]->matched = 1;
         $player[0]->save();
+    }
+    
+    // Pairs the current swiss round by using the Blossom method
+    public function swissPairingBlossom($subevent_id)
+    {
+        Standings::resetMatched($this->name);
+        
+        // Invalid entries get a fake
+        $players = $this->getPlayers();
+        foreach ($players as $player) {
+            $entry = new Entry($this->name, $player);
+            if (is_null($entry->deck) || !$entry->deck->isValid()) {
+                $playerStandings = new Standings($this->name, $player);
+                $playerStandings->matched = 1;
+                $playerStandings->save();
+            }
+        }
+
+        $db = Database::getConnection();
+        $stmt = $db->prepare('SELECT player, byes, score FROM standings WHERE event = ? AND active = 1 AND matched = 0 ORDER BY RAND()');
+        $stmt or die($db->error);
+        $stmt->bind_param('s', $this->name);
+        $stmt->execute() or die($stmt->error);
+        $resultSet = $stmt->get_result();
+        $active_players = $resultSet->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        
+        if (count($active_players) > 0) {
+            $bye_data = [];
+            if (count($active_players) % 2 != 0) {
+                $bye_data = ['player'=> 'BYE', 'score'=>  0, 'opponents'=> [], 'paired'=>false];
+            }
+
+            for ($i = 0; $i < count($active_players); $i++) {
+                $list_opponents = [];
+
+                $standing = new Standings($this->name, $active_players[$i]['player']);
+                $opponents = $standing->getOpponents($this->name, $subevent_id, 1);
+                if ($opponents != null) {
+                    foreach ($opponents as $opponent) {
+                        $list_opponents[] = $opponent->player;
+                    }
+                }
+
+                if (count($bye_data) > 0 && $standing->byes > 0) {
+                    $bye_data['opponents'][] = $active_players[$i]['player'];
+                    $list_opponents[] = 'BYE';
+                }
+
+                $active_players[$i]['opponents'] = $list_opponents;
+                $active_players[$i]['paired'] = false;
+            }
+
+            if (count($active_players) % 2 != 0) {
+                array_push($active_players, $bye_data);
+            }
+            $pairings = new Pairings($active_players);
+            $pairing = $pairings->pairing;
+            for ($i = 0; $i < count($pairing); $i++) {
+                if ($active_players[$i] != null && !$active_players[$i]['paired']) {
+                    $player1 = new Standings($this->name, $active_players[$i]['player']);
+                    if ($active_players[$pairing[$i]]['player'] == 'BYE') {
+                        $this->award_bye($player1);
+                    } else {
+                        $player2 = new Standings($this->name, $active_players[$pairing[$i]]['player']);
+                        $this->addPairing($player1, $player2, ($this->current_round + 1), 'P');
+                        $player2->matched = 1;
+                        $player2->save();
+                    }
+
+                    $player1->matched = 1;
+                    $player1->save();
+                    $active_players[$i]['paired'] = true;
+                    $active_players[$pairing[$i]]['paired'] = true;
+                }
+            }
+
+            $db = Database::getConnection();
+            $stmt = $db->prepare("UPDATE standings SET matched = 1 WHERE event = ? AND matched = 2 AND active = 1");
+            $stmt->bind_param('s', $this->name);
+            $stmt->execute() or die($stmt->error);
+            $stmt->close();
+        }
+        
     }
 
     // I'm sure there is a proper algorithm to single or double elim with an arbitrary number of players
