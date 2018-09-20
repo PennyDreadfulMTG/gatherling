@@ -132,7 +132,22 @@ function content()
     } elseif (mode_is('Create A New Event')) {
         eventForm(null, true);
     } elseif (mode_is('Create Next Event')) {
-        $oldevent = new Event($_REQUEST['name']);
+        $eventName = $_REQUEST['name'];
+
+        try {
+            $oldevent = new Event($eventName);
+        } catch (Exception $exc) {
+            if ($exc->getMessage() == "Event $eventName not found in DB") {
+                $seriesName = preg_replace('/ 1.00$/', '', $eventName);
+                $oldevent = new Event('');
+                $oldevent->name = $eventName;
+                $oldevent->season = 1;
+                $oldevent->number = 0;
+                $oldevent->series = $seriesName;
+            } else {
+                echo $exc->getMessage();
+            }
+        }
         $newevent = new Event('');
         $newevent->season = $oldevent->season;
         $newevent->number = $oldevent->number + 1;
