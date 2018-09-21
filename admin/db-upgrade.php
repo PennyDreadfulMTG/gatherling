@@ -594,14 +594,14 @@ if ($version < 29) {
             'Round Robin'
         )
         DEFAULT NULL AFTER `timing`;");
-    do_query("ALTER TABLE `standings`
+    do_query('ALTER TABLE `standings`
         MODIFY COLUMN
         `player` VARCHAR(40)
-        NOT NULL;");
-    do_query("ALTER TABLE `standings`
+        NOT NULL;');
+    do_query('ALTER TABLE `standings`
         MODIFY COLUMN
         `event` VARCHAR(40)
-        NOT NULL AFTER `player`;");
+        NOT NULL AFTER `player`;');
     set_version(29);
 }
 $db->autocommit(true);
