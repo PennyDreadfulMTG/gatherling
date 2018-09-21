@@ -984,7 +984,7 @@ class Event
                 case 'League':
                     //$this->current_round ++;
                     //$this->save();
-                    break;/
+                    break;
                 case 'Round Robin':
                     //Do later
                     break;
