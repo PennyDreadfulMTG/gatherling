@@ -984,7 +984,7 @@ class Event
                 case 'League':
                     //$this->current_round ++;
                     //$this->save();
-                    break;
+                    break;/
                 case 'Round Robin':
                     //Do later
                     break;
@@ -1474,6 +1474,7 @@ class Event
 
         switch ($structure) {
        case 'Swiss':
+       case 'Swiss (Blossom)':
            $this->AssignMedalsbyStandings();
            break;
        case 'Single Elimination':
