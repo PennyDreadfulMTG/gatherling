@@ -1088,7 +1088,14 @@ class Event
         if (count($active_players) > 0) {
             $bye_data = [];
             if (count($active_players) % 2 != 0) {
-                $bye_data = ['player'=> 'BYE', 'score'=>  0, 'opponents'=> [], 'paired'=>false];
+                $byeNum = 0;
+                while (count($bye_data) == 0) {
+                    if (is_null(Player::findByName('BYE'.$byeNum))) {
+                        $bye_data = ['player'=> 'BYE'.$byeNum, 'score'=>  0, 'opponents'=> [], 'paired'=>false];
+                    } else {
+                        $byeNum++;
+                    }
+                }
             }
 
             for ($i = 0; $i < count($active_players); $i++) {
@@ -1098,28 +1105,38 @@ class Event
                 $opponents = $standing->getOpponents($this->name, $subevent_id, 1);
                 if ($opponents != null) {
                     foreach ($opponents as $opponent) {
-                        $list_opponents[] = $opponent->player;
+                        if ($opponent->active === 1) {
+                            $list_opponents[] = $opponent->player;
+                        }
                     }
                 }
 
                 if (count($bye_data) > 0 && $standing->byes > 0) {
-                    $bye_data['opponents'][] = $active_players[$i]['player'];
-                    $list_opponents[] = 'BYE';
+                    if (count($list_opponents) < (count($active_players) - 1)) {
+                        //This player hasn't played against the remaining active players
+                        //So they aren't allowed to get another bye this round
+                        $bye_data['opponents'][] = $active_players[$i]['player'];
+                        $list_opponents[] = $bye_data['player'];
+                    }
                 }
 
                 $active_players[$i]['opponents'] = $list_opponents;
                 $active_players[$i]['paired'] = false;
             }
 
-            if (count($active_players) % 2 != 0) {
+            $pairings = new Pairings($active_players, $bye_data);
+            $pairing = $pairings->pairing;
+            if(count($bye_data) > 0) {
                 array_push($active_players, $bye_data);
             }
-            $pairings = new Pairings($active_players);
-            $pairing = $pairings->pairing;
             for ($i = 0; $i < count($pairing); $i++) {
                 if ($active_players[$i] != null && !$active_players[$i]['paired']) {
                     $player1 = new Standings($this->name, $active_players[$i]['player']);
-                    if ($active_players[$pairing[$i]]['player'] == 'BYE') {
+                    if (count($bye_data) > 0 && $active_players[$pairing[$i]]['player'] == $bye_data['player']) {
+                        $this->award_bye($player1);
+                    } elseif ($active_players[$pairing[$i]] == null || $active_players[$pairing[$i]]['player'] == null) {
+                        //In a very rare case where a player has played against all remaining players
+                        //and the number of active players is even, hence no bye allowed initially
                         $this->award_bye($player1);
                     } else {
                         $player2 = new Standings($this->name, $active_players[$pairing[$i]]['player']);
@@ -1134,12 +1151,6 @@ class Event
                     $active_players[$pairing[$i]]['paired'] = true;
                 }
             }
-
-            $db = Database::getConnection();
-            $stmt = $db->prepare('UPDATE standings SET matched = 1 WHERE event = ? AND matched = 2 AND active = 1');
-            $stmt->bind_param('s', $this->name);
-            $stmt->execute() or die($stmt->error);
-            $stmt->close();
         }
     }
 
