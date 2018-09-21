@@ -4,7 +4,7 @@ class Pairings
 {
     private $lowestScoreWithoutBye = -1;
     private $highest_points = 0;
-    private $byeName = "";
+    private $byeName = '';
     public $pairing = [];
 
     public function __construct($players, $bye_data)
