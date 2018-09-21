@@ -1126,7 +1126,7 @@ class Event
 
             $pairings = new Pairings($active_players, $bye_data);
             $pairing = $pairings->pairing;
-            if(count($bye_data) > 0) {
+            if (count($bye_data) > 0) {
                 array_push($active_players, $bye_data);
             }
             for ($i = 0; $i < count($pairing); $i++) {
