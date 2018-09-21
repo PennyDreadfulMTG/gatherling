@@ -1081,7 +1081,7 @@ function monthDropMenu($month)
 
 function structDropMenu($field, $def)
 {
-    $names = ['Swiss', 'Single Elimination', /*"Round Robin",*/ 'League'];
+    $names = ['Swiss (Blossom)', 'Swiss', 'Single Elimination', /*"Round Robin",*/ 'League'];
     echo "<select class=\"inputbox\" name=\"$field\">";
     echo '<option value="">- Structure -</option>';
     for ($i = 0; $i < count($names); $i++) {
@@ -1149,7 +1149,7 @@ function insertEvent()
         $_POST['mainrounds'] = 3;
     }
     if ($_POST['mainstruct'] == '') {
-        $_POST['mainstruct'] = 'Swiss';
+        $_POST['mainstruct'] = 'Swiss (Blossom)';
     }
     $event->mainrounds = $_POST['mainrounds'];
     $event->mainstruct = $_POST['mainstruct'];
@@ -1232,7 +1232,7 @@ function updateEvent()
         $_POST['mainrounds'] = 3;
     }
     if ($_POST['mainstruct'] == '') {
-        $_POST['mainstruct'] = 'Swiss';
+        $_POST['mainstruct'] = 'Swiss (Blossom)';
     }
     if ($_POST['mainrounds'] >= $event->current_round) {
         $event->mainrounds = $_POST['mainrounds'];
