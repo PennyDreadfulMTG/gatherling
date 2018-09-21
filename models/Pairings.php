@@ -4,32 +4,33 @@ class Pairings
 {
     private $lowestScoreWithoutBye = -1;
     private $highest_points = 0;
-    private $indexOfBye = -1;
+    private $byeName = "";
     public $pairing = [];
 
-    public function __construct($players)
+    public function __construct($players, $bye_data)
     {
         // $highest_points = 0;
+        $byeExist = (count($bye_data) > 0);
         for ($i = 0; $i < count($players); $i++) {
-            if ($players[$i]['player'] == 'BYE') {
-                $this->indexOfBye = $i;
-                continue;
-            }
             $this->highest_points = max($this->highest_points, $players[$i]['score']);
-            if (!in_array('BYE', $players[$i]['opponents'])) {
-                if ($this->lowestScoreWithoutBye < 0) {
-                    $this->lowestScoreWithoutBye = $players[$i]['score'];
-                } else {
-                    $this->lowestScoreWithoutBye = min($this->lowestScoreWithoutBye, $players[$i]['score']);
+            if ($byeExist) {
+                $this->byeName = $bye_data['player'];
+                if (!in_array($this->byeName, $players[$i]['opponents'])) {
+                    if ($this->lowestScoreWithoutBye < 0) {
+                        $this->lowestScoreWithoutBye = $players[$i]['score'];
+                    } else {
+                        $this->lowestScoreWithoutBye = min($this->lowestScoreWithoutBye, $players[$i]['score']);
+                    }
                 }
             }
         }
-        //In a weird case where all players have had at least 1 bye
-        $this->lowestScoreWithoutBye = max($this->lowestScoreWithoutBye, 0);
 
-        if ($this->indexOfBye > -1) {
+        if ($byeExist) {
+            //In a weird case where all players have had at least 1 bye
+            $this->lowestScoreWithoutBye = max($this->lowestScoreWithoutBye, 0);
             // $players[$this->indexOfBye]['score'] = $this->lowestScoreWithoutBye - 3;
-            $players[$this->indexOfBye]['score'] = $this->lowestScoreWithoutBye;
+            $bye_data['score'] = $this->lowestScoreWithoutBye;
+            array_push($players, $bye_data);
         }
 
         $weights = $this->weights($players);
@@ -55,6 +56,7 @@ class Pairings
 
     public function weight($highest_points, $player1, $player2)
     {
+        global $byeName;
         $weight = 0;
 
         // A pairing where the participants have not played each other as many times as they have played at least one other participant outscore all pairings where the participants have played the most times.
@@ -63,10 +65,10 @@ class Pairings
 
         if (!in_array($player2['player'], $player1['opponents'])) {
             $weight += $this->quality($highest_points, $highest_points) + 1;
-            if ($player2['player'] == 'BYE' && $player1['score'] == ($this->lowestScoreWithoutBye)) {
+            if ($player2['player'] == $this->byeName && $player1['score'] == ($this->lowestScoreWithoutBye)) {
                 $weight += $this->quality($highest_points, $highest_points) + 1;
             }
-            if ($player1['player'] == 'BYE' && $player2['score'] == ($this->lowestScoreWithoutBye)) {
+            if ($player1['player'] == $this->byeName && $player2['score'] == ($this->lowestScoreWithoutBye)) {
                 $weight += $this->quality($highest_points, $highest_points) + 1;
             }
 
