@@ -1338,7 +1338,7 @@ class Event
                     //echo "about to update scores";
                     $match->updateScores($structure);
                 }
-                if ($structure == 'Swiss') {
+                if (strpos($structure, 'Swiss') === 0) {
                     $this->recalculateScores($structure);
                     Standings::updateStandings($this->name, $this->mainid, 1);
                 } elseif ($structure == 'League') {
