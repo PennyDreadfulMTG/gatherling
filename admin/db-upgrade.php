@@ -583,7 +583,7 @@ if ($version < 28) {
     set_version(28);
 }
 if ($version < 29) {
-    info('Updating to version 29 (Add "Swiss (Blossom)" as new structure type for subevent)...');
+    info('Updating to version 29 (Add "Swiss (Blossom)" as new structure type for subevent). Updating player and event columns on standings table as NON NULL');
     do_query("ALTER TABLE `subevents`
         MODIFY COLUMN
         `type` enum(
@@ -594,6 +594,14 @@ if ($version < 29) {
             'Round Robin'
         )
         DEFAULT NULL AFTER `timing`;");
+    do_query("ALTER TABLE `standings`
+        MODIFY COLUMN
+        `player` VARCHAR(40)
+        NOT NULL;");
+    do_query("ALTER TABLE `standings`
+        MODIFY COLUMN
+        `event` VARCHAR(40)
+        NOT NULL AFTER `player`;");
     set_version(29);
 }
 $db->autocommit(true);
