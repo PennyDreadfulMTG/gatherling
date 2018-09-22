@@ -46,38 +46,41 @@ class Standings
 
     public function save()
     {
-        $db = Database::getConnection();
-        if ($this->new == true) {
-            $this->active = 1;
-            $this->score = 0;
-            $this->matches_played = 0;
-            $this->matches_won = 0;
-            $this->games_won = 0;
-            $this->games_played = 0;
-            $this->byes = 0;
-            $this->OP_Match = 0;
-            $this->PL_Game = 0;
-            $this->OP_Game = 0;
-            $this->seed = 127;
-            $this->matched = 0;
-            $this->draws = 0;
+       $db = Database::getConnection();
+        if (!is_null($this->player) && trim($this->player) != ""
+            && !is_null($this->event) && trim($this->event) != "") {
+            if ($this->new == true) {
+                $this->active = 1;
+                $this->score = 0;
+                $this->matches_played = 0;
+                $this->matches_won = 0;
+                $this->games_won = 0;
+                $this->games_played = 0;
+                $this->byes = 0;
+                $this->OP_Match = 0;
+                $this->PL_Game = 0;
+                $this->OP_Game = 0;
+                $this->seed = 127;
+                $this->matched = 0;
+                $this->draws = 0;
 
-            $stmt = $db->prepare('INSERT INTO standings(player, event, active,
-        matches_played, draws, games_won, games_played, byes, OP_Match, PL_Game,
-        OP_Game, score, seed, matched)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-            $stmt->bind_param('ssdddddddddddd', $this->player, $this->event, $this->active, $this->matches_played, $this->draws, $this->games_won, $this->games_played, $this->byes, $this->OP_Match, $this->PL_Game, $this->OP_Game, $this->score, $this->seed, $this->matched);
-            $stmt->execute() or die($stmt->error);
-            $stmt->close();
-        } else {
-            $stmt = $db->prepare('UPDATE standings SET
-                                player = ?, event = ?, active = ?, matches_played = ?, games_won = ?,
-                                games_played = ?, byes = ?, OP_Match = ?, PL_Game = ?, OP_Game = ?,
-                                score = ?, seed = ?, matched = ?, matches_won = ?, draws = ? WHERE player = ? AND event = ?');
-            $stmt or die($db->error);
-            $stmt->bind_param('ssdddddddddddddss', $this->player, $this->event, $this->active, $this->matches_played, $this->games_won, $this->games_played, $this->byes, $this->OP_Match, $this->PL_Game, $this->OP_Game, $this->score, $this->seed, $this->matched, $this->matches_won, $this->draws, $this->player, $this->event);
-            $stmt->execute() or die($stmt->error);
-            $stmt->close();
+                $stmt = $db->prepare('INSERT INTO standings(player, event, active,
+            matches_played, draws, games_won, games_played, byes, OP_Match, PL_Game,
+            OP_Game, score, seed, matched)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+                $stmt->bind_param('ssdddddddddddd', $this->player, $this->event, $this->active, $this->matches_played, $this->draws, $this->games_won, $this->games_played, $this->byes, $this->OP_Match, $this->PL_Game, $this->OP_Game, $this->score, $this->seed, $this->matched);
+                $stmt->execute() or die($stmt->error);
+                $stmt->close();
+            } else {
+                $stmt = $db->prepare('UPDATE standings SET
+                                    player = ?, event = ?, active = ?, matches_played = ?, games_won = ?,
+                                    games_played = ?, byes = ?, OP_Match = ?, PL_Game = ?, OP_Game = ?,
+                                    score = ?, seed = ?, matched = ?, matches_won = ?, draws = ? WHERE player = ? AND event = ?');
+                $stmt or die($db->error);
+                $stmt->bind_param('ssdddddddddddddss', $this->player, $this->event, $this->active, $this->matches_played, $this->games_won, $this->games_played, $this->byes, $this->OP_Match, $this->PL_Game, $this->OP_Game, $this->score, $this->seed, $this->matched, $this->matches_won, $this->draws, $this->player, $this->event);
+                $stmt->execute() or die($stmt->error);
+                $stmt->close();
+            }
         }
     }
 
