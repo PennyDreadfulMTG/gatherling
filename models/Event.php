@@ -1065,16 +1065,7 @@ class Event
     {
         Standings::resetMatched($this->name);
 
-        // Invalid entries get a fake
-        $players = $this->getPlayers();
-        foreach ($players as $player) {
-            $entry = new Entry($this->name, $player);
-            if (is_null($entry->deck) || !$entry->deck->isValid()) {
-                $playerStandings = new Standings($this->name, $player);
-                $playerStandings->matched = 1;
-                $playerStandings->save();
-            }
-        }
+        $this->skipInvalidDecks();
 
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT player, byes, score FROM standings WHERE event = ? AND active = 1 AND matched = 0 ORDER BY RAND()');
@@ -1088,36 +1079,19 @@ class Event
         if (count($active_players) > 0) {
             $bye_data = [];
             if (count($active_players) % 2 != 0) {
-                $byeNum = 0;
-                while (count($bye_data) == 0) {
-                    if (is_null(Player::findByName('BYE'.$byeNum))) {
-                        $bye_data = ['player'=> 'BYE'.$byeNum, 'score'=>  0, 'opponents'=> [], 'paired'=>false];
-                    } else {
-                        $byeNum++;
-                    }
-                }
+                $bye_data = ['player'=> $this->getByeProxyName(), 'score'=>  0, 'opponents'=> [], 'paired'=>false];
             }
 
             for ($i = 0; $i < count($active_players); $i++) {
-                $list_opponents = [];
+                $list_opponents = $this->getActiveOpponents($active_players[$i]['player'], $subevent_id);
 
                 $standing = new Standings($this->name, $active_players[$i]['player']);
-                $opponents = $standing->getOpponents($this->name, $subevent_id, 1);
-                if ($opponents != null) {
-                    foreach ($opponents as $opponent) {
-                        if ($opponent->active === 1) {
-                            $list_opponents[] = $opponent->player;
-                        }
-                    }
-                }
 
-                if (count($bye_data) > 0 && $standing->byes > 0) {
-                    if (count($list_opponents) < (count($active_players) - 1)) {
-                        //This player hasn't played against the remaining active players
-                        //So they aren't allowed to get another bye this round
-                        $bye_data['opponents'][] = $active_players[$i]['player'];
-                        $list_opponents[] = $bye_data['player'];
-                    }
+                if (count($bye_data) > 0 && $standing->byes > 0 && count($list_opponents) < (count($active_players) - 1)) {
+                    //This player hasn't played against the remaining active players
+                    //So they aren't allowed to get another bye this round
+                    $bye_data['opponents'][] = $active_players[$i]['player'];
+                    $list_opponents[] = $bye_data['player'];
                 }
 
                 $active_players[$i]['opponents'] = $list_opponents;
@@ -1152,6 +1126,45 @@ class Event
                 }
             }
         }
+    }
+
+    private function skipInvalidDecks() {
+        // Invalid entries get a fake
+        $players = $this->getPlayers();
+        foreach ($players as $player) {
+            $entry = new Entry($this->name, $player);
+            if (is_null($entry->deck) || !$entry->deck->isValid()) {
+                $playerStandings = new Standings($this->name, $player);
+                $playerStandings->matched = 1;
+                $playerStandings->save();
+            }
+        }
+    }
+
+    private function getByeProxyName() {
+        $byeNum = 0;
+        while (true) {
+            if (is_null(Player::findByName('BYE'.$byeNum))) {
+                return 'BYE'.$byeNum;
+            }
+            $byeNum++;
+        }
+    }
+
+    private function getActiveOpponents($playername, $subevent) {
+        $list_opponents = [];
+
+        $standing = new Standings($this->name, $playername);
+        $opponents = $standing->getOpponents($this->name, $subevent, 1);
+        if ($opponents != null) {
+            foreach ($opponents as $opponent) {
+                if ($opponent->active === 1) {
+                    $list_opponents[] = $opponent->player;
+                }
+            }
+        }
+
+        return $list_opponents;
     }
 
     // I'm sure there is a proper algorithm to single or double elim with an arbitrary number of players
