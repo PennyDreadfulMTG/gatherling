@@ -1128,7 +1128,8 @@ class Event
         }
     }
 
-    private function skipInvalidDecks() {
+    private function skipInvalidDecks()
+    {
         // Invalid entries get a fake
         $players = $this->getPlayers();
         foreach ($players as $player) {
@@ -1141,7 +1142,8 @@ class Event
         }
     }
 
-    private function getByeProxyName() {
+    private function getByeProxyName()
+    {
         $byeNum = 0;
         while (true) {
             if (is_null(Player::findByName('BYE'.$byeNum))) {
@@ -1151,7 +1153,8 @@ class Event
         }
     }
 
-    private function getActiveOpponents($playername, $subevent) {
+    private function getActiveOpponents($playername, $subevent)
+    {
         $list_opponents = [];
 
         $standing = new Standings($this->name, $playername);
