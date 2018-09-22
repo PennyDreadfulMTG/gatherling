@@ -46,9 +46,9 @@ class Standings
 
     public function save()
     {
-       $db = Database::getConnection();
-        if (!is_null($this->player) && trim($this->player) != ""
-            && !is_null($this->event) && trim($this->event) != "") {
+        $db = Database::getConnection();
+        if (!is_null($this->player) && trim($this->player) != ''
+            && !is_null($this->event) && trim($this->event) != '') {
             if ($this->new == true) {
                 $this->active = 1;
                 $this->score = 0;
