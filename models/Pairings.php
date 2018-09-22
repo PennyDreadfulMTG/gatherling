@@ -56,7 +56,6 @@ class Pairings
 
     public function weight($highest_points, $player1, $player2)
     {
-        global $byeName;
         $weight = 0;
 
         // A pairing where the participants have not played each other as many times as they have played at least one other participant outscore all pairings where the participants have played the most times.
