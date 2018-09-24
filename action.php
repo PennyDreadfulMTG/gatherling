@@ -23,7 +23,7 @@ if (!is_null($player)) {
             }
         }
         $recent = $series->mostRecentEvent();
-        if (!$recent->finalized) {
+        if (!$recent->finalized && !empty($recent->name)) {
             $message = "Your event <a href=\"event.php?event={$recent->name}\">{$recent->name}</a> is ready to start. <br />";
             $reg = count($recent->getPlayers());
             $valid = count($recent->getRegisteredPlayers());
