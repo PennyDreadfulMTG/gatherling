@@ -9,10 +9,21 @@ class Database
         if (!isset($instance)) {
             global $CONFIG;
             $instance = new mysqli($CONFIG['db_hostname'], $CONFIG['db_username'],
-                             $CONFIG['db_password'], $CONFIG['db_database']);
+                             $CONFIG['db_password']);
             if (mysqli_connect_errno()) {
                 echo mysqli_connect_error();
-                die('failed to connect to db');
+                die("\nfailed to connect to mysql server");
+            }
+            $db_selected = $instance->select_db($CONFIG['db_database']);
+            if (!$db_selected) {
+                // If we couldn't, then it either doesn't exist, or we can't see it.
+                $sql = "CREATE DATABASE {$CONFIG['db_database']}";
+
+                self::single_result($sql);
+                $db_selected = $instance->select_db($CONFIG['db_database']);
+                if (!$db_selected) {
+                    die('Error creating database: ' . mysqli_error() . "\n");
+                }
             }
         }
 

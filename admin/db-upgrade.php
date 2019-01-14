@@ -1,5 +1,6 @@
 <?php
 
+error_reporting(E_ALL);
 ini_set('max_execution_time', 300);
 
 // Upgrades the database.  There are a couple of pretty crude checks for
@@ -17,7 +18,6 @@ if (file_exists('../lib.php')) {
 }
 
 session_start();
-error_reporting(E_ALL);
 
 $db = Database::getConnection();
 
