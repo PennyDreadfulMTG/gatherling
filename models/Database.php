@@ -22,7 +22,7 @@ class Database
                 self::single_result($sql);
                 $db_selected = $instance->select_db($CONFIG['db_database']);
                 if (!$db_selected) {
-                    die('Error creating database: ' . mysqli_error() . "\n");
+                    die('Error creating database: '.mysqli_error()."\n");
                 }
             }
         }
