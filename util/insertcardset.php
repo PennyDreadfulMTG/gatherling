@@ -23,7 +23,7 @@ session_start();
 if (PHP_SAPI == 'cli') {
     if (isset($argv[1])) {
         if (strlen($argv[1]) < 4) {
-            $file = file_get_contents("https://raw.githubusercontent.com/mtgjson/mtgjson/master/json/{$argv[1]}.json");
+            $file = file_get_contents("https://mtgjson.com/json/{$argv[1]}.json");
         } else {
             $file = file_get_contents($argv[1]);
         }
@@ -37,7 +37,7 @@ if (PHP_SAPI == 'cli') {
     }
 
     if (isset($_REQUEST['cardsetcode'])) {
-        $file = file_get_contents("https://raw.githubusercontent.com/mtgjson/mtgjson/master/json/{$_REQUEST['cardsetcode']}.json");
+        $file = file_get_contents("https://mtgjson.com/json/{$_REQUEST['cardsetcode']}.json");
     } elseif (isset($_FILES['cardsetfile'])) {
         $file = file_get_contents($_FILES['cardsetfile']['tmp_name']);
     } else {
@@ -93,7 +93,6 @@ if (!$stmt->execute()) {
         $set_already_in = true;
 
         $row = $result->fetch_array();
-        // print(json_encode($row));
         if (is_null($row['code'])) {
             info("$set is missing code ($data->code) in db.");
             $stmt = $database->prepare('UPDATE cardsets SET code = ? WHERE name = ?');
@@ -123,10 +122,10 @@ if (!$set_already_in) {
 }
 
 $stmt = $database->prepare('INSERT INTO cards(cost, convertedcost, name, cardset, type,
-  isw, isu, isb, isr, isg, isp, rarity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  isw, isu, isb, isr, isg, isp, rarity, scryfallId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   ON DUPLICATE KEY UPDATE `cost` = VALUES(`cost`), `convertedcost`= VALUES(`convertedcost`), `type` = VALUES(`type`),
   isw = VALUES(`isw`), isu = VALUES(`isu`), isb = VALUES(`isb`),isr = VALUES(`isr`),isg = VALUES(`isg`),isp = VALUES(`isp`),
-  `rarity` = VALUES(`rarity`);');
+  `rarity` = VALUES(`rarity`),scryfallId = VALUES(`scryfallId`);');
 
 foreach ($data->cards as $card) {
     $cardsparsed++;
@@ -156,7 +155,7 @@ function insertCard($card, $set, $rarity, $stmt)
     $name = normaliseCardName($name);
     echo '<table class="new_card">';
     echo '<tr><th>Name:</th><td>'.$name.'</td></tr>';
-    foreach (['manaCost', 'cmc', 'type', 'rarity'] as $attr) {
+    foreach (['manaCost', 'convertedManaCost', 'type', 'rarity'] as $attr) {
         if (isset($card->{$attr})) {
             echo "<tr><th>{$attr}:</th><td>".$card->{$attr}.'</td></tr>';
         }
@@ -195,9 +194,9 @@ function insertCard($card, $set, $rarity, $stmt)
     $zero = 0;
 
     if (property_exists($card, 'manaCost')) {
-        $stmt->bind_param('sdsssdddddds', $card->manaCost, $card->cmc, $name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity);
+        $stmt->bind_param('sdsssddddddss', $card->manaCost, $card->convertedManaCost, $name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity, $card->scryfallId);
     } else {
-        $stmt->bind_param('sdsssdddddds', $empty_string, $zero, $name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity);
+        $stmt->bind_param('sdsssddddddss', $empty_string, $zero, $name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity, $card->scryfallId);
     }
 
     if (!$stmt->execute()) {

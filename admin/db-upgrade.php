@@ -604,6 +604,13 @@ if ($version < 29) {
         NOT NULL AFTER `player`;');
     set_version(29);
 }
+if ($version<30){
+    info("Updating to version 30 (mtgjson v4 compatibility)");
+    do_query("ALTER TABLE `gatherling`.`cards`
+                CHANGE COLUMN `id` `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+                ADD COLUMN `scryfallId` VARCHAR(36) NULL AFTER `rarity`;");
+
+}
 $db->autocommit(true);
 
 info('DB is up to date!');

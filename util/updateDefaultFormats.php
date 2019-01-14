@@ -35,19 +35,6 @@ function info($text, $newline = true)
 
 function addSet($set)
 {
-    switch ($set) {
-        // Correct discrepancies between Scryfall and MtgJson
-        case 'JVC':
-            $set = 'DD3_JVC';
-            break;
-        case 'NEM':
-            $set = 'NMS';
-            break;
-        case 'PHPR':
-            $set = 'pMEI';
-            break;
-    }
-
     if (PHP_SAPI == 'cli') {
         info("Please add {$set} to the database");
     } else {
