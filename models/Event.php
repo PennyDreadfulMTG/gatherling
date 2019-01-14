@@ -975,6 +975,9 @@ class Event
                 case 'Swiss':
                     $this->swissPairing($subevent_id);
                     break;
+                case 'Swiss (Blossom)':
+                    $this->swissPairingBlossom($subevent_id);
+                    break;
                 case 'Single Elimination':
                     $this->singleElimination($round);
                     break;
@@ -1055,6 +1058,116 @@ class Event
         }
         $player[0]->matched = 1;
         $player[0]->save();
+    }
+
+    // Pairs the current swiss round by using the Blossom method
+    public function swissPairingBlossom($subevent_id)
+    {
+        Standings::resetMatched($this->name);
+
+        $this->skipInvalidDecks();
+
+        $db = Database::getConnection();
+        $stmt = $db->prepare('SELECT player, byes, score FROM standings WHERE event = ? AND active = 1 AND matched = 0 ORDER BY RAND()');
+        $stmt or die($db->error);
+        $stmt->bind_param('s', $this->name);
+        $stmt->execute() or die($stmt->error);
+        $resultSet = $stmt->get_result();
+        $active_players = $resultSet->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+
+        if (count($active_players) > 0) {
+            $bye_data = [];
+            if (count($active_players) % 2 != 0) {
+                $bye_data = ['player'=> $this->getByeProxyName(), 'score'=>  0, 'opponents'=> [], 'paired'=>false];
+            }
+
+            for ($i = 0; $i < count($active_players); $i++) {
+                $list_opponents = $this->getActiveOpponents($active_players[$i]['player'], $subevent_id);
+
+                $standing = new Standings($this->name, $active_players[$i]['player']);
+
+                if (count($bye_data) > 0 && $standing->byes > 0 && count($list_opponents) < (count($active_players) - 1)) {
+                    //This player hasn't played against the remaining active players
+                    //So they aren't allowed to get another bye this round
+                    $bye_data['opponents'][] = $active_players[$i]['player'];
+                    $list_opponents[] = $bye_data['player'];
+                }
+
+                $active_players[$i]['opponents'] = $list_opponents;
+                $active_players[$i]['paired'] = false;
+            }
+
+            $pairings = new Pairings($active_players, $bye_data);
+            $pairing = $pairings->pairing;
+            if (count($bye_data) > 0) {
+                array_push($active_players, $bye_data);
+            }
+            for ($i = 0; $i < count($pairing); $i++) {
+                if ($active_players[$i] != null && !$active_players[$i]['paired']) {
+                    $player1 = new Standings($this->name, $active_players[$i]['player']);
+                    if (count($bye_data) > 0 && $active_players[$pairing[$i]]['player'] == $bye_data['player']) {
+                        $this->award_bye($player1);
+                    } elseif ($active_players[$pairing[$i]] == null || $active_players[$pairing[$i]]['player'] == null) {
+                        //In a very rare case where a player has played against all remaining players
+                        //and the number of active players is even, hence no bye allowed initially
+                        $this->award_bye($player1);
+                    } else {
+                        $player2 = new Standings($this->name, $active_players[$pairing[$i]]['player']);
+                        $this->addPairing($player1, $player2, ($this->current_round + 1), 'P');
+                        $player2->matched = 1;
+                        $player2->save();
+                    }
+
+                    $player1->matched = 1;
+                    $player1->save();
+                    $active_players[$i]['paired'] = true;
+                    $active_players[$pairing[$i]]['paired'] = true;
+                }
+            }
+        }
+    }
+
+    private function skipInvalidDecks()
+    {
+        // Invalid entries get a fake
+        $players = $this->getPlayers();
+        foreach ($players as $player) {
+            $entry = new Entry($this->name, $player);
+            if (is_null($entry->deck) || !$entry->deck->isValid()) {
+                $playerStandings = new Standings($this->name, $player);
+                $playerStandings->matched = 1;
+                $playerStandings->save();
+            }
+        }
+    }
+
+    private function getByeProxyName()
+    {
+        $byeNum = 0;
+        while (true) {
+            if (is_null(Player::findByName('BYE'.$byeNum))) {
+                return 'BYE'.$byeNum;
+            }
+            $byeNum++;
+        }
+    }
+
+    private function getActiveOpponents($playername, $subevent)
+    {
+        $list_opponents = [];
+
+        $standing = new Standings($this->name, $playername);
+        $opponents = $standing->getOpponents($this->name, $subevent, 1);
+        if ($opponents != null) {
+            foreach ($opponents as $opponent) {
+                if ($opponent->active === 1) {
+                    $list_opponents[] = $opponent->player;
+                }
+            }
+        }
+
+        return $list_opponents;
     }
 
     // I'm sure there is a proper algorithm to single or double elim with an arbitrary number of players
@@ -1241,7 +1354,7 @@ class Event
                     //echo "about to update scores";
                     $match->updateScores($structure);
                 }
-                if ($structure == 'Swiss') {
+                if (strpos($structure, 'Swiss') === 0) {
                     $this->recalculateScores($structure);
                     Standings::updateStandings($this->name, $this->mainid, 1);
                 } elseif ($structure == 'League') {
@@ -1377,6 +1490,7 @@ class Event
 
         switch ($structure) {
        case 'Swiss':
+       case 'Swiss (Blossom)':
            $this->AssignMedalsbyStandings();
            break;
        case 'Single Elimination':
