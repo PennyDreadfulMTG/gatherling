@@ -37,6 +37,10 @@ if (PHP_SAPI == 'cli') {
     }
 
     if (isset($_REQUEST['cardsetcode'])) {
+        if ($_REQUEST['cardsetcode'] == "CON") { // Due to an ancient bug in MS-DOS, Windows-based computers can't handle Conflux correctly.
+            $_REQUEST['cardsetcode'] = "CON_";
+        }
+
         $file = file_get_contents("https://mtgjson.com/json/{$_REQUEST['cardsetcode']}.json");
     } elseif (isset($_FILES['cardsetfile'])) {
         $file = file_get_contents($_FILES['cardsetfile']['tmp_name']);
