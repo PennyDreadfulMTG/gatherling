@@ -23,34 +23,33 @@ function activeEvents()
 {
     $db = Database::getConnection();
     $events = Event::getActiveEvents();
-    if ($events){
-    echo "<div class=\"box sidecolumn\">\n";
-    echo "<h4>ACTIVE EVENTS</h4>\n";
+    if ($events) {
+        echo "<div class=\"box sidecolumn\">\n";
+        echo "<h4>ACTIVE EVENTS</h4>\n";
 
         foreach ($events as $event) {
             $name = $event->name;
             $series = $event->series;
             $threadurl = $event->threadurl;
             $format = $event->format;
-        $round = $event->current_round;
-        $col2 = $name;
-        $room = '';
-        $series = new Series($event->series);
-        if ($series->mtgo_room) {
-            $room = '#'.$series->mtgo_room;
+            $round = $event->current_round;
+            $col2 = $name;
+            $room = '';
+            $series = new Series($event->series);
+            if ($series->mtgo_room) {
+                $room = '#'.$series->mtgo_room;
+            }
+            echo "<table class=\"center\">\n";
+            if (strcmp($threadurl, '') != 0) {
+                $col2 = "<a href=\"$threadurl\">".$name.'</a>';
+            }
+            echo "<tr><td width=60>$format</td>\n";
+            echo "<td width=100>$col2<br />$room</td>\n";
+            echo "<td width=50>Round $round</td></tr></table>\n";
         }
         echo "<table class=\"center\">\n";
-        if (strcmp($threadurl, '') != 0) {
-            $col2 = "<a href=\"$threadurl\">".$name.'</a>';
-        }
-        echo "<tr><td width=60>$format</td>\n";
-        echo "<td width=100>$col2<br />$room</td>\n";
-        echo "<td width=50>Round $round</td></tr></table>\n";
-    }
-    echo "<table class=\"center\">\n";
-    echo '</table>';
-    echo '</div>';
-
+        echo '</table>';
+        echo '</div>';
     }
 }
 
