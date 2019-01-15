@@ -2,10 +2,7 @@
 
 include_once 'lib.php';
 
-echo "<div class=\"box sidecolumn\">\n";
-echo "<h4>ACTIVE EVENTS</h4>\n";
 activeEvents();
-echo '</div>';
 
 echo "<div class=\"box sidecolumn\">\n";
 echo "<h4>UPCOMING EVENTS</h4>\n";
@@ -26,11 +23,15 @@ function activeEvents()
 {
     $db = Database::getConnection();
     $events = Event::getActiveEvents();
-    foreach ($events as $event) {
-        $name = $event->name;
-        $series = $event->series;
-        $threadurl = $event->threadurl;
-        $format = $event->format;
+    if ($events){
+    echo "<div class=\"box sidecolumn\">\n";
+    echo "<h4>ACTIVE EVENTS</h4>\n";
+
+        foreach ($events as $event) {
+            $name = $event->name;
+            $series = $event->series;
+            $threadurl = $event->threadurl;
+            $format = $event->format;
         $round = $event->current_round;
         $col2 = $name;
         $room = '';
@@ -48,6 +49,9 @@ function activeEvents()
     }
     echo "<table class=\"center\">\n";
     echo '</table>';
+    echo '</div>';
+
+    }
 }
 
 function upcomingEvents()
