@@ -609,6 +609,7 @@ if ($version < 30) {
     do_query('ALTER TABLE `gatherling`.`cards`
                 CHANGE COLUMN `id` `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
                 ADD COLUMN `scryfallId` VARCHAR(36) NULL AFTER `rarity`;');
+    set_version(30);
 }
 $db->autocommit(true);
 
