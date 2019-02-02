@@ -166,6 +166,7 @@ function printCalcRatingsForm()
 function printAddCardSet()
 {
     echo '<h3><center>Install New Cardset</center></h3>';
+    echo '<form action="util/insertcardset.php" method="post" enctype="multipart/form-data">';
     echo '<table class="form" style="border-width: 0px" align="center">';
     echo '<input type="hidden" name="return" value="admincp.php" />';
     echo '<input type="hidden" name="ret_args" value="view=add_cardset" />';

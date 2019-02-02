@@ -1,5 +1,6 @@
 <?php
 
+error_reporting(E_ALL);
 ini_set('max_execution_time', 300);
 
 // Upgrades the database.  There are a couple of pretty crude checks for
@@ -17,7 +18,6 @@ if (file_exists('../lib.php')) {
 }
 
 session_start();
-error_reporting(E_ALL);
 
 $db = Database::getConnection();
 
@@ -581,6 +581,35 @@ if ($version < 28) {
     do_query('ALTER TABLE `subformats` ADD FOREIGN KEY (`parentformat`) REFERENCES `formats`(`name`) ON DELETE CASCADE ON UPDATE CASCADE;');
     do_query('ALTER TABLE `subformats` ADD FOREIGN KEY (`childformat`) REFERENCES `formats`(`name`) ON DELETE CASCADE ON UPDATE CASCADE;');
     set_version(28);
+}
+if ($version < 29) {
+    info('Updating to version 29 (Add "Swiss (Blossom)" as new structure type for subevent). Updating player and event columns on standings table as NON NULL');
+    do_query("ALTER TABLE `subevents`
+        MODIFY COLUMN
+        `type` enum(
+            'Swiss',
+            'Swiss (Blossom)',
+            'Single Elimination',
+            'League',
+            'Round Robin'
+        )
+        NOT NULL AFTER `timing`;");
+    do_query('ALTER TABLE `standings`
+        MODIFY COLUMN
+        `player` VARCHAR(40)
+        NOT NULL;');
+    do_query('ALTER TABLE `standings`
+        MODIFY COLUMN
+        `event` VARCHAR(40)
+        NOT NULL AFTER `player`;');
+    set_version(29);
+}
+if ($version < 30) {
+    info('Updating to version 30 (mtgjson v4 compatibility)');
+    do_query('ALTER TABLE `gatherling`.`cards`
+                CHANGE COLUMN `id` `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+                ADD COLUMN `scryfallId` VARCHAR(36) NULL AFTER `rarity`;');
+    set_version(30);
 }
 $db->autocommit(true);
 

@@ -22,6 +22,9 @@ class SetScraper
 
         $context = stream_context_create($options);
         $sets = json_decode(file_get_contents($url, false, $context));
+        if (!$sets) {
+            return [];
+        }
         $sets = $sets->sets;
         usort($sets, 'sortSets');
 

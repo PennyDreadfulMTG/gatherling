@@ -431,7 +431,7 @@ class Match
             if ($this->playera_wins > $this->playerb_wins) {
                 if ($structure == 'Single Elimination') {
                     $playerb_standing->active = 0;
-                } elseif ($structure == 'Swiss') {
+                } elseif (strpos($structure, 'Swiss') === 0) {
                     $playera_standing->score += 3;
                 } elseif ($structure == 'League') {
                     $playera_standing->score += 3;
@@ -441,7 +441,7 @@ class Match
             } else {
                 if ($structure == 'Single Elimination') {
                     $playera_standing->active = 0;
-                } elseif ($structure == 'Swiss') {
+                } elseif (strpos($structure, 'Swiss') === 0) {
                     $playerb_standing->score += 3;
                 } elseif ($structure == 'League') {
                     $playerb_standing->score += 3;
