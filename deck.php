@@ -126,9 +126,9 @@ function deckForm($deck = null)
     echo '<td>To enter your deck, please give it ';
     echo 'a name and select an archetype from the drop-down menu below. If ';
     echo 'you do not specify and archetype, your deck will be labeled as ';
-    echo '"Unclassified". To enter cards, save your deck as a .txt file using the ';
-    echo 'official MTGO client, and then copy and paste the maindeck and ';
-    echo 'sideboard into the appropriate text boxes. ';
+    echo '"Unclassified". To enter cards, save your deck as a .txt or .dek file ';
+    echo 'using the official MTGO client, and then copy and paste the maindeck ';
+    echo 'and sideboard into the appropriate text boxes. ';
     //   echo "Do not use a format such as \"1x Card\". ";
     //   echo "The parser will not accept this structure. The correct pattern is ";
     //   echo "\"1 Card\".";
@@ -192,9 +192,9 @@ function deckRegisterForm()
     echo '<td>To enter your deck, please give it ';
     echo 'a name and select an archetype from the drop-down menu below. If ';
     echo 'you do not specify and archetype, your deck will be labeled as ';
-    echo '"Unclassified". To enter cards, save your deck as a .txt file using the ';
-    echo 'official MTGO client, and then copy and paste the maindeck and ';
-    echo 'sideboard into the appropriate text boxes. ';
+    echo '"Unclassified". To enter cards, save your deck as a .txt or .dek file ';
+    echo 'using the official MTGO client, and then copy and paste the maindeck ';
+    echo 'and sideboard into the appropriate text boxes. ';
     echo 'Do not use a format such as "1x Card". ';
     echo 'The parser will not accept this structure. The correct pattern is ';
     echo "\"1 Card\".</td></tr>\n";
