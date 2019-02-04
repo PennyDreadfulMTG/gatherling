@@ -615,7 +615,7 @@ if ($version < 31) {
     info('Updating to version 31 (Increase max length of mtgo_room column)');
     do_query('ALTER TABLE `series`
         MODIFY COLUMN
-        `mtgo_room` VARCHAR(11)
+        `mtgo_room` VARCHAR(20)
         NULL DEFAULT NULL;');
     set_version(31);
 }
