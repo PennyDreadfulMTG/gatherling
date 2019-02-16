@@ -1,4 +1,5 @@
-<?
+<?php
+
 // Have some PHP 5 specific code
 if (get_magic_quotes_gpc()) {
     function stripinputslashes(&$input)
