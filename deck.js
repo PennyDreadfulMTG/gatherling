@@ -27,21 +27,44 @@ $(document).ready(function() {
 });
 
 String.prototype.beforeLastIndex = function (delimiter) {
-    return this.substr(0,this.lastIndexOf(delimiter)) || this + ""
-}
+    return this.substr(0,this.lastIndexOf(delimiter)) || this + "";
+};
+
+String.prototype.afterLastIndex = function (delimiter) {
+    return this.substr(this.lastIndexOf(delimiter)+1) || this + "";
+};
 
 $('input[type=file]').on("change", function(e) {
     var file = e.target.files[0];
+    var fileExt = file.name.afterLastIndex('.');
     reader = new FileReader();
     reader.onload = function (e) {
-        txt = e.target.result.replace(/\n\r/g, '\n');
-        split = txt.split('\n\n');
-        $("#deck-contents").val(split[0]);
-        if (split.length > 1) {
-            $("#deck-sideboard").val(split[1]);
-        }
         $("#deck-name").val(file.name.beforeLastIndex('.'));
-        // TODO: Put sideboard in the right place
+        if (fileExt ==='txt') {
+            txt = e.target.result.replace(/\n\r/g, '\n');
+            split = txt.split('\n\n');
+            $("#deck-contents").val(split[0]);
+            if (split.length > 1) {
+                $("#deck-sideboard").val(split[1]);
+            }
+        } else if (fileExt ==='dek') {
+            $.ajax({
+                url: 'deckXmlParser.php',
+                type:'POST',
+                async: false,  
+                data:
+                {
+                    data:e.target.result
+                },
+                success: function(result)
+                {
+                    deckData = JSON.parse(result);
+                    $("#deck-contents").val(deckData.main.join("\n"));
+                    $("#deck-sideboard").val(deckData.side.join("\n"));
+
+                }
+            });
+        }
     };
     reader.readAsText(file);
 });
