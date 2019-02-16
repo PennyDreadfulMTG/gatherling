@@ -31,9 +31,12 @@ if (version_compare(phpversion(), 6) === -1) {
         array_walk_recursive($_COOKIE, 'stripinputslashes');
     }
 
-    function __autoload($class_name)
-    {
-        return autoload($class_name);
+    if (!function_exists('spl_autoload_register')){
+
+        function __autoload($class_name)
+        {
+            return autoload($class_name);
+        }
     }
 }
 
