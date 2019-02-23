@@ -578,8 +578,8 @@ if ($version < 28) {
         PRIMARY KEY (`id`),
         INDEX `_idx` (`parentformat` ASC, `childformat` ASC)
         );');
-    do_query('ALTER TABLE `subformats` ADD FOREIGN KEY (`parentformat`) REFERENCES `formats`(`name`) ON DELETE CASCADE ON UPDATE CASCADE;');
-    do_query('ALTER TABLE `subformats` ADD FOREIGN KEY (`childformat`) REFERENCES `formats`(`name`) ON DELETE CASCADE ON UPDATE CASCADE;');
+    // do_query('ALTER TABLE `subformats` ADD FOREIGN KEY (`parentformat`) REFERENCES `formats`(`name`) ON DELETE CASCADE ON UPDATE CASCADE;');
+    // do_query('ALTER TABLE `subformats` ADD FOREIGN KEY (`childformat`) REFERENCES `formats`(`name`) ON DELETE CASCADE ON UPDATE CASCADE;');
     set_version(28);
 }
 if ($version < 29) {
