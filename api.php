@@ -1,165 +1,67 @@
 <?php
 
 require_once 'lib.php';
+require_once 'api_lib.php';
 session_start();
-
-$_SESSION['infobot'] = false;
-if (strncmp($_SERVER['HTTP_USER_AGENT'], 'infobot', 7) == 0 && $_REQUEST['passkey'] != $CONFIG['infobot_passkey']) {
-    $_SESSION['infobot'] = true;
-}
 
 $action = '';
 if (isset($_REQUEST['action'])) {
     $action = $_REQUEST['action'];
 }
 
-function populate($array, $src, $keys)
-{
-    foreach ($keys as $key) {
-        $array[$key] = $src->{$key};
-    }
 
-    return $array;
-}
-
-function json_event($event)
-{
-    $series = new Series($event->series);
-    $json = [];
-    // Event Properties
-    $json = populate($json, $event, ['series', 'season', 'number', 'host', 'cohost', 'active', 'finalized', 'current_round', 'start', 'mainrounds', 'mainstruct', 'finalrounds', 'finalstruct']);
-
-    // Series Properties
-    $json = populate($json, $series, ['mtgo_room']);
-
-    $matches = $event->getMatches();
-    if ($matches) {
-        $json['matches'] = [];
-        $json['unreported'] = [];
-        $addrounds = 0;
-        $roundnum = 0;
-        $timing = 0;
-        foreach ($matches as $m) {
-            $data = populate([], $m, ['playera', 'playera_wins', 'playerb', 'playerb_wins', 'timing', 'round', 'verification']);
-            if ($m->timing > $timing) {
-                $timing = $m->timing;
-                $addrounds += $roundnum;
-            }
-            if ($roundnum != $m->round) {
-                $roundnum = $m->round;
-                $json['unreported'] = [];
-            }
-            $data['round'] = $m->round + $addrounds;
-            $json['matches'][] = $data;
-            if ($m->verification != 'verified') {
-                if (!$m->reportSubmitted($m->playera)) {
-                    $json['unreported'][] = $m->playera;
-                }
-                if (!$m->reportSubmitted($m->playerb)) {
-                    $json['unreported'][] = $m->playerb;
-                }
-            }
-        }
-    }
-    if ($event->finalized) {
-        $decks = $event->getDecks();
-        $json['decks'] = [];
-        foreach ($decks as $d) {
-            $json['decks'][] = json_deck($d);
-        }
-
-        $json['finalists'] = $event->getFinalists();
-        $json['standings'] = [];
-        foreach (Standings::getEventStandings($event->name, $event->active) as $s) {
-            $json['standings'][] = populate([], $s, ['player', 'active', 'score', 'matches_played', 'matches_won', 'draws', 'games_won', 'games_played', 'byes', 'OP_Match', 'PL_Game', 'OP_Game', 'seed']);
-        }
-    }
-
-    return $json;
-}
-
-function json_deck($deck)
-{
-    $json = [];
-    $json['id'] = $deck->id;
-    if ($deck->id != 0) {
-        $json['found'] = 1;
-        $json['name'] = $deck->name;
-        $json['archetype'] = $deck->archetype;
-        $json['maindeck'] = $deck->maindeck_cards;
-        $json['sideboard'] = $deck->sideboard_cards;
-    } else {
-        $json['found'] = 0;
-    }
-
-    return $json;
-}
 
 $result = [];
 switch ($action) {
     case 'deckinfo':
+    case 'deck_info':
     $deckid = $_REQUEST['deck'];
     $deck = new Deck($deckid);
-    $result = json_deck($deck);
+    $result = repr_json_deck($deck);
     break;
 
     case 'eventinfo':
+    case 'event_info':
     $eventname = $_REQUEST['event'];
     $event = new Event($eventname);
-    $result = json_event($event);
+    $result = repr_json_event($event);
+    break;
+
+    case 'seriesinfo':
+    case 'series_info':
+    $seriesname = $_REQUEST['series'];
+    try{
+        $series = new Series($seriesname);
+        $result = repr_json_series($series);
+        $result['sucess'] = true;
+    } catch (Exception $e) {
+        $result['sucess'] = false;
+        $result['error'] = $e->getMessage();
+    }
     break;
 
     case 'addplayer':
     $event = new Event($_GET['event']);
-    if ($event->authCheck($_SESSION['username'])) {
-        $new = $_GET['addplayer'];
-        if ($event->addPlayer($new)) {
-            $player = new Player($new);
-            $result['success'] = true;
-            $result['player'] = $player->name;
-            $result['verified'] = $player->verified;
-            $result['event_running'] = $event->active == 1;
-        } else {
-            $result['success'] = false;
-        }
-    } else {
-        $result['error'] = 'Unauthorized';
-        $result['success'] = false;
-    }
+    $player = $_GET['addplayer'];
+    $result = add_player_to_event($event, $player);
     break;
 
     case 'delplayer':
     $event = new Event($_GET['event']);
-    if ($event->authCheck($_SESSION['username'])) {
-        $old = $_GET['delplayer'];
-        $result = [];
-        $result['success'] = $event->removeEntry($old);
-        $result['player'] = $old;
-    } else {
-        $result['error'] = 'Unauthorized';
-        $result['success'] = false;
-    }
+    $player = $_GET['delplayer'];
+    $result = delete_player_from_event($event, $player);
     break;
 
     case 'dropplayer':
     $event = new Event($_GET['event']);
-    if ($event->authCheck($_SESSION['username'])) {
-        $playername = $_GET['dropplayer'];
-        $event->dropPlayer($playername);
-        $result['success'] = true;
-        $result['player'] = $playername;
-        $result['eventname'] = $event->name;
-        $result['round'] = $event->current_round;
-    } else {
-        $result['error'] = 'Unauthorized';
-        $result['success'] = false;
-    }
+    $player = $_GET['dropplayer'];
+    $result = drop_player_from_event($event, $player);
     break;
 
     case 'active_events':
     $events = Event::getActiveEvents();
     foreach ($events as $event) {
-        $result[$event->name] = json_event($event);
+        $result[$event->name] = repr_json_event($event);
     }
     break;
 
@@ -175,8 +77,18 @@ switch ($action) {
     $query->close();
     foreach ($events as $eventname) {
         $event = new Event($eventname);
-        $result[$event->name] = json_event($event);
+        $result[$event->name] = repr_json_event($event);
     }
+    break;
+
+    case 'create_series':
+    $series = $_REQUEST['series'];
+    $active = true;
+    $day = 'Monday';
+    if (isset($_REQUEST['day'])){
+        $day = $_REQUEST['day'];
+    }
+    $result = create_series($series, $active, $day);
     break;
 
     case 'api_version':
