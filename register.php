@@ -44,7 +44,7 @@ function regForm()
     echo "<form action=\"register.php\" method=\"post\" onsubmit=\"return validate_pw()\">\n";
     echo "<table align=\"center\" style=\"border-width: 0px\">\n";
     echo "<center id='notice'>Passwords are required to be at least 8 characters long.</center>\n";
-    echo "<center id='hibp' style='display: none;'>Password check provided by <a href='https://haveibeenpwned.com'>haveibeenpwned.com</a></center>";
+    echo "<center id='hibp' style='display: none;'>Password check provided by <a href='https://haveibeenpwned.com'>haveibeenpwned.com</a> and <a href='https://github.com/djadmin/passw0rd'>passw0rd</a></center>";
     echo "<tr><td><b>MTGO Username</td>\n";
     echo "<td><input class=\"inputbox\" type=\"text\" name=\"username\" value=\"\">\n";
     echo "</td></tr>\n";
