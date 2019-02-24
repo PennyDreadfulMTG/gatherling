@@ -275,7 +275,9 @@ function print_submit_resultForm($match_id, $drop = false)
         echo "<tr><td><input type='radio' name='report' value='D' />The match was a draw</td> </tr>";
     }
     echo '<tr><td></td></tr>';
-    print_checkbox_input('I want to drop from this event', 'drop', $drop);
+    if($match->type !== 'Single Elimination') {
+        print_checkbox_input('I want to drop from this event', 'drop', $drop);
+    }
     echo '<tr><td></td></tr>';
     echo '<tr><td class="buttons">';
     echo '<input class="inputbutton" name="submit" type="submit" value="Submit Match Report" />';
