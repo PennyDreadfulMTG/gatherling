@@ -9,8 +9,6 @@ if (isset($_REQUEST['action'])) {
     $action = $_REQUEST['action'];
 }
 
-
-
 $result = [];
 switch ($action) {
     case 'deckinfo':
@@ -30,7 +28,8 @@ switch ($action) {
     case 'seriesinfo':
     case 'series_info':
     $seriesname = $_REQUEST['series'];
-    try{
+
+    try {
         $series = new Series($seriesname);
         $result = repr_json_series($series);
         $result['sucess'] = true;
@@ -85,7 +84,7 @@ switch ($action) {
     $series = $_REQUEST['series'];
     $active = true;
     $day = 'Monday';
-    if (isset($_REQUEST['day'])){
+    if (isset($_REQUEST['day'])) {
         $day = $_REQUEST['day'];
     }
     $result = create_series($series, $active, $day);

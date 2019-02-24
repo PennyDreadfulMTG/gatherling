@@ -1,4 +1,5 @@
 <?php
+
 if (!isset($_REQUEST['action'])) {
 
     // The below is for backwards compat

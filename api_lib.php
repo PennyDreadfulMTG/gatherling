@@ -1,6 +1,6 @@
 <?php
 
-### Helper Functions
+//## Helper Functions
 function populate($array, $src, $keys)
 {
     foreach ($keys as $key) {
@@ -10,27 +10,31 @@ function populate($array, $src, $keys)
     return $array;
 }
 
-function is_admin() {
-    if (!isset($_SESSION['infobot']))
+function is_admin()
+{
+    if (!isset($_SESSION['infobot'])) {
         $_SESSION['infobot'] = false;
+    }
     if (strncmp($_SERVER['HTTP_USER_AGENT'], 'infobot', 7) == 0 && $_REQUEST['passkey'] == $CONFIG['infobot_passkey']) {
         $_SESSION['infobot'] = true;
         header('X-InfoBot: true');
+
         return true;
     }
 
-    if (!Player::isLoggedIn()){
+    if (!Player::isLoggedIn()) {
         header('X-Logged-In: false');
-    }
-    elseif (Player::getSessionPlayer()->isSuper()){
+    } elseif (Player::getSessionPlayer()->isSuper()) {
         header('X-Admin: true');
+
         return true;
     }
     header('X-Admin: false');
+
     return false;
 }
 
-### Models
+//## Models
 function repr_json_event($event)
 {
     $series = new Series($event->series);
@@ -104,14 +108,17 @@ function repr_json_deck($deck)
     return $json;
 }
 
-function repr_json_series($series){
+function repr_json_series($series)
+{
     $json = populate([], $series, ['name', 'active', 'start_day', 'start_time', 'organizers', 'mtgo_room', 'this_season_format', 'this_season_master_link', 'this_season_season']);
+
     return $json;
 }
 
-### Actions
+//## Actions
 
-function add_player_to_event($event, $name){
+function add_player_to_event($event, $name)
+{
     if ($event->authCheck($_SESSION['username'])) {
         if ($event->addPlayer($name)) {
             $player = new Player($name);
@@ -126,10 +133,12 @@ function add_player_to_event($event, $name){
         $result['error'] = 'Unauthorized';
         $result['success'] = false;
     }
+
     return $result;
 }
 
-function delete_player_from_event($event, $name){
+function delete_player_from_event($event, $name)
+{
     if ($event->authCheck($_SESSION['username'])) {
         $result = [];
         $result['success'] = $event->removeEntry($name);
@@ -138,10 +147,12 @@ function delete_player_from_event($event, $name){
         $result['error'] = 'Unauthorized';
         $result['success'] = false;
     }
+
     return $result;
 }
 
-function drop_player_from_event($event, $name) {
+function drop_player_from_event($event, $name)
+{
     if ($event->authCheck($_SESSION['username'])) {
         $event->dropPlayer($name);
         $result['success'] = true;
@@ -152,18 +163,17 @@ function drop_player_from_event($event, $name) {
         $result['error'] = 'Unauthorized';
         $result['success'] = false;
     }
-    return $result;
 
+    return $result;
 }
 
-function create_series($newseries, $active, $day) {
+function create_series($newseries, $active, $day)
+{
     $result = [];
-    if (!is_admin())
-    {
+    if (!is_admin()) {
         $result['error'] = 'Unauthorized';
         $result['success'] = false;
-    }
-    else {
+    } else {
         $series = new Series('');
         $series->name = $newseries;
         $series->active = $active;
@@ -175,5 +185,6 @@ function create_series($newseries, $active, $day) {
 
         $result['message'] = "New series $series->name was created!";
     }
+
     return $result;
 }
