@@ -34,6 +34,24 @@ function is_admin()
     return false;
 }
 
+function error($msg) {
+    $result = [];
+    $result['error'] = $msg;
+    $result['success'] = false;
+    json_headers();
+    die(json_encode($result));
+}
+
+function arg($key, $default = null){
+    if (!isset($_REQUEST[$key])){
+        if ($default !== null){
+            return $default;
+        }
+        return error("Missing argument '$key'");
+    }
+    return $_REQUEST[$key];
+}
+
 //## Models
 function repr_json_event($event)
 {
@@ -184,7 +202,30 @@ function create_series($newseries, $active, $day)
         $series->save();
 
         $result['message'] = "New series $series->name was created!";
+        $result['success'] = true;
+        $result['series'] = $series;
     }
 
+    return $result;
+}
+
+
+function create_event() {
+    $name = arg('name', '');
+    $naming = '';
+    if ($name == '') {
+        $naming = 'auto';
+    }
+
+
+    $event = Event::CreateEvent(arg('year'), arg('month'), arg('day'), arg('hour'), $naming, $name,
+                    arg('format'), arg('host', ''), arg('cohost', ''), arg('kvalue', ''), arg('series'), arg('season'),
+                    arg('number'), arg('threadurl',''), arg('metaurl',''), arg('reporturl', ''), arg('prereg_allowed', ''),
+                    arg('pkonly', ''), arg('player_reportable', ''), arg('late_entry_limit', ''),
+                    arg('mainrounds', ''), arg('mainstruct', ''), arg('finalrounds', ''), arg('finalstruct', ''));
+
+    $result = [];
+    $result['success'] = true;
+    $result['event'] = $event;
     return $result;
 }

@@ -90,6 +90,10 @@ switch ($action) {
     $result = create_series($series, $active, $day);
     break;
 
+    case 'create_event':
+    $result = create_event();
+    break;
+
     case 'api_version':
     $result['version'] = 2;
     break;
