@@ -197,8 +197,6 @@ function create_series($newseries, $active, $day)
         $series->active = $active;
         $series->start_time = '0:00:00';
         $series->start_day = $day;
-        $series->prereg_default = true;
-        $series->pkonly_default = false;
         $series->save();
 
         $result['message'] = "New series $series->name was created!";

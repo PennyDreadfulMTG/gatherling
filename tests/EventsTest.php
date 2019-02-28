@@ -16,8 +16,6 @@ final class EventsTest extends TestCase
             $series->active = true;
             $series->start_time = '00:00'.':00';
             $series->start_day = 'Friday';
-            $series->prereg_default = true;
-            $series->pkonly_default = false;
             $series->save();
         }
 
