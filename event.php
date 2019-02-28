@@ -1113,70 +1113,31 @@ function noEvent($event)
 
 function insertEvent()
 {
-    $event = new Event('');
-    $event->start = "{$_POST['year']}-{$_POST['month']}-{$_POST['day']} {$_POST['hour']}:00";
     if (!isset($_POST['naming'])) {
         $_POST['naming'] = '';
     }
 
-    if (strcmp($_POST['naming'], 'auto') == 0) {
-        $event->name = sprintf('%s %d.%02d', $_POST['series'], $_POST['season'], $_POST['number']);
-    } else {
-        $event->name = $_POST['name'];
-    }
-
-    $event->format = $_POST['format'];
-    $event->host = $_POST['host'];
-    $event->cohost = $_POST['cohost'];
-    $event->kvalue = $_POST['kvalue'];
-    $event->series = $_POST['series'];
-    $event->season = $_POST['season'];
-    $event->number = $_POST['number'];
-    $event->threadurl = $_POST['threadurl'];
-    $event->metaurl = $_POST['metaurl'];
-    $event->reporturl = $_POST['reporturl'];
-
     if (!isset($_POST['prereg_allowed'])) {
-        $event->prereg_allowed = 0;
-    } else {
-        $event->prereg_allowed = $_POST['prereg_allowed'];
+        $_POST['prereg_allowed'] = 0;
     }
 
     if (!isset($_POST['pkonly'])) {
-        $event->pkonly = 0;
-    } else {
-        $event->pkonly = $_POST['pkonly']; // Dabil added
+        $_POST['pkonly'] = 0;
     }
 
     if (!isset($_POST['player_reportable'])) {
-        $event->player_reportable = 0;
-    } else {
-        $event->player_reportable = $_POST['player_reportable'];
+        $_POST['player_reportable'] = 0;
     }
 
     if (!isset($_POST['late_entry_limit'])) {
-        $event->late_entry_limit = 0;
-    } else {
-        $event->late_entry_limit = $_POST['late_entry_limit'];
+        $_POST['late_entry_limit'] = 0;
     }
 
-    if ($_POST['mainrounds'] == '') {
-        $_POST['mainrounds'] = 3;
-    }
-    if ($_POST['mainstruct'] == '') {
-        $_POST['mainstruct'] = 'Swiss (Blossom)';
-    }
-    $event->mainrounds = $_POST['mainrounds'];
-    $event->mainstruct = $_POST['mainstruct'];
-    if ($_POST['finalrounds'] == '') {
-        $_POST['finalrounds'] = 0;
-    }
-    if ($_POST['finalstruct'] == '') {
-        $_POST['finalstruct'] = 'Single Elimination';
-    }
-    $event->finalrounds = $_POST['finalrounds'];
-    $event->finalstruct = $_POST['finalstruct'];
-    $event->save();
+    $event = Event::CreateEvent($_POST['year'], $_POST['month'], $_POST['day'], $_POST['hour'], $_POST['naming'], $_POST['name'],
+                       $_POST['format'], $_POST['host'], $_POST['cohost'], $_POST['kvalue'], $_POST['series'], $_POST['season'],
+                       $_POST['number'], $_POST['threadurl'], $_POST['metaurl'], $_POST['reporturl'], $_POST['prereg_allowed'],
+                       $_POST['pkonly'], $_POST['player_reportable'], $_POST['late_entry_limit'],
+                       $_POST['mainrounds'], $_POST['mainstruct'], $_POST['finalrounds'], $_POST['finalstruct']);
 
     return $event;
 }
