@@ -10,8 +10,7 @@ if ($version < 31) {
 
 if ($gatherlingoutofservice != 1) {
     session_start();
-    print_header('Home');
-    ?>
+    print_header('Home'); ?>
 
     <div id="gatherling_main" class="box grid_12">
         <div class="alpha omega uppertitle">Gatherling</div>

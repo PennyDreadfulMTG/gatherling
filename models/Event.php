@@ -150,8 +150,9 @@ class Event
     public static function CreateEvent($year, $month, $day, $hour, $naming, $name, $format, $host, $cohost,
                                        $kvalue, $series, $season, $number, $threadurl, $metaurl, $reporturl,
                                        $prereg_allowed, $pkonly, $player_reportable, $late_entry_limit,
-                                       $mainrounds, $mainstruct, $finalrounds, $finalstruct) {
-        $event = new Event('');
+                                       $mainrounds, $mainstruct, $finalrounds, $finalstruct)
+    {
+        $event = new self('');
         $event->start = "{$year}-{$month}-{$day} {$hour}:00";
 
         if (strcmp($naming, 'auto') == 0) {
@@ -170,7 +171,6 @@ class Event
         $event->threadurl = $threadurl;
         $event->metaurl = $metaurl;
         $event->reporturl = $reporturl;
-
 
         $event->prereg_allowed = $prereg_allowed;
 
