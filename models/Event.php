@@ -139,12 +139,66 @@ class Event
         $this->new = false;
     }
 
-    public static function session_timeout_stat()
+    public static function session_timeout_stat() // Katelyn: Why is this here???
     {
         // Get the current Session Timeout Value
         $currentTimeoutInSecs = ini_get('session.gc_maxlifetime');
 
         return $currentTimeoutInSecs;
+    }
+
+    public static function CreateEvent($year, $month, $day, $hour, $naming, $name, $format, $host, $cohost,
+                                       $kvalue, $series, $season, $number, $threadurl, $metaurl, $reporturl,
+                                       $prereg_allowed, $pkonly, $player_reportable, $late_entry_limit,
+                                       $mainrounds, $mainstruct, $finalrounds, $finalstruct)
+    {
+        $event = new self('');
+        $event->start = "{$year}-{$month}-{$day} {$hour}:00";
+
+        if (strcmp($naming, 'auto') == 0) {
+            $event->name = sprintf('%s %d.%02d', $series, $season, $number);
+        } else {
+            $event->name = $name;
+        }
+
+        $event->format = $format;
+        $event->host = $host;
+        $event->cohost = $cohost;
+        $event->kvalue = $kvalue;
+        $event->series = $series;
+        $event->season = $season;
+        $event->number = $number;
+        $event->threadurl = $threadurl;
+        $event->metaurl = $metaurl;
+        $event->reporturl = $reporturl;
+
+        $event->prereg_allowed = $prereg_allowed;
+
+        $event->pkonly = $pkonly; // Dabil added
+
+        $event->player_reportable = $player_reportable;
+
+        $event->late_entry_limit = $late_entry_limit;
+
+        if ($mainrounds == '') {
+            $mainrounds = 3;
+        }
+        if ($mainstruct == '') {
+            $mainstruct = 'Swiss (Blossom)';
+        }
+        $event->mainrounds = $mainrounds;
+        $event->mainstruct = $mainstruct;
+        if ($finalrounds == '') {
+            $finalrounds = 0;
+        }
+        if ($finalstruct == '') {
+            $finalstruct = 'Single Elimination';
+        }
+        $event->finalrounds = $finalrounds;
+        $event->finalstruct = $finalstruct;
+        $event->save();
+
+        return $event;
     }
 
     public function save()

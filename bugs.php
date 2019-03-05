@@ -1,1 +1,0 @@
-<li> Including a # in event names currently leads to <a href="https://github.com/PennyDreadfulMTG/gatherling/issues/24">bad things</a>. The easiest workaround is to not name your events with hashtags. </li>

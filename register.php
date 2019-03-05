@@ -4,6 +4,8 @@ require_once 'lib_form_helper.php';
 
 print_header('Register');
 ?>
+<script src="passw0rd.js"></script>
+<script src="password_checker.js"></script>
 
 <div class="grid_10 suffix_1 prefix_1">
 <div id="gatherling_main" class="box">
@@ -39,16 +41,18 @@ function content()
 
 function regForm()
 {
-    echo "<form action=\"register.php\" method=\"post\">\n";
+    echo "<form action=\"register.php\" method=\"post\" onsubmit=\"return validate_pw()\">\n";
     echo "<table align=\"center\" style=\"border-width: 0px\">\n";
+    echo "<center id='notice'>Passwords are required to be at least 8 characters long.</center>\n";
+    echo "<center id='hibp' style='display: none;'>Password check provided by <a href='https://haveibeenpwned.com'>haveibeenpwned.com</a> and <a href='https://github.com/djadmin/passw0rd'>passw0rd</a></center>";
     echo "<tr><td><b>MTGO Username</td>\n";
     echo "<td><input class=\"inputbox\" type=\"text\" name=\"username\" value=\"\">\n";
     echo "</td></tr>\n";
     echo "<tr><td><b>Password</td>\n";
-    echo "<td><input class=\"inputbox\" type=\"password\" name=\"pw1\" value=\"\">\n";
+    echo "<td><input class=\"inputbox\" type=\"password\" name=\"pw1\" id=\"pw\" value=\"\">\n";
     echo '</td></tr>';
     echo "<tr><td><b>Confirm Password</td>\n";
-    echo "<td><input class=\"inputbox\" type=\"password\" name=\"pw2\" value=\"\">\n";
+    echo "<td><input class=\"inputbox\" type=\"password\" name=\"pw2\" id=\"pw2\" value=\"\">\n";
     echo "</td></tr>\n";
     echo "<tr><td><b>Email</td>\n";
     echo "<td><input class=\"inputbox\" type=\"email\" name=\"email\" value=\"\">\n";

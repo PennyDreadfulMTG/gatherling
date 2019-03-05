@@ -381,14 +381,17 @@ function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, 
 
 function print_changePassForm($player, $result)
 {
+    echo '<script src="passw0rd.js"></script>';
+    echo '<script src="password_checker.js"></script>';
     if (isset($_REQUEST['tooshort'])) {
         echo "<center><h3>You must change your password to continue</h3></center>\n";
     } else {
         echo "<center><h3>Changing your password</h3></center>\n";
     }
-    echo "<center>Passwords are required to be at least 8 characters long.</center>\n";
+    echo "<center id='notice'>Passwords are required to be at least 8 characters long.</center>\n";
+    echo "<center id='hibp' style='display: none;'>Password check provided by <a href='https://haveibeenpwned.com'>haveibeenpwned.com</a> and <a href='https://github.com/djadmin/passw0rd'>passw0rd</a></center>";
     echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
-    echo "<form action=\"player.php\" method=\"post\">\n";
+    echo "<form action=\"player.php\" method=\"post\" onsubmit=\"return validate_pw()\">\n";
     echo "<input name=\"action\" type=\"hidden\" value=\"changePassword\" />\n";
     echo "<input name=\"mode\" type=\"hidden\" value=\"changepass\" />\n";
     echo "<input name=\"username\" type=\"hidden\" value=\"{$player->name}\" />\n";
@@ -396,9 +399,9 @@ function print_changePassForm($player, $result)
     echo "<tr><th>Current Password</th>\n";
     echo "<td><input class=\"inputbox\" name=\"oldPassword\" type=\"password\" /></td></tr>\n";
     echo "<tr><th>New Password</th>\n";
-    echo "<td><input class=\"inputbox\" name=\"newPassword\" type=\"password\" /></td></tr>\n";
+    echo "<td><input class=\"inputbox\" name=\"newPassword\" id=\"pw\" type=\"password\" /></td></tr>\n";
     echo "<tr><th>Repeat New Password</th>\n";
-    echo "<td><input class=\"inputbox\" name=\"newPassword2\" type=\"password\" /></td></tr>\n";
+    echo "<td><input class=\"inputbox\" name=\"newPassword2\" id=\"pw2\" type=\"password\" /></td></tr>\n";
     echo "<tr><td colspan=\"2\" class=\"buttons\">\n";
     echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Change Password\" />\n";
     echo "</td></tr></table>\n";
