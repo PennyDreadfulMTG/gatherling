@@ -157,7 +157,6 @@ function content()
         $newevent->kvalue = $oldevent->kvalue;
         $newevent->finalized = 0;
         $newevent->prereg_allowed = $oldevent->prereg_allowed;
-        $newevent->pkonly = $oldevent->pkonly;
         $newevent->threadurl = $oldevent->threadurl;
         $newevent->reporturl = $oldevent->reporturl;
         $newevent->metaurl = $oldevent->metaurl;
@@ -1141,12 +1140,6 @@ function insertEvent()
         $event->prereg_allowed = $_POST['prereg_allowed'];
     }
 
-    if (!isset($_POST['pkonly'])) {
-        $event->pkonly = 0;
-    } else {
-        $event->pkonly = $_POST['pkonly']; // Dabil added
-    }
-
     if (!isset($_POST['player_reportable'])) {
         $event->player_reportable = 0;
     } else {
@@ -1182,9 +1175,6 @@ function insertEvent()
 
 function updateEvent()
 {
-    if (!isset($_POST['pkonly'])) {
-        $_POST['pkonly'] = 0;
-    }
     if (!isset($_POST['finalized'])) {
         $_POST['finalized'] = 0;
     }
@@ -1219,7 +1209,6 @@ function updateEvent()
     $event->active = $_POST['active'];
     $event->current_round = $_POST['newmatchround'];
     $event->prereg_allowed = $_POST['prereg_allowed'];
-    $event->pkonly = $_POST['pkonly'];
     $event->player_reportable = $_POST['player_reportable'];
     $event->prereg_cap = $_POST['prereg_cap'];
     $event->private_decks = $_POST['private_decks'];
