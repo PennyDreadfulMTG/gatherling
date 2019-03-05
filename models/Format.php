@@ -165,9 +165,8 @@ class Format
                                            WHERE name = ?', 's', $type);
         if (strcasecmp($tribe, $type) == 0) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     public static function doesFormatExist($format)
@@ -245,24 +244,20 @@ class Format
         // there are 3 different format types: system, public, private
 
         $player = new Player($playerName); // to access isOrganizer and isSuper functions
-        $authorized = false;
 
         switch ($this->type) {
             case 'System':
-                $authorized = true; // anyone can view a system format
-                break;
             case 'Public':
-                $authorized = true; // anyone can view a public format
-                break;
+                return true; // anyone can view a system and public format
             case 'Private':
                 // Only supers and organizers can view private formats
                 if ($player->isOrganizer($this->series_name) || $player->isSuper()) {
-                    $authorized = true;
+                    return true;
                 }
                 break;
         }
 
-        return $authorized;
+        return false;
     }
 
     public function save()
@@ -577,7 +572,6 @@ class Format
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT rarity FROM cards WHERE name = ? AND cardset = ?');
-        $isLegal = false;
         $cardRarities = [];
 
         foreach ($this->legal_sets as $setName) {
@@ -590,46 +584,46 @@ class Format
         }
         $stmt->close();
 
+        $cardRarities = array_unique($cardRarities, SORT_STRING); //Get only the unique values
+
         foreach ($cardRarities as $rarity) {
             switch ($rarity) {
-                case 'Land':
                 case 'Basic Land':
-                    $isLegal = true;
-                    break;
+                    return true;
                 case 'Common':
                 case 'common':
                     if ($this->allow_commons == 1) {
-                        $isLegal = true;
+                        return true;
                     }
                     break;
                 case 'Uncommon':
                 case 'uncommon':
                     if ($this->allow_uncommons == 1) {
-                        $isLegal = true;
+                        return true;
                     }
                     break;
                 case 'Rare':
                 case 'rare':
                     if ($this->allow_rares == 1) {
-                        $isLegal = true;
+                        return true;
                     }
                     break;
                 case 'Mythic Rare':
                 case 'mythic rare':
                     if ($this->allow_mythics == 1) {
-                        $isLegal = true;
+                        return true;
                     }
                     break;
                 case 'Timeshifted':
                 case 'timeshifted':
                     if ($this->allow_timeshifted == 1) {
-                        $isLegal = true;
+                        return true;
                     }
                     break;
                 case 'Special':
                 case 'special':
                     if ($this->vanguard == 1) {
-                        $isLegal = true;
+                        return true;
                     }
                     break;
                 default:
@@ -638,7 +632,7 @@ class Format
             }
         }
 
-        return $isLegal;
+        return false;
     }
 
     public function isCardOnBanList($card)
@@ -700,6 +694,7 @@ class Format
             case 'Relentless Rats':
             case 'Rat Colony':
             case 'Shadowborn Apostle':
+            case 'Persistent Petitioners':
              case 'Swamp':
              case 'Plains':
              case 'Island':
@@ -719,17 +714,15 @@ class Format
 
     public function isCardSingletonLegal($card, $amt)
     {
-        $isLegal = false;
-
         if ($amt == 1) {
-            $isLegal = true;
+            return true;
         }
 
         if ($this->isCardBasic($card)) {
-            $isLegal = true;
+            return true;
         }
 
-        return $isLegal;
+        return false;
     }
 
     public static function getCardType($card)
@@ -759,74 +752,32 @@ class Format
 
     public static function isChangeling($card)
     {
-        $foundChangeling = false;
         switch ($card) {
             case 'Amoeboid Changeling':
-                $foundChangeling = true;
-                break;
             case 'Avian Changeling':
-                $foundChangeling = true;
-                break;
             case 'Cairn Wanderer':
-                $foundChangeling = true;
-                break;
             case 'Chameleon Colossus':
-                $foundChangeling = true;
-                break;
             case 'Changeling Berserker':
-                $foundChangeling = true;
-                break;
             case 'Changeling Hero':
-                $foundChangeling = true;
-                break;
             case 'Changeling Sentinel':
-                $foundChangeling = true;
-                break;
             case 'Changeling Titan':
-                $foundChangeling = true;
-                break;
             case 'Fire-Belly Changeling':
-                $foundChangeling = true;
-                break;
             case 'Game-Trail Changeling':
-                $foundChangeling = true;
-                break;
             case 'Ghostly Changeling':
-                $foundChangeling = true;
-                break;
             case 'Mirror Entity':
-                $foundChangeling = true;
-                break;
             case 'Mistform Ultimus':
-                $foundChangeling = true;
-                break;
             case 'Moonglove Changeling':
-                $foundChangeling = true;
-                break;
             case 'Mothdust Changeling':
-                $foundChangeling = true;
-                break;
             case 'Shapesharer':
-                $foundChangeling = true;
-                break;
             case 'Skeletal Changeling':
-                $foundChangeling = true;
-                break;
             case 'Taurean Mauler':
-                $foundChangeling = true;
-                break;
             case 'Turtleshell Changeling':
-                $foundChangeling = true;
-                break;
             case 'War-Spike Changeling':
-                $foundChangeling = true;
-                break;
             case 'Woodland Changeling':
-                $foundChangeling = true;
-                break;
+                return true;
+            default:
+                return false;
         }
-
-        return $foundChangeling;
     }
 
     public function getTribe($deckID)
@@ -1145,38 +1096,34 @@ class Format
 
     public function isQuantityLegal($card, $amt)
     {
-        $isLegal = false;
-
         if ($amt <= 4) {
-            $isLegal = true;
+            return true;
         }
 
         if ($this->isCardBasic($card)) {
-            $isLegal = true;
+            return true;
         }
 
-        return $isLegal;
+        return false;
     }
 
     public function isQuantityLegalAgainstMain($sideCard, $sideAmt, $mainCard, $mainAmt)
     {
-        $isLegal = false;
-
         if ($sideCard == $mainCard) {
             if (($sideAmt + $mainAmt) <= 4) {
-                $isLegal = true;
+                return true;
             }
 
             if ($this->isCardBasic($sideCard)) {
-                $isLegal = true;
+                return true;
             }
         } else {
-            $isLegal = true; // mainCard and sideCard don't match so is automatically legal
-                             // individual quantity check has already been done. We are only
-                             // interested in finding too many of the same card between the side and main
+            return true; // mainCard and sideCard don't match so is automatically legal
+                         // individual quantity check has already been done. We are only
+                         // interested in finding too many of the same card between the side and main
         }
 
-        return $isLegal;
+        return false;
     }
 
     public function insertCardIntoBanlist($card)
@@ -1239,7 +1186,9 @@ class Format
             return false; // card not found in database
         }
 
-        if ($this->isCardOnBanList($card) || $this->isCardOnLegalList($card) || $this->isCardOnLegalList($card)) {
+        if ($this->isCardOnRestrictedList($card)) {
+            return true;
+        } elseif ($this->isCardOnBanList($card)) {
             return false;
         } else {
             $db = Database::getConnection();
