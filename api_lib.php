@@ -232,8 +232,9 @@ function create_event()
     return $result;
 }
 
-function create_pairing($event, $round, $a, $b, $res){
-    if (!is_admin() && !$event->authCheck(Player::loginName())){
+function create_pairing($event, $round, $a, $b, $res)
+{
+    if (!is_admin() && !$event->authCheck(Player::loginName())) {
         error('Unauthorized');
     }
 
@@ -271,7 +272,7 @@ function create_pairing($event, $round, $a, $b, $res){
             $res = 'P';
             break;
         default:
-            error("unexpected value for res.  Expected one of [2-0, 2-1, 1-2, 0-2, D, P].");
+            error('unexpected value for res.  Expected one of [2-0, 2-1, 1-2, 0-2, D, P].');
             break;
     }
     if ($res == 'P') {
@@ -279,5 +280,4 @@ function create_pairing($event, $round, $a, $b, $res){
     } else {
         $event->addMatch($playerA, $playerB, $rnd, $res, $pAWins, $pBWins);
     }
-
 }
