@@ -1189,7 +1189,7 @@ class Format
 
         if ($this->isCardOnRestrictedList($card)) {
             return true;
-        } elseif ($this->isCardOnBanList($card)) {
+        } elseif ($this->isCardOnBanList($card) || $this->isCardOnLegalList($card)) {
             return false;
         } else {
             $db = Database::getConnection();
