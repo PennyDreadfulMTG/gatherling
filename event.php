@@ -533,7 +533,6 @@ function eventForm($event = null, $forcenew = false)
         echo '</td></tr>';
         print_checkbox_input('Allow Pre-Registration', 'prereg_allowed', $event->prereg_allowed);
         print_text_input('Late Entry Limit', 'late_entry_limit', $event->late_entry_limit, 4, 'The event host may still add players after this round.');
-        // print_checkbox_input('Pauper Krew Members Only', 'pkonly', $event->pkonly);
 
         print_checkbox_input('Allow Players to Report Results', 'player_reportable', $event->player_reportable);
 
@@ -1851,7 +1850,7 @@ function authFailed()
     echo 'You are not permitted to make that change. Please contact the ';
     echo 'event host to modify this event. If you <b>are</b> the event host, ';
     echo 'or feel that you should have privilege to modify this event, you ';
-    echo 'should contact Dabil via the Pauper Krew forums.<br /><br />';
+    echo 'should contact the admin via <a href="https://discord.gg/2VJ8Fa6">the Discord server</a>.<br><br>';
 }
 
 function fileInputForm($event)
