@@ -75,7 +75,7 @@ function repr_json_event($event)
         $roundnum = 0;
         $timing = 0;
         foreach ($matches as $m) {
-            $data = populate([], $m, ['playera', 'playera_wins', 'playerb', 'playerb_wins', 'timing', 'round', 'verification']);
+            $data = populate([], $m, ['id', 'playera', 'playera_wins', 'playerb', 'playerb_wins', 'timing', 'round', 'verification']);
             if ($m->timing > $timing) {
                 $timing = $m->timing;
                 $addrounds += $roundnum;
@@ -230,4 +230,54 @@ function create_event()
     $result['event'] = $event;
 
     return $result;
+}
+
+function create_pairing($event, $round, $a, $b, $res){
+    if (!is_admin() && !$event->authCheck(Player::loginName())){
+        error('Unauthorized');
+    }
+
+    $playerA = new Standings($event->name, $pA);
+    $playerB = new Standings($event->name, $pB);
+    switch ($res) {
+        case '2-0':
+            $pAWins = 2;
+            $pBWins = 0;
+            $res = 'A';
+            break;
+        case '2-1':
+            $pAWins = 2;
+            $pBWins = 1;
+            $res = 'A';
+            break;
+        case '1-2':
+            $pAWins = 1;
+            $pBWins = 2;
+            $res = 'B';
+            break;
+        case '0-2':
+            $pAWins = 0;
+            $pBWins = 2;
+            $res = 'B';
+            break;
+        case 'D':
+        case 'draw':
+            $pAWins = 1;
+            $pBWins = 1;
+            $res = 'D';
+            break;
+        case 'P':
+        case 'paired':
+            $res = 'P';
+            break;
+        default:
+            error("unexpected value for res.  Expected one of [2-0, 2-1, 1-2, 0-2, D, P].");
+            break;
+    }
+    if ($res == 'P') {
+        $event->addPairing($playerA, $playerB, $rnd, $res);
+    } else {
+        $event->addMatch($playerA, $playerB, $rnd, $res, $pAWins, $pBWins);
+    }
+
 }

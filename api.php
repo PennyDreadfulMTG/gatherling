@@ -94,6 +94,16 @@ switch ($action) {
     $result = create_event();
     break;
 
+    case 'create_pairing':
+    $event = new Event(arg('event'));
+    $round = arg('round');
+    $a = arg('player_a');
+    $b = arg('player_b');
+    $res = arg('res', 'P');
+
+    create_pairing($event, $round, $a, $b, $res);
+    break;
+
     case 'api_version':
     $result['version'] = 2;
     break;
