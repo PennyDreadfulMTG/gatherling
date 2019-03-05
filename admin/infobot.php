@@ -21,10 +21,10 @@ if (!$player) {
     return;
 }
 
-if (strncmp($_REQUEST['action'], 'verify') == 0) {
+if (strcmp($_REQUEST['mode'], 'verify') == 0) {
     $player->setChallenge($challenge);
     echo "<UaReply>Your verification code for {$CONFIG['site_name']} is $challenge</UaReply>";
-} elseif (strncmp($_REQUEST['action'], 'reset') == 0) {
+} elseif (strcmp($_REQUEST['mode'], 'reset') == 0) {
     $player->setPassword($challenge);
     echo "<UaReply>Your temporary password for {$CONFIG['site_name']} is $challenge</UaReply>";
 } else {

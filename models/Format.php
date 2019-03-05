@@ -597,31 +597,37 @@ class Format
                     $isLegal = true;
                     break;
                 case 'Common':
+                case 'common':
                     if ($this->allow_commons == 1) {
                         $isLegal = true;
                     }
                     break;
                 case 'Uncommon':
+                case 'uncommon':
                     if ($this->allow_uncommons == 1) {
                         $isLegal = true;
                     }
                     break;
                 case 'Rare':
+                case 'rare':
                     if ($this->allow_rares == 1) {
                         $isLegal = true;
                     }
                     break;
                 case 'Mythic Rare':
+                case 'mythic rare':
                     if ($this->allow_mythics == 1) {
                         $isLegal = true;
                     }
                     break;
                 case 'Timeshifted':
+                case 'timeshifted':
                     if ($this->allow_timeshifted == 1) {
                         $isLegal = true;
                     }
                     break;
                 case 'Special':
+                case 'special':
                     if ($this->vanguard == 1) {
                         $isLegal = true;
                     }

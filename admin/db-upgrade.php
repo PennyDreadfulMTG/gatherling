@@ -606,10 +606,18 @@ if ($version < 29) {
 }
 if ($version < 30) {
     info('Updating to version 30 (mtgjson v4 compatibility)');
-    do_query('ALTER TABLE `gatherling`.`cards`
+    do_query('ALTER TABLE `cards`
                 CHANGE COLUMN `id` `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
                 ADD COLUMN `scryfallId` VARCHAR(36) NULL AFTER `rarity`;');
     set_version(30);
+}
+if ($version < 31) {
+    info('Updating to version 31 (Increase max length of mtgo_room column)');
+    do_query('ALTER TABLE `series`
+        MODIFY COLUMN
+        `mtgo_room` VARCHAR(20)
+        NULL DEFAULT NULL;');
+    set_version(31);
 }
 $db->autocommit(true);
 
