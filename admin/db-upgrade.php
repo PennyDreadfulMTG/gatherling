@@ -621,6 +621,8 @@ if ($version < 31) {
 }
 if ($version < 32) {
     info('Updating to version 32 (Remove Pauper Krew related columns)');
+    do_query('ALTER TABLE `players`
+        DROP COLUMN `pkmember`;');
     do_query('ALTER TABLE `events`
         DROP COLUMN `pkonly`;');
     do_query('ALTER TABLE `series`
