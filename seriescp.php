@@ -218,12 +218,6 @@ function printSeriesForm($series)
         echo 'checked ';
     }
     echo '/></td></tr>';
-    // echo '<tr><th>Pauper Krew Members Only Default</th>';
-    // echo '<td><input type="checkbox" value="1" name="pkonlydefault" ';
-    // if ($series->pkonly_default == 1) {
-    //     echo 'checked ';
-    // }
-    // echo '/></td></tr>';
     print_text_input('MTGO Room', 'mtgo_room', $series->mtgo_room);
 
     // Submit button
@@ -444,19 +438,12 @@ function handleActions()
             $prereg = $_POST['preregdefault'];
         }
 
-        if (!isset($_POST['pkonlydefault'])) {
-            $pkonly = 0;
-        } else {
-            $pkonly = $_POST['pkonlydefault'];
-        }
-
         $series = new Series($seriesname);
         if ($series->authCheck(Player::loginName())) {
             $series->active = $newactive;
             $series->start_time = $newtime.':00';
             $series->start_day = $newday;
             $series->prereg_default = $prereg;
-            $series->pkonly_default = $pkonly;
             $series->mtgo_room = $room;
             $series->save();
         }
