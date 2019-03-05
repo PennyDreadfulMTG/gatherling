@@ -164,7 +164,7 @@ class Event
                                                number, season, series, threadurl, reporturl,
                                                metaurl, prereg_allowed, finalized, player_reportable,
                                                prereg_cap, player_editdecks, private_decks, private_finals, player_reported_draws, late_entry_limit)
-                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?)');
+                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?)');
             $stmt->bind_param('sssssdddssssdddddddd', $this->name, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
                                              $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl,
                                              $this->metaurl, $this->prereg_allowed, $this->player_reportable,
