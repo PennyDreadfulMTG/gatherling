@@ -6,7 +6,6 @@ class Player
     public $password;
     public $host;
     public $super;
-    public $pkmember;
     public $rememberMe; // if selected will record IP address. Gatherling will automatically log players in of known IP addresses.
     public $ipAddress;
     public $emailAddress;
@@ -21,7 +20,6 @@ class Player
             $this->name = '';
             $this->password = null;
             $this->super = 0;
-            $this->pkmember = 0;
             $this->rememberMe = 0;
             $this->verified = 0;
             $this->theme = null;
@@ -30,13 +28,13 @@ class Player
         }
         $database = Database::getConnection();
         $stmt = $database->prepare('SELECT name, password, rememberme, INET_NTOA(ipaddress), host, super,
-                pkmember, mtgo_confirmed, email, email_privacy, timezone, theme FROM players WHERE name = ?');
+                mtgo_confirmed, email, email_privacy, timezone, theme FROM players WHERE name = ?');
         $stmt or die($database->error);
 
         $stmt->bind_param('s', $name);
         $stmt->execute();
         $stmt->bind_result($this->name, $this->password, $this->rememberMe, $this->ipAddress, $this->host, $this->super,
-                $this->pkmember, $this->verified, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->theme);
+                $this->verified, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->theme);
         if ($stmt->fetch() == null) {
             throw new Exception('Player '.$name.' is not found.');
         }
@@ -165,8 +163,8 @@ class Player
     public function save()
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('UPDATE players SET password = ?, rememberme = ?, host = ?, super = ?, pkmember = ?, email = ?, email_privacy = ?, timezone = ? WHERE name = ?');
-        $stmt->bind_param('sddddsdds', $this->password, $this->rememberMe, $this->host, $this->super, $this->pkmember, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->name);
+        $stmt = $db->prepare('UPDATE players SET password = ?, rememberme = ?, host = ?, super = ?, email = ?, email_privacy = ?, timezone = ? WHERE name = ?');
+        $stmt->bind_param('sddddsdds', $this->password, $this->rememberMe, $this->host, $this->super, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->name);
         $stmt->execute();
         $stmt->close();
     }
@@ -243,11 +241,6 @@ class Player
                                         FROM series_organizers
                                         WHERE player = '{$this->name}' AND series = '{$seriesName}'") > 0;
         }
-    }
-
-    public static function isPKmember()
-    {
-        return $this->pkmember == 1;
     }
 
     public function getHostedEvents()
