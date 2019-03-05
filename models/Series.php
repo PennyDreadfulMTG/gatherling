@@ -87,7 +87,7 @@ class Series
             $this->mtgo_room = substr($this->mtgo_room, 1);
         }
         if ($this->new) {
-            $stmt = $db->prepare('INSERT INTO series(name, day, normalstart, isactive, prereg_default, mtgo_room) values(?, ?, ?, ?, ?, ?, ?)');
+            $stmt = $db->prepare('INSERT INTO series(name, day, normalstart, isactive, prereg_default, mtgo_room) values(?, ?, ?, ?, ?, ?)');
             $stmt->bind_param('sssdds', $this->name, $this->start_day, $this->start_time, $this->active, $this->prereg_default, $this->mtgo_room);
             $stmt->execute() or die($stmt->error);
             $stmt->close();
