@@ -700,6 +700,7 @@ class Format
             case 'Relentless Rats':
             case 'Rat Colony':
             case 'Shadowborn Apostle':
+            case 'Persistent Petitioners':
              case 'Swamp':
              case 'Plains':
              case 'Island':
