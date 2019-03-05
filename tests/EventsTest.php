@@ -17,7 +17,6 @@ final class EventsTest extends TestCase
             $series->start_time = '00:00'.':00';
             $series->start_day = 'Friday';
             $series->prereg_default = true;
-            $series->pkonly_default = false;
             $series->save();
         }
 
@@ -60,7 +59,6 @@ final class EventsTest extends TestCase
         $event->reporturl = '';
 
         $event->prereg_allowed = 1;
-        $event->pkonly = 0;
         $event->player_reportable = 1;
 
         $event->mainrounds = 3;
