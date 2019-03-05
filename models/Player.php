@@ -164,7 +164,7 @@ class Player
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('UPDATE players SET password = ?, rememberme = ?, host = ?, super = ?, email = ?, email_privacy = ?, timezone = ? WHERE name = ?');
-        $stmt->bind_param('sddddsdds', $this->password, $this->rememberMe, $this->host, $this->super, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->name);
+        $stmt->bind_param('sdddsdds', $this->password, $this->rememberMe, $this->host, $this->super, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->name);
         $stmt->execute();
         $stmt->close();
     }
