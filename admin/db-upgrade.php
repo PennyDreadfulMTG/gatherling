@@ -619,6 +619,14 @@ if ($version < 31) {
         NULL DEFAULT NULL;');
     set_version(31);
 }
+if ($version < 32) {
+    info('Updating to version 32 (Remove Pauper Krew related columns)');
+    do_query('ALTER TABLE `events`
+        DROP COLUMN `pkonly`;');
+    do_query('ALTER TABLE `series`
+        DROP COLUMN `pkonly_default`;');
+    set_version(32);
+}
 $db->autocommit(true);
 
 info('DB is up to date!');
