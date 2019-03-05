@@ -132,8 +132,6 @@ function printCreateNewSeriesForm()
     // Pre-registration on by default?
     echo '<tr><th>Pre-Registration Default</th>';
     echo '<td><input type="checkbox" value="1" name="preregdefault" /></td></tr>';
-    echo '<tr><th>Pauper Krew Members Only Default</th>';
-    echo '<td><input type="checkbox" value="1" name="pkonlydefault" /></td></tr>';
 
     // Submit button
     echo '<tr><td colspan="2" class="buttons">';
@@ -228,7 +226,6 @@ function handleActions()
         $newtime = $_POST['hour'];
         $newday = $_POST['start_day'];
         $prereg = 0;
-        $pkonly = 0;
 
         if (isset($_POST['preregdefault'])) {
             $prereg = $_POST['preregdefault'];
@@ -236,11 +233,6 @@ function handleActions()
             $prereg = 0;
         }
 
-        if (isset($_POST['pkonlydefault'])) {
-            $pkonly = $_POST['pkonlydefault'];
-        } else {
-            $pkonly = 0;
-        }
         $series = new Series('');
         $newseries = $_POST['seriesname'];
         if ($series->authCheck(Player::loginName())) {
@@ -249,7 +241,6 @@ function handleActions()
             $series->start_time = $newtime.':00';
             $series->start_day = $newday;
             $series->prereg_default = $prereg;
-            $series->pkonly_default = $pkonly;
             $series->save();
         }
         $result = "New series $series->name was created!";
