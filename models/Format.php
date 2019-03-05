@@ -166,6 +166,7 @@ class Format
         if (strcasecmp($tribe, $type) == 0) {
             return true;
         }
+
         return false;
     }
 
