@@ -15,7 +15,6 @@ class Series
     public $this_season_season;
 
     public $prereg_default;
-    public $pkonly_default;
 
     public function __construct($name)
     {
@@ -27,18 +26,17 @@ class Series
             $this->bannedplayers = [];
             $this->new = true;
             $this->prereg_default = true;
-            $this->pkonly_default = false;
             $this->mtgo_room = '';
 
             return;
         }
 
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT isactive, day, normalstart, prereg_default, pkonly_default, mtgo_room FROM series WHERE name = ?');
+        $stmt = $db->prepare('SELECT isactive, day, normalstart, prereg_default, mtgo_room FROM series WHERE name = ?');
         $stmt or die($db->error);
         $stmt->bind_param('s', $name);
         $stmt->execute();
-        $stmt->bind_result($this->active, $this->start_day, $this->start_time, $this->prereg_default, $this->pkonly_default, $this->mtgo_room);
+        $stmt->bind_result($this->active, $this->start_day, $this->start_time, $this->prereg_default, $this->mtgo_room);
         if ($stmt->fetch() == null) {
             throw new Exception('Series '.$name.' not found in DB');
         }
@@ -89,16 +87,16 @@ class Series
             $this->mtgo_room = substr($this->mtgo_room, 1);
         }
         if ($this->new) {
-            $stmt = $db->prepare('INSERT INTO series(name, day, normalstart, isactive, prereg_default, pkonly_default, mtgo_room) values(?, ?, ?, ?, ?, ?, ?)');
-            $stmt->bind_param('sssddds', $this->name, $this->start_day, $this->start_time, $this->active, $this->prereg_default, $this->pkonly_default, $this->mtgo_room);
+            $stmt = $db->prepare('INSERT INTO series(name, day, normalstart, isactive, prereg_default, mtgo_room) values(?, ?, ?, ?, ?, ?, ?)');
+            $stmt->bind_param('sssddds', $this->name, $this->start_day, $this->start_time, $this->active, $this->prereg_default, $this->mtgo_room);
             $stmt->execute() or die($stmt->error);
             $stmt->close();
         } else {
             $stmt = $db->prepare('UPDATE series
-                            SET day = ?, normalstart = ?, isactive = ?, prereg_default = ?, pkonly_default = ?, mtgo_room = ?
+                            SET day = ?, normalstart = ?, isactive = ?, prereg_default = ?, mtgo_room = ?
                             WHERE name = ?');
             $stmt or die($db->error);
-            $stmt->bind_param('ssdddss', $this->start_day, $this->start_time, $this->active, $this->prereg_default, $this->pkonly_default, $this->mtgo_room, $this->name);
+            $stmt->bind_param('ssdddss', $this->start_day, $this->start_time, $this->active, $this->prereg_default, $this->mtgo_room, $this->name);
             $stmt->execute() or die($stmt->error);
             $stmt->close();
         }
