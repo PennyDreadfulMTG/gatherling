@@ -514,7 +514,8 @@ function version_number()
 
 function version_tagline()
 {
-    echo 'Gatherling version 4.8.5 ("That\'s my secret, Captain: I\'m always angry...")';
+    echo 'Gatherling version 4.8.6 ("I\'m gonna steal the declaration of independence.")';
+    // echo 'Gatherling version 4.8.5 ("That\'s my secret, Captain: I\'m always angry...")';
     // echo 'Gatherling version 4.8.4 ("It doesn\'t look like anything to me.")';
     // echo 'Gatherling version 4.8.3 ("These violent delights have violent ends.")';
     // print "Gatherling version 4.8.2 (\"Zagreus taking time apart. / Zagreus fears the hero heart. / Zagreus seeks the final part. / The reward that he is reaping..\")";
