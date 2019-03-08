@@ -10,7 +10,7 @@ $HC = '#DDDDDD';
 $R1 = '#EEEEEE';
 $R2 = '#FFFFFF';
 $CC = $R1;
-putenv('TZ=US/Eastern'); // force time functions to use US/Eastern time
+date_default_timezone_set('US/Eastern'); // force time functions to use US/Eastern time
 
 function is_assoc($array)
 {
