@@ -15,7 +15,6 @@ class Series
     public $this_season_season;
 
     public $prereg_default;
-    public $pkonly_default;
 
     public function __construct($name)
     {
@@ -27,7 +26,6 @@ class Series
             $this->bannedplayers = [];
             $this->new = true;
             $this->prereg_default = true;
-            $this->pkonly_default = false;
             $this->mtgo_room = '';
 
             return;

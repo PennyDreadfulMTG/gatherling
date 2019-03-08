@@ -661,7 +661,7 @@ function matchupTable($deck)
       echo '</ul>';
       echo 'Please contact the event host to modify this deck. If you <b>are</b> the event host ';
       echo 'or feel that you should have privilege to modify this deck, you ';
-      echo 'should contact Dabil via the Pauper Krew forums.<br><br>';
+      echo 'should contact the admin via <a href="https://discord.gg/2VJ8Fa6">the Discord server</a>.<br><br>';
   }
 
   function loginRequired()
