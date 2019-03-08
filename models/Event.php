@@ -13,7 +13,6 @@ class Event
     public $active;
     public $finalized;
     public $prereg_allowed;
-    public $pkonly;
     public $threadurl;
     public $reporturl;
     public $metaurl;
@@ -63,7 +62,6 @@ class Event
             $this->start = null;
             $this->finalized = 0;
             $this->prereg_allowed = 0;
-            $this->pkonly = 0;
             $this->hastrophy = 0;
             $this->new = true;
             $this->active = 0;
@@ -82,7 +80,7 @@ class Event
         if (!$this->new) {
             $db = Database::getConnection();
             $stmt = $db->prepare('SELECT format, host, cohost, series, season, number,
-                                   start, kvalue, finalized, prereg_allowed, pkonly, threadurl,
+                                   start, kvalue, finalized, prereg_allowed, threadurl,
                                    metaurl, reporturl, active, current_round, player_reportable, player_editdecks,
                                     prereg_cap, private_decks, private_finals, player_reported_draws, late_entry_limit FROM events WHERE name = ?');
             if (!$stmt) {
@@ -91,7 +89,7 @@ class Event
             $stmt->bind_param('s', $name);
             $stmt->execute();
             $stmt->bind_result($this->format, $this->host, $this->cohost, $this->series, $this->season, $this->number,
-                         $this->start, $this->kvalue, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->threadurl,
+                         $this->start, $this->kvalue, $this->finalized, $this->prereg_allowed, $this->threadurl,
                           $this->metaurl, $this->reporturl, $this->active, $this->current_round, $this->player_reportable, $this->player_editdecks,
                           $this->prereg_cap, $this->private_decks, $this->private_finals, $this->player_reported_draws, $this->late_entry_limit);
             if ($stmt->fetch() == null) {
@@ -218,12 +216,12 @@ class Event
         if ($this->new) {
             $stmt = $db->prepare('INSERT INTO events(name, start, format, host, cohost, kvalue,
                                                number, season, series, threadurl, reporturl,
-                                               metaurl, prereg_allowed, finalized, pkonly, player_reportable,
+                                               metaurl, prereg_allowed, finalized, player_reportable,
                                                prereg_cap, player_editdecks, private_decks, private_finals, player_reported_draws, late_entry_limit)
-                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?)');
-            $stmt->bind_param('sssssdddssssddddddddd', $this->name, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
+                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?)');
+            $stmt->bind_param('sssssdddssssdddddddd', $this->name, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
                                              $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl,
-                                             $this->metaurl, $this->prereg_allowed, $this->pkonly, $this->player_reportable,
+                                             $this->metaurl, $this->prereg_allowed, $this->player_reportable,
                                              $this->prereg_cap, $this->player_editdecks, $this->private_decks, $this->private_finals, $this->player_reported_draws, $this->late_entry_limit);
             $stmt->execute() or die($stmt->error);
             $stmt->close();
@@ -234,14 +232,14 @@ class Event
             $stmt = $db->prepare('UPDATE events SET
       start = ?, format = ?, host = ?, cohost = ?, kvalue = ?,
       number = ?, season = ?, series = ?, threadurl = ?, reporturl = ?,
-      metaurl = ?, finalized = ?, prereg_allowed = ?, pkonly = ?, active = ?,
+      metaurl = ?, finalized = ?, prereg_allowed = ?, active = ?,
       current_round = ?, player_reportable = ?, prereg_cap = ?,
       player_editdecks = ?, private_decks = ?, private_finals = ?, player_reported_draws = ?, late_entry_limit = ?
       WHERE name = ?');
             $stmt or die($db->error);
-            $stmt->bind_param('ssssdddssssdddddddddddds', $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
+            $stmt->bind_param('ssssdddssssddddddddddds', $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
         $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl,
-        $this->metaurl, $this->finalized, $this->prereg_allowed, $this->pkonly, $this->active,
+        $this->metaurl, $this->finalized, $this->prereg_allowed, $this->active,
         $this->current_round, $this->player_reportable, $this->prereg_cap,
         $this->player_editdecks, $this->private_decks, $this->private_finals, $this->player_reported_draws, $this->late_entry_limit,
         $this->name);
@@ -907,28 +905,8 @@ class Event
     public static function getNextPreRegister($num = 20)
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE prereg_allowed = 1 AND pkonly = 0 AND finalized = 0 AND DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() ORDER BY start LIMIT ?');
+        $stmt = $db->prepare('SELECT name FROM events WHERE prereg_allowed = 1 AND finalized = 0 AND DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() ORDER BY start LIMIT ?');
         // 180 minute interal in Date_Sub is to compensate for time zone difference from Server and Eastern Standard Time which is what all events are quoted in
-        $stmt->bind_param('d', $num);
-        $stmt->execute();
-        $stmt->bind_result($nextevent);
-        $event_names = [];
-        while ($stmt->fetch()) {
-            $event_names[] = $nextevent;
-        }
-        $stmt->close();
-        $events = [];
-        foreach ($event_names as $eventname) {
-            $events[] = new self($eventname);
-        }
-
-        return $events;
-    }
-
-    public static function getNextPKPreRegister($num = 4)
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE prereg_allowed = 1 AND pkonly = 1 AND start > NOW() ORDER BY start LIMIT ?');
         $stmt->bind_param('d', $num);
         $stmt->execute();
         $stmt->bind_result($nextevent);

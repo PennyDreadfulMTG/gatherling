@@ -157,7 +157,6 @@ function content()
         $newevent->kvalue = $oldevent->kvalue;
         $newevent->finalized = 0;
         $newevent->prereg_allowed = $oldevent->prereg_allowed;
-        $newevent->pkonly = $oldevent->pkonly;
         $newevent->threadurl = $oldevent->threadurl;
         $newevent->reporturl = $oldevent->reporturl;
         $newevent->metaurl = $oldevent->metaurl;
@@ -533,7 +532,6 @@ function eventForm($event = null, $forcenew = false)
         echo '</td></tr>';
         print_checkbox_input('Allow Pre-Registration', 'prereg_allowed', $event->prereg_allowed);
         print_text_input('Late Entry Limit', 'late_entry_limit', $event->late_entry_limit, 4, 'The event host may still add players after this round.');
-        // print_checkbox_input('Pauper Krew Members Only', 'pkonly', $event->pkonly);
 
         print_checkbox_input('Allow Players to Report Results', 'player_reportable', $event->player_reportable);
 
@@ -1121,10 +1119,6 @@ function insertEvent()
         $_POST['prereg_allowed'] = 0;
     }
 
-    if (!isset($_POST['pkonly'])) {
-        $_POST['pkonly'] = 0;
-    }
-
     if (!isset($_POST['player_reportable'])) {
         $_POST['player_reportable'] = 0;
     }
@@ -1144,9 +1138,6 @@ function insertEvent()
 
 function updateEvent()
 {
-    if (!isset($_POST['pkonly'])) {
-        $_POST['pkonly'] = 0;
-    }
     if (!isset($_POST['finalized'])) {
         $_POST['finalized'] = 0;
     }
@@ -1181,7 +1172,6 @@ function updateEvent()
     $event->active = $_POST['active'];
     $event->current_round = $_POST['newmatchround'];
     $event->prereg_allowed = $_POST['prereg_allowed'];
-    $event->pkonly = $_POST['pkonly'];
     $event->player_reportable = $_POST['player_reportable'];
     $event->prereg_cap = $_POST['prereg_cap'];
     $event->private_decks = $_POST['private_decks'];
@@ -1812,7 +1802,7 @@ function authFailed()
     echo 'You are not permitted to make that change. Please contact the ';
     echo 'event host to modify this event. If you <b>are</b> the event host, ';
     echo 'or feel that you should have privilege to modify this event, you ';
-    echo 'should contact Dabil via the Pauper Krew forums.<br /><br />';
+    echo 'should contact the admin via <a href="https://discord.gg/2VJ8Fa6">the Discord server</a>.<br><br>';
 }
 
 function fileInputForm($event)

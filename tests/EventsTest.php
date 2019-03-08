@@ -58,7 +58,6 @@ final class EventsTest extends TestCase
         $event->reporturl = '';
 
         $event->prereg_allowed = 1;
-        $event->pkonly = 0;
         $event->player_reportable = 1;
 
         $event->mainrounds = 3;
