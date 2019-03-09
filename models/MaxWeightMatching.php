@@ -1,4 +1,5 @@
 <?php
+
 $DEBUG = null;
 $CHECK_DELTA = false;
 
@@ -22,7 +23,7 @@ class MaxWeightMatching
         foreach ($this->edges as $edge) {
             list($i, $j, $w) = $edge;
             assert($i >= 0 && $j >= 0 && $i != $j);
-            $this->nvertex = max($this->nvertex, $i+1, $j+1);
+            $this->nvertex = max($this->nvertex, $i + 1, $j + 1);
         }
 
         $weights = [];
@@ -150,6 +151,7 @@ class MaxWeightMatching
         foreach ($path as $b) {
             $this->label[$b] = 1;
         }
+
         return $base;
     }
 
@@ -775,7 +777,6 @@ class MaxWeightMatching
                 } elseif ($deltatype == 4) {
                     $this->expandBlossom($deltablossom, false);
                 }
-
             }
 
             if (!$augmented) {
