@@ -40,18 +40,21 @@ switch ($action) {
     break;
 
     case 'addplayer':
+    case 'add_player':
     $event = new Event($_GET['event']);
     $player = $_GET['addplayer'];
     $result = add_player_to_event($event, $player);
     break;
 
     case 'delplayer':
+    case 'delete_player':
     $event = new Event($_GET['event']);
     $player = $_GET['delplayer'];
     $result = delete_player_from_event($event, $player);
     break;
 
     case 'dropplayer':
+    case 'drop_player':
     $event = new Event($_GET['event']);
     $player = $_GET['dropplayer'];
     $result = drop_player_from_event($event, $player);

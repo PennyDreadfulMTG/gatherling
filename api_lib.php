@@ -102,12 +102,12 @@ function repr_json_event($event)
         foreach ($decks as $d) {
             $json['decks'][] = repr_json_deck($d);
         }
+    }
 
-        $json['finalists'] = $event->getFinalists();
-        $json['standings'] = [];
-        foreach (Standings::getEventStandings($event->name, $event->active) as $s) {
-            $json['standings'][] = populate([], $s, ['player', 'active', 'score', 'matches_played', 'matches_won', 'draws', 'games_won', 'games_played', 'byes', 'OP_Match', 'PL_Game', 'OP_Game', 'seed']);
-        }
+    $json['finalists'] = $event->getFinalists();
+    $json['standings'] = [];
+    foreach (Standings::getEventStandings($event->name, $event->active) as $s) {
+        $json['standings'][] = populate([], $s, ['player', 'active', 'score', 'matches_played', 'matches_won', 'draws', 'games_won', 'games_played', 'byes', 'OP_Match', 'PL_Game', 'OP_Game', 'seed']);
     }
 
     return $json;
