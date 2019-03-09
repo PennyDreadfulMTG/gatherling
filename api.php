@@ -60,6 +60,21 @@ switch ($action) {
     $result = drop_player_from_event($event, $player);
     break;
 
+    case 'add_deck':
+    $event = new Event(arg('event'));
+    $player = arg('player');
+    $entries = $event->getEntries();
+    foreach ($entries as $entry) {
+        if ($entry->player->name == $player) {
+            if ($entry->deck) {
+                error('Decklist already exists');
+            }
+            // TODO
+        }
+    }
+
+    break;
+
     case 'active_events':
     $events = Event::getActiveEvents();
     foreach ($events as $event) {
