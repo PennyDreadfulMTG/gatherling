@@ -268,7 +268,7 @@ function fullmetagame($event)
     echo '<table style="border-width: 0px;" align="center">';
     $hg = headerColor();
     echo '<tr style="">';
-    if (($event->finalized && !$event->active) || $event->private_decks == 0 || ($event->current_round > $event->mainrounds && !$event->private_finals)) {
+    if ($event->decklistsVisible()) {
         echo "<td colspan=5 align=\"center\"><b>Metagame Breakdown</td></tr>\n";
         while ($row = $result->fetch_assoc()) {
             if ($row['colors'] != $color) {
