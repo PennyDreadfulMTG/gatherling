@@ -25,6 +25,9 @@ class Database
                     die('Error creating database: '.mysqli_error()."\n");
                 }
             }
+             
+            $sql = "SET time_zone = 'America/New_York'"; // Ensure EST
+            $instance->query($sql);
         }
 
         return $instance;
