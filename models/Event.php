@@ -306,7 +306,8 @@ class Event
         return $playername;
     }
 
-    public function decklistsVisible() {
+    public function decklistsVisible()
+    {
         return ($this->finalized && !$this->active) || $this->private_decks == 0 || ($this->current_round > $this->mainrounds && !$this->private_finals);
     }
 
