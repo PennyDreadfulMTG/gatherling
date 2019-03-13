@@ -34,7 +34,7 @@ foreach ($active_series as $series_name) {
             echo $player;
             $count++;
         } else {
-            if (count <= 3) {
+            if ($count <= 3) {
                 echo ', '.$player;
             }
         }
