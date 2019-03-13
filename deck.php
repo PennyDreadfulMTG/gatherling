@@ -400,8 +400,8 @@ function deckInfoCell($deck)
         $deckplayer = new Player($deck->playername);
         $line3 .= $deckplayer->linkTo();
         $targetUrl = 'eventreport';
-        $player = Player::getSessionPlayer();
-        if ($event->authCheck($player->name)) {
+        $player = Player::loginName();
+        if ($player && $event->authCheck($player)) {
             $targetUrl = 'event';
         }
         $line3 .= " in <a href=\"${targetUrl}.php?event=".rawurlencode($deck->eventname)."\"><span class=\"eventname\" title=\"{$day}\">{$event->name}</span></a>\n";

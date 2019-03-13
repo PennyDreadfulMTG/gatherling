@@ -64,11 +64,15 @@ if (!is_null($player)) {
             } elseif ($player_number == 'a' and ($match->playera_wins + $match->playera_losses) > 0) {
                 // Report Submitted
             } else {
-                if ($match->player_reportable_check() == true) {
-                    $message = "You have an unreported match in $event->name vs. ".$oppplayer->linkTo().'.';
-                    $message = $message.'<a href="player.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
+                $message = "You have an unreported match in $event->name vs. ";
+                if ($event->decklistsVisible()) {
+                    $opp_entry = Entry::findByEventAndPlayer($event->name, $oppplayer->name);
+                    $message = $message.$oppplayer->name.' ('.$opp_entry->deck->linkTo().').';
                 } else {
-                    $message = "You have an unreported match in $match->eventname.";
+                    $message = $message.$oppplayer->linkTo().'.';
+                }
+                if ($match->player_reportable_check() == true) {
+                    $message = $message.'  <a href="player.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
                 }
             }
         } elseif ($match->result != 'BYE' && $match->verification == 'failed') {

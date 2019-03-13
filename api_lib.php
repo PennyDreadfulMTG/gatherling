@@ -119,8 +119,7 @@ function repr_json_deck($deck)
     $json['id'] = $deck->id;
     if ($deck->id != 0) {
         $json['found'] = 1;
-        $json['name'] = $deck->name;
-        $json['archetype'] = $deck->archetype;
+        $json = populate($json, $deck, ['name', 'archetype', 'notes']);
         $json['maindeck'] = $deck->maindeck_cards;
         $json['sideboard'] = $deck->sideboard_cards;
     } else {
