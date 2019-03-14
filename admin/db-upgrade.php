@@ -620,13 +620,16 @@ if ($version < 31) {
     set_version(31);
 }
 if ($version < 32) {
-    info('Updating to version 32 (Remove Pauper Krew related columns)');
-    do_query('ALTER TABLE `players`
-        DROP COLUMN `pkmember`;');
-    do_query('ALTER TABLE `events`
-        DROP COLUMN `pkonly`;');
-    do_query('ALTER TABLE `series`
-        DROP COLUMN `pkonly_default`;');
+    // Katelyn: While this seems like a good idea, actually removing columns is data loss we'd rather avoid.
+    // For now, simply not querying them is good enough.
+
+    // info('Updating to version 32 (Remove Pauper Krew related columns)');
+    // do_query('ALTER TABLE `players`
+    //     DROP COLUMN `pkmember`;');
+    // do_query('ALTER TABLE `events`
+    //     DROP COLUMN `pkonly`;');
+    // do_query('ALTER TABLE `series`
+    //     DROP COLUMN `pkonly_default`;');
     set_version(32);
 }
 $db->autocommit(true);
