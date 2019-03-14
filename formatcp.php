@@ -881,10 +881,10 @@ function formatCPMenu($active_format, $seriesName)
         if ($active_format->eternal) {
             echo ' | ';
             print_tooltip('Legal Sets', 'All sets are legal, as this is an Eternal format');
-        } else if ($active_format->modern) {
+        } elseif ($active_format->modern) {
             echo ' | ';
             print_tooltip('Legal Sets', 'This format uses Modern Legality to determine legal sets');
-        } else if ($active_format->standard) {
+        } elseif ($active_format->standard) {
             echo ' | ';
             print_tooltip('Legal Sets', 'This format uses Standard Legality to determine legal sets');
         } else {
