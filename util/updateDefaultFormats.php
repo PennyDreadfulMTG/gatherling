@@ -168,6 +168,10 @@ function updatePennyDreadful($name, $url)
     info(' ', false);
     foreach ($legal_cards as $card) {
         if (!in_array($card, $fmt->card_legallist)) {
+            if ($fmt->isCardOnBanList($card)) {
+                info("{$card} is banned");
+                continue;
+            }
             $success = $fmt->insertCardIntoLegallist($card);
             if (!$success) {
                 info("Can't add {$card} to $name Legal list, it is not in the database.");
