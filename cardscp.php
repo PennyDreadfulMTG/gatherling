@@ -134,7 +134,7 @@ function printSetList()
 
     $sets = [];
     $db = Database::getConnection();
-    $stmt = $db->prepare('SELECT `name`, `code`, `released`, `type` FROM gatherling.cardsets');
+    $stmt = $db->prepare('SELECT `name`, `code`, `released`, `type` FROM `cardsets`');
     $stmt->execute();
     $stmt->bind_result($name, $code, $released, $type);
     while ($stmt->fetch()) {
