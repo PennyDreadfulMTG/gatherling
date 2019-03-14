@@ -81,10 +81,10 @@ function updateStandard()
         } else {
             // The ones we care about.
             $db = Database::getConnection();
-            $stmt = $db->prepare('SELECT name, type FROM cardsets WHERE code = ?');
+            $stmt = $db->prepare('SELECT name, type, standard_legal FROM cardsets WHERE code = ?');
             $stmt->bind_param('s', $set->code);
             $stmt->execute();
-            $stmt->bind_result($setName, $setType);
+            $stmt->bind_result($setName, $setType, $standard_legal);
             $success = $stmt->fetch();
             $stmt->close();
             if (!$success) {
@@ -99,6 +99,7 @@ function updateStandard()
         if (!in_array($setName, $expected, true)) {
             $fmt->deleteLegalCardSet($setName);
             info("{$setName} is no longer Standard Legal.");
+            Database::no_result_single_param('UPDATE cardsets SET standard_legal = 0 WHERE `name` = ?', $setname);
         }
     }
 
@@ -106,6 +107,7 @@ function updateStandard()
         if (!$fmt->isCardSetLegal($setName)) {
             $fmt->insertNewLegalSet($setName);
             info("{$setName} is now Standard Legal.");
+            Database::no_result_single_param('UPDATE cardsets SET standard_legal = 1 WHERE `name` = ?', $setname);
         }
     }
 }
@@ -136,6 +138,7 @@ function updateModern()
             if (!$fmt->isCardSetLegal($setName)) {
                 $fmt->insertNewLegalSet($setName);
                 info("{$setName} is Modern Legal.");
+                Database::no_result_single_param('UPDATE cardsets SET modern_legal = 1 WHERE `name` = ?', $setname);
             }
         }
     }
