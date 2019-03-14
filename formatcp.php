@@ -370,6 +370,16 @@ function handleActions($seriesName)
         } else {
             $format->eternal = 0;
         }
+        if (isset($_POST['modern'])) {
+            $format->modern = 1;
+        } else {
+            $format->modern = 0;
+        }
+        if (isset($_POST['standard'])) {
+            $format->standard = 1;
+        } else {
+            $format->standard = 0;
+        }
 
         if (isset($_POST['is_meta_format'])) {
             $format->is_meta_format = 1;
@@ -800,9 +810,15 @@ function printFormatSettings($active_format, $seriesName)
     }
 
     echo '<h4>Format Modifiers</h4>';
-    echo '<table class="form" style="border-width: 0px;" align="center">';
-    echo '<tr><th style="width: 100px; text-align: center;">';
+    echo '<table class="form" style="border-width: 0px;" align="center"><tr>';
+    echo '<th style="width: 100px; text-align: center;">';
     print_tooltip('Eternal Format', 'Eternal Formats treat all cardsets as legal.');
+    echo '</th>';
+    echo '<th style="width: 100px; text-align: center;">';
+    print_tooltip('Modern Format', 'This format is built upon Modern.');
+    echo '</th>';
+    echo '<th style="width: 100px; text-align: center;">';
+    print_tooltip('Standard Format', 'This format is built upon Standard.');
     echo '</th>';
     // echo '<th style="width: 100px; text-align: center;">';
     // print_tooltip('Meta Format', 'A meta-format allows players to submit a deck legal under one of several possible legal lists.');
@@ -811,6 +827,16 @@ function printFormatSettings($active_format, $seriesName)
     echo '</tr><tr>';
     echo '<td style="width: 100px; text-align: center;"><input type="checkbox" name="eternal" value="1" ';
     if ($active_format->eternal == 1) {
+        echo 'checked="yes" ';
+    }
+    echo ' /></td>';
+    echo '<td style="width: 100px; text-align: center;"><input type="checkbox" name="modern" value="1" ';
+    if ($active_format->modern == 1) {
+        echo 'checked="yes" ';
+    }
+    echo ' /></td>';
+    echo '<td style="width: 100px; text-align: center;"><input type="checkbox" name="standard" value="1" ';
+    if ($active_format->standard == 1) {
         echo 'checked="yes" ';
     }
     echo ' /></td>';
@@ -852,11 +878,17 @@ function formatCPMenu($active_format, $seriesName)
         if ($active_format->tribal) {
             echo " | <a href=\"formatcp.php?view=tribal&format={$escaped}\">Tribes</a>";
         }
-        if (!$active_format->eternal) {
-            echo " | <a href=\"formatcp.php?view=cardsets&format={$escaped}\">Legal Sets</a>";
-        } else {
+        if ($active_format->eternal) {
             echo ' | ';
             print_tooltip('Legal Sets', 'All sets are legal, as this is an Eternal format');
+        } else if ($active_format->modern) {
+            echo ' | ';
+            print_tooltip('Legal Sets', 'This format uses Modern Legality to determine legal sets');
+        } else if ($active_format->standard) {
+            echo ' | ';
+            print_tooltip('Legal Sets', 'This format uses Standard Legality to determine legal sets');
+        } else {
+            echo " | <a href=\"formatcp.php?view=cardsets&format={$escaped}\">Legal Sets</a>";
         }
         echo '</td></tr></table>';
     }

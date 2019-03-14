@@ -60,6 +60,10 @@ function updateStandard()
 {
     info('Updating Standard...');
     $fmt = LoadFormat('Standard');
+    if (!$fmt->standard) {
+        $fmt->standard = true;
+        $fmt->save();
+    }
     $legal = json_decode(file_get_contents('http://whatsinstandard.com/api/v5/sets.json'));
     if (!$legal) {
         info('Unable to load WhatsInStandard API.  Aborting.');
@@ -97,17 +101,15 @@ function updateStandard()
     }
     foreach ($fmt->getLegalCardsets() as $setName) {
         if (!in_array($setName, $expected, true)) {
-            $fmt->deleteLegalCardSet($setName);
             info("{$setName} is no longer Standard Legal.");
-            Database::no_result_single_param('UPDATE cardsets SET standard_legal = 0 WHERE `name` = ?', $setname);
+            Database::no_result_single_param('UPDATE cardsets SET standard_legal = 0 WHERE `name` = ?', 's', $setName);
         }
     }
 
     foreach ($expected as $setName) {
         if (!$fmt->isCardSetLegal($setName)) {
-            $fmt->insertNewLegalSet($setName);
             info("{$setName} is now Standard Legal.");
-            Database::no_result_single_param('UPDATE cardsets SET standard_legal = 1 WHERE `name` = ?', $setname);
+            Database::no_result_single_param('UPDATE cardsets SET standard_legal = 1 WHERE `name` = ?', 's', $setName);
         }
     }
 }
@@ -116,6 +118,10 @@ function updateModern()
 {
     info('Updating Modern...');
     $fmt = LoadFormat('Modern');
+    if (!$fmt->modern) {
+        $fmt->modern = true;
+        $fmt->save();
+    }
 
     $legal = $fmt->getLegalCardsets();
 
@@ -136,9 +142,8 @@ function updateModern()
         $release = strtotime($set[2]);
         if ($release > $cutoff) {
             if (!$fmt->isCardSetLegal($setName)) {
-                $fmt->insertNewLegalSet($setName);
                 info("{$setName} is Modern Legal.");
-                Database::no_result_single_param('UPDATE cardsets SET modern_legal = 1 WHERE `name` = ?', $setname);
+                Database::no_result_single_param('UPDATE cardsets SET modern_legal = 1 WHERE `name` = ?', 's', $setName);
             }
         }
     }
