@@ -599,6 +599,7 @@ class Format
 
         foreach ($cardRarities as $rarity) {
             switch ($rarity) {
+                case 'Land':
                 case 'Basic Land':
                     return true;
                 case 'Common':
@@ -621,6 +622,7 @@ class Format
                     break;
                 case 'Mythic Rare':
                 case 'mythic rare':
+                case 'mythic':
                     if ($this->allow_mythics == 1) {
                         return true;
                     }
