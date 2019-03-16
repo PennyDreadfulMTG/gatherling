@@ -60,6 +60,8 @@ class Format
             $this->card_restrictedlist = [];
             $this->legal_sets = [];
             $this->eternal = 0;
+            $this->modern = 0;
+            $this->standard = 0;
             $this->singleton = 0;
             $this->commander = 0;
             $this->planechase = 0;
