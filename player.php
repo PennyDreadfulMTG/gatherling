@@ -381,8 +381,6 @@ function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, 
 
 function print_changePassForm($player, $result)
 {
-    echo '<script src="passw0rd.js"></script>';
-    echo '<script src="password_checker.js"></script>';
     if (isset($_REQUEST['tooshort'])) {
         echo "<center><h3>You must change your password to continue</h3></center>\n";
     } else {

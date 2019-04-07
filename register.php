@@ -4,8 +4,6 @@ require_once 'lib_form_helper.php';
 
 print_header('Register');
 ?>
-<script src="passw0rd.js"></script>
-<script src="password_checker.js"></script>
 
 <div class="grid_10 suffix_1 prefix_1">
 <div id="gatherling_main" class="box">
