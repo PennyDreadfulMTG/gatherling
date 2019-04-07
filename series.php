@@ -29,16 +29,17 @@ foreach ($active_series as $series_name) {
     <tr> <th> Hosted by </th> <td>
     <?php
         $count = 0;
-    foreach ($series->organizers as $player) {
-        if (!$count) {
+        foreach ($series->organizers as $player) {
+            if ($count > 0) {
+                echo ", ";
+            }
             echo $player;
-            $count++;
-        } else {
-            if ($count <= 3) {
-                echo ', '.$player;
+            $count += 1;
+            if ($count >=3 ) {
+                break;
             }
         }
-    } ?>  </td></tr>
+    ?>  </td></tr>
     <tr> <th> Format </th> <td> <a href="<?php echo $season_format_link?>"> <?php echo $series->this_season_format ?></a> </td> </tr>
     <?php
     $start_format = '%I:%M %P';
