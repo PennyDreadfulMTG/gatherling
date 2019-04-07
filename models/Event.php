@@ -399,21 +399,18 @@ class Event
 
     public function isOrganizer($name)
     {
+        $isOrganizer = false;
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT player FROM series_organizers WHERE series = ? and player = ?');
         $stmt->bind_param('ss', $this->series, $name);
         $stmt->execute();
         $stmt->bind_result($aname);
         while ($stmt->fetch()) {
-            if (count($aname)) {
-                $stmt->close();
-
-                return true;
-            }
+            $isOrganizer = true;
         }
         $stmt->close();
 
-        return false;
+        return $isOrganizer;
     }
 
     public function authCheck($playername)
