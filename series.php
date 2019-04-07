@@ -30,13 +30,13 @@ foreach ($active_series as $series_name) {
     <?php
         $count = 0;
     foreach ($series->organizers as $player) {
-        if (!$count) {
-            echo $player;
-            $count++;
-        } else {
-            if ($count <= 3) {
-                echo ', '.$player;
-            }
+        if ($count > 0) {
+            echo ', ';
+        }
+        echo $player;
+        $count += 1;
+        if ($count >= 3) {
+            break;
         }
     } ?>  </td></tr>
     <tr> <th> Format </th> <td> <a href="<?php echo $season_format_link?>"> <?php echo $series->this_season_format ?></a> </td> </tr>
