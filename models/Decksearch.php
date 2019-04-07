@@ -233,7 +233,6 @@ class Decksearch
 
     public function idsToSortedInfo($id_arr)
     {
-
         $db = Database::getConnection();
 
         //sanitize the id_arr to protect against sql injection.
@@ -246,12 +245,12 @@ class Decksearch
         $info = [];
         while ($stmt->fetch()) {
             $info[] = [
-                'id' => $id,
-                'archetype' => $archetype,
-                'name' => $name,
-                'playername' => $playername,
-                'format' => $format,
-                'created_date' => $created_date
+                'id'           => $id,
+                'archetype'    => $archetype,
+                'name'         => $name,
+                'playername'   => $playername,
+                'format'       => $format,
+                'created_date' => $created_date,
             ];
         }
         $stmt->close();
