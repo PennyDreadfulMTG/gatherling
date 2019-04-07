@@ -231,33 +231,36 @@ class Decksearch
         }
     }
 
-    // TODO: Refactor this to use Database wrapper.
     public function idsToSortedInfo($id_arr)
     {
-        // prepared statements would not work with mysql IN
-        // needed a way to run the array through one query so I
-        // could sort properly
 
-        global $CONFIG;
-        $con = mysql_connect($CONFIG['db_hostname'], $CONFIG['db_username'], $CONFIG['db_password'])
-    or die('Could not connect to the server!');
-
-        // select a database:
-        mysql_select_db($CONFIG['db_database'])
-    or die('Could not select a database.');
+        $db = Database::getConnection();
 
         //sanitize the id_arr to protect against sql injection.
         $id_arr = array_filter(array_map('intval', $id_arr));
 
         $query = 'SELECT id, archetype, name, playername, format, created_date from decks WHERE id IN ('.implode(',', $id_arr).') ORDER BY DATE(`created_date`) DESC';
-        $result = mysql_query($query);
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        $stmt->bind_result($id, $archetype, $name, $playername, $format, $created_date);
+        $info = [];
+        while ($stmt->fetch()) {
+            $info[] = [
+                'id' => $id,
+                'archetype' => $archetype,
+                'name' => $name,
+                'playername' => $playername,
+                'format' => $format,
+                'created_date' => $created_date
+            ];
+        }
+        $stmt->close();
 
         $list = [];
-        while ($row = mysql_fetch_assoc($result)) {
+        foreach ($info as $row) {
             $row['record'] = $this->_getDeckRecord($row['id']);
             $list[] = $row;
         }
-        mysql_close();
 
         return $list;
     }
