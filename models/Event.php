@@ -147,7 +147,7 @@ class Event
 
     public static function CreateEvent($year, $month, $day, $hour, $naming, $name, $format, $host, $cohost,
                                        $kvalue, $series, $season, $number, $threadurl, $metaurl, $reporturl,
-                                       $prereg_allowed, $pkonly, $player_reportable, $late_entry_limit,
+                                       $prereg_allowed, $player_reportable, $late_entry_limit,
                                        $mainrounds, $mainstruct, $finalrounds, $finalstruct)
     {
         $event = new self('');
@@ -171,8 +171,6 @@ class Event
         $event->reporturl = $reporturl;
 
         $event->prereg_allowed = $prereg_allowed;
-
-        $event->pkonly = $pkonly; // Dabil added
 
         $event->player_reportable = $player_reportable;
 
