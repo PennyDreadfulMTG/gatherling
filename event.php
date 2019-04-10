@@ -1130,7 +1130,7 @@ function insertEvent()
     $event = Event::CreateEvent($_POST['year'], $_POST['month'], $_POST['day'], $_POST['hour'], $_POST['naming'], $_POST['name'],
                        $_POST['format'], $_POST['host'], $_POST['cohost'], $_POST['kvalue'], $_POST['series'], $_POST['season'],
                        $_POST['number'], $_POST['threadurl'], $_POST['metaurl'], $_POST['reporturl'], $_POST['prereg_allowed'],
-                       $_POST['pkonly'], $_POST['player_reportable'], $_POST['late_entry_limit'],
+                       $_POST['player_reportable'], $_POST['late_entry_limit'],
                        $_POST['mainrounds'], $_POST['mainstruct'], $_POST['finalrounds'], $_POST['finalstruct']);
 
     return $event;
