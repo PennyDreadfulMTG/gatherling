@@ -213,9 +213,13 @@ class Standings
             }
         }
         if ($this->games_played == 0) {
-            $this->OP_Match = 0;
-            $this->OP_Game = 0;
-            $this->PL_Game = 0;
+            $default = 0;
+            if ($this->score > 0) { //The player has a bye on their first round
+                $default = 0.33;
+            }
+            $this->OP_Match = $default;
+            $this->OP_Game = $default;
+            $this->PL_Game = $default;
         } else {
             $this->OP_Match = ($OMW / $number_of_opponents);
             $this->OP_Game = ($OGW / $number_of_opponents);
