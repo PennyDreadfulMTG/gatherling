@@ -694,7 +694,9 @@ function print_ActiveEvents()
             if ($structure == 'League') {
                 $Leagues[] = "<tr><td>{$event->name} Round: {$event->current_round}</td><td><a href=\"player.php?mode=submit_league_result&event={$event->name}&round={$event->current_round}&subevent={$subevent_id}\">Report League Game</a></td></tr>";
             }
-            echo "<td><a href=\"player.php?mode=drop_form&event={$event->name}\">Drop From Event</a></td>";
+            if ($structure !== 'Single Elimination') {
+                echo "<td><a href=\"player.php?mode=drop_form&event={$event->name}\">Drop From Event</a></td>";
+            }
         } else {
             // This doesn't account for the small amount of time where Event Start time has elapsed, but Round 1 hasn't started
             if ($event->late_entry_limit > 0 && $event->late_entry_limit >= $event->current_round) {
