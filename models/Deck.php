@@ -493,6 +493,7 @@ class Deck
             $db->autocommit(true);
 
             throw new Exception("Cannot flush the deckerror content {$this->id}");
+
             return false;
         } else {
             return true;

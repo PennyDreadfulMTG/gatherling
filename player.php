@@ -482,6 +482,7 @@ function print_editTimeZoneForm($player, $result)
 
 function print_manualverifyMtgoForm()
 {
+    $player = Player::getSessionPlayer();
     if ($player->verified == 1) {
         echo "<center>You are already verified!</center>\n";
         echo "<a href=\"player.php\">Go back to the Player CP</a>\n";
