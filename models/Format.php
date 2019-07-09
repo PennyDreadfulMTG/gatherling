@@ -753,14 +753,14 @@ class Format
     public static function removeTypeCrap($typeString)
     {
         // leave only the tribal sub types
-        $typeString = str_replace('Tribal ', '', $typeString);
-        $typeString = str_replace('Creature - ', '', $typeString);
-        $typeString = str_replace('Artifact ', '', $typeString);
-        $typeString = str_replace('Artifact - ', '', $typeString);
-        $typeString = str_replace('Instant - ', '', $typeString);
-        $typeString = str_replace('Enchantment - ', '', $typeString);
-        $typeString = str_replace('Sorcery - ', '', $typeString);
-        $typeString = str_replace('Legendary ', '', $typeString);
+        $typeString = str_ireplace('Tribal ', '', $typeString);
+        $typeString = str_ireplace('Creature - ', '', $typeString);
+        $typeString = str_ireplace('Artifact ', '', $typeString);
+        $typeString = str_ireplace('Artifact - ', '', $typeString);
+        $typeString = str_ireplace('Instant - ', '', $typeString);
+        $typeString = str_ireplace('Enchantment - ', '', $typeString);
+        $typeString = str_ireplace('Sorcery - ', '', $typeString);
+        $typeString = str_ireplace('Legendary ', '', $typeString);
 
         return $typeString;
     }

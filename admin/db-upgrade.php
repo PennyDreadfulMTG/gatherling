@@ -632,6 +632,15 @@ if ($version < 32) {
     //     DROP COLUMN `pkonly_default`;');
     set_version(32);
 }
+if ($version < 33) {
+    info('Updating to version 33 (Better support for changelings, paper-only cards)');
+    do_query('ALTER TABLE `cards`
+        ADD COLUMN `is_changeling` TINYINT NULL DEFAULT NULL AFTER `scryfallId`,
+        ADD COLUMN `is_online` TINYINT NULL DEFAULT NULL AFTER `is_changeling`;');
+    do_query('ALTER TABLE `cardsets`
+        ADD COLUMN `last_updated` INT NULL AFTER `modern_legal`;');
+    set_version(33);
+}
 $db->autocommit(true);
 
 info('DB is up to date!');
