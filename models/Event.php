@@ -989,48 +989,51 @@ class Event
     // This should probably be in Standings?
     public function pairCurrentRound()
     {
-        //Check to see if we are main rounds or final, get structure
-        $test = $this->current_round;
-        if ($test < ($this->finalrounds + $this->mainrounds)) {
-            if ($test >= $this->mainrounds) {
-                // In the final rounds.
-                $structure = $this->finalstruct;
-                $subevent_id = $this->finalid;
-                $round = 'final';
+        //Check if all matches in the current round are finished
+        if (count($this->unfinishedMatches()) === 0) {
+            //Check to see if we are main rounds or final, get structure
+            $test = $this->current_round;
+            if ($test < ($this->finalrounds + $this->mainrounds)) {
+                if ($test >= $this->mainrounds) {
+                    // In the final rounds.
+                    $structure = $this->finalstruct;
+                    $subevent_id = $this->finalid;
+                    $round = 'final';
+                } else {
+                    $structure = $this->mainstruct;
+                    $subevent_id = $this->mainid;
+                    $round = 'main';
+                }
+                // Run matching function
+                switch ($structure) {
+                    case 'Swiss':
+                        $this->swissPairing($subevent_id);
+                        break;
+                    case 'Swiss (Blossom)':
+                        $this->swissPairingBlossom($subevent_id);
+                        break;
+                    case 'Single Elimination':
+                        $this->singleElimination($round);
+                        break;
+                    case 'League':
+                        //$this->current_round ++;
+                        //$this->save();
+                        break;
+                    case 'Round Robin':
+                        //Do later
+                        break;
+                }
             } else {
-                $structure = $this->mainstruct;
-                $subevent_id = $this->mainid;
-                $round = 'main';
+                $this->active = 0;
+                $this->finalized = 1;
+                $this->save();
+                $this->assignMedals();
+                $ratings = new Ratings();
+                $ratings->calcFinalizedEventRatings($this->name, $this->format, $this->start);
             }
-            // Run matching function
-            switch ($structure) {
-                case 'Swiss':
-                    $this->swissPairing($subevent_id);
-                    break;
-                case 'Swiss (Blossom)':
-                    $this->swissPairingBlossom($subevent_id);
-                    break;
-                case 'Single Elimination':
-                    $this->singleElimination($round);
-                    break;
-                case 'League':
-                    //$this->current_round ++;
-                    //$this->save();
-                    break;
-                case 'Round Robin':
-                    //Do later
-                    break;
-            }
-        } else {
-            $this->active = 0;
-            $this->finalized = 1;
+            $this->current_round++;
             $this->save();
-            $this->assignMedals();
-            $ratings = new Ratings();
-            $ratings->calcFinalizedEventRatings($this->name, $this->format, $this->start);
         }
-        $this->current_round++;
-        $this->save();
 
         return true;
     }
