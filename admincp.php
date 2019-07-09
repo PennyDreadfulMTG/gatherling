@@ -213,15 +213,26 @@ function handleActions()
     if (!isset($_POST['action'])) {
         return;
     }
+    global $hasError;
+    global $errormsg;
     if ($_POST['action'] == 'Change Password') {
-        $player = new Player($_POST['username']);
-        $player->setPassword($_POST['new_password']);
-        $result = "Password changed for user {$player->name} to {$_POST['new_password']}";
+        $hasError = true;
+        $username = $_POST['username'];
+
+        try {
+            $player = new Player($username);
+            $player->setPassword($_POST['new_password']);
+            $errormsg = "Password changed for user {$player->name} to {$_POST['new_password']}";
+        } catch (Exception $e) {
+            $errormsg = "User $username is not found.";
+        }
     } elseif ($_POST['action'] == 'Verify Player') {
+        $hasError = true;
         $player = new Player($_POST['username']);
         $player->setVerified(true);
-        $result = "User {$player->name} is now verified.";
+        $errormsg = "User {$player->name} is now verified.";
     } elseif ($_POST['action'] == 'Create Series') {
+        $hasError = true;
         $newactive = $_POST['isactive'];
         $newtime = $_POST['hour'];
         $newday = $_POST['start_day'];
@@ -243,7 +254,7 @@ function handleActions()
             $series->prereg_default = $prereg;
             $series->save();
         }
-        $result = "New series $series->name was created!";
+        $errormsg = "New series $series->name was created!";
     } elseif ($_POST['action'] == 'Re-Calculate All Ratings') {
         $ratings = new Ratings();
         $ratings->deleteAllRatings();
