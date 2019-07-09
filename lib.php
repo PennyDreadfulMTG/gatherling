@@ -395,16 +395,16 @@ function distance_of_time_in_words($from_time, $to_time = 0, $truncate = false)
     if ($days > 7) {
         $weeks = floor($days / 7);
         $days = $days % 7;
-        $parts[] = "$weeks Weeks";
+        $parts[] = "$weeks Week".(($weeks > 1) ? 's' : '');
     }
     if ($days > 0) {
-        $parts[] = "$days Days";
+        $parts[] = "$days Day".(($days > 1) ? 's' : '');
     }
     if ($hours > 0) {
-        $parts[] = "$hours Hours";
+        $parts[] = "$hours Hour".(($hours > 1) ? 's' : '');
     }
     if ($minutes > 0) {
-        $parts[] = "$minutes Minutes";
+        $parts[] = "$minutes Minute".(($minutes > 1) ? 's' : '');
     }
     if ($truncate) {
         $parts = array_slice($parts, 0, 2);
