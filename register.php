@@ -71,7 +71,7 @@ function doRegister()
     if (strcmp($_POST['pw1'], $_POST['pw2']) != 0) {
         $code = -1;
     }
-    $player = Player::findOrCreateByName($_POST['username']);
+    $player = Player::findOrCreateByName(trim($_POST['username']));
     if (!is_null($player->password)) {
         $code = -3;
     }
