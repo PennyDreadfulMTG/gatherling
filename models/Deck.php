@@ -708,8 +708,8 @@ class Deck
 
         foreach ($this->sideboard_cards as $card => $amt) {
             $card = stripslashes($card);
-            $card = Format::getCardName($card);
-            $cardar = $format->getLegalCard($card);
+            $testcard = Format::getCardName($card);
+            $cardar = $format->getLegalCard($testcard);
             if (is_null($cardar)) {
                 $this->errors[] = "Could not find sideboard card: {$amt} {$card} in legal sets";
 
