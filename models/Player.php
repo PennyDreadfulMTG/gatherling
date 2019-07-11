@@ -1110,6 +1110,9 @@ class Player
 
     public function checkChallenge($challenge)
     {
+        if (strlen($challenge) == 0) {
+            return false;
+        }
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT name, mtgo_challenge FROM players WHERE name = ?');
         $stmt->bind_param('s', $this->name);
