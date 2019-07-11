@@ -453,13 +453,15 @@ class Match
         if (strcmp($playera_standing->player, $playerb_standing->player) == 0) {
             // Moved to above
         } else {
-            $playera_standing->matches_played++;
-            $playera_standing->games_played += ($this->playera_wins + $this->playera_losses);
-            $playera_standing->games_won += $this->playera_wins;
-            //echo "****playeragameswon".$playera_standing->games_won;
-            $playerb_standing->matches_played++;
-            $playerb_standing->games_played += $this->playera_wins + $this->playera_losses;
-            $playerb_standing->games_won += $this->playerb_wins;
+            if ($structure !== 'Single Elimination') {
+                $playera_standing->matches_played++;
+                $playera_standing->games_played += ($this->playera_wins + $this->playera_losses);
+                $playera_standing->games_won += $this->playera_wins;
+                //echo "****playeragameswon".$playera_standing->games_won;
+                $playerb_standing->matches_played++;
+                $playerb_standing->games_played += $this->playera_wins + $this->playera_losses;
+                $playerb_standing->games_won += $this->playerb_wins;
+            }
             $playera_standing->save();
             $playerb_standing->save();
         }
