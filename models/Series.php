@@ -69,7 +69,9 @@ class Series
 
         // Most recent season
         $this_season = $this->mostRecentEvent()->season;
-        $stmt = $db->prepare('SELECT format, master_link FROM series_seasons WHERE series = ? AND season = ?');
+        $stmt = $db->prepare('SELECT format, master_link FROM series_seasons WHERE series = ? AND season <= ?
+                              ORDER BY season DESC
+                              LIMIT 1');
         $stmt->bind_param('sd', $this->name, $this_season);
         $stmt->execute();
         $stmt->bind_result($this->this_season_format, $this->this_season_master_link);
