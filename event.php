@@ -185,6 +185,60 @@ function content()
         $newevent->name = sprintf('%s %d.%02d', $newevent->series, $newevent->season, $newevent->number);
 
         eventForm($newevent, true);
+    } elseif (mode_is('Create Next Season')) {
+        $eventName = $_REQUEST['name'];
+
+        try {
+            $oldevent = new Event($eventName);
+        } catch (Exception $exc) {
+            if ($exc->getMessage() == "Event $eventName not found in DB") {
+                $seriesName = preg_replace('/ 1.00$/', '', $eventName);
+                $oldevent = new Event('');
+                $oldevent->name = $eventName;
+                $oldevent->season = 0;
+                $oldevent->number = 0;
+                $oldevent->series = $seriesName;
+            } else {
+                echo $exc->getMessage();
+            }
+        }
+        $newevent = new Event('');
+        $newevent->season = $oldevent->season + 1;
+        $newevent->number = 1;
+        $newevent->format = $oldevent->format;
+
+        $newevent->start = strftime('%Y-%m-%d %H:%M:00', strtotime($oldevent->start) + (86400 * 7));
+        $newevent->kvalue = $oldevent->kvalue;
+        $newevent->finalized = 0;
+        $newevent->prereg_allowed = $oldevent->prereg_allowed;
+        $newevent->threadurl = $oldevent->threadurl;
+        $newevent->reporturl = $oldevent->reporturl;
+        $newevent->metaurl = $oldevent->metaurl;
+
+        $newevent->player_editdecks = $oldevent->player_editdecks;
+
+        $newevent->series = $oldevent->series;
+        $newevent->host = $oldevent->host;
+        $newevent->cohost = $oldevent->cohost;
+
+        $newevent->mainrounds = $oldevent->mainrounds;
+        $newevent->mainstruct = $oldevent->mainstruct;
+        $newevent->finalrounds = $oldevent->finalrounds;
+        $newevent->finalstruct = $oldevent->finalstruct;
+
+        $newevent->player_reportable = $oldevent->player_reportable;
+        $newevent->prereg_cap = $oldevent->prereg_cap;
+        $newevent->private_decks = $oldevent->private_decks;
+        $newevent->private_finals = $oldevent->private_finals;
+
+        $newevent->player_reportable = $oldevent->player_reportable;
+        $newevent->player_reported_draws = $oldevent->player_reported_draws;
+        $newevent->prereg_cap = $oldevent->prereg_cap;
+        $newevent->late_entry_limit = $oldevent->late_entry_limit;
+
+        $newevent->name = sprintf('%s %d.%02d', $newevent->series, $newevent->season, $newevent->number);
+
+        eventForm($newevent, true);
     } elseif (isset($_GET['name'])) {
         $event = new Event($_GET['name']);
         if (!$event->authCheck(Player::loginName())) {
@@ -560,8 +614,12 @@ function eventForm($event = null, $forcenew = false)
             echo '<tr><td colspan="2" class="buttons">';
             echo ' <input class="inputbutton" type="submit" name="mode" value="Update Event Info" />';
             $nexteventname = sprintf('%s %d.%02d', $event->series, $event->season, $event->number + 1);
+            $nextseasonname = sprintf('%s %d.%02d', $event->series, $event->season + 1, 1);
             if (!Event::exists($nexteventname)) {
                 echo ' <input class="inputbutton" type="submit" name="mode" value="Create Next Event" />';
+            }
+            if (!Event::exists($nextseasonname)) {
+                echo ' <input class="inputbutton" type="submit" name="mode" value="Create Next Season" />';
             }
             echo '<input type="hidden" name="update" value="1" />';
             echo '</td></tr>';
@@ -761,8 +819,12 @@ function playerList($event)
         echo '<input id="start_event" class="inputbutton" type="submit" name="mode" value="Recalculate Standings" />';
         echo '<input id="start_event" class="inputbutton" type="submit" name="mode" value="Assign Medals" />';
         $nexteventname = sprintf('%s %d.%02d', $event->series, $event->season, $event->number + 1);
+        $nextseasonname = sprintf('%s %d.%02d', $event->series, $event->season + 1, 1);
         if (!Event::exists($nexteventname)) {
             echo '<input class="inputbutton" type="submit" name="mode" value="Create Next Event" />';
+        }
+        if (!Event::exists($nextseasonname)) {
+            echo ' <input class="inputbutton" type="submit" name="mode" value="Create Next Season" />';
         }
         echo '</td></tr>';
     }
