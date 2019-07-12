@@ -46,7 +46,7 @@ foreach ($active_series as $series_name) {
         $start_format = str_replace('P', 'p', $start_format);
     } ?>
     <tr> <th> Regular Time </th> <td> <?php echo $series->start_day ?>, <?php echo strftime($start_format, strtotime($series->start_time)) ?> Eastern Time </td> </tr>
-    <tr> <th> Rules </th> <td> <a href="<?php echo $series->this_season_master_link ?>">Season <?php echo $series->this_season_season ?> Master Document</a> </td> </tr>
+    <tr> <th> Rules </th> <td> <a href="<?php echo (empty($series->this_season_master_link)) ? $series->mostRecentEvent()->threadurl : $series->this_season_master_link ?>">Season <?php echo $series->this_season_season ?> Master Document</a> </td> </tr>
     <tr> <th> Most Recent Event </th> <td> <?php echo $series->mostRecentEvent()->linkReport() ?> </td> </tr>
     <?php
     $nextevent = $series->nextEvent();
