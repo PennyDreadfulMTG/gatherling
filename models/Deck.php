@@ -718,6 +718,8 @@ class Deck
                 }
                 $this->unparsed_side[$card] += $amt;
                 continue;
+            } else {
+                $card = $testcard;
             }
 
             // Restricted Card list. Only one of these cards is alowed in a deck
