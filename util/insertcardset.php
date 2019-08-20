@@ -126,10 +126,10 @@ if (!$set_already_in) {
 }
 
 $stmt = $database->prepare('INSERT INTO cards(cost, convertedcost, name, cardset, type,
-  isw, isu, isb, isr, isg, isp, rarity, scryfallId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  isw, isu, isb, isr, isg, isp, rarity, scryfallId, is_changeling, is_online) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   ON DUPLICATE KEY UPDATE `cost` = VALUES(`cost`), `convertedcost`= VALUES(`convertedcost`), `type` = VALUES(`type`),
   isw = VALUES(`isw`), isu = VALUES(`isu`), isb = VALUES(`isb`),isr = VALUES(`isr`),isg = VALUES(`isg`),isp = VALUES(`isp`),
-  `rarity` = VALUES(`rarity`),scryfallId = VALUES(`scryfallId`);');
+  `rarity` = VALUES(`rarity`),scryfallId = VALUES(`scryfallId`), is_changeling = VALUES(`is_changeling`), is_online = VALUES(`is_online`);');
 
 foreach ($data->cards as $card) {
     $cardsparsed++;
@@ -194,13 +194,20 @@ function insertCard($card, $set, $rarity, $stmt)
     }
     echo '</td></tr>';
 
+    $changeling = 0;
+    if (preg_match('/Creature|Tribal/', $typeline) && preg_match('/is every creature type/', $card->text)) {
+        $changeling = 1;
+    }
+
+    $online = isset($card->isMtgo);
+
     $empty_string = '';
     $zero = 0;
 
     if (property_exists($card, 'manaCost')) {
-        $stmt->bind_param('sdsssddddddss', $card->manaCost, $card->convertedManaCost, $name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity, $card->scryfallId);
+        $stmt->bind_param('sdsssddddddssdd', $card->manaCost, $card->convertedManaCost, $name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity, $card->scryfallId, $changeling, $online);
     } else {
-        $stmt->bind_param('sdsssddddddss', $empty_string, $zero, $name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity, $card->scryfallId);
+        $stmt->bind_param('sdsssddddddssdd', $empty_string, $zero, $name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity, $card->scryfallId, $changeling, $online);
     }
 
     if (!$stmt->execute()) {
