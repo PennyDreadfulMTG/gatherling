@@ -561,11 +561,11 @@ function print_mainPlayerCP($player, $result)
     print_statsTable();
     echo "<b>ACTIONS</b><br />\n";
     echo "<ul>\n";
-    if ($player->verified == 0) {
-        echo "<li><a href=\"player.php?mode=verifymtgo\">Verify your MTGO account</a></li>\n";
-    } else {
-        echo '<li><span style="color: green; font-weight: bold;">'.image_tag('verified.png')."Account Verified</span></li>\n";
-    }
+    // if ($player->verified == 0) {
+    //     echo "<li><a href=\"player.php?mode=verifymtgo\">Verify your MTGO account</a></li>\n";
+    // } else {
+    //     echo '<li><span style="color: green; font-weight: bold;">'.image_tag('verified.png')."Account Verified</span></li>\n";
+    // }
     echo "<li><a href=\"player.php?mode=changepass\">Change your password</a></li>\n";
     if ($player->emailAddress == '') {
         echo "<li><a href=\"player.php?mode=edit_email\">Add Email Address</a></li>\n";
