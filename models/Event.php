@@ -574,6 +574,19 @@ class Event
         }
     }
 
+    //Players that doesn't play a single game and doesn't get a bye as well
+    public function dropBlankEntries()
+    {
+        $players = $this->getPlayers();
+        $entries = [];
+        foreach ($players as $player) {
+            $entry = new Entry($this->name, $player);
+            if ($entry->canDelete()) {
+                $this->removeEntry($player);
+            }
+        }
+    }
+
     public function removeEntry($playername)
     {
         $entry = new Entry($this->name, $playername);
@@ -1396,6 +1409,12 @@ class Event
                     $this->recalculateScores('League');
                     Standings::updateStandings($this->name, $this->mainid, 1);
                 }
+
+                //We are at the end of the swiss round
+                if (($this->current_round == $this->mainrounds) && (strpos($structure, 'Swiss') === 0)) {
+                    $this->dropBlankEntries();
+                }
+
                 if ($structure != 'League' && $this->active === 1) {
                     $this->pairCurrentRound();
                 }
