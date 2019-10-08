@@ -27,6 +27,7 @@ foreach ($deck->maindeck_cards as $card => $qty) {
 $content .= "\r\nSideboard\r\n";
 
 foreach ($deck->sideboard_cards as $card => $qty) {
+    $card = normaliseCardName($card);
     $content .= $qty.' '.$card."\r\n";
 }
 
