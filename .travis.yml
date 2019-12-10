@@ -10,6 +10,7 @@ script:
 - cp config.php.travisci config.php
 - php admin/db-upgrade.php
 - php util/insertcardset.php M10
+- php util/insertcardset.php ELD
 - php util/updateDefaultFormats.php
 - phpunit -v tests/
 notifications:
