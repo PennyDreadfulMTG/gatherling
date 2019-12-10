@@ -737,6 +737,9 @@ class Format
             return true;
         }
 
+        if ($card == 'Seven Dwarves' && $amt <= 7)
+            return true;
+
         return false;
     }
 
@@ -1119,6 +1122,9 @@ class Format
             return true;
         }
 
+        if ($card == 'Seven Dwarves' && $amt <= 7)
+            return true;
+
         return false;
     }
 
@@ -1128,6 +1134,9 @@ class Format
             if (($sideAmt + $mainAmt) <= 4) {
                 return true;
             }
+
+            if ($sideCard == 'Seven Dwarves' && $sideAmt + $mainAmt <= 7)
+                return true;
 
             if ($this->isCardBasic($sideCard)) {
                 return true;
