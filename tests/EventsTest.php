@@ -131,7 +131,7 @@ final class EventsTest extends TestCase
     public function testReporting($event)
     {
         $matches = $event->getRoundMatches(1);
-        $this->assertEquals(count($matches), 2);
+        $this->assertEquals(count($matches), 3);
         Match::saveReport('W20', $matches[0]->id, 'a');
         Match::saveReport('L20', $matches[0]->id, 'b');
         Match::saveReport('W20', $matches[1]->id, 'a');
