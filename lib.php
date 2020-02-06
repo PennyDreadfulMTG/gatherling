@@ -509,12 +509,13 @@ function print_warning_if($conditional)
 
 function version_number()
 {
-    return '4.8.3';
+    return '4.8.8';
 }
 
 function version_tagline()
 {
-    echo 'Gatherling version 4.8.7 ("Step 7: Steal a bagel.")';
+    echo 'Gatherling version 4.8.8 ("Fish fingers and custard")';
+    // echo 'Gatherling version 4.8.7 ("Step 7: Steal a bagel.")';
     // echo 'Gatherling version 4.8.6.1 ("I\'m gonna steal the declaration of independence.")';
     // echo 'Gatherling version 4.8.6 ("I\'m gonna steal the declaration of independence.")';
     // echo 'Gatherling version 4.8.5 ("That\'s my secret, Captain: I\'m always angry...")';

@@ -66,7 +66,7 @@ if ($gatherlingoutofservice != 1) {
     <div id="" class="grid_4">
         <div class="box pad">
             <?php $player = Player::getSessionPlayer(); ?>
-            <?php if ($player != null): ?>
+            <?php if ($player != null) { ?>
                 <div>
                     <b> Welcome back <?php echo $player->name ?> </b>
                     <ul>
@@ -90,7 +90,7 @@ if ($gatherlingoutofservice != 1) {
     } ?>
                     </ul>
                 </div>
-            <?php else: ?>
+            <?php } else { ?>
                 <div style="height: 165px;">
                     <b>Login to Gatherling</b>
                     <table class="form" align="left" cellpadding="3">
@@ -113,7 +113,7 @@ if ($gatherlingoutofservice != 1) {
                         </form>
                     </table>
                 </div>
-            <?php endif; ?>
+            <?php } ?>
         </div><!-- grid_4 omega (login/links) -->
         <?php include 'sidebar.php'; ?>
     </div> <!-- Sidebar -->

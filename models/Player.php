@@ -995,13 +995,13 @@ class Player
         $res = [];
         while ($stmt->fetch()) {
             $res[] = ['name'      => $name,
-                     'cnt'        => $cnt,
-                     'id'         => $id,
-                     't8'         => $t8,
-                     't4'         => $t4,
-                     '2nd'        => $secnd,
-                     '1st'        => $first,
-                     'score'      => $score, ];
+                'cnt'             => $cnt,
+                'id'              => $id,
+                't8'              => $t8,
+                't4'              => $t4,
+                '2nd'             => $secnd,
+                '1st'             => $first,
+                'score'           => $score, ];
         }
         $stmt->close();
 

@@ -229,8 +229,8 @@ function fullmetagame($event)
     $players = [];
     foreach ($decks as $deck) {
         $info = ['player'          => $deck->playername, 'deckname' => $deck->name,
-                  'archetype'      => $deck->archetype, 'medal' => $deck->medal,
-                              'id' => $deck->id, ];
+            'archetype'            => $deck->archetype, 'medal' => $deck->medal,
+            'id'                   => $deck->id, ];
         $arr = deckInfo($deck);
         $info['colors'] = $arr[1];
         if ($info['medal'] == 'dot') {

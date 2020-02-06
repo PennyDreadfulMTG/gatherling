@@ -28,5 +28,5 @@ if (strcmp($_REQUEST['mode'], 'verify') == 0) {
     $player->setPassword($challenge);
     echo "<UaReply>Your temporary password for {$CONFIG['site_name']} is $challenge</UaReply>";
 } else {
-    echo '<error>Unknown Action</error>';
+    echo "<error>Unknown Action: {$_REQUEST['mode']}</error>";
 }

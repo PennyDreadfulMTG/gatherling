@@ -341,20 +341,20 @@ class Series
     // TODO: THESE functions are UGLY.
     public function getSeasonRules($season_number)
     {
-        $season_rules = ['first_pts' => 0,
-      'second_pts'                   => 0,
-      'semi_pts'                     => 0,
-      'quarter_pts'                  => 0,
-      'participation_pts'            => 0,
-      'rounds_pts'                   => 0,
-      'decklist_pts'                 => 0,
-      'win_pts'                      => 0,
-      'loss_pts'                     => 0,
-      'bye_pts'                      => 0,
-      'must_decklist'                => 0,
-      'cutoff_ord'                   => 0,
-      'master_link'                  => '',
-      'format'                       => '', ];
+        $season_rules = ['first_pts'       => 0,
+            'second_pts'                   => 0,
+            'semi_pts'                     => 0,
+            'quarter_pts'                  => 0,
+            'participation_pts'            => 0,
+            'rounds_pts'                   => 0,
+            'decklist_pts'                 => 0,
+            'win_pts'                      => 0,
+            'loss_pts'                     => 0,
+            'bye_pts'                      => 0,
+            'must_decklist'                => 0,
+            'cutoff_ord'                   => 0,
+            'master_link'                  => '',
+            'format'                       => '', ];
 
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT series, first_pts, second_pts, semi_pts, quarter_pts, participation_pts,

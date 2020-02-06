@@ -72,7 +72,7 @@ if (!is_null($player)) {
                     $message = $message.$oppplayer->linkTo().'.';
                 }
                 if ($match->player_reportable_check() == true) {
-                    $message = $message.'  <a href="player.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
+                    $message = $message.'  <a href="report.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
                 }
             }
         } elseif ($match->result != 'BYE' && $match->verification == 'failed') {
@@ -86,7 +86,7 @@ if (!is_null($player)) {
 
             if ($match->player_reportable_check() == true) {
                 $message = "The reported result wasn't consistent with your opponent's, please resubmit $event->name vs. ".$oppplayer->linkTo().'.';
-                $message = $message.'<a href="player.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
+                $message = $message.'<a href="report.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
             } else {
                 $message = "You have an unreported match in $match->eventname.";
             }

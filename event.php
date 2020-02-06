@@ -1134,7 +1134,7 @@ function kValueDropMenu($kvalue)
         $kvalue = -1;
     }
     $names = [''      => '- K-Value -', 8 => 'Casual (Alt Event)', 16 => 'Regular (less than 24 players)',
-                 24   => 'Large (24 or more players)', 32 => 'Championship', ];
+        24            => 'Large (24 or more players)', 32 => 'Championship', ];
     print_select_input('K-Value', 'kvalue', $names, $kvalue);
 }
 
@@ -1144,7 +1144,7 @@ function monthDropMenu($month)
         $month = -1;
     }
     $names = ['January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December', ];
+        'July', 'August', 'September', 'October', 'November', 'December', ];
     echo '<select class="inputbox" name="month">';
     echo '<option value="">- Month -</option>';
     for ($m = 1; $m <= 12; $m++) {

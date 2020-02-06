@@ -65,41 +65,6 @@ if ($player == null) {
             } else {
                 $result = "Your challenge is wrong.  Get a new one by sending the message '<code>!verify {$CONFIG['infobot_prefix']}</code>' to pdbot on MTGO!";
             }
-        } elseif ($_POST['action'] == 'finalize_result') {
-            // write results to matches table
-            $drop = false;
-            if (isset($_POST['drop'])) {
-                $drop = $_POST['drop'] == 'Y';
-            }
-            if ($drop) {
-                $match = new Match($_POST['match_id']);
-                $eventname = $match->getEventNamebyMatchid();
-                $event = new Event($eventname);
-                $event->dropPlayer($player->name);
-            }
-            if ($_POST['opponent'] != '0') {
-                $event = new Event($_POST['event']);
-                if ($event->isLeague()) {
-                    $player = new Standings($event->name, $_POST['player']);
-                    $opponent = new Standings($event->name, $_POST['opponent']);
-                    $new_match_id = $event->addPairing($player, $opponent, $event->current_round, 'P');
-                    Match::saveReport($_POST['report'], $new_match_id, 'a');
-                } else {
-                    $result = 'This is not a league event!';
-                }
-            } else {
-                // Non-league matches
-                $match = new Match($_POST['match_id']);
-                if ($match->playerLetter($player->name) == $_POST['player']) {
-                    Match::saveReport($_POST['report'], $_POST['match_id'], $_POST['player']);
-                } else {
-                    $result = 'Results appear to be tampered.  Please only submit your own results.';
-                }
-            }
-        } elseif ($_POST['action'] == 'drop') {
-            // drop player from event
-            $event = new Event($_POST['event']);
-            $event->dropPlayer($player->name);
         }
     }
     // Handle modes
@@ -109,6 +74,15 @@ if ($player == null) {
     }
 
     switch ($dispmode) {
+    case 'submit_result':
+    case 'submit_league_result':
+    case 'verify_result':
+    case 'verify_league_result':
+    case 'drop_form':
+        echo 'oops';
+
+    break;
+
     case 'alldecks':
     print_allContainer();
     break;
@@ -147,32 +121,6 @@ if ($player == null) {
     print_editTimeZoneForm($player, $result);
     break;
 
-    case 'submit_result':
-    if (!isset($_GET['match_id'])) {
-        print_mainPlayerCP($player, '');
-        break;
-    }
-    print_submit_resultForm($_GET['match_id']);
-    break;
-
-    case 'submit_league_result':
-    League_print_submit_resultForm($_GET['event'], $_GET['round'], $player, $_GET['subevent']);
-    break;
-
-    case 'verify_result':
-    if (isset($_POST['report'])) {
-        $drop = (isset($_POST['drop'])) ? 'Y' : 'N';
-        print_verify_resultForm($_POST['report'], $_POST['match_id'], $_POST['player'], $drop, 0, 0);
-    } else {
-        print_submit_resultForm($_REQUEST['match_id']);
-    }
-    break;
-
-    // todo: Fold this into the above case
-    case 'verify_league_result':
-    print_verify_resultForm($_POST['report'], $_POST['match_id'], $_POST['player'], 'N', $_POST['opponent'], $_POST['event']);
-    break;
-
     case 'standings':
     Standings::printEventStandings($_GET['event'], Player::loginName());
     break;
@@ -183,37 +131,6 @@ if ($player == null) {
     } else {
         print_verifyMtgoForm($player, $result);
     }
-    break;
-
-    case 'drop_form':
-        $matches = $player->getCurrentMatches();
-        $event_name = $_REQUEST['event'];
-        $can_drop = true;
-        foreach ($matches as $match) {
-            if (strcasecmp($event_name, $match->getEventNamebyMatchid()) != 0) {
-                continue;
-            }
-            if ($match->verification == 'unverified') {
-                $player_number = $match->playerLetter($player->name);
-                if ($player_number == 'b' and ($match->playerb_wins + $match->playerb_losses) > 0) {
-                    // Fine.
-                } elseif ($player_number == 'a' and ($match->playera_wins + $match->playera_losses) > 0) {
-                    // Also Fine
-                } else {
-                    if ($match->player_reportable_check() == true) {
-                        $can_drop = false;
-                    }
-                }
-            } elseif ($match->verification == 'failed') {
-                $can_drop = false;
-            }
-        }
-
-        if ($can_drop) {
-            print_dropConfirm($event_name, $player);
-        } else {
-            print_submit_resultForm($match->id, true);
-        }
     break;
 
     default:
@@ -228,160 +145,6 @@ if ($player == null) {
 <?php print_footer(); ?>
 
 <?php
-//Drop confirmation form
-function print_dropConfirm($event_name, $player)
-{
-    echo '<center><h3>Drop Form</h3>';
-    echo "<center style=\"color: red; font-weight: bold;\">
-    Are you sure you want to drop? This cannot be undone. </center>\n";
-    echo "<center bold;\">Please be sure to submit a result for any active matches before you leave.</center>\n";
-    echo '<table class="form">';
-    echo '<tr><th>';
-    echo "<form action=\"player.php\" method=\"post\">\n";
-    echo "<input name=\"action\" type=\"hidden\" value=\"drop\" />\n";
-    echo "<input name=\"event\" type=\"hidden\" value=\"{$event_name}\" />\n";
-    echo "<input name=\"player\" type=\"hidden\" value=\"{$player->name}\" />\n";
-    echo "<input name=\"submit\" type=\"submit\" value=\"Drop from Event\" />\n";
-    echo '<td> ';
-    echo "</form>\n";
-    echo "<form action=\"player.php\" method=\"get\">\n";
-    echo "<input name=\"submit\" type=\"submit\" value=\"Cancel\" />\n";
-    echo "</td> </tr> \n";
-    echo "<tr> <td colspan=\"2\" class=\"buttons\">\n";
-    echo "</td> </tr> </table> \n";
-    echo "</form>\n";
-}
-
-function print_submit_resultForm($match_id, $drop = false)
-{
-    $match = new Match($match_id);
-    $event = new Event($match->getEventNamebyMatchid());
-    $letter = $match->playerLetter(Player::getSessionPlayer()->name);
-    if ($letter == 'a') {
-        $opp = $match->playerb;
-    } else {
-        $opp = $match->playera;
-    }
-    $oppplayer = new Player($opp);
-    echo "<center><h3>Report Game Results</h3>
-    Enter results for <em>$event->name</em> round $event->current_round vs. $oppplayer->name</center>\n";
-
-    echo "<form action=\"player.php\" method=\"post\">\n";
-    echo "<input name=\"mode\" type=\"hidden\" value=\"verify_result\" />\n";
-    echo "<input name=\"match_id\" type=\"hidden\" value=\"{$match_id}\" />\n";
-    echo "<input name=\"player\" type=\"hidden\" value=\"{$letter}\" />\n";
-    echo '<table class="form">';
-    echo "<tr><td><input type='radio' name='report' value='W20' /> I won the match 2-0</td> </tr>";
-    echo "<tr><td><input type='radio' name='report' value='W21' />I won the match 2-1</td> </tr>";
-    echo "<tr><td><input type='radio' name='report' value='L20' />I lost the match 0-2 </td> </tr>";
-    echo "<tr><td><input type='radio' name='report' value='L21' />I lost the match 1-2</td> </tr>";
-    if ($match->allowsPlayerReportedDraws() == 1) {
-        echo "<tr><td><input type='radio' name='report' value='D' />The match was a draw</td> </tr>";
-    }
-    echo '<tr><td></td></tr>';
-    if ($match->type !== 'Single Elimination') {
-        print_checkbox_input('I want to drop from this event', 'drop', $drop);
-    }
-    echo '<tr><td></td></tr>';
-    echo '<tr><td class="buttons">';
-    echo '<input class="inputbutton" name="submit" type="submit" value="Submit Match Report" />';
-    echo '</td></tr></table>';
-    echo '</form>';
-    echo '<div class="clear"></div>';
-}
-
-// *form to report League results
-function League_print_submit_resultForm($event, $round, $player, $subevent)
-{
-    echo "<center><h3>Report League Game Results</h3>
-    Enter results</center>\n";
-    echo "<center style=\" font-weight: bold;\">Opponent</center>\n";
-    echo "<form action=\"player.php\" method=\"post\">\n";
-    echo "<input name=\"mode\" type=\"hidden\" value=\"verify_league_result\" />\n";
-    echo "<input name=\"match_id\" type=\"hidden\" value=\"0\" />\n";
-    echo "<input name=\"event\" type=\"hidden\" value=\"{$event}\" />\n";
-    echo "<input name=\"player\" type=\"hidden\" value=\"{$player->name}\" />\n";
-    echo '<table class="form">';
-
-    echo '<tr><th>';
-    leagueOpponentDropMenu($event, $round, $player, $subevent);
-
-    echo "<br /></th>\n";
-    echo "<td></td></tr>\n";
-    echo "<tr><th><input type='radio' name='report' value='W20' /> I won the match 2-0<br /></th>\n";
-    echo "<td></td> </tr> \n";
-    echo "<tr><th><input type='radio' name='report' value='W21' />I won the match 2-1</th>\n";
-    echo "<td></td> </tr> \n";
-    echo "<tr> <td colspan=\"2\" class=\"buttons\">\n";
-    echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Submit Match Report\" />\n";
-    echo "</td> </tr> </table> \n";
-    echo "</form>\n";
-    echo "<div class=\"clear\"> </div>\n";
-}
-
-//* form to confirm submission
-function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, $event)
-{
-    echo "<center><h3><br>Confirm Game Results</p></h3></center>\n";
-    echo "<center style=\"color: red; font-weight: bold;\">Please confirm your entry.</center></p>\n";
-    echo '<center><h4>';
-    if ($opponent != '0') {
-        echo 'Opponent: '.$opponent.'<br />';
-    }
-    switch ($report) {
-        case 'W20':
-            echo 'I won the match 2-0';
-            break;
-        case 'W21':
-            echo 'I won the match 2-1';
-            break;
-        case 'L20':
-            echo 'I lost the match 0-2';
-            break;
-        case 'L21':
-            echo 'I lost the match 1-2';
-            break;
-        case 'D':
-            echo 'The match was a draw';
-        break;
-    }
-    if ($drop == 1) {
-        $drop = 'Y';
-    }
-    if ($drop == 'Y') {
-        echo "</p><center style=\"color: red; font-weight: bold;\">I want to drop out of this event.</center>\n";
-    }
-    echo '</center></h4></p>';
-
-    echo '<table class="form">';
-    echo '<tr><th>';
-    echo "<form action=\"player.php\" method=\"post\">\n";
-    if ($drop == 'Y') {
-        echo "<input name=\"drop\" type=\"hidden\" value=\"Y\" />\n";
-    }
-    echo "<input name=\"action\" type=\"hidden\" value=\"finalize_result\" />\n";
-    echo "<input name=\"match_id\" type=\"hidden\" value=\"{$match_id}\" />\n";
-    echo "<input name=\"report\" type=\"hidden\" value=\"{$report}\" />\n";
-    echo "<input name=\"opponent\" type=\"hidden\" value=\"{$opponent}\" />\n";
-    echo "<input name=\"player\" type=\"hidden\" value=\"{$player}\" />\n";
-    echo "<input name=\"event\" type=\"hidden\" value=\"{$event}\" />\n";
-    echo "<input name=\"submit\" type=\"submit\" value=\"Verify Match Report\" />\n";
-    echo "</form>\n";
-    echo "</th>\n";
-    echo '<td> ';
-    echo "<form action=\"player.php\" method=\"get\">\n";
-    echo "<input name=\"match_id\" type=\"hidden\" value=\"{$match_id}\" />\n";
-    echo "<input name=\"player\" type=\"hidden\" value=\"{$player}\" />\n";
-    echo "<input name=\"mode\" type=\"hidden\" value=\"submit_result\" />\n";
-    echo "<input name=\"submit\" type=\"submit\" value=\"Go Back and Correct\" />\n";
-    echo "</form>\n";
-    echo "</td> </tr> \n";
-    echo "<tr> <td colspan=\"2\" class=\"buttons\">\n";
-
-    echo "</td> </tr> </table> \n";
-    echo "</form>\n";
-    echo "<div class=\"clear\"> </div>\n";
-}
 
 function print_changePassForm($player, $result)
 {
@@ -697,10 +460,10 @@ function print_ActiveEvents()
                 $round = 'main';
             }
             if ($structure == 'League') {
-                $Leagues[] = "<tr><td>{$event->name} Round: {$event->current_round}</td><td><a href=\"player.php?mode=submit_league_result&event={$event->name}&round={$event->current_round}&subevent={$subevent_id}\">Report League Game</a></td></tr>";
+                $Leagues[] = "<tr><td>{$event->name} Round: {$event->current_round}</td><td><a href=\"report.php?mode=submit_league_result&event={$event->name}&round={$event->current_round}&subevent={$subevent_id}\">Report League Game</a></td></tr>";
             }
             if ($structure !== 'Single Elimination') {
-                echo "<td><a href=\"player.php?mode=drop_form&event={$event->name}\">Drop From Event</a></td>";
+                echo "<td><a href=\"report.php?mode=drop_form&event={$event->name}\">Drop From Event</a></td>";
             }
         } else {
             // This doesn't account for the small amount of time where Event Start time has elapsed, but Round 1 hasn't started
@@ -857,13 +620,13 @@ function print_currentMatchTable($Leagues)
                     echo '(Report Submitted)';
                 } else {
                     if ($match->player_reportable_check() == true) {
-                        echo '<a href="player.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
+                        echo '<a href="report.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
                     } else {
                         echo 'Please report results in the report channel for this event';
                     }
                 }
             } elseif ($match->verification == 'failed') {
-                echo "<font style=\"color: red; font-weight: bold;\">The reported result wasn't consistent with your opponent's, please check with the host  </style><a href=\"player.php?mode=submit_result&match_id=".$match->id.'&player='.$player_number.'">(Correct Result)</a>';
+                echo "<font style=\"color: red; font-weight: bold;\">The reported result wasn't consistent with your opponent's, please check with the host  </style><a href=\"report.php?mode=submit_result&match_id=".$match->id.'&player='.$player_number.'">(Correct Result)</a>';
             } elseif ($match->result == 'BYE') {
             } else {
                 echo '(Reported)';

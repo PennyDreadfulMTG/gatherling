@@ -333,8 +333,8 @@ class Event
         $finalists = [];
         while ($stmt->fetch()) {
             $finalists[] = ['medal'       => $medal,
-                           'player'       => $player,
-                           'deck'         => $deck, ];
+                'player'                  => $player,
+                'deck'                    => $deck, ];
         }
         $stmt->close();
 

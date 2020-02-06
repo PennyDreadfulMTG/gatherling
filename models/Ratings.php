@@ -21,8 +21,8 @@ class Ratings
             $this->wins = 0;
             $this->losses = 0;
             $this->ratingNames = ['Standard', 'Extended', 'Modern', 'Classic', 'Legacy',
-                                       'Pauper', 'SilverBlack', 'Heirloom', 'Commander', 'Tribal Wars',
-                                       'Penny Dreadful', ];
+                'Pauper', 'SilverBlack', 'Heirloom', 'Commander', 'Tribal Wars',
+                'Penny Dreadful', ];
 
             return;
         }
@@ -31,8 +31,8 @@ class Ratings
     public function formatDropMenuR($format = '')
     {
         $names = ['Composite', 'Standard', 'Extended', 'Modern',
-                       'Classic', 'Legacy', 'Pauper', 'SilverBlack', 'Heirloom',
-                       'Commander', 'Tribal Wars', 'Other Formats', ];
+            'Classic', 'Legacy', 'Pauper', 'SilverBlack', 'Heirloom',
+            'Commander', 'Tribal Wars', 'Other Formats', ];
         echo '<select class="inputbox" name="format">';
         foreach ($names as $name) {
             $sel = (strcmp($name, $format) == 0) ? 'selected' : '';
@@ -244,9 +244,9 @@ class Ratings
         $data = [];
         while ($stmt->fetch()) {
             $data[] = ['playera'      => $playera,
-                            'playerb' => $playerb,
-                            'result'  => $result,
-                            'kvalue'  => $kvalue, ];
+                'playerb'             => $playerb,
+                'result'              => $result,
+                'kvalue'              => $kvalue, ];
         }
         $stmt->close();
 
