@@ -6,7 +6,7 @@ if (file_exists('../lib.php')) {
     require_once 'lib.php';
 }
 
-if (PHP_SAPI != 'cli') {
+if (PHP_SAPI != 'cli' && $_SERVER['REQUEST_METHOD'] == 'GET') { // unauthorized POST is okay
     session_start();
     ini_set('max_execution_time', 300);
     if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
@@ -19,7 +19,7 @@ updateStandard();
 set_time_limit(0);
 updateModern();
 set_time_limit(0);
-updatePennyDreadful('Penny Dreadful', 'http://pdmtgo.com/legal_cards.txt');
+updatePennyDreadful('Penny Dreadful', 'https://pennydreadfulmtg.github.io/legal_cards.txt');
 
 function info($text, $newline = true)
 {
