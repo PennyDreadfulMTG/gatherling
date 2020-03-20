@@ -1017,6 +1017,12 @@ class Event
                     $subevent_id = $this->mainid;
                     $round = 'main';
                 }
+
+                $lock_db = Database::get_lock($subevent_id);
+                if ($lock_db !== 1) {
+                    return false;
+                }
+
                 // Run matching function
                 switch ($structure) {
                     case 'Swiss':
@@ -1036,6 +1042,8 @@ class Event
                         //Do later
                         break;
                 }
+
+                Database::release_lock($subevent_id);
             } else {
                 $this->active = 0;
                 $this->finalized = 1;
