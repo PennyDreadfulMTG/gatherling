@@ -248,9 +248,15 @@ function fullmetagame($event)
     $stmt = $db->prepare('INSERT INTO meta(player, deckname, archetype,	colors, medal, id)
     VALUES(?, ?, ?, ?, ?, ?)');
     for ($ndx = 0; $ndx < count($players); $ndx++) {
-        $stmt->bind_param('sssssd', $players[$ndx]['player'],
-            $players[$ndx]['deckname'], $players[$ndx]['archetype'],
-      $players[$ndx]['colors'], $players[$ndx]['medal'], $players[$ndx]['id']);
+        $stmt->bind_param(
+            'sssssd',
+            $players[$ndx]['player'],
+            $players[$ndx]['deckname'],
+            $players[$ndx]['archetype'],
+            $players[$ndx]['colors'],
+            $players[$ndx]['medal'],
+            $players[$ndx]['id']
+        );
         $stmt->execute() or die($stmt->error);
     }
     $stmt->close();

@@ -42,8 +42,19 @@ class Deck
                                 WHERE id = ?');
         $stmt->bind_param('d', $id);
         $stmt->execute();
-        $stmt->bind_result($this->name, $this->playername, $this->archetype, $this->format, $this->tribe, $this->notes,
-                        $this->deck_hash, $this->sideboard_hash, $this->whole_hash, $this->created_date, $this->deck_color_str);
+        $stmt->bind_result(
+            $this->name,
+            $this->playername,
+            $this->archetype,
+            $this->format,
+            $this->tribe,
+            $this->notes,
+            $this->deck_hash,
+            $this->sideboard_hash,
+            $this->whole_hash,
+            $this->created_date,
+            $this->deck_color_str
+        );
 
         if ($stmt->fetch() == null) {
             $this->id = 0;
@@ -826,8 +837,10 @@ class Deck
             throw new Exception('Can\'t update deck '.$this->id);
         }
 
-        $this->deck_contents_cache = implode('|', array_merge(array_keys($this->maindeck_cards),
-                                                          array_keys($this->sideboard_cards)));
+        $this->deck_contents_cache = implode('|', array_merge(
+            array_keys($this->maindeck_cards),
+            array_keys($this->sideboard_cards)
+        ));
 
         $stmt = $db->prepare('UPDATE decks set deck_contents_cache = ? WHERE id = ?');
 

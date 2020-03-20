@@ -260,7 +260,8 @@ if ($version < 11) {
     // Automatically verify all the ones that are in here already
     do_query("UPDATE matches SET verification = 'verified'");
 
-    do_query(<<<'EOS'
+    do_query(
+        <<<'EOS'
 CREATE TABLE IF NOT EXISTS `standings` (
   `player` varchar(40) DEFAULT NULL,
   `event` varchar(40) DEFAULT NULL,
@@ -282,7 +283,7 @@ CREATE TABLE IF NOT EXISTS `standings` (
   KEY `event` (`event`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=266 ;
 EOS
-);
+    );
 
     do_query('UPDATE db_version SET version = 11');
     $db->commit();

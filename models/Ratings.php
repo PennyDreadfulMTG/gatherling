@@ -181,12 +181,18 @@ class Ratings
                 $players[$matches[$ndx]['playerb']]['wins']++;
                 $players[$matches[$ndx]['playera']]['losses']++;
             }
-            $newA = $this->newRating($players[$matches[$ndx]['playera']]['rating'],
-                              $players[$matches[$ndx]['playerb']]['rating'],
-                              $aPts, $matches[$ndx]['kvalue']);
-            $newB = $this->newRating($players[$matches[$ndx]['playerb']]['rating'],
-                              $players[$matches[$ndx]['playera']]['rating'],
-                              $bPts, $matches[$ndx]['kvalue']);
+            $newA = $this->newRating(
+                $players[$matches[$ndx]['playera']]['rating'],
+                $players[$matches[$ndx]['playerb']]['rating'],
+                $aPts,
+                $matches[$ndx]['kvalue']
+            );
+            $newB = $this->newRating(
+                $players[$matches[$ndx]['playerb']]['rating'],
+                $players[$matches[$ndx]['playera']]['rating'],
+                $bPts,
+                $matches[$ndx]['kvalue']
+            );
 
             $players[$matches[$ndx]['playera']]['rating'] = $newA;
             $players[$matches[$ndx]['playerb']]['rating'] = $newB;

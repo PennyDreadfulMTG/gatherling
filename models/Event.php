@@ -88,10 +88,30 @@ class Event
             }
             $stmt->bind_param('s', $name);
             $stmt->execute();
-            $stmt->bind_result($this->format, $this->host, $this->cohost, $this->series, $this->season, $this->number,
-                         $this->start, $this->kvalue, $this->finalized, $this->prereg_allowed, $this->threadurl,
-                          $this->metaurl, $this->reporturl, $this->active, $this->current_round, $this->player_reportable, $this->player_editdecks,
-                          $this->prereg_cap, $this->private_decks, $this->private_finals, $this->player_reported_draws, $this->late_entry_limit);
+            $stmt->bind_result(
+                $this->format,
+                $this->host,
+                $this->cohost,
+                $this->series,
+                $this->season,
+                $this->number,
+                $this->start,
+                $this->kvalue,
+                $this->finalized,
+                $this->prereg_allowed,
+                $this->threadurl,
+                $this->metaurl,
+                $this->reporturl,
+                $this->active,
+                $this->current_round,
+                $this->player_reportable,
+                $this->player_editdecks,
+                $this->prereg_cap,
+                $this->private_decks,
+                $this->private_finals,
+                $this->player_reported_draws,
+                $this->late_entry_limit
+            );
             if ($stmt->fetch() == null) {
                 throw new Exception('Event '.$name.' not found in DB');
             }
@@ -145,11 +165,31 @@ class Event
         return $currentTimeoutInSecs;
     }
 
-    public static function CreateEvent($year, $month, $day, $hour, $naming, $name, $format, $host, $cohost,
-                                       $kvalue, $series, $season, $number, $threadurl, $metaurl, $reporturl,
-                                       $prereg_allowed, $player_reportable, $late_entry_limit,
-                                       $mainrounds, $mainstruct, $finalrounds, $finalstruct)
-    {
+    public static function CreateEvent(
+        $year,
+        $month,
+        $day,
+        $hour,
+        $naming,
+        $name,
+        $format,
+        $host,
+        $cohost,
+        $kvalue,
+        $series,
+        $season,
+        $number,
+        $threadurl,
+        $metaurl,
+        $reporturl,
+        $prereg_allowed,
+        $player_reportable,
+        $late_entry_limit,
+        $mainrounds,
+        $mainstruct,
+        $finalrounds,
+        $finalstruct
+    ) {
         $event = new self('');
         $event->start = "{$year}-{$month}-{$day} {$hour}:00";
 
@@ -217,10 +257,29 @@ class Event
                                                metaurl, prereg_allowed, finalized, player_reportable,
                                                prereg_cap, player_editdecks, private_decks, private_finals, player_reported_draws, late_entry_limit)
                             VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?)');
-            $stmt->bind_param('sssssdddssssdddddddd', $this->name, $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
-                                             $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl,
-                                             $this->metaurl, $this->prereg_allowed, $this->player_reportable,
-                                             $this->prereg_cap, $this->player_editdecks, $this->private_decks, $this->private_finals, $this->player_reported_draws, $this->late_entry_limit);
+            $stmt->bind_param(
+                'sssssdddssssdddddddd',
+                $this->name,
+                $this->start,
+                $this->format,
+                $this->host,
+                $this->cohost,
+                $this->kvalue,
+                $this->number,
+                $this->season,
+                $this->series,
+                $this->threadurl,
+                $this->reporturl,
+                $this->metaurl,
+                $this->prereg_allowed,
+                $this->player_reportable,
+                $this->prereg_cap,
+                $this->player_editdecks,
+                $this->private_decks,
+                $this->private_finals,
+                $this->player_reported_draws,
+                $this->late_entry_limit
+            );
             $stmt->execute() or die($stmt->error);
             $stmt->close();
 
@@ -235,12 +294,32 @@ class Event
       player_editdecks = ?, private_decks = ?, private_finals = ?, player_reported_draws = ?, late_entry_limit = ?
       WHERE name = ?');
             $stmt or die($db->error);
-            $stmt->bind_param('ssssdddssssddddddddddds', $this->start, $this->format, $this->host, $this->cohost, $this->kvalue,
-        $this->number, $this->season, $this->series, $this->threadurl, $this->reporturl,
-        $this->metaurl, $this->finalized, $this->prereg_allowed, $this->active,
-        $this->current_round, $this->player_reportable, $this->prereg_cap,
-        $this->player_editdecks, $this->private_decks, $this->private_finals, $this->player_reported_draws, $this->late_entry_limit,
-        $this->name);
+            $stmt->bind_param(
+                'ssssdddssssddddddddddds',
+                $this->start,
+                $this->format,
+                $this->host,
+                $this->cohost,
+                $this->kvalue,
+                $this->number,
+                $this->season,
+                $this->series,
+                $this->threadurl,
+                $this->reporturl,
+                $this->metaurl,
+                $this->finalized,
+                $this->prereg_allowed,
+                $this->active,
+                $this->current_round,
+                $this->player_reportable,
+                $this->prereg_cap,
+                $this->player_editdecks,
+                $this->private_decks,
+                $this->private_finals,
+                $this->player_reported_draws,
+                $this->late_entry_limit,
+                $this->name
+            );
 
             $stmt->execute() or die($stmt->error);
             $stmt->close();
@@ -516,20 +595,26 @@ class Event
 
     public function getEntriesByDateTime()
     {
-        return Database::list_result_single_param('SELECT player
+        return Database::list_result_single_param(
+            'SELECT player
                                                  FROM entries
                                                  WHERE event = ?
                                                  AND deck ORDER BY DATE(`registered_at`) ASC',
-                                                 's', $this->name);
+            's',
+            $this->name
+        );
     }
 
     public function getEntriesByMedal()
     {
-        return Database::list_result_single_param('SELECT player
+        return Database::list_result_single_param(
+            'SELECT player
                                              FROM entries
                                              WHERE event = ?
                                              AND deck ORDER BY medal, player ',
-        's', $this->name);
+            's',
+            $this->name
+        );
     }
 
     public function getEntries()

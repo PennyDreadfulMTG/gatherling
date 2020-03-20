@@ -8,8 +8,11 @@ class Database
 
         if (!isset($instance)) {
             global $CONFIG;
-            $instance = new mysqli($CONFIG['db_hostname'], $CONFIG['db_username'],
-                             $CONFIG['db_password']);
+            $instance = new mysqli(
+                $CONFIG['db_hostname'],
+                $CONFIG['db_username'],
+                $CONFIG['db_password']
+            );
             if (mysqli_connect_errno()) {
                 echo mysqli_connect_error();
                 die("\nfailed to connect to mysql server");
@@ -39,8 +42,11 @@ class Database
 
         if (!isset($pdo_instance)) {
             global $CONFIG;
-            $pdo_instance = new PDO('mysql:hostname='.$CONFIG['db_hostname'].';dbname='.$CONFIG['db_database'],
-                              $CONFIG['db_username'], $CONFIG['db_password']);
+            $pdo_instance = new PDO(
+                'mysql:hostname='.$CONFIG['db_hostname'].';dbname='.$CONFIG['db_database'],
+                $CONFIG['db_username'],
+                $CONFIG['db_password']
+            );
         }
 
         return $pdo_instance;

@@ -1189,11 +1189,31 @@ function insertEvent()
         $_POST['late_entry_limit'] = 0;
     }
 
-    $event = Event::CreateEvent($_POST['year'], $_POST['month'], $_POST['day'], $_POST['hour'], $_POST['naming'], $_POST['name'],
-                       $_POST['format'], $_POST['host'], $_POST['cohost'], $_POST['kvalue'], $_POST['series'], $_POST['season'],
-                       $_POST['number'], $_POST['threadurl'], $_POST['metaurl'], $_POST['reporturl'], $_POST['prereg_allowed'],
-                       $_POST['player_reportable'], $_POST['late_entry_limit'],
-                       $_POST['mainrounds'], $_POST['mainstruct'], $_POST['finalrounds'], $_POST['finalstruct']);
+    $event = Event::CreateEvent(
+        $_POST['year'],
+        $_POST['month'],
+        $_POST['day'],
+        $_POST['hour'],
+        $_POST['naming'],
+        $_POST['name'],
+        $_POST['format'],
+        $_POST['host'],
+        $_POST['cohost'],
+        $_POST['kvalue'],
+        $_POST['series'],
+        $_POST['season'],
+        $_POST['number'],
+        $_POST['threadurl'],
+        $_POST['metaurl'],
+        $_POST['reporturl'],
+        $_POST['prereg_allowed'],
+        $_POST['player_reportable'],
+        $_POST['late_entry_limit'],
+        $_POST['mainrounds'],
+        $_POST['mainstruct'],
+        $_POST['finalrounds'],
+        $_POST['finalstruct']
+    );
 
     return $event;
 }
@@ -1779,8 +1799,11 @@ function extractPairings($text)
     $lines = explode("\n", $text);
     $loc = 0;
     for ($ndx = 0; $ndx < count($lines); $ndx++) {
-        if (preg_match("/^\s*[0-9]+\s+([0-9]+\s+)?([0-9a-z_.\- ]+),.*\s+[0-9]+\s+([0-9a-z_.\- ]+),/i",
-      $lines[$ndx], $m)) {
+        if (preg_match(
+            "/^\s*[0-9]+\s+([0-9]+\s+)?([0-9a-z_.\- ]+),.*\s+[0-9]+\s+([0-9a-z_.\- ]+),/i",
+            $lines[$ndx],
+            $m
+        )) {
             $pairings[$loc] = [$m[2], $m[3]];
             $loc++;
         }
@@ -1794,8 +1817,11 @@ function extractBye($text)
     $lines = explode("\n", $text);
     $loc = 0;
     for ($ndx = 0; $ndx < count($lines); $ndx++) {
-        if (preg_match("/^\s*[0-9]+\s+([0-9]+\s+)?([0-9a-z_.\- ]+),.*\s+\* BYE \*/i",
-      $lines[$ndx], $m)) {
+        if (preg_match(
+            "/^\s*[0-9]+\s+([0-9]+\s+)?([0-9a-z_.\- ]+),.*\s+\* BYE \*/i",
+            $lines[$ndx],
+            $m
+        )) {
             return $m[2];
         }
     }
@@ -1806,8 +1832,11 @@ function extractStandings($text)
     $standings = [];
     $lines = explode("\n", $text);
     for ($ndx = 0; $ndx < count($lines); $ndx++) {
-        if (preg_match("/^\s*[0-9]+\s+([0-9]+\s+)?([0-9a-z_.\- ]+),.*\s+([0-9]+)\s+/i",
-    $lines[$ndx], $m)) {
+        if (preg_match(
+            "/^\s*[0-9]+\s+([0-9]+\s+)?([0-9a-z_.\- ]+),.*\s+([0-9]+)\s+/i",
+            $lines[$ndx],
+            $m
+        )) {
             $standings[$m[2]] = $m[3];
         }
     }

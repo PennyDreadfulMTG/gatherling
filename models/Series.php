@@ -366,11 +366,23 @@ class Series
                           LIMIT 1');
         $stmt->bind_param('ss', $this->name, $season_number);
         $stmt->execute();
-        $stmt->bind_result($seriesname, $season_rules['first_pts'], $season_rules['second_pts'],
-                       $season_rules['semi_pts'], $season_rules['quarter_pts'], $season_rules['participation_pts'],
-                       $season_rules['rounds_pts'], $season_rules['decklist_pts'], $season_rules['win_pts'],
-                       $season_rules['loss_pts'], $season_rules['bye_pts'], $season_rules['must_decklist'],
-                       $season_rules['cutoff_ord'], $season_rules['master_link'], $season_rules['format']);
+        $stmt->bind_result(
+            $seriesname,
+            $season_rules['first_pts'],
+            $season_rules['second_pts'],
+            $season_rules['semi_pts'],
+            $season_rules['quarter_pts'],
+            $season_rules['participation_pts'],
+            $season_rules['rounds_pts'],
+            $season_rules['decklist_pts'],
+            $season_rules['win_pts'],
+            $season_rules['loss_pts'],
+            $season_rules['bye_pts'],
+            $season_rules['must_decklist'],
+            $season_rules['cutoff_ord'],
+            $season_rules['master_link'],
+            $season_rules['format']
+        );
         $stmt->fetch();
         $stmt->close();
 
@@ -391,21 +403,39 @@ class Series
         if (!$stmt) {
             echo $db->error;
         }
-        $stmt->bind_param('sdddddddddddddssddddddddddddss', $this->name, $season_number, $new_rules['first_pts'],
-                                                        $new_rules['second_pts'], $new_rules['semi_pts'],
-                                                        $new_rules['quarter_pts'], $new_rules['participation_pts'],
-                                                        $new_rules['rounds_pts'], $new_rules['decklist_pts'],
-                                                        $new_rules['win_pts'], $new_rules['loss_pts'],
-                                                        $new_rules['bye_pts'], $new_rules['must_decklist'],
-                                                        $new_rules['cutoff_ord'], $new_rules['master_link'],
-                                                        $new_rules['format'], $new_rules['first_pts'],
-                                                        $new_rules['second_pts'], $new_rules['semi_pts'],
-                                                        $new_rules['quarter_pts'], $new_rules['participation_pts'],
-                                                        $new_rules['rounds_pts'], $new_rules['decklist_pts'],
-                                                        $new_rules['win_pts'], $new_rules['loss_pts'],
-                                                        $new_rules['bye_pts'], $new_rules['must_decklist'],
-                                                        $new_rules['cutoff_ord'], $new_rules['master_link'],
-                                                        $new_rules['format']);
+        $stmt->bind_param(
+            'sdddddddddddddssddddddddddddss',
+            $this->name,
+            $season_number,
+            $new_rules['first_pts'],
+            $new_rules['second_pts'],
+            $new_rules['semi_pts'],
+            $new_rules['quarter_pts'],
+            $new_rules['participation_pts'],
+            $new_rules['rounds_pts'],
+            $new_rules['decklist_pts'],
+            $new_rules['win_pts'],
+            $new_rules['loss_pts'],
+            $new_rules['bye_pts'],
+            $new_rules['must_decklist'],
+            $new_rules['cutoff_ord'],
+            $new_rules['master_link'],
+            $new_rules['format'],
+            $new_rules['first_pts'],
+            $new_rules['second_pts'],
+            $new_rules['semi_pts'],
+            $new_rules['quarter_pts'],
+            $new_rules['participation_pts'],
+            $new_rules['rounds_pts'],
+            $new_rules['decklist_pts'],
+            $new_rules['win_pts'],
+            $new_rules['loss_pts'],
+            $new_rules['bye_pts'],
+            $new_rules['must_decklist'],
+            $new_rules['cutoff_ord'],
+            $new_rules['master_link'],
+            $new_rules['format']
+        );
         $stmt->execute();
         $stmt->close();
 

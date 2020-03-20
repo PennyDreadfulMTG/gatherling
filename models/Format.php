@@ -101,12 +101,34 @@ class Format
             $stmt or die($db->error);
             $stmt->bind_param('s', $name);
             $stmt->execute();
-            $stmt->bind_result($this->name, $this->description, $this->type, $this->series_name, $this->singleton,
-                               $this->commander, $this->planechase, $this->vanguard, $this->prismatic, $this->tribal,
-                               $this->pure, $this->underdog, $this->allow_commons, $this->allow_uncommons, $this->allow_rares,
-                               $this->allow_mythics,$this->allow_timeshifted, $this->priority, $this->min_main_cards_allowed,
-                               $this->max_main_cards_allowed, $this->min_side_cards_allowed, $this->max_side_cards_allowed,
-                               $this->eternal, $this->modern, $this->standard, $this->is_meta_format);
+            $stmt->bind_result(
+                $this->name,
+                $this->description,
+                $this->type,
+                $this->series_name,
+                $this->singleton,
+                $this->commander,
+                $this->planechase,
+                $this->vanguard,
+                $this->prismatic,
+                $this->tribal,
+                $this->pure,
+                $this->underdog,
+                $this->allow_commons,
+                $this->allow_uncommons,
+                $this->allow_rares,
+                $this->allow_mythics,
+                $this->allow_timeshifted,
+                $this->priority,
+                $this->min_main_cards_allowed,
+                $this->max_main_cards_allowed,
+                $this->min_side_cards_allowed,
+                $this->max_side_cards_allowed,
+                $this->eternal,
+                $this->modern,
+                $this->standard,
+                $this->is_meta_format
+            );
             if ($stmt->fetch() == null) {
                 throw new Exception('Format '.$name.' not found in DB');
             }
@@ -195,13 +217,35 @@ class Format
                                                   max_main_cards_allowed, min_side_cards_allowed, max_side_cards_allowed,
                                                   eternal, modern, `standard`, is_meta_format)
                               VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-        $stmt->bind_param('ssssdddddddddddddddddddddd',
-                          $this->name, $this->description, $this->type, $this->series_name, $this->singleton,
-                          $this->commander, $this->planechase, $this->vanguard, $this->prismatic, $this->tribal,
-                          $this->pure, $this->underdog, $this->allow_commons, $this->allow_uncommons, $this->allow_rares,
-                          $this->allow_mythics, $this->allow_timeshifted, $this->priority, $this->min_main_cards_allowed,
-                          $this->max_main_cards_allowed, $this->min_side_cards_allowed, $this->max_side_cards_allowed,
-                          $this->eternal, $this->modern, $this->standard, $this->is_meta_format);
+        $stmt->bind_param(
+            'ssssdddddddddddddddddddddd',
+            $this->name,
+            $this->description,
+            $this->type,
+            $this->series_name,
+            $this->singleton,
+            $this->commander,
+            $this->planechase,
+            $this->vanguard,
+            $this->prismatic,
+            $this->tribal,
+            $this->pure,
+            $this->underdog,
+            $this->allow_commons,
+            $this->allow_uncommons,
+            $this->allow_rares,
+            $this->allow_mythics,
+            $this->allow_timeshifted,
+            $this->priority,
+            $this->min_main_cards_allowed,
+            $this->max_main_cards_allowed,
+            $this->min_side_cards_allowed,
+            $this->max_side_cards_allowed,
+            $this->eternal,
+            $this->modern,
+            $this->standard,
+            $this->is_meta_format
+        );
         $stmt->execute() or die($stmt->error);
         $stmt->close();
 
@@ -281,14 +325,35 @@ class Format
                                   eternal = ?, modern = ?, `standard` = ?, is_meta_format = ?
                                   WHERE name = ?');
             $stmt or die($db->error);
-            $stmt->bind_param('sssdddddddddddddddddddddds',
-                              $this->description, $this->type, $this->series_name, $this->singleton, $this->commander,
-                              $this->planechase, $this->vanguard, $this->prismatic, $this->tribal, $this->pure, $this->underdog,
-                              $this->allow_commons, $this->allow_uncommons, $this->allow_rares, $this->allow_mythics,
-                              $this->allow_timeshifted, $this->priority, $this->min_main_cards_allowed,
-                              $this->max_main_cards_allowed, $this->min_side_cards_allowed, $this->max_side_cards_allowed,
-                              $this->eternal, $this->modern, $this->standard, $this->is_meta_format,
-                              $this->name);
+            $stmt->bind_param(
+                'sssdddddddddddddddddddddds',
+                $this->description,
+                $this->type,
+                $this->series_name,
+                $this->singleton,
+                $this->commander,
+                $this->planechase,
+                $this->vanguard,
+                $this->prismatic,
+                $this->tribal,
+                $this->pure,
+                $this->underdog,
+                $this->allow_commons,
+                $this->allow_uncommons,
+                $this->allow_rares,
+                $this->allow_mythics,
+                $this->allow_timeshifted,
+                $this->priority,
+                $this->min_main_cards_allowed,
+                $this->max_main_cards_allowed,
+                $this->min_side_cards_allowed,
+                $this->max_side_cards_allowed,
+                $this->eternal,
+                $this->modern,
+                $this->standard,
+                $this->is_meta_format,
+                $this->name
+            );
             $stmt->execute() or die($stmt->error);
             $stmt->close();
 
@@ -441,8 +506,12 @@ class Format
 
     public static function getPrivateFormats($seriesName)
     {
-        return Database::list_result_double_param('SELECT name FROM formats WHERE type = ? AND series_name = ?',
-                                                  'ss', 'Private', $seriesName);
+        return Database::list_result_double_param(
+            'SELECT name FROM formats WHERE type = ? AND series_name = ?',
+            'ss',
+            'Private',
+            $seriesName
+        );
     }
 
     public static function getAllFormats()
@@ -524,38 +593,50 @@ class Format
 
     public function getLegalList()
     {
-        return Database::list_result_single_param('SELECT card_name
+        return Database::list_result_single_param(
+            'SELECT card_name
                                                    FROM bans
                                                    WHERE format = ? AND allowed = 1
                                                    ORDER BY card_name',
-                                                  's', $this->name);
+            's',
+            $this->name
+        );
     }
 
     public function getTribesAllowed()
     {
-        return Database::list_result_single_param('SELECT name
+        return Database::list_result_single_param(
+            'SELECT name
                                                    FROM tribe_bans
                                                    WHERE format = ? AND allowed = 1
                                                    ORDER BY name',
-                                                  's', $this->name);
+            's',
+            $this->name
+        );
     }
 
     public function getRestrictedList()
     {
-        return Database::list_result_single_param('SELECT card_name
+        return Database::list_result_single_param(
+            'SELECT card_name
                                                    FROM restricted
                                                    WHERE format = ?
                                                    ORDER BY card_name',
-                                                  's', $this->name);
+            's',
+            $this->name
+        );
     }
 
     public function getRestrictedTotribeList()
     {
-        return Database::list_result_single_param('SELECT card_name
+        return Database::list_result_single_param(
+            'SELECT card_name
                                                    FROM restrictedtotribe
                                                    WHERE format = ? AND allowed = 1
                                                    ORDER BY card_name',
-                                                  's', $this->name);
+            's',
+            $this->name
+        );
     }
 
     public function isError()
@@ -652,40 +733,56 @@ class Format
 
     public function isCardOnBanList($card)
     {
-        return count(Database::list_result_double_param('SELECT card_name
+        return count(Database::list_result_double_param(
+            'SELECT card_name
                                                          FROM bans
                                                          WHERE (format = ?
                                                          AND card_name = ?
                                                          AND allowed = 0)',
-                                                         'ss', $this->name, $card)) > 0;
+            'ss',
+            $this->name,
+            $card
+        )) > 0;
     }
 
     public function isCardOnLegalList($card)
     {
-        return count(Database::list_result_double_param('SELECT card_name
+        return count(Database::list_result_double_param(
+            'SELECT card_name
                                                          FROM bans
                                                          WHERE (format = ?
                                                          AND card_name = ?
                                                          AND allowed = 1)',
-                                                         'ss', $this->name, $card)) > 0;
+            'ss',
+            $this->name,
+            $card
+        )) > 0;
     }
 
     public function isCardOnRestrictedList($card)
     {
-        return count(Database::list_result_double_param('SELECT card_name
+        return count(Database::list_result_double_param(
+            'SELECT card_name
                                                          FROM restricted
                                                          WHERE (format = ?
                                                          AND card_name = ?)',
-                                                         'ss', $this->name, $card)) > 0;
+            'ss',
+            $this->name,
+            $card
+        )) > 0;
     }
 
     public function isCardOnRestrictedToTribeList($card)
     {
-        return count(Database::list_result_double_param('SELECT card_name
+        return count(Database::list_result_double_param(
+            'SELECT card_name
                                                          FROM restrictedtotribe
                                                          WHERE (format = ?
                                                          AND card_name = ?)',
-                                                         'ss', $this->name, $card)) > 0;
+            'ss',
+            $this->name,
+            $card
+        )) > 0;
     }
 
     public function isCardSetLegal($setName)
@@ -1109,8 +1206,11 @@ class Format
 
     public static function isCardLegendary($card)
     {
-        return count(Database::list_result_single_param("SELECT id FROM cards WHERE name = ? AND type LIKE '%Legendary%'",
-                                                         's', $card)) > 0;
+        return count(Database::list_result_single_param(
+            "SELECT id FROM cards WHERE name = ? AND type LIKE '%Legendary%'",
+            's',
+            $card
+        )) > 0;
     }
 
     public function isQuantityLegal($card, $amt)

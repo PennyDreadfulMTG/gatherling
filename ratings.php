@@ -124,8 +124,12 @@ function bestEver($format)
     $stmt->fetch();
     $stmt->close();
 
-    printf("The highest $format rating ever achieved is <b>%d</b>, obtained by <b>%s</b> on %s",
-    $rating, $playername, date('l, F j, Y', $timestamp));
+    printf(
+        "The highest $format rating ever achieved is <b>%d</b>, obtained by <b>%s</b> on %s",
+        $rating,
+        $playername,
+        date('l, F j, Y', $timestamp)
+    );
 }
 
 function currentThrough($format)

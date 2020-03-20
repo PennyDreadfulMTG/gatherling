@@ -33,8 +33,19 @@ class Player
 
         $stmt->bind_param('s', $name);
         $stmt->execute();
-        $stmt->bind_result($this->name, $this->password, $this->rememberMe, $this->ipAddress, $this->host, $this->super,
-                $this->verified, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->theme);
+        $stmt->bind_result(
+            $this->name,
+            $this->password,
+            $this->rememberMe,
+            $this->ipAddress,
+            $this->host,
+            $this->super,
+            $this->verified,
+            $this->emailAddress,
+            $this->emailPrivacy,
+            $this->timezone,
+            $this->theme
+        );
         if ($stmt->fetch() == null) {
             throw new Exception('Player '.$name.' is not found.');
         }

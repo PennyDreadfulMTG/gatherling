@@ -745,9 +745,7 @@ class Pagination
 
                     // if on the first page, remove it in order to avoid duplicate content
                     ($page == 1 ? '' : $this->_properties['variable_name'].$page),
-
                     $this->_properties['base_url']
-
                 ));
 
             // if the current page is not yet in the URL, set it, unless we're on the first page

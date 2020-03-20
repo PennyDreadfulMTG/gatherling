@@ -218,11 +218,31 @@ function create_event()
         $naming = 'auto';
     }
 
-    $event = Event::CreateEvent(arg('year'), arg('month'), arg('day'), arg('hour'), $naming, $name,
-                    arg('format'), arg('host', ''), arg('cohost', ''), arg('kvalue', ''), arg('series'), arg('season'),
-                    arg('number'), arg('threadurl', ''), arg('metaurl', ''), arg('reporturl', ''), arg('prereg_allowed', ''),
-                    arg('player_reportable', ''), arg('late_entry_limit', ''),
-                    arg('mainrounds', ''), arg('mainstruct', ''), arg('finalrounds', ''), arg('finalstruct', ''));
+    $event = Event::CreateEvent(
+        arg('year'),
+        arg('month'),
+        arg('day'),
+        arg('hour'),
+        $naming,
+        $name,
+        arg('format'),
+        arg('host', ''),
+        arg('cohost', ''),
+        arg('kvalue', ''),
+        arg('series'),
+        arg('season'),
+        arg('number'),
+        arg('threadurl', ''),
+        arg('metaurl', ''),
+        arg('reporturl', ''),
+        arg('prereg_allowed', ''),
+        arg('player_reportable', ''),
+        arg('late_entry_limit', ''),
+        arg('mainrounds', ''),
+        arg('mainstruct', ''),
+        arg('finalrounds', ''),
+        arg('finalstruct', '')
+    );
 
     $result = [];
     $result['success'] = true;
