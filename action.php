@@ -1,13 +1,15 @@
 <?php
 
 /// Information banner informing user that they have pending actions.
-/// Appears at top of each page?
+/// Appears at top of each page
 require_once 'lib.php';
 session_start();
 $player = Player::getSessionPlayer();
 if (!is_null($player)) {
     $message = null;
-
+    if ($player->emailAddress == '') {
+        $message = '<a href="player.php?mode=edit_email">Add an Email Address</a> to your account.';
+    }
     foreach ($player->organizersSeries() as $player_series) {
         $series = new Series($player_series);
         if ($series->active) {

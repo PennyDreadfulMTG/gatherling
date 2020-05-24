@@ -126,6 +126,23 @@ switch ($action) {
     $result['version'] = 2;
     break;
 
+    case 'whoami':
+    $player = Player::getSessionPlayer();
+    if (is_null($player)) {
+        error('Not Logged in', ['name' => null]);
+    }
+
+        $result = repr_json_player($player);
+    break;
+
+    case 'whois':
+        $name = arg('name');
+        $player = Player::findByName($name);
+        if (is_null($player)) {
+            error("No player named $name");
+        }
+        $result = repr_json_player($player);
+    break;
     default:
     $result['error'] = "Unknown action '{$action}'";
     break;

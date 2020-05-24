@@ -34,9 +34,12 @@ function is_admin()
     return false;
 }
 
-function error($msg)
+function error($msg, $extra = null)
 {
     $result = [];
+    if (is_array($extra)) {
+        $result = populate([], (object) $extra, array_keys($extra));
+    }
     $result['error'] = $msg;
     $result['success'] = false;
     json_headers();
@@ -136,6 +139,13 @@ function repr_json_series($series)
     return $json;
 }
 
+function repr_json_player($player)
+{
+    $json = populate([], $player, ['name', 'verified']);
+
+    return $json;
+}
+
 //## Actions
 
 function add_player_to_event($event, $name)
@@ -191,6 +201,12 @@ function drop_player_from_event($event, $name)
 function create_series($newseries, $active, $day)
 {
     $result = [];
+    $authorized = false;
+    if (is_admin()) {
+        $authorized = true;
+    } else {
+    }
+
     if (!is_admin()) {
         $result['error'] = 'Unauthorized';
         $result['success'] = false;
@@ -238,6 +254,7 @@ function create_event()
         arg('prereg_allowed', ''),
         arg('player_reportable', ''),
         arg('late_entry_limit', ''),
+        //arg('private', ''),
         arg('mainrounds', ''),
         arg('mainstruct', ''),
         arg('finalrounds', ''),
