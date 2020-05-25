@@ -1420,10 +1420,10 @@ function resultDropMenu($name = 'newmatchresult', $extra_options = [])
 {
     echo "<select class=\"inputbox\" name=\"{$name}\">";
     echo '<option value="">- Result -</option>';
-    echo '<option value="2-0">2-0</option>';
-    echo '<option value="2-1">2-1</option>';
-    echo '<option value="1-2">1-2</option>';
-    echo '<option value="0-2">0-2</option>';
+    echo '<option value="2-0">Player A win 2-0</option>';
+    echo '<option value="2-1">Player A win 2-1</option>';
+    echo '<option value="0-2">Player B win 2-0</option>';
+    echo '<option value="1-2">Player B win 2-1</option>';
     echo '<option value="D">Draw</option>';
     foreach ($extra_options as $value => $text) {
         echo "<option value=\"{$value}\">{$text}</option>";
