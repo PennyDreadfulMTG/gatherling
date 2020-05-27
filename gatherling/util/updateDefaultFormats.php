@@ -3,7 +3,7 @@
 if (file_exists('../lib.php')) {
     require_once '../lib.php';
 } else {
-    require_once 'lib.php';
+    require_once 'gatherling/lib.php';
 }
 
 if (PHP_SAPI != 'cli' && $_SERVER['REQUEST_METHOD'] == 'GET') { // unauthorized POST is okay

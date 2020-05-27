@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `cards` (
   `rarity` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cardset` (`cardset`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19737 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -145,7 +145,7 @@ CREATE TABLE IF NOT EXISTS `decks` (
   KEY `archetype` (`archetype`),
   KEY `FK_decks_players` (`playername`),
   KEY `FK_decks_formats` (`format`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11346 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
 
 -- --------------------------------------------------------
 
@@ -268,7 +268,7 @@ CREATE TABLE IF NOT EXISTS `matches` (
   KEY `playera` (`playera`),
   KEY `playerb` (`playerb`),
   KEY `subevent` (`subevent`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21619 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1  ;
 
 -- --------------------------------------------------------
 
@@ -468,7 +468,7 @@ CREATE TABLE IF NOT EXISTS `standings` (
   PRIMARY KEY (`id`),
   KEY `player` (`player`),
   KEY `event` (`event`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10495 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1  ;
 
 -- --------------------------------------------------------
 
@@ -484,7 +484,7 @@ CREATE TABLE IF NOT EXISTS `subevents` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   KEY `parent` (`parent`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1255 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1  ;
 
 -- --------------------------------------------------------
 

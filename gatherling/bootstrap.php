@@ -6,6 +6,8 @@ function autoload($class_name)
         require_once 'models/'.$class_name.'.php';
     } elseif (file_exists('../models/'.$class_name.'.php')) {
         require_once '../models/'.$class_name.'.php';
+    } elseif (file_exists('gatherling/models/'.$class_name.'.php')) {
+        require_once 'gatherling/models/'.$class_name.'.php';
     }
 }
 spl_autoload_register('autoload');

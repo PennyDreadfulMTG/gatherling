@@ -14,7 +14,7 @@ ini_set('max_execution_time', 300);
 if (file_exists('../lib.php')) {
     require_once '../lib.php';
 } else {
-    require_once 'lib.php';
+    require_once 'gatherling/lib.php';
 }
 
 session_start();
@@ -94,6 +94,8 @@ if (!$db->query('SELECT name FROM players LIMIT 1')) {
         $schema = file_get_contents('../schema.sql');
     } elseif (file_exists('schema.sql')) {
         $schema = file_get_contents('schema.sql');
+    } elseif (file_exists('gatherling/schema.sql')) {
+        $schema = file_get_contents('gatherling/schema.sql');
     } else {
         die('Could not find schema.sql');
     }
@@ -641,6 +643,12 @@ if ($version < 33) {
     do_query('ALTER TABLE `cardsets`
         ADD COLUMN `last_updated` INT NULL AFTER `modern_legal`;');
     set_version(33);
+}
+if ($version < 34) {
+    info('Updating to version 44 (Private Events)');
+    do_query('ALTER TABLE `events`
+        ADD COLUMN `private` TINYINT(1) NULL DEFAULT 0 AFTER `late_entry_limit`;');
+    set_version(34);
 }
 $db->autocommit(true);
 

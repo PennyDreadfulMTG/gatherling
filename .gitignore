@@ -1,8 +1,11 @@
 util/*.txt
 util/setpassword.php
 config.php
-gatherling
 nav/
 tmp/
 .vscode/
 vendor/
+
+/backups/*.sql.gz
+/backups/*.sql
+/.env

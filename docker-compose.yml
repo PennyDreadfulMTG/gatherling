@@ -1,0 +1,23 @@
+version: '2'
+services:
+  web:
+    build: .
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    env_file: .env
+    volumes:
+      - ./gatherling:/var/www/html/local
+      - ./:/var/repo
+  db:
+    image: mysql:5
+    env_file: .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./backups:/docker-entrypoint-initdb.d
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080

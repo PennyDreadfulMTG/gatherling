@@ -1,6 +1,6 @@
 <?php
 
-require_once 'lib.php';
+require_once 'gatherling/lib.php';
 
 // declare(strict_types=1);
 

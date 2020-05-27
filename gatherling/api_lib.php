@@ -254,7 +254,7 @@ function create_event()
         arg('prereg_allowed', ''),
         arg('player_reportable', ''),
         arg('late_entry_limit', ''),
-        //arg('private', ''),
+        arg('private', ''),
         arg('mainrounds', ''),
         arg('mainstruct', ''),
         arg('finalrounds', ''),

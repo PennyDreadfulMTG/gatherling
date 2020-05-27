@@ -181,6 +181,7 @@ function content()
         $newevent->player_reported_draws = $oldevent->player_reported_draws;
         $newevent->prereg_cap = $oldevent->prereg_cap;
         $newevent->late_entry_limit = $oldevent->late_entry_limit;
+        $newevent->private = $oldevent->private;
 
         $newevent->name = sprintf('%s %d.%02d', $newevent->series, $newevent->season, $newevent->number);
 
@@ -235,6 +236,7 @@ function content()
         $newevent->player_reported_draws = $oldevent->player_reported_draws;
         $newevent->prereg_cap = $oldevent->prereg_cap;
         $newevent->late_entry_limit = $oldevent->late_entry_limit;
+        $newevent->private = $oldevent->private;
 
         $newevent->name = sprintf('%s %d.%02d', $newevent->series, $newevent->season, $newevent->number);
 
@@ -594,6 +596,7 @@ function eventForm($event = null, $forcenew = false)
         print_checkbox_input('Deck List Privacy', 'private_decks', $event->private_decks);
         print_checkbox_input('Finals List Privacy', 'private_finals', $event->private_finals);
         print_checkbox_input('Allow Player Reported Draws', 'player_reported_draws', $event->player_reported_draws, 'This allows players to report a draw result for matches.');
+        print_checkbox_input('Private Event', 'private', $event->private, 'This event is invisible to non-participants');
 
         if ($edit == 0) {
             echo '<tr><td>&nbsp;</td></tr>';
@@ -1209,6 +1212,7 @@ function insertEvent()
         $_POST['prereg_allowed'],
         $_POST['player_reportable'],
         $_POST['late_entry_limit'],
+        $_POST['private'],
         $_POST['mainrounds'],
         $_POST['mainstruct'],
         $_POST['finalrounds'],
@@ -1246,6 +1250,9 @@ function updateEvent()
     }
     if (!isset($_POST['late_entry_limit'])) {
         $_POST['late_entry_limit'] = 0;
+    }
+    if (!isset($_POST['private'])) {
+        $_POST['private'] = 0;
     }
 
     $event = new Event($_POST['name']);
@@ -1295,6 +1302,7 @@ function updateEvent()
     }
     $event->finalrounds = $_POST['finalrounds'];
     $event->finalstruct = $_POST['finalstruct'];
+    $event->private = $_POST['private'];
 
     $event->save();
 
@@ -1420,10 +1428,10 @@ function resultDropMenu($name = 'newmatchresult', $extra_options = [])
 {
     echo "<select class=\"inputbox\" name=\"{$name}\">";
     echo '<option value="">- Result -</option>';
-    echo '<option value="2-0">Player A win 2-0</option>';
-    echo '<option value="2-1">Player A win 2-1</option>';
-    echo '<option value="0-2">Player B win 2-0</option>';
-    echo '<option value="1-2">Player B win 2-1</option>';
+    echo '<option value="2-0">2-0</option>';
+    echo '<option value="2-1">2-1</option>';
+    echo '<option value="1-2">1-2</option>';
+    echo '<option value="0-2">0-2</option>';
     echo '<option value="D">Draw</option>';
     foreach ($extra_options as $value => $text) {
         echo "<option value=\"{$value}\">{$text}</option>";

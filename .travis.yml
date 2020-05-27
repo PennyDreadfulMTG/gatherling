@@ -7,11 +7,12 @@ services:
 - mysql
 script:
 - mysql -e 'CREATE DATABASE gatherling DEFAULT CHARACTER SET latin1;'
-- cp config.php.travisci config.php
-- php admin/db-upgrade.php
-- php util/insertcardset.php M10
-- php util/insertcardset.php ELD
-- php util/updateDefaultFormats.php
+- mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql
+- cp gatherling/config.php.travisci gatherling/config.php
+- php gatherling/admin/db-upgrade.php
+- php gatherling/util/insertcardset.php M10
+- php gatherling/util/insertcardset.php ELD
+- php gatherling/util/updateDefaultFormats.php
 - phpunit -v tests/
 notifications:
   webhooks: https://www.travisbuddy.com/

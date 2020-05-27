@@ -1,9 +1,11 @@
 <?php
 
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
 if (file_exists('../lib.php')) {
     require_once '../lib.php';
 } else {
-    require_once 'lib.php';
+    require_once 'gatherling/lib.php';
 }
 
 function info($text, $newline = true)
@@ -195,7 +197,10 @@ function insertCard($card, $set, $rarity, $stmt)
     echo '</td></tr>';
 
     $changeling = 0;
-    if (preg_match('/Creature|Tribal/', $typeline) && preg_match('/is every creature type/', $card->text)) {
+    if (preg_match('/Creature|Tribal/', $typeline)) {
+        $changeling = 1;
+    }
+    if (isset($card->text) && preg_match('/is every creature type/', $card->text)) {
         $changeling = 1;
     }
 

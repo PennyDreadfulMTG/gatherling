@@ -3,6 +3,9 @@ require_once 'lib.php';
 require_once 'lib_form_helper.php';
 session_start();
 $player = Player::getSessionPlayer();
+if ($player == null) {
+    linkToLogin('your Player Control Panel');
+}
 
 print_header('Player Control Panel');
 ?>
@@ -11,83 +14,79 @@ print_header('Player Control Panel');
 <div class="uppertitle"> Player Control Panel </div>
 <?php
 $result = '';
-if ($player == null) {
-    linkToLogin('your Player Control Panel');
-} else {
-    $result = '';
-    // Handle actions
-    if (isset($_POST['action'])) {
-        // TODO: remove deck ignore functionality
-        if ($_POST['action'] == 'setIgnores') {
-            setPlayerIgnores();
-        } elseif ($_POST['action'] == 'changePassword') {
-            $success = false;
-            if ($_POST['newPassword2'] == $_POST['newPassword']) {
-                if (strlen($_POST['newPassword']) >= 8) {
-                    $authenticated = Player::checkPassword($_POST['username'], $_POST['oldPassword']);
-                    if ($authenticated) {
-                        $player = new Player($_POST['username']);
-                        $player->setPassword($_POST['newPassword']);
-                        $result = 'Password changed.';
-                        $success = true;
-                    } else {
-                        $result = 'Password *not* changed, your old password was incorrect!';
-                    }
+// Handle actions
+if (isset($_POST['action'])) {
+    // TODO: remove deck ignore functionality
+    if ($_POST['action'] == 'setIgnores') {
+        setPlayerIgnores();
+    } elseif ($_POST['action'] == 'changePassword') {
+        $success = false;
+        if ($_POST['newPassword2'] == $_POST['newPassword']) {
+            if (strlen($_POST['newPassword']) >= 8) {
+                $authenticated = Player::checkPassword($_POST['username'], $_POST['oldPassword']);
+                if ($authenticated) {
+                    $player = new Player($_POST['username']);
+                    $player->setPassword($_POST['newPassword']);
+                    $result = 'Password changed.';
+                    $success = true;
                 } else {
-                    $result = 'Password *not* changed, your new password needs to be longer!';
+                    $result = 'Password *not* changed, your old password was incorrect!';
                 }
             } else {
-                $result = 'Password *not* changed, your new passwords did not match!';
+                $result = 'Password *not* changed, your new password needs to be longer!';
             }
-        } elseif ($_POST['action'] == 'editEmail') {
-            $success = false;
-            if ($_POST['newEmail'] == $_POST['newEmail2']) {
-                $player = new Player($_POST['username']);
-                $player->emailAddress = ($_POST['newEmail']);
-                $player->emailPrivacy = ($_POST['emailstatus']);
-                $result = 'Email changed.';
-                $success = true;
-                $player->save();
-            } else {
-                $result = 'Email *NOT* Changed, your new emails did not match!';
-            }
-        } elseif ($_POST['action'] == 'changeTimeZone') {
+        } else {
+            $result = 'Password *not* changed, your new passwords did not match!';
+        }
+    } elseif ($_POST['action'] == 'editEmail') {
+        $success = false;
+        if ($_POST['newEmail'] == $_POST['newEmail2']) {
             $player = new Player($_POST['username']);
-            $player->timezone = ($_POST['timezone']);
-            $result = 'Time Zone Changed.';
+            $player->emailAddress = ($_POST['newEmail']);
+            $player->emailPrivacy = ($_POST['emailstatus']);
+            $result = 'Email changed.';
+            $success = true;
             $player->save();
-        } elseif ($_POST['action'] == 'verifyAccount') {
-            $success = false;
-            if ($player->checkChallenge($_POST['challenge'])) {
-                $player->setVerified(true);
-                $result = 'Successfully verified your account with MTGO.';
-                $success = true;
-            } else {
-                $result = "Your challenge is wrong.  Get a new one by sending the message '<code>!verify {$CONFIG['infobot_prefix']}</code>' to pdbot on MTGO!";
-            }
+        } else {
+            $result = 'Email *NOT* Changed, your new emails did not match!';
+        }
+    } elseif ($_POST['action'] == 'changeTimeZone') {
+        $player = new Player($_POST['username']);
+        $player->timezone = ($_POST['timezone']);
+        $result = 'Time Zone Changed.';
+        $player->save();
+    } elseif ($_POST['action'] == 'verifyAccount') {
+        $success = false;
+        if ($player->checkChallenge($_POST['challenge'])) {
+            $player->setVerified(true);
+            $result = 'Successfully verified your account with MTGO.';
+            $success = true;
+        } else {
+            $result = "Your challenge is wrong.  Get a new one by sending the message '<code>!verify {$CONFIG['infobot_prefix']}</code>' to pdbot on MTGO!";
         }
     }
-    // Handle modes
-    $dispmode = 'playercp';
-    if (isset($_REQUEST['mode'])) {
-        $dispmode = $_REQUEST['mode'];
-    }
+}
+// Handle modes
+$dispmode = 'playercp';
+if (isset($_REQUEST['mode'])) {
+    $dispmode = $_REQUEST['mode'];
+}
 
-    switch ($dispmode) {
-    case 'submit_result':
-    case 'submit_league_result':
-    case 'verify_result':
-    case 'verify_league_result':
-    case 'drop_form':
-        echo 'oops';
+switch ($dispmode) {
+case 'submit_result':
+case 'submit_league_result':
+case 'verify_result':
+case 'verify_league_result':
+case 'drop_form':
+    echo 'oops';
 
-    break;
+break;
 
-    case 'alldecks':
-    print_allContainer();
-    break;
+case 'alldecks':
+  print_allContainer();
+  break;
 
-    case 'allratings':
+case 'allratings':
     $format = 'Composite';
     if (isset($_GET['format'])) {
         $format = $_GET['format'];
@@ -99,44 +98,43 @@ if ($player == null) {
     print_ratingsHistory($format);
     break;
 
-    case 'allmatches':
-    print_allMatchForm($player);
-    print_matchTable($player);
-    break;
+case 'allmatches':
+print_allMatchForm($player);
+print_matchTable($player);
+break;
 
-    case 'Filter Matches':
-    print_allMatchForm($player);
-    print_matchTable($player);
-    break;
+case 'Filter Matches':
+print_allMatchForm($player);
+print_matchTable($player);
+break;
 
-    case 'changepass':
-    print_changePassForm($player, $result);
-    break;
+case 'changepass':
+print_changePassForm($player, $result);
+break;
 
-    case 'edit_email':
-    print_editEmailForm($player, $result);
-    break;
+case 'edit_email':
+print_editEmailForm($player, $result);
+break;
 
-    case 'change_timezone':
-    print_editTimeZoneForm($player, $result);
-    break;
+case 'change_timezone':
+print_editTimeZoneForm($player, $result);
+break;
 
-    case 'standings':
-    Standings::printEventStandings($_GET['event'], Player::loginName());
-    break;
+case 'standings':
+Standings::printEventStandings($_GET['event'], Player::loginName());
+break;
 
-    case 'verifymtgo':
-    if ($CONFIG['infobot_passkey'] == '') {
-        print_manualverifyMtgoForm();
-    } else {
-        print_verifyMtgoForm($player, $result);
-    }
-    break;
+case 'verifymtgo':
+if ($CONFIG['infobot_passkey'] == '') {
+    print_manualverifyMtgoForm();
+} else {
+    print_verifyMtgoForm($player, $result);
+}
+break;
 
-    default:
-    print_mainPlayerCP($player, $result);
-    break;
-  }
+default:
+print_mainPlayerCP($player, $result);
+break;
 }
 ?>
 </div> <!-- gatherling_main box -->
@@ -438,6 +436,9 @@ function print_ActiveEvents()
     $Leagues = [];
     $numberOfLeagues = 0;
     foreach ($events as $event) {
+        if (Standings::playerActive($event->name, $player->name) == 0 && $event->private) {
+            continue;
+        }
         $targetUrl = 'eventreport';
         if ($event->authCheck($player->name)) {
             $targetUrl = 'event';
