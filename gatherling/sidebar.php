@@ -22,7 +22,7 @@ echo "</div>\n";
 function activeEvents()
 {
     $db = Database::getConnection();
-    $events = Event::getActiveEvents();
+    $events = Event::getActiveEvents(false);
     if ($events) {
         echo "<div class=\"box sidecolumn\">\n";
         echo "<h4>ACTIVE EVENTS</h4>\n";

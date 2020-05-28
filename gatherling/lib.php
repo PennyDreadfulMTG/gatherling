@@ -30,7 +30,7 @@ function theme_file($name)
         }
     }
     $theme_dir = "styles/{$CONFIG['style']}/";
-    $default_dir = 'styles/default/';
+    $default_dir = 'styles/Chandra/';
     if (file_exists($theme_dir.$name)) {
         return $theme_dir.$name;
     }

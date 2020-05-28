@@ -650,6 +650,21 @@ if ($version < 34) {
         ADD COLUMN `private` TINYINT(1) NULL DEFAULT 0 AFTER `late_entry_limit`;');
     set_version(34);
 }
+if ($version < 35) {
+    info('Updating to version 44 (Primary Keys)');
+    do_query('ALTER TABLE `events`
+	ADD COLUMN `id` INT NOT NULL AUTO_INCREMENT FIRST,
+	DROP PRIMARY KEY,
+	ADD PRIMARY KEY (`id`) USING BTREE,
+    ADD UNIQUE INDEX `name` (`name`);');
+
+    do_query('ALTER TABLE `players`
+	ADD COLUMN `id` INT NOT NULL AUTO_INCREMENT FIRST,
+	DROP PRIMARY KEY,
+	ADD PRIMARY KEY (`id`) USING BTREE,
+    ADD UNIQUE INDEX `name` (`name`);');
+    set_version(35);
+}
 $db->autocommit(true);
 
 info('DB is up to date!');

@@ -1456,10 +1456,15 @@ class Event
         $this->addPairing($player, $player, ($this->current_round + 1), 'BYE');
     }
 
-    public static function getActiveEvents()
+    public static function getActiveEvents($include_private = true)
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE active = 1');
+        if ($include_private) {
+            $stmt = $db->prepare('SELECT name FROM events WHERE active = 1');
+        } else {
+            $stmt = $db->prepare('SELECT name FROM events WHERE active = 1 AND `private` = 0');
+        }
+
         $stmt->execute();
         $stmt->bind_result($nextevent);
         $event_names = [];
