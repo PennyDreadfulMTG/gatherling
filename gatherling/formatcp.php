@@ -389,7 +389,7 @@ function handleActions($seriesName)
 
         $format->save();
     } elseif ($_POST['action'] == 'New') {
-        printNewFormat();
+        printNewFormat($seriesName);
     } elseif ($_POST['action'] == 'Create New Format') {
         $format = new Format('');
         $format->name = $_POST['newformatname'];
@@ -634,11 +634,12 @@ function handleActions($seriesName)
     }
 }
 
-function printNewFormat()
+function printNewFormat($seriesName = '')
 {
     echo "<h4>New Format</h4>\n";
     echo '<form action="formatcp.php" method="post">';
     echo '<input type="hidden" name="view" value="no_view" />';
+    echo '<input type="hidden" name="series" value="'.$seriesName.'" />';
     echo '<table class="form" style="border-width: 0px;" align="center">';
     echo '<tr><td colspan="2">New Format Name: <input type="text" name="newformatname" STYLE="width: 175px"/></td></tr>';
     echo '<td colspan="2" class="buttons">';
