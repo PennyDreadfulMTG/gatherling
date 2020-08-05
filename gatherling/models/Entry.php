@@ -33,7 +33,7 @@ class Entry
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT deck, medal, ignored, drop_round FROM entries WHERE event = ? AND player = ?');
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
         $stmt->bind_param('ss', $eventname, $playername);
         $stmt->execute();
         $this->ignored = 0;

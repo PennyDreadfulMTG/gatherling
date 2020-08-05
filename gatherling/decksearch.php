@@ -277,7 +277,7 @@ function archetypeDropMenu($archetype = null, $useAll = 0, $form_name = 'archety
 {
     $db = Database::getConnection();
     $query = 'SELECT name FROM archetypes WHERE priority > 0 ORDER BY  name';
-    $result = $db->query($query) or die($db->error);
+    $result = $db->query($query) or exit($db->error);
     echo "<select id=\"ds_select\"  name=\"{$form_name}\">";
     $title = ($useAll == 0) ? '- Archetype -' : 'All';
     echo "<option value=\"\">$title</option>";
@@ -296,7 +296,7 @@ function seriesDropMenu($series = null, $useAll = 0, $form_name = 'series')
 {
     $db = Database::getConnection();
     $query = 'SELECT name FROM series ORDER BY name';
-    $result = $db->query($query) or die($db->error);
+    $result = $db->query($query) or exit($db->error);
     echo "<select id=\"ds_select\" name=\"{$form_name}\">";
     $title = ($useAll == 0) ? '- Series -' : 'All';
     echo "<option value=\"\">$title</option>";
@@ -327,7 +327,7 @@ function formatDropMenuDS($format, $useAll = 0, $form_name = 'format')
 {
     $db = Database::getConnection();
     $query = 'SELECT name FROM formats ORDER BY priority desc, name';
-    $result = $db->query($query) or die($db->error);
+    $result = $db->query($query) or exit($db->error);
     echo "<select id=\"ds_select\" name=\"{$form_name}\">";
     $title = ($useAll == 0) ? '- Format -' : 'All';
     echo "<option value=\"\">$title</option>";

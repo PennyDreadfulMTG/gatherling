@@ -44,7 +44,7 @@ class Ratings
     public function deleteAllRatings()
     {
         $db = Database::getConnection();
-        $db->query('DELETE FROM ratings') or die($db->error);
+        $db->query('DELETE FROM ratings') or exit($db->error);
     }
 
     public function deleteRatingByFormat($format)
@@ -52,7 +52,7 @@ class Ratings
         $db = Database::getConnection();
         $stmt = $db->prepare('Delete FROM ratings WHERE format = ?');
         if (!$stmt) {
-            die($db->error);
+            exit($db->error);
         }
         $stmt->bind_param('s', $format);
         $stmt->execute();
@@ -75,7 +75,7 @@ class Ratings
     {
         $db = Database::getConnection();
 
-        $result = $db->query("SELECT name, start FROM events WHERE finalized = '1' ORDER BY start") or die($db->error);
+        $result = $db->query("SELECT name, start FROM events WHERE finalized = '1' ORDER BY start") or exit($db->error);
         echo '<h3>Calculating Composite Ratings</h3>';
 
         while ($row = $result->fetch_assoc()) {
@@ -131,7 +131,7 @@ class Ratings
                               FROM events
                               WHERE finalized = '1'
                               $notlike
-                              ORDER BY start") or die($db->error);
+                              ORDER BY start") or exit($db->error);
         echo '<h3>Calculating Other Formats Ratings</h3>';
 
         while ($row = $result->fetch_assoc()) {
@@ -211,7 +211,7 @@ class Ratings
             $losses = $data['losses'];
             $stmt = $db->prepare('INSERT INTO ratings VALUES(?, ?, ?, ?, ?, ?, ?)');
             $stmt->bind_param('ssdssdd', $event, $player, $rating, $format, $date, $wins, $losses);
-            $stmt->execute() or die($stmt->error);
+            $stmt->execute() or exit($stmt->error);
             $stmt->close();
         }
     }

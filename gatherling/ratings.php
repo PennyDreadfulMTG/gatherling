@@ -63,7 +63,7 @@ function ratingsTable($format, $min = 20)
                   AND r.wins + r.losses >= ?
                           ORDER BY r.rating DESC');
     $stmt->bind_param('ssd', $format, $format, $min);
-    $stmt->execute() or die($stmt->error);
+    $stmt->execute() or exit($stmt->error);
     $stmt->bind_result($playername, $rating, $wins, $losses);
     $rank = 0;
 
@@ -119,7 +119,7 @@ function bestEver($format)
                 FROM ratings AS qr WHERE qr.format = ?) AS q
                         WHERE format = ?  AND p.name=r.player AND q.qmax=r.rating');
     $stmt->bind_param('ss', $format, $format);
-    $stmt->execute() or die($stmt->error);
+    $stmt->execute() or exit($stmt->error);
     $stmt->bind_result($playername, $rating, $timestamp);
     $stmt->fetch();
     $stmt->close();
@@ -137,13 +137,13 @@ function currentThrough($format)
     $db = Database::getConnection();
     $stmt = $db->prepare('SELECT MAX(updated) AS m FROM ratings WHERE format = ?');
     $stmt->bind_param('s', $format);
-    $stmt->execute() or die($stmt->error);
+    $stmt->execute() or exit($stmt->error);
     $stmt->bind_result($start);
     $stmt->fetch();
     $stmt->close();
     $stmt = $db->prepare('SELECT name FROM events WHERE start = ?');
     $stmt->bind_param('s', $start);
-    $stmt->execute() or die($stmt->error);
+    $stmt->execute() or exit($stmt->error);
     $stmt->bind_result($name);
     $stmt->fetch();
     $stmt->close();

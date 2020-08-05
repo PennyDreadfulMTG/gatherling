@@ -29,7 +29,7 @@ class Player
         $database = Database::getConnection();
         $stmt = $database->prepare('SELECT name, password, rememberme, INET_NTOA(ipaddress), host, super,
                 mtgo_confirmed, email, email_privacy, timezone, theme FROM players WHERE name = ?');
-        $stmt or die($database->error);
+        $stmt or exit($database->error);
 
         $stmt->bind_param('s', $name);
         $stmt->execute();
@@ -124,7 +124,7 @@ class Player
         $ipAddress = ip2long($ipAddress);
         $db = Database::getConnection();
         $stmt = $db->prepare('UPDATE players SET ipaddress = ? WHERE name = ?');
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
         $stmt->bind_param('ds', $ipAddress, $player);
         $stmt->execute();
         $stmt->close();
@@ -806,7 +806,7 @@ class Player
         select  playerb as p, playera_losses as losses from matches where playera = ? and playera_losses > 0
         ) AS q GROUP BY q.p ORDER BY losses DESC LIMIT 1');
         if (!$stmt) {
-            die($db->error);
+            exit($db->error);
         }
         $stmt->bind_param('ss', $this->name, $this->name);
         $stmt->execute();
@@ -830,7 +830,7 @@ class Player
        AND t.card = c.id AND c.type NOT LIKE '%Land%'
        GROUP BY c.name ORDER BY qty DESC, c.name LIMIT 1");
         if (!$stmt) {
-            die($db->error);
+            exit($db->error);
         }
         $stmt->bind_param('s', $this->name);
         $stmt->execute();

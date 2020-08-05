@@ -31,7 +31,7 @@ class Standings
             //echo "past loop";
             $db = Database::getConnection();
             $stmt = $db->prepare('SELECT active, matches_played, games_won, games_played, byes, OP_Match, PL_Game, OP_Game, score, seed, matched, matches_won, draws FROM standings WHERE event = ? AND player = ? limit 1');
-            $stmt or die($db->error);
+            $stmt or exit($db->error);
             $stmt->bind_param('ss', $eventname, $playername);
             $stmt->execute();
             $stmt->bind_result($this->active, $this->matches_played, $this->games_won, $this->games_played, $this->byes, $this->OP_Match, $this->PL_Game, $this->OP_Game, $this->score, $this->seed, $this->matched, $this->matches_won, $this->draws);
@@ -69,16 +69,16 @@ class Standings
             OP_Game, score, seed, matched)
             VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
                 $stmt->bind_param('ssdddddddddddd', $this->player, $this->event, $this->active, $this->matches_played, $this->draws, $this->games_won, $this->games_played, $this->byes, $this->OP_Match, $this->PL_Game, $this->OP_Game, $this->score, $this->seed, $this->matched);
-                $stmt->execute() or die($stmt->error);
+                $stmt->execute() or exit($stmt->error);
                 $stmt->close();
             } else {
                 $stmt = $db->prepare('UPDATE standings SET
                                     player = ?, event = ?, active = ?, matches_played = ?, games_won = ?,
                                     games_played = ?, byes = ?, OP_Match = ?, PL_Game = ?, OP_Game = ?,
                                     score = ?, seed = ?, matched = ?, matches_won = ?, draws = ? WHERE player = ? AND event = ?');
-                $stmt or die($db->error);
+                $stmt or exit($db->error);
                 $stmt->bind_param('ssdddddddddddddss', $this->player, $this->event, $this->active, $this->matches_played, $this->games_won, $this->games_played, $this->byes, $this->OP_Match, $this->PL_Game, $this->OP_Game, $this->score, $this->seed, $this->matched, $this->matches_won, $this->draws, $this->player, $this->event);
-                $stmt->execute() or die($stmt->error);
+                $stmt->execute() or exit($stmt->error);
                 $stmt->close();
             }
         }
@@ -99,7 +99,7 @@ class Standings
         } elseif ($isactive == 3) {
             $stmt = $db->prepare('SELECT player FROM standings WHERE event = ? AND active = 1 ORDER BY score desc, OP_Match desc, PL_Game desc, OP_Game desc');
         }
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
         $stmt->bind_param('s', $eventname);
         $stmt->execute();
         $stmt->bind_result($name);
@@ -344,9 +344,9 @@ class Standings
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('UPDATE standings SET matched = 0 WHERE event = ?');
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
         $stmt->bind_param('s', $eventname);
-        $stmt->execute() or die($stmt->error);
+        $stmt->execute() or exit($stmt->error);
         $stmt->close();
     }
 
@@ -354,9 +354,9 @@ class Standings
     {
         $db = Database::getConnection();
         $stmt = $db->prepare("SELECT count(id) FROM standings WHERE event = ? AND matched = '0' AND active = '1'");
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
         $stmt->bind_param('s', $eventname);
-        $stmt->execute() or die($stmt->error);
+        $stmt->execute() or exit($stmt->error);
         $stmt->bind_result($count);
         $stmt->fetch();
         $stmt->close();

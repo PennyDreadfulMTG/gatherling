@@ -30,7 +30,7 @@ if (PHP_SAPI == 'cli') {
             $file = file_get_contents($argv[1]);
         }
     } else {
-        die('No set provided.');
+        exit('No set provided.');
     }
 } else { // CGI
     ini_set('max_execution_time', 300);
@@ -47,12 +47,12 @@ if (PHP_SAPI == 'cli') {
     } elseif (isset($_FILES['cardsetfile'])) {
         $file = file_get_contents($_FILES['cardsetfile']['tmp_name']);
     } else {
-        die('No set provided.');
+        exit('No set provided.');
     }
 }
 
 if ($file == false) {
-    die("Can't open the file you uploaded: {$_FILES['cardsetfile']['tmp_name']}");
+    exit("Can't open the file you uploaded: {$_FILES['cardsetfile']['tmp_name']}");
 }
 
 $data = json_decode($file);
@@ -92,7 +92,7 @@ $set_already_in = false;
 
 if (!$stmt->execute()) {
     info('!!!!!!!!!! Set Insertion Error !!!!!!!!!');
-    die($stmt->error);
+    exit($stmt->error);
 } else {
     $result = $stmt->get_result();
     if ($result->num_rows === 1) {
@@ -105,7 +105,7 @@ if (!$stmt->execute()) {
             $stmt->bind_param('ss', $data->code, $row['name']);
             if (!$stmt->execute()) {
                 info('!!!!!!!!!! Set Insertion Error !!!!!!!!!');
-                die($stmt->error);
+                exit($stmt->error);
             }
         }
     }
@@ -120,7 +120,7 @@ if (!$set_already_in) {
 
     if (!$stmt->execute()) {
         echo '!!!!!!!!!! Set Insertion Error !!!!!!!!!<br /><br /><br />';
-        die($stmt->error);
+        exit($stmt->error);
     } else {
         echo "Inserted new set {$set}!<br /><br />";
     }
@@ -218,7 +218,7 @@ function insertCard($card, $set, $rarity, $stmt)
     if (!$stmt->execute()) {
         echo '<tr><td colspan="2" style="background-color: LightRed;">!!!!!!!!!! Card Insertion Error !!!!!!!!!</td></tr>';
         echo '</table>';
-        die($stmt->error);
+        exit($stmt->error);
     } else {
         echo '<tr><th colspan="2" style="background-color: LightGreen;">Card Inserted Successfully</th></tr>';
         echo '</table>';

@@ -1,7 +1,7 @@
 <?php
 
 $data = filter_input(INPUT_POST, 'data');
-$xml = simplexml_load_string($data) or die('Error: Cannot create object');
+$xml = simplexml_load_string($data) or exit('Error: Cannot create object');
 $maindeck = [];
 $sideboard = [];
 $noOfRows = count($xml->Cards);

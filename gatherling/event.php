@@ -1338,7 +1338,7 @@ function insertTrophy()
         $db = Database::getPDOConnection();
         $stmt = $db->prepare('DELETE FROM trophies WHERE event = ?');
         $stmt->bindParam(1, $event, PDO::PARAM_STR);
-        $stmt->execute() or die($stmt->errorCode());
+        $stmt->execute() or exit($stmt->errorCode());
 
         $stmt = $db->prepare('INSERT INTO trophies(event, size, type, image)
       VALUES(?, ?, ?, ?)');
@@ -1346,7 +1346,7 @@ function insertTrophy()
         $stmt->bindParam(2, $size, PDO::PARAM_INT);
         $stmt->bindParam(3, $type, PDO::PARAM_STR);
         $stmt->bindParam(4, $f, PDO::PARAM_LOB);
-        $stmt->execute() or die($stmt->errorCode());
+        $stmt->execute() or exit($stmt->errorCode());
         fclose($f);
 
         return true;

@@ -60,7 +60,7 @@ function upcomingEvents()
     format, series, name, threadurl FROM events
     WHERE DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() ORDER BY start ASC LIMIT 20');
     // interval in DATE_SUB was used to select eastern standard time, but since the server is now in Washington DC it is not needed
-    $result or die($db->error);
+    $result or exit($db->error);
     while ($row = $result->fetch_assoc()) {
         $dateStr = date('D j M', $row['d']);
         $timeStr = date('g:i A', $row['d']);
@@ -93,7 +93,7 @@ function recentWinners()
                         AND e.name=b.event
                         ORDER BY e.start
                         DESC LIMIT 10");
-    $result or die($db->error);
+    $result or exit($db->error);
     while ($row = $result->fetch_assoc()) {
         echo '<div class="newtrophies">';
         echo "<table class=\"center\">\n";

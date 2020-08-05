@@ -3,11 +3,11 @@
 require_once '../lib.php';
 
 if (strncmp($_SERVER['HTTP_USER_AGENT'], 'infobot', 7) != 0) {
-    die("<error>You're not infobot!</error>");
+    exit("<error>You're not infobot!</error>");
 }
 
 if ($_GET['passkey'] != $CONFIG['infobot_passkey']) {
-    die('<error>Wrong passkey</error>');
+    exit('<error>Wrong passkey</error>');
 }
 
 // generate a user passkey for verification

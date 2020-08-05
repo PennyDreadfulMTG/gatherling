@@ -15,7 +15,7 @@ class Database
             );
             if (mysqli_connect_errno()) {
                 echo mysqli_connect_error();
-                die("\nfailed to connect to mysql server");
+                exit("\nfailed to connect to mysql server");
             }
             $db_selected = $instance->select_db($CONFIG['db_database']);
             if (!$db_selected) {
@@ -25,7 +25,7 @@ class Database
                 self::single_result($sql);
                 $db_selected = $instance->select_db($CONFIG['db_database']);
                 if (!$db_selected) {
-                    die('Error creating database: '.mysqli_error()."\n");
+                    exit('Error creating database: '.mysqli_error()."\n");
                 }
             }
 
@@ -162,7 +162,7 @@ class Database
 
         $db = self::getConnection();
         $stmt = $db->prepare($query);
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
 
         if (count($params) == 1) {
             list($one) = $params;
@@ -195,7 +195,7 @@ class Database
             list($one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten) = $params;
             $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten);
         }
-        $stmt->execute() or die($stmt->error);
+        $stmt->execute() or exit($stmt->error);
         $stmt->close();
 
         return true;
@@ -209,7 +209,7 @@ class Database
 
         $db = self::getConnection();
         $stmt = $db->prepare($query);
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
 
         if (count($params) == 1) {
             list($one) = $params;
@@ -242,7 +242,7 @@ class Database
             list($one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten) = $params;
             $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten);
         }
-        $stmt->execute() or die($stmt->error);
+        $stmt->execute() or exit($stmt->error);
         $stmt->bind_result($result);
         $stmt->fetch();
         $stmt->close();

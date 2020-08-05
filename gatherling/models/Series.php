@@ -33,7 +33,7 @@ class Series
 
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT isactive, day, normalstart, prereg_default, mtgo_room FROM series WHERE name = ?');
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
         $stmt->bind_param('s', $name);
         $stmt->execute();
         $stmt->bind_result($this->active, $this->start_day, $this->start_time, $this->prereg_default, $this->mtgo_room);
@@ -91,15 +91,15 @@ class Series
         if ($this->new) {
             $stmt = $db->prepare('INSERT INTO series(name, day, normalstart, isactive, prereg_default, mtgo_room) values(?, ?, ?, ?, ?, ?)');
             $stmt->bind_param('sssdds', $this->name, $this->start_day, $this->start_time, $this->active, $this->prereg_default, $this->mtgo_room);
-            $stmt->execute() or die($stmt->error);
+            $stmt->execute() or exit($stmt->error);
             $stmt->close();
         } else {
             $stmt = $db->prepare('UPDATE series
                             SET day = ?, normalstart = ?, isactive = ?, prereg_default = ?, mtgo_room = ?
                             WHERE name = ?');
-            $stmt or die($db->error);
+            $stmt or exit($db->error);
             $stmt->bind_param('ssddss', $this->start_day, $this->start_time, $this->active, $this->prereg_default, $this->mtgo_room, $this->name);
-            $stmt->execute() or die($stmt->error);
+            $stmt->execute() or exit($stmt->error);
             $stmt->close();
         }
     }
@@ -461,7 +461,7 @@ class Series
                           AND events.season = ?
                           AND entries.medal = ?
                           AND events.number != 128');
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
         $stmt->bind_param('sds', $this->name, $season_number, $place);
         $stmt->execute();
         $stmt->bind_result($playername, $eventname);
@@ -791,7 +791,7 @@ class Series
         // Include adjustments.
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT player, event, adjustment, reason FROM season_points WHERE series = ? AND season = ?');
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
         $stmt->bind_param('sd', $this->name, $season_number);
         $stmt->execute();
         $stmt->bind_result($player, $event, $adjustment, $reason);
@@ -828,7 +828,7 @@ class Series
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT name FROM events WHERE series = ? AND season = ? AND events.number != 128 ORDER BY start');
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
         $stmt->bind_param('sd', $this->name, $season_number);
         $stmt->execute();
         $stmt->bind_result($event);
@@ -845,7 +845,7 @@ class Series
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT cutoff_ord FROM series_seasons WHERE series = ? AND season = ?');
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
         $stmt->bind_param('sd', $this->name, $season_number);
         $stmt->execute();
         $cutoff = 0;

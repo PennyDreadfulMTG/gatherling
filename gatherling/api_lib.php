@@ -43,7 +43,7 @@ function error($msg, $extra = null)
     $result['error'] = $msg;
     $result['success'] = false;
     json_headers();
-    die(json_encode($result));
+    exit(json_encode($result));
 }
 
 function arg($key, $default = null)

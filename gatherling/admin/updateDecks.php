@@ -35,7 +35,7 @@ while ($ndx > 7000) {
                 $stmt = $db->prepare('UPDATE decks SET playername = ?, format = ?, deck_colors = ?, created_date = ? WHERE id = ?');
                 echo 'Playername: '.$deck->playername.'<br />Format: '.$deck->format.'<br />Color String: '.$deck->deck_color_str."<br />\n";
                 $stmt->bind_param('ssssd', $deck->playername, $deck->format, $deck->deck_color_str, $deck->created_date, $deck->id);
-                $stmt->execute() or die($stmt->error);
+                $stmt->execute() or exit($stmt->error);
                 echo '<a href="deck.php?mode=view&id='.$deck->id.'">'.$deck->name.'</a> Deck ID: '.$deck->id.' Sucessfully updated<br />';
                 $successUpdatedDecks++;
             //if ($decksChecked > 10) { die; }

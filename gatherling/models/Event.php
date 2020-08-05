@@ -86,7 +86,7 @@ class Event
                                    metaurl, reporturl, active, current_round, player_reportable, player_editdecks,
                                     prereg_cap, private_decks, private_finals, player_reported_draws, late_entry_limit, `private` FROM events WHERE name = ?');
             if (!$stmt) {
-                die($db->error);
+                exit($db->error);
             }
             $stmt->bind_param('s', $name);
             $stmt->execute();
@@ -286,7 +286,7 @@ class Event
                 $this->late_entry_limit,
                 $this->private
             );
-            $stmt->execute() or die($stmt->error);
+            $stmt->execute() or exit($stmt->error);
             $stmt->close();
 
             $this->newSubevent($this->mainrounds, 1, $this->mainstruct);
@@ -299,7 +299,7 @@ class Event
       current_round = ?, player_reportable = ?, prereg_cap = ?,
       player_editdecks = ?, private_decks = ?, private_finals = ?, player_reported_draws = ?, late_entry_limit = ?, `private` = ?
       WHERE name = ?');
-            $stmt or die($db->error);
+            $stmt or exit($db->error);
             $stmt->bind_param(
                 'ssssdddssssdddddddddddds',
                 $this->start,
@@ -328,7 +328,7 @@ class Event
                 $this->name
             );
 
-            $stmt->execute() or die($stmt->error);
+            $stmt->execute() or exit($stmt->error);
             $stmt->close();
 
             if ($this->mainid == null) {
@@ -1032,7 +1032,7 @@ class Event
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT adjustment, reason FROM season_points WHERE event = ? AND player = ?');
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
         $stmt->bind_param('ss', $this->name, $player);
         $stmt->execute();
         $stmt->bind_result($adjustment, $reason);
@@ -1050,7 +1050,7 @@ class Event
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT player FROM season_points WHERE event = ? AND player = ?');
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
         $stmt->bind_param('ss', $this->name, $player);
         $stmt->execute();
         $exists = $stmt->fetch() != null;
@@ -1190,9 +1190,9 @@ class Event
 
         $db = Database::getConnection();
         $stmt = $db->prepare($SQL_statement);
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
 
-        $stmt->execute() or die($stmt->error);
+        $stmt->execute() or exit($stmt->error);
         $stmt->bind_result($playerb);
         if ($stmt->fetch() == null) { // No players left to match against, award bye
             $stmt->close();
@@ -1217,9 +1217,9 @@ class Event
 
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT player, byes, score FROM standings WHERE event = ? AND active = 1 AND matched = 0 ORDER BY RAND()');
-        $stmt or die($db->error);
+        $stmt or exit($db->error);
         $stmt->bind_param('s', $this->name);
-        $stmt->execute() or die($stmt->error);
+        $stmt->execute() or exit($stmt->error);
         $resultSet = $stmt->get_result();
         $active_players = $resultSet->fetch_all(MYSQLI_ASSOC);
         $stmt->close();

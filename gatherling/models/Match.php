@@ -293,7 +293,7 @@ class Match
             } else {
                 $stmt = $db->prepare('UPDATE matches SET playerb_wins = ?, playerb_losses = ? WHERE id = ?');
             }
-            $stmt or die($db->error);
+            $stmt or exit($db->error);
             // this is dumb, fix later
             // I agree it's dumb, but you can't because PDO sucks.
             $two = 2;

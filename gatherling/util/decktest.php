@@ -10,10 +10,10 @@ function content()
 
     $query = 'CREATE TEMPORARY TABLE scores(
     id BIGINT UNSIGNED, type VARCHAR(40), score BIGINT)';
-    mysql_query($query, $db) or die(mysql_error());
+    mysql_query($query, $db) or exit(mysql_error());
 
     $query = 'SELECT DISTINCT decktype FROM typeinfo';
-    $result = mysql_query($query, $db) or die(mysql_error());
+    $result = mysql_query($query, $db) or exit(mysql_error());
     $decktypes = [];
     while ($row = mysql_fetch_assoc($result)) {
         $decktypes[] = $row['decktype'];
@@ -23,7 +23,7 @@ function content()
     FROM deckcontents dc, decks d
     WHERE dc.issideboard=0 AND d.id=dc.deck GROUP BY dc.deck
     HAVING n > 40';
-    $result = mysql_query($query, $db) or die(mysql_error());
+    $result = mysql_query($query, $db) or exit(mysql_error());
     while ($row = mysql_fetch_assoc($result)) {
         $maxscore = -32000;
         $type = 'Unclassified';
@@ -38,7 +38,7 @@ function content()
         }
         $query = "INSERT INTO scores(id, type, score)
       VALUES({$row['deck']}, \"$type\", $maxscore)";
-        mysql_query($query, $db) or die(mysql_error());
+        mysql_query($query, $db) or exit(mysql_error());
     }
 
     $query = 'SELECT s.id, s.type, s.score, d.name FROM scores s, decks d WHERE  d.id=s.id ORDER BY score DESC';
@@ -62,7 +62,7 @@ function scoredeck($id, $type, $db)
     LEFT OUTER JOIN deckcontents AS dc
     ON dc.card=ti.card AND dc.deck=$id AND dc.issideboard=0
     WHERE ti.decktype=\"$type\"";
-    $result = mysql_query($query, $db) or die(mysql_error());
+    $result = mysql_query($query, $db) or exit(mysql_error());
     while ($row = mysql_fetch_assoc($result)) {
         if ($row['strength'] == 'Required' && $row['qty'] == 0) {
             $score -= 1000;

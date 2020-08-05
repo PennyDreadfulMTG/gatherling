@@ -98,7 +98,7 @@ class Format
                                          min_side_cards_allowed, max_side_cards_allowed, eternal, modern, `standard`, is_meta_format
                                   FROM formats
                                   WHERE name = ?');
-            $stmt or die($db->error);
+            $stmt or exit($db->error);
             $stmt->bind_param('s', $name);
             $stmt->execute();
             $stmt->bind_result(
@@ -176,7 +176,7 @@ class Format
                         $db = Database::getConnection();
                         $stmt = $db->prepare('INSERT INTO tribes(name) VALUES(?)');
                         $stmt->bind_param('s', $subtype);
-                        $stmt->execute() or die($stmt->error);
+                        $stmt->execute() or exit($stmt->error);
                         $stmt->close();
                     }
                 }
@@ -246,7 +246,7 @@ class Format
             $this->standard,
             $this->is_meta_format
         );
-        $stmt->execute() or die($stmt->error);
+        $stmt->execute() or exit($stmt->error);
         $stmt->close();
 
         return true;
@@ -324,7 +324,7 @@ class Format
                                   max_main_cards_allowed = ?, min_side_cards_allowed = ?, max_side_cards_allowed = ?,
                                   eternal = ?, modern = ?, `standard` = ?, is_meta_format = ?
                                   WHERE name = ?');
-            $stmt or die($db->error);
+            $stmt or exit($db->error);
             $stmt->bind_param(
                 'sssdddddddddddddddddddddds',
                 $this->description,
@@ -354,7 +354,7 @@ class Format
                 $this->is_meta_format,
                 $this->name
             );
-            $stmt->execute() or die($stmt->error);
+            $stmt->execute() or exit($stmt->error);
             $stmt->close();
 
             return true;
@@ -723,7 +723,7 @@ class Format
                     }
                     break;
                 default:
-                    die("Unexpected rarity {$rarity}!");
+                    exit("Unexpected rarity {$rarity}!");
                     break;
             }
         }
@@ -1271,7 +1271,7 @@ class Format
             $db = Database::getConnection();
             $stmt = $db->prepare('INSERT INTO bans(card_name, card, format, allowed) VALUES(?, ?, ?, 0)');
             $stmt->bind_param('sds', $card, $cardID, $this->name);
-            $stmt->execute() or die($stmt->error);
+            $stmt->execute() or exit($stmt->error);
             $stmt->close();
 
             return true;
@@ -1296,7 +1296,7 @@ class Format
             $db = Database::getConnection();
             $stmt = $db->prepare('INSERT INTO bans(card_name, card, format, allowed) VALUES(?, ?, ?, 1)');
             $stmt->bind_param('sds', $card, $cardID, $this->name);
-            $stmt->execute() or die($stmt->error);
+            $stmt->execute() or exit($stmt->error);
             $stmt->close();
 
             return true;
@@ -1321,7 +1321,7 @@ class Format
             $db = Database::getConnection();
             $stmt = $db->prepare('INSERT INTO restricted(card_name, card, format, allowed) VALUES(?, ?, ?, 2)');
             $stmt->bind_param('sds', $card, $cardID, $this->name);
-            $stmt->execute() or die($stmt->error);
+            $stmt->execute() or exit($stmt->error);
             $stmt->close();
 
             return true;
@@ -1343,7 +1343,7 @@ class Format
             $db = Database::getConnection();
             $stmt = $db->prepare('INSERT INTO restrictedtotribe(card_name, card, format, allowed) VALUES(?, ?, ?, 1)');
             $stmt->bind_param('sds', $card, $cardID, $this->name);
-            $stmt->execute() or die($stmt->error);
+            $stmt->execute() or exit($stmt->error);
             $stmt->close();
 
             return true;
@@ -1491,7 +1491,7 @@ class Format
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO setlegality(format, cardset)VALUES(?, ?)');
         $stmt->bind_param('ss', $this->name, $cardsetName);
-        $stmt->execute() or die($stmt->error);
+        $stmt->execute() or exit($stmt->error);
         $stmt->close();
 
         return true;
@@ -1502,7 +1502,7 @@ class Format
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO subtype_bans(name, format, allowed) VALUES(?, ?, 0)');
         $stmt->bind_param('ss', $subTypeBanned, $this->name);
-        $stmt->execute() or die($stmt->error);
+        $stmt->execute() or exit($stmt->error);
         $stmt->close();
 
         return true;
@@ -1513,7 +1513,7 @@ class Format
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO tribe_bans(name, format, allowed) VALUES(?, ?, 0)');
         $stmt->bind_param('ss', $tribeBanned, $this->name);
-        $stmt->execute() or die($stmt->error);
+        $stmt->execute() or exit($stmt->error);
         $stmt->close();
 
         return true;
@@ -1524,7 +1524,7 @@ class Format
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO subformats(parentformat, childformat) VALUES(?, ?)');
         $stmt->bind_param('ss', $this->name, $subformat);
-        $stmt->execute() or die($stmt->error);
+        $stmt->execute() or exit($stmt->error);
         $stmt->close();
 
         return true;

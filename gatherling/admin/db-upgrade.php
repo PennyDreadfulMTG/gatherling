@@ -97,7 +97,7 @@ if (!$db->query('SELECT name FROM players LIMIT 1')) {
     } elseif (file_exists('gatherling/schema.sql')) {
         $schema = file_get_contents('gatherling/schema.sql');
     } else {
-        die('Could not find schema.sql');
+        exit('Could not find schema.sql');
     }
     $split = explode(';', $schema);
     foreach ($split as $line) {

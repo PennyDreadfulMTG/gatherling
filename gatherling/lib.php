@@ -241,7 +241,7 @@ function seasonDropMenu($season, $useall = 0)
 {
     $db = Database::getConnection();
     $query = 'SELECT MAX(season) AS m FROM events';
-    $result = $db->query($query) or die($db->error);
+    $result = $db->query($query) or exit($db->error);
     $maxarr = $result->fetch_assoc();
     $max = $maxarr['m'];
     $title = ($useall == 0) ? '- Season - ' : 'All';
@@ -257,7 +257,7 @@ function formatDropMenu($format, $useAll = 0, $form_name = 'format', $show_meta 
         $query .= ' WHERE NOT is_meta_format ';
     }
     $query .= ' ORDER BY priority desc, name';
-    $result = $db->query($query) or die($db->error);
+    $result = $db->query($query) or exit($db->error);
     echo "<select class=\"inputbox\" name=\"{$form_name}\">";
     $title = ($useAll == 0) ? '- Format -' : 'All';
     echo "<option value=\"\">$title</option>";
