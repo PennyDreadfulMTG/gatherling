@@ -197,6 +197,12 @@ class Event
         $event = new self('');
         $event->start = "{$year}-{$month}-{$day} {$hour}:00";
 
+        if (empty($season) && empty($number)) {
+            $_series = new Series($series);
+            $season = $_series->mostRecentEvent()->season;
+            $number = $_series->mostRecentEvent()->number + 1;
+        }
+
         if (strcmp($naming, 'auto') == 0) {
             $event->name = sprintf('%s %d.%02d', $series, $season, $number);
         } else {
