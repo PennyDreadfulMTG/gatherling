@@ -1447,12 +1447,12 @@ function resultDropMenu($name = 'newmatchresult', $extra_options = [])
     echo '</select>';
 }
 
-function initialByeDropMenu($name = 'initial_byes', $playername='', $current_byes=0)
+function initialByeDropMenu($name = 'initial_byes', $playername = '', $current_byes = 0)
 {
     echo "<select class=\"inputbox\" name=\"{$name}\">";
-    echo "<option value=\"$playername 0\"".($current_byes==0?' selected':'').">None</option>";
-    for($i=1;$i<3;$i++) {
-        echo "<option value=\"$playername $i\"".($current_byes==$i?' selected':'').">$i</option>";
+    echo "<option value=\"$playername 0\"".($current_byes == 0 ? ' selected' : '').'>None</option>';
+    for ($i = 1; $i < 3; $i++) {
+        echo "<option value=\"$playername $i\"".($current_byes == $i ? ' selected' : '').">$i</option>";
     }
     echo '</select>';
 }
@@ -1500,10 +1500,10 @@ function updateReg()
 
     if (isset($_POST['initial_byes'])) {
         foreach ($_POST['initial_byes'] as $byedata) {
-            if(!empty(trim($byedata))) {
+            if (!empty(trim($byedata))) {
                 $array_data = explode(' ', $byedata);
-                $bye_qty = intval($array_data[count($array_data)-1]);
-                unset($array_data[count($array_data)-1]);
+                $bye_qty = intval($array_data[count($array_data) - 1]);
+                unset($array_data[count($array_data) - 1]);
                 $playername = implode(' ', $array_data);
                 $entry = new Entry($event->name, $playername);
                 $entry->addInitialByes($bye_qty);

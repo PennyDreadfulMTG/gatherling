@@ -156,13 +156,14 @@ class Entry
         }
     }
 
-    public function addInitialByes($byeqty) {
+    public function addInitialByes($byeqty)
+    {
         $db = Database::getConnection();
         $db->autocommit(false);
         $stmt = $db->prepare('UPDATE entries SET initial_byes = ? WHERE player = ? AND event = ?');
         $stmt->bind_param('dss', $byeqty, $this->player->name, $this->event->name);
         $stmt->execute();
-        if ($stmt->affected_rows <0) {
+        if ($stmt->affected_rows < 0) {
             $db->rollback();
             $db->autocommit(true);
 
