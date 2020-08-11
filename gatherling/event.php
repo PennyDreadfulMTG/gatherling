@@ -764,7 +764,7 @@ function playerList($event)
             }
         }
         echo '<td align="center">';
-        if ($event->active == 1) {
+        if ($event->active == 1 || $event->finalized) {
             echo $entry->initial_byes;
         } else {
             initialByeDropMenu('initial_byes[]', $entry->player->name, $entry->initial_byes);
@@ -1506,7 +1506,7 @@ function updateReg()
                 unset($array_data[count($array_data) - 1]);
                 $playername = implode(' ', $array_data);
                 $entry = new Entry($event->name, $playername);
-                $entry->addInitialByes($bye_qty);
+                $entry->setInitialByes($bye_qty);
             }
         }
     }

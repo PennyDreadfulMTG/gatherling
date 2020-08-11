@@ -156,7 +156,7 @@ class Entry
         }
     }
 
-    public function addInitialByes($byeqty)
+    public function setInitialByes($byeqty)
     {
         $db = Database::getConnection();
         $db->autocommit(false);
