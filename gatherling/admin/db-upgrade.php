@@ -665,6 +665,12 @@ if ($version < 35) {
     ADD UNIQUE INDEX `name` (`name`);');
     set_version(35);
 }
+if ($version < 36) {
+    info('Updating to version 36 (Add initial_byes column to entries table)');
+    do_query("ALTER TABLE `entries`
+    ADD COLUMN `initial_byes` TINYINT NOT NULL DEFAULT '0';");
+    set_version(36);
+}
 $db->autocommit(true);
 
 info('DB is up to date!');
