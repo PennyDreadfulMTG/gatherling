@@ -712,6 +712,7 @@ function playerList($event)
         if ($format->tribal) {
             echo '<th>Tribe</th>';
         }
+        echo '<th>Byes</th>';
         echo '<th>Delete</th></tr>';
     } else {
         echo '<tr><td align="center" colspan="5"><i>';
@@ -763,6 +764,13 @@ function playerList($event)
             }
         }
         echo '<td align="center">';
+        if ($event->active == 1) {
+            echo $entry->initial_byes;
+        } else {
+            initialByeDropMenu('initial_byes[]', $entry->player->name, $entry->initial_byes);
+        }
+        echo '</td>';
+        echo '<td align="center">';
         if ($entry->canDelete()) {
             echo "<input type=\"checkbox\" name=\"delentries[]\" value=\"{$entry->player->name}\" />";
         } else {
@@ -771,9 +779,9 @@ function playerList($event)
         echo '</td></tr>';
     }
     if ($event->active == 0 && !$event->finalized) {
-        echo '<tr id="row_new_entry"><td>Add: ';
+        echo '<tr id="row_new_entry"><td colspan=2>Add: ';
         stringField('newentry', '', 40);
-        echo '</td><td>&nbsp;</td><td colspan=2>';
+        echo '</td><td colspan=2>';
         echo '<input id="update_reg" class="inputbutton" type="submit" name="mode" value="Update Registration" />';
         echo '</td></tr>';
     } elseif ($event->active == 1 && !$event->finalized) {
@@ -1439,6 +1447,16 @@ function resultDropMenu($name = 'newmatchresult', $extra_options = [])
     echo '</select>';
 }
 
+function initialByeDropMenu($name = 'initial_byes', $playername='', $current_byes=0)
+{
+    echo "<select class=\"inputbox\" name=\"{$name}\">";
+    echo "<option value=\"$playername 0\"".($current_byes==0?' selected':'').">None</option>";
+    for($i=1;$i<3;$i++) {
+        echo "<option value=\"$playername $i\"".($current_byes==$i?' selected':'').">$i</option>";
+    }
+    echo '</select>';
+}
+
 function controlPanel($event, $cur = '')
 {
     $name = $event->name;
@@ -1473,10 +1491,23 @@ function updateReg()
         $event->addPlayer($_POST['newentry']);
     }
 
-    if (isset($_POST['earned_byes'])) {
-        foreach ($_POST['earned_byes'] as $playername) {
-            $entry = new Entry($event->name, $playername);
-            $entry->add_earned_byes($playername, $playername[1]);
+    // if (isset($_POST['earned_byes'])) {
+    //     foreach ($_POST['earned_byes'] as $playername) {
+    //         $entry = new Entry($event->name, $playername);
+    //         $entry->add_earned_byes($playername, $playername[1]);
+    //     }
+    // }
+
+    if (isset($_POST['initial_byes'])) {
+        foreach ($_POST['initial_byes'] as $byedata) {
+            if(!empty(trim($byedata))) {
+                $array_data = explode(' ', $byedata);
+                $bye_qty = intval($array_data[count($array_data)-1]);
+                unset($array_data[count($array_data)-1]);
+                $playername = implode(' ', $array_data);
+                $entry = new Entry($event->name, $playername);
+                $entry->addInitialByes($bye_qty);
+            }
         }
     }
 }

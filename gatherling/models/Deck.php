@@ -915,7 +915,7 @@ class Deck
             $stmt = $db->prepare('SELECT d.id
                             FROM decks d, entries n, events e
                             WHERE deck_hash = ?
-                            AND id != ?
+                            AND d.id != ?
                             AND n.deck = d.id
                             AND e.name = n.event
                             AND e.finalized = 1

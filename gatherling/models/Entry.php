@@ -7,6 +7,7 @@ class Entry
     public $deck;
     public $medal;
     public $drop_round;
+    public $initial_byes;
 
     public static function findByEventAndPlayer($eventname, $playername)
     {
@@ -32,12 +33,12 @@ class Entry
     public function __construct($eventname, $playername)
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT deck, medal, ignored, drop_round FROM entries WHERE event = ? AND player = ?');
+        $stmt = $db->prepare('SELECT deck, medal, ignored, drop_round, initial_byes FROM entries WHERE event = ? AND player = ?');
         $stmt or exit($db->error);
         $stmt->bind_param('ss', $eventname, $playername);
         $stmt->execute();
         $this->ignored = 0;
-        $stmt->bind_result($deckid, $this->medal, $this->ignored, $this->drop_round);
+        $stmt->bind_result($deckid, $this->medal, $this->ignored, $this->drop_round, $this->initial_byes);
 
         if ($stmt->fetch() == null) {
             throw new Exception('Entry for '.$playername.' in '.$eventname.' not found');
@@ -153,5 +154,21 @@ class Entry
         } else {
             return '(no deck entered)';
         }
+    }
+
+    public function addInitialByes($byeqty) {
+        $db = Database::getConnection();
+        $db->autocommit(false);
+        $stmt = $db->prepare('UPDATE entries SET initial_byes = ? WHERE player = ? AND event = ?');
+        $stmt->bind_param('dss', $byeqty, $this->player->name, $this->event->name);
+        $stmt->execute();
+        if ($stmt->affected_rows <0) {
+            $db->rollback();
+            $db->autocommit(true);
+
+            throw new Exception('Entry for '.$this->playername.' in '.$this->event.' not found');
+        }
+        $db->commit();
+        $db->autocommit(true);
     }
 }
