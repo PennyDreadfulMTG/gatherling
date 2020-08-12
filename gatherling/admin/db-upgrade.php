@@ -59,6 +59,17 @@ function set_version($version)
     info("... DB now at version {$version}!");
 }
 
+function upgrade_db($new_version, $text, $func) {
+    global $db;
+    global $version;
+    if ($version >= $new_version)
+        return;
+    $db->begin_transaction();
+    info("Updating to version $new_version ($text)");
+    $func();
+    set_version($new_version);
+}
+
 function redirect_deck_update($latest_id = 0)
 {
     $url = explode('?', $_SERVER['REQUEST_URI']);
@@ -645,13 +656,13 @@ if ($version < 33) {
     set_version(33);
 }
 if ($version < 34) {
-    info('Updating to version 44 (Private Events)');
+    info('Updating to version 34 (Private Events)');
     do_query('ALTER TABLE `events`
         ADD COLUMN `private` TINYINT(1) NULL DEFAULT 0 AFTER `late_entry_limit`;');
     set_version(34);
 }
 if ($version < 35) {
-    info('Updating to version 44 (Primary Keys)');
+    info('Updating to version 35 (Primary Keys)');
     do_query('ALTER TABLE `events`
 	ADD COLUMN `id` INT NOT NULL AUTO_INCREMENT FIRST,
 	DROP PRIMARY KEY,
@@ -665,12 +676,21 @@ if ($version < 35) {
     ADD UNIQUE INDEX `name` (`name`);');
     set_version(35);
 }
-if ($version < 36) {
-    info('Updating to version 36 (Add initial_byes column to entries table)');
+
+
+upgrade_db(36, "Add initial_byes column to entries table", function() {
     do_query("ALTER TABLE `entries`
     ADD COLUMN `initial_byes` TINYINT NOT NULL DEFAULT '0';");
-    set_version(36);
-}
+});
+
+upgrade_db(37, "User Info", function() {
+    do_query("ALTER TABLE `players`
+    ADD `discord_id` bigint NULL,
+    ADD `discord_handle` varchar(37) COLLATE 'utf8mb4_general_ci' NULL AFTER `discord_id`,
+    ADD `api_key` varchar(32) NULL AFTER `discord_handle`,
+    ADD UNIQUE INDEX `discord_id` (`discord_id`);");
+});
+
 $db->autocommit(true);
 
 info('DB is up to date!');

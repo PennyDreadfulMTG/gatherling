@@ -13,6 +13,8 @@ function autoload($class_name)
 spl_autoload_register('autoload');
 // Fix for MAGIC_QUOTES_GPC
 
+include_once __DIR__ . '/vendor/autoload.php';
+
 // PHP 5 hacks
 if (version_compare(phpversion(), 6) === -1) {
     require_once 'bootstrap_5.php';

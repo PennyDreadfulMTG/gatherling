@@ -210,7 +210,7 @@ a.create_deck_link {
     -moz-box-shadow: #000 0 2px 5px;
     box-shadow: #000 0 2px 5px;
 }
-.inputbutton:hover {
+.inputbutton:not(.discordlogin):hover {
     border-color: #D45E28;
     background-color: #353535;
     color: #D45E28;
@@ -401,6 +401,7 @@ a.create_deck_link {
     -moz-appearannce: none;
     font-size: 15px;
     border: none;
+    border-radius: 0;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     padding: 5px;
@@ -463,4 +464,31 @@ a.create_deck_link {
     background: black;
     border: red;
     border-style: dotted;
+}
+
+.discordlogin {
+    background: #7289DA;
+    color: #fff;
+    font-family: 'Helvetica', 'Arial', sans-sefir;
+    text-decoration: none;
+}
+
+/* .discordlogin::before {
+    font-family: "Font Awesome 5 Free";
+    content: "\uf392";
+    display: inline-block;
+    padding-right: 3px;
+    vertical-align: middle;
+    font-weight: 900;
+} */
+
+.discordlogin::before {
+    display: inline-block;
+    margin-right: .5em;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: translate(0, 0);
 }

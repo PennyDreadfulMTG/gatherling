@@ -13,6 +13,7 @@ class Player
     public $timezone;
     public $verified;
     public $theme;
+    public $discord_id;
 
     public function __construct($name)
     {
@@ -28,7 +29,7 @@ class Player
         }
         $database = Database::getConnection();
         $stmt = $database->prepare('SELECT name, password, rememberme, INET_NTOA(ipaddress), host, super,
-                mtgo_confirmed, email, email_privacy, timezone, theme FROM players WHERE name = ?');
+                mtgo_confirmed, email, email_privacy, timezone, theme, discord_id FROM players WHERE name = ?');
         $stmt or exit($database->error);
 
         $stmt->bind_param('s', $name);
@@ -44,7 +45,8 @@ class Player
             $this->emailAddress,
             $this->emailPrivacy,
             $this->timezone,
-            $this->theme
+            $this->theme,
+            $this->discord_id
         );
         if ($stmt->fetch() == null) {
             throw new Exception('Player '.$name.' is not found.');
@@ -84,7 +86,7 @@ class Player
 
     public static function checkPassword($username, $password)
     {
-        if ($username == '') {
+        if ($username == '' || $password == '') {
             return false;
         }
 
@@ -150,6 +152,26 @@ class Player
         }
     }
 
+    public static function findByDiscordID($playername)
+    {
+        $database = Database::getConnection();
+        $stmt = $database->prepare('SELECT name FROM players WHERE discord_id = ?');
+        $stmt->bind_param('i', $playername);
+        $stmt->execute();
+        $stmt->bind_result($resname);
+        $good = false;
+        if ($stmt->fetch()) {
+            $good = true;
+        }
+        $stmt->close();
+
+        if ($good) {
+            return new self($resname);
+        } else {
+            return;
+        }
+    }
+
     public static function createByName($playername)
     {
         $db = Database::getConnection();
@@ -174,8 +196,8 @@ class Player
     public function save()
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('UPDATE players SET password = ?, rememberme = ?, host = ?, super = ?, email = ?, email_privacy = ?, timezone = ? WHERE name = ?');
-        $stmt->bind_param('sdddsdds', $this->password, $this->rememberMe, $this->host, $this->super, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->name);
+        $stmt = $db->prepare('UPDATE players SET password = ?, rememberme = ?, host = ?, super = ?, email = ?, email_privacy = ?, timezone = ?, discord_id = ? WHERE name = ?');
+        $stmt->bind_param('sdddsddds', $this->password, $this->rememberMe, $this->host, $this->super, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->discord_id, $this->name);
         $stmt->execute();
         $stmt->close();
     }

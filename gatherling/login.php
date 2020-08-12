@@ -19,12 +19,17 @@ print_header('Login');
       $message = filter_var($_REQUEST['message'], FILTER_SANITIZE_STRING);
       echo "<div align=\"center\" class=\"error\">$message</div>";
   }
+
+  $username = '';
+  if (isset($_REQUEST['username'])){
+      $username = $_REQUEST['username'];
+  }
 ?>
         <form action="login.php" method="post">
             <table class="form" align="center" style="border-width: 0px" cellpadding="3">
                 <tr>
                     <th>MTGO Username</th>
-                    <td><input id="username" class="inputbox" type="text" name="username" value="" tabindex="1"></td>
+                    <td><input id="username" class="inputbox" type="text" name="username" value="<?=$username?>" tabindex="1"></td>
                 </tr>
                 <tr>
                     <th>Gatherling Password</th>
@@ -41,7 +46,12 @@ print_header('Login');
                           echo "<input type=\"hidden\" name=\"target\" value=\"$target\">";
                       }
                     ?>
-                        <input class="inputbutton" type="submit" name="mode" value="Log In"><br />
+                        <input class="inputbutton" type="submit" name="mode" value="Log In">
+                        <?php
+                        if (!isset($_SESSION['DISCORD_ID'])){
+                            echo "<input class=\"inputbutton discordlogin fa-discord\" type=\"submit\" name=\"mode\" value=\"Log In with discord\" />";
+                        } ?>
+                        <br />
                         Please <a href="register.php">Click Here</a> if you need to register.<br />
                         <a href="forgot.php">Forgot your password?</a>
                     </td>
@@ -68,6 +78,10 @@ function printIPAddressChanged()
 
 function testLogin()
 {
+    if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'Log In with discord')
+    {
+        redirect('auth.php');
+    }
     $success = 0;
 
     if (isset($_POST['username']) && isset($_POST['password'])) {

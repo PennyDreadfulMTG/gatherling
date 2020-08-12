@@ -58,7 +58,6 @@ function LoadFormat($format)
 
 function updateStandard()
 {
-    info('Updating Standard...');
     $fmt = LoadFormat('Standard');
     if (!$fmt->standard) {
         $fmt->standard = true;

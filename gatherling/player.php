@@ -334,6 +334,12 @@ function print_mainPlayerCP($player, $result)
         echo "<li><a href=\"player.php?mode=edit_email\">Change Email Address: {$player->emailAddress}</a></li>\n";
     }
     echo "<li><a href=\"player.php?mode=change_timezone\">Change Your Time Zone</a></li>\n";
+    if (isset($_SESSION['DISCORD_ID']) && empty($player->discord_id)) {
+        echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> {$_SESSION['DISCORD_NAME']}</a></li>\n";
+    }
+    else if (empty($player->discord_id)){
+        echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> Discord</a></li>\n";
+    }
     echo "</ul>\n";
     echo "</div></div>\n";
     echo "<div class=\"clear\"></div>\n";

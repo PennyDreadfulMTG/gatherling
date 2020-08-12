@@ -1,6 +1,21 @@
 <?php
-include 'lib.php';
+include_once 'lib.php';
 require_once 'lib_form_helper.php';
+session_start();
+
+$result = '';
+if (isset($_POST['pw1'])) {
+    $code = doRegister();
+    if ($code == 0) {
+        $result = "Registration was successful. You may now  <a href=\"login.php\">Log In</a>.";
+        redirect('player.php');
+    } elseif ($code == -1) {
+        $result = "Passwords don't match. Please go back and try again.";
+    } elseif ($code == -3) {
+        $result = "A password has already been created for this account.";
+        linkToLogin("player.php", $result, trim($_POST['username']));
+    }
+}
 
 print_header('Register');
 ?>
@@ -9,33 +24,19 @@ print_header('Register');
 <div id="gatherling_main" class="box">
 <div class="uppertitle"> Register for Gatherling </div>
 
-<?php content(); ?>
+<?php
+if (!isset($_POST['pw1'])) {
+    regForm();
+} else {
+    echo $result;
+}
+?>
 
 </div> </div>
 
 <?php print_footer(); ?>
 
 <?php
-function content()
-{
-    if (!isset($_POST['pw1'])) {
-        regForm();
-    } else {
-        $code = doRegister();
-        if ($code == 0) {
-            echo 'Registration was successful. You may now ';
-            echo "<a href=\"login.php\">Log In</a>.\n";
-        } elseif ($code == -1) {
-            echo "Passwords don't match. Please go back and try again.\n";
-        } elseif ($code == -2) {
-            echo 'The specified username was not found in the database ';
-            echo 'Please contact jamuraa on the forums if you feel this is ';
-            echo "an error.\n";
-        } elseif ($code == -3) {
-            echo "A password has already been created for this account.\n";
-        }
-    }
-}
 
 function regForm()
 {
@@ -71,6 +72,9 @@ function doRegister()
     if (strcmp($_POST['pw1'], $_POST['pw2']) != 0) {
         $code = -1;
     }
+    if (empty($_POST['pw1']) && !isset($_SESSION['DISCORD_ID'])) {
+        $code = -1;
+    }
     $player = Player::findOrCreateByName(trim($_POST['username']));
     if (!is_null($player->password)) {
         $code = -3;
@@ -81,7 +85,11 @@ function doRegister()
         $player->emailAddress = $_POST['email'];
         $player->emailPrivacy = $_POST['emailstatus'];
         $player->timezone = $_POST['timezone'];
+        if (isset($_SESSION['DISCORD_ID'])){
+            $player->discord_id = $_SESSION['DISCORD_ID'];
+        }
         $player->save();
+        $_SESSION['username'] = $_POST['username'];
     }
 
     return $code;

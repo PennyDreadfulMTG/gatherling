@@ -191,15 +191,18 @@ function rowColor()
     return $CC;
 }
 
-function linkToLogin($pagename = null)
+function linkToLogin($pagename = null, $message = null, $username = null)
 {
     if (is_null($pagename)) {
         $pagename = $_SERVER['REQUEST_URI'];
     }
-    redirect("login.php?target={$_SERVER['REQUEST_URI']}&message=You must log in to access $pagename.");
+    if (is_null($message)) {
+        $message = "You must log in to access $pagename.";
+    }
+    redirect("login.php?target=$pagename&message=$message&username=$username");
 
     echo "<center>\n";
-    echo "<div class=\"error\">You must log in to access $pagename.</div>";
+    echo "<div class=\"error\">$message</div>";
     echo "Please <a href=\"login.php?target={$_SERVER['REQUEST_URI']}\">Click Here</a> to log in.\n";
     echo "</center>\n";
 }

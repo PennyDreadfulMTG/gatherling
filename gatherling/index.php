@@ -4,7 +4,7 @@ $gatherlingoutofservice = 0;
 include 'lib.php';
 include 'config.php';
 $version = Database::single_result('SELECT version FROM db_version LIMIT 1');
-if ($version < 31) {
+if ($version < 37) {
     $gatherlingoutofservice = 1;
 }
 
@@ -105,7 +105,9 @@ if ($gatherlingoutofservice != 1) {
                             </tr>
                             <tr>
                                 <td colspan="2" class="buttons">
-                                <input class="inputbutton" type="submit" name="mode" value="Log In" /> <br />
+                                <input class="inputbutton" type="submit" name="mode" value="Log In" />
+                                <input class="inputbutton discordlogin fa-discord" type="submit" name="mode" value="Log In with discord" />
+                                <br />
                                 <a href="register.php">Need to register?</a><br />
                                 <a href="forgot.php">Forgot your password?</a>
                                 </td>
