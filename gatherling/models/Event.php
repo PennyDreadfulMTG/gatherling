@@ -81,16 +81,27 @@ class Event
 
         if (!$this->new) {
             $db = Database::getConnection();
-            $stmt = $db->prepare('SELECT format, host, cohost, series, season, number,
-                                   start, kvalue, finalized, prereg_allowed, threadurl,
-                                   metaurl, reporturl, active, current_round, player_reportable, player_editdecks,
-                                    prereg_cap, private_decks, private_finals, player_reported_draws, late_entry_limit, `private` FROM events WHERE name = ?');
+            $sql = 'SELECT name, format, host, cohost, series, season, number,
+                           start, kvalue, finalized, prereg_allowed, threadurl,
+                           metaurl, reporturl, active, current_round, player_reportable, player_editdecks,
+                           prereg_cap, private_decks, private_finals, player_reported_draws, late_entry_limit, `private` FROM events WHERE ';
+            if (is_numeric($name))
+                {
+                    $sql .= 'id = ?';
+                    $pt = 'd';
+                }
+                else{
+                    $sql .= 'name = ?';
+                    $pt = 's';
+                }
+            $stmt = $db->prepare($sql);
             if (!$stmt) {
                 exit($db->error);
             }
-            $stmt->bind_param('s', $name);
+            $stmt->bind_param($pt, $name);
             $stmt->execute();
             $stmt->bind_result(
+                $this->name,
                 $this->format,
                 $this->host,
                 $this->cohost,
@@ -122,7 +133,6 @@ class Event
 
         $stmt->close();
 
-        $this->name = $name;
         $this->standing = new Standings($this->name, '0');
 
         // Main rounds
