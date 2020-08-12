@@ -47,7 +47,7 @@ if (strcmp($_GET['mode'], 'view') == 0) {
     }
 
     $event = null;
-    if (isset($_REQUEST['event'])){
+    if (isset($_REQUEST['event'])) {
         $event = new Event($_REQUEST['event']);
     }
 

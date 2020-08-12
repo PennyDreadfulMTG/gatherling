@@ -87,15 +87,13 @@ class Event
                            start, kvalue, finalized, prereg_allowed, threadurl,
                            metaurl, reporturl, active, current_round, player_reportable, player_editdecks,
                            prereg_cap, private_decks, private_finals, player_reported_draws, late_entry_limit, `private` FROM events WHERE ';
-            if (is_numeric($name))
-                {
-                    $sql .= 'id = ?';
-                    $pt = 'd';
-                }
-                else{
-                    $sql .= 'name = ?';
-                    $pt = 's';
-                }
+            if (is_numeric($name)) {
+                $sql .= 'id = ?';
+                $pt = 'd';
+            } else {
+                $sql .= 'name = ?';
+                $pt = 's';
+            }
             $stmt = $db->prepare($sql);
             if (!$stmt) {
                 exit($db->error);
