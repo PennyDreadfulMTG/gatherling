@@ -28,6 +28,7 @@ class Match
     public $series;
     public $season;
     public $eventname;
+    public $event_id;
 
     // added for matching
 
@@ -48,12 +49,12 @@ class Match
     public function __construct($id)
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT m.subevent, m.round, m.playera, m.playerb, m.result, m.playera_wins, m.playera_losses, m.playera_draws, m.playerb_wins, m.playerb_losses, m.playerb_draws, s.timing, s.type, s.rounds, e.format, e.series, e.season, m.verification, e.name
+        $stmt = $db->prepare('SELECT m.subevent, m.round, m.playera, m.playerb, m.result, m.playera_wins, m.playera_losses, m.playera_draws, m.playerb_wins, m.playerb_losses, m.playerb_draws, s.timing, s.type, s.rounds, e.format, e.series, e.season, m.verification, e.name, e.id
       FROM matches m, subevents s, events e
       WHERE m.id = ? AND m.subevent = s.id AND e.name = s.parent');
         $stmt->bind_param('d', $id);
         $stmt->execute();
-        $stmt->bind_result($this->subevent, $this->round, $this->playera, $this->playerb, $this->result, $this->playera_wins, $this->playera_losses, $this->playera_draws, $this->playerb_wins, $this->playerb_losses, $this->playerb_draws, $this->timing, $this->type, $this->rounds, $this->format, $this->series, $this->season, $this->verification, $this->eventname);
+        $stmt->bind_result($this->subevent, $this->round, $this->playera, $this->playerb, $this->result, $this->playera_wins, $this->playera_losses, $this->playera_draws, $this->playerb_wins, $this->playerb_losses, $this->playerb_draws, $this->timing, $this->type, $this->rounds, $this->format, $this->series, $this->season, $this->verification, $this->eventname, $this->event_id);
         $stmt->fetch();
         $stmt->close();
         $this->id = $id;
@@ -192,7 +193,7 @@ class Match
     public function playerDropped($player)
     {
         $playername = $this->toName($player);
-        $entry = new Entry($this->eventname, $player);
+        $entry = new Entry($this->event_id, $player);
 
         return $entry->drop_round == $this->round;
     }

@@ -250,7 +250,7 @@ function content()
         }
         if (isset($_GET['action'])) {
             if (strcmp($_GET['action'], 'undrop') == 0) {
-                $entry = new Entry($_GET['name'], $_GET['player']);
+                $entry = new Entry($_GET['event_id'], $_GET['player']);
                 if ($entry->deck and $entry->deck->isValid()) {
                     $event->undropPlayer($_GET['player']);
                 }
@@ -335,7 +335,7 @@ function eventList($series = '', $season = '')
     COUNT(DISTINCT n.player) AS players, e.host AS host, e.start AS start,
     e.finalized, e.cohost, e.series, e.kvalue
     FROM events e
-    LEFT OUTER JOIN entries AS n ON n.event = e.name
+    LEFT OUTER JOIN entries AS n ON n.event_id = e.id
     WHERE (e.host = \"{$db->escape_string($player->name)}\"
            OR e.cohost = \"{$db->escape_string($player->name)}\"
            OR e.series IN (".$seriesString.'))';
@@ -728,7 +728,7 @@ function playerList($event)
                 echo '<input type="checkbox" name="dropplayer[]" ';
                 echo "value=\"{$entry->player->name}\"></td>";
             } else {
-                echo "<td>{$drop_icon} {$entry->drop_round} <a href=\"event.php?view=reg&player=".$entry->player->name.'&event='.$event->name.'&action=undrop&name='.$event->name.'">(undrop)</a></td>'; // else echo a symbol to represent player has dropped
+                echo "<td>{$drop_icon} {$entry->drop_round} <a href=\"event.php?view=reg&player=".$entry->player->name.'&event='.$event->name.'&action=undrop&event_id='.$event->id.'">(undrop)</a></td>'; // else echo a symbol to represent player has dropped
             }
         }
         if ($event->finalized && !$event->active) {
@@ -1493,7 +1493,7 @@ function updateReg()
 
     // if (isset($_POST['earned_byes'])) {
     //     foreach ($_POST['earned_byes'] as $playername) {
-    //         $entry = new Entry($event->name, $playername);
+    //         $entry = new Entry($event->id, $playername);
     //         $entry->add_earned_byes($playername, $playername[1]);
     //     }
     // }
@@ -1505,7 +1505,7 @@ function updateReg()
                 $bye_qty = intval($array_data[count($array_data) - 1]);
                 unset($array_data[count($array_data) - 1]);
                 $playername = implode(' ', $array_data);
-                $entry = new Entry($event->name, $playername);
+                $entry = new Entry($event->id, $playername);
                 $entry->setInitialByes($bye_qty);
             }
         }

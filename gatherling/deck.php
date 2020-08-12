@@ -46,15 +46,20 @@ if (strcmp($_GET['mode'], 'view') == 0) {
         $_POST['event'] = $_GET['event'];
     }
 
+    $event = null;
+    if (isset($_REQUEST['event'])){
+        $event = new Event($_REQUEST['event']);
+    }
+
     // part of the reg-decklist feature. both "register" and "addregdeck" switches
     if (strcmp($_GET['mode'], 'register') == 0) {
         deckRegisterForm();
     } elseif (strcmp($_GET['mode'], 'addregdeck') == 0) {
-        $deck = insertDeck();
+        $deck = insertDeck($event);
         deckProfile($deck);
-    } elseif (checkDeckAuth($_POST['event'], $deck_player, $deck)) {
+    } elseif (checkDeckAuth($event->id, $deck_player, $deck)) {
         if (strcmp($_POST['mode'], 'Create Deck') == 0) {
-            $deck = insertDeck();
+            $deck = insertDeck($event);
             if ($deck->isValid()) {
                 deckProfile($deck);
             } else {
@@ -89,13 +94,13 @@ function deckForm($deck = null)
     $mode = is_null($deck) ? 'Create Deck' : 'Update Deck';
     if (!is_null($deck)) {
         $player = $deck->playername;
-        $event = $deck->eventname;
+        $event = new Event($deck->eventname);
     } else {
         $player = (isset($_POST['player'])) ? $_POST['player'] : $_GET['player'];
-        $event = (isset($_POST['player'])) ? $_POST['event'] : $_GET['event'];
+        $event = new Event((isset($_POST['player'])) ? $_POST['event'] : $_GET['event']);
     }
 
-    if (!checkDeckAuth($event, $player, $deck)) {
+    if (!checkDeckAuth($event->id, $player, $deck)) {
         return;
     }
 
@@ -175,7 +180,7 @@ function deckForm($deck = null)
     echo "<tr><td colspan=\"2\" align=\"center\">\n";
     echo "<input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"$mode\">\n";
     echo "<input type=\"hidden\" name=\"player\" value=\"$player\">";
-    echo "<input type=\"hidden\" name=\"event\" value=\"$event\">";
+    echo "<input type=\"hidden\" name=\"event\" value=\"$event->id\">";
     echo "</td></tr></table></form>\n";
 }
 
@@ -245,7 +250,7 @@ function archetypeDropMenu($def = '')
     print_select_input('Archetype', 'archetype', $archetypes, $def, 'deck-archetype');
 }
 
-function insertDeck()
+function insertDeck($event)
 {
     $deck = new Deck(0);
 
@@ -254,7 +259,8 @@ function insertDeck()
     $deck->notes = $_POST['notes'];
 
     $deck->playername = $_POST['player'];
-    $deck->eventname = $_POST['event'];
+    $deck->eventname = $event->name;
+    $deck->event_id = $event->id;
 
     $deck->maindeck_cards = parseCardsWithQuantity($_POST['contents']);
     $deck->sideboard_cards = parseCardsWithQuantity($_POST['sideboard']);
@@ -530,7 +536,7 @@ function matchupTable($deck)
             if ($res != 'Bye') {
                 $opp = new Player($match->otherPlayer($deck->playername));
                 $deckcell = 'No Deck Found';
-                $oppdeck = $opp->getDeckEvent($deck->eventname);
+                $oppdeck = $opp->getDeckEvent($deck->event_id);
                 if ($oppdeck != null) {
                     $deckcell = $oppdeck->linkTo();
                 }
@@ -669,7 +675,7 @@ function matchupTable($deck)
       echo "<center>You can't do that unless you <a href=\"login.php\">log in first</a></center>";
   }
 
-  function checkDeckAuth($event, $player, $deck = null)
+  function checkDeckAuth($event_id, $player, $deck = null)
   {
       if (!Player::isLoggedIn()) {
           loginRequired();
@@ -678,7 +684,7 @@ function matchupTable($deck)
       }
       if (is_null($deck)) {
           // Creating a deck.
-          $entry = new Entry($event, $player);
+          $entry = new Entry($event_id, $player);
           $auth = $entry->canCreateDeck(Player::loginName());
       } else {
           // Updating a deck.

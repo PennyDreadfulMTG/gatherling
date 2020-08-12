@@ -325,7 +325,7 @@ class Player
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT e.name FROM entries n, events e
-      WHERE n.player = ? AND e.name = n.event ORDER BY UNIX_TIMESTAMP(e.start) DESC');
+      WHERE n.player = ? AND e.id = n.event_id ORDER BY UNIX_TIMESTAMP(e.start) DESC');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
         $lastevname = null;
@@ -366,13 +366,13 @@ class Player
         return $matches;
     }
 
-    public function getDeckEvent($eventname)
+    public function getDeckEvent($event_id)
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT n.deck
       FROM entries n
-      WHERE n.event = ? AND n.player = ?');
-        $stmt->bind_param('ss', $eventname, $this->name);
+      WHERE n.event_id = ? AND n.player = ?');
+        $stmt->bind_param('ss', $event_id, $this->name);
         $stmt->execute();
         $stmt->bind_result($deckid);
         $stmt->fetch();
@@ -385,19 +385,12 @@ class Player
         return new Deck($deckid);
     }
 
-    public function getRecordEvent($eventname)
-    {
-        $entry = new Entry($eventname, $this->name);
-
-        return $entry->recordString();
-    }
-
     public function getAllDecks()
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT n.deck
       FROM entries n, events e
-      WHERE n.player = ? AND n.deck IS NOT NULL AND n.event = e.name
+      WHERE n.player = ? AND n.deck IS NOT NULL AND n.event_id = e.id
       ORDER BY e.start DESC');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
@@ -421,7 +414,7 @@ class Player
     {
         $db = Database::getConnection();
         $stmt = $db->prepare("SELECT n.deck FROM entries n, events e
-      WHERE n.player = ? AND n.event = e.name AND n.deck IS NOT NULL
+      WHERE n.player = ? AND n.event_id = e.id AND n.deck IS NOT NULL
       ORDER BY e.start DESC LIMIT $number");
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
@@ -572,7 +565,7 @@ class Player
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT m.id FROM matches m, entries n, decks d, events e, subevents s
       WHERE d.name = ? AND n.player = ? AND n.deck = d.id
-       AND n.event = e.name AND s.parent = e.name AND m.subevent = s.id
+       AND n.event_id = e.id AND s.parent = e.name AND m.subevent = s.id
        AND (m.playera = ? OR m.playerb = ?)');
         $stmt->bind_param('ssss', $deckname, $this->name, $this->name, $this->name);
         $stmt->execute();
@@ -616,22 +609,22 @@ class Player
     public function getNoDeckEntries()
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT event FROM entries n, events e
-      WHERE n.player = ? AND n.deck IS NULL AND n.event = e.name
+        $stmt = $db->prepare('SELECT event_id FROM entries n, events e
+      WHERE n.player = ? AND n.deck IS NULL AND n.event_id = e.id
       ORDER BY e.start DESC');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $stmt->bind_result($eventname);
+        $stmt->bind_result($event_id);
 
-        $eventnames = [];
+        $event_ids = [];
         while ($stmt->fetch()) {
-            $eventnames[] = $eventname;
+            $event_ids[] = $event_id;
         }
         $stmt->close();
 
         $entries = [];
-        foreach ($eventnames as $eventname) {
-            $entries[] = new Entry($eventname, $this->name);
+        foreach ($event_ids as $event_id) {
+            $entries[] = new Entry($event_id, $this->name);
         }
 
         return $entries;
@@ -641,8 +634,8 @@ class Player
     public function getUnenteredCount()
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT count(event) FROM entries n, events e
-      WHERE n.player = ? AND n.deck IS NULL AND n.event = e.name
+        $stmt = $db->prepare('SELECT count(event_id) FROM entries n, events e
+      WHERE n.player = ? AND n.deck IS NULL AND n.event_id = e.id
       AND n.ignored = false');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
@@ -915,7 +908,7 @@ class Player
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT e.name
       FROM events e, entries n, trophies t
-      WHERE n.event = e.name AND n.player = ?
+      WHERE n.event_id = e.id AND n.player = ?
        AND n.medal = "1st" and t.event = e.name AND t.image IS NOT NULL
        ORDER BY e.start DESC LIMIT 1');
         $stmt->bind_param('s', $this->name);
@@ -938,7 +931,7 @@ class Player
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT e.name
       FROM events e, entries n, trophies t
-      WHERE n.event = e.name AND n.player = ?
+      WHERE n.event_id = e.id AND n.player = ?
        AND n.medal = "1st" and t.event = e.name AND t.image IS NOT NULL
        ORDER BY e.start DESC');
         $stmt->bind_param('s', $this->name);
@@ -959,7 +952,7 @@ class Player
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT e.format FROM entries n, events e, formats f
-      WHERE n.player = ? AND e.name = n.event AND e.format = f.name
+      WHERE n.player = ? AND n.event_id = e.id AND e.format = f.name
       GROUP BY e.format ORDER BY f.priority DESC, f.name');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
@@ -979,7 +972,7 @@ class Player
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT e.format, count(n.event) AS cnt
       FROM entries n, events e
-      WHERE n.player = ? AND e.name = n.event
+      WHERE n.player = ? AND n.event_id = e.id
       GROUP BY e.format ORDER BY cnt DESC');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
@@ -1050,7 +1043,7 @@ class Player
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT e.series, count(n.event) AS cnt
       FROM events e, entries n
-      WHERE n.player = ? AND n.event = e.name
+      WHERE n.player = ? AND n.event_id = e.id
       GROUP BY e.series ORDER BY cnt DESC');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
@@ -1069,7 +1062,7 @@ class Player
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT e.series FROM entries n, events e, series s
-      WHERE n.player = ? AND e.name = n.event AND e.series = s.name
+      WHERE n.player = ? AND n.event_id = e.id AND e.series = s.name
       GROUP BY e.series ORDER BY s.isactive DESC, s.name');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
@@ -1090,7 +1083,7 @@ class Player
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT e.season FROM entries n, events e
-      WHERE n.player = ? AND e.name = n.event
+      WHERE n.player = ? AND n.event_id = e.id
       GROUP BY e.season ORDER BY e.season ASC');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();

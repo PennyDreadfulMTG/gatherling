@@ -3,6 +3,7 @@
 class Event
 {
     public $name;
+    public $id;
 
     public $season;
     public $number;
@@ -50,6 +51,7 @@ class Event
     public function __construct($name)
     {
         if ($name == '') {
+            $this->id = 0;
             $this->name = '';
             $this->mainrounds = '';
             $this->mainstruct = '';
@@ -81,7 +83,7 @@ class Event
 
         if (!$this->new) {
             $db = Database::getConnection();
-            $sql = 'SELECT name, format, host, cohost, series, season, number,
+            $sql = 'SELECT id, name, format, host, cohost, series, season, number,
                            start, kvalue, finalized, prereg_allowed, threadurl,
                            metaurl, reporturl, active, current_round, player_reportable, player_editdecks,
                            prereg_cap, private_decks, private_finals, player_reported_draws, late_entry_limit, `private` FROM events WHERE ';
@@ -101,6 +103,7 @@ class Event
             $stmt->bind_param($pt, $name);
             $stmt->execute();
             $stmt->bind_result(
+                $this->id,
                 $this->name,
                 $this->format,
                 $this->host,
@@ -381,7 +384,7 @@ class Event
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT n.deck from entries n, events e
-      WHERE e.name = n.event AND n.medal = ? AND e.name = ?');
+      WHERE n.event_id = e.id AND n.medal = ? AND e.name = ?');
         $stmt->bind_param('ss', $placing, $this->name);
         $stmt->execute();
         $stmt->bind_result($deckid);
@@ -399,7 +402,7 @@ class Event
     public function getPlacePlayer($placing = '1st')
     {
         $playername = Database::db_query_single('SELECT n.player from entries n, events e
-                                             WHERE e.name = n.event
+                                             WHERE n.event_id = e.id
                                              AND n.medal = ?
                                              AND e.name = ?', 'ss', $placing, $this->name);
 
@@ -533,7 +536,7 @@ class Event
 
     public function getPlayers()
     {
-        return Database::list_result_single_param('SELECT player FROM entries WHERE event = ? ORDER BY medal, player', 's', $this->name);
+        return Database::list_result_single_param('SELECT player FROM entries WHERE event_id = ? ORDER BY medal, player', 's', $this->id);
     }
 
     public function getActiveRegisteredPlayers()
@@ -542,7 +545,7 @@ class Event
         $registeredPlayers = [];
 
         foreach ($players as $player) {
-            $entry = new Entry($this->name, $player);
+            $entry = new Entry($this->id, $player);
             if (is_null($entry->deck)) {
                 continue;
             }
@@ -561,7 +564,7 @@ class Event
         $registeredPlayers = [];
 
         foreach ($players as $player) {
-            $entry = new Entry($this->name, $player);
+            $entry = new Entry($this->id, $player);
             if (is_null($entry->deck)) {
                 continue;
             }
@@ -646,7 +649,7 @@ class Event
 
         $entries = [];
         foreach ($players as $player) {
-            $entries[] = new Entry($this->name, $player);
+            $entries[] = new Entry($this->id, $player);
         }
 
         return $entries;
@@ -658,12 +661,12 @@ class Event
 
         $entries = [];
         foreach ($players as $player) {
-            $entry = new Entry($this->name, $player);
+            $entry = new Entry($this->id, $player);
             if (is_null($entry->deck)) {
                 continue;
             }
             if ($entry->deck->isValid()) {
-                $entries[] = new Entry($this->name, $player);
+                $entries[] = new Entry($this->id, $player);
             }
         }
 
@@ -676,13 +679,13 @@ class Event
 
         $entries = [];
         foreach ($players as $player) {
-            $entry = new Entry($this->name, $player);
+            $entry = new Entry($this->id, $player);
             if (is_null($entry->deck)) {
                 continue;
             }
             $standings = new Standings($this->name, $player);
             if ($entry->deck->isValid() && $entry->initial_byes > 0 && $standings->active) {
-                //$entries[] = new Entry($this->name, $player);
+                //$entries[] = new Entry($this->id, $player);
                 $entries[] = $entry;
             }
         }
@@ -695,7 +698,7 @@ class Event
         $players = $this->getPlayers();
         $entries = [];
         foreach ($players as $player) {
-            $entry = new Entry($this->name, $player);
+            $entry = new Entry($this->id, $player);
             if (is_null($entry->deck) || !$entry->deck->isValid()) {
                 $this->removeEntry($player);
             }
@@ -708,7 +711,7 @@ class Event
         $players = $this->getPlayers();
         $entries = [];
         foreach ($players as $player) {
-            $entry = new Entry($this->name, $player);
+            $entry = new Entry($this->id, $player);
             if ($entry->canDelete()) {
                 $this->removeEntry($player);
             }
@@ -717,7 +720,7 @@ class Event
 
     public function removeEntry($playername)
     {
-        $entry = new Entry($this->name, $playername);
+        $entry = new Entry($this->id, $playername);
 
         return $entry->removeEntry();
     }
@@ -733,13 +736,13 @@ class Event
         if ($playerIsBanned) {
             return false;
         }
-        $entry = Entry::findByEventAndPlayer($this->name, $playername);
+        $entry = Entry::findByEventAndPlayer($this->id, $playername);
         $added = false;
         if (is_null($entry)) {
             $player = Player::findOrCreateByName($playername);
             $db = Database::getConnection();
-            $stmt = $db->prepare('INSERT INTO entries(event, player, registered_at) VALUES(?, ?, NOW())');
-            $stmt->bind_param('ss', $this->name, $player->name);
+            $stmt = $db->prepare('INSERT INTO entries(event_id, player, registered_at) VALUES(?, ?, NOW())');
+            $stmt->bind_param('ss', $this->id, $player->name);
             if (!$stmt->execute()) {
                 print_r($stmt->error);
 
@@ -1195,7 +1198,7 @@ class Event
         // Invalid entries get a fake
         $players = $this->getPlayers();
         foreach ($players as $player) {
-            $entry = new Entry($this->name, $player);
+            $entry = new Entry($this->id, $player);
             if (is_null($entry->deck) || !$entry->deck->isValid()) {
                 $playerStandings = new Standings($this->name, $player);
                 $playerStandings->matched = 1;
@@ -1328,7 +1331,7 @@ class Event
         // Invalid entries get a fake
         $players = $this->getPlayers();
         foreach ($players as $player) {
-            $entry = new Entry($this->name, $player);
+            $entry = new Entry($this->id, $player);
             if (is_null($entry->deck) || !$entry->deck->isValid()) {
                 $playerStandings = new Standings($this->name, $player);
                 $playerStandings->matched = 1;

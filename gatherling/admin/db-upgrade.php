@@ -692,6 +692,22 @@ upgrade_db(37, 'User Info', function () {
     ADD UNIQUE INDEX `discord_id` (`discord_id`);");
 });
 
+upgrade_db(38, 'Entries use deck_id', function () {
+    do_query("ALTER TABLE `entries`
+    ADD `event_id` INT DEFAULT 0 FIRST;");
+    do_query("UPDATE `entries` n INNER JOIN `events` e ON n.event = e.name
+     SET n.event_id = e.id;");
+    do_query("ALTER TABLE `entries`
+	DROP FOREIGN KEY `entries_ibfk_4`;");
+
+    do_query("ALTER TABLE `entries`
+	DROP COLUMN `event`,
+	DROP PRIMARY KEY,
+	ADD PRIMARY KEY (`event_id`, `player`) USING BTREE,
+	ADD CONSTRAINT `entries_ibfk_4` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON UPDATE CASCADE ON DELETE RESTRICT;");
+
+});
+
 $db->autocommit(true);
 
 info('DB is up to date!');

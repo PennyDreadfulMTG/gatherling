@@ -17,6 +17,7 @@ class Deck
 
     public $playername; // Belongs to player through entries, now held in decks table
     public $eventname; // Belongs to event through entries
+    public $event_id; // Belongs to event through entries
     public $subeventid; // Belongs to event
     public $format; // Belongs to event..  now held in decks table
     public $tribe; // used only for tribal events
@@ -118,13 +119,13 @@ class Deck
         $stmt->close();
 
         // Retrieve event
-        $stmt = $database->prepare('SELECT e.name
+        $stmt = $database->prepare('SELECT e.name, e.id
                                 FROM events e, entries n, decks d
                                 WHERE d.id = ? and d.id = n.deck
-                                AND n.event = e.name');
+                                AND n.event_id = e.id');
         $stmt->bind_param('d', $id);
         $stmt->execute();
-        $stmt->bind_result($this->eventname);
+        $stmt->bind_result($this->eventname, $this->event_id);
         $stmt->fetch();
         $stmt->close();
 
@@ -136,7 +137,7 @@ class Deck
         if (!is_null($this->eventname)) {
             $this->format = Database::single_result_single_param('SELECT  events.format
                                                                FROM entries INNER JOIN events
-                                                               ON entries.event = events.name
+                                                               ON entries.event_id = events.id
                                                                WHERE entries.deck = ?', 'd', $this->id);
             $this->subeventid = Database::single_result_single_param('SELECT id
                                                                    FROM subevents
@@ -186,7 +187,7 @@ class Deck
 
     public function getEntry()
     {
-        return new Entry($this->eventname, $this->playername);
+        return new Entry($this->event_id, $this->playername);
     }
 
     public function recordString()
@@ -319,7 +320,7 @@ class Deck
 
     public function getEvent()
     {
-        return new Event($this->eventname);
+        return new Event($this->event_id);
     }
 
     public function getCardCount($cards)
@@ -573,10 +574,10 @@ class Deck
         }
 
         // had to put this here since the constructor doesn't run entirely when a new deck is created
-        if (!is_null($this->eventname) && is_null($this->format)) {
+        if (!is_null($this->event_id) && is_null($this->format)) {
             $this->format = Database::single_result_single_param('SELECT format
                                                                FROM events
-                                                               WHERE name = ?', 's', $this->eventname);
+                                                               WHERE id = ?', 'd', $this->event_id);
         }
         $format = new Format($this->format);
 
@@ -587,8 +588,8 @@ class Deck
             $stmt->execute();
             $this->id = $stmt->insert_id;
 
-            $stmt = $db->prepare('UPDATE entries SET deck = ? WHERE player = ? AND event = ?');
-            $stmt->bind_param('dss', $this->id, $this->playername, $this->eventname);
+            $stmt = $db->prepare('UPDATE entries SET deck = ? WHERE player = ? AND event_id = ?');
+            $stmt->bind_param('dsd', $this->id, $this->playername, $this->event_id);
             $stmt->execute();
             if ($stmt->affected_rows != 1) {
                 $db->rollback();
@@ -917,7 +918,7 @@ class Deck
                             WHERE deck_hash = ?
                             AND d.id != ?
                             AND n.deck = d.id
-                            AND e.name = n.event
+                            AND e.id = n.event_id
                             AND e.finalized = 1
                             ORDER BY e.start
                             DESC');
