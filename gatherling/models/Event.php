@@ -660,26 +660,6 @@ class Event
         return $entries;
     }
 
-    public function getActiveEntriesWithInitialByes()
-    {
-        $players = $this->getPlayers();
-
-        $entries = [];
-        foreach ($players as $player) {
-            $entry = new Entry($this->name, $player);
-            if (is_null($entry->deck)) {
-                continue;
-            }
-            $standings = new Standings($this->name, $player);
-            if ($entry->deck->isValid() && $entry->initial_byes > 0 && $standings->active) {
-                //$entries[] = new Entry($this->name, $player);
-                $entries[] = $entry;
-            }
-        }
-
-        return $entries;
-    }
-
     public function dropInvalidEntries()
     {
         $players = $this->getPlayers();
@@ -1241,11 +1221,8 @@ class Event
 
         $this->skipInvalidDecks();
 
-        $entries = $this->getActiveEntriesWithInitialByes();
+        $entries = Entry::getActivePlayersWithInitialByes($this->name, $this->current_round + 1);
         foreach ($entries as $entry) {
-            if ($entry->initial_byes < 1 || ($entry->initial_byes < $this->current_round + 1)) {
-                continue;
-            }
             $player1 = new Standings($this->name, $entry->player->name);
             $this->award_bye($player1);
             $player1->matched = 1;

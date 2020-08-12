@@ -29,6 +29,35 @@ class Entry
         }
     }
 
+    public static function getActivePlayersWithInitialByes($eventname, $currentround=1)
+    {
+        $db = Database::getConnection();
+        $stmt = $db->prepare('SELECT e.player
+            FROM entries e
+            JOIN standings s ON e.event = s.event
+            WHERE e.event = ?
+            AND s.active = 1
+            AND e.deck IS NOT NULL
+            AND e.initial_byes >= ?
+            GROUP BY player');
+        $stmt->bind_param('sd', $eventname, $currentround);
+        $entries = [];
+        $playernames = [];
+        $playername = '';
+        $stmt->execute();
+        $stmt->bind_result($playername);
+        while ($stmt->fetch()) {
+            $playernames[] = $playername;
+        }
+        $stmt->close();
+
+        foreach ($playernames as $name) {
+            $entries[] = new Entry($eventname, $name);
+        }
+
+        return $entries;   
+    }
+
     // TODO: remove ignore functionality
     public function __construct($eventname, $playername)
     {
