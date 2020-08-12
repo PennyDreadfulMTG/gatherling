@@ -14,6 +14,8 @@ class Player
     public $verified;
     public $theme;
     public $discord_id;
+    public $discord_handle;
+    public $api_key;
 
     public function __construct($name)
     {
@@ -29,7 +31,7 @@ class Player
         }
         $database = Database::getConnection();
         $stmt = $database->prepare('SELECT name, password, rememberme, INET_NTOA(ipaddress), host, super,
-                mtgo_confirmed, email, email_privacy, timezone, theme, discord_id FROM players WHERE name = ?');
+                mtgo_confirmed, email, email_privacy, timezone, theme, discord_id, discord_handle, api_key  FROM players WHERE name = ?');
         $stmt or exit($database->error);
 
         $stmt->bind_param('s', $name);
@@ -46,7 +48,9 @@ class Player
             $this->emailPrivacy,
             $this->timezone,
             $this->theme,
-            $this->discord_id
+            $this->discord_id,
+            $this->discord_handle,
+            $this->api_key
         );
         if ($stmt->fetch() == null) {
             throw new Exception('Player '.$name.' is not found.');
@@ -196,8 +200,8 @@ class Player
     public function save()
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('UPDATE players SET password = ?, rememberme = ?, host = ?, super = ?, email = ?, email_privacy = ?, timezone = ?, discord_id = ? WHERE name = ?');
-        $stmt->bind_param('sdddsddds', $this->password, $this->rememberMe, $this->host, $this->super, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->discord_id, $this->name);
+        $stmt = $db->prepare('UPDATE players SET password = ?, rememberme = ?, host = ?, super = ?, email = ?, email_privacy = ?, timezone = ?, discord_id = ?, discord_handle = ? WHERE name = ?');
+        $stmt->bind_param('sdddsdddss', $this->password, $this->rememberMe, $this->host, $this->super, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->discord_id, $this->discord_handle, $this->name);
         $stmt->execute();
         $stmt->close();
     }
