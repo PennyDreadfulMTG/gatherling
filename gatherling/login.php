@@ -21,7 +21,7 @@ print_header('Login');
   }
 
   $username = '';
-  if (isset($_REQUEST['username'])){
+  if (isset($_REQUEST['username'])) {
       $username = $_REQUEST['username'];
   }
 ?>
@@ -48,8 +48,8 @@ print_header('Login');
                     ?>
                         <input class="inputbutton" type="submit" name="mode" value="Log In">
                         <?php
-                        if (!isset($_SESSION['DISCORD_ID'])){
-                            echo "<input class=\"inputbutton discordlogin fa-discord\" type=\"submit\" name=\"mode\" value=\"Log In with discord\" />";
+                        if (!isset($_SESSION['DISCORD_ID'])) {
+                            echo '<input class="inputbutton discordlogin fa-discord" type="submit" name="mode" value="Log In with discord" />';
                         } ?>
                         <br />
                         Please <a href="register.php">Click Here</a> if you need to register.<br />
@@ -65,10 +65,10 @@ print_header('Login');
 
 <?php
 function printLoginFailed()
-                    {
-                        echo "<span class=\"error\"><center>Incorrect username or password. Please try again.</center></span>\n";
-                        echo '<br />';
-                    }
+                        {
+                            echo "<span class=\"error\"><center>Incorrect username or password. Please try again.</center></span>\n";
+                            echo '<br />';
+                        }
 
 function printIPAddressChanged()
 {
@@ -78,8 +78,7 @@ function printIPAddressChanged()
 
 function testLogin()
 {
-    if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'Log In with discord')
-    {
+    if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'Log In with discord') {
         redirect('auth.php');
     }
     $success = 0;

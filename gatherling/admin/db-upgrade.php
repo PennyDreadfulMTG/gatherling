@@ -59,11 +59,13 @@ function set_version($version)
     info("... DB now at version {$version}!");
 }
 
-function upgrade_db($new_version, $text, $func) {
+function upgrade_db($new_version, $text, $func)
+{
     global $db;
     global $version;
-    if ($version >= $new_version)
+    if ($version >= $new_version) {
         return;
+    }
     $db->begin_transaction();
     info("Updating to version $new_version ($text)");
     $func();
@@ -677,13 +679,12 @@ if ($version < 35) {
     set_version(35);
 }
 
-
-upgrade_db(36, "Add initial_byes column to entries table", function() {
+upgrade_db(36, 'Add initial_byes column to entries table', function () {
     do_query("ALTER TABLE `entries`
     ADD COLUMN `initial_byes` TINYINT NOT NULL DEFAULT '0';");
 });
 
-upgrade_db(37, "User Info", function() {
+upgrade_db(37, 'User Info', function () {
     do_query("ALTER TABLE `players`
     ADD `discord_id` bigint NULL,
     ADD `discord_handle` varchar(37) COLLATE 'utf8mb4_general_ci' NULL AFTER `discord_id`,

@@ -7,13 +7,13 @@ $result = '';
 if (isset($_POST['pw1'])) {
     $code = doRegister();
     if ($code == 0) {
-        $result = "Registration was successful. You may now  <a href=\"login.php\">Log In</a>.";
+        $result = 'Registration was successful. You may now  <a href="login.php">Log In</a>.';
         redirect('player.php');
     } elseif ($code == -1) {
         $result = "Passwords don't match. Please go back and try again.";
     } elseif ($code == -3) {
-        $result = "A password has already been created for this account.";
-        linkToLogin("player.php", $result, trim($_POST['username']));
+        $result = 'A password has already been created for this account.';
+        linkToLogin('player.php', $result, trim($_POST['username']));
     }
 }
 
@@ -85,7 +85,7 @@ function doRegister()
         $player->emailAddress = $_POST['email'];
         $player->emailPrivacy = $_POST['emailstatus'];
         $player->timezone = $_POST['timezone'];
-        if (isset($_SESSION['DISCORD_ID'])){
+        if (isset($_SESSION['DISCORD_ID'])) {
             $player->discord_id = $_SESSION['DISCORD_ID'];
         }
         $player->save();

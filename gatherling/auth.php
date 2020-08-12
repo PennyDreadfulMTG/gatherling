@@ -1,26 +1,26 @@
 <?php
-require __DIR__ . '/lib.php';
+require __DIR__.'/lib.php';
 
 session_start();
 
 global $CONFIG;
 
 $provider = new \Wohali\OAuth2\Client\Provider\Discord([
-    'clientId' => $CONFIG['DISCORD_CLIENT_ID'],
+    'clientId'     => $CONFIG['DISCORD_CLIENT_ID'],
     'clientSecret' => $CONFIG['DISCORD_CLIENT_SECRET'],
-    'redirectUri' => $CONFIG['base_url'] . 'auth.php'
+    'redirectUri'  => $CONFIG['base_url'].'auth.php',
 ]);
 
 if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     $token = new \League\OAuth2\Client\Token\AccessToken([
-        'access_token' => $_SESSION['DISCORD_TOKEN'],
+        'access_token'  => $_SESSION['DISCORD_TOKEN'],
         'refresh_token' => $_SESSION['DISCORD_REFRESH_TOKEN'],
-        'expires' => $_SESSION['DISCORD_EXPIRES']
+        'expires'       => $_SESSION['DISCORD_EXPIRES'],
     ]);
 
     if ($token->hasExpired()) {
         $newAccessToken = $provider->getAccessToken('refresh_token', [
-            'refresh_token' => $existingAccessToken->getRefreshToken()
+            'refresh_token' => $existingAccessToken->getRefreshToken(),
         ]);
 
         store_token($newAccessToken);
@@ -28,38 +28,36 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     }
 
     do_login($token);
-}
-
-elseif (!isset($_GET['code'])) {
+} elseif (!isset($_GET['code'])) {
     send_to_discord();
 
 // Check given state against previously stored one to mitigate CSRF attack
 } elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
-
     unset($_SESSION['oauth2state']);
     exit('Invalid state');
-
 } else {
 
     // Step 2. Get an access token using the provided authorization code
     $token = $provider->getAccessToken('authorization_code', [
-        'code' => $_GET['code']
+        'code' => $_GET['code'],
     ]);
 
     store_token($token);
     do_login($token);
 }
 
-function send_to_discord() {
+function send_to_discord()
+{
     // Step 1. Get authorization code
     global $provider;
     $options = ['scope' => ['identify', 'email']];
     $authUrl = $provider->getAuthorizationUrl($options);
     $_SESSION['oauth2state'] = $provider->getState();
-    header('Location: ' . $authUrl);
+    header('Location: '.$authUrl);
 }
 
-function store_token($token) {
+function store_token($token)
+{
     $_SESSION['DISCORD_TOKEN'] = $token->getToken();
     $_SESSION['DISCORD_REFRESH_TOKEN'] = $token->getRefreshToken();
     $_SESSION['DISCORD_EXPIRES'] = $token->getExpires();
@@ -78,8 +76,6 @@ function store_token($token) {
 //         global $provider;
 //         $user = $provider->getResourceOwner($token);
 
-
-
 //         echo '<h2>Resource owner details:</h2>';
 //         printf('Hello %s#%s!<br/><br/>', $user->getUsername(), $user->getDiscriminator());
 //         var_export($user->toArray());
@@ -92,15 +88,15 @@ function store_token($token) {
 //     }
 // }
 
-function do_login($token) {
+function do_login($token)
+{
     try {
         global $provider;
         $user = $provider->getResourceOwner($token);
         $_SESSION['DISCORD_ID'] = $user->getId();
         $_SESSION['DISCORD_NAME'] = "{$user->getUsername()}#{$user->getDiscriminator()}";
 
-        if (Player::isLoggedIn())
-        {
+        if (Player::isLoggedIn()) {
             $player = Player::getSessionPlayer();
             $player->discord_id = $_SESSION['DISCORD_ID'];
             $player->save();
@@ -108,23 +104,21 @@ function do_login($token) {
         }
 
         $player = Player::findByDiscordID($user->getId());
-        if ($player)
-        {
+        if ($player) {
             $_SESSION['username'] = $player->name;
             redirect('player.php');
         }
 
         prompt_link_account($user);
-
     } catch (Exception $e) {
         // Failed to get user details
         exit('Discord Login Failure');
     }
 }
 
-function prompt_link_account($user) {
-    print_header('Login');
-    ?>
+function prompt_link_account($user)
+{
+    print_header('Login'); ?>
     <div class="grid_10 suffix_1 prefix_1">
     <div id="gatherling_main" class="box">
     <div class="uppertitle"> Link Discord Account </div>
