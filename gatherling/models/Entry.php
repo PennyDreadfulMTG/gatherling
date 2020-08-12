@@ -29,7 +29,7 @@ class Entry
         }
     }
 
-    public static function getActivePlayersWithInitialByes($eventname, $currentround=1)
+    public static function getActivePlayersWithInitialByes($eventname, $currentround = 1)
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT e.player
@@ -55,7 +55,7 @@ class Entry
             $entries[] = new Entry($eventname, $name);
         }
 
-        return $entries;   
+        return $entries;
     }
 
     // TODO: remove ignore functionality
