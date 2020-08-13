@@ -312,8 +312,8 @@ function print_mainPlayerCP($player, $result)
     print_currentMatchTable($Leagues);
     print_conditionalAllDecks();
     print_noDeckTable(0);
-    print_recentDeckTable();
     print_preRegistration();
+    print_recentDeckTable();
     print_recentMatchTable();
     echo "</div></div>\n";
     echo "<div class=\"omega grid_5\">\n";
@@ -402,7 +402,7 @@ function print_preRegistration()
         echo '<tr><td colspan="3"> No Upcoming Events! </td> </tr>';
     }
     foreach ($events as $event) {
-        echo "<tr><td><a href=\"{$event->threadurl}\">{$event->name}</a></td>";
+        echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a></td>";
         echo '<td class="eventtime" start="'.$event->start.'"> Starts in '.distance_of_time_in_words(time(), strtotime($event->start), true).'</td>';
         if ($event->hasRegistrant($player->name)) {
             echo '<td>Registered <a href="prereg.php?action=unreg&event='.rawurlencode($event->name).'">(Unreg)</a></td>';
@@ -592,7 +592,9 @@ function print_currentMatchTable($Leagues)
 {
     global $player;
     $matches = $player->getCurrentMatches();
-
+    if (empty($matches)) {
+        return;
+    }
     echo "<table style=\"border-width: 0px\" width=300>\n";
     echo "<tr><td colspan=\"4\"><b>ACTIVE MATCHES</td><td align=\"right\">\n";
     echo "</td></tr>\n";
