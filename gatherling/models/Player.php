@@ -974,7 +974,7 @@ class Player
       FROM entries n, events e
       WHERE n.player = ? AND n.event_id = e.id
       GROUP BY e.format ORDER BY cnt DESC');
-      $stmt || exit($db->error);
+        $stmt || exit($db->error);
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
         $stmt->bind_result($format, $count);
