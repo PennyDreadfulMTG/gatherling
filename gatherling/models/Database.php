@@ -71,6 +71,7 @@ class Database
     {
         $db = self::getConnection();
         $stmt = $db->prepare($sql);
+        $stmt || exit($db->error);
         $stmt->bind_param($paramType, $param);
         $stmt->execute();
         $stmt->bind_result($result);

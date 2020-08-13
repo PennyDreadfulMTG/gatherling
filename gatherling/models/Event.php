@@ -428,8 +428,8 @@ class Event
     {
         $db = Database::getConnection();
         $stmt = $db->prepare("SELECT medal, player, deck FROM entries
-      WHERE event = ? AND medal != 'dot' ORDER BY medal, player");
-        $stmt->bind_param('s', $this->name);
+      WHERE event_id = ? AND medal != 'dot' ORDER BY medal, player");
+        $stmt->bind_param('s', $this->id);
         $stmt->execute();
         $stmt->bind_result($medal, $player, $deck);
 
