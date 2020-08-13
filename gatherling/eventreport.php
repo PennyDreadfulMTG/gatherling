@@ -122,6 +122,8 @@ function eventList($series = '', $season = '')
 
 function showReport($event)
 {
+    // TODO: use $event->id instead
+    $can_prereg = $event->prereg_allowed && Database::single_result_single_param("SELECT `start` > NOW() AS okay FROM events WHERE `name` = ?;", 's', $event->name);
     echo '<div id="EventReport">';
     echo "<table width=900>\n";
     echo '<tr><td width=300 valign="top">';
@@ -129,12 +131,22 @@ function showReport($event)
     echo '</td><td width=300 valign="top">';
     infoCell($event);
     echo '</td><td  width=300 valign="top">';
-    trophyCell($event);
+    if ($event->finalized) {
+        trophyCell($event);
+    }
+
     echo '</td></tr></table>';
     echo "<table style=\"border-width: 0px;\" width=600>\n<tr><td>";
-    finalists($event);
+    if ($event->finalized) {
+        finalists($event);
+    }
+    else if ($can_prereg) {
+        prereg($event);
+    }
     echo '</td><td align="right">';
+    if ($event->active || $event->finalized) {
     metastats($event);
+    }
     echo "</td></tr></table>\n</div>";
     echo '<br /><br />';
     fullmetagame($event);
@@ -171,6 +183,26 @@ function finalists($event)
         echo "<td align=\"right\" width=\"250\">$playerSTR</td></tr>\n";
     }
     echo '</table>';
+}
+
+function prereg($event) {
+    echo "<table>\n";
+    echo "<tr><td colspan=5 align=\"center\"><h3>Registration Open</h3></td></tr>\n";
+    echo "<tr><td>";
+    $player = Player::getSessionPlayer();
+    if (is_null($player)) {
+        echo "<a href='login.php'>Sign in</a> or <a href='register.php'>make an account</a> to Register";
+    } elseif ($event->hasRegistrant($player->name)) {
+        echo 'You are registered for this event! <a href="prereg.php?action=unreg&event='.rawurlencode($event->name).'">(Unreg)</a>';
+    }elseif ($event->is_full()) {
+        echo 'This event is currently at capacity.';
+    } else {
+        echo '<a href="prereg.php?action=reg&event='.rawurlencode($event->name).'">Register for '.$event->name.'</a>';
+    }
+    echo "</td></tr>";
+
+    echo '</table>';
+
 }
 
 function metastats($event)
@@ -320,10 +352,12 @@ function fullmetagame($event)
             echo '<td>'.$play->linkTo()."</td><td align=\left\">{$entry->recordString()}</td></tr>";
         }
     }
-    if (isset($_SESSION['username'])) {
-        Standings::printEventStandings($event->name, $_SESSION['username']);
-    } else {
-        Standings::printEventStandings($event->name, null);
+    if ($event->active || $event->finalized) {
+        if (isset($_SESSION['username'])) {
+            Standings::printEventStandings($event->name, $_SESSION['username']);
+        } else {
+            Standings::printEventStandings($event->name, null);
+        }
     }
     $result->close();
     echo "</table>\n";
@@ -392,19 +426,23 @@ function infoCell($event)
     $playercount = $event->getPlayerCount();
     echo "{$playercount} Players<br />\n";
     $deckcount = count($event->getDecks());
-    echo "{$deckcount} Decks &middot; ";
-    if ($playercount == 0) {
-        $deckpercentexact = 0;
-        $deckpercent = 0;
-    } else {
-        $deckpercentexact = round($deckcount * 100 / $playercount, 2);
-        $deckpercent = round($deckcount * 100 / $playercount, 0);
+    echo "{$deckcount} Decks";
+    if ($event->active){
+        echo " &middot; ";
+        if ($playercount == 0) {
+            $deckpercentexact = 0;
+            $deckpercent = 0;
+        } else {
+            $deckpercentexact = round($deckcount * 100 / $playercount, 2);
+            $deckpercent = round($deckcount * 100 / $playercount, 0);
+        }
+        if ($deckpercentexact == $deckpercent) {
+            echo "{$deckpercent}% Reported";
+        } else {
+            echo "~{$deckpercent}% Reported";
+        }
     }
-    if ($deckpercentexact == $deckpercent) {
-        echo "{$deckpercent}% Reported <br />\n";
-    } else {
-        echo "~{$deckpercent}% Reported <br />\n";
-    }
+    echo "<br />\n";
     foreach ($event->getSubevents() as $subevent) {
         if ($subevent->type != 'Single Elimination') {
             echo "{$subevent->rounds} rounds {$subevent->type}<br />\n";
