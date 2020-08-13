@@ -832,7 +832,7 @@ function print_ratingsHistory($format)
     $stmt = $db->prepare('SELECT e.name, e.id, r.rating, n.medal, n.deck AS id
     FROM events e, entries n, ratings r
     WHERE r.format= ? AND r.player = ?
-    AND e.start=r.updated AND n.player=r.player AND n.event=e.name
+    AND e.start=r.updated AND n.player=r.player AND n.event_id=e.id
     ORDER BY e.start DESC');
     $stmt->bind_param('ss', $format, $player->name);
     $stmt->execute();

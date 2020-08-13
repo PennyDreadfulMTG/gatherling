@@ -447,33 +447,33 @@ class Event
     public function setFinalists($win, $sec, $t4 = null, $t8 = null)
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare("UPDATE entries SET medal = 'dot' WHERE event = ?");
-        $stmt->bind_param('s', $this->name);
+        $stmt = $db->prepare("UPDATE entries SET medal = 'dot' WHERE event_id = ?");
+        $stmt->bind_param('d', $this->id);
         $stmt->execute();
         $stmt->close();
-        $stmt = $db->prepare('UPDATE entries SET medal = ? WHERE event = ? AND player = ?');
+        $stmt = $db->prepare('UPDATE entries SET medal = ? WHERE event_id = ? AND player = ?');
         $medal = '1st';
-        $stmt->bind_param('sss', $medal, $this->name, $win);
+        $stmt->bind_param('sds', $medal, $this->id, $win);
         $stmt->execute();
         $medal = '2nd';
-        $stmt->bind_param('sss', $medal, $this->name, $sec);
+        $stmt->bind_param('sds', $medal, $this->id, $sec);
         $stmt->execute();
         if (!is_null($t4)) {
             $medal = 't4';
-            $stmt->bind_param('sss', $medal, $this->name, $t4[0]);
+            $stmt->bind_param('sds', $medal, $this->id, $t4[0]);
             $stmt->execute();
-            $stmt->bind_param('sss', $medal, $this->name, $t4[1]);
+            $stmt->bind_param('sds', $medal, $this->id, $t4[1]);
             $stmt->execute();
         }
         if (!is_null($t8)) {
             $medal = 't8';
-            $stmt->bind_param('sss', $medal, $this->name, $t8[0]);
+            $stmt->bind_param('sds', $medal, $this->id, $t8[0]);
             $stmt->execute();
-            $stmt->bind_param('sss', $medal, $this->name, $t8[1]);
+            $stmt->bind_param('sds', $medal, $this->id, $t8[1]);
             $stmt->execute();
-            $stmt->bind_param('sss', $medal, $this->name, $t8[2]);
+            $stmt->bind_param('sds', $medal, $this->id, $t8[2]);
             $stmt->execute();
-            $stmt->bind_param('sss', $medal, $this->name, $t8[3]);
+            $stmt->bind_param('sds', $medal, $this->id, $t8[3]);
             $stmt->execute();
         }
         $stmt->close();
@@ -534,7 +534,7 @@ class Event
 
     public function getPlayers()
     {
-        return Database::list_result_single_param('SELECT player FROM entries WHERE event_id = ? ORDER BY medal, player', 's', $this->id);
+        return Database::list_result_single_param('SELECT player FROM entries WHERE event_id = ? ORDER BY medal, player', 'd', $this->id);
     }
 
     public function getActiveRegisteredPlayers()
@@ -622,10 +622,10 @@ class Event
         return Database::list_result_single_param(
             'SELECT player
                                                  FROM entries
-                                                 WHERE event = ?
+                                                 WHERE event_id = ?
                                                  AND deck ORDER BY DATE(`registered_at`) ASC',
-            's',
-            $this->name
+            'd',
+            $this->id
         );
     }
 
@@ -634,10 +634,10 @@ class Event
         return Database::list_result_single_param(
             'SELECT player
                                              FROM entries
-                                             WHERE event = ?
+                                             WHERE event_id = ?
                                              AND deck ORDER BY medal, player ',
-            's',
-            $this->name
+            'd',
+            $this->id
         );
     }
 
@@ -740,7 +740,7 @@ class Event
             $player = Player::findOrCreateByName($playername);
             $db = Database::getConnection();
             $stmt = $db->prepare('INSERT INTO entries(event_id, player, registered_at) VALUES(?, ?, NOW())');
-            $stmt->bind_param('ss', $this->id, $player->name);
+            $stmt->bind_param('ds', $this->id, $player->name);
             if (!$stmt->execute()) {
                 print_r($stmt->error);
 
@@ -763,13 +763,13 @@ class Event
         if ($round == -1) {
             $round = $this->current_round;
         }
-        Database::db_query('UPDATE entries SET drop_round = ? WHERE event = ? AND player = ?', 'dss', $round, $this->name, $playername);
+        Database::db_query('UPDATE entries SET drop_round = ? WHERE event_id = ? AND player = ?', 'dds', $round, $this->id, $playername);
         Database::db_query('UPDATE standings SET active = 0 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
     }
 
     public function undropPlayer($playername)
     {
-        Database::db_query('UPDATE entries SET drop_round = 0 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
+        Database::db_query('UPDATE entries SET drop_round = 0 WHERE event_id = ? AND player = ?', 'ds', $this->id, $playername);
         Database::db_query('UPDATE standings SET active = 1 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
     }
 
@@ -1647,8 +1647,8 @@ class Event
         $stmt->close();
 
         $db = Database::getConnection();
-        $stmt = $db->prepare("UPDATE entries SET medal = 'dot' WHERE event = ?");
-        $stmt->bind_param('s', $this->name);
+        $stmt = $db->prepare("UPDATE entries SET medal = 'dot' WHERE event_id = ?");
+        $stmt->bind_param('d', $this->id);
         $stmt->execute();
         $stmt->close();
 

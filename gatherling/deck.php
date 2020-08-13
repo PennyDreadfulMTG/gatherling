@@ -10,8 +10,11 @@ print_header('Deck Database');
 <div id="gatherling_main" class="box">
 
 <?php
+$event = null;
+
 if (isset($_GET['event'])) {
-    echo '<div class="uppertitle">Your Deck For '.$_GET['event'].'</div>';
+    $event = new Event($_GET['event']);
+    echo '<div class="uppertitle">Your Deck For '.$event->name.'</div>';
 } else {
     echo '<div class="uppertitle">Deck Database</div>';
 }
@@ -24,7 +27,6 @@ if (!isset($_POST['mode'])) {
 if (strcmp($_GET['mode'], 'view') == 0) {
     $deck = null;
     if (isset($_GET['event'])) {
-        $event = new Event($_GET['event']);
         $deck = $event->getPlaceDeck('1st');
     } else {
         if (isset($_GET['id'])) {
@@ -46,8 +48,7 @@ if (strcmp($_GET['mode'], 'view') == 0) {
         $_POST['event'] = $_GET['event'];
     }
 
-    $event = null;
-    if (isset($_REQUEST['event'])) {
+    if (isset($_REQUEST['event']) && is_null($event)) {
         $event = new Event($_REQUEST['event']);
     }
 
@@ -57,7 +58,7 @@ if (strcmp($_GET['mode'], 'view') == 0) {
     } elseif (strcmp($_GET['mode'], 'addregdeck') == 0) {
         $deck = insertDeck($event);
         deckProfile($deck);
-    } elseif (checkDeckAuth($event->id, $deck_player, $deck)) {
+    } elseif (checkDeckAuth($event, $deck_player, $deck)) {
         if (strcmp($_POST['mode'], 'Create Deck') == 0) {
             $deck = insertDeck($event);
             if ($deck->isValid()) {
@@ -100,7 +101,7 @@ function deckForm($deck = null)
         $event = new Event((isset($_POST['player'])) ? $_POST['event'] : $_GET['event']);
     }
 
-    if (!checkDeckAuth($event->id, $player, $deck)) {
+    if (!checkDeckAuth($event, $player, $deck)) {
         return;
     }
 
@@ -675,7 +676,7 @@ function matchupTable($deck)
       echo "<center>You can't do that unless you <a href=\"login.php\">log in first</a></center>";
   }
 
-  function checkDeckAuth($event_id, $player, $deck = null)
+  function checkDeckAuth($event, $player, $deck = null)
   {
       if (!Player::isLoggedIn()) {
           loginRequired();
@@ -684,7 +685,7 @@ function matchupTable($deck)
       }
       if (is_null($deck)) {
           // Creating a deck.
-          $entry = new Entry($event_id, $player);
+          $entry = new Entry($event->id, $player);
           $auth = $entry->canCreateDeck(Player::loginName());
       } else {
           // Updating a deck.
