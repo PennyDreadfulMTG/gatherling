@@ -272,7 +272,8 @@ class Decksearch
 
         if ($result) {
             $database = Database::getConnection();
-            $stmt = $database->prepare('SELECT e.event, d.playername FROM decks d, entries e WHERE d.id = ? AND d.id = e.deck');
+            $stmt = $database->prepare('SELECT e.name, d.playername FROM decks d, entries n, events e WHERE d.id = ? AND d.id = n.deck AND n.event_id = e.id');
+            $stmt || exit($database->error);
             $stmt->bind_param('d', $deckid);
             $stmt->execute();
             $stmt->bind_result($this->_eventname, $this->_playername);
