@@ -970,10 +970,11 @@ class Player
     public function getFormatsPlayedStats()
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT e.format, count(n.event) AS cnt
+        $stmt = $db->prepare('SELECT e.format, count(n.event_id) AS cnt
       FROM entries n, events e
       WHERE n.player = ? AND n.event_id = e.id
       GROUP BY e.format ORDER BY cnt DESC');
+        $stmt || exit($db->error);
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
         $stmt->bind_result($format, $count);
@@ -990,7 +991,7 @@ class Player
     public function getMedalStats()
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare("SELECT count(n.event) AS cnt, n.medal
+        $stmt = $db->prepare("SELECT count(n.event_id) AS cnt, n.medal
       FROM entries n WHERE n.player = ? AND n.medal != 'dot'
       GROUP BY n.medal ORDER BY n.medal");
         $stmt->bind_param('s', $this->name);
@@ -1041,7 +1042,7 @@ class Player
     public function getSeriesPlayedStats()
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT e.series, count(n.event) AS cnt
+        $stmt = $db->prepare('SELECT e.series, count(n.event_id) AS cnt
       FROM events e, entries n
       WHERE n.player = ? AND n.event_id = e.id
       GROUP BY e.series ORDER BY cnt DESC');

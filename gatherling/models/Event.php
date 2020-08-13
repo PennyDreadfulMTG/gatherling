@@ -415,7 +415,7 @@ class Event
     public function getDecks()
     {
         $decks = [];
-        $deckids = Database::list_result_single_param('SELECT deck FROM entries WHERE event = ? AND deck IS NOT NULL', 's', $this->name);
+        $deckids = Database::list_result_single_param('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
 
         foreach ($deckids as $deckid) {
             $decks[] = new Deck($deckid);
@@ -428,8 +428,8 @@ class Event
     {
         $db = Database::getConnection();
         $stmt = $db->prepare("SELECT medal, player, deck FROM entries
-      WHERE event = ? AND medal != 'dot' ORDER BY medal, player");
-        $stmt->bind_param('s', $this->name);
+      WHERE event_id = ? AND medal != 'dot' ORDER BY medal, player");
+        $stmt->bind_param('s', $this->id);
         $stmt->execute();
         $stmt->bind_result($medal, $player, $deck);
 

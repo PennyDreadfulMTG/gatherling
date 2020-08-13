@@ -137,6 +137,7 @@ function showMostPlayedDecks()
     echo '</thead>';
     echo '<tbody>';
     $db = Database::getConnection();
+    $db->query("set session sql_mode='';"); // Disable ONLY_FULL_GROUP_BY
     $stmt = $db->prepare('SELECT count(d.deck_hash) as cnt, d.playername, d.name, d.archetype, d.format, d.created_date, d.id
                           FROM decks d, entries n
                           WHERE n.deck = d.id
@@ -147,6 +148,7 @@ function showMostPlayedDecks()
                           GROUP BY d.deck_hash
                           ORDER BY cnt DESC
                           LIMIT 20');
+    $stmt || exit($db->error);
     $stmt->execute();
     $stmt->bind_result($count, $playerName, $deckName, $archetype, $format, $created, $deckid);
 
