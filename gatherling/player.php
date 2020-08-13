@@ -402,7 +402,7 @@ function print_preRegistration()
         echo '<tr><td colspan="3"> No Upcoming Events! </td> </tr>';
     }
     foreach ($events as $event) {
-        echo "<tr><td><a href=\"eventreport.php?event=".rawurlencode($event->name)."\">{$event->name}</a></td>";
+        echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a></td>";
         echo '<td class="eventtime" start="'.$event->start.'"> Starts in '.distance_of_time_in_words(time(), strtotime($event->start), true).'</td>';
         if ($event->hasRegistrant($player->name)) {
             echo '<td>Registered <a href="prereg.php?action=unreg&event='.rawurlencode($event->name).'">(Unreg)</a></td>';

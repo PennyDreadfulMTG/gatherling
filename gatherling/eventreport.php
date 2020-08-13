@@ -123,7 +123,7 @@ function eventList($series = '', $season = '')
 function showReport($event)
 {
     // TODO: use $event->id instead
-    $can_prereg = $event->prereg_allowed && Database::single_result_single_param("SELECT `start` > NOW() AS okay FROM events WHERE `name` = ?;", 's', $event->name);
+    $can_prereg = $event->prereg_allowed && Database::single_result_single_param('SELECT `start` > NOW() AS okay FROM events WHERE `name` = ?;', 's', $event->name);
     echo '<div id="EventReport">';
     echo "<table width=900>\n";
     echo '<tr><td width=300 valign="top">';
@@ -139,13 +139,12 @@ function showReport($event)
     echo "<table style=\"border-width: 0px;\" width=600>\n<tr><td>";
     if ($event->finalized) {
         finalists($event);
-    }
-    else if ($can_prereg) {
+    } elseif ($can_prereg) {
         prereg($event);
     }
     echo '</td><td align="right">';
     if ($event->active || $event->finalized) {
-    metastats($event);
+        metastats($event);
     }
     echo "</td></tr></table>\n</div>";
     echo '<br /><br />';
@@ -185,24 +184,24 @@ function finalists($event)
     echo '</table>';
 }
 
-function prereg($event) {
+function prereg($event)
+{
     echo "<table>\n";
     echo "<tr><td colspan=5 align=\"center\"><h3>Registration Open</h3></td></tr>\n";
-    echo "<tr><td>";
+    echo '<tr><td>';
     $player = Player::getSessionPlayer();
     if (is_null($player)) {
         echo "<a href='login.php'>Sign in</a> or <a href='register.php'>make an account</a> to Register";
     } elseif ($event->hasRegistrant($player->name)) {
         echo 'You are registered for this event! <a href="prereg.php?action=unreg&event='.rawurlencode($event->name).'">(Unreg)</a>';
-    }elseif ($event->is_full()) {
+    } elseif ($event->is_full()) {
         echo 'This event is currently at capacity.';
     } else {
         echo '<a href="prereg.php?action=reg&event='.rawurlencode($event->name).'">Register for '.$event->name.'</a>';
     }
-    echo "</td></tr>";
+    echo '</td></tr>';
 
     echo '</table>';
-
 }
 
 function metastats($event)
@@ -427,8 +426,8 @@ function infoCell($event)
     echo "{$playercount} Players<br />\n";
     $deckcount = count($event->getDecks());
     echo "{$deckcount} Decks";
-    if ($event->active){
-        echo " &middot; ";
+    if ($event->active) {
+        echo ' &middot; ';
         if ($playercount == 0) {
             $deckpercentexact = 0;
             $deckpercent = 0;
