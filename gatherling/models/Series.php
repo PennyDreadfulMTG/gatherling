@@ -456,7 +456,7 @@ class Series
         $stmt = $db->prepare('SELECT entries.player, events.name
                           FROM events
                           JOIN entries
-                          ON events.name = entries.event
+                          ON events.id = entries.event_id
                           WHERE events.series = ?
                           AND events.season = ?
                           AND entries.medal = ?
@@ -482,7 +482,7 @@ class Series
         $stmt = $db->prepare('SELECT entries.player, events.name
                           FROM events
                           JOIN entries
-                          ON events.name = entries.event
+                          ON events.id = entries.event_id
                           WHERE events.series = ?
                           AND events.season = ?
                           AND events.number != 128');
@@ -574,7 +574,7 @@ class Series
         $stmt = $db->prepare('SELECT entries.player, events.name, count(entries.deck) c
                           FROM events
                           JOIN entries
-                          ON entries.event = events.name
+                          ON entries.event_id = events.id
                           WHERE entries.deck IS NOT NULL
                           AND events.number != 128
                           AND events.series = ?

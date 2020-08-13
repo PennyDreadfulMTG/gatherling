@@ -372,7 +372,7 @@ class Player
         $stmt = $db->prepare('SELECT n.deck
       FROM entries n
       WHERE n.event_id = ? AND n.player = ?');
-        $stmt->bind_param('ss', $event_id, $this->name);
+        $stmt->bind_param('ds', $event_id, $this->name);
         $stmt->execute();
         $stmt->bind_result($deckid);
         $stmt->fetch();
@@ -1100,11 +1100,11 @@ class Player
     }
 
     // TODO: Is this part of the deck ignore functionality? If so remove it.
-    public function setIgnoreEvent($eventname, $ignored)
+    public function setIgnoreEvent($eventid, $ignored)
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('UPDATE entries SET ignored = ? WHERE event = ? AND player = ?');
-        $stmt->bind_param('iss', $ignored, $eventname, $this->name);
+        $stmt = $db->prepare('UPDATE entries SET ignored = ? WHERE event_id = ? AND player = ?');
+        $stmt->bind_param('ids', $ignored, $eventid, $this->name);
         $stmt->execute();
         $stmt->close();
     }

@@ -64,7 +64,7 @@ class Decksearch
                     $sql = 'select Count(*) FROM entries where deck = ?';
                     $result = Database::single_result_single_param($sql, 'd', $value);
                     if ($result) {
-                        $sql = 'SELECT d.id FROM decks d, entries e, events t WHERE d.id = ? AND d.id = e.deck AND e.event = t.name AND t.finalized = 1';
+                        $sql = 'SELECT d.id FROM decks d, entries e, events t WHERE d.id = ? AND d.id = e.deck AND e.event_id = t.id AND t.finalized = 1';
                         $arr_tmp = Database::single_result_single_param($sql, 'd', $value);
                         if (!empty($arr_tmp)) {
                             array_push($this->_final_results, $arr_tmp);
@@ -194,7 +194,7 @@ class Decksearch
     {
         $sql = 'SELECT entries.deck
             FROM entries INNER JOIN events
-            ON entries.event = events.name
+            ON entries.event_id = events.id
             WHERE events.series = ?
             AND entries.deck ORDER BY DATE(`registered_at`) DESC';
 

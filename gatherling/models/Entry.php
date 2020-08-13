@@ -167,7 +167,7 @@ class Entry
             $db->rollback();
             $db->autocommit(true);
 
-            throw new Exception('Entry for '.$this->playername.' in '.$this->event.' not found');
+            throw new Exception('Entry for '.$this->player->name.' in '.$this->event->name.' not found');
         }
         $db->commit();
         $db->autocommit(true);
