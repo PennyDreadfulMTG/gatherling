@@ -137,7 +137,7 @@ function showMostPlayedDecks()
     echo '</thead>';
     echo '<tbody>';
     $db = Database::getConnection();
-    $db->query("set session sql_mode='';"); // Disable ONLY_FULL_GROUP_BY 
+    $db->query("set session sql_mode='';"); // Disable ONLY_FULL_GROUP_BY
     $stmt = $db->prepare('SELECT count(d.deck_hash) as cnt, d.playername, d.name, d.archetype, d.format, d.created_date, d.id
                           FROM decks d, entries n
                           WHERE n.deck = d.id
