@@ -415,7 +415,7 @@ class Event
     public function getDecks()
     {
         $decks = [];
-        $deckids = Database::list_result_single_param('SELECT deck FROM entries WHERE event = ? AND deck IS NOT NULL', 's', $this->name);
+        $deckids = Database::list_result_single_param('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
 
         foreach ($deckids as $deckid) {
             $decks[] = new Deck($deckid);
@@ -529,7 +529,7 @@ class Event
 
     public function getPlayerCount()
     {
-        return Database::single_result_single_param('SELECT count(*) FROM entries WHERE event = ?', 's', $this->name);
+        return Database::single_result_single_param('SELECT count(*) FROM entries WHERE event_id = ?', 'd', $this->id);
     }
 
     public function getPlayers()
@@ -585,8 +585,8 @@ class Event
     public function hasRegistrant($playername)
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT count(player) FROM entries WHERE event = ? AND player = ?');
-        $stmt->bind_param('ss', $this->name, $playername);
+        $stmt = $db->prepare('SELECT count(player) FROM entries WHERE event_id = ? AND player = ?');
+        $stmt->bind_param('ds', $this->id, $playername);
         $stmt->execute();
         $stmt->bind_result($isPlaying);
         $stmt->fetch();
@@ -1811,7 +1811,7 @@ class Event
 
     public function updateDecksFormat($format)
     {
-        $deckIDs = Database::list_result_single_param('SELECT deck FROM entries WHERE event = ? AND deck IS NOT NULL', 's', $this->name);
+        $deckIDs = Database::list_result_single_param('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
 
         if (count($deckIDs)) {
             $db = Database::getConnection();

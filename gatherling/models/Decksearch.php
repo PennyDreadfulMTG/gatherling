@@ -194,7 +194,7 @@ class Decksearch
     {
         $sql = 'SELECT entries.deck
             FROM entries INNER JOIN events
-            ON entries.event = events.name
+            ON entries.event_id = events.id
             WHERE events.series = ?
             AND entries.deck ORDER BY DATE(`registered_at`) DESC';
 
