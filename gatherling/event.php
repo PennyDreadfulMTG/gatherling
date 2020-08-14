@@ -1168,8 +1168,9 @@ function monthDropMenu($month)
 function structDropMenu($field, $def)
 {
     $names = ['Swiss', 'Single Elimination', /*"Round Robin",*/ 'League'];
-    if (in_array($def, ['Swiss (Blossom)', 'Round Robin'])) // Disabled structures.
+    if (in_array($def, ['Swiss (Blossom)', 'Round Robin'])) { // Disabled structures.
         $names[] = $def;
+    }
     echo "<select class=\"inputbox\" name=\"$field\">";
     echo '<option value="">- Structure -</option>';
     for ($i = 0; $i < count($names); $i++) {
