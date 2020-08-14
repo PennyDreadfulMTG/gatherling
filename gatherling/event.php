@@ -1167,7 +1167,7 @@ function monthDropMenu($month)
 
 function structDropMenu($field, $def)
 {
-    $names = ['Swiss (Blossom)', 'Swiss', 'Single Elimination', /*"Round Robin",*/ 'League'];
+    $names = ['Swiss', 'Single Elimination', /*"Round Robin",*/ 'League'];
     echo "<select class=\"inputbox\" name=\"$field\">";
     echo '<option value="">- Structure -</option>';
     for ($i = 0; $i < count($names); $i++) {

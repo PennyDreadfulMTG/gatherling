@@ -1155,7 +1155,7 @@ class Event
                 // Run matching function
                 switch ($structure) {
                     case 'Swiss':
-                        $this->swissPairing($subevent_id);
+                        $this->swissPairingBlossom($subevent_id);
                         break;
                     case 'Swiss (Blossom)':
                         $this->swissPairingBlossom($subevent_id);
