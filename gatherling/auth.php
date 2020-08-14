@@ -99,6 +99,7 @@ function do_login($token)
         if (Player::isLoggedIn()) {
             $player = Player::getSessionPlayer();
             $player->discord_id = $_SESSION['DISCORD_ID'];
+            $player->discord_handle = $_SESSION['DISCORD_NAME'];
             $player->save();
             redirect('player.php');
         }
@@ -106,6 +107,10 @@ function do_login($token)
         $player = Player::findByDiscordID($user->getId());
         if ($player) {
             $_SESSION['username'] = $player->name;
+            if ($player->discord_handle != $_SESSION['DISCORD_NAME']) {
+                $player->discord_handle = $_SESSION['DISCORD_NAME'];
+                $player->save();
+            }
             redirect('player.php');
         }
 

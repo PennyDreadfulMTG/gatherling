@@ -3,6 +3,10 @@ include 'lib.php';
 include 'lib_form_helper.php';
 session_start();
 
+if (!Player::isLoggedIn()) {
+    linkToLogin('Series Control Panel');
+}
+
 $hasError = false;
 $errormsg = '';
 
@@ -14,11 +18,7 @@ print_header('Series Control Panel');
 <div class="uppertitle"> Series Control Panel </div>
 
 <?php
-if (!Player::isLoggedIn()) {
-    linkToLogin('Series Control Panel');
-} else {
-    do_page();
-}
+do_page();
 ?>
 <div class="clear"></div>
 </div></div>

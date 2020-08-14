@@ -10,6 +10,11 @@ if (!is_null($player)) {
     if ($player->emailAddress == '') {
         $message = '<a href="player.php?mode=edit_email">Add an Email Address</a> to your account.';
     }
+    if (isset($_SESSION['DISCORD_ID']) && empty($player->discord_id)) {
+        $message = "<a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> {$_SESSION['DISCORD_NAME']}</a>";
+    } elseif (empty($player->discord_id)) {
+        $message = '<a href="auth.php">Link your account to <i class="fab fa-discord"></i> Discord</a>';
+    }
     foreach ($player->organizersSeries() as $player_series) {
         $series = new Series($player_series);
         if ($series->active) {
@@ -68,7 +73,7 @@ if (!is_null($player)) {
             } else {
                 $message = "You have an unreported match in $event->name vs. ";
                 if ($event->decklistsVisible()) {
-                    $opp_entry = Entry::findByEventAndPlayer($event->name, $oppplayer->name);
+                    $opp_entry = Entry::findByEventAndPlayer($event->id, $oppplayer->name);
                     $message = $message.$oppplayer->name.' ('.$opp_entry->deck->linkTo().').';
                 } else {
                     $message = $message.$oppplayer->linkTo().'.';

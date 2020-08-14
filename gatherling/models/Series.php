@@ -456,7 +456,7 @@ class Series
         $stmt = $db->prepare('SELECT entries.player, events.name
                           FROM events
                           JOIN entries
-                          ON events.name = entries.event
+                          ON events.id = entries.event_id
                           WHERE events.series = ?
                           AND events.season = ?
                           AND entries.medal = ?
@@ -482,7 +482,7 @@ class Series
         $stmt = $db->prepare('SELECT entries.player, events.name
                           FROM events
                           JOIN entries
-                          ON events.name = entries.event
+                          ON events.id = entries.event_id
                           WHERE events.series = ?
                           AND events.season = ?
                           AND events.number != 128');
@@ -503,6 +503,8 @@ class Series
     private function getRoundsPlayed($season_number)
     {
         $db = Database::getConnection();
+        $db->query("set session sql_mode='';"); // Disable ONLY_FULL_GROUP_BY
+
         // This is a bit complicated we have to find the number of the last round in the
         // main event which the player played in, in each event in the season, and sum those together.
         //
@@ -521,6 +523,7 @@ class Series
                           AND events.season = ?
                           AND subevents.timing = 1
                           AND events.number != 128 GROUP BY events.name, matches.playera ORDER BY events.name, matches.round');
+        $stmt or exit($db->error);
         $stmt->bind_param('sd', $this->name, $season_number);
         $stmt->execute();
         $stmt->bind_result($event_name, $playername, $maxround);
@@ -574,7 +577,7 @@ class Series
         $stmt = $db->prepare('SELECT entries.player, events.name, count(entries.deck) c
                           FROM events
                           JOIN entries
-                          ON entries.event = events.name
+                          ON entries.event_id = events.id
                           WHERE entries.deck IS NOT NULL
                           AND events.number != 128
                           AND events.series = ?

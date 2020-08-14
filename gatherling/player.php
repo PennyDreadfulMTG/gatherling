@@ -312,8 +312,8 @@ function print_mainPlayerCP($player, $result)
     print_currentMatchTable($Leagues);
     print_conditionalAllDecks();
     print_noDeckTable(0);
-    print_recentDeckTable();
     print_preRegistration();
+    print_recentDeckTable();
     print_recentMatchTable();
     echo "</div></div>\n";
     echo "<div class=\"omega grid_5\">\n";
@@ -372,7 +372,7 @@ function print_recentDeckTable()
     if (is_null($event)) {
         echo "<tr><td>No Decks Found!</td>\n";
     } else {
-        $entry = new Entry($event->name, $player->name);
+        $entry = new Entry($event->id, $player->name);
         if ($entry->deck) {
             $decks = $player->getRecentDecks(6);
         } else {
@@ -402,7 +402,7 @@ function print_preRegistration()
         echo '<tr><td colspan="3"> No Upcoming Events! </td> </tr>';
     }
     foreach ($events as $event) {
-        echo "<tr><td><a href=\"{$event->threadurl}\">{$event->name}</a></td>";
+        echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a></td>";
         echo '<td class="eventtime" start="'.$event->start.'"> Starts in '.distance_of_time_in_words(time(), strtotime($event->start), true).'</td>';
         if ($event->hasRegistrant($player->name)) {
             echo '<td>Registered <a href="prereg.php?action=unreg&event='.rawurlencode($event->name).'">(Unreg)</a></td>';
@@ -592,7 +592,9 @@ function print_currentMatchTable($Leagues)
 {
     global $player;
     $matches = $player->getCurrentMatches();
-
+    if (empty($matches)) {
+        return;
+    }
     echo "<table style=\"border-width: 0px\" width=300>\n";
     echo "<tr><td colspan=\"4\"><b>ACTIVE MATCHES</td><td align=\"right\">\n";
     echo "</td></tr>\n";
@@ -727,7 +729,7 @@ function print_matchTable($player, $limit = 0)
 
         $event = $match->getEvent();
         $oppRating = $opponent->getRating('Composite', $event->start);
-        $oppDeck = $opponent->getDeckEvent($event->name);
+        $oppDeck = $opponent->getDeckEvent($event->id);
         $deckStr = 'No Deck Found';
 
         if (!is_null($oppDeck)) {
@@ -829,14 +831,14 @@ function print_ratingsHistory($format)
 {
     global $player;
     $db = Database::getConnection();
-    $stmt = $db->prepare('SELECT e.name, r.rating, n.medal, n.deck AS id
+    $stmt = $db->prepare('SELECT e.name, e.id, r.rating, n.medal, n.deck AS id
     FROM events e, entries n, ratings r
     WHERE r.format= ? AND r.player = ?
-    AND e.start=r.updated AND n.player=r.player AND n.event=e.name
+    AND e.start=r.updated AND n.player=r.player AND n.event_id=e.id
     ORDER BY e.start DESC');
     $stmt->bind_param('ss', $format, $player->name);
     $stmt->execute();
-    $stmt->bind_result($eventname, $rating, $medal, $deckid);
+    $stmt->bind_result($eventname, $event_id, $rating, $medal, $deckid);
 
     $stmt->store_result();
 
@@ -851,9 +853,10 @@ function print_ratingsHistory($format)
     if ($stmt->num_rows > 0) {
         $stmt->fetch();
         $preveventname = $eventname;
+        $prevevent_id = $event_id;
         $prevrating = $rating;
         while ($stmt->fetch()) {
-            $entry = new Entry($preveventname, $player->name);
+            $entry = new Entry($prevevent_id, $player->name);
             $wl = $entry->recordString();
             $img = medalImgStr($entry->medal);
 
@@ -865,9 +868,10 @@ function print_ratingsHistory($format)
             echo "<td align=\"center\">{$prevrating}</td></tr>";
             $prevrating = $rating;
             $preveventname = $eventname;
+            $prevevent_id = $event_id;
         }
 
-        $entry = new Entry($preveventname, $player->name);
+        $entry = new Entry($prevevent_id, $player->name);
         $wl = $entry->recordString();
         $img = medalImgStr($entry->medal);
         echo "<tr><td align=\"center\">1600</td>\n";
