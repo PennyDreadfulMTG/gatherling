@@ -1,0 +1,12 @@
+{
+  "checkpoints": {
+    "Test Server": {
+      "overdue": "12H",
+      "url": "https://gatherling.pennydreadfulmagic.com/"
+    },
+    "Production Server": {
+      "overdue": "168H",
+      "url": "https://gatherling.com/"
+    }
+  }
+}
