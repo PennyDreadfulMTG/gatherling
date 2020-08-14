@@ -164,7 +164,11 @@ function print_footer()
 {
     echo "<div class=\"prefix_1 suffix_1\">\n";
     echo "<div id=\"gatherling_footer\" class=\"box\">\n";
-    version_tagline();
+    if (file_exists('../.git/HEAD')) {
+        print_git_hash();
+    } else {
+        version_tagline();
+    }
     echo "</div><!-- prefix_1 suffix_1 -->\n";
     echo "</div><!-- gatherling_footer -->\n";
     echo "<div class=\"clear\"></div>\n";
@@ -514,14 +518,15 @@ function print_warning_if($conditional)
     }
 }
 
-function version_number()
+function print_git_hash()
 {
-    return '4.8.8';
+    include '../.git/HEAD';
 }
 
 function version_tagline()
 {
-    echo 'Gatherling version 4.8.8 ("Fish fingers and custard")';
+    echo 'Gatherling version 4.9.0 ("Where we’re going, we don’t need roads")';
+    // echo 'Gatherling version 4.8.8 ("Fish fingers and custard")';
     // echo 'Gatherling version 4.8.7 ("Step 7: Steal a bagel.")';
     // echo 'Gatherling version 4.8.6.1 ("I\'m gonna steal the declaration of independence.")';
     // echo 'Gatherling version 4.8.6 ("I\'m gonna steal the declaration of independence.")';
