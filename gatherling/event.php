@@ -1477,9 +1477,11 @@ function updateReg()
 {
     $event = new Event($_POST['name']);
 
+    $dropped = [];
     if (isset($_POST['delentries'])) {
         foreach ($_POST['delentries'] as $playername) {
             $event->removeEntry($playername);
+            $dropped[] = $playername;
         }
     }
     if (isset($_POST['dropplayer'])) {
@@ -1505,6 +1507,8 @@ function updateReg()
                 $bye_qty = intval($array_data[count($array_data) - 1]);
                 unset($array_data[count($array_data) - 1]);
                 $playername = implode(' ', $array_data);
+                if (in_array($playername, $dropped))
+                    continue;
                 $entry = new Entry($event->id, $playername);
                 $entry->setInitialByes($bye_qty);
             }
