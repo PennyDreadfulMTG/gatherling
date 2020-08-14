@@ -537,7 +537,7 @@ class Event
         return Database::list_result_single_param('SELECT player FROM entries WHERE event_id = ? ORDER BY medal, player', 'd', $this->id);
     }
 
-    public function getActiveRegisteredPlayers()
+    public function getRegisteredPlayers($checkActive = false)
     {
         $players = $this->getPlayers();
         $registeredPlayers = [];
@@ -547,27 +547,11 @@ class Event
             if (is_null($entry->deck)) {
                 continue;
             }
-            $standings = new Standings($this->name, $player);
-            if ($entry->deck->isValid() && $standings->active) {
-                $registeredPlayers[] = $player;
+            if ($checkActive) {
+                $standings = new Standings($this->name, $player);
             }
-        }
-
-        return $registeredPlayers;
-    }
-
-    public function getRegisteredPlayers()
-    {
-        $players = $this->getPlayers();
-        $registeredPlayers = [];
-
-        foreach ($players as $player) {
-            $entry = new Entry($this->id, $player);
-            if (is_null($entry->deck)) {
-                continue;
-            }
-            $standings = new Standings($this->name, $player);
-            if ($entry->deck->isValid()) {
+            if ($entry->deck->isValid()
+                && (!$checkActive || $standings->active)) {
                 $registeredPlayers[] = $player;
             }
         }
