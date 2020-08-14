@@ -61,7 +61,7 @@ final class EventsTest extends TestCase
         $event->player_reportable = 1;
 
         $event->mainrounds = 3;
-        $event->mainstruct = 'Swiss (Blossom)';
+        $event->mainstruct = 'Swiss';
         $event->finalrounds = 3;
         $event->finalstruct = 'Single Elimination';
         $event->save();

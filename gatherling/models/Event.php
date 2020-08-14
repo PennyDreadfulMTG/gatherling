@@ -242,7 +242,7 @@ class Event
             $mainrounds = 3;
         }
         if ($mainstruct == '') {
-            $mainstruct = 'Swiss (Blossom)';
+            $mainstruct = 'Swiss';
         }
         $event->mainrounds = $mainrounds;
         $event->mainstruct = $mainstruct;
@@ -1107,6 +1107,7 @@ class Event
 
                 // Run matching function
                 switch ($structure) {
+                    case 'Swiss':
                     case 'Swiss (Blossom)':
                         $this->swissPairingBlossom($subevent_id);
                         break;
@@ -1592,7 +1593,7 @@ class Event
         }
 
         switch ($structure) {
-       // case 'Swiss':
+       case 'Swiss':
        case 'Swiss (Blossom)':
            $this->AssignMedalsbyStandings();
            break;
