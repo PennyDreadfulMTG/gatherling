@@ -653,7 +653,7 @@ class Event
         return $entries;
     }
 
-    public function getRegisteredEntries($deleteinvalid=false)
+    public function getRegisteredEntries($deleteinvalid = false)
     {
         $players = $this->getPlayers();
 
@@ -661,7 +661,7 @@ class Event
         foreach ($players as $player) {
             $entry = new Entry($this->id, $player);
             if (is_null($entry->deck) || !$entry->deck->isValid()) {
-                if($deleteinvalid) {
+                if ($deleteinvalid) {
                     $entry->removeEntry($player);
                 }
                 continue;
