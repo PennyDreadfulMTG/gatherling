@@ -1188,63 +1188,6 @@ class Event
         return true;
     }
 
-    // Pairs the current round by using the swiss method which is below.
-    public function swissPairing($subevent_id)
-    {
-        Standings::resetMatched($this->name);
-
-        // Invalid entries get a fake
-        $players = $this->getPlayers();
-        foreach ($players as $player) {
-            $entry = new Entry($this->id, $player);
-            if (is_null($entry->deck) || !$entry->deck->isValid()) {
-                $playerStandings = new Standings($this->name, $player);
-                $playerStandings->matched = 1;
-                $playerStandings->save();
-            }
-        }
-
-        // This section should really be replaced by an implementation of a stable roommates algorithm or something similar
-        while (Standings::checkUnmatchedPlayers($this->name) > 0) {
-            //echo "found an unmatched player";
-            $player = $this->standing->getEventStandings($this->name, 1);
-            $this->swissFindMatch($player, $subevent_id);
-        }
-    }
-
-    public function swissFindMatch($player, $subevent)
-    {
-        $standing = new Standings($this->name, $player[0]->player);
-        $opponents = $standing->getOpponents($this->name, $subevent, 1);
-        $SQL_statement = "SELECT player FROM standings WHERE event = '".$this->name."' AND active = 1 AND matched = 0 AND player <> '".$player[0]->player."'";
-
-        if ($opponents != null) {
-            foreach ($opponents as $opponent) {
-                $SQL_statement .= " AND player <> '".$opponent->player."'";
-            }
-        }
-        $SQL_statement .= ' ORDER BY score desc, byes , RAND() LIMIT 1';
-
-        $db = Database::getConnection();
-        $stmt = $db->prepare($SQL_statement);
-        $stmt or exit($db->error);
-
-        $stmt->execute() or exit($stmt->error);
-        $stmt->bind_result($playerb);
-        if ($stmt->fetch() == null) { // No players left to match against, award bye
-            $stmt->close();
-            $this->award_bye($player[0]);
-        } else {
-            $stmt->close();
-            $playerbStandings = new Standings($this->name, $playerb);
-            $this->addPairing($player[0], $playerbStandings, ($this->current_round + 1), 'P');
-            $playerbStandings->matched = 1;
-            $playerbStandings->save();
-        }
-        $player[0]->matched = 1;
-        $player[0]->save();
-    }
-
     // Pairs the current swiss round by using the Blossom method
     public function swissPairingBlossom($subevent_id)
     {
