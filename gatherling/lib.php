@@ -518,17 +518,19 @@ function print_warning_if($conditional)
 
 function print_git_hash()
 {
-    if (file_exists('../.git/HEAD'))    {
+    if (file_exists('../.git/HEAD')) {
         $branch = trim(substr(file_get_contents('../.git/HEAD'), 5));
-        if ( $hash = file_get_contents( sprintf( '../.git/%s', $branch ) ) ) {
-            echo "Gatherling version ".$hash;
+        if ($hash = file_get_contents(sprintf('../.git/%s', $branch))) {
+            echo 'Gatherling version '.$hash;
+
             return true;
-          } else {
+        } else {
             return false;
-          }
+        }
 
         return true;
     }
+
     return false;
 }
 
