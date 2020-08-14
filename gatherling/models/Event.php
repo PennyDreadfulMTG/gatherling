@@ -653,7 +653,7 @@ class Event
         return $entries;
     }
 
-    public function getValidRegisteredEntries()
+    public function getRegisteredEntries($deleteinvalid=false)
     {
         $players = $this->getPlayers();
 
@@ -661,30 +661,12 @@ class Event
         foreach ($players as $player) {
             $entry = new Entry($this->id, $player);
             if (is_null($entry->deck) || !$entry->deck->isValid()) {
-                $entry->removeEntry($player);
+                if($deleteinvalid) {
+                    $entry->removeEntry($player);
+                }
                 continue;
             }
-            if ($entry->deck->isValid()) {
-                $entries[] = $entry;
-            }
-        }
-
-        return $entries;
-    }
-
-    public function getRegisteredEntries()
-    {
-        $players = $this->getPlayers();
-
-        $entries = [];
-        foreach ($players as $player) {
-            $entry = new Entry($this->id, $player);
-            if (is_null($entry->deck)) {
-                continue;
-            }
-            if ($entry->deck->isValid()) {
-                $entries[] = $entry;
-            }
+            $entries[] = $entry;
         }
 
         return $entries;
@@ -1756,7 +1738,7 @@ class Event
 
     public function startEvent()
     {
-        $entries = $this->getValidRegisteredEntries();
+        $entries = $this->getRegisteredEntries(true);
         Standings::startEvent($entries, $this->name);
         // $this->dropInvalidEntries();
         $this->pairCurrentRound();
