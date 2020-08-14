@@ -11,6 +11,17 @@ $provider = new \Wohali\OAuth2\Client\Provider\Discord([
     'redirectUri'  => $CONFIG['base_url'].'auth.php',
 ]);
 
+if (isset($_GET['debug']) && isset($_SESSION['DISCORD_TOKEN'])) {
+    $token = new \League\OAuth2\Client\Token\AccessToken([
+        'access_token'  => $_SESSION['DISCORD_TOKEN'],
+        'refresh_token' => $_SESSION['DISCORD_REFRESH_TOKEN'],
+        'expires'       => $_SESSION['DISCORD_EXPIRES'],
+    ]);
+    debug_info($token);
+
+    return;
+}
+
 if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     $token = new \League\OAuth2\Client\Token\AccessToken([
         'access_token'  => $_SESSION['DISCORD_TOKEN'],
@@ -63,30 +74,29 @@ function store_token($token)
     $_SESSION['DISCORD_EXPIRES'] = $token->getExpires();
 }
 
-// function debug_info($token) {
-//     # Show some token details
-//     echo '<h2>Token details:</h2>';
-//     echo 'Token: ' . $token->getToken() . "<br/>";
-//     echo 'Refresh token: ' . $token->getRefreshToken() . "<br/>";
-//     echo 'Expires: ' . $token->getExpires() . " - ";
-//     echo ($token->hasExpired() ? 'expired' : 'not expired') . "<br/>";
+function debug_info($token)
+{
+    // Show some token details
+    echo '<h2>Token details:</h2>';
+    echo 'Token: '.$token->getToken().'<br/>';
+    echo 'Refresh token: '.$token->getRefreshToken().'<br/>';
+    echo 'Expires: '.$token->getExpires().' - ';
+    echo($token->hasExpired() ? 'expired' : 'not expired').'<br/>';
 
-//     // Step 3. (Optional) Look up the user's profile with the provided token
-//     try {
-//         global $provider;
-//         $user = $provider->getResourceOwner($token);
+    // Step 3. (Optional) Look up the user's profile with the provided token
+    try {
+        global $provider;
+        $user = $provider->getResourceOwner($token);
 
-//         echo '<h2>Resource owner details:</h2>';
-//         printf('Hello %s#%s!<br/><br/>', $user->getUsername(), $user->getDiscriminator());
-//         var_export($user->toArray());
+        echo '<h2>Resource owner details:</h2>';
+        printf('Hello %s#%s!<br/><br/>', $user->getUsername(), $user->getDiscriminator());
+        var_export($user->toArray());
+    } catch (Exception $e) {
 
-//     } catch (Exception $e) {
-
-//         // Failed to get user details
-//         exit('Oh dear...');
-
-//     }
-// }
+        // Failed to get user details
+        exit('Oh dear...');
+    }
+}
 
 function do_login($token)
 {
