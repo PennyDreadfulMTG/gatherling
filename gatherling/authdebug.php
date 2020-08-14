@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__.'/lib.php';
 
 session_start();
@@ -63,13 +64,14 @@ function store_token($token)
     $_SESSION['DISCORD_EXPIRES'] = $token->getExpires();
 }
 
-function debug_info($token) {
-    # Show some token details
+function debug_info($token)
+{
+    // Show some token details
     echo '<h2>Token details:</h2>';
-    echo 'Token: ' . $token->getToken() . "<br/>";
-    echo 'Refresh token: ' . $token->getRefreshToken() . "<br/>";
-    echo 'Expires: ' . $token->getExpires() . " - ";
-    echo ($token->hasExpired() ? 'expired' : 'not expired') . "<br/>";
+    echo 'Token: '.$token->getToken().'<br/>';
+    echo 'Refresh token: '.$token->getRefreshToken().'<br/>';
+    echo 'Expires: '.$token->getExpires().' - ';
+    echo($token->hasExpired() ? 'expired' : 'not expired').'<br/>';
 
     // Step 3. (Optional) Look up the user's profile with the provided token
     try {
@@ -79,11 +81,9 @@ function debug_info($token) {
         echo '<h2>Resource owner details:</h2>';
         printf('Hello %s#%s!<br/><br/>', $user->getUsername(), $user->getDiscriminator());
         var_export($user->toArray());
-
     } catch (Exception $e) {
 
         // Failed to get user details
         exit($e);
-
     }
 }
