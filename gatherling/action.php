@@ -13,7 +13,7 @@ if (!is_null($player)) {
     if (isset($_SESSION['DISCORD_ID']) && empty($player->discord_id)) {
         $message = "<a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> {$_SESSION['DISCORD_NAME']}</a>";
     } elseif (empty($player->discord_id)) {
-        $message =  "<a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> Discord</a>";
+        $message = '<a href="auth.php">Link your account to <i class="fab fa-discord"></i> Discord</a>';
     }
     foreach ($player->organizersSeries() as $player_series) {
         $series = new Series($player_series);
