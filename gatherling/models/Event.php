@@ -1245,7 +1245,7 @@ class Event
     private function skipInvalidDecks($entries)
     {
         // Invalid entries get a fake
-        foreach($entries as $entry) {
+        foreach ($entries as $entry) {
             if (is_null($entry->deck) || !$entry->deck->isValid()) {
                 $playerStandings = new Standings($this->name, $entry->player->name);
                 $playerStandings->matched = 1;
