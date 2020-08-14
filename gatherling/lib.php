@@ -164,9 +164,7 @@ function print_footer()
 {
     echo "<div class=\"prefix_1 suffix_1\">\n";
     echo "<div id=\"gatherling_footer\" class=\"box\">\n";
-    if (file_exists('../.git/HEAD')) {
-        print_git_hash();
-    } else {
+    if (!print_git_hash()) {
         version_tagline();
     }
     echo "</div><!-- prefix_1 suffix_1 -->\n";
@@ -520,7 +518,20 @@ function print_warning_if($conditional)
 
 function print_git_hash()
 {
-    include '../.git/HEAD';
+    if (file_exists('../.git/HEAD')) {
+        $branch = trim(substr(file_get_contents('../.git/HEAD'), 5));
+        if ($hash = file_get_contents(sprintf('../.git/%s', $branch))) {
+            echo 'Gatherling version '.$hash;
+
+            return true;
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 function version_tagline()
