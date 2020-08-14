@@ -350,17 +350,17 @@ class Standings
         $stmt->close();
     }
 
-    public static function checkUnmatchedPlayers($eventname)
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare("SELECT count(id) FROM standings WHERE event = ? AND matched = '0' AND active = '1'");
-        $stmt or exit($db->error);
-        $stmt->bind_param('s', $eventname);
-        $stmt->execute() or exit($stmt->error);
-        $stmt->bind_result($count);
-        $stmt->fetch();
-        $stmt->close();
+    // public static function checkUnmatchedPlayers($eventname)
+    // {
+    //     $db = Database::getConnection();
+    //     $stmt = $db->prepare("SELECT count(id) FROM standings WHERE event = ? AND matched = '0' AND active = '1'");
+    //     $stmt or exit($db->error);
+    //     $stmt->bind_param('s', $eventname);
+    //     $stmt->execute() or exit($stmt->error);
+    //     $stmt->bind_result($count);
+    //     $stmt->fetch();
+    //     $stmt->close();
 
-        return $count;
-    }
+    //     return $count;
+    // }
 }

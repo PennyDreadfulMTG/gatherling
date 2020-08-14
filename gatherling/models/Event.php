@@ -653,6 +653,25 @@ class Event
         return $entries;
     }
 
+    public function getValidRegisteredEntries()
+    {
+        $players = $this->getPlayers();
+
+        $entries = [];
+        foreach ($players as $player) {
+            $entry = new Entry($this->id, $player);
+            if (is_null($entry->deck) || !$entry->deck->isValid()) {
+                $entry->removeEntry($player);
+                continue;
+            }
+            if ($entry->deck->isValid()) {
+                $entries[] = $entry;
+            }
+        }
+
+        return $entries;
+    }
+
     public function getRegisteredEntries()
     {
         $players = $this->getPlayers();
@@ -664,43 +683,11 @@ class Event
                 continue;
             }
             if ($entry->deck->isValid()) {
-                $entries[] = new Entry($this->id, $player);
-            }
-        }
-
-        return $entries;
-    }
-
-    public function getActiveEntriesWithInitialByes()
-    {
-        $players = $this->getPlayers();
-
-        $entries = [];
-        foreach ($players as $player) {
-            $entry = new Entry($this->id, $player);
-            if (is_null($entry->deck)) {
-                continue;
-            }
-            $standings = new Standings($this->name, $player);
-            if ($entry->deck->isValid() && $entry->initial_byes > 0 && $standings->active) {
-                //$entries[] = new Entry($this->id, $player);
                 $entries[] = $entry;
             }
         }
 
         return $entries;
-    }
-
-    public function dropInvalidEntries()
-    {
-        $players = $this->getPlayers();
-        $entries = [];
-        foreach ($players as $player) {
-            $entry = new Entry($this->id, $player);
-            if (is_null($entry->deck) || !$entry->deck->isValid()) {
-                $this->removeEntry($player);
-            }
-        }
     }
 
     //Players that doesn't play a single game and doesn't get a bye as well
@@ -1154,9 +1141,6 @@ class Event
 
                 // Run matching function
                 switch ($structure) {
-                    case 'Swiss':
-                        $this->swissPairing($subevent_id);
-                        break;
                     case 'Swiss (Blossom)':
                         $this->swissPairingBlossom($subevent_id);
                         break;
@@ -1188,80 +1172,14 @@ class Event
         return true;
     }
 
-    // Pairs the current round by using the swiss method which is below.
-    public function swissPairing($subevent_id)
-    {
-        Standings::resetMatched($this->name);
-
-        // Invalid entries get a fake
-        $players = $this->getPlayers();
-        foreach ($players as $player) {
-            $entry = new Entry($this->id, $player);
-            if (is_null($entry->deck) || !$entry->deck->isValid()) {
-                $playerStandings = new Standings($this->name, $player);
-                $playerStandings->matched = 1;
-                $playerStandings->save();
-            }
-        }
-
-        // This section should really be replaced by an implementation of a stable roommates algorithm or something similar
-        while (Standings::checkUnmatchedPlayers($this->name) > 0) {
-            //echo "found an unmatched player";
-            $player = $this->standing->getEventStandings($this->name, 1);
-            $this->swissFindMatch($player, $subevent_id);
-        }
-    }
-
-    public function swissFindMatch($player, $subevent)
-    {
-        $standing = new Standings($this->name, $player[0]->player);
-        $opponents = $standing->getOpponents($this->name, $subevent, 1);
-        $SQL_statement = "SELECT player FROM standings WHERE event = '".$this->name."' AND active = 1 AND matched = 0 AND player <> '".$player[0]->player."'";
-
-        if ($opponents != null) {
-            foreach ($opponents as $opponent) {
-                $SQL_statement .= " AND player <> '".$opponent->player."'";
-            }
-        }
-        $SQL_statement .= ' ORDER BY score desc, byes , RAND() LIMIT 1';
-
-        $db = Database::getConnection();
-        $stmt = $db->prepare($SQL_statement);
-        $stmt or exit($db->error);
-
-        $stmt->execute() or exit($stmt->error);
-        $stmt->bind_result($playerb);
-        if ($stmt->fetch() == null) { // No players left to match against, award bye
-            $stmt->close();
-            $this->award_bye($player[0]);
-        } else {
-            $stmt->close();
-            $playerbStandings = new Standings($this->name, $playerb);
-            $this->addPairing($player[0], $playerbStandings, ($this->current_round + 1), 'P');
-            $playerbStandings->matched = 1;
-            $playerbStandings->save();
-        }
-        $player[0]->matched = 1;
-        $player[0]->save();
-    }
-
     // Pairs the current swiss round by using the Blossom method
     public function swissPairingBlossom($subevent_id)
     {
         Standings::resetMatched($this->name);
+        $active_entries = Entry::getActivePlayers($this->id);
 
-        $this->skipInvalidDecks();
-
-        $entries = $this->getActiveEntriesWithInitialByes();
-        foreach ($entries as $entry) {
-            if ($entry->initial_byes < 1 || ($entry->initial_byes < $this->current_round + 1)) {
-                continue;
-            }
-            $player1 = new Standings($this->name, $entry->player->name);
-            $this->award_bye($player1);
-            $player1->matched = 1;
-            $player1->save();
-        }
+        $this->skipInvalidDecks($active_entries);
+        $this->assignInitialByes($active_entries, $this->current_round + 1);
 
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT player, byes, score FROM standings WHERE event = ? AND active = 1 AND matched = 0 ORDER BY RAND()');
@@ -1324,17 +1242,29 @@ class Event
         }
     }
 
-    private function skipInvalidDecks()
+    private function skipInvalidDecks($entries)
     {
         // Invalid entries get a fake
-        $players = $this->getPlayers();
-        foreach ($players as $player) {
-            $entry = new Entry($this->id, $player);
+        foreach($entries as $entry) {
             if (is_null($entry->deck) || !$entry->deck->isValid()) {
-                $playerStandings = new Standings($this->name, $player);
+                $playerStandings = new Standings($this->name, $entry->player->name);
                 $playerStandings->matched = 1;
                 $playerStandings->save();
+                continue;
             }
+        }
+    }
+
+    private function assignInitialByes($entries, $current_round)
+    {
+        foreach ($entries as $entry) {
+            if ($entry->initial_byes < $current_round) {
+                continue;
+            }
+            $player1 = new Standings($this->name, $entry->player->name);
+            $this->award_bye($player1);
+            $player1->matched = 1;
+            $player1->save();
         }
     }
 
@@ -1696,7 +1626,7 @@ class Event
         }
 
         switch ($structure) {
-       case 'Swiss':
+       // case 'Swiss':
        case 'Swiss (Blossom)':
            $this->AssignMedalsbyStandings();
            break;
@@ -1826,9 +1756,9 @@ class Event
 
     public function startEvent()
     {
-        $entries = $this->getRegisteredEntries();
+        $entries = $this->getValidRegisteredEntries();
         Standings::startEvent($entries, $this->name);
-        $this->dropInvalidEntries();
+        // $this->dropInvalidEntries();
         $this->pairCurrentRound();
         $this->active = 1;
         $this->save();
