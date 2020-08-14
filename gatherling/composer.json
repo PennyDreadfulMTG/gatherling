@@ -1,5 +1,7 @@
 {
+    "name": "Gatherling",
     "require": {
-        "wohali/oauth2-discord-new": "^1.0"
+        "wohali/oauth2-discord-new": "^1.0",
+        "sentry/sdk": "^2.1.0"
     }
 }
