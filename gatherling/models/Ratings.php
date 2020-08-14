@@ -261,6 +261,10 @@ class Ratings
 
     public function getEntryRatings($event, $format)
     {
+        $event_id = Database::single_result_single_param('SELECT id
+                                                          FROM events
+                                                          WHERE name = ?', 's', $event);
+
         $db = Database::getConnection();
 
         $stmt = $db->prepare('SELECT LCASE(n.player) AS player, r.rating, q.qmax, r.wins, r.losses
@@ -272,10 +276,11 @@ class Ratings
                               WHERE qr.updated<qe.start AND qe.name = ? AND qr.format = ?
                               GROUP BY qr.player) AS q
                               ON q.qplayer=r.player
-                              WHERE n.event = ? AND ((q.qmax=r.updated AND q.qplayer=r.player AND r.format = ?)
+                              WHERE n.event_id = ? AND ((q.qmax=r.updated AND q.qplayer=r.player AND r.format = ?)
                               OR q.qmax IS NULL)
                               GROUP BY n.player ORDER BY n.player');
-        $stmt->bind_param('ssss', $event, $format, $event, $format);
+        $stmt or exit($db->error);
+        $stmt->bind_param('ssds', $event, $format, $event_id, $format);
         $stmt->execute();
         $stmt->bind_result($player, $rating, $qmax, $wins, $losses);
 

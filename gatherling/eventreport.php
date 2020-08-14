@@ -33,7 +33,7 @@ function eventList($series = '', $season = '')
         COUNT(DISTINCT n.player) AS players, e.host AS host, e.start AS start,
         e.finalized, e.cohost, e.series, e.season
         FROM events e
-        LEFT OUTER JOIN entries AS n ON n.event = e.name
+        LEFT OUTER JOIN entries AS n ON n.event_id = e.id
         WHERE 1=1 AND e.start < NOW() GROUP BY e.name ORDER BY e.start DESC');
 
     if (!isset($_GET['format'])) {
@@ -327,7 +327,7 @@ function fullmetagame($event)
                 echo medalImgStr($row['medal']).'&nbsp;';
             }
             $play = new Player($row['player']);
-            $entry = new Entry($event->name, $play->name);
+            $entry = new Entry($event->id, $play->name);
             echo $play->linkTo()."</td>\n";
             echo "<td align=\left\">{$entry->recordString()}</td>";
             echo '<td align="left">';
@@ -340,7 +340,7 @@ function fullmetagame($event)
         echo '<center><h2><em>Deck lists are not shown for privacy until event is finalized.</em></h2></center>';
         while ($row = $result->fetch_assoc()) {
             $play = new Player($row['player']);
-            $entry = new Entry($event->name, $play->name);
+            $entry = new Entry($event->id, $play->name);
             $format = new Format($event->format);
             // $deck = new Deck($entry->deck);
 

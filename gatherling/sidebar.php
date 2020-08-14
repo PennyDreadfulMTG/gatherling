@@ -86,11 +86,11 @@ function upcomingEvents()
 function recentWinners()
 {
     $db = Database::getConnection();
-    $result = $db->query("SELECT b.event, b.player, d.name, d.id
-                        FROM entries b, decks d, events e
-                        WHERE b.medal='1st'
-                        AND d.id=b.deck
-                        AND e.name=b.event
+    $result = $db->query("SELECT e.name as `event`, n.player, d.name, d.id
+                        FROM entries n, decks d, events e
+                        WHERE n.medal='1st'
+                        AND d.id=n.deck
+                        AND e.id=n.event_id
                         ORDER BY e.start
                         DESC LIMIT 10");
     $result or exit($db->error);
@@ -114,11 +114,11 @@ function recentWinners()
 
 function recentTrophies()
 {
-    $sql = "SELECT b.event
-             FROM entries b, events e, trophies t
-             WHERE b.medal='1st'
-             AND e.name=b.event
-             AND t.event=b.event
+    $sql = "SELECT e.name
+             FROM entries n, events e, trophies t
+             WHERE n.medal='1st'
+             AND e.id=n.event_id
+             AND t.event=e.name
              ORDER BY e.start
              DESC LIMIT 20";
     $results = Database::list_result($sql);
