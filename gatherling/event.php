@@ -1378,7 +1378,7 @@ function medalDropMenu()
 
 function playerByeMenu($event, $def = "\n")
 {
-    $playernames = $event->getActiveRegisteredPlayers();
+    $playernames = $event->getRegisteredPlayers(true);
     echo '<select class="inputbox" name="newbyeplayer">';
     if (strcmp("\n", $def) == 0) {
         echo '<option value="">- Bye Player -</option>';
@@ -1400,11 +1400,7 @@ function playerDropMenu($event, $letter, $active, $def = "\n")
     // (ie. who haven't dropped)
     // if $active is not set, function will return all registered
     // players
-    if ($active) {
-        $playernames = $event->getActiveRegisteredPlayers();
-    } else {
-        $playernames = $event->getRegisteredPlayers();
-    }
+    $playernames = $event->getRegisteredPlayers($active);
 
     echo "<select class=\"inputbox\" name=\"newmatchplayer$letter\">";
     if (strcmp("\n", $def) == 0) {
