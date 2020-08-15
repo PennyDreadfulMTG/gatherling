@@ -30,7 +30,7 @@ if (!is_null($player)) {
             }
         }
         $recent = $series->mostRecentEvent();
-        if (!$recent->finalized && !empty($recent->name)) {
+        if (!$recent->finalized && !$recent->active && !empty($recent->name)) {
             $message = "Your event <a href=\"event.php?event={$recent->name}\">{$recent->name}</a> is ready to start. <br />";
             $reg = count($recent->getPlayers());
             $valid = count($recent->getRegisteredPlayers());
@@ -40,7 +40,7 @@ if (!is_null($player)) {
 
     $active_events = Event::getActiveEvents();
     foreach ($active_events as $event) {
-        if ($event->authCheck($player->name)) {
+        if ($event->authCheck($player->name) && !$event->private) {
             $message = "Your event <a href=\"event.php?event={$event->name}\">{$event->name}</a> is currently active.";
             // if ($event->current_round > ($event->mainrounds)) {
             //     $subevent_id = $event->finalid;
