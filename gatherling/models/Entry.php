@@ -29,6 +29,34 @@ class Entry
         }
     }
 
+    public static function getActivePlayers($eventid)
+    {
+        $db = Database::getConnection();
+        $stmt = $db->prepare('SELECT e.player
+            FROM entries e
+            JOIN events ev ON e.event_id = ev.id
+            JOIN standings s ON ev.name = s.event
+            WHERE e.event_id = ?
+            AND s.active = 1
+            GROUP BY player');
+        $stmt->bind_param('d', $eventid);
+        $entries = [];
+        $playernames = [];
+        $playername = '';
+        $stmt->execute();
+        $stmt->bind_result($playername);
+        while ($stmt->fetch()) {
+            $playernames[] = $playername;
+        }
+        $stmt->close();
+
+        foreach ($playernames as $name) {
+            $entries[] = new Entry($eventid, $name);
+        }
+
+        return $entries;
+    }
+
     // TODO: remove ignore functionality
     public function __construct($event_id, $playername)
     {
@@ -140,7 +168,7 @@ class Entry
 
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM standings WHERE event = ? AND player = ?');
-        $stmt->bind_param('ds', $this->event->name, $this->player->name);
+        $stmt->bind_param('ss', $this->event->name, $this->player->name);
         $stmt->execute();
         $stmt->close();
 
