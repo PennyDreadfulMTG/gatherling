@@ -74,13 +74,15 @@ function upcomingEvents()
         if (strcmp($threadurl, '') != 0) {
             $col2 = "<a href=\"$threadurl\">".$name.'</a>';
         }
-        echo "<tr><td width=60 class=\"eventtime\" start=\"$start\">$dateStr</td>\n";
+        echo "<tr><td width=60 class=\"eventtime timeclear\" start=\"$start\">$dateStr</td>\n";
         echo "<td width=100>$col2<br />$format</td>\n";
-        echo "<td width=50>$timeStr</td></tr></table>\n";
+        echo "<td width=50 class=\"timeclear\">$timeStr</td></tr></table>\n";
     }
     echo "<table class=\"center\">\n";
-    echo "<tr><td colspan=\"3\" align=\"center\"><i>All times are EST.</i></td></tr>\n";
+    echo "<tr><td colspan=\"3\" align=\"center\" class=\"timeclear\"><i>All times are EST.</i></td></tr>\n";
     echo '</table>';
+    echo '<script src="time.js"></script>';
+
     $result->close();
 }
 

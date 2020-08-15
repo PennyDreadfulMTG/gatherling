@@ -421,15 +421,7 @@ function print_preRegistration()
         echo '</tr>';
     }
     echo '</table>';
-    echo'<script>
-        window.onload = function(){
-            $(\'.eventtime\').each(function(i, obj) {
-                $strStartTime = $(this).attr("start");
-                mStart = moment.tz($strStartTime,"America/New_York");
-                $(this).html(mStart.tz(moment.tz.guess()).format("D MMM Y HH:mm z")+" <br/> "+$(this).html());
-            });
-        }
-        </script>';
+    echo '<script src="time.js"></script>';
 }
 
 //* Modified above function to display active events and a link to current standings
