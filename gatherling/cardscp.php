@@ -134,20 +134,20 @@ function printSetList()
 
     $sets = [];
     $db = Database::getConnection();
-    $stmt = $db->prepare('SELECT `name`, `code`, `released`, `type` FROM `cardsets`');
+    $stmt = $db->prepare('SELECT `name`, `code`, `released`, `type`, `last_updated` FROM `cardsets`');
     $stmt->execute();
-    $stmt->bind_result($name, $code, $released, $type);
+    $stmt->bind_result($name, $code, $released, $type, $updated);
     while ($stmt->fetch()) {
-        $sets[] = ['name' => $name, 'code' => $code, 'released' => $released, 'type' => $type];
+        $sets[] = ['name' => $name, 'code' => $code, 'released' => $released, 'type' => $type, 'last_updated' => $updated];
     }
     $stmt->close();
 
     echo '<table>';
-    echo '<tr><th>Name</th><th>Code</th><th>Release Date</th><th>Set Type</th><th># Cards</th></tr>';
+    echo '<tr><th>Name</th><th>Code</th><th>Release Date</th><th>Set Type</th><th># Cards</th><th>Last Updated</th></tr>';
     foreach ($sets as $set) {
         $count = Database::single_result_single_param('SELECT COUNT(*) FROM `cards` WHERE `cardset` = ?', 's', $set['name']);
         echo "<tr><td><a href='cardscp.php?view=edit_set&set={$set['name']}'>{$set['name']}</a></td>";
-        echo "<td>{$set['code']}</td><td>{$set['released']}</td><td>{$set['type']}</td><td>$count</td></tr>";
+        echo "<td>{$set['code']}</td><td>{$set['released']}</td><td>{$set['type']}</td><td>$count</td><td>{$set['last_updated']}</td></tr>";
     }
     echo '</table>';
 }

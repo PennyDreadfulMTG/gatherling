@@ -20,8 +20,6 @@ function info($text, $newline = true)
     echo $text;
 }
 
-session_start();
-
 if (PHP_SAPI == 'cli') {
     if (isset($argv[1])) {
         if (strlen($argv[1]) < 4) {
@@ -33,6 +31,7 @@ if (PHP_SAPI == 'cli') {
         exit('No set provided.');
     }
 } else { // CGI
+    session_start();
     ini_set('max_execution_time', 300);
     if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
         redirect('index.php');
