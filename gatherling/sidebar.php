@@ -57,7 +57,7 @@ function upcomingEvents()
 {
     $db = Database::getConnection();
     $result = $db->query('SELECT UNIX_TIMESTAMP(DATE_SUB(start, INTERVAL 0 MINUTE)) AS d,
-    format, series, name, threadurl FROM events
+    format, series, name, threadurl, start FROM events
     WHERE DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() ORDER BY start ASC LIMIT 20');
     // interval in DATE_SUB was used to select eastern standard time, but since the server is now in Washington DC it is not needed
     $result or exit($db->error);
@@ -68,12 +68,13 @@ function upcomingEvents()
         $series = $row['series'];
         $threadurl = $row['threadurl'];
         $format = $row['format'];
+        $start = $row['start'];
         $col2 = $name;
         echo "<table class=\"center\">\n";
         if (strcmp($threadurl, '') != 0) {
             $col2 = "<a href=\"$threadurl\">".$name.'</a>';
         }
-        echo "<tr><td width=60>$dateStr</td>\n";
+        echo "<tr><td width=60 class=\"eventtime\" start=\"$start\">$dateStr</td>\n";
         echo "<td width=100>$col2<br />$format</td>\n";
         echo "<td width=50>$timeStr</td></tr></table>\n";
     }
