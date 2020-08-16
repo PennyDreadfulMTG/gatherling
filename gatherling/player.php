@@ -401,7 +401,12 @@ function print_preRegistration()
     if (count($events) == 0) {
         echo '<tr><td colspan="3"> No Upcoming Events! </td> </tr>';
     }
+    $series = [];
     foreach ($events as $event) {
+        if (in_array($event->series, $series)) {
+            continue;
+        }
+        $series[] = $event->series;
         echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a></td>";
         echo '<td class="eventtime" start="'.$event->start.'"> Starts in '.distance_of_time_in_words(time(), strtotime($event->start), true).'</td>';
         if ($event->hasRegistrant($player->name)) {
@@ -416,15 +421,7 @@ function print_preRegistration()
         echo '</tr>';
     }
     echo '</table>';
-    echo'<script>
-        window.onload = function(){
-            $(\'.eventtime\').each(function(i, obj) {
-                $strStartTime = $(this).attr("start");
-                mStart = moment.tz($strStartTime,"America/New_York");
-                $(this).html(mStart.tz(moment.tz.guess()).format("D MMM Y HH:mm z")+" <br/> "+$(this).html());
-            });
-        }
-        </script>';
+    echo '<script src="time.js"></script>';
 }
 
 //* Modified above function to display active events and a link to current standings

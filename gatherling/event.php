@@ -251,7 +251,7 @@ function content()
         if (isset($_GET['action'])) {
             if (strcmp($_GET['action'], 'undrop') == 0) {
                 $entry = new Entry($_GET['event_id'], $_GET['player']);
-                if ($entry->deck and $entry->deck->isValid()) {
+                if ($entry->deck && $entry->deck->isValid()) {
                     $event->undropPlayer($_GET['player']);
                 }
             }
