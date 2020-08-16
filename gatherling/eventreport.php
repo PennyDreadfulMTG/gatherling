@@ -274,7 +274,7 @@ function fullmetagame($event)
 		player VARCHAR(40), deckname VARCHAR(40), archetype VARCHAR(20),
 		colors VARCHAR(10), medal VARCHAR(10), id BIGINT UNSIGNED,
     srtordr TINYINT UNSIGNED DEFAULT 0)');
-    $succ or exit($db->error);
+    if (!$succ) throw new Exception($db->error, 1);
 
     $stmt = $db->prepare('INSERT INTO meta(player, deckname, archetype,	colors, medal, id)
     VALUES(?, ?, ?, ?, ?, ?)');

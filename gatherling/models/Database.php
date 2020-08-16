@@ -71,7 +71,7 @@ class Database
     {
         $db = self::getConnection();
         $stmt = $db->prepare($sql);
-        $stmt || exit($db->error);
+        if (!$stmt) throw new Exception($stmt->error, 1);
         $stmt->bind_param($paramType, $param);
         $stmt->execute();
         $stmt->bind_result($result);
@@ -114,6 +114,7 @@ class Database
     {
         $db = self::getConnection();
         $stmt = $db->prepare($sql);
+        if (!$stmt) throw new Exception($stmt->error, 1);
         $stmt->bind_param($paramType, $param);
         $stmt->execute();
         $stmt->bind_result($result);
@@ -163,8 +164,7 @@ class Database
 
         $db = self::getConnection();
         $stmt = $db->prepare($query);
-        $stmt or exit($db->error);
-
+        if (!$stmt) throw new Exception($stmt->error, 1);
         if (count($params) == 1) {
             list($one) = $params;
             $stmt->bind_param($paramspec, $one);
@@ -210,8 +210,7 @@ class Database
 
         $db = self::getConnection();
         $stmt = $db->prepare($query);
-        $stmt or exit($db->error);
-
+        if (!$stmt) throw new Exception($stmt->error, 1);
         if (count($params) == 1) {
             list($one) = $params;
             $stmt->bind_param($paramspec, $one);
