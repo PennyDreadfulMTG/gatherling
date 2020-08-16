@@ -592,7 +592,7 @@ function print_currentMatchTable($Leagues)
 {
     global $player;
     $matches = $player->getCurrentMatches();
-    if (empty($matches)) {
+    if (empty($matches) && empty($Leagues)) {
         return;
     }
     echo "<table style=\"border-width: 0px\" width=300>\n";
@@ -655,23 +655,6 @@ function print_currentMatchTable($Leagues)
     }
 
     echo "</table>\n";
-}
-
-function leagueOpponentDropMenu($event, $round, $player, $subevent)
-{
-    $player_standings = new Standings($event, $player->name);
-    $playernames = $player_standings->League_getAvailable_Opponents($subevent, $round);
-
-    echo '<select class="inputbox" name="opponent"> Opponent';
-
-    if (count($playernames)) {
-        foreach ($playernames as $playername) {
-            echo "<option value=\"{$playername}\">{$playername}</option>";
-        }
-    } else {
-        echo '<option value="">-No Available Opponents-</option>';
-    }
-    echo '</select>';
 }
 
 function leagueResultDropMenu()

@@ -196,9 +196,6 @@ function insertCard($card, $set, $rarity, $stmt)
     echo '</td></tr>';
 
     $changeling = 0;
-    if (preg_match('/Creature|Tribal/', $typeline)) {
-        $changeling = 1;
-    }
     if (isset($card->text) && preg_match('/is every creature type/', $card->text)) {
         $changeling = 1;
     }

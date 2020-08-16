@@ -17,7 +17,7 @@ if (file_exists('../lib.php')) {
     require_once 'gatherling/lib.php';
 }
 
-session_start();
+// session_start();
 
 $db = Database::getConnection();
 
@@ -705,6 +705,18 @@ upgrade_db(38, 'Entries use deck_id', function () {
 	DROP PRIMARY KEY,
 	ADD PRIMARY KEY (`event_id`, `player`) USING BTREE,
 	ADD CONSTRAINT `entries_ibfk_4` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON UPDATE CASCADE ON DELETE RESTRICT;');
+});
+
+upgrade_db(39, '"Duel Decks: Mirrodin Pure vs. New Phyrexia" is too long.', function() {
+    do_query("ALTER TABLE `cards`
+	CHANGE COLUMN `cardset` `cardset` VARCHAR(60) NOT NULL,
+	CHANGE COLUMN `is_changeling` `is_changeling` TINYINT(1) NULL DEFAULT NULL,
+    CHANGE COLUMN `is_online` `is_online` TINYINT(1) NULL DEFAULT NULL;");
+    do_query("ALTER TABLE `cardsets`
+	CHANGE COLUMN `name` `name` VARCHAR(60) NOT NULL,
+	CHANGE COLUMN `standard_legal` `standard_legal` TINYINT(1) NULL DEFAULT 0,
+	CHANGE COLUMN `modern_legal` `modern_legal` TINYINT(1) NULL DEFAULT 0;");
+
 });
 
 $db->autocommit(true);
