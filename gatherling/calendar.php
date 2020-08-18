@@ -49,8 +49,9 @@ $db = Database::getConnection();
 
 $result = $db->query('SELECT UNIX_TIMESTAMP(DATE_SUB(start, INTERVAL 30 MINUTE)) as d, format, series, name, threadurl FROM events WHERE start < NOW() ORDER BY start DESC LIMIT 50');
 
-$result or exit($db->error);
-
+if (!$result) {
+    throw new Exception($db->error, 1);
+}
 while ($row = $result->fetch_assoc()) {
     printEventIcal($row['d'], $row['name'], $row['threadurl']);
 }
@@ -61,8 +62,9 @@ $result->close();
 
 $result = $db->query('SELECT UNIX_TIMESTAMP(start) as d, format, series, name, threadurl FROM events WHERE start > NOW() ORDER BY start ASC');
 
-$result or exit($db->error);
-
+if (!$result) {
+    throw new Exception($db->error, 1);
+}
 while ($row = $result->fetch_assoc()) {
     printEventIcal($row['d'], $row['name'], $row['threadurl']);
 }

@@ -274,8 +274,9 @@ function fullmetagame($event)
 		player VARCHAR(40), deckname VARCHAR(40), archetype VARCHAR(20),
 		colors VARCHAR(10), medal VARCHAR(10), id BIGINT UNSIGNED,
     srtordr TINYINT UNSIGNED DEFAULT 0)');
-    $succ or exit($db->error);
-
+    if (!$succ) {
+        throw new Exception($db->error, 1);
+    }
     $stmt = $db->prepare('INSERT INTO meta(player, deckname, archetype,	colors, medal, id)
     VALUES(?, ?, ?, ?, ?, ?)');
     for ($ndx = 0; $ndx < count($players); $ndx++) {
@@ -288,14 +289,18 @@ function fullmetagame($event)
             $players[$ndx]['medal'],
             $players[$ndx]['id']
         );
-        $stmt->execute() or exit($stmt->error);
+        if (!$stmt->execute()) {
+            throw new Exception($stmt->error, 1);
+        }
     }
     $stmt->close();
     $result = $db->query('SELECT colors, COUNT(player) AS cnt FROM meta GROUP BY(colors)');
     $stmt = $db->prepare('UPDATE meta SET srtordr = ? WHERE colors = ?');
     while ($row = $result->fetch_assoc()) {
         $stmt->bind_param('ds', $row['cnt'], $row['colors']);
-        $stmt->execute() or exit($stmt->error);
+        if (!$stmt->execute()) {
+            throw new Exception($stmt->error, 1);
+        }
     }
     $stmt->close();
     $result->close();
