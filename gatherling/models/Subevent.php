@@ -29,7 +29,7 @@ class Subevent
         $stmt = $db->prepare('UPDATE subevents SET parent = ?, rounds = ?,
       timing = ?, type = ? WHERE id = ?');
         $stmt->bind_param('sddss', $this->parent, $this->rounds, $this->timing, $this->type, $this->id);
-        $stmt->execute() or exit($stmt->error);
+        if(!$stmt->execute()) throw new Exception($stmt->error, 1);
         $stmt->close();
     }
 }

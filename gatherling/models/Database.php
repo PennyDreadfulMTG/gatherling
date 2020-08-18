@@ -196,7 +196,7 @@ class Database
             list($one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten) = $params;
             $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten);
         }
-        $stmt->execute() or exit($stmt->error);
+        if(!$stmt->execute()) throw new Exception($stmt->error, 1);
         $stmt->close();
 
         return true;
@@ -242,7 +242,7 @@ class Database
             list($one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten) = $params;
             $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten);
         }
-        $stmt->execute() or exit($stmt->error);
+        if(!$stmt->execute()) throw new Exception($stmt->error, 1);
         $stmt->bind_result($result);
         $stmt->fetch();
         $stmt->close();

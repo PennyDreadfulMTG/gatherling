@@ -27,7 +27,7 @@ if ($_POST['mode'] == 'Upload') {
       imgtype = ? WHERE name = ?');
         $stmt->bind_param('bdss', $null, $size, $type, $seriesname);
         $stmt->send_long_data(0, $content);
-        $stmt->execute() or exit($stmt->error);
+        if(!$stmt->execute()) throw new Exception($stmt->error, 1);
         $stmt->close();
     } else {
         echo 'No file found';
