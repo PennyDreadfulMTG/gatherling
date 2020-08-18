@@ -211,7 +211,9 @@ class Ratings
             $losses = $data['losses'];
             $stmt = $db->prepare('INSERT INTO ratings VALUES(?, ?, ?, ?, ?, ?, ?)');
             $stmt->bind_param('ssdssdd', $event, $player, $rating, $format, $date, $wins, $losses);
-            if(!$stmt->execute()) throw new Exception($stmt->error, 1);
+            if (!$stmt->execute()) {
+                throw new Exception($stmt->error, 1);
+            }
             $stmt->close();
         }
     }

@@ -36,27 +36,24 @@ $client = new Ypho\Scryfall\Client();
 $collSets = $client->sets()->all();
 $arrSets = $collSets->sets();
 $now = time();
-$threshold = $now - 60 * 60* 24 * 30;
+$threshold = $now - 60 * 60 * 24 * 30;
 foreach ($arrSets as $set) {
     info($set->name);
     if (array_key_exists($set->name, $sets)) {
         $updated = $sets[$set->name]['last_updated'];
-        if (empty($updated) || $updated < $threshold)
+        if (empty($updated) || $updated < $threshold) {
             info("-Last updated: $updated. Updating");
-        else {
+        } else {
             info("-Last updated: $updated. Skipping");
             continue;
         }
-
-    }
-    else{
+    } else {
         // info('-Inserting new set');
         $name = $set->name;
         $releasedate = $set->release;
         $code = strtoupper($set->code);
         $settype = convert_settype($set->setType);
-        if ($settype == 'Ignore')
-        {
+        if ($settype == 'Ignore') {
             info("Skipping card set ($name, $releasedate, $settype, $code)");
             continue;
         }
@@ -69,6 +66,7 @@ foreach ($arrSets as $set) {
 
         if (!$stmt->execute()) {
             info('!!!!!!!!!! Set Insertion Error !!!!!!!!!');
+
             throw new Exception($stmt->error, 1);
         } else {
             info("Inserted new set {$name}!");
@@ -76,11 +74,12 @@ foreach ($arrSets as $set) {
         $stmt->close();
     }
     sync($set->name, $set->getCards($client));
-    return;
 
+    return;
 }
 
-function convert_settype($sf_type) {
+function convert_settype($sf_type)
+{
     switch ($sf_type) {
         case 'core':
         case 'starter':
@@ -97,17 +96,20 @@ function convert_settype($sf_type) {
     }
 }
 
-function sync($setname, $cards) {
+function sync($setname, $cards)
+{
     global $db;
     $stmt = $db->prepare('SELECT `id`, `name`, `scryfallId`, `type`, `is_online` FROM `cards` WHERE `name` = ? AND `cardset` = ?');
-    if (!$stmt) throw new Exception($db->error, 1);
-
+    if (!$stmt) {
+        throw new Exception($db->error, 1);
+    }
     $newCards = [];
     $names = [];
     foreach ($cards as $c) {
         $name = normaliseCardName($c->name);
-        if (in_array($name, $names))
+        if (in_array($name, $names)) {
             continue;
+        }
         info($name);
         $names[] = $name; // Ignore Borderless/promo/whatnots
         $typeline = str_replace('—', '-', $c->type);
@@ -118,32 +120,22 @@ function sync($setname, $cards) {
         if (is_null($exists)) {
             $newCards[] = $c;
             info('New');
-        }
-        elseif ($exists == false) {
+        } elseif ($exists == false) {
             throw new Exception($stmt->error, 1);
-
-        }
-        elseif ($printing_id != $c->idScryfall)
-        {
+        } elseif ($printing_id != $c->idScryfall) {
             info('Needs Updating');
             info("$printing_id != $c->idScryfall");
             $newCards[] = $c;
-        }
-        elseif ($typeline != $type)
-        {
+        } elseif ($typeline != $type) {
             info('Needs Updating');
             info("$typeline != $type");
             $newCards[] = $c;
-        }
-        elseif ($is_online != boolval($c->idMtgo))
-        {
+        } elseif ($is_online != boolval($c->idMtgo)) {
             info('Needs Updating');
             info("$is_online != boolval($c->idMtgo)");
             $newCards[] = $c;
-        }
-        else
-        {
-            info("Okay");
+        } else {
+            info('Okay');
         }
     }
     $stmt->close();
@@ -153,11 +145,11 @@ function sync($setname, $cards) {
             ON DUPLICATE KEY UPDATE `cost` = VALUES(`cost`), `convertedcost`= VALUES(`convertedcost`), `type` = VALUES(`type`),
             isw = VALUES(`isw`), isu = VALUES(`isu`), isb = VALUES(`isb`),isr = VALUES(`isr`),isg = VALUES(`isg`),isp = VALUES(`isp`),
             `rarity` = VALUES(`rarity`),scryfallId = VALUES(`scryfallId`), is_changeling = VALUES(`is_changeling`), is_online = VALUES(`is_online`);');
-    foreach ($newCards as $c){
+    foreach ($newCards as $c) {
         insertCard($c, $setname, $typeline, $stmt);
     }
     $stmt->close();
-    Database::no_result_single_param("UPDATE `cardsets` SET last_updated = UNIX_TIMESTAMP() WHERE `name` = ?;", 's', $setname);
+    Database::no_result_single_param('UPDATE `cardsets` SET last_updated = UNIX_TIMESTAMP() WHERE `name` = ?;', 's', $setname);
 }
 
 function insertCard($card, $set, $typeline, $stmt)

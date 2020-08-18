@@ -31,7 +31,9 @@ $n = 0;
 $w = $g = $u = $r = $b = 0;
 foreach ($cardsets as $cardset) {
     $stmt->bind_param('s', $cardset);
-    if(!$stmt->execute()) throw new Exception($stmt->error, 1);
+    if (!$stmt->execute()) {
+        throw new Exception($stmt->error, 1);
+    }
     $stmt->bind_result($id, $name, $total, $isw, $isg, $isu, $isb, $isr);
     while ($stmt->fetch()) {
         if ($isw != $w || $isg != $g || $isu != $u || $isr != $r || $isb != $b) {

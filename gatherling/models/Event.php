@@ -308,7 +308,9 @@ class Event
                 $this->late_entry_limit,
                 $this->private
             );
-            if(!$stmt->execute()) throw new Exception($stmt->error, 1);
+            if (!$stmt->execute()) {
+                throw new Exception($stmt->error, 1);
+            }
             $stmt->close();
 
             $this->newSubevent($this->mainrounds, 1, $this->mainstruct);
@@ -350,7 +352,9 @@ class Event
                 $this->name
             );
 
-            if(!$stmt->execute()) throw new Exception($stmt->error, 1);
+            if (!$stmt->execute()) {
+                throw new Exception($stmt->error, 1);
+            }
             $stmt->close();
 
             if ($this->mainid == null) {
@@ -1157,7 +1161,9 @@ class Event
         $stmt = $db->prepare('SELECT player, byes, score FROM standings WHERE event = ? AND active = 1 AND matched = 0 ORDER BY RAND()');
         $stmt or exit($db->error);
         $stmt->bind_param('s', $this->name);
-        if(!$stmt->execute()) throw new Exception($stmt->error, 1);
+        if (!$stmt->execute()) {
+            throw new Exception($stmt->error, 1);
+        }
         $resultSet = $stmt->get_result();
         $active_players = $resultSet->fetch_all(MYSQLI_ASSOC);
         $stmt->close();
