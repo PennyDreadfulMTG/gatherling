@@ -20,8 +20,6 @@ function info($text, $newline = true)
     echo $text;
 }
 
-session_start();
-
 if (PHP_SAPI == 'cli') {
     if (isset($argv[1])) {
         if (strlen($argv[1]) < 4) {
@@ -33,6 +31,7 @@ if (PHP_SAPI == 'cli') {
         exit('No set provided.');
     }
 } else { // CGI
+    session_start();
     ini_set('max_execution_time', 300);
     if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
         redirect('index.php');
@@ -197,9 +196,6 @@ function insertCard($card, $set, $rarity, $stmt)
     echo '</td></tr>';
 
     $changeling = 0;
-    if (preg_match('/Creature|Tribal/', $typeline)) {
-        $changeling = 1;
-    }
     if (isset($card->text) && preg_match('/is every creature type/', $card->text)) {
         $changeling = 1;
     }

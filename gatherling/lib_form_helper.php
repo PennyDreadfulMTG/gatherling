@@ -135,3 +135,20 @@ function timeZoneDropMenu($selected = null)
     $timezones['14'] = '[UTC + 14] Line Island Time';
     print_select('timezone', $timezones, $selected);
 }
+
+function leagueOpponentDropMenu($event, $round, $player, $subevent)
+{
+    $player_standings = new Standings($event, $player->name);
+    $playernames = $player_standings->League_getAvailable_Opponents($subevent, $round);
+
+    echo '<select class="inputbox" name="opponent"> Opponent';
+
+    if (count($playernames)) {
+        foreach ($playernames as $playername) {
+            echo "<option value=\"{$playername}\">{$playername}</option>";
+        }
+    } else {
+        echo '<option value="">-No Available Opponents-</option>';
+    }
+    echo '</select>';
+}

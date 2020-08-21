@@ -2,6 +2,7 @@
     "name": "pennydreadfulmagic/gatherling",
     "require": {
         "wohali/oauth2-discord-new": "^1.0",
-        "sentry/sdk": "^2.1.0"
+        "sentry/sdk": "^2.1.0",
+        "ypho/scryfall": "^1.0"
     }
 }

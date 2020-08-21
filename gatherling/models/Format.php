@@ -172,7 +172,7 @@ class Format
                         continue;
                     } else {
                         // type is not in database, so insert it
-                        echo "New Tribe Found! Inserting: $subtype<br />";
+                        echo "New Tribe Found! Inserting: <pre>$subtype</pre><br />";
                         $db = Database::getConnection();
                         $stmt = $db->prepare('INSERT INTO tribes(name) VALUES(?)');
                         $stmt->bind_param('s', $subtype);
@@ -855,13 +855,15 @@ class Format
     {
         // leave only the tribal sub types
         $typeString = str_ireplace('Tribal ', '', $typeString);
-        $typeString = str_ireplace('Creature - ', '', $typeString);
+        $typeString = str_ireplace('Creature ', '', $typeString);
         $typeString = str_ireplace('Artifact ', '', $typeString);
-        $typeString = str_ireplace('Artifact - ', '', $typeString);
-        $typeString = str_ireplace('Instant - ', '', $typeString);
-        $typeString = str_ireplace('Enchantment - ', '', $typeString);
-        $typeString = str_ireplace('Sorcery - ', '', $typeString);
+        $typeString = str_ireplace('Artifact ', '', $typeString);
+        $typeString = str_ireplace('Instant ', '', $typeString);
+        $typeString = str_ireplace('Enchantment ', '', $typeString);
+        $typeString = str_ireplace('Sorcery ', '', $typeString);
         $typeString = str_ireplace('Legendary ', '', $typeString);
+        $typeString = str_ireplace('- ', '', $typeString);
+        $typeString = str_ireplace('	', ' ', $typeString); // Not gonna ask how a tab ended up in the db
 
         return $typeString;
     }
