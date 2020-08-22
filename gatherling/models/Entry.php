@@ -57,6 +57,24 @@ class Entry
         return $entries;
     }
 
+    public static function playerRegistered($eventid, $playername)
+    {
+        $db = Database::getConnection();
+        $stmt = $db->prepare('SELECT n.player
+            FROM entries n
+            JOIN events e ON n.event_id = e.id
+            WHERE n.event_id = ?
+            AND n.player = ?
+            GROUP BY player');
+        $stmt->bind_param('ds', $eventid, $playername);
+        $stmt->execute();
+        $stmt->store_result();
+        $entry_exists = $stmt->num_rows > 0;
+        $stmt->close();
+
+        return $entry_exists;
+    }
+
     // TODO: remove ignore functionality
     public function __construct($event_id, $playername)
     {
