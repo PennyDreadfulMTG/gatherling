@@ -60,11 +60,11 @@ class Entry
     public static function playerRegistered($eventid, $playername)
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT e.player
-            FROM entries e
-            JOIN events ev ON e.event_id = ev.id
-            WHERE e.event_id = ?
-            AND e.player = ?
+        $stmt = $db->prepare('SELECT n.player
+            FROM entries n
+            JOIN events e ON n.event_id = e.id
+            WHERE n.event_id = ?
+            AND n.player = ?
             GROUP BY player');
         $stmt->bind_param('ds', $eventid, $playername);
         $stmt->execute();
