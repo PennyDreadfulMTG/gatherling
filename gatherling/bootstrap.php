@@ -13,7 +13,10 @@ function autoload($class_name)
 spl_autoload_register('autoload');
 // Fix for MAGIC_QUOTES_GPC
 
-include_once __DIR__.'/vendor/autoload.php';
+if (file_exists(__DIR__.'/vendor/autoload.php'))
+    include_once __DIR__.'/vendor/autoload.php';
+else
+    include_once __DIR__.'/../vendor/autoload.php';
 
 // PHP 5 hacks
 if (version_compare(phpversion(), 6) === -1) {
