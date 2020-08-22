@@ -397,11 +397,16 @@ function print_preRegistration()
 {
     global $player;
     $events = Event::getNextPreRegister();
+
+    $upcoming_events=[];
+    $registered_events=[];
+    $series = [];
+
     echo '<table><tr><td colspan="3"><b>PREREGISTER FOR EVENTS</b></td></tr>';
     if (count($events) == 0) {
         echo '<tr><td colspan="3"> No Upcoming Events! </td> </tr>';
     }
-    $series = [];
+    
     foreach ($events as $event) {
         if (in_array($event->series, $series)) {
             continue;
