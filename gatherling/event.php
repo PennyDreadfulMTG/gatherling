@@ -1202,6 +1202,9 @@ function insertEvent()
     if (!isset($_POST['late_entry_limit'])) {
         $_POST['late_entry_limit'] = 0;
     }
+    if (!isset($_POST['private'])) {
+        $_POST['private'] = 0;
+    }
 
     $event = Event::CreateEvent(
         $_POST['year'],

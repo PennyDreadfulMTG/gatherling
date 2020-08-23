@@ -2,11 +2,7 @@
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-if (file_exists('../lib.php')) {
-    require_once '../lib.php';
-} else {
-    require_once 'gatherling/lib.php';
-}
+require_once __DIR__.'/../lib.php';
 
 function info($text, $newline = true)
 {
