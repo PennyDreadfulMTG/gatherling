@@ -424,7 +424,7 @@ function print_recentDeckTable()
     global $player;
 
     echo "<table width-'100%'>\n";
-    echo "<tr><td colspan=2><b>RECENT DECKS</td>\n";
+    echo "<tr><td colspan=3><b>RECENT DECKS</td>\n";
     echo '<td colspan=2 align="right">';
     echo "<a href=\"player.php?mode=alldecks\">(see all)</a></td>\n";
 
