@@ -70,8 +70,8 @@ foreach ($arrSets as $set) {
         $stmt->close();
     }
     sync($set->name, $set->getCards($client));
-
-    return;
+    flush();
+    // return;
 }
 
 function convert_settype($sf_type)
@@ -103,9 +103,15 @@ function sync($setname, $cards)
     $names = [];
     foreach ($cards as $c) {
         $name = normaliseCardName($c->name);
+        if ($c->layout == 'flip' || $c->layout == 'adventure') {
+            $name = explode('/', $name)[0];
+            $c->name = $name;
+        }
         if (in_array($name, $names)) {
             continue;
         }
+        if ($c->borderColor == 'silver' || $c->borderColor == 'gold')
+            continue; // Not worth my time right now.
         info($name);
         $names[] = $name; // Ignore Borderless/promo/whatnots
         $typeline = str_replace('—', '-', $c->type);
