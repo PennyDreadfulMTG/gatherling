@@ -465,9 +465,9 @@ function print_preRegistration()
         }
         $series[] = $event->series;
         if ($event->hasRegistrant($player->name)) {
-            $registered_events[]=$event;
+            $registered_events[] = $event;
         } else {
-            $upcoming_events[]=$event;
+            $upcoming_events[] = $event;
         }
     }
 
@@ -483,9 +483,9 @@ function print_preRegistration()
         if (is_null($entry->deck)) {
             echo '<td align="left">'.$entry->createDeckLink().'</td>';
         } else {
-            echo '<td align="left">'.$entry->deck->linkTo().'</td>';    
+            echo '<td align="left">'.$entry->deck->linkTo().'</td>';
         }
-        
+
         echo '<td><a href="prereg.php?action=unreg&event='.rawurlencode($event->name).'">Unreg</a></td>';
         echo '</tr>';
     }
@@ -498,7 +498,7 @@ function print_preRegistration()
     foreach ($upcoming_events as $event) {
         echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a></td>";
         echo '<td class="eventtime" start="'.$event->start.'"> Starts in '.distance_of_time_in_words(time(), strtotime($event->start), true).'</td>';
-        
+
         if ($event->is_full()) {
             echo '<td>This event is currently at capacity.</td>';
         } else {
