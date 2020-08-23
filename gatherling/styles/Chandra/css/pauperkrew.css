@@ -438,6 +438,16 @@ table.center {
     color: red;
     font-weight: bolder;
 }
+#gatherling_full table {
+    /*align-content: flex-start;*/
+    margin-left: inherit;
+    /*width: 100%;*/
+    table-layout: auto;
+}
+#gatherling_full td {
+    border: 1px solid white;
+    /*padding: 100px;*/
+}
 #gatherling_lefthalf table {
     width: 100%;
     margin-left: inherit;

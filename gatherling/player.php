@@ -303,30 +303,44 @@ function setPlayerIgnores()
 function print_mainPlayerCP($player, $result)
 {
     $upper = strtoupper(Player::loginName());
-    echo "<div class=\"alpha grid_5\">\n";
-    echo "<div id=\"gatherling_lefthalf\">\n";
-    if ($result) {
-        echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
-    }
+    echo '<button class="tablink" id="defaultOpen" onclick="openPage(\'future\', this)">Events</button>';
+    echo '<button class="tablink" onclick="openPage(\'past\', this)">History</button>';
+    echo '<button class="tablink" onclick="openPage(\'statistics\', this)">Statistics</button>';
+    echo '<button class="tablink" onclick="openPage(\'settings\', this)">Settings</button>';
+
+    echo '<div id="future" class="tabcontent">';
+    echo "<div class=\"alpha grid_10\">\n";
+    echo "<div id=\"gatherling_full\">\n";
     $Leagues = print_ActiveEvents();
     print_currentMatchTable($Leagues);
-    print_conditionalAllDecks();
-    print_noDeckTable(0);
     print_preRegistration();
+    echo "</div></div>\n";
+    echo '</div>';
+
+    echo '<div id="past" class="tabcontent">';
+    echo "<div class=\"alpha grid_10\">\n";
+    echo "<div id=\"gatherling_lefthalf\">\n";
     print_recentDeckTable();
     print_recentMatchTable();
     echo "</div></div>\n";
+    echo '</div>';
+
+    echo '<div id="statistics" class="tabcontent">';
+    echo "<div class=\"alpha grid_5\">\n";
+    echo "<div id=\"gatherling_lefthalf\">\n";
+    print_ratingsTableSmall();
+    echo "</div></div>\n";
     echo "<div class=\"omega grid_5\">\n";
     echo "<div id=\"gatherling_righthalf\">\n";
-    print_ratingsTableSmall();
     print_statsTable();
+    echo "</div></div>\n";
+    echo '</div>';
+
+    echo '<div id="settings" class="tabcontent">';
+    echo "<div class=\"alpha grid_10\">\n";
+    echo "<div id=\"gatherling_lefthalf\">\n";
     echo "<b>ACTIONS</b><br />\n";
     echo "<ul>\n";
-    // if ($player->verified == 0) {
-    //     echo "<li><a href=\"player.php?mode=verifymtgo\">Verify your MTGO account</a></li>\n";
-    // } else {
-    //     echo '<li><span style="color: green; font-weight: bold;">'.image_tag('verified.png')."Account Verified</span></li>\n";
-    // }
     echo "<li><a href=\"player.php?mode=changepass\">Change your password</a></li>\n";
     if ($player->emailAddress == '') {
         echo "<li><a href=\"player.php?mode=edit_email\">Add Email Address</a></li>\n";
@@ -341,7 +355,50 @@ function print_mainPlayerCP($player, $result)
     }
     echo "</ul>\n";
     echo "</div></div>\n";
+    echo '</div>';
+    // echo "<div class=\"alpha grid_5\">\n";
+    // echo "<div id=\"gatherling_lefthalf\">\n";
+    // if ($result) {
+    //     echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
+    // }
+    // $Leagues = print_ActiveEvents();
+    // print_currentMatchTable($Leagues);
+    // print_conditionalAllDecks();
+    // // print_noDeckTable(0);
+    // print_preRegistration();
+    // print_recentDeckTable();
+    // print_recentMatchTable();
+    // echo "</div></div>\n";
+    // echo "<div class=\"omega grid_5\">\n";
+    // echo "<div id=\"gatherling_righthalf\">\n";
+    // print_ratingsTableSmall();
+    // print_statsTable();
+    // echo "<b>ACTIONS</b><br />\n";
+    // echo "<ul>\n";
+
+    //Don't uncomment this
+    // if ($player->verified == 0) {
+    //     echo "<li><a href=\"player.php?mode=verifymtgo\">Verify your MTGO account</a></li>\n";
+    // } else {
+    //     echo '<li><span style="color: green; font-weight: bold;">'.image_tag('verified.png')."Account Verified</span></li>\n";
+    // }
+
+    // echo "<li><a href=\"player.php?mode=changepass\">Change your password</a></li>\n";
+    // if ($player->emailAddress == '') {
+    //     echo "<li><a href=\"player.php?mode=edit_email\">Add Email Address</a></li>\n";
+    // } else {
+    //     echo "<li><a href=\"player.php?mode=edit_email\">Change Email Address: {$player->emailAddress}</a></li>\n";
+    // }
+    // echo "<li><a href=\"player.php?mode=change_timezone\">Change Your Time Zone</a></li>\n";
+    // if (isset($_SESSION['DISCORD_ID']) && empty($player->discord_id)) {
+    //     echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> {$_SESSION['DISCORD_NAME']}</a></li>\n";
+    // } elseif (empty($player->discord_id)) {
+    //     echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> Discord</a></li>\n";
+    // }
+    // echo "</ul>\n";
+    // echo "</div></div>\n";
     echo "<div class=\"clear\"></div>\n";
+    echo '<script src="tab_view.js"></script>';
 }
 
 function print_allContainer()
@@ -354,7 +411,7 @@ function print_allContainer()
     echo "</div> </div> \n";
     echo "<div class=\"omega grid_4\">\n";
     echo "<div id=\"gatherling_righthalf\">\n";
-    print_noDeckTable(1);
+    // print_noDeckTable(1);
     echo "</div> </div> \n";
     echo '<div class="clear"> </div> ';
 }
@@ -402,26 +459,50 @@ function print_preRegistration()
     $registered_events = [];
     $series = [];
 
-    echo '<table><tr><td colspan="3"><b>PREREGISTER FOR EVENTS</b></td></tr>';
-    if (count($events) == 0) {
-        echo '<tr><td colspan="3"> No Upcoming Events! </td> </tr>';
-    }
-
     foreach ($events as $event) {
         if (in_array($event->series, $series)) {
             continue;
         }
         $series[] = $event->series;
+        if ($event->hasRegistrant($player->name)) {
+            $registered_events[]=$event;
+        } else {
+            $upcoming_events[]=$event;
+        }
+    }
+
+    echo '<table><tr><td colspan="3"><b>YOUR UPCOMING EVENTS</b></td></tr>';
+    if (count($registered_events) == 0) {
+        echo '<tr><td colspan="3"> You Haven\'t Register for Any Events! </td> </tr>';
+    }
+
+    foreach ($registered_events as $event) {
         echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a></td>";
         echo '<td class="eventtime" start="'.$event->start.'"> Starts in '.distance_of_time_in_words(time(), strtotime($event->start), true).'</td>';
-        if ($event->hasRegistrant($player->name)) {
-            echo '<td>Registered <a href="prereg.php?action=unreg&event='.rawurlencode($event->name).'">(Unreg)</a></td>';
+        $entry = new Entry($event->id, $player->name);
+        if (is_null($entry->deck)) {
+            echo '<td align="left">'.$entry->createDeckLink().'</td>';
         } else {
-            if ($event->is_full()) {
-                echo '<td>This event is currently at capacity.</td>';
-            } else {
-                echo '<td><a href="prereg.php?action=reg&event='.rawurlencode($event->name).'">Register</a></td>';
-            }
+            echo '<td align="left">'.$entry->deck->linkTo().'</td>';    
+        }
+        
+        echo '<td><a href="prereg.php?action=unreg&event='.rawurlencode($event->name).'">Unreg</a></td>';
+        echo '</tr>';
+    }
+    echo '</table>';
+    echo '<table><tr><td colspan="3"><b>PREREGISTER FOR EVENTS</b></td></tr>';
+    if (count($upcoming_events) == 0) {
+        echo '<tr><td colspan="3"> No Upcoming Events! </td> </tr>';
+    }
+
+    foreach ($upcoming_events as $event) {
+        echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a></td>";
+        echo '<td class="eventtime" start="'.$event->start.'"> Starts in '.distance_of_time_in_words(time(), strtotime($event->start), true).'</td>';
+        
+        if ($event->is_full()) {
+            echo '<td>This event is currently at capacity.</td>';
+        } else {
+            echo '<td><a href="prereg.php?action=reg&event='.rawurlencode($event->name).'">Register</a></td>';
         }
         echo '</tr>';
     }
@@ -435,9 +516,9 @@ function print_ActiveEvents()
 {
     global $player;
     $events = Event::getActiveEvents();
-    echo '<table><tr><td colspan="3"><b>ACTIVE EVENTS</b></td></tr>';
+    echo '<table class="gatherling_full"><tr><td colspan="12"><b>ACTIVE EVENTS</b></td></tr>';
     if (count($events) == 0) {
-        echo '<tr><td colspan="3"> No events are currently active. </td> </tr>';
+        echo '<tr><td colspan="12"> No events are currently active. </td> </tr>';
     }
 
     $Leagues = [];
@@ -597,7 +678,7 @@ function print_currentMatchTable($Leagues)
     if (empty($matches) && empty($Leagues)) {
         return;
     }
-    echo "<table style=\"border-width: 0px\" width=300>\n";
+    echo "<table class='gatherling_full'>\n";
     echo "<tr><td colspan=\"4\"><b>ACTIVE MATCHES</td><td align=\"right\">\n";
     echo "</td></tr>\n";
     foreach ($matches as $match) {
