@@ -1,10 +1,6 @@
 <?php
 
-if (file_exists('../lib.php')) {
-    require_once '../lib.php';
-} else {
-    require_once 'gatherling/lib.php';
-}
+require_once __DIR__ . '/../lib.php';
 
 if (PHP_SAPI != 'cli' && $_SERVER['REQUEST_METHOD'] == 'GET') { // unauthorized POST is okay
     session_start();
