@@ -2,7 +2,7 @@
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-require_once __DIR__ . '/../lib.php';
+require_once __DIR__.'/../lib.php';
 
 function info($text, $newline = true)
 {
@@ -110,8 +110,9 @@ function sync($setname, $cards)
         if (in_array($name, $names)) {
             continue;
         }
-        if ($c->borderColor == 'silver' || $c->borderColor == 'gold')
-            continue; // Not worth my time right now.
+        if ($c->borderColor == 'silver' || $c->borderColor == 'gold') {
+            continue;
+        } // Not worth my time right now.
         info($name);
         $names[] = $name; // Ignore Borderless/promo/whatnots
         $typeline = str_replace('—', '-', $c->type);
