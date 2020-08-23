@@ -13,7 +13,7 @@ if (isset($_POST['pw1'])) {
         $result = "Passwords don't match. Please go back and try again.";
     } elseif ($code == -3) {
         $result = 'A password has already been created for this account.';
-        linkToLogin('player.php', $result, trim($_POST['username']));
+        linkToLogin('your Player Control Panel', 'player.php', $result, trim($_POST['username']));
     }
 }
 
