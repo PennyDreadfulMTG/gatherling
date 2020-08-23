@@ -359,47 +359,6 @@ function print_mainPlayerCP($player, $result)
     echo "</ul>\n";
     echo "</div></div>\n";
     echo '</div>';
-    // echo "<div class=\"alpha grid_5\">\n";
-    // echo "<div id=\"gatherling_lefthalf\">\n";
-    // if ($result) {
-    //     echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
-    // }
-    // $Leagues = print_ActiveEvents();
-    // print_currentMatchTable($Leagues);
-    // print_conditionalAllDecks();
-    // // print_noDeckTable(0);
-    // print_preRegistration();
-    // print_recentDeckTable();
-    // print_recentMatchTable();
-    // echo "</div></div>\n";
-    // echo "<div class=\"omega grid_5\">\n";
-    // echo "<div id=\"gatherling_righthalf\">\n";
-    // print_ratingsTableSmall();
-    // print_statsTable();
-    // echo "<b>ACTIONS</b><br />\n";
-    // echo "<ul>\n";
-
-    //Don't uncomment this
-    // if ($player->verified == 0) {
-    //     echo "<li><a href=\"player.php?mode=verifymtgo\">Verify your MTGO account</a></li>\n";
-    // } else {
-    //     echo '<li><span style="color: green; font-weight: bold;">'.image_tag('verified.png')."Account Verified</span></li>\n";
-    // }
-
-    // echo "<li><a href=\"player.php?mode=changepass\">Change your password</a></li>\n";
-    // if ($player->emailAddress == '') {
-    //     echo "<li><a href=\"player.php?mode=edit_email\">Add Email Address</a></li>\n";
-    // } else {
-    //     echo "<li><a href=\"player.php?mode=edit_email\">Change Email Address: {$player->emailAddress}</a></li>\n";
-    // }
-    // echo "<li><a href=\"player.php?mode=change_timezone\">Change Your Time Zone</a></li>\n";
-    // if (isset($_SESSION['DISCORD_ID']) && empty($player->discord_id)) {
-    //     echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> {$_SESSION['DISCORD_NAME']}</a></li>\n";
-    // } elseif (empty($player->discord_id)) {
-    //     echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> Discord</a></li>\n";
-    // }
-    // echo "</ul>\n";
-    // echo "</div></div>\n";
     echo "<div class=\"clear\"></div>\n";
     echo '<script src="tab_view.js"></script>';
 }
