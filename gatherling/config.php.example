@@ -16,7 +16,7 @@ $CONFIG['db_database'] = 'gatherli_gatherling';
 $CONFIG['base_url'] = "http://localhost/gatherling/";
 
 # The name of your site.  This is used in a lot of places.
-$CONFIG['site_name'] = "Gatherling.com";
+$CONFIG['site_name'] = "Gatherling";
 
 # The Style of the site.
 $CONFIG['style'] = "Chandra";
