@@ -318,9 +318,12 @@ function print_mainPlayerCP($player, $result)
     echo '</div>';
 
     echo '<div id="past" class="tabcontent">';
-    echo "<div class=\"alpha grid_10\">\n";
+    echo "<div class=\"alpha grid_5\">\n";
     echo "<div id=\"gatherling_lefthalf\">\n";
     print_recentDeckTable();
+    echo "</div></div>\n";
+    echo "<div class=\"omega grid_5\">\n";
+    echo "<div id=\"gatherling_righthalf\">\n";
     print_recentMatchTable();
     echo "</div></div>\n";
     echo '</div>';
@@ -338,7 +341,7 @@ function print_mainPlayerCP($player, $result)
 
     echo '<div id="settings" class="tabcontent">';
     echo "<div class=\"alpha grid_10\">\n";
-    echo "<div id=\"gatherling_lefthalf\">\n";
+    echo "<div id=\"gatherling_full\">\n";
     echo "<b>ACTIONS</b><br />\n";
     echo "<ul>\n";
     echo "<li><a href=\"player.php?mode=changepass\">Change your password</a></li>\n";
@@ -420,7 +423,7 @@ function print_recentDeckTable()
 {
     global $player;
 
-    echo "<table>\n";
+    echo "<table width-'100%'>\n";
     echo "<tr><td colspan=2><b>RECENT DECKS</td>\n";
     echo '<td colspan=2 align="right">';
     echo "<a href=\"player.php?mode=alldecks\">(see all)</a></td>\n";
@@ -436,15 +439,15 @@ function print_recentDeckTable()
             $decks = $player->getRecentDecks(5);
         }
         foreach ($decks as $deck) {
-            echo '<tr><td>'.medalImgStr($deck->medal)."</td>\n";
-            echo '<td>'.$deck->linkTo()."</td>\n";
+            echo '<tr><td style="white-space: nowrap;">'.medalImgStr($deck->medal)."</td>\n";
+            echo '<td style="white-space: nowrap;">'.$deck->linkTo()."</td>\n";
             $targetUrl = 'eventreport';
             $event = new Event($deck->eventname);
             if ($event->authCheck($player->name)) {
                 $targetUrl = 'event';
             }
-            echo "<td><a href=\"${targetUrl}.php?event={$deck->eventname}\">{$deck->eventname}</a></a></td>\n";
-            echo '<td align="right">'.$deck->recordString()."</td></tr>\n";
+            echo "<td style=\"white-space: nowrap;\"><a href=\"${targetUrl}.php?event={$deck->eventname}\">{$deck->eventname}</a></a></td>\n";
+            echo '<td  width="99%"" align="right">'.$deck->recordString()."</td></tr>\n";
         }
     }
     echo "</table>\n";
@@ -471,7 +474,7 @@ function print_preRegistration()
         }
     }
 
-    echo '<table><tr><td colspan="3"><b>YOUR UPCOMING EVENTS</b></td></tr>';
+    echo '<table class="gatherling_full"><tr><td colspan="3"><b>YOUR UPCOMING EVENTS</b></td></tr>';
     if (count($registered_events) == 0) {
         echo '<tr><td colspan="3"> You Haven\'t Register for Any Events! </td> </tr>';
     }
@@ -483,14 +486,14 @@ function print_preRegistration()
         if (is_null($entry->deck)) {
             echo '<td align="left">'.$entry->createDeckLink().'</td>';
         } else {
-            echo '<td align="left">'.$entry->deck->linkTo().'</td>';
+            echo '<td align="left" style="font-size: 1.1em">'.$entry->deck->linkTo().'</td>';
         }
 
         echo '<td><a href="prereg.php?action=unreg&event='.rawurlencode($event->name).'">Unreg</a></td>';
         echo '</tr>';
     }
     echo '</table>';
-    echo '<table><tr><td colspan="3"><b>PREREGISTER FOR EVENTS</b></td></tr>';
+    echo '<table class="gatherling_full"><tr><td colspan="3"><b>PREREGISTER FOR EVENTS</b></td></tr>';
     if (count($upcoming_events) == 0) {
         echo '<tr><td colspan="3"> No Upcoming Events! </td> </tr>';
     }
@@ -552,7 +555,7 @@ function print_ActiveEvents()
                 $Leagues[] = "<tr><td>{$event->name} Round: {$event->current_round}</td><td><a href=\"report.php?mode=submit_league_result&event={$event->name}&round={$event->current_round}&subevent={$subevent_id}\">Report League Game</a></td></tr>";
             }
             if ($structure !== 'Single Elimination') {
-                echo "<td><a href=\"report.php?mode=drop_form&event={$event->name}\">Drop From Event</a></td>";
+                echo "<td><a href=\"report.php?mode=drop_form&event={$event->name}\" style='color:red;'>Drop From Event</a></td>";
             }
         } else {
             // This doesn't account for the small amount of time where Event Start time has elapsed, but Round 1 hasn't started
