@@ -438,6 +438,10 @@ table.center {
     color: red;
     font-weight: bolder;
 }
+#gatherling_full table {
+    margin-left: inherit;
+    table-layout: auto;
+}
 #gatherling_lefthalf table {
     width: 100%;
     margin-left: inherit;
