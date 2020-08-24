@@ -228,7 +228,7 @@ function print_editTimeZoneForm($player, $result)
     echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
     echo "<form action=\"player.php\" method=\"post\">\n";
     echo "<input name=\"action\" type=\"hidden\" value=\"changeTimeZone\" />\n";
-    echo "<input name=\"mode\" type=\"hidden\" value=\"change_timezone\" />\n";
+    // echo "<input name=\"mode\" type=\"hidden\" value=\"change_timezone\" />\n";
     echo "<input name=\"username\" type=\"hidden\" value=\"{$player->name}\" />\n";
     echo '<table class="form">';
     echo "<tr><th>Current Time Zone: </th>\n";
@@ -302,12 +302,14 @@ function setPlayerIgnores()
 
 function print_mainPlayerCP($player, $result)
 {
-    $upper = strtoupper(Player::loginName());
     echo '<button class="tablink" id="defaultOpen" onclick="openPage(\'future\', this)">Events</button>';
     echo '<button class="tablink" onclick="openPage(\'past\', this)">History</button>';
     echo '<button class="tablink" onclick="openPage(\'statistics\', this)">Statistics</button>';
     echo '<button class="tablink" onclick="openPage(\'settings\', this)">Settings</button>';
 
+    if ($result) {
+        echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
+    }
     echo '<div id="future" class="tabcontent">';
     echo "<div class=\"alpha grid_5\">\n";
     echo "<div id=\"gatherling_lefthalf\">\n";
@@ -358,6 +360,11 @@ function print_mainPlayerCP($player, $result)
         echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> {$_SESSION['DISCORD_NAME']}</a></li>\n";
     } elseif (empty($player->discord_id)) {
         echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> Discord</a></li>\n";
+    }
+    if ($player->verified == 0) {
+        echo "<li><a href=\"player.php?mode=verifymtgo\">Verify your MTGO account</a></li>\n";
+    } else {
+        echo '<li><span style="color: green; font-weight: bold;">'.image_tag('verified.png')."Account Verified</span></li>\n";
     }
     echo "</ul>\n";
     echo "</div></div>\n";
@@ -438,7 +445,7 @@ function print_preRegistration()
 
     echo '<table class="gatherling_full"><tr><td colspan="3"><b>YOUR UPCOMING EVENTS</b></td></tr>';
     if (count($registered_events) == 0) {
-        echo '<tr><td colspan="3"> You Haven\'t Register for Any Events! </td> </tr>';
+        echo '<tr><td colspan="3"> You haven\'t registered for any events </td> </tr>';
     }
 
     foreach ($registered_events as $event) {
@@ -457,7 +464,7 @@ function print_preRegistration()
     echo '</table>';
     echo '<table class="gatherling_full"><tr><td colspan="3"><b>PREREGISTER FOR EVENTS</b></td></tr>';
     if (count($upcoming_events) == 0) {
-        echo '<tr><td colspan="3"> No Upcoming Events! </td> </tr>';
+        echo '<tr><td colspan="3"> No upcoming events </td> </tr>';
     }
 
     foreach ($upcoming_events as $event) {
