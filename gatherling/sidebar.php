@@ -33,16 +33,13 @@ function activeEvents()
             $threadurl = $event->threadurl;
             $format = $event->format;
             $round = $event->current_round;
-            $col2 = $name;
             $room = '';
             $series = new Series($event->series);
             if ($series->mtgo_room) {
                 $room = '#'.$series->mtgo_room;
             }
             echo "<table class=\"center\">\n";
-            if (strcmp($threadurl, '') != 0) {
-                $col2 = "<a href=\"$threadurl\">".$name.'</a>';
-            }
+            $col2 = '<a href="eventreport.php?event='.rawurlencode($name)."\">{$name}</a>";
             echo "<tr><td width=60>$format</td>\n";
             echo "<td width=100>$col2<br />$room</td>\n";
             echo "<td width=50>Round $round</td></tr></table>\n";
@@ -69,11 +66,8 @@ function upcomingEvents()
         $threadurl = $row['threadurl'];
         $format = $row['format'];
         $start = $row['start'];
-        $col2 = $name;
         echo "<table class=\"center\">\n";
-        if (strcmp($threadurl, '') != 0) {
-            $col2 = "<a href=\"$threadurl\">".$name.'</a>';
-        }
+        $col2 = '<a href="eventreport.php?event='.rawurlencode($name)."\">{$name}</a>";
         echo "<tr><td width=60 class=\"eventtime timeclear\" start=\"$start\">$dateStr</td>\n";
         echo "<td width=100>$col2<br />$format</td>\n";
         echo "<td width=50 class=\"timeclear\">$timeStr</td></tr></table>\n";
