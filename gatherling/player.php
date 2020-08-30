@@ -425,6 +425,7 @@ function print_recentDeckTable()
 function print_preRegistration()
 {
     global $player;
+    $starting_soon_events = Event::getStartingSoon($player->name);
     $events = Event::getNextPreRegister();
 
     $upcoming_events = [];
@@ -444,8 +445,22 @@ function print_preRegistration()
     }
 
     echo '<table class="gatherling_full"><tr><td colspan="3"><b>YOUR UPCOMING EVENTS</b></td></tr>';
-    if (count($registered_events) == 0) {
+    if (count($registered_events) == 0 && count($starting_soon_events) == 0) {
         echo '<tr><td colspan="3"> You haven\'t registered for any events </td> </tr>';
+    }
+
+    foreach ($starting_soon_events as $event) {
+        echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a></td>";
+        echo '<td class="eventtime" start="'.$event->start.'"> Starting soon</td>';
+        $entry = new Entry($event->id, $player->name);
+        if (is_null($entry->deck)) {
+            echo '<td align="left">'.$entry->createDeckLink().'</td>';
+        } else {
+            echo '<td align="left" style="font-size: 1.1em">'.$entry->deck->linkTo().'</td>';
+        }
+
+        echo '<td><a href="prereg.php?action=unreg&event='.rawurlencode($event->name).'">Unreg</a></td>';
+        echo '</tr>';
     }
 
     foreach ($registered_events as $event) {
