@@ -1030,7 +1030,7 @@ class Event
     public static function getStartingSoon($playername)
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT e.name FROM events e, entries n WHERE n.event_id = e.id AND n.player = ? AND prereg_allowed = 1 AND active = 0 AND finalized = 0 AND DATE_SUB(start, INTERVAL 0 MINUTE) < NOW() ORDER BY start');
+        $stmt = $db->prepare('SELECT e.name FROM events e, entries n WHERE n.event_id = e.id AND n.player = ? AND active = 0 AND finalized = 0 AND DATE_SUB(start, INTERVAL 0 MINUTE) < NOW() ORDER BY start');
         $stmt->bind_param('s', $playername);
         $stmt->execute();
         $stmt->bind_result($nextevent);
