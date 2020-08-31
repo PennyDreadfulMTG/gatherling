@@ -449,7 +449,7 @@ function print_preRegistration()
 
     foreach ($upcoming_events as $event) {
         echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a></td>";
-        if(time() >= strtotime($event->start)) {
+        if (time() >= strtotime($event->start)) {
             echo '<td class="eventtime" start="'.$event->start.'"> Starting soon</td>';
         } else {
             echo '<td class="eventtime" start="'.$event->start.'"> Starts in '.distance_of_time_in_words(time(), strtotime($event->start), true).'</td>';
