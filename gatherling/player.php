@@ -313,12 +313,12 @@ function print_mainPlayerCP($player, $result)
     echo '<div id="future" class="tabcontent">';
     echo "<div class=\"alpha grid_5\">\n";
     echo "<div id=\"gatherling_lefthalf\">\n";
-    $Leagues = print_ActiveEvents();
-    print_currentMatchTable($Leagues);
+    print_preRegistration();
     echo "</div></div>\n";
     echo "<div class=\"omega grid_5\">\n";
     echo "<div id=\"gatherling_righthalf\">\n";
-    print_preRegistration();
+    $Leagues = print_ActiveEvents();
+    print_currentMatchTable($Leagues);
     echo "</div></div>\n";
     echo '</div>';
 
