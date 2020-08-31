@@ -425,10 +425,10 @@ function print_recentDeckTable()
 function print_preRegistration()
 {
     global $player;
+    $upcoming_events = Event::getUpcomingEvents($player->name);
     $events = Event::getNextPreRegister();
 
-    $upcoming_events = [];
-    $registered_events = [];
+    $available_events = [];
     $series = [];
 
     foreach ($events as $event) {
@@ -437,20 +437,23 @@ function print_preRegistration()
         }
         $series[] = $event->series;
         if ($event->hasRegistrant($player->name)) {
-            $registered_events[] = $event;
-        } else {
-            $upcoming_events[] = $event;
+            continue;
         }
+        $available_events[] = $event;
     }
 
     echo '<table class="gatherling_full"><tr><td colspan="3"><b>YOUR UPCOMING EVENTS</b></td></tr>';
-    if (count($registered_events) == 0) {
+    if (count($upcoming_events) == 0) {
         echo '<tr><td colspan="3"> You haven\'t registered for any events </td> </tr>';
     }
 
-    foreach ($registered_events as $event) {
+    foreach ($upcoming_events as $event) {
         echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a></td>";
-        echo '<td class="eventtime" start="'.$event->start.'"> Starts in '.distance_of_time_in_words(time(), strtotime($event->start), true).'</td>';
+        if (time() >= strtotime($event->start)) {
+            echo '<td class="eventtime" start="'.$event->start.'"> Starting soon</td>';
+        } else {
+            echo '<td class="eventtime" start="'.$event->start.'"> Starts in '.distance_of_time_in_words(time(), strtotime($event->start), true).'</td>';
+        }
         $entry = new Entry($event->id, $player->name);
         if (is_null($entry->deck)) {
             echo '<td align="left">'.$entry->createDeckLink().'</td>';
@@ -463,11 +466,11 @@ function print_preRegistration()
     }
     echo '</table>';
     echo '<table class="gatherling_full"><tr><td colspan="3"><b>PREREGISTER FOR EVENTS</b></td></tr>';
-    if (count($upcoming_events) == 0) {
+    if (count($available_events) == 0) {
         echo '<tr><td colspan="3"> No upcoming events </td> </tr>';
     }
 
-    foreach ($upcoming_events as $event) {
+    foreach ($available_events as $event) {
         echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a></td>";
         echo '<td class="eventtime" start="'.$event->start.'"> Starts in '.distance_of_time_in_words(time(), strtotime($event->start), true).'</td>';
 

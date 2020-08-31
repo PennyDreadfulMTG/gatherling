@@ -1009,9 +1009,29 @@ class Event
     public static function getNextPreRegister($num = 20)
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE prereg_allowed = 1 AND finalized = 0 AND DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() ORDER BY start LIMIT ?');
+        $stmt = $db->prepare('SELECT name FROM events WHERE prereg_allowed = 1 AND active = 0 AND finalized = 0 AND DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() ORDER BY start LIMIT ?');
         // 180 minute interal in Date_Sub is to compensate for time zone difference from Server and Eastern Standard Time which is what all events are quoted in
         $stmt->bind_param('d', $num);
+        $stmt->execute();
+        $stmt->bind_result($nextevent);
+        $event_names = [];
+        while ($stmt->fetch()) {
+            $event_names[] = $nextevent;
+        }
+        $stmt->close();
+        $events = [];
+        foreach ($event_names as $eventname) {
+            $events[] = new self($eventname);
+        }
+
+        return $events;
+    }
+
+    public static function getUpcomingEvents($playername)
+    {
+        $db = Database::getConnection();
+        $stmt = $db->prepare('SELECT e.name FROM events e, entries n WHERE n.event_id = e.id AND n.player = ? AND active = 0 AND finalized = 0 ORDER BY start');
+        $stmt->bind_param('s', $playername);
         $stmt->execute();
         $stmt->bind_result($nextevent);
         $event_names = [];
