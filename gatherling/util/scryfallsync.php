@@ -34,13 +34,13 @@ $arrSets = $collSets->sets();
 $now = time();
 $threshold = $now - 60 * 60 * 24 * 30;
 foreach ($arrSets as $set) {
-    info($set->name);
     if (array_key_exists($set->name, $sets)) {
         $updated = $sets[$set->name]['last_updated'];
         if (empty($updated) || $updated < $threshold) {
+            info($set->name);
             info("-Last updated: $updated. Updating");
         } else {
-            info("-Last updated: $updated. Skipping");
+            // info("-Last updated: $updated. Skipping");
             continue;
         }
     } else {
@@ -50,7 +50,7 @@ foreach ($arrSets as $set) {
         $code = strtoupper($set->code);
         $settype = convert_settype($set->setType);
         if ($settype == 'Ignore') {
-            info("Skipping card set ($name, $releasedate, $settype, $code)");
+            // info("Skipping card set ($name, $releasedate, $settype, $code)");
             continue;
         }
 
@@ -137,6 +137,7 @@ function sync($setname, $cards)
             info('Needs Updating');
             info("$is_online != boolval($c->idMtgo)");
             $newCards[] = $c;
+        // check Name
         } else {
             info('Okay');
         }
@@ -149,6 +150,7 @@ function sync($setname, $cards)
             isw = VALUES(`isw`), isu = VALUES(`isu`), isb = VALUES(`isb`),isr = VALUES(`isr`),isg = VALUES(`isg`),isp = VALUES(`isp`),
             `rarity` = VALUES(`rarity`),scryfallId = VALUES(`scryfallId`), is_changeling = VALUES(`is_changeling`), is_online = VALUES(`is_online`);');
     foreach ($newCards as $c) {
+        $typeline = str_replace('—', '-', $c->type);
         insertCard($c, $setname, $typeline, $stmt);
     }
     $stmt->close();
