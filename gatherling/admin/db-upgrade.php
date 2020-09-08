@@ -712,6 +712,13 @@ upgrade_db(39, '"Duel Decks: Mirrodin Pure vs. New Phyrexia" is too long.', func
 	CHANGE COLUMN `modern_legal` `modern_legal` TINYINT(1) NULL DEFAULT 0;');
 });
 
+upgrade_db(40, 'We need longer card names.', function () {
+    do_query('ALTER TABLE `cards`
+    CHANGE COLUMN `name` `name` VARCHAR(160) NOT NULL,
+    CHANGE COLUMN `type` `type` VARCHAR(80) NOT NULL');
+    // We probably won't go past OMRSTPLRLCNSWMTCTHTALCNEE any time soon, but let's give it an additional 20 characters just in case ;P
+});
+
 $db->autocommit(true);
 
 info('DB is up to date!');

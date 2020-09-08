@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc2bbc1137ec627ebb6361d4088beb79",
+    "content-hash": "a9be66f4f4a262604427698154e92b82",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -2367,16 +2367,16 @@
         },
         {
             "name": "ypho/scryfall",
-            "version": "1.0.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ypho/Scryfall.git",
-                "reference": "6678b230db460e74eb6483221725943b89e6f1be"
+                "reference": "a11c71019d012734ba5ca47453d697daec39dc80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ypho/Scryfall/zipball/6678b230db460e74eb6483221725943b89e6f1be",
-                "reference": "6678b230db460e74eb6483221725943b89e6f1be",
+                "url": "https://api.github.com/repos/Ypho/Scryfall/zipball/a11c71019d012734ba5ca47453d697daec39dc80",
+                "reference": "a11c71019d012734ba5ca47453d697daec39dc80",
                 "shasum": ""
             },
             "require": {
@@ -2417,13 +2417,15 @@
                 "scryfall",
                 "scryfall.com"
             ],
-            "time": "2018-08-31T16:13:44+00:00"
+            "time": "2020-08-18T06:02:31+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "ypho/scryfall": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
