@@ -21,7 +21,7 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
 
     if ($token->hasExpired()) {
         $newAccessToken = $provider->getAccessToken('refresh_token', [
-            'refresh_token' => $existingAccessToken->getRefreshToken(),
+            'refresh_token' => $token->getRefreshToken(),
         ]);
 
         store_token($newAccessToken);

@@ -32,9 +32,10 @@ $client = new Ypho\Scryfall\Client();
 $collSets = $client->sets()->all();
 $arrSets = $collSets->sets();
 $now = time();
-$threshold = $now - 60 * 60 * 24 * 30;
+$threshold = $now - 60 * 60 * 24 * 1;
 foreach ($arrSets as $set) {
     if (array_key_exists($set->name, $sets)) {
+        /** @var int $updated */
         $updated = $sets[$set->name]['last_updated'];
         if (empty($updated) || $updated < $threshold) {
             info($set->name);
@@ -137,7 +138,6 @@ function sync($setname, $cards)
             info('Needs Updating');
             info("$is_online != boolval($c->idMtgo)");
             $newCards[] = $c;
-        // check Name
         } else {
             info('Okay');
         }
@@ -146,9 +146,9 @@ function sync($setname, $cards)
 
     $stmt = $db->prepare('INSERT INTO cards(cost, convertedcost, name, cardset, type,
             isw, isu, isb, isr, isg, isp, rarity, scryfallId, is_changeling, is_online) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ON DUPLICATE KEY UPDATE `cost` = VALUES(`cost`), `convertedcost`= VALUES(`convertedcost`), `type` = VALUES(`type`),
+            ON DUPLICATE KEY UPDATE `cost` = VALUES(`cost`), `convertedcost`= VALUES(`convertedcost`), `type` = VALUES(`type`), `name` = VALUES(`name`),
             isw = VALUES(`isw`), isu = VALUES(`isu`), isb = VALUES(`isb`),isr = VALUES(`isr`),isg = VALUES(`isg`),isp = VALUES(`isp`),
-            `rarity` = VALUES(`rarity`),scryfallId = VALUES(`scryfallId`), is_changeling = VALUES(`is_changeling`), is_online = VALUES(`is_online`);');
+            `rarity` = VALUES(`rarity`), scryfallId = VALUES(`scryfallId`), is_changeling = VALUES(`is_changeling`), is_online = VALUES(`is_online`);');
     foreach ($newCards as $c) {
         $typeline = str_replace('—', '-', $c->type);
         insertCard($c, $setname, $typeline, $stmt);
