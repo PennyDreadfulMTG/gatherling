@@ -37,13 +37,14 @@ class Deck
             return;
         }
         $database = Database::getConnection();
-        $stmt = $database->prepare('SELECT name, playername, archetype, format, tribe, notes, deck_hash,
+        $stmt = $database->prepare('SELECT id, name, playername, archetype, format, tribe, notes, deck_hash,
                                        sideboard_hash, whole_hash, created_date, deck_colors
                                 FROM decks d
                                 WHERE id = ?');
         $stmt->bind_param('d', $id);
         $stmt->execute();
         $stmt->bind_result(
+            $this->id,
             $this->name,
             $this->playername,
             $this->archetype,
@@ -65,7 +66,6 @@ class Deck
         }
 
         $this->new = false;
-        $this->id = $id;
 
         $stmt->close();
 
@@ -346,7 +346,9 @@ class Deck
                           AND dc.issideboard = 0
                           ORDER BY dc.qty
                           DESC, c.name");
-
+        if (!$result) {
+            throw new Exception($db->error, 1);
+        }
         $cards = [];
         while ($res = $result->fetch_assoc()) {
             $cards[$res['name']] = $res['qty'];

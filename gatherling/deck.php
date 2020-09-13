@@ -18,13 +18,13 @@ if (isset($_GET['event'])) {
 } else {
     echo '<div class="uppertitle">Deck Database</div>';
 }
-if (!isset($_GET['mode'])) {
-    $_GET['mode'] = '';
+if (!isset($_REQUEST['mode'])) {
+    $_REQUEST['mode'] = '';
 }
 if (!isset($_POST['mode'])) {
     $_POST['mode'] = '';
 }
-if (strcmp($_GET['mode'], 'view') == 0) {
+if (strcmp($_REQUEST['mode'], 'view') == 0) {
     $deck = null;
     if (isset($_GET['event'])) {
         $deck = $event->getPlaceDeck('1st');
@@ -53,11 +53,14 @@ if (strcmp($_GET['mode'], 'view') == 0) {
     }
 
     // part of the reg-decklist feature. both "register" and "addregdeck" switches
-    if (strcmp($_GET['mode'], 'register') == 0) {
+    if (strcmp($_REQUEST['mode'], 'register') == 0) {
         deckRegisterForm();
-    } elseif (strcmp($_GET['mode'], 'addregdeck') == 0) {
+    } elseif (strcmp($_REQUEST['mode'], 'addregdeck') == 0) {
         $deck = insertDeck($event);
         deckProfile($deck);
+    } elseif (is_null($event)) {
+        echo 'No deck or event id specifed.<br/>';
+        echo "Go back to <a href='player.php'>Player CP</a>";
     } elseif (checkDeckAuth($event, $deck_player, $deck)) {
         if (strcmp($_POST['mode'], 'Create Deck') == 0) {
             $deck = insertDeck($event);
@@ -76,7 +79,7 @@ if (strcmp($_GET['mode'], 'view') == 0) {
             }
         } elseif (strcmp($_POST['mode'], 'Edit Deck') == 0) {
             deckForm($deck);
-        } elseif (strcmp($_GET['mode'], 'create') == 0) {
+        } elseif (strcmp($_REQUEST['mode'], 'create') == 0) {
             deckForm();
         }
     }
