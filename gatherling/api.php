@@ -136,13 +136,27 @@ switch ($action) {
     break;
 
     case 'whois':
-        $name = arg('name');
-        $player = Player::findByName($name);
+        $discord = arg('discordid', 0);
+        $handle = arg('discord_handle', '');
+        if ($discord)
+        {
+            $name = $discord;
+            $player = Player::findByDiscordID($discord);
+        }
+        elseif ($handle) {
+            $name = $handle;
+            $player = Player::findByDiscordHandle($handle);
+        }
+        else{
+            $name = arg('name');
+            $player = Player::findByName($name);
+        }
         if (is_null($player)) {
-            error("No player named $name");
+            error("No player identified by $name");
         }
         $result = repr_json_player($player);
     break;
+
     default:
     $result['error'] = "Unknown action '{$action}'";
     break;
