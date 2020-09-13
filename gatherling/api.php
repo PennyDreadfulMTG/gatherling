@@ -138,16 +138,13 @@ switch ($action) {
     case 'whois':
         $discord = arg('discordid', 0);
         $handle = arg('discord_handle', '');
-        if ($discord)
-        {
+        if ($discord) {
             $name = $discord;
             $player = Player::findByDiscordID($discord);
-        }
-        elseif ($handle) {
+        } elseif ($handle) {
             $name = $handle;
             $player = Player::findByDiscordHandle($handle);
-        }
-        else{
+        } else {
             $name = arg('name');
             $player = Player::findByName($name);
         }
