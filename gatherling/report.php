@@ -77,7 +77,7 @@ print_header('Player Control Panel');
     break;
 
     case 'submit_league_result':
-    League_print_submit_resultForm($_GET['event'], $_GET['round'], $player, $_GET['subevent']);
+    League_print_submit_resultForm($_REQUEST['event'], $_REQUEST['round'], $player, $_REQUEST['subevent']);
     break;
 
     case 'verify_result':
@@ -91,7 +91,7 @@ print_header('Player Control Panel');
 
     // todo: Fold this into the above case
     case 'verify_league_result':
-    print_verify_resultForm($_POST['report'], $_POST['match_id'], $_POST['player'], 'N', $_POST['opponent'], $_POST['event']);
+    print_verify_resultForm($_REQUEST['report'], $_REQUEST['match_id'], $_REQUEST['player'], 'N', $_REQUEST['opponent'], $_REQUEST['event']);
     break;
 
     case 'drop_form':
