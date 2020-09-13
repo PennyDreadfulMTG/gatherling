@@ -176,6 +176,26 @@ class Player
         }
     }
 
+    public static function findByDiscordHandle($playername)
+    {
+        $database = Database::getConnection();
+        $stmt = $database->prepare('SELECT name FROM players WHERE discord_handle = ?');
+        $stmt->bind_param('s', $playername);
+        $stmt->execute();
+        $stmt->bind_result($resname);
+        $good = false;
+        if ($stmt->fetch()) {
+            $good = true;
+        }
+        $stmt->close();
+
+        if ($good) {
+            return new self($resname);
+        } else {
+            return;
+        }
+    }
+
     public static function createByName($playername)
     {
         $db = Database::getConnection();
