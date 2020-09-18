@@ -583,6 +583,14 @@ class Deck
         }
         $format = new Format($this->format);
 
+        //Extra check to make sure a duplicate deck won't be created
+        if ($this->id == 0) {
+            $check_entry = new Entry($this->eventname, $this->playername);
+            if ($check_entry->deck != null) { //The player already registered a deck
+                $this->id = $check_entry->deck->id;
+            }
+        }
+
         if ($this->id == 0) {
             // New record.  Set up the decks entry and the Entry.
             $stmt = $db->prepare('INSERT INTO decks (archetype, name, playername, format, tribe, notes, created_date) values(?, ?, ?, ?, ?, ?, NOW())');
