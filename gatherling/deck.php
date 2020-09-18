@@ -45,7 +45,7 @@ if (strcmp($_REQUEST['mode'], 'view') == 0) {
         if (!isset($_GET['event'])) {
             $_GET['event'] = '';
         }
-        $_POST['event'] = $_GET['event'];
+        $_REQUEST['event'] = $_GET['event'];
     }
 
     if (isset($_REQUEST['event']) && is_null($event)) {
