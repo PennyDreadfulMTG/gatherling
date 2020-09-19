@@ -45,7 +45,7 @@ if (strcmp($_REQUEST['mode'], 'view') == 0) {
         if (!isset($_GET['event'])) {
             $_GET['event'] = '';
         }
-        $_POST['event'] = $_GET['event'];
+        $_REQUEST['event'] = $_GET['event'];
     }
 
     if (isset($_REQUEST['event']) && is_null($event)) {
@@ -58,7 +58,7 @@ if (strcmp($_REQUEST['mode'], 'view') == 0) {
     } elseif (strcmp($_REQUEST['mode'], 'addregdeck') == 0) {
         $deck = insertDeck($event);
         deckProfile($deck);
-    } elseif (is_null($event)) {
+    } elseif (is_null($deck) && $event->name == '') {
         echo 'No deck or event id specifed.<br/>';
         echo "Go back to <a href='player.php'>Player CP</a>";
     } elseif (checkDeckAuth($event, $deck_player, $deck)) {
