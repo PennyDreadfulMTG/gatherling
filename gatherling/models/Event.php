@@ -1096,7 +1096,7 @@ class Event
     {
         $test = $this->current_round;
         if ($test <= ($this->finalrounds + $this->mainrounds)) {
-            if ($test >= $this->mainrounds) {
+            if ($test > $this->mainrounds) {
                 $structure = $this->finalstruct;
             } else {
                 $structure = $this->mainstruct;
