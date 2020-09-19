@@ -101,7 +101,7 @@ function deckForm($deck = null)
         $event = new Event($deck->eventname);
     } else {
         $player = (isset($_POST['player'])) ? $_POST['player'] : $_GET['player'];
-        $event = new Event((isset($_POST['player'])) ? $_REQUEST['event'] : $_GET['event']);
+        $event = new Event((isset($_POST['player'])) ? $_POST['event'] : $_GET['event']);
     }
 
     if (!checkDeckAuth($event, $player, $deck)) {
