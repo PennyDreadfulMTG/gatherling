@@ -8,3 +8,4 @@ Setup:
 2. Visit `/admin/db-upgrade.php`
 3. Sign up a player by visiting register.php.
 4. Visit /util/updateDefaultFormats.php
+
