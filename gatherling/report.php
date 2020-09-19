@@ -125,7 +125,8 @@ print_header('Player Control Panel');
         }
     break;
     default:
-    redirect('player.php');
+    echo "$result<br/>Unknown dispmode: $dispmode";
+    // redirect('player.php');
 
     return;
     }
