@@ -141,7 +141,7 @@ function repr_json_series($series)
 
 function repr_json_player($player)
 {
-    $json = populate([], $player, ['name', 'verified']);
+    $json = populate([], $player, ['name', 'verified', 'discord_id']);
 
     return $json;
 }
