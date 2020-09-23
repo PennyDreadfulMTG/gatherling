@@ -798,6 +798,28 @@ class Event
         return $matches;
     }
 
+    /**
+     * This is a really specific method, used to show how many matches someone has played in a specific league round.
+     * Used on Player CP and nowhere else.
+     *
+     * @return int
+     */
+    public function getPlayerLeagueMatchCount($player_name)
+    {
+        if ($this->current_round > $this->mainrounds) {
+            $subevnum = 2;
+            $roundnum = $this->current_round - $this->mainrounds;
+        } else {
+            $subevnum = 1;
+            $roundnum = $this->current_round;
+        }
+        $count = Database::db_query_single('SELECT COUNT(m.id) FROM matches m, subevents s, events e
+            WHERE m.subevent = s.id AND s.parent = e.name AND e.name = ? AND
+            s.timing = ? AND m.round = ? AND (m.playera = ? OR m.playerb = ?)', 'sddss', $this->name, $subevnum, $roundnum, $player_name, $player_name);
+
+        return $count;
+    }
+
     // In preparation for automating the pairings this function will add match the next pairing
     // results should be equal to 'P' for match in progress
     public function addPairing($playera, $playerb, $round, $result)
@@ -1432,6 +1454,9 @@ class Event
         $this->addPairing($player, $player, ($this->current_round + 1), 'BYE');
     }
 
+    /**
+     * @return Event[] Active Events
+     */
     public static function getActiveEvents($include_private = true)
     {
         $db = Database::getConnection();
