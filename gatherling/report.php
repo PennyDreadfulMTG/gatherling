@@ -10,10 +10,6 @@ if ($player == null) {
     if (isset($_POST['action'])) {
         if ($_POST['action'] == 'finalize_result') {
             // write results to matches table
-            $drop = false;
-            // if (isset($_POST['drop'])) {
-            //     $drop = $_POST['drop'] == 'Y';
-            // }
             $drop = isset($_POST['drop']);
             if ($drop) {
                 $match = new Match($_POST['match_id']);
@@ -81,16 +77,6 @@ print_header('Player Control Panel');
     League_print_submit_resultForm($_REQUEST['event'], $_REQUEST['round'], $player, $_REQUEST['subevent']);
     break;
 
-    // case 'verify_result':
-    // if (isset($_POST['report'])) {
-    //     $drop = (isset($_POST['drop'])) ? 'Y' : 'N';
-    //     print_verify_resultForm($_POST['report'], $_POST['match_id'], $_POST['player'], $drop, 0, 0);
-    // } else {
-    //     print_submit_resultForm($_REQUEST['match_id']);
-    // }
-    // break;
-
-    // todo: Fold this into the above case
     case 'verify_league_result':
     print_verify_resultForm($_REQUEST['report'], $_REQUEST['match_id'], $_REQUEST['player'], 'N', $_REQUEST['opponent'], $_REQUEST['event']);
     break;
@@ -176,7 +162,7 @@ function print_submit_resultForm($match_id, $drop = false)
     echo "<center><h3>Report Game Results</h3>
     Enter results for <em>$event->name</em> round $event->current_round vs. $oppplayer->name</center>\n";
 
-    echo "<form action=\"report.php\" method=\"post\" onsubmit=\"return check_drop(this);\">\n";
+    echo "<form action=\"report.php\" method=\"post\" onsubmit=\"return verify_input(this);\">\n";
     echo "<input name=\"action\" type=\"hidden\" value=\"finalize_result\" />\n";
     echo "<input name=\"mode\" type=\"hidden\" value=\"submit_result\" />\n";
     echo "<input name=\"match_id\" type=\"hidden\" value=\"{$match_id}\" />\n";
@@ -297,7 +283,7 @@ function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, 
 ?>
 
 <script>
-function check_drop(form) {
+function verify_input(form) {
     //Check if the player wants to drop
     if(form[9].checked) {
         return confirm('Are you sure you want to drop? This cannot be undone.');
