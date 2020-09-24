@@ -45,7 +45,7 @@ if (strcmp($_REQUEST['mode'], 'view') == 0) {
         if (!isset($_GET['event'])) {
             $_GET['event'] = '';
         }
-        $_POST['event'] = $_GET['event'];
+        $_REQUEST['event'] = $_GET['event'];
     }
 
     if (isset($_REQUEST['event']) && is_null($event)) {
@@ -58,7 +58,7 @@ if (strcmp($_REQUEST['mode'], 'view') == 0) {
     } elseif (strcmp($_REQUEST['mode'], 'addregdeck') == 0) {
         $deck = insertDeck($event);
         deckProfile($deck);
-    } elseif (is_null($event)) {
+    } elseif (is_null($deck) && $event->name == '') {
         echo 'No deck or event id specifed.<br/>';
         echo "Go back to <a href='player.php'>Player CP</a>";
     } elseif (checkDeckAuth($event, $deck_player, $deck)) {
@@ -95,13 +95,14 @@ if (strcmp($_REQUEST['mode'], 'view') == 0) {
 
 function deckForm($deck = null)
 {
-    $mode = is_null($deck) ? 'Create Deck' : 'Update Deck';
-    if (!is_null($deck)) {
+    $create = is_null($deck) || $deck->id == 0;
+    $mode = $create ? 'Create Deck' : 'Update Deck';
+    if (!$create) {
         $player = $deck->playername;
         $event = new Event($deck->eventname);
     } else {
         $player = (isset($_POST['player'])) ? $_POST['player'] : $_GET['player'];
-        $event = new Event((isset($_POST['player'])) ? $_POST['event'] : $_GET['event']);
+        $event = new Event((isset($_POST['player'])) ? $_REQUEST['event'] : $_GET['event']);
     }
 
     if (!checkDeckAuth($event, $player, $deck)) {
@@ -109,7 +110,7 @@ function deckForm($deck = null)
     }
 
     $vals = ['contents' => '', 'sideboard' => ''];
-    if (!is_null($deck)) {
+    if (!$create) {
         foreach ($deck->maindeck_cards as $card => $amt) {
             $line = $amt.' '.$card."\n";
             $vals['contents'] = $vals['contents'].$line;
@@ -152,7 +153,7 @@ function deckForm($deck = null)
     }
 
     echo '</select></td></tr>';
-    if (!is_null($deck)) {
+    if (!$create) {
         if (count($deck->errors) > 0) {
             echo '<tr><td class="error">Errors</td><td>There are some problems adding your deck:<ul>';
             foreach ($deck->errors as $error) {
@@ -164,7 +165,7 @@ function deckForm($deck = null)
     print_file_input('Import File', 'txt');
     echo "<tr><td></td><td><hr width='60%' ALIGN=\"left\"/></td></tr>";
     print_text_input('Name', 'name', $vals['name'], 40, null, 'deck-name');
-    if (!is_null($deck)) {
+    if (!$create) {
         echo "<input type=\"hidden\" name=\"id\" value=\"{$deck->id}\">\n";
     }
     archetypeDropMenu($vals['archetype']);
@@ -686,7 +687,7 @@ function matchupTable($deck)
 
           return false;
       }
-      if (is_null($deck)) {
+      if (is_null($deck) && $event->id > 0) {
           // Creating a deck.
           $entry = new Entry($event->id, $player);
           $auth = $entry->canCreateDeck(Player::loginName());

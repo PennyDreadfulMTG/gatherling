@@ -524,7 +524,10 @@ function print_ActiveEvents()
                 $round = 'main';
             }
             if ($structure == 'League') {
-                $Leagues[] = "<tr><td>{$event->name} Round: {$event->current_round}</td><td><a href=\"report.php?mode=submit_league_result&event={$event->name}&round={$event->current_round}&subevent={$subevent_id}\">Report League Game</a></td></tr>";
+                $count = $event->getPlayerLeagueMatchCount($player->name) + 1;
+                if ($count < 6) {
+                    $Leagues[] = "<tr><td>{$event->name} Match: {$count}</td><td><a href=\"report.php?mode=submit_league_result&event={$event->name}&round={$event->current_round}&subevent={$subevent_id}\">Report League Game</a></td></tr>";
+                }
             }
             if ($structure !== 'Single Elimination') {
                 echo "<td><a href=\"report.php?mode=drop_form&event={$event->name}\" style='color:red;'>Drop From Event</a></td>";
@@ -663,13 +666,6 @@ function print_currentMatchTable($Leagues)
         if (strcasecmp($player->name, $opp) == 0) {
             $opp = $match->playerb;
             $player_number = 'a';
-        }
-
-        if ($match->result == 'League') {
-            leagueResultDropMenu();
-            echo '<table><tr><td align="left" colspan="2">';
-            leagueOpponentDropMenu($event, $round = 1);
-            echo '</td></tr></table>';
         }
 
         if ($match->result != 'BYE') {

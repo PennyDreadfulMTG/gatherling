@@ -292,6 +292,9 @@ class Standings
             $stmt->close();
         }
 
+        if (count($opponentsAlreadyFaced) >= 5) {
+            return [];
+        }
         // Get all opponents who haven't dropped from event and exclude myself
         $allPlayers = Database::list_result_double_param('SELECT player
                                                           FROM standings
