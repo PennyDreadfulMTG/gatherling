@@ -10,7 +10,7 @@ print_header('Event Report');
 <div class="uppertitle"> Event Report </div>
 
 <?php
-if (isset($_GET['event'])) {
+if (isset($_GET['event']) && Event::exists($_GET['event'])) {
     $event = new Event($_GET['event']);
     showReport($event);
 } else {
