@@ -285,16 +285,16 @@ function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, 
 <script>
 function verify_input(form) {
     //Check if the player wants to drop
-    if(form[9].checked) {
+    if($("input[name='drop']").is(':checked')) {
         return confirm('Are you sure you want to drop? This cannot be undone.');
     }
 
     //Check if no result being selected
-    if(!form[5].checked && !form[6].checked && !form[7].checked && !form[8].checked) {
+    if (!$("input[name='report']:checked").val()) {
         alert('No result being selected. Please choose a result.');
         return false;
     }
-    
+
     return true;
 }
 </script>
