@@ -297,4 +297,4 @@ function verify_input(form) {
     
     return true;
 }
-</script>1
+</script>
