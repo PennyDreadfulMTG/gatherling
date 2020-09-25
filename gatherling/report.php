@@ -8,6 +8,13 @@ if ($player == null) {
     linkToLogin('your Player Control Panel');
 } else {
     if (isset($_POST['action'])) {
+        if ($_POST['action'] == 'verify_result' && !isset($_POST['drop'])) {
+            $_POST['action'] = 'finalize_result';
+            $_REQUEST['action'] = 'finalize_result';
+            if (!isset($_POST['opponent'])) {
+                $_POST['opponent'] = '0';
+            }
+        }
         if ($_POST['action'] == 'finalize_result') {
             // write results to matches table
             $drop = false;
@@ -81,17 +88,16 @@ print_header('Player Control Panel');
     break;
 
     case 'verify_result':
+    case 'verify_league_result':
     if (isset($_POST['report'])) {
         $drop = (isset($_POST['drop'])) ? 'Y' : 'N';
-        print_verify_resultForm($_POST['report'], $_POST['match_id'], $_POST['player'], $drop, 0, 0);
+        $opponent = isset($_REQUEST['opponent']) ? $_REQUEST['opponent'] : 0;
+        $event = isset($_REQUEST['event']) ? $_REQUEST['event'] : 0;
+
+        print_verify_resultForm($_POST['report'], $_POST['match_id'], $_POST['player'], $drop, $opponent, $event);
     } else {
         print_submit_resultForm($_REQUEST['match_id']);
     }
-    break;
-
-    // todo: Fold this into the above case
-    case 'verify_league_result':
-    print_verify_resultForm($_REQUEST['report'], $_REQUEST['match_id'], $_REQUEST['player'], 'N', $_REQUEST['opponent'], $_REQUEST['event']);
     break;
 
     case 'drop_form':
@@ -177,6 +183,7 @@ function print_submit_resultForm($match_id, $drop = false)
 
     echo "<form action=\"report.php\" method=\"post\">\n";
     echo "<input name=\"mode\" type=\"hidden\" value=\"verify_result\" />\n";
+    echo "<input name=\"action\" type=\"hidden\" value=\"verify_result\" />\n";
     echo "<input name=\"match_id\" type=\"hidden\" value=\"{$match_id}\" />\n";
     echo "<input name=\"player\" type=\"hidden\" value=\"{$letter}\" />\n";
     echo '<table class="form">';
@@ -228,7 +235,8 @@ function League_print_submit_resultForm($event, $round, $player, $subevent)
     echo "<div class=\"clear\"> </div>\n";
 }
 
-//* form to confirm submission
+/** form to confirm submission.
+ */
 function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, $event)
 {
     echo "<center><h3><br>Confirm Game Results</p></h3></center>\n";

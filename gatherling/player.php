@@ -497,7 +497,6 @@ function print_ActiveEvents()
     }
 
     $Leagues = [];
-    $numberOfLeagues = 0;
     foreach ($events as $event) {
         if (Standings::playerActive($event->name, $player->name) == 0 && $event->private) {
             continue;
@@ -517,11 +516,9 @@ function print_ActiveEvents()
             if ($event->current_round > $event->mainrounds) {
                 $structure = $event->finalstruct;
                 $subevent_id = $event->finalid;
-                $round = 'final';
             } else {
                 $structure = $event->mainstruct;
                 $subevent_id = $event->mainid;
-                $round = 'main';
             }
             if ($structure == 'League') {
                 $count = $event->getPlayerLeagueMatchCount($player->name) + 1;
