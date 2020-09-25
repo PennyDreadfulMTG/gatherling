@@ -11,8 +11,9 @@ if ($player == null) {
         if ($_POST['action'] == 'verify_result' && !isset($_POST['drop'])) {
             $_POST['action'] = 'finalize_result';
             $_REQUEST['action'] = 'finalize_result';
-            if (!isset($_POST['opponent']))
+            if (!isset($_POST['opponent'])) {
                 $_POST['opponent'] = '0';
+            }
         }
         if ($_POST['action'] == 'finalize_result') {
             // write results to matches table
@@ -234,7 +235,7 @@ function League_print_submit_resultForm($event, $round, $player, $subevent)
     echo "<div class=\"clear\"> </div>\n";
 }
 
-/** form to confirm submission
+/** form to confirm submission.
  */
 function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, $event)
 {
