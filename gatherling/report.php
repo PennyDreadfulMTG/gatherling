@@ -8,6 +8,12 @@ if ($player == null) {
     linkToLogin('your Player Control Panel');
 } else {
     if (isset($_POST['action'])) {
+        if ($_POST['action'] == 'verify_result' && !isset($_POST['drop'])) {
+            $_POST['action'] = 'finalize_result';
+            $_REQUEST['action'] = 'finalize_result';
+            if (!isset($_POST['opponent']))
+                $_POST['opponent'] = '0';
+        }
         if ($_POST['action'] == 'finalize_result') {
             // write results to matches table
             $drop = false;
@@ -177,6 +183,7 @@ function print_submit_resultForm($match_id, $drop = false)
 
     echo "<form action=\"report.php\" method=\"post\">\n";
     echo "<input name=\"mode\" type=\"hidden\" value=\"verify_result\" />\n";
+    echo "<input name=\"action\" type=\"hidden\" value=\"verify_result\" />\n";
     echo "<input name=\"match_id\" type=\"hidden\" value=\"{$match_id}\" />\n";
     echo "<input name=\"player\" type=\"hidden\" value=\"{$letter}\" />\n";
     echo '<table class="form">';
@@ -228,7 +235,8 @@ function League_print_submit_resultForm($event, $round, $player, $subevent)
     echo "<div class=\"clear\"> </div>\n";
 }
 
-//* form to confirm submission
+/** form to confirm submission
+ */
 function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, $event)
 {
     echo "<center><h3><br>Confirm Game Results</p></h3></center>\n";
