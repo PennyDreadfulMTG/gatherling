@@ -87,17 +87,16 @@ print_header('Player Control Panel');
     break;
 
     case 'verify_result':
+    case 'verify_league_result':
     if (isset($_POST['report'])) {
         $drop = (isset($_POST['drop'])) ? 'Y' : 'N';
-        print_verify_resultForm($_POST['report'], $_POST['match_id'], $_POST['player'], $drop, 0, 0);
+        $opponent = isset($_REQUEST['opponent']) ? $_REQUEST['opponent'] : 0;
+        $event = isset($_REQUEST['event']) ? $_REQUEST['event'] : 0;
+
+        print_verify_resultForm($_POST['report'], $_POST['match_id'], $_POST['player'], $drop, $opponent, $event);
     } else {
         print_submit_resultForm($_REQUEST['match_id']);
     }
-    break;
-
-    // todo: Fold this into the above case
-    case 'verify_league_result':
-    print_verify_resultForm($_REQUEST['report'], $_REQUEST['match_id'], $_REQUEST['player'], 'N', $_REQUEST['opponent'], $_REQUEST['event']);
     break;
 
     case 'drop_form':
