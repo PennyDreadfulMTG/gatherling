@@ -1461,9 +1461,9 @@ class Event
     {
         $db = Database::getConnection();
         if ($include_private) {
-            $stmt = $db->prepare('SELECT name FROM events WHERE active = 1');
+            $stmt = $db->prepare('SELECT name FROM events WHERE active = 1 ORDER BY start ASC');
         } else {
-            $stmt = $db->prepare('SELECT name FROM events WHERE active = 1 AND `private` = 0');
+            $stmt = $db->prepare('SELECT name FROM events WHERE active = 1 AND `private` = 0 ORDER BY start ASC');
         }
 
         $stmt->execute();
