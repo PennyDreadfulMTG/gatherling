@@ -516,14 +516,14 @@ function print_ActiveEvents()
         }
         echo '</td>';
         echo "<td><a href=\"player.php?mode=standings&event={$event->name}\">Current Standings</a></td>";
+        if ($event->current_round > $event->mainrounds) {
+            $structure = $event->finalstruct;
+            $subevent_id = $event->finalid;
+        } else {
+            $structure = $event->mainstruct;
+            $subevent_id = $event->mainid;
+        }
         if (Standings::playerActive($event->name, $player->name) == 1) {
-            if ($event->current_round > $event->mainrounds) {
-                $structure = $event->finalstruct;
-                $subevent_id = $event->finalid;
-            } else {
-                $structure = $event->mainstruct;
-                $subevent_id = $event->mainid;
-            }
             if ($structure == 'League') {
                 $count = $event->getPlayerLeagueMatchCount($player->name) + 1;
                 if ($count < 6) {
@@ -536,7 +536,11 @@ function print_ActiveEvents()
         } else {
             // This doesn't account for the small amount of time where Event Start time has elapsed, but Round 1 hasn't started
             if ($event->late_entry_limit > 0 && $event->late_entry_limit >= $event->current_round && !Entry::playerRegistered($event->id, $player->name)) {
-                echo "<td><a href=\"prereg.php?action=reg&event={$event->name}\">Submit Late Entry</a></td>";
+                if ($structure == 'League')
+                    $text = 'Join League';
+                else
+                    $text = 'Submit Late Entry';
+                echo "<td><a href=\"prereg.php?action=reg&event={$event->name}\">$text</a></td>";
             }
         }
         echo '</tr>';
