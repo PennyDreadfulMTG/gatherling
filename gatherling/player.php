@@ -536,10 +536,11 @@ function print_ActiveEvents()
         } else {
             // This doesn't account for the small amount of time where Event Start time has elapsed, but Round 1 hasn't started
             if ($event->late_entry_limit > 0 && $event->late_entry_limit >= $event->current_round && !Entry::playerRegistered($event->id, $player->name)) {
-                if ($structure == 'League')
+                if ($structure == 'League') {
                     $text = 'Join League';
-                else
+                } else {
                     $text = 'Submit Late Entry';
+                }
                 echo "<td><a href=\"prereg.php?action=reg&event={$event->name}\">$text</a></td>";
             }
         }
