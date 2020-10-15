@@ -534,7 +534,6 @@ function print_ActiveEvents()
                 echo "<td><a href=\"report.php?mode=drop_form&event={$event->name}\" style='color:red;'>Drop From Event</a></td>";
             }
         } else {
-            // This doesn't account for the small amount of time where Event Start time has elapsed, but Round 1 hasn't started
             if ($event->late_entry_limit > 0 && $event->late_entry_limit >= $event->current_round && !Entry::playerRegistered($event->id, $player->name)) {
                 if ($structure == 'League')
                     $text = 'Join League';

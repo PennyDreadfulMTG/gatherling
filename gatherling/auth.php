@@ -11,23 +11,24 @@ $provider = new \Wohali\OAuth2\Client\Provider\Discord([
     'redirectUri'  => $CONFIG['base_url'].'auth.php',
 ]);
 
-if (isset($_GET['debug']) && isset($_SESSION['DISCORD_TOKEN'])) {
-    $token = new \League\OAuth2\Client\Token\AccessToken([
+function load_cached_token() {
+    return new \League\OAuth2\Client\Token\AccessToken([
         'access_token'  => $_SESSION['DISCORD_TOKEN'],
         'refresh_token' => $_SESSION['DISCORD_REFRESH_TOKEN'],
         'expires'       => $_SESSION['DISCORD_EXPIRES'],
+        'scope'         => $_SESSION['DISCORD_SCOPES'],
     ]);
+}
+
+if (isset($_GET['debug']) && isset($_SESSION['DISCORD_TOKEN'])) {
+    $token = load_cached_token();
     debug_info($token);
 
     return;
 }
 
 if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
-    $token = new \League\OAuth2\Client\Token\AccessToken([
-        'access_token'  => $_SESSION['DISCORD_TOKEN'],
-        'refresh_token' => $_SESSION['DISCORD_REFRESH_TOKEN'],
-        'expires'       => $_SESSION['DISCORD_EXPIRES'],
-    ]);
+    $token = load_cached_token();
 
     if ($token->hasExpired()) {
         $newAccessToken = $provider->getAccessToken('refresh_token', [
@@ -37,15 +38,30 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
         store_token($newAccessToken);
         $token = $newAccessToken;
     }
+    // We might be here to upgrade our requested Discord permissions (Series Organizers setting up Discord Channels, for example)
+    if (isset($_REQUEST['scope']))
+    {
+        $needed = explode(' ', $_REQUEST['scope']);
+        $current = explode(' ', $token->getValues()['scope']);
 
+        if (!empty(array_diff($needed, $current))){
+            $scope = array_unique(array_merge($current, $needed));
+            send_to_discord($scope);
+            return;
+        }
+    }
     do_login($token);
 } elseif (!isset($_GET['code'])) {
-    send_to_discord();
+    if (isset($_REQUEST['scope']))
+        $scope = $_REQUEST['scope'];
+    else
+        $scope = null;
+    send_to_discord($scope);
 
 // Check given state against previously stored one to mitigate CSRF attack
 } elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
     unset($_SESSION['oauth2state']);
-    exit('Invalid state');
+    exit('Failed CSRF check. Please try again, or disable any browser extensions that might be causing issues.');
 } else {
 
     // Step 2. Get an access token using the provided authorization code
@@ -57,21 +73,27 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     do_login($token);
 }
 
-function send_to_discord()
+function send_to_discord($scope = null)
 {
     // Step 1. Get authorization code
     global $provider;
-    $options = ['scope' => ['identify', 'email']];
+    if (is_null($scope))
+        $scope = 'identify email';
+    $options = ['scope' => $scope];
     $authUrl = $provider->getAuthorizationUrl($options);
     $_SESSION['oauth2state'] = $provider->getState();
     header('Location: '.$authUrl);
 }
 
+/**
+ * @param \League\OAuth2\Client\Token\AccessTokenInterface $token
+ */
 function store_token($token)
 {
     $_SESSION['DISCORD_TOKEN'] = $token->getToken();
     $_SESSION['DISCORD_REFRESH_TOKEN'] = $token->getRefreshToken();
     $_SESSION['DISCORD_EXPIRES'] = $token->getExpires();
+    $_SESSION['DISCORD_SCOPES'] = $token->getValues()['scope'];
 }
 
 function debug_info($token)
@@ -82,6 +104,9 @@ function debug_info($token)
     echo 'Refresh token: '.$token->getRefreshToken().'<br/>';
     echo 'Expires: '.$token->getExpires().' - ';
     echo($token->hasExpired() ? 'expired' : 'not expired').'<br/>';
+    foreach ($token->getValues() as $key => $value) {
+        echo "$key: $value<br/>";
+    }
 
     // Step 3. (Optional) Look up the user's profile with the provided token
     try {
