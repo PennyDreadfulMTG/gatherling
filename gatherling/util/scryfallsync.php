@@ -115,8 +115,7 @@ function sync($setname, $cards)
             // Not worth my time right now.
             continue;
         }
-        if ($name[0] == '"')
-        {
+        if ($name[0] == '"') {
             // Placeholder name, do not sync.
             continue;
         }
