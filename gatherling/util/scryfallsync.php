@@ -112,8 +112,13 @@ function sync($setname, $cards)
             continue;
         }
         if ($c->borderColor == 'silver' || $c->borderColor == 'gold') {
+            // Not worth my time right now.
             continue;
-        } // Not worth my time right now.
+        }
+        if ($name[0] == '"') {
+            // Placeholder name, do not sync.
+            continue;
+        }
         info($name);
         $names[] = $name; // Ignore Borderless/promo/whatnots
         $typeline = str_replace('—', '-', $c->type);

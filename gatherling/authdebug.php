@@ -12,12 +12,18 @@ $provider = new \Wohali\OAuth2\Client\Provider\Discord([
     'redirectUri'  => $CONFIG['base_url'].'authdebug.php',
 ]);
 
-if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
-    $token = new \League\OAuth2\Client\Token\AccessToken([
+function load_cached_token()
+{
+    return new \League\OAuth2\Client\Token\AccessToken([
         'access_token'  => $_SESSION['DISCORD_TOKEN'],
         'refresh_token' => $_SESSION['DISCORD_REFRESH_TOKEN'],
         'expires'       => $_SESSION['DISCORD_EXPIRES'],
+        'scope'         => $_SESSION['DISCORD_SCOPES'],
     ]);
+}
+
+if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
+    $token = load_cached_token();
 
     if ($token->hasExpired()) {
         $newAccessToken = $provider->getAccessToken('refresh_token', [
@@ -62,6 +68,7 @@ function store_token($token)
     $_SESSION['DISCORD_TOKEN'] = $token->getToken();
     $_SESSION['DISCORD_REFRESH_TOKEN'] = $token->getRefreshToken();
     $_SESSION['DISCORD_EXPIRES'] = $token->getExpires();
+    $_SESSION['DISCORD_SCOPES'] = $token->getValues()['scope'];
 }
 
 function debug_info($token)
@@ -72,6 +79,10 @@ function debug_info($token)
     echo 'Refresh token: '.$token->getRefreshToken().'<br/>';
     echo 'Expires: '.$token->getExpires().' - ';
     echo($token->hasExpired() ? 'expired' : 'not expired').'<br/>';
+    echo 'Values: <br/>';
+    foreach ($token->getValues() as $key => $value) {
+        echo "$key=$value<br/>";
+    }
 
     // Step 3. (Optional) Look up the user's profile with the provided token
     try {
