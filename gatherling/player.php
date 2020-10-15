@@ -535,10 +535,11 @@ function print_ActiveEvents()
             }
         } else {
             if ($event->late_entry_limit > 0 && $event->late_entry_limit >= $event->current_round && !Entry::playerRegistered($event->id, $player->name)) {
-                if ($structure == 'League')
+                if ($structure == 'League') {
                     $text = 'Join League';
-                else
+                } else {
                     $text = 'Submit Late Entry';
+                }
                 echo "<td><a href=\"prereg.php?action=reg&event={$event->name}\">$text</a></td>";
             }
         }

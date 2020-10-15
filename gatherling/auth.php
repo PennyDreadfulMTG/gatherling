@@ -11,7 +11,8 @@ $provider = new \Wohali\OAuth2\Client\Provider\Discord([
     'redirectUri'  => $CONFIG['base_url'].'auth.php',
 ]);
 
-function load_cached_token() {
+function load_cached_token()
+{
     return new \League\OAuth2\Client\Token\AccessToken([
         'access_token'  => $_SESSION['DISCORD_TOKEN'],
         'refresh_token' => $_SESSION['DISCORD_REFRESH_TOKEN'],
@@ -39,23 +40,24 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
         $token = $newAccessToken;
     }
     // We might be here to upgrade our requested Discord permissions (Series Organizers setting up Discord Channels, for example)
-    if (isset($_REQUEST['scope']))
-    {
+    if (isset($_REQUEST['scope'])) {
         $needed = explode(' ', $_REQUEST['scope']);
         $current = explode(' ', $token->getValues()['scope']);
 
-        if (!empty(array_diff($needed, $current))){
+        if (!empty(array_diff($needed, $current))) {
             $scope = array_unique(array_merge($current, $needed));
             send_to_discord($scope);
+
             return;
         }
     }
     do_login($token);
 } elseif (!isset($_GET['code'])) {
-    if (isset($_REQUEST['scope']))
+    if (isset($_REQUEST['scope'])) {
         $scope = $_REQUEST['scope'];
-    else
+    } else {
         $scope = null;
+    }
     send_to_discord($scope);
 
 // Check given state against previously stored one to mitigate CSRF attack
@@ -77,8 +79,9 @@ function send_to_discord($scope = null)
 {
     // Step 1. Get authorization code
     global $provider;
-    if (is_null($scope))
+    if (is_null($scope)) {
         $scope = 'identify email';
+    }
     $options = ['scope' => $scope];
     $authUrl = $provider->getAuthorizationUrl($options);
     $_SESSION['oauth2state'] = $provider->getState();

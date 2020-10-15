@@ -12,7 +12,8 @@ $provider = new \Wohali\OAuth2\Client\Provider\Discord([
     'redirectUri'  => $CONFIG['base_url'].'authdebug.php',
 ]);
 
-function load_cached_token() {
+function load_cached_token()
+{
     return new \League\OAuth2\Client\Token\AccessToken([
         'access_token'  => $_SESSION['DISCORD_TOKEN'],
         'refresh_token' => $_SESSION['DISCORD_REFRESH_TOKEN'],
