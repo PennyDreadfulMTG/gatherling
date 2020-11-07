@@ -681,8 +681,7 @@ function reportsForm($event)
 
 function playerList($event)
 {
-    global $drop_icon;
-    global $host_drop_icon;
+    global $drop_icon, $host_drop_icon;
     $entries = $event->getEntries();
     $numentries = count($entries);
     $format = new Format($event->format);
@@ -807,8 +806,7 @@ function playerList($event)
     echo '</table>';
 
     if ($event->active == 1) {
-        echo '<table>';
-        echo '<tr><td colspan="2">';
+        echo '<table><tr><td colspan="2">';
         echo "{$host_drop_icon} means dropped by system or host";
         echo '</td></tr>';
         echo '<tr><td colspan="2">';
