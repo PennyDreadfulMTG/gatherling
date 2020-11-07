@@ -7,6 +7,7 @@ $verified_url = theme_file('images/verified.png');
 $dot_url = theme_file('images/dot.png');
 
 $drop_icon = '&#x2690;';
+$host_drop_icon = '&#x2691;';
 
 $js = <<<EOD
 
@@ -681,6 +682,7 @@ function reportsForm($event)
 function playerList($event)
 {
     global $drop_icon;
+    global $host_drop_icon;
     $entries = $event->getEntries();
     $numentries = count($entries);
     $format = new Format($event->format);
@@ -723,12 +725,18 @@ function playerList($event)
         echo "<tr id=\"entry_row_{$entry->player->name}\">";
         // Show drop box if event is active.
         if ($event->active == 1) {
-            if (Standings::playerActive($event->name, $entry->player->name)) {
+            $standing = new Standings($event->name, $entry->player->name);
+            if ($standing->active == 1) {
                 echo '<td align="center">';
                 echo '<input type="checkbox" name="dropplayer[]" ';
                 echo "value=\"{$entry->player->name}\"></td>";
             } else {
-                echo "<td>{$drop_icon} {$entry->drop_round} <a href=\"event.php?view=reg&player=".$entry->player->name.'&event='.$event->name.'&action=undrop&event_id='.$event->id.'">(undrop)</a></td>'; // else echo a symbol to represent player has dropped
+                if ($standing->active == 0) {
+                    echo "<td>{$drop_icon}";
+                } else {
+                    echo "<td>{$host_drop_icon}";
+                }
+                echo " {$entry->drop_round} <a href=\"event.php?view=reg&player=".$entry->player->name.'&event='.$event->name.'&action=undrop&event_id='.$event->id.'">(undrop)</a></td>';
             }
         }
         if ($event->finalized && !$event->active) {
@@ -799,7 +807,14 @@ function playerList($event)
     echo '</table>';
 
     if ($event->active == 1) {
-        echo '<table><tr><td colspan="2">';
+        echo '<table>';
+        echo '<tr><td colspan="2">';
+        echo "{$host_drop_icon} means dropped by system or host";
+        echo '</td></tr>';
+        echo '<tr><td colspan="2">';
+        echo "{$drop_icon} means the player dropped themselves";
+        echo '</td></tr>';
+        echo '<tr><td colspan="2">';
         echo '<font color= "red"><b><p class="squeeze">Players added after the event has started:</p></b></font>';
         echo '<ul>';
         echo '<li>receive 0 points for any rounds already started</li>';
@@ -1491,7 +1506,7 @@ function updateReg()
     }
     if (isset($_POST['dropplayer'])) {
         foreach ($_POST['dropplayer'] as $playername) {
-            $event->dropPlayer($playername);
+            $event->dropPlayer($playername, -1, -1);
         }
     }
     if (isset($_POST['newentry'])) {
@@ -1533,7 +1548,7 @@ function updateMatches()
 
     if (isset($_POST['dropplayer'])) {
         foreach ($_POST['dropplayer'] as $playername) {
-            $event->dropPlayer($playername);
+            $event->dropPlayer($playername, -1, -1);
         }
     }
 

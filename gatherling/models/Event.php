@@ -720,13 +720,18 @@ class Event
         return $added;
     }
 
-    public function dropPlayer($playername, $round = -1)
+    public function dropPlayer($playername, $round = -1, $active = 0)
     {
         if ($round == -1) {
             $round = $this->current_round;
         }
+
+        if($active > 0) {
+            $active = 0;
+        }
+
         Database::db_query('UPDATE entries SET drop_round = ? WHERE event_id = ? AND player = ?', 'dds', $round, $this->id, $playername);
-        Database::db_query('UPDATE standings SET active = 0 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
+        Database::db_query('UPDATE standings SET active = ? WHERE event = ? AND player = ?', 'dss', $active, $this->name, $playername);
     }
 
     public function undropPlayer($playername)
