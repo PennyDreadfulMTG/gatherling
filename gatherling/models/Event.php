@@ -726,7 +726,7 @@ class Event
             $round = $this->current_round;
         }
 
-        if($active > 0) {
+        if ($active > 0) {
             $active = 0;
         }
 
