@@ -40,7 +40,7 @@ if (!is_null($player)) {
 
     $active_events = Event::getActiveEvents();
     foreach ($active_events as $event) {
-        if ($event->authCheck($player->name) && !$event->private) {
+        if ($event->authCheck($player->name) && !$event->private && !$event->isLeague()) {
             $message = "Your event <a href=\"event.php?event={$event->name}\">{$event->name}</a> is currently active.";
             // if ($event->current_round > ($event->mainrounds)) {
             //     $subevent_id = $event->finalid;
