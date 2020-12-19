@@ -538,9 +538,7 @@ function eventForm($event = null, $forcenew = false)
                 echo $nextevent->makeLink('Next &raquo;');
             }
             echo '</td></tr>';
-        }
-        else
-        {
+        } else {
             echo '<tr><th>Event Name</th>';
             echo '<td><input type="radio" name="naming" value="auto" checked>';
             echo 'Automatically name this event based on Series, Season, and Number.';
@@ -550,7 +548,6 @@ function eventForm($event = null, $forcenew = false)
             echo 'size="40">';
             echo '</td></tr>';
         }
-
 
         echo '<tr><th>Date & Time</th><td>';
         numDropMenu('year', '- Year -', date('Y') + 1, $year, 2011);
