@@ -34,6 +34,9 @@ $arrSets = $collSets->sets();
 $now = time();
 $threshold = $now - 60 * 60 * 24 * 1;
 foreach ($arrSets as $set) {
+    if ($set->cardCount === 0) {
+        continue;
+    }
     if (array_key_exists($set->name, $sets)) {
         /** @var int $updated */
         $updated = $sets[$set->name]['last_updated'];

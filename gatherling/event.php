@@ -512,6 +512,15 @@ function eventForm($event = null, $forcenew = false)
             $day = $datearr[3];
             $hour = $datearr[4];
             $minutes = $datearr[5];
+        } else {
+            $year = strftime('Y', time());
+            $month = strftime('B', time());
+            $day = strftime('Y', time());
+            $hour = strftime('H', time());
+            $minutes = strftime('M', time());
+        }
+
+        if ($edit) {
             echo '<tr><th>Currently Editing</th>';
             echo "<td><i>{$event->name}</i>";
             echo "<input type=\"hidden\" name=\"name\" value=\"{$event->name}\">";
@@ -538,12 +547,8 @@ function eventForm($event = null, $forcenew = false)
             echo "<input class=\"inputbox\" type=\"text\" name=\"name\" value=\"{$event->name}\" ";
             echo 'size="40">';
             echo '</td></tr>';
-            $year = strftime('Y', time());
-            $month = strftime('B', time());
-            $day = strftime('Y', time());
-            $hour = strftime('H', time());
-            $minutes = strftime('M', time());
         }
+
         echo '<tr><th>Date & Time</th><td>';
         numDropMenu('year', '- Year -', date('Y') + 1, $year, 2011);
         monthDropMenu($month);
