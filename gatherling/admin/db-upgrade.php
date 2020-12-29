@@ -719,7 +719,7 @@ upgrade_db(40, 'We need longer card names.', function () {
     // We probably won't go past OMRSTPLRLCNSWMTCTHTALCNEE any time soon, but let's give it an additional 20 characters just in case ;P
 });
 
-upgrade_db(41, 'Arena Support?', function() {
+upgrade_db(41, 'Arena Support?', function () {
     // We can't ALTER `events` on prod, because the database contains illegal rows.  Fix them first.
     do_query("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'NO_ZERO_DATE',''));");
     do_query("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'NO_ZERO_IN_DATE',''));");
