@@ -13,8 +13,8 @@ services:
   db:
     image: mysql:5
     env_file: .env
-    # ports:
-    #   - "3306:3306"
+    ports:
+      - "3307:3306"
     volumes:
       - ./backups:/docker-entrypoint-initdb.d
   adminer:
