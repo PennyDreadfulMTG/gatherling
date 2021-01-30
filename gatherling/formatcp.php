@@ -148,7 +148,7 @@ function handleActions($seriesName)
                 }
                 if (!$success) {
                     $hasError = true;
-                    $errormsg .= "Can't add {$card} to Ban list, it is either not in the database, or on the legal card list";
+                    $errormsg .= "Can't add {$card} to Ban list, it is either not in the database, or it's on the legal card list";
 
                     return;
                 }
