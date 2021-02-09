@@ -602,7 +602,7 @@ function normaliseCardName($card, $tolower = false)
     $replace = ['e', 'e', 'e', 'e', 'E', 'E', 'E', 'E', 'a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A', 'A', 'o', 'o', 'o', 'o', 'O', 'O', 'O', 'O', 'i', 'i', 'i', 'I', 'I', 'I', 'I', 'I', 'u', 'u', 'u', 'u', 'U', 'U', 'U', 'U', 'y', 'y', 'Y', 'o', 'O', 'ae', 'ae', 'Ae', 'Ae', 'c', 'C', '-', '-', '-', "'", '{1/2}'];
     $card = preg_replace($pattern, $replace, $card);
     $card = preg_replace("/\306/", 'AE', $card);
-    $card = preg_replace("/ \/\/ /", '/', $card);
+    $card = preg_replace("/ \/\/\/? /", '/', $card);
     if ($tolower) {
         $card = strtolower($card);
     }
