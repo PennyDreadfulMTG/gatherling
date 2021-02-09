@@ -1,0 +1,17 @@
+<?php
+
+# CONFIGURATION FILE FOR UNIT TESTS
+# GO LOOK AT THE OTHER ONE FOR AN EXPLANATION
+
+$CONFIG['db_hostname'] = 'localhost';
+$CONFIG['db_username'] = 'gatherling';
+$CONFIG['db_password'] = 'gatherling';
+$CONFIG['db_database'] = 'gatherling';
+
+$CONFIG['base_url'] = "http://localhost/gatherling/";
+$CONFIG['site_name'] = "Gatherling on Github Actions";
+$CONFIG['style'] = "Chandra";
+$CONFIG['calendar_description'] = "Gatherling Calendar";
+$CONFIG['analytics_account'] = '';
+
+$CONFIG['infobot_passkey'] = "";
