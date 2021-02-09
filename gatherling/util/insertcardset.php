@@ -42,7 +42,7 @@ if (PHP_SAPI == 'cli') {
             $_REQUEST['cardsetcode'] = 'CON_';
         }
 
-        $file = file_get_contents("https://mtgjson.com/json/{$_REQUEST['cardsetcode']}.json");
+        $file = file_get_contents("https://mtgjson.com/api/v5/{$_REQUEST['cardsetcode']}.json");
     } elseif (isset($_FILES['cardsetfile'])) {
         $file = file_get_contents($_FILES['cardsetfile']['tmp_name']);
     } else {
@@ -55,7 +55,7 @@ if ($file == false) {
 }
 
 $data = json_decode($file);
-
+$data = $data->data;
 $set = $data->name;
 if ($set == 'Time Spiral "Timeshifted"') {
     // Terrible hack, but needed.
@@ -200,7 +200,7 @@ function insertCard($card, $set, $rarity, $stmt)
         $changeling = 1;
     }
 
-    $online = isset($card->isMtgo);
+    $online = in_array('mtgo', $card->availability);
 
     $empty_string = '';
     $zero = 0;

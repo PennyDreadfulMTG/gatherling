@@ -1,5 +1,6 @@
 {
     "name": "pennydreadfulmagic/gatherling",
+    "description": "Magic the Gathering tournament software",
     "require": {
         "wohali/oauth2-discord-new": "^1.0",
         "sentry/sdk": "^3.0.0",
