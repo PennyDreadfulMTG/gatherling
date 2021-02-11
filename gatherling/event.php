@@ -602,6 +602,8 @@ function eventForm($event = null, $forcenew = false)
         print_checkbox_input('Finals List Privacy', 'private_finals', $event->private_finals);
         print_checkbox_input('Allow Player Reported Draws', 'player_reported_draws', $event->player_reported_draws, 'This allows players to report a draw result for matches.');
         print_checkbox_input('Private Event', 'private', $event->private, 'This event is invisible to non-participants');
+        clientDropMenu('client', $event->client);
+        
 
         if ($edit == 0) {
             echo '<tr><td>&nbsp;</td></tr>';
@@ -1185,6 +1187,19 @@ function structDropMenu($field, $def)
     echo '</select>';
 }
 
+function clientDropMenu($field, $def)
+{
+    $names = [null, 'MTGO', 'Arena', 'Other'];
+    echo "<tr><th><label for='$field'>Game Client</label></th>";
+    echo "<td><select class=\"inputbox\" name=\"$field\" id=\"$field\">";
+    echo '<option value="">- Client -</option>';
+    for ($i = 0; $i < count($names); $i++) {
+        $selStr = ($def == $i) ? 'selected' : '';
+        echo "<option value=\"{$i}\" $selStr>{$names[$i]}</option>";
+    }
+    echo '</select></td></tr>';
+}
+
 function noEvent($event)
 {
     return "The requested event \"$event\" could not be found.";
@@ -1235,7 +1250,8 @@ function insertEvent()
         $_POST['mainrounds'],
         $_POST['mainstruct'],
         $_POST['finalrounds'],
-        $_POST['finalstruct']
+        $_POST['finalstruct'],
+        $_POST['client']
     );
 
     return $event;

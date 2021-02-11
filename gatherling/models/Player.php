@@ -1202,9 +1202,21 @@ class Player
         return $series;
     }
 
-    public function linkTo()
+    public function linkTo($game = 'mtgo')
     {
-        $result = "<a href=\"profile.php?player={$this->name}\">$this->name";
+        if ($game == 1) $game = 'mtgo';
+        elseif ($game == 2) $game = 'arena';
+        elseif ($game == 3) $game = 'paper';
+
+        $name = $this->name;
+        if ($game == 'mtgo')
+            $name = "<i class=\"ss ss-pmodo\"></i> " . $this->name;
+        else if ($game == 'arena' && !empty($this->mtga_username))
+            $name = "<i class=\"ss ss-parl3\"></i> " . $this->mtga_username;
+        else if (!empty($this->discord_handle))
+            $name = "<i class=\"fab fa-discord\"></i> " . $this->discord_handle;
+
+        $result = "<a href=\"profile.php?player={$this->name}\">$name";
         if ($this->verified == 1) {
             $result .= image_tag('verified.png', ['width' => '12', 'height' => '12']);
         }

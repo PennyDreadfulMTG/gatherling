@@ -258,7 +258,8 @@ function create_event()
         arg('mainrounds', ''),
         arg('mainstruct', ''),
         arg('finalrounds', ''),
-        arg('finalstruct', '')
+        arg('finalstruct', ''),
+        arg('client', 1)
     );
 
     $result = [];

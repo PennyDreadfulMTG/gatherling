@@ -18,6 +18,7 @@ class Event
     public $reporturl;
     public $metaurl;
     public $private;
+    public $client;
 
     public $player_editdecks;
 
@@ -77,6 +78,7 @@ class Event
             $this->player_reported_draws = 0;
             $this->late_entry_limit = 0;
             $this->private = 0;
+            $this->client = 1;
 
             return;
         }
@@ -86,7 +88,7 @@ class Event
             $sql = 'SELECT id, name, format, host, cohost, series, season, number,
                            start, kvalue, finalized, prereg_allowed, threadurl,
                            metaurl, reporturl, active, current_round, player_reportable, player_editdecks,
-                           prereg_cap, private_decks, private_finals, player_reported_draws, late_entry_limit, `private` FROM events WHERE ';
+                           prereg_cap, private_decks, private_finals, player_reported_draws, late_entry_limit, `private`, client FROM events WHERE ';
             if (is_numeric($name)) {
                 $sql .= 'id = ?';
                 $pt = 'd';
@@ -125,7 +127,8 @@ class Event
                 $this->private_finals,
                 $this->player_reported_draws,
                 $this->late_entry_limit,
-                $this->private
+                $this->private,
+                $this->client
             );
             if ($stmt->fetch() == null) {
                 throw new Exception('Event '.$name.' not found in DB');
@@ -208,7 +211,8 @@ class Event
         $mainrounds,
         $mainstruct,
         $finalrounds,
-        $finalstruct
+        $finalstruct,
+        $client
     ) {
         $event = new self('');
         $event->start = "{$year}-{$month}-{$day} {$hour}:00";
@@ -236,6 +240,7 @@ class Event
         $event->metaurl = $metaurl;
         $event->reporturl = $reporturl;
         $event->private = $private;
+        $event->client = $client;
 
         $event->prereg_allowed = $prereg_allowed;
 
@@ -282,10 +287,10 @@ class Event
             $stmt = $db->prepare('INSERT INTO events(name, start, format, host, cohost, kvalue,
                                                number, season, series, threadurl, reporturl,
                                                metaurl, prereg_allowed, finalized, player_reportable,
-                                               prereg_cap, player_editdecks, private_decks, private_finals, player_reported_draws, late_entry_limit, `private`)
-                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?)');
+                                               prereg_cap, player_editdecks, private_decks, private_finals, player_reported_draws, late_entry_limit, `private`, client)
+                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
             $stmt->bind_param(
-                'sssssdddssssddddddddd',
+                'sssssdddssssdddddddddd',
                 $this->name,
                 $this->start,
                 $this->format,
@@ -306,7 +311,8 @@ class Event
                 $this->private_finals,
                 $this->player_reported_draws,
                 $this->late_entry_limit,
-                $this->private
+                $this->private,
+                $this->client
             );
             if (!$stmt->execute()) {
                 throw new Exception($stmt->error, 1);
@@ -321,11 +327,11 @@ class Event
       number = ?, season = ?, series = ?, threadurl = ?, reporturl = ?,
       metaurl = ?, finalized = ?, prereg_allowed = ?, active = ?,
       current_round = ?, player_reportable = ?, prereg_cap = ?,
-      player_editdecks = ?, private_decks = ?, private_finals = ?, player_reported_draws = ?, late_entry_limit = ?, `private` = ?
+      player_editdecks = ?, private_decks = ?, private_finals = ?, player_reported_draws = ?, late_entry_limit = ?, `private` = ?, client = ?
       WHERE name = ?');
             $stmt or exit($db->error);
             $stmt->bind_param(
-                'ssssdddssssdddddddddddds',
+                'ssssdddssssddddddddddddds',
                 $this->start,
                 $this->format,
                 $this->host,
@@ -349,6 +355,7 @@ class Event
                 $this->player_reported_draws,
                 $this->late_entry_limit,
                 $this->private,
+                $this->client,
                 $this->name
             );
 

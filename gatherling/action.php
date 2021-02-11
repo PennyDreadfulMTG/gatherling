@@ -74,9 +74,9 @@ if (!is_null($player)) {
                 $message = "You have an unreported match in $event->name vs. ";
                 if ($event->decklistsVisible()) {
                     $opp_entry = Entry::findByEventAndPlayer($event->id, $oppplayer->name);
-                    $message = $message.$oppplayer->name.' ('.$opp_entry->deck->linkTo().').';
+                    $message = $message.$oppplayer->linkTo($event->client).' ('.$opp_entry->deck->linkTo().').';
                 } else {
-                    $message = $message.$oppplayer->linkTo().'.';
+                    $message = $message.$oppplayer->linkTo($event->client).'.';
                 }
                 if ($match->player_reportable_check() == true) {
                     $message = $message.'  <a href="report.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
