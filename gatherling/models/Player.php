@@ -16,6 +16,7 @@ class Player
     public $discord_id;
     public $discord_handle;
     public $api_key;
+    public $mtga_username;
 
     public function __construct($name)
     {
@@ -31,7 +32,7 @@ class Player
         }
         $database = Database::getConnection();
         $stmt = $database->prepare('SELECT name, password, rememberme, INET_NTOA(ipaddress), host, super,
-                mtgo_confirmed, email, email_privacy, timezone, theme, discord_id, discord_handle, api_key  FROM players WHERE name = ?');
+                mtgo_confirmed, email, email_privacy, timezone, theme, discord_id, discord_handle, api_key, mtga_username FROM players WHERE name = ?');
         $stmt or exit($database->error);
 
         $stmt->bind_param('s', $name);
@@ -50,7 +51,8 @@ class Player
             $this->theme,
             $this->discord_id,
             $this->discord_handle,
-            $this->api_key
+            $this->api_key,
+            $this->mtga_username
         );
         if ($stmt->fetch() == null) {
             throw new Exception('Player '.$name.' is not found.');

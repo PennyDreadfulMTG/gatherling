@@ -64,6 +64,7 @@ function print_header($title, $js = null, $extra_head_content = '')
     echo "    <meta name=\"google-site-verification\" content=\"VWE-XX0CgPTHYgUqJ6t13N75y-p_Q9dgtqXikM3EsBo\" />\n";
     echo "    <title>{$CONFIG['site_name']} | {$title}</title>\n";
     echo '    <link rel="stylesheet" type="text/css" media="all" href="'.theme_file('css/stylesheet.css')."\" />\n";
+    echo "     <link href=\"//cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css\" rel=\"stylesheet\" type=\"text/css\" />\n";
     echo "     <script src=\"//code.jquery.com/jquery-latest.min.js\"></script>\n";
     echo "     <script src=\"//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js\"></script>\n";
     echo "     <script src=\"//cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.21/moment-timezone-with-data.min.js\"></script>\n";

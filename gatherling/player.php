@@ -310,6 +310,7 @@ function print_mainPlayerCP($player, $result)
     if ($result) {
         echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
     }
+    /// Events
     echo '<div id="future" class="tabcontent">';
     echo "<div class=\"alpha grid_5\">\n";
     echo "<div id=\"gatherling_lefthalf\">\n";
@@ -322,6 +323,7 @@ function print_mainPlayerCP($player, $result)
     echo "</div></div>\n";
     echo '</div>';
 
+    /// History
     echo '<div id="past" class="tabcontent">';
     echo "<div class=\"alpha grid_5\">\n";
     echo "<div id=\"gatherling_lefthalf\">\n";
@@ -333,6 +335,7 @@ function print_mainPlayerCP($player, $result)
     echo "</div></div>\n";
     echo '</div>';
 
+    /// Statistics
     echo '<div id="statistics" class="tabcontent">';
     echo "<div class=\"alpha grid_5\">\n";
     echo "<div id=\"gatherling_lefthalf\">\n";
@@ -344,9 +347,10 @@ function print_mainPlayerCP($player, $result)
     echo "</div></div>\n";
     echo '</div>';
 
+    /// Settings
     echo '<div id="settings" class="tabcontent">';
-    echo "<div class=\"alpha grid_10\">\n";
-    echo "<div id=\"gatherling_full\">\n";
+    echo "<div class=\"alpha grid_5\">\n";
+    echo "<div id=\"gatherling_lefthalf\">\n";
     echo "<b>ACTIONS</b><br />\n";
     echo "<ul>\n";
     echo "<li><a href=\"player.php?mode=changepass\">Change your password</a></li>\n";
@@ -356,21 +360,32 @@ function print_mainPlayerCP($player, $result)
         echo "<li><a href=\"player.php?mode=edit_email\">Change Email Address: {$player->emailAddress}</a></li>\n";
     }
     echo "<li><a href=\"player.php?mode=change_timezone\">Change Your Time Zone</a></li>\n";
+    echo "</div></div>\n";
+    //
+    echo "<div class=\"omega grid_5\">\n";
+    echo "<div id=\"gatherling_righthalf\">\n";
+    echo "<b>CONNECTIONS</b><br />\n";
     if (isset($_SESSION['DISCORD_ID']) && empty($player->discord_id)) {
         echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> {$_SESSION['DISCORD_NAME']}</a></li>\n";
     } elseif (empty($player->discord_id)) {
         echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> Discord</a></li>\n";
     }
+    else {
+        echo "<li><span style=\"color: green; font-weight: bold;\">Linked to <i class=\"fab fa-discord\"></i> $player->discord_handle</span> (<a href=\"auth.php\">Link new account</a>)</li>\n";
+    }
     if ($player->verified == 0) {
-        echo "<li><a href=\"player.php?mode=verifymtgo\">Verify your MTGO account</a></li>\n";
+        echo "<li><a href=\"player.php?mode=verifymtgo\">Verify your <i class=\"ss ss-pmodo\"></i> MTGO account</a></li>\n";
     } else {
-        echo '<li><span style="color: green; font-weight: bold;">'.image_tag('verified.png')."Account Verified</span></li>\n";
+        echo '<li><span style="color: green; font-weight: bold;">'.image_tag('verified.png').'<i class="ss ss-pmodo"></i> '."MTGO Verified</span></li>\n";
+    }
+    if (!empty($player->mtga_username)) {
+        echo '<li><span style="color: green; font-weight: bold;"><i class="ss ss-parl3"></i> '."$player->mtga_username</span></li>\n";
     }
     echo "</ul>\n";
     echo "</div></div>\n";
     echo '</div>';
     echo "<div class=\"clear\"></div>\n";
-    echo '<script src="tab_view.js"></script>';
+    echo '<script src="tab_view.js" async></script>';
 }
 
 function print_allContainer()
@@ -512,7 +527,7 @@ function print_ActiveEvents()
         echo "<tr><td><a href=\"{$targetUrl}.php?event=".rawurlencode($event->name)."\">{$event->name}</a>";
         $series = new Series($event->series);
         if ($series->mtgo_room) {
-            echo " <pre style=\"cursor:help;\" title=\"To join a Chat room, use the Chat menu, or type /join #$series->mtgo_room into your game chat.\" >MTGO room #$series->mtgo_room</pre>";
+            echo " <pre style=\"cursor:help;\" title=\"To join a Chat room, use the Chat menu, or type /join #$series->mtgo_room into your game chat.\" ><i class=\"ss ss-pmodo\"></i> MTGO room #$series->mtgo_room</pre>";
         }
         echo '</td>';
         echo "<td><a href=\"player.php?mode=standings&event={$event->name}\">Current Standings</a></td>";
