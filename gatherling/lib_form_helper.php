@@ -10,9 +10,10 @@ function print_text_input($label, $name, $value = '', $len = 0, $reminder_text =
     if (!isset($value)) {
         $value = '';
     }
-    $class= '';
-    if ($advanced)
+    $class = '';
+    if ($advanced) {
         $class = 'advanced';
+    }
     echo "<tr class=\"$class\"><th><label for='$id'>{$label}</label></th>";
     echo "<td><input class=\"inputbox\" type=\"text\" name=\"{$name}\" id='$id' value=\"{$value}\"";
     if ($len > 0) {

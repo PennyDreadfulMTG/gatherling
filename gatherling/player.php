@@ -369,8 +369,7 @@ function print_mainPlayerCP($player, $result)
         echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> {$_SESSION['DISCORD_NAME']}</a></li>\n";
     } elseif (empty($player->discord_id)) {
         echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> Discord</a></li>\n";
-    }
-    else {
+    } else {
         echo "<li><span style=\"color: green; font-weight: bold;\">Linked to <i class=\"fab fa-discord\"></i> $player->discord_handle</span> (<a href=\"auth.php\">Link new account</a>)</li>\n";
     }
     if ($player->verified == 0) {

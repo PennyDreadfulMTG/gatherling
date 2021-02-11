@@ -1204,17 +1204,22 @@ class Player
 
     public function linkTo($game = 'mtgo')
     {
-        if ($game == 1) $game = 'mtgo';
-        elseif ($game == 2) $game = 'arena';
-        elseif ($game == 3) $game = 'paper';
+        if ($game == 1) {
+            $game = 'mtgo';
+        } elseif ($game == 2) {
+            $game = 'arena';
+        } elseif ($game == 3) {
+            $game = 'paper';
+        }
 
         $name = $this->name;
-        if ($game == 'mtgo')
-            $name = "<i class=\"ss ss-pmodo\"></i> " . $this->name;
-        else if ($game == 'arena' && !empty($this->mtga_username))
-            $name = "<i class=\"ss ss-parl3\"></i> " . $this->mtga_username;
-        else if (!empty($this->discord_handle))
-            $name = "<i class=\"fab fa-discord\"></i> " . $this->discord_handle;
+        if ($game == 'mtgo') {
+            $name = '<i class="ss ss-pmodo"></i> '.$this->name;
+        } elseif ($game == 'arena' && !empty($this->mtga_username)) {
+            $name = '<i class="ss ss-parl3"></i> '.$this->mtga_username;
+        } elseif (!empty($this->discord_handle)) {
+            $name = '<i class="fab fa-discord"></i> '.$this->discord_handle;
+        }
 
         $result = "<a href=\"profile.php?player={$this->name}\">$name";
         if ($this->verified == 1) {

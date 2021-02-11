@@ -603,7 +603,6 @@ function eventForm($event = null, $forcenew = false)
         print_checkbox_input('Allow Player Reported Draws', 'player_reported_draws', $event->player_reported_draws, 'This allows players to report a draw result for matches.');
         print_checkbox_input('Private Event', 'private', $event->private, 'This event is invisible to non-participants');
         clientDropMenu('client', $event->client);
-        
 
         if ($edit == 0) {
             echo '<tr><td>&nbsp;</td></tr>';
