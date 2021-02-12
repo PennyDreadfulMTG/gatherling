@@ -1192,7 +1192,7 @@ function clientDropMenu($field, $def)
     echo "<tr><th><label for='$field'>Game Client</label></th>";
     echo "<td><select class=\"inputbox\" name=\"$field\" id=\"$field\">";
     echo '<option value="">- Client -</option>';
-    for ($i = 0; $i < count($names); $i++) {
+    for ($i = 1; $i < count($names); $i++) {
         $selStr = ($def == $i) ? 'selected' : '';
         echo "<option value=\"{$i}\" $selStr>{$names[$i]}</option>";
     }
@@ -1337,6 +1337,7 @@ function updateEvent()
     $event->finalrounds = $_POST['finalrounds'];
     $event->finalstruct = $_POST['finalstruct'];
     $event->private = $_POST['private'];
+    $event->client = $_POST['client'];
 
     $event->save();
 

@@ -693,7 +693,7 @@ function print_currentMatchTable($Leagues)
             echo $event->name.' Round: '.$event->current_round.' ';
             echo '</td>';
             echo "<td>vs.</td>\n";
-            echo '<td>'.$oppplayer->linkTo().'</td><td>';
+            echo '<td>'.$oppplayer->linkTo($event->client).'</td><td>';
             if ($match->verification == 'unverified') {
                 if ($player_number == 'b' and ($match->playerb_wins + $match->playerb_losses) > 0) {
                     echo '(Report Submitted)';

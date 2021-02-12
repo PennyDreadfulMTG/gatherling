@@ -653,6 +653,10 @@ class Deck
         foreach ($this->maindeck_cards as $card => $amt) {
             $card = stripslashes($card);
             $testcard = Format::getCardName($card);
+            if (is_null($testcard)) {
+                $this->errors[] = "Could not find card in database: {$card}";
+                continue;
+            }
             $cardar = $format->getLegalCard($testcard);
             if (is_null($cardar)) {
                 $this->errors[] = "Could not find maindeck card: {$amt} {$card} in legal sets";

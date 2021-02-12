@@ -1202,7 +1202,7 @@ class Player
         return $series;
     }
 
-    public function linkTo($game = 'mtgo')
+    public function linkTo($game = null)
     {
         if ($game == 1) {
             $game = 'mtgo';
@@ -1217,14 +1217,14 @@ class Player
             $name = '<i class="ss ss-pmodo"></i>&nbsp;'.$this->name;
         } elseif ($game == 'arena' && !empty($this->mtga_username)) {
             $name = '<i class="ss ss-parl3"></i>&nbsp;'.$this->mtga_username;
-        } elseif (!empty($this->discord_handle)) {
+        } elseif ($game != null && !empty($this->discord_handle)) {
             $name = '<i class="fab fa-discord"></i>&nbsp;'.$this->discord_handle;
         }
 
         $result = "<a href=\"profile.php?player={$this->name}\">$name";
-        if ($this->verified == 1) {
-            $result .= image_tag('verified.png', ['width' => '12', 'height' => '12']);
-        }
+        // if ($this->verified == 1) {
+        //     $result .= image_tag('verified.png', ['width' => '12', 'height' => '12']);
+        // }
         $result .= '</a>';
 
         return $result;
