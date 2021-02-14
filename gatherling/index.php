@@ -96,7 +96,7 @@ if ($gatherlingoutofservice != 1) {
                     <table class="form" align="left" cellpadding="3">
                         <form action="login.php" method="post">
                             <tr>
-                                <th>MTGO Username</th>
+                                <th>Gatherling Username</th>
                                 <td><input class="inputbox" type="text" name="username" value="" /></td>
                             </tr>
                             <tr>

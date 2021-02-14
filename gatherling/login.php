@@ -28,7 +28,7 @@ print_header('Login');
         <form action="login.php" method="post">
             <table class="form" align="center" style="border-width: 0px" cellpadding="3">
                 <tr>
-                    <th>MTGO Username</th>
+                    <th>Gatherling Username</th>
                     <td><input id="username" class="inputbox" type="text" name="username" value="<?=$username?>" tabindex="1"></td>
                 </tr>
                 <tr>

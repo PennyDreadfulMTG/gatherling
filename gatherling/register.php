@@ -43,7 +43,7 @@ function regForm()
     echo "<form action=\"register.php\" method=\"post\" onsubmit=\"return validate_pw()\">\n";
     echo "<table align=\"center\" style=\"border-width: 0px\">\n";
     echo "<center id='notice'>Passwords are required to be at least 8 characters long.</center>\n";
-    echo "<tr><td><b>MTGO Username</td>\n";
+    echo "<tr><td><b>Username</td>\n";
     echo "<td><input class=\"inputbox\" type=\"text\" name=\"username\" value=\"\">\n";
     echo "</td></tr>\n";
     echo "<tr><td><b>Password</td>\n";
