@@ -2,7 +2,7 @@
 
 require_once 'lib.php';
 
-function print_text_input($label, $name, $value = '', $len = 0, $reminder_text = null, $id = null)
+function print_text_input($label, $name, $value = '', $len = 0, $reminder_text = null, $id = null, $advanced = false)
 {
     if (is_null($id)) {
         $id = $name;
@@ -10,7 +10,11 @@ function print_text_input($label, $name, $value = '', $len = 0, $reminder_text =
     if (!isset($value)) {
         $value = '';
     }
-    echo "<tr><th><label for='$id'>{$label}</label></th>";
+    $class = '';
+    if ($advanced) {
+        $class = 'advanced';
+    }
+    echo "<tr class=\"$class\"><th><label for='$id'>{$label}</label></th>";
     echo "<td><input class=\"inputbox\" type=\"text\" name=\"{$name}\" id='$id' value=\"{$value}\"";
     if ($len > 0) {
         echo " size=\"$len\"";
@@ -22,7 +26,7 @@ function print_text_input($label, $name, $value = '', $len = 0, $reminder_text =
     echo "</td></tr>\n";
 }
 
-function print_checkbox_input($label, $name, $checked = false, $reminder_text = null)
+function print_checkbox_input($label, $name, $checked = false, $reminder_text = null, $advanced = false)
 {
     echo "<tr><th><label for='$name'>{$label}</label></th>";
     echo "<td><input type=\"checkbox\" name=\"{$name}\" id='$name' value=\"1\"";

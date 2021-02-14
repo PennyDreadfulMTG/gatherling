@@ -75,7 +75,7 @@ function updateStandard()
         }
         if ($exit < $now) {
             // Set has rotated out.
-        } elseif ($enter > $now) {
+        } elseif ($enter == null || $enter > $now) {
             // Set is yet to be released. (And probably not available in MTGJSON yet)
         } else {
             // The ones we care about.

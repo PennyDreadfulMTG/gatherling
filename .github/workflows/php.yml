@@ -20,9 +20,8 @@ jobs:
       with:
         php-version: '7.4'
 
-    - uses: mirromutth/mysql-action@v1.1
+    - uses: getong/mariadb-action@v1.1
       with:
-        mysql version: '5'
         mysql database: gatherling
         mysql user: gatherling
         mysql password: gatherling

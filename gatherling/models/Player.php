@@ -16,6 +16,8 @@ class Player
     public $discord_id;
     public $discord_handle;
     public $api_key;
+    public $mtga_username;
+    public $mtgo_username;
 
     public function __construct($name)
     {
@@ -31,7 +33,7 @@ class Player
         }
         $database = Database::getConnection();
         $stmt = $database->prepare('SELECT name, password, rememberme, INET_NTOA(ipaddress), host, super,
-                mtgo_confirmed, email, email_privacy, timezone, theme, discord_id, discord_handle, api_key  FROM players WHERE name = ?');
+                mtgo_confirmed, email, email_privacy, timezone, theme, discord_id, discord_handle, api_key, mtga_username, mtgo_username FROM players WHERE name = ?');
         $stmt or exit($database->error);
 
         $stmt->bind_param('s', $name);
@@ -50,7 +52,9 @@ class Player
             $this->theme,
             $this->discord_id,
             $this->discord_handle,
-            $this->api_key
+            $this->api_key,
+            $this->mtga_username,
+            $this->mtgo_username
         );
         if ($stmt->fetch() == null) {
             throw new Exception('Player '.$name.' is not found.');
@@ -220,8 +224,8 @@ class Player
     public function save()
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('UPDATE players SET password = ?, rememberme = ?, host = ?, super = ?, email = ?, email_privacy = ?, timezone = ?, discord_id = ?, discord_handle = ? WHERE name = ?');
-        $stmt->bind_param('sdddsdddss', $this->password, $this->rememberMe, $this->host, $this->super, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->discord_id, $this->discord_handle, $this->name);
+        $stmt = $db->prepare('UPDATE players SET password = ?, rememberme = ?, host = ?, super = ?, email = ?, email_privacy = ?, timezone = ?, discord_id = ?, discord_handle = ?, mtga_username = ?, mtgo_username = ? WHERE name = ?');
+        $stmt->bind_param('sdddsdddssss', $this->password, $this->rememberMe, $this->host, $this->super, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->discord_id, $this->discord_handle, $this->mtga_username, $this->mtgo_username, $this->name);
         $stmt->execute();
         $stmt->close();
     }
@@ -1200,12 +1204,29 @@ class Player
         return $series;
     }
 
-    public function linkTo()
+    public function linkTo($game = null)
     {
-        $result = "<a href=\"profile.php?player={$this->name}\">$this->name";
-        if ($this->verified == 1) {
-            $result .= image_tag('verified.png', ['width' => '12', 'height' => '12']);
+        if ($game == 1) {
+            $game = 'mtgo';
+        } elseif ($game == 2) {
+            $game = 'arena';
+        } elseif ($game == 3) {
+            $game = 'paper';
         }
+
+        $name = $this->name;
+        if ($game == 'mtgo' && !empty($this->mtgo_username)) {
+            $name = '<i class="ss ss-pmodo"></i>&nbsp;'.$this->mtgo_username;
+        } elseif ($game == 'arena' && !empty($this->mtga_username)) {
+            $name = '<i class="ss ss-parl3"></i>&nbsp;'.$this->mtga_username;
+        } elseif ($game != null && !empty($this->discord_handle)) {
+            $name = '<i class="fab fa-discord"></i>&nbsp;'.$this->discord_handle;
+        }
+
+        $result = "<a href=\"profile.php?player={$this->name}\">$name";
+        // if ($this->verified == 1) {
+        //     $result .= image_tag('verified.png', ['width' => '12', 'height' => '12']);
+        // }
         $result .= '</a>';
 
         return $result;

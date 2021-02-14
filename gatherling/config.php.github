@@ -3,7 +3,7 @@
 # CONFIGURATION FILE FOR UNIT TESTS
 # GO LOOK AT THE OTHER ONE FOR AN EXPLANATION
 
-$CONFIG['db_hostname'] = 'localhost';
+$CONFIG['db_hostname'] = '127.0.0.1';
 $CONFIG['db_username'] = 'gatherling';
 $CONFIG['db_password'] = 'gatherling';
 $CONFIG['db_database'] = 'gatherling';

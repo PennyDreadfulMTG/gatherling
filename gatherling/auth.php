@@ -169,7 +169,7 @@ function prompt_link_account($user)
     <form action="register.php" method="post">
             <table class="form" align="center" style="border-width: 0px" cellpadding="3">
                 <tr>
-                    <th>MTGO Username</th>
+                    <th>Username</th>
                     <td><input id="username" class="inputbox" type="text" name="username" value="" tabindex="1"></td>
                 </tr>
                 <tr>

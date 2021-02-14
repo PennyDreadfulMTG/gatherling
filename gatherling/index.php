@@ -4,7 +4,7 @@ $gatherlingoutofservice = 0;
 include 'lib.php';
 include 'config.php';
 $version = Database::single_result('SELECT version FROM db_version LIMIT 1');
-if ($version < 37) {
+if ($version < 42) {
     $gatherlingoutofservice = 1;
 }
 
@@ -96,7 +96,7 @@ if ($gatherlingoutofservice != 1) {
                     <table class="form" align="left" cellpadding="3">
                         <form action="login.php" method="post">
                             <tr>
-                                <th>MTGO Username</th>
+                                <th>Gatherling Username</th>
                                 <td><input class="inputbox" type="text" name="username" value="" /></td>
                             </tr>
                             <tr>

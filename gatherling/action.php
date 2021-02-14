@@ -55,7 +55,11 @@ if (!is_null($player)) {
     $matches = $player->getCurrentMatches();
     foreach ($matches as $match) {
         $event = new Event($match->getEventNamebyMatchid());
-        if ($event->isLeague()) {
+        if ($event->client == 1 && empty($player->mtgo_username)) {
+            $message = 'Please <a href="player.php?mode=edit_accounts">set your MTGO username</a>.';
+        } elseif ($event->client == 2 && empty($player->mtga_username)) {
+            $message = 'Please <a href="player.php?mode=edit_accounts">set your MTGA username</a>.';
+        } elseif ($event->isLeague()) {
             // Do nothing
         } elseif ($match->result != 'BYE' && $match->verification == 'unverified') {
             $opp = $match->playera;
@@ -74,9 +78,9 @@ if (!is_null($player)) {
                 $message = "You have an unreported match in $event->name vs. ";
                 if ($event->decklistsVisible()) {
                     $opp_entry = Entry::findByEventAndPlayer($event->id, $oppplayer->name);
-                    $message = $message.$oppplayer->name.' ('.$opp_entry->deck->linkTo().').';
+                    $message = $message.$oppplayer->linkTo($event->client).' ('.$opp_entry->deck->linkTo().').';
                 } else {
-                    $message = $message.$oppplayer->linkTo().'.';
+                    $message = $message.$oppplayer->linkTo($event->client).'.';
                 }
                 if ($match->player_reportable_check() == true) {
                     $message = $message.'  <a href="report.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';

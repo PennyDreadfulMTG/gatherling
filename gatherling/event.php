@@ -578,9 +578,9 @@ function eventForm($event = null, $forcenew = false)
         echo '&nbsp;/&nbsp;';
         stringField('cohost', $event->cohost, 20);
         echo '</td></tr>';
-        print_text_input('Event Thread URL', 'threadurl', $event->threadurl, 60);
-        print_text_input('Metagame URL', 'metaurl', $event->metaurl, 60);
-        print_text_input('Report URL', 'reporturl', $event->reporturl, 60);
+        print_text_input('Event Thread URL', 'threadurl', $event->threadurl, 60, null, null, true);
+        print_text_input('Metagame URL', 'metaurl', $event->metaurl, 60, null, null, true);
+        print_text_input('Report URL', 'reporturl', $event->reporturl, 60, null, null, true);
         echo '<tr><th>Main Event Structure</th><td>';
         numDropMenu('mainrounds', '- No. of Rounds -', 10, $event->mainrounds, 1);
         echo ' rounds of ';
@@ -591,17 +591,18 @@ function eventForm($event = null, $forcenew = false)
         echo ' rounds of ';
         structDropMenu('finalstruct', $event->finalstruct);
         echo '</td></tr>';
-        print_checkbox_input('Allow Pre-Registration', 'prereg_allowed', $event->prereg_allowed);
+        print_checkbox_input('Allow Pre-Registration', 'prereg_allowed', $event->prereg_allowed, null, true);
         print_text_input('Late Entry Limit', 'late_entry_limit', $event->late_entry_limit, 4, 'The event host may still add players after this round.');
 
         print_checkbox_input('Allow Players to Report Results', 'player_reportable', $event->player_reportable);
 
-        print_text_input('Player initiatied registration cap', 'prereg_cap', $event->prereg_cap, 4, 'The event host may still add players beyond this limit. 0 is disabled.');
+        print_text_input('Player initiatied registration cap', 'prereg_cap', $event->prereg_cap, 4, 'The event host may still add players beyond this limit. 0 is disabled.', null, true);
 
         print_checkbox_input('Deck List Privacy', 'private_decks', $event->private_decks);
         print_checkbox_input('Finals List Privacy', 'private_finals', $event->private_finals);
         print_checkbox_input('Allow Player Reported Draws', 'player_reported_draws', $event->player_reported_draws, 'This allows players to report a draw result for matches.');
         print_checkbox_input('Private Event', 'private', $event->private, 'This event is invisible to non-participants');
+        clientDropMenu('client', $event->client);
 
         if ($edit == 0) {
             echo '<tr><td>&nbsp;</td></tr>';
@@ -1185,6 +1186,19 @@ function structDropMenu($field, $def)
     echo '</select>';
 }
 
+function clientDropMenu($field, $def)
+{
+    $names = [null, 'MTGO', 'Arena', 'Other'];
+    echo "<tr><th><label for='$field'>Game Client</label></th>";
+    echo "<td><select class=\"inputbox\" name=\"$field\" id=\"$field\">";
+    echo '<option value="">- Client -</option>';
+    for ($i = 1; $i < count($names); $i++) {
+        $selStr = ($def == $i) ? 'selected' : '';
+        echo "<option value=\"{$i}\" $selStr>{$names[$i]}</option>";
+    }
+    echo '</select></td></tr>';
+}
+
 function noEvent($event)
 {
     return "The requested event \"$event\" could not be found.";
@@ -1235,7 +1249,8 @@ function insertEvent()
         $_POST['mainrounds'],
         $_POST['mainstruct'],
         $_POST['finalrounds'],
-        $_POST['finalstruct']
+        $_POST['finalstruct'],
+        $_POST['client']
     );
 
     return $event;
@@ -1322,6 +1337,7 @@ function updateEvent()
     $event->finalrounds = $_POST['finalrounds'];
     $event->finalstruct = $_POST['finalstruct'];
     $event->private = $_POST['private'];
+    $event->client = $_POST['client'];
 
     $event->save();
 
