@@ -23,9 +23,8 @@ if (isset($_POST['action'])) {
         $success = false;
         if ($_POST['newPassword2'] == $_POST['newPassword']) {
             if (strlen($_POST['newPassword']) >= 8) {
-                $authenticated = Player::checkPassword($_POST['username'], $_POST['oldPassword']);
+                $authenticated = Player::checkPassword($player->name, $_POST['oldPassword']);
                 if ($authenticated) {
-                    $player = new Player($_POST['username']);
                     $player->setPassword($_POST['newPassword']);
                     $result = 'Password changed.';
                     $success = true;
@@ -41,7 +40,6 @@ if (isset($_POST['action'])) {
     } elseif ($_POST['action'] == 'editEmail') {
         $success = false;
         if ($_POST['newEmail'] == $_POST['newEmail2']) {
-            $player = new Player($_POST['username']);
             $player->emailAddress = ($_POST['newEmail']);
             $player->emailPrivacy = ($_POST['emailstatus']);
             $result = 'Email changed.';
@@ -59,7 +57,6 @@ if (isset($_POST['action'])) {
         $success = true;
         $player->save();
     } elseif ($_POST['action'] == 'changeTimeZone') {
-        $player = new Player($_POST['username']);
         $player->timezone = ($_POST['timezone']);
         $result = 'Time Zone Changed.';
         $player->save();
@@ -168,7 +165,6 @@ function print_changePassForm($player, $result)
     echo "<form action=\"player.php\" method=\"post\" onsubmit=\"return validate_pw()\">\n";
     echo "<input name=\"action\" type=\"hidden\" value=\"changePassword\" />\n";
     echo "<input name=\"mode\" type=\"hidden\" value=\"changepass\" />\n";
-    echo "<input name=\"username\" type=\"hidden\" value=\"{$player->name}\" />\n";
     echo '<table class="form">';
     echo "<tr><th>Current Password</th>\n";
     echo "<td><input class=\"inputbox\" name=\"oldPassword\" type=\"password\" /></td></tr>\n";
@@ -192,7 +188,6 @@ function print_editEmailForm($player, $result)
         echo "<form action=\"player.php\" method=\"post\">\n";
         echo "<input name=\"action\" type=\"hidden\" value=\"editEmail\" />\n";
         echo "<input name=\"mode\" type=\"hidden\" value=\"edit_email\" />\n";
-        echo "<input name=\"username\" type=\"hidden\" value=\"{$player->name}\" />\n";
         echo '<table class="form">';
         echo "<tr><th>New Email</th>\n";
         echo "<td><input class=\"inputbox\" name=\"newEmail\" type=\"email\" /></td></tr>\n";
@@ -214,7 +209,6 @@ function print_editEmailForm($player, $result)
         echo "<form action=\"player.php\" method=\"post\">\n";
         echo "<input name=\"action\" type=\"hidden\" value=\"editEmail\" />\n";
         echo "<input name=\"mode\" type=\"hidden\" value=\"edit_email\" />\n";
-        echo "<input name=\"username\" type=\"hidden\" value=\"{$player->name}\" />\n";
         echo '<table class="form">';
         echo "<tr><th>Existing Email: </th>\n";
         echo "<td>{$player->emailAddress}</td></tr>";
