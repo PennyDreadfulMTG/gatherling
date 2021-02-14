@@ -76,7 +76,7 @@ function redirect_deck_update($latest_id = 0)
 }
 
 if (isset($_GET['deckupdate'])) {
-    $deckquery = do_query('SELECT id FROM decks WHERE id > '. intval($_GET['deckupdate']));
+    $deckquery = do_query('SELECT id FROM decks WHERE id > '.intval($_GET['deckupdate']));
     $timestart = time();
     while ($deckid = $deckquery->fetch_array()) {
         flush();
