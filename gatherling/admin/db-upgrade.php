@@ -743,17 +743,17 @@ upgrade_db(41, 'Arena Support?', function () {
     ADD `client` int(10) unsigned NOT NULL DEFAULT '1',
     ADD FOREIGN KEY (`client`) REFERENCES `client` (`id`);");
 });
-upgrade_db(42, 'Arena Support pt 2', function() {
+upgrade_db(42, 'Arena Support pt 2', function () {
     do_query("ALTER TABLE `players`
     ADD COLUMN `mtgo_username` VARCHAR(40) COLLATE 'utf8mb4_general_ci' NULL;");
-    do_query("ALTER TABLE `players`
+    do_query('ALTER TABLE `players`
 	ADD UNIQUE INDEX `mtga_username` (`mtga_username`),
-    ADD UNIQUE INDEX `mtgo_username` (`mtgo_username`);");
-    do_query("ALTER TABLE `series`
+    ADD UNIQUE INDEX `mtgo_username` (`mtgo_username`);');
+    do_query('ALTER TABLE `series`
 	ADD COLUMN `discord_guild_id` BIGINT NULL DEFAULT NULL AFTER `mtgo_room`,
 	ADD COLUMN `discord_channel_name` VARCHAR(50) NULL DEFAULT NULL AFTER `discord_guild_id`,
 	ADD COLUMN `discord_guild_name` VARCHAR(50) NULL DEFAULT NULL AFTER `discord_channel_name`,
-    ADD COLUMN `discord_guild_invite` VARCHAR(50) NULL DEFAULT NULL AFTER `discord_guild_name`;");
+    ADD COLUMN `discord_guild_invite` VARCHAR(50) NULL DEFAULT NULL AFTER `discord_guild_name`;');
     do_query("UPDATE `players` SET `mtgo_username` = `name` WHERE `mtgo_confirmed` = '1' AND `mtgo_username` IS NULL AND `mtgo_challenge` IS NOT NULL;");
 });
 $db->autocommit(true);
