@@ -4,7 +4,7 @@ $gatherlingoutofservice = 0;
 include 'lib.php';
 include 'config.php';
 $version = Database::single_result('SELECT version FROM db_version LIMIT 1');
-if ($version < 41) {
+if ($version < 42) {
     $gatherlingoutofservice = 1;
 }
 
