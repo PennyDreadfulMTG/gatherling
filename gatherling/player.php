@@ -50,6 +50,14 @@ if (isset($_POST['action'])) {
         } else {
             $result = 'Email *NOT* Changed, your new emails did not match!';
         }
+    } elseif ($_POST['action'] == 'editAccounts') {
+        $success = false;
+
+        $player->mtgo_username = ($_POST['mtgo_username']);
+        $player->mtga_username = ($_POST['mtga_username']);
+        $result = 'Accounts updated.';
+        $success = true;
+        $player->save();
     } elseif ($_POST['action'] == 'changeTimeZone') {
         $player = new Player($_POST['username']);
         $player->timezone = ($_POST['timezone']);
@@ -114,6 +122,10 @@ break;
 
 case 'edit_email':
 print_editEmailForm($player, $result);
+break;
+
+case 'edit_accounts':
+print_editAccountsForm($player, $result);
 break;
 
 case 'change_timezone':
@@ -220,6 +232,22 @@ function print_editEmailForm($player, $result)
         echo "</form>\n";
         echo "<div class=\"clear\"></div>\n";
     }
+}
+
+function print_editAccountsForm($player, $result)
+{
+    echo "<center><h3>Set your accounts</h3></center>\n";
+    echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
+    echo "<form action=\"player.php\" method=\"post\">\n";
+    echo "<input name=\"action\" type=\"hidden\" value=\"editAccounts\" />\n";
+    echo '<table class="form">';
+    print_text_input('Magic Online', 'mtgo_username', $player->mtgo_username);
+    print_text_input('Magic Arena', 'mtga_username', $player->mtga_username);
+    echo "<tr><td colspan=\"2\" class=\"buttons\">\n";
+    echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Update Accounts\" />\n";
+    echo "</td></tr></table>\n";
+    echo "</form>\n";
+    echo "<div class=\"clear\"></div>\n";
 }
 
 function print_editTimeZoneForm($player, $result)
@@ -365,20 +393,29 @@ function print_mainPlayerCP($player, $result)
     echo "<div class=\"omega grid_5\">\n";
     echo "<div id=\"gatherling_righthalf\">\n";
     echo "<b>CONNECTIONS</b><br />\n";
+    if (empty($player->mtgo_username)) {
+        echo "<li><a href=\"player.php?mode=edit_accounts\">Add a Magic Online account</a></li>\n";
+    } else {
+        echo '<li><span style="color: green; font-weight: bold;"><i class="ss ss-pmodo"></i> '."$player->mtgo_username</span> (<a href=\"player.php?mode=edit_accounts\">edit</a>)</li>\n";
+    }
+
+    if (empty($player->mtga_username)) {
+        echo "<li><a href=\"player.php?mode=edit_accounts\">Add an Arena account</a></li>\n";
+    } else {
+        echo '<li><span style="color: green; font-weight: bold;"><i class="ss ss-parl3"></i> '."$player->mtga_username</span> (<a href=\"player.php?mode=edit_accounts\">edit</a>)</li>\n";
+    }
+    // if ($player->verified == 0) {
+    //     echo "<li><a href=\"player.php?mode=verifymtgo\">Verify your <i class=\"ss ss-pmodo\"></i> MTGO account</a></li>\n";
+    // } else {
+    //     echo '<li><span style="color: green; font-weight: bold;">'.image_tag('verified.png').'<i class="ss ss-pmodo"></i> '."MTGO Verified</span></li>\n";
+    // }
+
     if (isset($_SESSION['DISCORD_ID']) && empty($player->discord_id)) {
         echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> {$_SESSION['DISCORD_NAME']}</a></li>\n";
     } elseif (empty($player->discord_id)) {
         echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> Discord</a></li>\n";
     } else {
-        echo "<li><span style=\"color: green; font-weight: bold;\">Linked to <i class=\"fab fa-discord\"></i> $player->discord_handle</span> (<a href=\"auth.php\">Link new account</a>)</li>\n";
-    }
-    if ($player->verified == 0) {
-        echo "<li><a href=\"player.php?mode=verifymtgo\">Verify your <i class=\"ss ss-pmodo\"></i> MTGO account</a></li>\n";
-    } else {
-        echo '<li><span style="color: green; font-weight: bold;">'.image_tag('verified.png').'<i class="ss ss-pmodo"></i> '."MTGO Verified</span></li>\n";
-    }
-    if (!empty($player->mtga_username)) {
-        echo '<li><span style="color: green; font-weight: bold;"><i class="ss ss-parl3"></i> '."$player->mtga_username</span></li>\n";
+        echo "<li><span style=\"color: green; font-weight: bold;\"><i class=\"fab fa-discord\"></i> $player->discord_handle</span> (<a href=\"auth.php\">Link new account</a>)</li>\n";
     }
     echo "</ul>\n";
     echo "</div></div>\n";
