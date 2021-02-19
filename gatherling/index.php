@@ -83,11 +83,6 @@ if ($gatherlingoutofservice != 1) {
                             <li> <a href="event.php">Host Control Panel</a></li>
                         <?php
     } ?>
-                        <?php if (!$player->verified && $CONFIG['infobot_passkey'] != '') {
-        ?>
-                            <li> <a href="player.php?mode=verifymtgo">Verify your account</a></li>
-                        <?php
-    } ?>
                     </ul>
                 </div>
             <?php } else { ?>
@@ -106,7 +101,7 @@ if ($gatherlingoutofservice != 1) {
                             <tr>
                                 <td colspan="2" class="buttons">
                                 <input class="inputbutton" type="submit" name="mode" value="Log In" />
-                                <input class="inputbutton discordlogin fa-discord" type="submit" name="mode" value="Log In with discord" />
+                                <input class="inputbutton discordlogin fa-discord" type="submit" name="mode" value="Log In with Discord" />
                                 <br />
                                 <a href="register.php">Need to register?</a><br />
                                 <a href="forgot.php">Forgot your password?</a>

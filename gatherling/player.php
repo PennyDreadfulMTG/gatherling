@@ -51,11 +51,11 @@ if (isset($_POST['action'])) {
     } elseif ($_POST['action'] == 'editAccounts') {
         $success = false;
 
-        $player->mtgo_username = ($_POST['mtgo_username']);
-        $player->mtga_username = ($_POST['mtga_username']);
+        $player->mtgo_username = empty($_POST['mtgo_username']) ? null : $_POST['mtgo_username'];
+        $player->mtga_username = empty($_POST['mtga_username']) ? null : $_POST['mtga_username'];
+        $player->save();
         $result = 'Accounts updated.';
         $success = true;
-        $player->save();
     } elseif ($_POST['action'] == 'changeTimeZone') {
         $player->timezone = ($_POST['timezone']);
         $result = 'Time Zone Changed.';

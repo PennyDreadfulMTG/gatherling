@@ -49,7 +49,7 @@ print_header('Login');
                         <input class="inputbutton" type="submit" name="mode" value="Log In">
                         <?php
                         if (!isset($_SESSION['DISCORD_ID'])) {
-                            echo '<input class="inputbutton discordlogin fa-discord" type="submit" name="mode" value="Log In with discord" />';
+                            echo '<input class="inputbutton discordlogin fa-discord" type="submit" name="mode" value="Log In with Discord" />';
                         } ?>
                         <br />
                         Please <a href="register.php">Click Here</a> if you need to register.<br />
