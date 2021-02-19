@@ -78,7 +78,7 @@ function printIPAddressChanged()
 
 function testLogin()
 {
-    if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'Log In with discord') {
+    if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'Log In with Discord') {
         redirect('auth.php');
     }
     $success = 0;
