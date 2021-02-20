@@ -20,6 +20,7 @@ class Series
     public $discord_channel_name;
     public $discord_guild_name;
     public $discord_guild_invite;
+    public $discord_require_membership;
 
     public function __construct($name)
     {
@@ -32,16 +33,20 @@ class Series
             $this->new = true;
             $this->prereg_default = true;
             $this->mtgo_room = '';
+            $this->discord_require_membership = false;
 
             return;
         }
 
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT isactive, day, normalstart, prereg_default, mtgo_room, discord_guild_id, discord_channel_name, discord_guild_name, discord_guild_invite FROM series WHERE name = ?');
+        $stmt = $db->prepare('SELECT isactive, day, normalstart, prereg_default, mtgo_room, discord_guild_id, discord_channel_name, discord_guild_name, discord_guild_invite, discord_require_membership FROM series WHERE name = ?');
         $stmt or exit($db->error);
         $stmt->bind_param('s', $name);
         $stmt->execute();
-        $stmt->bind_result($this->active, $this->start_day, $this->start_time, $this->prereg_default, $this->mtgo_room, $discord_guild_id, $discord_channel_name, $discord_guild_name, $discord_guild_invite);
+        $stmt->bind_result($this->active, $this->start_day, $this->start_time, $this->prereg_default,
+                $this->mtgo_room, $this->discord_guild_id, $this->discord_channel_name, $this->discord_guild_name,
+                $this->discord_guild_invite, $this->discord_require_membership
+            );
         if ($stmt->fetch() == null) {
             throw new Exception('Series '.$name.' not found in DB');
         }
