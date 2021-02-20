@@ -1131,7 +1131,7 @@ class Event
                 $structure = $this->mainstruct;
             }
 
-            return $structure == 'League';
+            return $structure == 'League' || $structure == 'League Match';
         }
 
         return false;
@@ -1664,6 +1664,7 @@ class Event
            $this->assignTropiesFromMatches();
            break;
        case 'League':
+       case 'League Match':
            $this->AssignMedalsbyStandings();
            break;
        case 'Round Robin':

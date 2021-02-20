@@ -1058,7 +1058,6 @@ function matchList($event)
     }
 
     if ($structure == 'League') {
-        //echo "<center> <b> Players added after the event has started will receive 0 points for any rounds already started and be paired when the next round begins</center></b>";
         echo '<table style="border-width: 0px" align="center">';
         echo '<tr><td>';
         echo '<tr><td colspan="2" align="center">';
@@ -1173,7 +1172,7 @@ function monthDropMenu($month)
 
 function structDropMenu($field, $def)
 {
-    $names = ['Swiss', 'Single Elimination', /*"Round Robin",*/ 'League'];
+    $names = ['Swiss', 'Single Elimination', /*"Round Robin",*/ 'League', 'League Match'];
     if (in_array($def, ['Swiss (Blossom)', 'Round Robin'])) { // Disabled structures.
         $names[] = $def;
     }

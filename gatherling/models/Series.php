@@ -16,6 +16,11 @@ class Series
 
     public $prereg_default;
 
+    public $discord_guild_id;
+    public $discord_channel_name;
+    public $discord_guild_name;
+    public $discord_guild_invite;
+
     public function __construct($name)
     {
         if ($name == '') {
@@ -32,11 +37,11 @@ class Series
         }
 
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT isactive, day, normalstart, prereg_default, mtgo_room FROM series WHERE name = ?');
+        $stmt = $db->prepare('SELECT isactive, day, normalstart, prereg_default, mtgo_room, discord_guild_id, discord_channel_name, discord_guild_name, discord_guild_invite FROM series WHERE name = ?');
         $stmt or exit($db->error);
         $stmt->bind_param('s', $name);
         $stmt->execute();
-        $stmt->bind_result($this->active, $this->start_day, $this->start_time, $this->prereg_default, $this->mtgo_room);
+        $stmt->bind_result($this->active, $this->start_day, $this->start_time, $this->prereg_default, $this->mtgo_room, $discord_guild_id, $discord_channel_name, $discord_guild_name, $discord_guild_invite);
         if ($stmt->fetch() == null) {
             throw new Exception('Series '.$name.' not found in DB');
         }

@@ -434,7 +434,7 @@ class Match
                     $playerb_standing->active = 0;
                 } elseif (strpos($structure, 'Swiss') === 0) {
                     $playera_standing->score += 3;
-                } elseif ($structure == 'League') {
+                } elseif ($structure == 'League' || $structure == 'League Match') {
                     $playera_standing->score += 3;
                     $playerb_standing->score += $seasonRules['loss_pts'];
                 }
@@ -444,7 +444,7 @@ class Match
                     $playera_standing->active = 0;
                 } elseif (strpos($structure, 'Swiss') === 0) {
                     $playerb_standing->score += 3;
-                } elseif ($structure == 'League') {
+                } elseif ($structure == 'League' || $structure == 'League Match') {
                     $playerb_standing->score += 3;
                     $playera_standing->score += $seasonRules['loss_pts'];
                 }
@@ -510,7 +510,7 @@ class Match
             if ($this->playera_wins > $this->playerb_wins) {
                 $playera_standing->score += 3;
                 $playera_standing->matches_won += 1;
-                if ($structure == 'League') {
+                if ($structure == 'League' || $structure == 'League Match') {
                     $playerb_standing->score += $seasonRules['loss_pts'];
                 }
                 if ($structure == 'Single Elimination') {
@@ -520,7 +520,7 @@ class Match
             } else {
                 $playerb_standing->score += 3;
                 $playerb_standing->matches_won += 1;
-                if ($structure == 'League') {
+                if ($structure == 'League' || $structure == 'League Match') {
                     $playera_standing->score += $seasonRules['loss_pts'];
                 }
                 if ($structure == 'Single Elimination') {
