@@ -140,6 +140,14 @@ function timeZoneDropMenu($selected = null)
     print_select('timezone', $timezones, $selected);
 }
 
+/**
+ * @param string $event
+ * @param string $round
+ * @param mixed  $player
+ * @param int    $subevent
+ *
+ * @return void
+ */
 function leagueOpponentDropMenu($event, $round, $player, $subevent)
 {
     $player_standings = new Standings($event, $player->name);

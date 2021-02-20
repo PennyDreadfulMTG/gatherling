@@ -556,7 +556,9 @@ function print_ActiveEvents()
         }
         echo "<tr><td><a href=\"{$targetUrl}.php?event=".rawurlencode($event->name)."\">{$event->name}</a>";
         $series = new Series($event->series);
-        if ($series->mtgo_room) {
+        if ($series->discord_guild_name && $series->discord_channel_name) {
+            echo " <pre style=\"cursor:help;\" title=\"The Tournament Organizer prefers that your join their Discord server.\" ><i class=\"fab fa-discord\"></i> #$series->discord_channel_name in $series->discord_guild_name</pre>";
+        } elseif ($series->mtgo_room) {
             echo " <pre style=\"cursor:help;\" title=\"To join a Chat room, use the Chat menu, or type /join #$series->mtgo_room into your game chat.\" ><i class=\"ss ss-pmodo\"></i> MTGO room #$series->mtgo_room</pre>";
         }
         echo '</td>';
@@ -573,6 +575,12 @@ function print_ActiveEvents()
                 $count = $event->getPlayerLeagueMatchCount($player->name) + 1;
                 if ($count < 6) {
                     $Leagues[] = "<tr><td>{$event->name} Match: {$count}</td><td><a href=\"report.php?mode=submit_league_result&event={$event->name}&round={$event->current_round}&subevent={$subevent_id}\">Report League Game</a></td></tr>";
+                }
+            }
+            if ($structure == 'League Match') {
+                $count = $event->getPlayerLeagueMatchCount($player->name);
+                if ($count < 1) {
+                    $Leagues[] = "<tr><td>{$event->name} Match: {$event->current_round}</td><td><a href=\"report.php?mode=submit_league_result&event={$event->name}&round={$event->current_round}&subevent={$subevent_id}\">Report League Game</a></td></tr>";
                 }
             }
             if ($structure !== 'Single Elimination') {

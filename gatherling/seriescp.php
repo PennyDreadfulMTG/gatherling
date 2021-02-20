@@ -62,13 +62,6 @@ function do_page()
         }
     }
     $active_series = new Series($active_series_name);
-    $active_format = null;
-
-    if (isset($_POST['format'])) {
-        $active_format = $_POST['format'];
-    } else {
-        $active_format = '';
-    }
     printError();
 
     seriesCPMenu($active_series);
@@ -108,6 +101,9 @@ function do_page()
         break;
       case 'points_adj':
         seasonPointsAdj();
+        break;
+      case 'discord':
+        printDiscordForm($active_series);
         break;
     }
     }
@@ -382,6 +378,31 @@ function printLogoForm($series)
     echo '<td><input class="inputbox" type="file" name="logo" /> ';
     echo '<input class="inputbutton" type="submit" name="action" value="Change Logo" /></td></tr>';
     echo '</table></form> ';
+}
+
+function printDiscordForm($series)
+{
+    $player = new Player(Player::loginName());
+    echo '<form action="seriescp.php" method="post">';
+    echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
+    echo '<h3><center>Series Organizers</center></h3>';
+    echo '<p style="width: 75%; text-align: left;">Series organizers can create new series events, manage any event in the series, and modify anything on this page.  Please add them with care as they could screw with anything related to your series including changing the logo and the time.  Only verified members can be series organizers.</p>';
+    echo '<p style="width: 75%; text-align: left;"><em>If you just need a guest host, add them as the host to a specific event!</em></p>';
+    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<tr><th style="text-align: center;">Player</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
+    foreach ($series->organizers as $organizer) {
+        echo "<tr><td style=\"text-align: center;\">{$organizer}</td>";
+        echo "<td style=\"text-align: center; width: 50px; \"><input type=\"checkbox\" value=\"{$organizer}\" name=\"delorganizers[]\" ";
+        if ($organizer == $player->loginName() && !$player->isSuper()) {
+            echo 'disabled="yes" ';
+        }
+        echo '/></td></tr>';
+    }
+    echo '<tr><td colspan="2">Add new: <input class="inputbox" type="text" name="addorganizer" /></td></tr> ';
+    echo '<tr><td colspan="2" class="buttons">';
+    echo '<input type="hidden" name="view" value="organizers" />';
+    echo '<input class="inputbutton" type="submit" value="Update Organizers" name="action" /> </td> </tr> ';
+    echo '</table> ';
 }
 
 function printRecentEventsTable($series)

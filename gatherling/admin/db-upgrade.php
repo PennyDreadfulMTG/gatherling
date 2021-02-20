@@ -756,6 +756,12 @@ upgrade_db(42, 'Arena Support pt 2', function () {
     ADD COLUMN `discord_guild_invite` VARCHAR(50) NULL DEFAULT NULL AFTER `discord_guild_name`;');
     do_query("UPDATE `players` SET `mtgo_username` = `name` WHERE `mtgo_confirmed` = '1' AND `mtgo_username` IS NULL AND `mtgo_challenge` IS NOT NULL;");
 });
+upgrade_db(43, 'MiniLeague', function () {
+    do_query("ALTER TABLE `subevents`
+	CHANGE COLUMN `type` `type` ENUM('Swiss','Swiss (Blossom)','Single Elimination','League','Round Robin', 'League Match') NOT NULL COLLATE 'latin1_swedish_ci' AFTER `timing`;");
+    do_query('ALTER TABLE `series`
+        ADD COLUMN `discord_require_membership` BIGINT NULL DEFAULT NULL;');
+});
 $db->autocommit(true);
 
 info('DB is up to date!');

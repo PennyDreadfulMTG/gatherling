@@ -207,6 +207,14 @@ function print_submit_resultForm($match_id, $drop = false)
 }
 
 // *form to report League results
+/**
+ * @param string $event
+ * @param string $round
+ * @param mixed  $player
+ * @param int    $subevent
+ *
+ * @return void
+ */
 function League_print_submit_resultForm($event, $round, $player, $subevent)
 {
     echo "<center><h3>Report League Game Results</h3>
@@ -226,7 +234,11 @@ function League_print_submit_resultForm($event, $round, $player, $subevent)
     echo "<td></td></tr>\n";
     echo "<tr><th><input type='radio' name='report' value='W20' /> I won the match 2-0<br /></th>\n";
     echo "<td></td> </tr> \n";
-    echo "<tr><th><input type='radio' name='report' value='W21' />I won the match 2-1</th>\n";
+    echo "<tr><th><input type='radio' name='report' value='W21' /> I won the match 2-1</th>\n";
+    echo "<td></td> </tr> \n";
+    echo "<tr><th><input type='radio' name='report' value='L20' /> I lost the match 0-2<br /></th>\n";
+    echo "<td></td> </tr> \n";
+    echo "<tr><th><input type='radio' name='report' value='L21' /> I lost the match 0-2</th>\n";
     echo "<td></td> </tr> \n";
     echo "<tr> <td colspan=\"2\" class=\"buttons\">\n";
     echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Submit Match Report\" />\n";
@@ -256,7 +268,7 @@ function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, 
             echo 'I lost the match 0-2';
             break;
         case 'L21':
-            echo 'I lost the match 1-2';
+            echo 'I lost the match 0-2';
             break;
         case 'D':
             echo 'The match was a draw';

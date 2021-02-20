@@ -1204,7 +1204,7 @@ class Player
         return $series;
     }
 
-    public function linkTo($game = null)
+    public function gameName($game = null)
     {
         if ($game == 1) {
             $game = 'mtgo';
@@ -1223,7 +1223,13 @@ class Player
             $name = '<i class="fab fa-discord"></i>&nbsp;'.$this->discord_handle;
         }
 
-        $result = "<a href=\"profile.php?player={$this->name}\">$name";
+        return $name;
+    }
+
+    public function linkTo($game = null)
+    {
+        $name = $this->gameName($game);
+        $result = "<a href=\"profile.php?player={$this->name}\">{$name}";
         // if ($this->verified == 1) {
         //     $result .= image_tag('verified.png', ['width' => '12', 'height' => '12']);
         // }
