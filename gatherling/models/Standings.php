@@ -264,6 +264,7 @@ class Standings
     /**
      * @param int $subevent
      * @param int $round
+     *
      * @return void|array
      */
     public function League_getAvailable_Opponents($subevent, $round)
@@ -295,7 +296,7 @@ class Standings
             }
             $stmt->close();
         }
-        $structure = Database::single_result_single_param("SELECT `type` FROM subevents WHERE id = ?", 'd', $subevent);
+        $structure = Database::single_result_single_param('SELECT `type` FROM subevents WHERE id = ?', 'd', $subevent);
         if ($structure == 'League Match' && count($opponentsAlreadyFaced) >= 1) {
             return [];
         }

@@ -1222,6 +1222,7 @@ class Player
         } elseif ($game != null && !empty($this->discord_handle)) {
             $name = '<i class="fab fa-discord"></i>&nbsp;'.$this->discord_handle;
         }
+
         return $name;
     }
 

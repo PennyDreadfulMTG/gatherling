@@ -143,8 +143,9 @@ function timeZoneDropMenu($selected = null)
 /**
  * @param string $event
  * @param string $round
- * @param mixed $player
- * @param int $subevent
+ * @param mixed  $player
+ * @param int    $subevent
+ *
  * @return void
  */
 function leagueOpponentDropMenu($event, $round, $player, $subevent)

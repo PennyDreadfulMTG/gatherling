@@ -210,8 +210,9 @@ function print_submit_resultForm($match_id, $drop = false)
 /**
  * @param string $event
  * @param string $round
- * @param mixed $player
- * @param int $subevent
+ * @param mixed  $player
+ * @param int    $subevent
+ *
  * @return void
  */
 function League_print_submit_resultForm($event, $round, $player, $subevent)
