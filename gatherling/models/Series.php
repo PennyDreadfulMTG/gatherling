@@ -43,10 +43,18 @@ class Series
         $stmt or exit($db->error);
         $stmt->bind_param('s', $name);
         $stmt->execute();
-        $stmt->bind_result($this->active, $this->start_day, $this->start_time, $this->prereg_default,
-                $this->mtgo_room, $this->discord_guild_id, $this->discord_channel_name, $this->discord_guild_name,
-                $this->discord_guild_invite, $this->discord_require_membership
-            );
+        $stmt->bind_result(
+            $this->active,
+            $this->start_day,
+            $this->start_time,
+            $this->prereg_default,
+            $this->mtgo_room,
+            $this->discord_guild_id,
+            $this->discord_channel_name,
+            $this->discord_guild_name,
+            $this->discord_guild_invite,
+            $this->discord_require_membership
+        );
         if ($stmt->fetch() == null) {
             throw new Exception('Series '.$name.' not found in DB');
         }

@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__.'/lib.php';
 
+require_once __DIR__.'/lib.php';
 
 global $CONFIG;
 
@@ -20,10 +20,11 @@ function load_cached_token()
     ]);
 }
 
-function get_user_guilds($token) {
+function get_user_guilds($token)
+{
     global $provider;
 
-    $guildsRequest = $provider->getAuthenticatedRequest('GET', $provider->getResourceOwnerDetailsUrl($token) . '/guilds', $token);
+    $guildsRequest = $provider->getAuthenticatedRequest('GET', $provider->getResourceOwnerDetailsUrl($token).'/guilds', $token);
 
     return $provider->getParsedResponse($guildsRequest);
 }

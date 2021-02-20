@@ -37,7 +37,9 @@ if ($event->is_full()) {
 
 if ($series->discord_require_membership && $series->discord_guild_id) {
     $found = 0;
-    if (!isset($_SESSION['DISCORD_TOKEN'])) header('Location: auth.php');
+    if (!isset($_SESSION['DISCORD_TOKEN'])) {
+        header('Location: auth.php');
+    }
 
     require __DIR__.'/authlib.php';
     global $provider;
@@ -45,12 +47,14 @@ if ($series->discord_require_membership && $series->discord_guild_id) {
     $token = load_cached_token();
     $guilds = get_user_guilds($token);
     foreach ($guilds as $g) {
-        if (intval($g['id']) == $series->discord_guild_id){
+        if (intval($g['id']) == $series->discord_guild_id) {
             $found = true;
             break;
         }
     }
-    if (!$found) $prevent_registration = 1;
+    if (!$found) {
+        $prevent_registration = 1;
+    }
 }
 
 $location = 'player.php';
