@@ -343,7 +343,7 @@ function fullmetagame($event)
         }
     } else {
         echo "<td colspan=5 align=\"center\"><b><h3>Registered Players</h3></td></tr>\n";
-        echo '<center><h2><em>Deck lists are not shown for privacy until event is finalized.</em></h2></center>';
+        // echo '<center><h2><em>Deck lists are not shown for privacy until event is finalized.</em></h2></center>';
         while ($row = $result->fetch_assoc()) {
             $play = new Player($row['player']);
             $entry = new Entry($event->id, $play->name);
@@ -414,7 +414,7 @@ function initArchetypeCount()
 
 function imageCell($event)
 {
-    echo "<div class=\"series-logo\"><img src=\"displaySeries.php?series=$event->series\" alt=\"Series Logo\" /></div>";
+    echo "<div class=\"series-logo\"><img src=\"displaySeries.php?series=$event->series\" /></div>";
 }
 
 function infoCell($event)
