@@ -83,6 +83,7 @@ class Player
         }
     }
 
+    /** @return void|Player  */
     public static function getSessionPlayer()
     {
         if (!isset($_SESSION['username'])) {
