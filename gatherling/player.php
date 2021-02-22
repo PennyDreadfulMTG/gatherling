@@ -495,8 +495,11 @@ function print_preRegistration()
     $arena = false;
     $mtgo = false;
     foreach ($upcoming_events as $event) {
-        if ($event->client == 1) $mtgo = true;
-        elseif ($event->client == 2) $arena = true;
+        if ($event->client == 1) {
+            $mtgo = true;
+        } elseif ($event->client == 2) {
+            $arena = true;
+        }
 
         $targetUrl = 'eventreport';
         if ($event->authCheck($player->name)) {
