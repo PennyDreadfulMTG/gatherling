@@ -437,7 +437,7 @@ function print_recentDeckTable()
 {
     global $player;
 
-    echo "<table width-'100%'>\n";
+    echo "<table width='100%'>\n";
     echo "<tr><td colspan=3><b>RECENT DECKS</td>\n";
     echo '<td colspan=2 align="right">';
     echo "<a href=\"player.php?mode=alldecks\">(see all)</a></td>\n";
@@ -461,7 +461,7 @@ function print_recentDeckTable()
                 $targetUrl = 'event';
             }
             echo "<td style=\"white-space: nowrap;\"><a href=\"${targetUrl}.php?event={$deck->eventname}\">{$deck->eventname}</a></a></td>\n";
-            echo '<td  width="99%"" align="right">'.$deck->recordString()."</td></tr>\n";
+            echo '<td width="99%" align="right">'.$deck->recordString()."</td></tr>\n";
         }
     }
     echo "</table>\n";

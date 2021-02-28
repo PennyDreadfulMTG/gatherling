@@ -179,14 +179,6 @@ class Event
         return "Gatherling/Event($this->name)";
     }
 
-    public static function session_timeout_stat() // Katelyn: Why is this here???
-    {
-        // Get the current Session Timeout Value
-        $currentTimeoutInSecs = ini_get('session.gc_maxlifetime');
-
-        return $currentTimeoutInSecs;
-    }
-
     public static function CreateEvent(
         $year,
         $month,

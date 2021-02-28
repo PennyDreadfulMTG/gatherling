@@ -29,9 +29,6 @@ if ($gatherlingoutofservice != 1) {
                 </ul>
             <p><b>Gatherling Statistics:</b></p>
                 <ul>
-
-                    <li> Current Session Timeout: <?php echo Event::session_timeout_stat() / 60 ?> minutes.</li>
-
                     <li> There are <?php echo Deck::uniqueCount() ?> unique decks. </li>
                     <li> We have recorded <?php echo Match::count() ?> matches from <?php echo Event::count() ?> events.</li>
                     <li> There are <?php echo Player::activeCount() ?> active players in gatherling. (<?php echo Player::verifiedCount() ?> verified) </li>
