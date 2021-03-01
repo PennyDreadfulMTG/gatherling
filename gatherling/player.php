@@ -437,7 +437,7 @@ function print_recentDeckTable()
 {
     global $player;
 
-    echo "<table width-'100%'>\n";
+    echo "<table width='100%'>\n";
     echo "<tr><td colspan=3><b>RECENT DECKS</td>\n";
     echo '<td colspan=2 align="right">';
     echo "<a href=\"player.php?mode=alldecks\">(see all)</a></td>\n";
@@ -461,7 +461,7 @@ function print_recentDeckTable()
                 $targetUrl = 'event';
             }
             echo "<td style=\"white-space: nowrap;\"><a href=\"${targetUrl}.php?event={$deck->eventname}\">{$deck->eventname}</a></a></td>\n";
-            echo '<td  width="99%"" align="right">'.$deck->recordString()."</td></tr>\n";
+            echo '<td width="99%" align="right">'.$deck->recordString()."</td></tr>\n";
         }
     }
     echo "</table>\n";
@@ -492,7 +492,15 @@ function print_preRegistration()
         echo '<tr><td colspan="3"> You haven\'t registered for any events </td> </tr>';
     }
 
+    $arena = false;
+    $mtgo = false;
     foreach ($upcoming_events as $event) {
+        if ($event->client == 1) {
+            $mtgo = true;
+        } elseif ($event->client == 2) {
+            $arena = true;
+        }
+
         $targetUrl = 'eventreport';
         if ($event->authCheck($player->name)) {
             $targetUrl = 'event';
@@ -513,6 +521,13 @@ function print_preRegistration()
         echo '<td><a href="prereg.php?action=unreg&event='.rawurlencode($event->name).'">Unreg</a></td>';
         echo '</tr>';
     }
+    if ($mtgo && empty($player->mtgo_username)) {
+        echo '<tr>Please <a href="player.php?mode=edit_accounts">set your MTGO username</a>.</tr>';
+    }
+    if ($arena && empty($player->mtga_username)) {
+        echo '<tr>Please <a href="player.php?mode=edit_accounts">set your MTGA username</a>.</tr>';
+    }
+
     echo '</table>';
     echo '<table class="gatherling_full"><tr><td colspan="3"><b>PREREGISTER FOR EVENTS</b></td></tr>';
     if (count($available_events) == 0) {
