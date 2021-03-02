@@ -53,7 +53,7 @@ if (isset($_POST['action'])) {
 
         $player->mtgo_username = empty($_POST['mtgo_username']) ? null : $_POST['mtgo_username'];
         if (!preg_match('/^.{3,24}#\d{5}$/', $_POST['mtga_username'])) {
-                $_POST['mtga_username'] = null;
+            $_POST['mtga_username'] = null;
         }
         $player->mtga_username = empty($_POST['mtga_username']) ? null : $_POST['mtga_username'];
         $player->save();
