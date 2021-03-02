@@ -130,9 +130,9 @@ function infoTable($player)
     }
 
     $line1 = strtoupper($player->name);
-    if ($player->verified) {
-        $line1 .= image_tag('verified.png', ['title' => 'Verified their MTGO account']);
-    }
+    // if ($player->verified) {
+    //     $line1 .= image_tag('verified.png', ['title' => 'Verified their MTGO account']);
+    // }
 
     $matches = $player->getAllMatches();
     $nummatches = count($matches);
@@ -151,6 +151,18 @@ function infoTable($player)
     echo "<table style=\"border-width: 0px;\" width=250>\n";
     echo '<tr><td align="left" colspan=2 style="font-size: 10pt;">';
     echo "<b>$line1</td></tr>\n";
+    if ($player->mtgo_username){
+        echo "<tr><td align=\"left\" colspan=2 style=\"font-size: 10pt;\">";
+        echo "<i class=\"ss ss-pmodo\"></i> {$player->mtgo_username}</td></tr>\n";
+    }
+    if ($player->mtga_username){
+        echo "<tr><td align=\"left\" colspan=2 style=\"font-size: 10pt;\">";
+        echo "<i class=\"ss ss-parl3\"></i> {$player->mtga_username}</td></tr>\n";
+    }
+    if ($player->discord_handle){
+        echo "<tr><td align=\"left\" colspan=2 style=\"font-size: 10pt;\">";
+        echo "<i class=\"fab fa-discord\"></i> {$player->discord_handle}</td></tr>\n";
+    }
     echo "<tr><td>Rating:</td>\n";
     echo "<td align=\"right\">{$rating}</td></tr>\n";
     echo "<tr><td>Matches Played:</td>\n";
