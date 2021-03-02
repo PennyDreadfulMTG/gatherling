@@ -75,6 +75,7 @@ function print_header($title, $js = null, $extra_head_content = '')
         echo '    </script>';
     }
     echo $extra_head_content;
+    include_once 'analyticstracking.php'; // google analytics tracking
     echo <<<'EOT'
   </head>
   <body>
@@ -82,7 +83,6 @@ function print_header($title, $js = null, $extra_head_content = '')
         <div id="header_bar" class="box">
             <div id="header_gatherling">
 EOT;
-    include_once 'analyticstracking.php'; // google analytics tracking
     //  echo image_tag("header_gatherling.png");
     echo <<<'EOT'
             </div>
@@ -429,7 +429,7 @@ function not_allowed($reason)
 
 function displayPlayerEmailPopUp($player, $email)
 {
-    echo "<a class=\"emailPop\" style=\color: green\" title=\"{$email}\">{$player}</a>";
+    echo "<a class=\"emailPop\" style=\"color: green\" title=\"{$email}\">{$player}</a>";
 }
 
 function tribeBanDropMenu($format)

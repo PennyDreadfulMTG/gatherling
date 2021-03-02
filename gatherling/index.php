@@ -88,11 +88,11 @@ if ($gatherlingoutofservice != 1) {
                     <table class="form" align="left" cellpadding="3">
                         <form action="login.php" method="post">
                             <tr>
-                                <th>Gatherling Username</th>
+                                <th>Username</th>
                                 <td><input class="inputbox" type="text" name="username" value="" /></td>
                             </tr>
                             <tr>
-                                <th>Gatherling Password</th>
+                                <th>Password</th>
                                 <td><input class="inputbox" type="password" name="password" value="" /></td>
                             </tr>
                             <tr>

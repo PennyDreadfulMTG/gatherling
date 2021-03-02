@@ -27,6 +27,6 @@ if (version_compare(phpversion(), 6) === -1) {
 require_once 'config.php';
 
 Sentry\init([
-    'dsn'         => 'https://fdfade4631f84653a606228c18e6922a@o233010.ingest.sentry.io/1414048',
+    'dsn'         => 'https://f8ec94b8d8b24b71b111fe96b0cc22b5@o531055.ingest.sentry.io/5657303',
     'environment' => $CONFIG['site_name'],
 ]);
