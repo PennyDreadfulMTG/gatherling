@@ -23,7 +23,7 @@ function info($text, $newline = true)
 if (PHP_SAPI == 'cli') {
     if (isset($argv[1])) {
         if (strlen($argv[1]) < 4) {
-            $file = file_get_contents("https://mtgjson.com/json/{$argv[1]}.json");
+            $file = file_get_contents("https://mtgjson.com/api/v5/{$argv[1]}.json");
         } else {
             $file = file_get_contents($argv[1]);
         }
@@ -147,9 +147,9 @@ Format::constructTribes($set);
 
 function insertCard($card, $set, $rarity, $stmt)
 {
-    $typeline = implode($card->types, ' ');
+    $typeline = implode(' ', $card->types);
     if (isset($card->subtypes) && count($card->subtypes) > 0) {
-        $typeline = $typeline.' - '.implode($card->subtypes, ' ');
+        $typeline = $typeline.' - '.implode(' ', $card->subtypes);
     }
     $name = $card->name;
     if ($card->layout == 'split' || $card->layout == 'aftermath') {

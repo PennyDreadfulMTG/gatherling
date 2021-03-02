@@ -618,7 +618,7 @@ function parseCardsWithQuantity($cards)
     $cardarr = [];
     foreach ($cards as $line) {
         $chopped = rtrim($line);
-        if (preg_match("/[ \t]*([0-9]+)x?[ \t]+(.*)/i", $chopped, $m)) {
+        if (preg_match("/^[ \t]*([0-9]+)x?[ \t]+(.*?)( \(\w+\) \d+)?$/i", $chopped, $m)) {
             $qty = $m[1];
             $card = rtrim($m[2]);
             if (isset($cardarr[$card])) {
