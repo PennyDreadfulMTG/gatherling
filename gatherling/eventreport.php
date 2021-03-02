@@ -10,6 +10,9 @@ print_header('Event Report');
 <div class="uppertitle"> Event Report </div>
 
 <?php
+if (!isset($_GET['event']) && isset($_GET['name'])) {
+    $_GET['event'] = $_GET['name'];
+}
 if (isset($_GET['event']) && Event::exists($_GET['event'])) {
     $event = new Event($_GET['event']);
     showReport($event);
