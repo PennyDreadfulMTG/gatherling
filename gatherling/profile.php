@@ -15,6 +15,7 @@ if (isset($_GET['player'])) {
 if (isset($_POST['player'])) {
     $playername = $_POST['player'];
 }
+$playername = htmlspecialchars($playername);
 
 $profile_edit = 0;
 if (isset($_REQUEST['profile_edit'])) {
