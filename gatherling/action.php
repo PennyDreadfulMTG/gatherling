@@ -56,9 +56,9 @@ if (!is_null($player)) {
     foreach ($matches as $match) {
         $event = new Event($match->getEventNamebyMatchid());
         if ($event->client == 1 && empty($player->mtgo_username)) {
-            $message = 'Please <a href="player.php?mode=edit_accounts">set your MTGO username</a>.';
+            $message = '<a href="player.php?mode=edit_accounts">Set your MTGO username so that your opponent can find you.</a>.';
         } elseif ($event->client == 2 && empty($player->mtga_username)) {
-            $message = 'Please <a href="player.php?mode=edit_accounts">set your MTGA username</a>.';
+            $message = '<a href="player.php?mode=edit_accounts">Set your MTGA username so that your opponent can Direct Challenge you.</a>.';
         } elseif ($event->isLeague()) {
             // Do nothing
         } elseif ($match->result != 'BYE' && $match->verification == 'unverified') {

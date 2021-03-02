@@ -654,7 +654,7 @@ class Deck
             $card = stripslashes($card);
             $testcard = Format::getCardName($card);
             if (is_null($testcard)) {
-                $this->errors[] = "Could not find card in database: {$card}";
+                $this->errors[] = "Could not find card in database, did you make a typo?: {$card}";
                 continue;
             }
             $cardar = $format->getLegalCard($testcard);
