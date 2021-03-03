@@ -653,8 +653,7 @@ class Deck
         foreach ($this->maindeck_cards as $card => $amt) {
             $card = stripslashes($card);
             $testcard = Format::getCardName($card);
-            if (is_null($testcard))
-            {
+            if (is_null($testcard)) {
                 $testcard = Format::getCardNameFromPartialDFC($card);
             }
             if (is_null($testcard)) {
