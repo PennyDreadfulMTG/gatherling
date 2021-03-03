@@ -1488,6 +1488,13 @@ class Format
         return Database::single_result_single_param('SELECT name FROM cards WHERE name = ?', 's', $cardname);
     }
 
+    public static function getCardNameFromPartialDFC($cardname)
+    {
+        // this is used to return the name of the card as it appears in the database
+        // otherwise the ban list will have cards on it like rOnCoR, RONCOR, rONCOR, etc
+        return Database::single_result_single_param('SELECT name FROM cards WHERE name LIKE ?', 's', $cardname.'/%');
+    }
+
     public function insertNewLegalSet($cardsetName)
     {
         $db = Database::getConnection();
