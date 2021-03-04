@@ -142,9 +142,11 @@ class Standings
                 $color_code = ' style="color:green" ';
             }
             $match_score = $player_standing->score;
+            $sp = new Player($player_standing->player);
+            $name = $sp->gameName($event->client);
             echo "<tr>
                   <td{$color_code}>{$rank}</td>
-                  <td{$color_code}>{$player_standing->player}</td>
+                  <td{$color_code}>{$name}</td>
                   <td{$color_code}>{$match_score}</td>
                   <td{$color_code}>{$player_standing->OP_Match}</td>
                   <td{$color_code}>{$player_standing->PL_Game}</td>
