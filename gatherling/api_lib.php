@@ -65,7 +65,7 @@ function repr_json_event($event)
     $series = new Series($event->series);
     $json = [];
     // Event Properties
-    $json = populate($json, $event, ['series', 'season', 'number', 'host', 'cohost', 'active', 'finalized', 'current_round', 'start', 'mainrounds', 'mainstruct', 'finalrounds', 'finalstruct']);
+    $json = populate($json, $event, ['name', 'series', 'season', 'number', 'format', 'host', 'cohost', 'active', 'finalized', 'current_round', 'start', 'mainrounds', 'mainstruct', 'finalrounds', 'finalstruct']);
 
     // Series Properties
     $json = populate($json, $series, ['mtgo_room']);
