@@ -1284,7 +1284,12 @@ class Format
     {
         $card = stripslashes($card);
         $card = normaliseCardName($card);
-        $card = $this->getCardName($card);
+        $testcard = $this->getCardName($card);
+        if (is_null($testcard))
+        {
+            $testcard = $this->getCardNameFromPartialDFC($card);
+        }
+        $card = $testcard;
         $cardID = $this->getCardID($card);
         if (is_null($cardID)) {
             return false; // card not found in database
