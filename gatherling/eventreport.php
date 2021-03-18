@@ -320,15 +320,13 @@ function fullmetagame($event)
             if ($row['colors'] != $color) {
                 $bg = rowColor();
                 $color = $row['colors'];
-                echo '<tr><td>';
+                echo '<tr><td colspan=1></td><td>';
                 echo image_tag("mana{$color}.png")."&nbsp;</td>\n";
-                echo "<td colspan=4 align=\"left\"><i>{$row['srtordr']} Players ";
+                echo "<td colspan=\"4\" align=\"left\"><span>{$row['srtordr']} Players</span>";
                 echo "</td></tr>\n";
             }
-            // ironically its this error on the next <tr> by having no style that creates the look I liked for the mana
-            // symbols to be right next to the Players text.
-            // echo "<tr style=\"><td></td>\n";
-            echo "<tr style=\"><td></td>\n";
+
+            echo "<tr style=\"\">\n";
             echo '<td align="left">';
             echo "</td>\n<td align=\"left\">";
 
@@ -417,7 +415,7 @@ function initArchetypeCount()
 
 function imageCell($event)
 {
-    echo "<div class=\"series-logo\"><img src=\"displaySeries.php?series=$event->series\" alt=\"Series Logo\" /></div>";
+    echo "<div class=\"series-logo\"><img src=\"displaySeries.php?series=$event->series\" alt=\"Series Logo\" style=\"max-width: 300px;\"/></div>";
 }
 
 function infoCell($event)
