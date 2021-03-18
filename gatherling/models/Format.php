@@ -1285,8 +1285,7 @@ class Format
         $card = stripslashes($card);
         $card = normaliseCardName($card);
         $testcard = $this->getCardName($card);
-        if (is_null($testcard))
-        {
+        if (is_null($testcard)) {
             $testcard = $this->getCardNameFromPartialDFC($card);
         }
         $card = $testcard;
