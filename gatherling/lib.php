@@ -71,7 +71,7 @@ function print_header($title, $enable_vue = false, $js = null, $extra_head_conte
     if ($enable_vue) {
         echo "     <script src=\"//cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js\"></script>\n";
         echo "     <script src=\"//cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.min.js\"></script>\n";
-        echo "     <script src=\"https://unpkg.com/vue-toasted\"></script>";
+        echo '     <script src="https://unpkg.com/vue-toasted"></script>';
         echo "     <script src=\"components.js\" defer></script>\n";
     }
     if ($js) {
