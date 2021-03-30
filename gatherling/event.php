@@ -75,7 +75,7 @@ $(document).ready(function() {
 });
 EOD;
 
-print_header('Event Host Control Panel');
+print_header('Event Host Control Panel', true);
 ?>
 <div class="grid_10 suffix_1 prefix_1">
 <div id="gatherling_main" class="box">
@@ -1184,6 +1184,9 @@ function monthDropMenu($month)
 function structDropMenu($field, $def)
 {
     $names = ['Swiss', 'Single Elimination', /*"Round Robin",*/ 'League', 'League Match'];
+    if ($def == 'Swiss (Blossom)') {
+        $def = 'Swiss';
+    }
     if (in_array($def, ['Swiss (Blossom)', 'Round Robin'])) { // Disabled structures.
         $names[] = $def;
     }
@@ -1503,7 +1506,7 @@ function controlPanel($event, $cur = '')
     echo ' | <a href="event.php?name='.rawurlencode($name).'&view=standings">Standings</a>';
     echo ' | <a href="event.php?name='.rawurlencode($name).'&view=medal">Medals</a>';
     // echo " | <a href=\"event.php?name=$name&view=autoinput\">Auto-Input</a>"; hiding until I fix the auto-input feature
-    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=fileinput">DCI-R File Input</a>';
+    // echo ' | <a href="event.php?name='.rawurlencode($name).'&view=fileinput">DCI-R File Input</a>';
     echo ' | <a href="event.php?name='.rawurlencode($name).'&view=points_adj">Season Points Adj.</a>';
     echo ' | <a href="event.php?name='.rawurlencode($name).'&view=reports">Reports</a>';
     echo '</td></tr>';
@@ -1692,7 +1695,6 @@ function autoInputForm($event)
     echo '<form action="event.php" method="post" ';
     echo 'enctype="multipart/form-data">';
     echo "<input type=\"hidden\" name=\"name\" value=\"{$event->name}\">";
-    echo '<table style="border-width: 0px" align="center">';
 
     echo '<tr><td colspan="2 align="center">';
     echo '<table align="center" style="border-width: 0px;">';

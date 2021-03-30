@@ -9,6 +9,7 @@ const store = new Vuex.Store({
     }
 });
 
+Vue.use(Toasted);
 
 // Vue.component('activeevents', {
 //     template: `
