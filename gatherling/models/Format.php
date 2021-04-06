@@ -27,6 +27,7 @@ class Format
     public $tribal;
     public $pure;
     public $underdog;
+    public $limitless;
 
     // rarities allowed switches
     public $allow_commons;
@@ -93,7 +94,7 @@ class Format
         } else {
             $db = Database::getConnection();
             $stmt = $db->prepare('SELECT name, description, type, series_name, singleton, commander, planechase, vanguard,
-                                         prismatic, tribal, pure, underdog, allow_commons, allow_uncommons, allow_rares, allow_mythics,
+                                         prismatic, tribal, pure, underdog, limitless, allow_commons, allow_uncommons, allow_rares, allow_mythics,
                                          allow_timeshifted, priority, min_main_cards_allowed, max_main_cards_allowed,
                                          min_side_cards_allowed, max_side_cards_allowed, eternal, modern, `standard`, is_meta_format
                                   FROM formats
@@ -114,6 +115,7 @@ class Format
                 $this->tribal,
                 $this->pure,
                 $this->underdog,
+                $this->limitless,
                 $this->allow_commons,
                 $this->allow_uncommons,
                 $this->allow_rares,
@@ -212,13 +214,13 @@ class Format
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO formats(name, description, type, series_name, singleton, commander, planechase,
-                                                  vanguard, prismatic, tribal, pure, underdog, allow_commons, allow_uncommons, allow_rares,
+                                                  vanguard, prismatic, tribal, pure, underdog, limitless, allow_commons, allow_uncommons, allow_rares,
                                                   allow_mythics, allow_timeshifted, priority, min_main_cards_allowed,
                                                   max_main_cards_allowed, min_side_cards_allowed, max_side_cards_allowed,
                                                   eternal, modern, `standard`, is_meta_format)
                               VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $stmt->bind_param(
-            'ssssdddddddddddddddddddddd',
+            'ssssddddddddddddddddddddddd',
             $this->name,
             $this->description,
             $this->type,
@@ -231,6 +233,7 @@ class Format
             $this->tribal,
             $this->pure,
             $this->underdog,
+            $this->limitless,
             $this->allow_commons,
             $this->allow_uncommons,
             $this->allow_rares,
@@ -319,14 +322,15 @@ class Format
             $db = Database::getConnection();
             $stmt = $db->prepare('UPDATE formats
                                   SET description = ?, type = ?, series_name = ?, singleton = ?, commander = ?,
-                                  planechase = ?, vanguard = ?, prismatic = ?, tribal = ?, pure = ?, underdog = ?, allow_commons = ?, allow_uncommons = ?, allow_rares = ?,
+                                  planechase = ?, vanguard = ?, prismatic = ?, tribal = ?, pure = ?, underdog = ?, limitless = ?,
+                                  allow_commons = ?, allow_uncommons = ?, allow_rares = ?,
                                   allow_mythics = ?, allow_timeshifted = ?, priority = ?, min_main_cards_allowed = ?,
                                   max_main_cards_allowed = ?, min_side_cards_allowed = ?, max_side_cards_allowed = ?,
                                   eternal = ?, modern = ?, `standard` = ?, is_meta_format = ?
                                   WHERE name = ?');
             $stmt or exit($db->error);
             $stmt->bind_param(
-                'sssdddddddddddddddddddddds',
+                'sssddddddddddddddddddddddds',
                 $this->description,
                 $this->type,
                 $this->series_name,
@@ -338,6 +342,7 @@ class Format
                 $this->tribal,
                 $this->pure,
                 $this->underdog,
+                $this->limitless,
                 $this->allow_commons,
                 $this->allow_uncommons,
                 $this->allow_rares,
@@ -380,6 +385,7 @@ class Format
             $this->tribal = $oldFormat->tribal;
             $this->pure = $oldFormat->pure;
             $this->underdog = $oldFormat->underdog;
+            $this->limitless = $oldFormat->limitless;
             $this->priority = $oldFormat->priority;
             $this->description = $oldFormat->description;
             $this->min_main_cards_allowed = $oldFormat->min_main_cards_allowed;
