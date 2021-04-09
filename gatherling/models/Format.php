@@ -218,7 +218,7 @@ class Format
                                                   allow_mythics, allow_timeshifted, priority, min_main_cards_allowed,
                                                   max_main_cards_allowed, min_side_cards_allowed, max_side_cards_allowed,
                                                   eternal, modern, `standard`, is_meta_format)
-                              VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+                              VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $stmt->bind_param(
             'ssssddddddddddddddddddddddd',
             $this->name,
