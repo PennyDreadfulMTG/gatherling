@@ -238,7 +238,7 @@ function League_print_submit_resultForm($event, $round, $player, $subevent)
     echo "<td></td> </tr> \n";
     echo "<tr><th><input type='radio' name='report' value='L20' /> I lost the match 0-2<br /></th>\n";
     echo "<td></td> </tr> \n";
-    echo "<tr><th><input type='radio' name='report' value='L21' /> I lost the match 0-2</th>\n";
+    echo "<tr><th><input type='radio' name='report' value='L21' /> I lost the match 1-2</th>\n";
     echo "<td></td> </tr> \n";
     echo "<tr> <td colspan=\"2\" class=\"buttons\">\n";
     echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Submit Match Report\" />\n";
