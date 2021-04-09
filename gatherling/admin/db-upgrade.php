@@ -762,7 +762,7 @@ upgrade_db(43, 'MiniLeague', function () {
     do_query('ALTER TABLE `series`
         ADD COLUMN `discord_require_membership` BIGINT NULL DEFAULT NULL;');
 });
-upgrade_db(44, 'Limitless', function() {
+upgrade_db(44, 'Limitless', function () {
     do_query('ALTER TABLE `formats`
     ADD COLUMN `limitless` TINYINT(3) NULL AFTER `underdog`;');
 });

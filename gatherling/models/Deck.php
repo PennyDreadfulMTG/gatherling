@@ -686,13 +686,13 @@ class Deck
 
             if ($format->limitless) {
                 // Ignore this check
-            } else if ($format->singleton) {
+            } elseif ($format->singleton) {
                 if (!$format->isCardSingletonLegal($card, $amt)) {
                     $this->errors[] = "Singleton formats allow only one of any card, except basic lands.
                                  You entered {$amt} {$card} in your mainboard.";
                 }
-            } else if (!$format->isQuantityLegal($card, $amt)) {
-                    $this->errors[] = "No more than four of any card is allowed in this format, except basic lands.
+            } elseif (!$format->isQuantityLegal($card, $amt)) {
+                $this->errors[] = "No more than four of any card is allowed in this format, except basic lands.
                                  You entered {$amt} {$card} in your mainboard.";
             }
 
