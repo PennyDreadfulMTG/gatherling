@@ -766,6 +766,13 @@ upgrade_db(44, 'Limitless', function () {
     do_query('ALTER TABLE `formats`
     ADD COLUMN `limitless` TINYINT(3) NULL AFTER `underdog`;');
 });
+upgrade_db(45, 'Increase card_name max length', function () {
+    do_query('ALTER TABLE `bans`
+    MODIFY COLUMN
+        `card_name` VARCHAR(160)
+        NOT NULL;');
+});
+
 $db->autocommit(true);
 
 info('DB is up to date!');
