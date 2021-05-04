@@ -268,7 +268,7 @@ function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, 
             echo 'I lost the match 0-2';
             break;
         case 'L21':
-            echo 'I lost the match 0-2';
+            echo 'I lost the match 1-2';
             break;
         case 'D':
             echo 'The match was a draw';
