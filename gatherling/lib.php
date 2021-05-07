@@ -545,7 +545,9 @@ function print_git_hash()
 
 function version_tagline()
 {
-    echo 'Gatherling version 5.0.0 ("Hulk, no! Just for once in your life, don\'t smash!")';
+
+    echo 'Gatherling version 5.0.1 ("No rest. No mercy. No matter what.")';
+    // echo 'Gatherling version 5.0.0 ("Hulk, no! Just for once in your life, don\'t smash!")';
     // echo 'Gatherling version 4.9.0 ("Where we’re going, we don’t need roads")';
     // echo 'Gatherling version 4.8.8 ("Fish fingers and custard")';
     // echo 'Gatherling version 4.8.7 ("Step 7: Steal a bagel.")';
