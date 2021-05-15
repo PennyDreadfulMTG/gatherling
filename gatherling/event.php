@@ -744,10 +744,11 @@ function playerList($event)
             echo "<td align=\"center\">$img</td>";
         }
         echo '<td>';
+        $playername = $entry->player->gameName($event->client);
         if ($entry->player->emailAddress == '') {
-            echo "{$entry->player->name}";
+            echo "{$playername}";
         } else {
-            displayPlayerEmailPopUp($entry->player->name, $entry->player->emailAddress);
+            displayPlayerEmailPopUp($playername, $entry->player->emailAddress);
         }
         echo '</td>';
         if ($entry->deck) {
