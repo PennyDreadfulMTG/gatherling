@@ -20,6 +20,7 @@ if (isset($_POST['pw1'])) {
 print_header('Register');
 ?>
 
+<script src="https://hcaptcha.com/1/api.js" async defer></script>
 <div class="grid_10 suffix_1 prefix_1">
 <div id="gatherling_main" class="box">
 <div class="uppertitle"> Register for Gatherling </div>
@@ -62,6 +63,7 @@ function regForm()
     echo "</td></tr>\n";
     echo "<tr><td>&nbsp;</td></tr>\n";
     echo "<tr><td align=\"center\" colspan=\"2\">\n";
+    echo '<div class="h-captcha" data-sitekey="6593a7b2-48b0-4a15-bb0f-c6d47c4ac0e6"></div>';
     echo '<input class="inputbutton" type="submit" name="mode" value="Register Account">';
     echo "</td></tr></table></form>\n";
 }
