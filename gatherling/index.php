@@ -1,4 +1,11 @@
 <?php
+
+use Gatherling\Database;
+use Gatherling\Deck;
+use Gatherling\Event;
+use Gatherling\Matchup;
+use Gatherling\Player;
+
 $gatherlingoutofservice = 0;
 
 include 'lib.php';
@@ -30,7 +37,7 @@ if ($gatherlingoutofservice != 1) {
             <p><b>Gatherling Statistics:</b></p>
                 <ul>
                     <li> There are <?php echo Deck::uniqueCount() ?> unique decks. </li>
-                    <li> We have recorded <?php echo Match::count() ?> matches from <?php echo Event::count() ?> events.</li>
+                    <li> We have recorded <?php echo Matchup::count() ?> matches from <?php echo Event::count() ?> events.</li>
                     <li> There are <?php echo Player::activeCount() ?> active players in gatherling. (<?php echo Player::verifiedCount() ?> verified) </li>
                 </ul>
             </div>

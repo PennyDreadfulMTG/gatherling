@@ -1,4 +1,7 @@
 <?php
+
+use Gatherling\Player;
+
 session_start();
 
 require_once __DIR__.'/lib.php';

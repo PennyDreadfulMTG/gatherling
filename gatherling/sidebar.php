@@ -1,5 +1,10 @@
 <?php
 
+use Gatherling\Database;
+use Gatherling\Deck;
+use Gatherling\Event;
+use Gatherling\Series;
+
 include_once 'lib.php';
 
 activeEvents();
@@ -131,6 +136,6 @@ function recentTrophies()
         echo '</table>';
         echo '</div>';
     } else {
-        $this->errors[] = '<center><br>No Trophies Found.';
+        $errors[] = '<center><br>No Trophies Found.';
     }
 }

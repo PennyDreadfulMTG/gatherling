@@ -1,4 +1,7 @@
 <?php
+namespace Gatherling;
+
+use Exception;
 
 class Event
 {
@@ -734,6 +737,7 @@ class Event
         Database::db_query('UPDATE standings SET active = 1 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
     }
 
+    /** @return Match[] Returns a list Matches */
     public function getMatches()
     {
         $db = Database::getConnection();
@@ -752,7 +756,7 @@ class Event
 
         $matches = [];
         foreach ($mids as $mid) {
-            $matches[] = new Match($mid);
+            $matches[] = new Matchup($mid);
         }
 
         return $matches;
@@ -791,7 +795,7 @@ class Event
 
         $matches = [];
         foreach ($mids as $mid) {
-            $matches[] = new Match($mid);
+            $matches[] = new Matchup($mid);
         }
 
         return $matches;
@@ -1488,7 +1492,7 @@ class Event
         } else {
             $round = ($this->current_round - $this->mainrounds);
         }
-        $matches_remaining = Match::unresolvedMatchesCheck($subevent, $round);
+        $matches_remaining = Matchup::unresolvedMatchesCheck($subevent, $round);
 
         if ($matches_remaining > 0) {
             // Nothing to do yet
@@ -1746,7 +1750,7 @@ class Event
 
         $matches = [];
         foreach ($mids as $mid) {
-            $matches[] = new Match($mid);
+            $matches[] = new Matchup($mid);
         }
 
         return $matches;

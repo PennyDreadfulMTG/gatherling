@@ -1,5 +1,7 @@
 <?php
 
+namespace Gatherling;
+
 class Pairings
 {
     private $lowestScoreWithoutBye = -1;

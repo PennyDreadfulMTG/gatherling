@@ -1,6 +1,9 @@
 <?php
+namespace Gatherling;
 
-class Match
+use Exception;
+
+class Matchup
 {
     public $id;
     public $subevent;
@@ -187,7 +190,7 @@ class Match
             return 'Draw';
         }
 
-        throw new Exception("Player $playername is not in match {$match->id}");
+        throw new Exception("Player $playername is not in match {$this->id}");
     }
 
     public function playerDropped($player)

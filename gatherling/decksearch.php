@@ -1,4 +1,9 @@
 <?php
+
+use Gatherling\Database;
+use Gatherling\Decksearch;
+use Gatherling\Pagination;
+
 require_once 'lib.php';
 session_start();
 

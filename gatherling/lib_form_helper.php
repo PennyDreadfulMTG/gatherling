@@ -1,5 +1,7 @@
 <?php
 
+use Gatherling\Standings;
+
 require_once 'lib.php';
 
 function print_text_input($label, $name, $value = '', $len = 0, $reminder_text = null, $id = null, $advanced = false)

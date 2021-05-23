@@ -1,5 +1,9 @@
 <?php
 
+namespace Gatherling;
+
+use Exception;
+
 class Format
 {
     public $name;
@@ -1190,6 +1194,7 @@ class Format
 
     public static function getCardColors($card)
     {
+        $colors = [];
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT isw, isr, isg, isu, isb
                               FROM cards

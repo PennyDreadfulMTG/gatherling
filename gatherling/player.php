@@ -1,4 +1,13 @@
 <?php
+
+use Gatherling\Database;
+use Gatherling\Entry;
+use Gatherling\Event;
+use Gatherling\Player;
+use Gatherling\Ratings;
+use Gatherling\Series;
+use Gatherling\Standings;
+
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
 session_start();

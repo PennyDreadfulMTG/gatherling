@@ -1,5 +1,11 @@
 <?php
 
+use Gatherling\Database;
+use Gatherling\Deck;
+use Gatherling\Event;
+use Gatherling\Player;
+use Gatherling\Series;
+
 require_once 'lib.php';
 require_once 'api_lib.php';
 session_start();

@@ -1,5 +1,7 @@
 <?php
 
+namespace Gatherling;
+
 class Decksearch
 {
     public $errors = [];
@@ -13,38 +15,38 @@ class Decksearch
     // holds the current deck id that info is being collected for
 
     /**
-     * Deck Search, Gatherling Deck Search Class.
-     *
-     * This class allows you to create a deck search query using a varing
-     * amout of inputs
-     *
-     * example usage:
-     *
-     * <code>
-     * $decksearch = new Decksearch();
-     * $decksearch->searchByColor($color_array);
-     * $decksearch->searchByFormat($formatname);
-     * $results = $decksearch->getFinalResults();
-     * </code>
-     *
-     * will return an array of deck id's matching the set search terms
-     *
-     *
-     *
-     * @version 1.0
-     *
-     * @category Deck
-     */
+    * Deck Search, Gatherling Deck Search Class.
+    *
+    * This class allows you to create a deck search query using a varing
+    * amout of inputs
+    *
+    * example usage:
+    *
+    * <code>
+    * $decksearch = new Decksearch();
+    * $decksearch->searchByColor($color_array);
+    * $decksearch->searchByFormat($formatname);
+    * $results = $decksearch->getFinalResults();
+    * </code>
+    *
+    * will return an array of deck id's matching the set search terms
+    *
+    *
+    *
+    * @version 1.0
+    *
+    * @category Deck
+    */
     public function __construct()
     {
     }
 
     /**
-     * call getFinalResults to complete a search request with any set inputs
-     * and returns a list of deck id's that match.
-     *
-     * @return array List of id's that match the search request
-     */
+    * call getFinalResults to complete a search request with any set inputs
+    * and returns a list of deck id's that match.
+    *
+    * @return array List of id's that match the search request
+    */
     public function getFinalResults()
     {
         if (count($this->_results) > 0 && count($this->errors) == 0) {
@@ -86,10 +88,10 @@ class Decksearch
     }
 
     /**
-     * Add search by format to the search query and sets $_results array with matching deck ids.
-     *
-     * @param string $format Format to search decks by
-     */
+    * Add search by format to the search query and sets $_results array with matching deck ids.
+    *
+    * @param string $format Format to search decks by
+    */
     public function searchByFormat($format)
     {
         $sql = 'SELECT id FROM decks WHERE format = ?';
@@ -102,10 +104,10 @@ class Decksearch
     }
 
     /**
-     * Add search by players to the search query sets $_results array.
-     *
-     * @param string $player Player name to search decks by
-     */
+    * Add search by players to the search query sets $_results array.
+    *
+    * @param string $player Player name to search decks by
+    */
     public function searchByPlayer($player)
     {
         $sql = 'SELECT id FROM decks WHERE playername LIKE ?';
@@ -118,19 +120,19 @@ class Decksearch
     }
 
     /**
-     * Add search by medals to the search query and sets $_results array with matching deck ids.
-     *
-     * Input options: 1st 2nd t4 t8
-     *
-     * @param string $medal Medal to search decks by
-     */
+    * Add search by medals to the search query and sets $_results array with matching deck ids.
+    *
+    * Input options: 1st 2nd t4 t8
+    *
+    * @param string $medal Medal to search decks by
+    */
     public function searchByMedals($medal)
     {
         $sql = 'SELECT decks.id
-         FROM decks INNER JOIN entries
-         ON decks.id = entries.deck
-         WHERE entries.medal = ?
-         ORDER BY DATE(`created_date`) DESC';
+        FROM decks INNER JOIN entries
+        ON decks.id = entries.deck
+        WHERE entries.medal = ?
+        ORDER BY DATE(`created_date`) DESC';
 
         $results = Database::list_result_single_param($sql, 's', $medal);
         if (count($results) > 0) {
@@ -141,16 +143,16 @@ class Decksearch
     }
 
     /**
-     *  Add search by colors to the search query sets $_results array with matching deck ids.
-     *
-     *  bcgruw u=Blue w=White b=Black r=Red g=Green c=Colorless
-     *  e.g. array(u => 'u') order does not matter.
-     *
-     *
-     *  @param [$color_str_input] Array of the input color
-     *
-     *  @return mixed true if success/false otherwise
-     */
+    *  Add search by colors to the search query sets $_results array with matching deck ids.
+    *
+    *  bcgruw u=Blue w=White b=Black r=Red g=Green c=Colorless
+    *  e.g. array(u => 'u') order does not matter.
+    *
+    *
+    *  @param [$color_str_input] Array of the input color
+    *
+    *  @return mixed true if success/false otherwise
+    */
     public function searchByColor($color_str_input)
     {
         // alphebetizes then sets the search string
@@ -170,10 +172,10 @@ class Decksearch
     }
 
     /**
-     *  Add search by archetype to the search query and sets $_results array with matching deck ids.
-     *
-     * @param string $archetype Name of archetype to search for
-     */
+    *  Add search by archetype to the search query and sets $_results array with matching deck ids.
+    *
+    * @param string $archetype Name of archetype to search for
+    */
     public function searchByArchetype($archetype)
     {
         $sql = 'SELECT id FROM decks WHERE archetype = ?';
@@ -186,17 +188,17 @@ class Decksearch
     }
 
     /**
-     * Add search by series to the search query sets $_results array with matching deck ids.
-     *
-     * @param string $series Series name to search by
-     */
+    * Add search by series to the search query sets $_results array with matching deck ids.
+    *
+    * @param string $series Series name to search by
+    */
     public function searchBySeries($series)
     {
         $sql = 'SELECT entries.deck
-            FROM entries INNER JOIN events
-            ON entries.event_id = events.id
-            WHERE events.series = ?
-            AND entries.deck ORDER BY DATE(`registered_at`) DESC';
+        FROM entries INNER JOIN events
+        ON entries.event_id = events.id
+        WHERE events.series = ?
+        AND entries.deck ORDER BY DATE(`registered_at`) DESC';
 
         $results = Database::list_result_single_param($sql, 's', $series);
         if (count($results) > 0) {
@@ -207,17 +209,17 @@ class Decksearch
     }
 
     /**
-     *  Add search by card name to the search query and sets $_results array with matching deck ids.
-     *
-     * @param string $cardname Name of card to search for
-     */
+    *  Add search by card name to the search query and sets $_results array with matching deck ids.
+    *
+    * @param string $cardname Name of card to search for
+    */
     public function searchByCardName($cardname)
     {
         if (strlen($cardname) >= 3) {
             $sql = 'SELECT deckcontents.deck
-    FROM deckcontents INNER JOIN cards
-        on deckcontents.card = cards.id
-        WHERE cards.name LIKE ?';
+            FROM deckcontents INNER JOIN cards
+            on deckcontents.card = cards.id
+            WHERE cards.name LIKE ?';
             $results = Database::list_result_single_param($sql, 's', "%$cardname%");
             if (count($results) > 0) {
                 //Remove Duplicate decks
@@ -298,7 +300,7 @@ class Decksearch
 
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT m.id FROM matches m, subevents s WHERE m.subevent = s.id AND s.parent = ?
-                            AND (m.playera = ? OR m.playerb = ?) ORDER BY s.timing, m.round');
+        AND (m.playera = ? OR m.playerb = ?) ORDER BY s.timing, m.round');
         $stmt->bind_param('sss', $this->_eventname, $this->_playername, $this->_playername);
         $stmt->execute();
         $stmt->bind_result($matchid);
@@ -311,7 +313,7 @@ class Decksearch
 
         $matches = [];
         foreach ($matchids as $matchid) {
-            $matches[] = new Match($matchid);
+            $matches[] = new Matchup($matchid);
         }
 
         foreach ($matches as $match) {

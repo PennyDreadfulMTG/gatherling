@@ -1,4 +1,7 @@
 <?php
+namespace Gatherling;
+
+use Exception;
 
 class Deck
 {
@@ -216,6 +219,7 @@ class Deck
     {
         // First, get a list of casting costs, CC is used so we can determine
         // if its an artifact
+        $color = [];
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT isw
                           AS w, isg

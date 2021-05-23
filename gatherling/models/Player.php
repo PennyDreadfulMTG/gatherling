@@ -1,4 +1,7 @@
 <?php
+namespace Gatherling;
+
+use Exception;
 
 class Player
 {
@@ -385,7 +388,7 @@ class Player
 
         $matches = [];
         foreach ($matchids as $matchid) {
-            $matches[] = new Match($matchid);
+            $matches[] = new Matchup($matchid);
         }
 
         return $matches;
@@ -480,7 +483,7 @@ class Player
 
         $matches = [];
         foreach ($matchids as $matchid) {
-            $matches[] = new Match($matchid);
+            $matches[] = new Matchup($matchid);
         }
 
         return $matches;
@@ -507,7 +510,7 @@ class Player
 
         $matches = [];
         foreach ($matchids as $matchid) {
-            $matches[] = new Match($matchid);
+            $matches[] = new Matchup($matchid);
         }
 
         return $matches;
@@ -533,7 +536,7 @@ class Player
 
         $matches = [];
         foreach ($matchids as $matchid) {
-            $matches[] = new Match($matchid);
+            $matches[] = new Matchup($matchid);
         }
 
         return $matches;
@@ -604,7 +607,7 @@ class Player
 
         $matches = [];
         foreach ($mids as $mid) {
-            $matches[] = new Match($mid);
+            $matches[] = new Matchup($mid);
         }
 
         return $matches;

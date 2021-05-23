@@ -1,5 +1,9 @@
 <?php
 
+use Gatherling\Database;
+use Gatherling\Format;
+use Gatherling\Player;
+
 require_once 'bootstrap.php';
 if (isset($CONFIG['cookie_lifetime'])) {
     ini_set('session.gc_maxlifetime', $CONFIG['cookie_lifetime']);

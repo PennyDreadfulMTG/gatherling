@@ -1,4 +1,14 @@
 <?php
+
+use Gatherling\Database;
+use Gatherling\Entry;
+use Gatherling\Event;
+use Gatherling\Format;
+use Gatherling\Matchup;
+use Gatherling\Player;
+use Gatherling\Series;
+use Gatherling\Standings;
+
 include 'lib.php';
 include 'lib_form_helper.php';
 session_start();
@@ -902,6 +912,11 @@ function pointsAdjustmentForm($event)
     echo '</td></tr></table></form>';
 }
 
+/**
+ * @param mixed $match
+ * @param mixed $playername
+ * @return void
+ */
 function printUnverifiedPlayerCell($match, $playername)
 {
     global $drop_icon;
@@ -927,6 +942,10 @@ function printUnverifiedPlayerCell($match, $playername)
     }
 }
 
+/**
+ * @param Event $event
+ * @return void
+ */
 function matchList($event)
 {
     global $drop_icon;
@@ -1562,7 +1581,7 @@ function updateMatches()
     $event = new Event($_POST['name']);
     if (isset($_POST['matchdelete'])) {
         foreach ($_POST['matchdelete'] as $matchid) {
-            Match::destroy($matchid);
+            Matchup::destroy($matchid);
         }
     }
 
@@ -1597,8 +1616,8 @@ function updateMatches()
 
             if ((strcasecmp($resultForA, 'notset') != 0) && (strcasecmp($resultForB, 'notset') != 0)) {
                 $matchid = $_POST['hostupdatesmatches'][$ndx];
-                Match::saveReport($resultForA, $matchid, 'a');
-                Match::saveReport($resultForB, $matchid, 'b');
+                Matchup::saveReport($resultForA, $matchid, 'a');
+                Matchup::saveReport($resultForB, $matchid, 'b');
             }
         }
     }

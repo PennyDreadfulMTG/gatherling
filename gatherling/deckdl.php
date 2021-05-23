@@ -1,4 +1,7 @@
 <?php
+
+use Gatherling\Deck;
+
 require_once 'lib.php';
 
 $id = 0;

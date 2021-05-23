@@ -1,15 +1,25 @@
 <?php
 
+
+/**
+ * @param string $class_name
+ * @return void
+ */
 function autoload($class_name)
 {
-    if (file_exists('models/'.$class_name.'.php')) {
-        require_once 'models/'.$class_name.'.php';
-    } elseif (file_exists('../models/'.$class_name.'.php')) {
-        require_once '../models/'.$class_name.'.php';
-    } elseif (file_exists('gatherling/models/'.$class_name.'.php')) {
-        require_once 'gatherling/models/'.$class_name.'.php';
+    $names = explode('\\', $class_name);
+    if ($names[0] == 'Gatherling') {
+        $class_name = $names[1];
+        if (file_exists('models/'.$class_name.'.php')) {
+            require_once 'models/'.$class_name.'.php';
+        } elseif (file_exists('../models/'.$class_name.'.php')) {
+            require_once '../models/'.$class_name.'.php';
+        } elseif (file_exists('gatherling/models/'.$class_name.'.php')) {
+            require_once 'gatherling/models/'.$class_name.'.php';
+        }
     }
 }
+
 spl_autoload_register('autoload');
 // Fix for MAGIC_QUOTES_GPC
 

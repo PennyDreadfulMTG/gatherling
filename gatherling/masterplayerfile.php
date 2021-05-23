@@ -1,5 +1,7 @@
 <?php
 
+use Gatherling\Database;
+
 header('Content-type: text/plain');
 require_once 'lib.php';
 $db = Database::getConnection();

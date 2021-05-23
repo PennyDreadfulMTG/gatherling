@@ -1,4 +1,10 @@
 <?php
+
+use Gatherling\Event;
+use Gatherling\Matchup;
+use Gatherling\Player;
+use Gatherling\Standings;
+
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
 session_start();
@@ -22,7 +28,7 @@ if ($player == null) {
                 $drop = $_POST['drop'] == 'Y';
             }
             if ($drop) {
-                $match = new Match($_POST['match_id']);
+                $match = new Matchup($_POST['match_id']);
                 $eventname = $match->getEventNamebyMatchid();
                 $event = new Event($eventname);
                 $event->dropPlayer($player->name);
@@ -33,7 +39,7 @@ if ($player == null) {
                     $player = new Standings($event->name, $_POST['player']);
                     $opponent = new Standings($event->name, $_POST['opponent']);
                     $new_match_id = $event->addPairing($player, $opponent, $event->current_round, 'P');
-                    Match::saveReport($_POST['report'], $new_match_id, 'a');
+                    Matchup::saveReport($_POST['report'], $new_match_id, 'a');
                     redirect('player.php');
 
                     return;
@@ -42,9 +48,9 @@ if ($player == null) {
                 }
             } else {
                 // Non-league matches
-                $match = new Match($_POST['match_id']);
+                $match = new Matchup($_POST['match_id']);
                 if ($match->playerLetter($player->name) == $_POST['player']) {
-                    Match::saveReport($_POST['report'], $_POST['match_id'], $_POST['player']);
+                    Matchup::saveReport($_POST['report'], $_POST['match_id'], $_POST['player']);
                     redirect('player.php');
 
                     return;
@@ -169,7 +175,7 @@ function print_dropConfirm($event_name, $player)
 
 function print_submit_resultForm($match_id, $drop = false)
 {
-    $match = new Match($match_id);
+    $match = new Matchup($match_id);
     $event = new Event($match->getEventNamebyMatchid());
     $letter = $match->playerLetter(Player::getSessionPlayer()->name);
     if ($letter == 'a') {

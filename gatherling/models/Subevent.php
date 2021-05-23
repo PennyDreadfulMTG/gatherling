@@ -1,4 +1,7 @@
 <?php
+namespace Gatherling;
+
+use Exception;
 
 class Subevent
 {
