@@ -915,6 +915,7 @@ function pointsAdjustmentForm($event)
 /**
  * @param mixed $match
  * @param mixed $playername
+ *
  * @return void
  */
 function printUnverifiedPlayerCell($match, $playername)
@@ -944,6 +945,7 @@ function printUnverifiedPlayerCell($match, $playername)
 
 /**
  * @param Event $event
+ *
  * @return void
  */
 function matchList($event)

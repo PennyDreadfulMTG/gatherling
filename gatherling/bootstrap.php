@@ -1,8 +1,8 @@
 <?php
 
-
 /**
  * @param string $class_name
+ *
  * @return void
  */
 function autoload($class_name)

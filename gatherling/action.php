@@ -4,9 +4,9 @@
 /// Appears at top of each page
 
 use Gatherling\Entry;
+use Gatherling\Event;
 use Gatherling\Player;
 use Gatherling\Series;
-use Gatherling\Event;
 
 require_once 'lib.php';
 session_start();

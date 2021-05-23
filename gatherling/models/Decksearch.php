@@ -15,38 +15,38 @@ class Decksearch
     // holds the current deck id that info is being collected for
 
     /**
-    * Deck Search, Gatherling Deck Search Class.
-    *
-    * This class allows you to create a deck search query using a varing
-    * amout of inputs
-    *
-    * example usage:
-    *
-    * <code>
-    * $decksearch = new Decksearch();
-    * $decksearch->searchByColor($color_array);
-    * $decksearch->searchByFormat($formatname);
-    * $results = $decksearch->getFinalResults();
-    * </code>
-    *
-    * will return an array of deck id's matching the set search terms
-    *
-    *
-    *
-    * @version 1.0
-    *
-    * @category Deck
-    */
+     * Deck Search, Gatherling Deck Search Class.
+     *
+     * This class allows you to create a deck search query using a varing
+     * amout of inputs
+     *
+     * example usage:
+     *
+     * <code>
+     * $decksearch = new Decksearch();
+     * $decksearch->searchByColor($color_array);
+     * $decksearch->searchByFormat($formatname);
+     * $results = $decksearch->getFinalResults();
+     * </code>
+     *
+     * will return an array of deck id's matching the set search terms
+     *
+     *
+     *
+     * @version 1.0
+     *
+     * @category Deck
+     */
     public function __construct()
     {
     }
 
     /**
-    * call getFinalResults to complete a search request with any set inputs
-    * and returns a list of deck id's that match.
-    *
-    * @return array List of id's that match the search request
-    */
+     * call getFinalResults to complete a search request with any set inputs
+     * and returns a list of deck id's that match.
+     *
+     * @return array List of id's that match the search request
+     */
     public function getFinalResults()
     {
         if (count($this->_results) > 0 && count($this->errors) == 0) {
@@ -88,10 +88,10 @@ class Decksearch
     }
 
     /**
-    * Add search by format to the search query and sets $_results array with matching deck ids.
-    *
-    * @param string $format Format to search decks by
-    */
+     * Add search by format to the search query and sets $_results array with matching deck ids.
+     *
+     * @param string $format Format to search decks by
+     */
     public function searchByFormat($format)
     {
         $sql = 'SELECT id FROM decks WHERE format = ?';
@@ -104,10 +104,10 @@ class Decksearch
     }
 
     /**
-    * Add search by players to the search query sets $_results array.
-    *
-    * @param string $player Player name to search decks by
-    */
+     * Add search by players to the search query sets $_results array.
+     *
+     * @param string $player Player name to search decks by
+     */
     public function searchByPlayer($player)
     {
         $sql = 'SELECT id FROM decks WHERE playername LIKE ?';
@@ -120,12 +120,12 @@ class Decksearch
     }
 
     /**
-    * Add search by medals to the search query and sets $_results array with matching deck ids.
-    *
-    * Input options: 1st 2nd t4 t8
-    *
-    * @param string $medal Medal to search decks by
-    */
+     * Add search by medals to the search query and sets $_results array with matching deck ids.
+     *
+     * Input options: 1st 2nd t4 t8
+     *
+     * @param string $medal Medal to search decks by
+     */
     public function searchByMedals($medal)
     {
         $sql = 'SELECT decks.id
@@ -143,16 +143,16 @@ class Decksearch
     }
 
     /**
-    *  Add search by colors to the search query sets $_results array with matching deck ids.
-    *
-    *  bcgruw u=Blue w=White b=Black r=Red g=Green c=Colorless
-    *  e.g. array(u => 'u') order does not matter.
-    *
-    *
-    *  @param [$color_str_input] Array of the input color
-    *
-    *  @return mixed true if success/false otherwise
-    */
+     *  Add search by colors to the search query sets $_results array with matching deck ids.
+     *
+     *  bcgruw u=Blue w=White b=Black r=Red g=Green c=Colorless
+     *  e.g. array(u => 'u') order does not matter.
+     *
+     *
+     *  @param [$color_str_input] Array of the input color
+     *
+     *  @return mixed true if success/false otherwise
+     */
     public function searchByColor($color_str_input)
     {
         // alphebetizes then sets the search string
@@ -172,10 +172,10 @@ class Decksearch
     }
 
     /**
-    *  Add search by archetype to the search query and sets $_results array with matching deck ids.
-    *
-    * @param string $archetype Name of archetype to search for
-    */
+     *  Add search by archetype to the search query and sets $_results array with matching deck ids.
+     *
+     * @param string $archetype Name of archetype to search for
+     */
     public function searchByArchetype($archetype)
     {
         $sql = 'SELECT id FROM decks WHERE archetype = ?';
@@ -188,10 +188,10 @@ class Decksearch
     }
 
     /**
-    * Add search by series to the search query sets $_results array with matching deck ids.
-    *
-    * @param string $series Series name to search by
-    */
+     * Add search by series to the search query sets $_results array with matching deck ids.
+     *
+     * @param string $series Series name to search by
+     */
     public function searchBySeries($series)
     {
         $sql = 'SELECT entries.deck
@@ -209,10 +209,10 @@ class Decksearch
     }
 
     /**
-    *  Add search by card name to the search query and sets $_results array with matching deck ids.
-    *
-    * @param string $cardname Name of card to search for
-    */
+     *  Add search by card name to the search query and sets $_results array with matching deck ids.
+     *
+     * @param string $cardname Name of card to search for
+     */
     public function searchByCardName($cardname)
     {
         if (strlen($cardname) >= 3) {
