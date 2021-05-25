@@ -543,7 +543,7 @@ function print_preRegistration()
 
         if ($event->is_full()) {
             echo '<td>This event is currently at capacity.</td>';
-        } else if ($event->client == 1 && empty($player->mtgo_username)) {
+        } elseif ($event->client == 1 && empty($player->mtgo_username)) {
             echo '<td><a href="player.php?mode=edit_accounts">Requires an MTGO account</a></td>';
         } elseif ($event->client == 2 && empty($player->mtga_username)) {
             echo '<td><a href="player.php?mode=edit_accounts">Requires a Magic Arena account</a></td>';
