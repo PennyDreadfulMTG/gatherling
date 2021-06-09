@@ -36,7 +36,16 @@ if (version_compare(phpversion(), 6) === -1) {
 
 require_once 'config.php';
 
+$CONFIG['GIT_HASH'] = null;
+if (file_exists('../.git/HEAD')) {
+    $branch = trim(substr(file_get_contents('../.git/HEAD'), 5));
+    if ($hash = file_get_contents(sprintf('../.git/%s', $branch))) {
+        $CONFIG['GIT_HASH'] = $hash;
+    }
+}
+
 Sentry\init([
     'dsn'         => 'https://f8ec94b8d8b24b71b111fe96b0cc22b5@o531055.ingest.sentry.io/5657303',
     'environment' => $CONFIG['site_name'],
+    'release'     => $hash,
 ]);

@@ -135,7 +135,7 @@ function prompt_link_account($user)
                     <td><input id="username" class="inputbox" type="text" name="username" value="" tabindex="1"></td>
                 </tr>
                 <tr>
-                    <td colspan="2">Please ensure you enter this correctly, as it cannot be changed later.</td>
+                    <td colspan="2">Please use your MTGO username if you have one.</td>
                 </tr>
                 <tr>
                     <td>&nbsp;</td>

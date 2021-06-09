@@ -336,6 +336,7 @@ function setPlayerIgnores()
 
 function print_mainPlayerCP($player, $result)
 {
+    echo '<script defer src="tab_view.js"></script>';
     echo '<button class="tablink" id="defaultOpen" onclick="openPage(\'future\', this)">Events</button>';
     echo '<button class="tablink" onclick="openPage(\'past\', this)">History</button>';
     echo '<button class="tablink" onclick="openPage(\'statistics\', this)">Statistics</button>';
@@ -427,7 +428,6 @@ function print_mainPlayerCP($player, $result)
     echo "</div></div>\n";
     echo '</div>';
     echo "<div class=\"clear\"></div>\n";
-    echo '<script src="tab_view.js" async></script>';
 }
 
 function print_allContainer()

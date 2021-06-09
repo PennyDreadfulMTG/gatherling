@@ -1,4 +1,5 @@
 <?php
+namespace Gatherling;
 
 require_once __DIR__.'/../lib.php';
 

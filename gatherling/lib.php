@@ -527,16 +527,9 @@ function print_warning_if($conditional)
 
 function print_git_hash()
 {
-    if (file_exists('../.git/HEAD')) {
-        $branch = trim(substr(file_get_contents('../.git/HEAD'), 5));
-        if ($hash = file_get_contents(sprintf('../.git/%s', $branch))) {
-            echo '<br/>'.$hash;
-
-            return true;
-        } else {
-            return false;
-        }
-
+    global $CONFIG;
+    if (!is_null($hash = $CONFIG['GIT_HASH'])) {
+        echo '<br/>'.$hash;
         return true;
     }
 
