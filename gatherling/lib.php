@@ -530,6 +530,7 @@ function print_git_hash()
     global $CONFIG;
     if (!is_null($hash = $CONFIG['GIT_HASH'])) {
         echo '<br/>'.$hash;
+
         return true;
     }
 

@@ -997,10 +997,12 @@ function matchList(Event $event)
             echo "<tr><td class=\"box\" align=\"center\" colspan=\"7\" style=\"background-color: Grey;color: Black\"> <a name=\"round-{$thisround}\"></a>ROUND {$thisround} {$extraRoundTitle} </td></tr>";
         }
         echo "<tr><td align=\"center\">$printrnd$star</td>";
-        if (!isset($playersInMatches[$match->playera]))
+        if (!isset($playersInMatches[$match->playera])) {
             $playersInMatches[$match->playera] = new Player($match->playera);
-        if (!isset($playersInMatches[$match->playerb]))
+        }
+        if (!isset($playersInMatches[$match->playerb])) {
             $playersInMatches[$match->playerb] = new Player($match->playerb);
+        }
         $playera = $playersInMatches[$match->playera];
         $playerb = $playersInMatches[$match->playerb];
 
