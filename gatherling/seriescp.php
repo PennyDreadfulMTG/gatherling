@@ -1,4 +1,9 @@
 <?php
+
+use Gatherling\Deck;
+use Gatherling\Player;
+use Gatherling\Series;
+
 include 'lib.php';
 include 'lib_form_helper.php';
 session_start();

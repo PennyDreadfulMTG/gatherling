@@ -1,5 +1,9 @@
 <?php
 
+use Gatherling\Database;
+use Gatherling\Format;
+use Gatherling\Player;
+
 require_once 'bootstrap.php';
 if (isset($CONFIG['cookie_lifetime'])) {
     ini_set('session.gc_maxlifetime', $CONFIG['cookie_lifetime']);
@@ -523,15 +527,9 @@ function print_warning_if($conditional)
 
 function print_git_hash()
 {
-    if (file_exists('../.git/HEAD')) {
-        $branch = trim(substr(file_get_contents('../.git/HEAD'), 5));
-        if ($hash = file_get_contents(sprintf('../.git/%s', $branch))) {
-            echo '<br/>'.$hash;
-
-            return true;
-        } else {
-            return false;
-        }
+    global $CONFIG;
+    if (!is_null($hash = $CONFIG['GIT_HASH'])) {
+        echo '<br/>'.$hash;
 
         return true;
     }
@@ -541,7 +539,8 @@ function print_git_hash()
 
 function version_tagline()
 {
-    echo 'Gatherling version 5.0.0 ("Hulk, no! Just for once in your life, don\'t smash!")';
+    echo 'Gatherling version 5.0.1 ("No rest. No mercy. No matter what.")';
+    // echo 'Gatherling version 5.0.0 ("Hulk, no! Just for once in your life, don\'t smash!")';
     // echo 'Gatherling version 4.9.0 ("Where we’re going, we don’t need roads")';
     // echo 'Gatherling version 4.8.8 ("Fish fingers and custard")';
     // echo 'Gatherling version 4.8.7 ("Step 7: Steal a bagel.")';

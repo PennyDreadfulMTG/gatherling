@@ -1,4 +1,7 @@
 <?php
+
+use Gatherling\Player;
+
 include_once 'lib.php';
 require_once 'lib_form_helper.php';
 session_start();
@@ -20,6 +23,7 @@ if (isset($_POST['pw1'])) {
 print_header('Register');
 ?>
 
+<script src="https://hcaptcha.com/1/api.js" async defer></script>
 <div class="grid_10 suffix_1 prefix_1">
 <div id="gatherling_main" class="box">
 <div class="uppertitle"> Register for Gatherling </div>
@@ -43,6 +47,7 @@ function regForm()
     echo "<form action=\"register.php\" method=\"post\" onsubmit=\"return validate_pw()\">\n";
     echo "<table align=\"center\" style=\"border-width: 0px\">\n";
     echo "<center id='notice'>Passwords are required to be at least 8 characters long.</center>\n";
+    echo "<center id='notice'>Please use your MTGO username if you have one.</center>\n";
     echo "<tr><td><b>Username</td>\n";
     echo "<td><input class=\"inputbox\" type=\"text\" name=\"username\" value=\"\">\n";
     echo "</td></tr>\n";
@@ -62,6 +67,7 @@ function regForm()
     echo "</td></tr>\n";
     echo "<tr><td>&nbsp;</td></tr>\n";
     echo "<tr><td align=\"center\" colspan=\"2\">\n";
+    echo '<div class="h-captcha" data-sitekey="6593a7b2-48b0-4a15-bb0f-c6d47c4ac0e6"></div>';
     echo '<input class="inputbutton" type="submit" name="mode" value="Register Account">';
     echo "</td></tr></table></form>\n";
 }

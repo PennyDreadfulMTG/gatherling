@@ -1,5 +1,7 @@
 <?php
 
+namespace Gatherling;
+
 class Standings
 {
     public $event;  // belongs_to event

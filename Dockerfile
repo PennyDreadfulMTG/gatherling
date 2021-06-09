@@ -8,7 +8,7 @@ RUN curl --silent --show-error https://getcomposer.org/installer | php
 RUN php composer.phar install
 
 
-FROM php:7.2-apache
+FROM php:7.4-apache
 LABEL maintainer="Katelyn Gigante"
 
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli

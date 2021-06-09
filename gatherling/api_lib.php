@@ -1,6 +1,12 @@
 <?php
 
 //## Helper Functions
+
+use Gatherling\Event;
+use Gatherling\Player;
+use Gatherling\Series;
+use Gatherling\Standings;
+
 function populate($array, $src, $keys)
 {
     foreach ($keys as $key) {
@@ -277,8 +283,8 @@ function create_pairing($event, $round, $a, $b, $res)
         error('Unauthorized');
     }
 
-    $playerA = new Standings($event->name, $pA);
-    $playerB = new Standings($event->name, $pB);
+    $playerA = new Standings($event->name, $a);
+    $playerB = new Standings($event->name, $b);
     switch ($res) {
         case '2-0':
             $pAWins = 2;
@@ -315,8 +321,8 @@ function create_pairing($event, $round, $a, $b, $res)
             break;
     }
     if ($res == 'P') {
-        $event->addPairing($playerA, $playerB, $rnd, $res);
+        $event->addPairing($playerA, $playerB, $round, $res);
     } else {
-        $event->addMatch($playerA, $playerB, $rnd, $res, $pAWins, $pBWins);
+        $event->addMatch($playerA, $playerB, $round, $res, $pAWins, $pBWins);
     }
 }

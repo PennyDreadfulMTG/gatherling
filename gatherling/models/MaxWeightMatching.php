@@ -1,5 +1,7 @@
 <?php
 
+namespace Gatherling;
+
 $DEBUG = null;
 $CHECK_DELTA = false;
 

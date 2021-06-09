@@ -1,5 +1,7 @@
 <?php
 
+namespace Gatherling;
+
 function sortSets($a, $b)
 {
     return strtotime($a->releaseDate) < strtotime($b->releaseDate);

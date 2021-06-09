@@ -1,5 +1,7 @@
 <?php
 
+use Gatherling\Database;
+
 include 'lib.php';
 
 $eventName = $_GET['event'];

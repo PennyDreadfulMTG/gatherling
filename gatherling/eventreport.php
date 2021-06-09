@@ -1,4 +1,14 @@
 <?php
+
+use Gatherling\Database;
+use Gatherling\Deck;
+use Gatherling\Entry;
+use Gatherling\Event;
+use Gatherling\Format;
+use Gatherling\Player;
+use Gatherling\Series;
+use Gatherling\Standings;
+
 include 'lib.php';
 session_start();
 

@@ -1,4 +1,13 @@
 <?php
+
+use Gatherling\Database;
+use Gatherling\Entry;
+use Gatherling\Event;
+use Gatherling\Player;
+use Gatherling\Ratings;
+use Gatherling\Series;
+use Gatherling\Standings;
+
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
 session_start();
@@ -327,6 +336,7 @@ function setPlayerIgnores()
 
 function print_mainPlayerCP($player, $result)
 {
+    echo '<script defer src="tab_view.js"></script>';
     echo '<button class="tablink" id="defaultOpen" onclick="openPage(\'future\', this)">Events</button>';
     echo '<button class="tablink" onclick="openPage(\'past\', this)">History</button>';
     echo '<button class="tablink" onclick="openPage(\'statistics\', this)">Statistics</button>';
@@ -418,7 +428,6 @@ function print_mainPlayerCP($player, $result)
     echo "</div></div>\n";
     echo '</div>';
     echo "<div class=\"clear\"></div>\n";
-    echo '<script src="tab_view.js" async></script>';
 }
 
 function print_allContainer()
@@ -543,6 +552,10 @@ function print_preRegistration()
 
         if ($event->is_full()) {
             echo '<td>This event is currently at capacity.</td>';
+        } elseif ($event->client == 1 && empty($player->mtgo_username)) {
+            echo '<td><a href="player.php?mode=edit_accounts">Requires an MTGO account</a></td>';
+        } elseif ($event->client == 2 && empty($player->mtga_username)) {
+            echo '<td><a href="player.php?mode=edit_accounts">Requires a Magic Arena account</a></td>';
         } else {
             echo '<td><a href="prereg.php?action=reg&event='.rawurlencode($event->name).'">Register</a></td>';
         }

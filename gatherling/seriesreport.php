@@ -1,4 +1,7 @@
 <?php
+
+use Gatherling\Series;
+
 include 'lib.php';
 session_start();
 

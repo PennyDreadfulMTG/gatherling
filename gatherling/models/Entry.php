@@ -1,5 +1,9 @@
 <?php
 
+namespace Gatherling;
+
+use Exception;
+
 class Entry
 {
     public $event;

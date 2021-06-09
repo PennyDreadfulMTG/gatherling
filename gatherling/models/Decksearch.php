@@ -1,5 +1,7 @@
 <?php
 
+namespace Gatherling;
+
 class Decksearch
 {
     public $errors = [];
@@ -127,10 +129,10 @@ class Decksearch
     public function searchByMedals($medal)
     {
         $sql = 'SELECT decks.id
-         FROM decks INNER JOIN entries
-         ON decks.id = entries.deck
-         WHERE entries.medal = ?
-         ORDER BY DATE(`created_date`) DESC';
+        FROM decks INNER JOIN entries
+        ON decks.id = entries.deck
+        WHERE entries.medal = ?
+        ORDER BY DATE(`created_date`) DESC';
 
         $results = Database::list_result_single_param($sql, 's', $medal);
         if (count($results) > 0) {
@@ -193,10 +195,10 @@ class Decksearch
     public function searchBySeries($series)
     {
         $sql = 'SELECT entries.deck
-            FROM entries INNER JOIN events
-            ON entries.event_id = events.id
-            WHERE events.series = ?
-            AND entries.deck ORDER BY DATE(`registered_at`) DESC';
+        FROM entries INNER JOIN events
+        ON entries.event_id = events.id
+        WHERE events.series = ?
+        AND entries.deck ORDER BY DATE(`registered_at`) DESC';
 
         $results = Database::list_result_single_param($sql, 's', $series);
         if (count($results) > 0) {
@@ -215,9 +217,9 @@ class Decksearch
     {
         if (strlen($cardname) >= 3) {
             $sql = 'SELECT deckcontents.deck
-    FROM deckcontents INNER JOIN cards
-        on deckcontents.card = cards.id
-        WHERE cards.name LIKE ?';
+            FROM deckcontents INNER JOIN cards
+            on deckcontents.card = cards.id
+            WHERE cards.name LIKE ?';
             $results = Database::list_result_single_param($sql, 's', "%$cardname%");
             if (count($results) > 0) {
                 //Remove Duplicate decks
@@ -298,7 +300,7 @@ class Decksearch
 
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT m.id FROM matches m, subevents s WHERE m.subevent = s.id AND s.parent = ?
-                            AND (m.playera = ? OR m.playerb = ?) ORDER BY s.timing, m.round');
+        AND (m.playera = ? OR m.playerb = ?) ORDER BY s.timing, m.round');
         $stmt->bind_param('sss', $this->_eventname, $this->_playername, $this->_playername);
         $stmt->execute();
         $stmt->bind_result($matchid);
@@ -311,7 +313,7 @@ class Decksearch
 
         $matches = [];
         foreach ($matchids as $matchid) {
-            $matches[] = new Match($matchid);
+            $matches[] = new Matchup($matchid);
         }
 
         foreach ($matches as $match) {

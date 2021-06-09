@@ -1,4 +1,11 @@
 <?php
+
+use Gatherling\Format;
+use Gatherling\Player;
+use Gatherling\Ratings;
+use Gatherling\Series;
+use Gatherling\SetScraper;
+
 include 'lib.php';
 include 'lib_form_helper.php';
 session_start();

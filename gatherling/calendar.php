@@ -1,4 +1,7 @@
 <?php
+
+use Gatherling\Database;
+
 require_once 'lib.php';
 
 header('Content-Type: text/calendar');

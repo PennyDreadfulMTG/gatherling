@@ -1,5 +1,7 @@
 <?php
 
+namespace Gatherling;
+
 /**
  *  A generic pagination script that automatically generates navigation links as well as next/previous page links, given
  *  the total number of records and the number of records to be shown per page. Useful for breaking large sets of data

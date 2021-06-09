@@ -1,5 +1,7 @@
 <?php
 
+namespace Gatherling;
+
 class Trophy
 {
     public $event;

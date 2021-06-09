@@ -1,4 +1,8 @@
 <?php
+
+use Gatherling\Event;
+use Gatherling\Player;
+
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
 session_start();

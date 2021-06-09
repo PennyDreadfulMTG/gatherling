@@ -4,6 +4,8 @@
 // Mode: Used to select between send and read modes
 // Type: Type of message being sent. Options are: Bug Report and Update Request
 
+use Gatherling\Player;
+
 include 'lib.php';
 session_start();
 

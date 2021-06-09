@@ -1,4 +1,15 @@
 <?php
+
+// declare(strict_types=1);
+use Gatherling\Database;
+use Gatherling\Entry;
+use Gatherling\Event;
+use Gatherling\Format;
+use Gatherling\Matchup;
+use Gatherling\Player;
+use Gatherling\Series;
+use Gatherling\Standings;
+
 include 'lib.php';
 include 'lib_form_helper.php';
 session_start();
@@ -75,6 +86,10 @@ $(document).ready(function() {
 });
 EOD;
 
+if (!Player::isLoggedIn()) {
+    linkToLogin('Host Control Panel');
+}
+
 print_header('Event Host Control Panel', true);
 ?>
 <div class="grid_10 suffix_1 prefix_1">
@@ -82,11 +97,7 @@ print_header('Event Host Control Panel', true);
 <div class="uppertitle"> Host Control Panel </div>
 
 <?php
-if (Player::isLoggedIn()) {
-    content();
-} else {
-    linkToLogin('Host Control Panel');
-}
+content();
 ?>
 
 <div class="clear"></div>
@@ -96,9 +107,9 @@ if (Player::isLoggedIn()) {
 
 <?php
 
-function mode_is($str)
+function mode_is(string $str)
 {
-    $mode = null;
+    $mode = '';
     if (isset($_REQUEST['mode']) and $_REQUEST['mode'] != '') {
         $mode = $_REQUEST['mode'];
     }
@@ -450,7 +461,7 @@ function eventList($series = '', $season = '')
     echo '</table></form>';
 }
 
-function eventForm($event = null, $forcenew = false)
+function eventForm(Event $event = null, bool $forcenew = false)
 {
     if ($forcenew) {
         $edit = 0;
@@ -744,24 +755,17 @@ function playerList($event)
             echo "<td align=\"center\">$img</td>";
         }
         echo '<td>';
+        $playername = $entry->player->gameName($event->client);
         if ($entry->player->emailAddress == '') {
-            echo "{$entry->player->name}";
+            echo "{$playername}";
         } else {
-            displayPlayerEmailPopUp($entry->player->name, $entry->player->emailAddress);
+            displayPlayerEmailPopUp($playername, $entry->player->emailAddress);
         }
         echo '</td>';
         if ($entry->deck) {
             $decklink = $entry->deck->linkTo();
         } else {
-            if (!empty($entry->player->discord_handle)) {
-                $deckless .= "@{$entry->player->discord_handle}, ";
-            } elseif ($event->client == 1 && !empty($entry->player->mtgo_username)) {
-                $deckless .= "{$entry->player->mtgo_username}, ";
-            } elseif ($event->client == 2 && !empty($entry->player->mtga_username)) {
-                $deckless .= "{$entry->player->mtgo_username}, ";
-            } else {
-                $deckless .= "{$entry->player->name}, ";
-            }
+            $deckless .= "{$playername}, ";
             $decklink = $entry->createDeckLink();
         }
         $rstar = '<font color="red">*</font>';
@@ -901,14 +905,16 @@ function pointsAdjustmentForm($event)
     echo '</td></tr></table></form>';
 }
 
-function printUnverifiedPlayerCell($match, $playername)
+function printUnverifiedPlayerCell(Event $event, Matchup $match, Player $player)
 {
     global $drop_icon;
+    $playername = $player->name;
+    $displayname = $player->gameName($event->client);
     $dropped = $match->playerDropped($playername);
     if ($dropped) {
         echo "<td>{$drop_icon}";
     } else {
-        echo "<td><input type=\"checkbox\" name=\"dropplayer[]\" value=\"{$playername}\" title='Drop $playername from the event'>";
+        echo "<td><input type=\"checkbox\" name=\"dropplayer[]\" value=\"{$playername}\" title='Drop $displayname from the event'>";
     }
     if (($match->getPlayerWins($playername) > 0) || ($match->getPlayerLosses($playername) > 0)) {
         if ($match->getPlayerWins($playername) > $match->getPlayerLosses($playername)) {
@@ -917,16 +923,16 @@ function printUnverifiedPlayerCell($match, $playername)
             $matchresult = 'L ';
         }
         if (($match->getPlayerWins($playername) == 1) && ($match->getPlayerLosses($playername) == 1)) {
-            echo "<span class=\"match_{$match->verification}\">{$playername}</span> (Draw)</td>";
+            echo "<span class=\"match_{$match->verification}\">{$displayname}</span> (Draw)</td>";
         } else {
-            echo "<span class=\"match_{$match->verification}\">{$playername}</span> ({$matchresult}{$match->getPlayerWins($playername)}-{$match->getPlayerLosses($playername)})</td>";
+            echo "<span class=\"match_{$match->verification}\">{$displayname}</span> ({$matchresult}{$match->getPlayerWins($playername)}-{$match->getPlayerLosses($playername)})</td>";
         }
     } else {
-        echo "{$playername}</td>";
+        echo "{$displayname}</td>";
     }
 }
 
-function matchList($event)
+function matchList(Event $event)
 {
     global $drop_icon;
     $matches = $event->getMatches();
@@ -983,7 +989,6 @@ function matchList($event)
         $star = ($match->timing > 1) ? '*' : '';
         if ($printrnd != $thisround) {
             $thisround = $printrnd;
-            $playersInMatches = [];
             $extraRoundTitle = '';
             if ($match->timing > 1) {
                 $extraRoundTitle = "(Finals Round {$match->round})";
@@ -992,34 +997,41 @@ function matchList($event)
             echo "<tr><td class=\"box\" align=\"center\" colspan=\"7\" style=\"background-color: Grey;color: Black\"> <a name=\"round-{$thisround}\"></a>ROUND {$thisround} {$extraRoundTitle} </td></tr>";
         }
         echo "<tr><td align=\"center\">$printrnd$star</td>";
-        $playersInMatches[] = $match->playera;
-        $playersInMatches[] = $match->playerb;
+        if (!isset($playersInMatches[$match->playera])) {
+            $playersInMatches[$match->playera] = new Player($match->playera);
+        }
+        if (!isset($playersInMatches[$match->playerb])) {
+            $playersInMatches[$match->playerb] = new Player($match->playerb);
+        }
+        $playera = $playersInMatches[$match->playera];
+        $playerb = $playersInMatches[$match->playerb];
+
         if (strcasecmp($match->verification, 'verified') != 0 && $event->finalized == 0) {
-            $ezypaste .= "{$match->playera} vs. {$match->playerb}<br />";
-            printUnverifiedPlayerCell($match, $match->playera);
+            $ezypaste .= "{$playera->gameName($event->client)} vs. {$playerb->gameName($event->client)}<br />";
+            printUnverifiedPlayerCell($event, $match, $playera);
             echo '<td>';
             echo "<input type=\"hidden\" name=\"hostupdatesmatches[]\" value=\"{$match->id}\">";
             resultDropMenu('matchresult[]');
             echo '</td>';
-            printUnverifiedPlayerCell($match, $match->playerb);
+            printUnverifiedPlayerCell($event, $match, $playerb);
         } else {
             $playerawins = $match->getPlayerWins($match->playera);
             $playerbwins = $match->getPlayerWins($match->playerb);
             $playeradropflag = $match->playerDropped($match->playera) ? $drop_icon : '';
             $playerbdropflag = $match->playerDropped($match->playerb) ? $drop_icon : '';
-            echo "<td class=\"match_{$match->verification}\">{$match->playera}</td>";
+            echo "<td class=\"match_{$match->verification}\">{$playera->gameName($event->client)}</td>";
             if ($match->playera == $match->playerb) {
-                $ezypaste .= "{$match->playera} has the BYE<br />";
+                $ezypaste .= "{$playera->gameName($event->client)} has the BYE<br />";
                 echo '<td>BYE</td>';
                 echo '<td></td>';
             } elseif (($match->getPlayerWins($match->playera) == 1) && ($match->getPlayerWins($match->playerb) == 1)) {
                 echo "<td>{$playeradropflag} Draw {$playerbdropflag}</td>";
-                $ezypaste .= "{$match->playera} {$playerawins}-{$playerbwins} {$match->playerb}<br />";
-                echo "<td class=\"match_{$match->verification}\">{$match->playerb}</td>";
+                $ezypaste .= "{$playera->gameName($event->client)} {$playerawins}-{$playerbwins} {$playerb->gameName($event->client)}<br />";
+                echo "<td class=\"match_{$match->verification}\">{$playerb->gameName($event->client)}</td>";
             } else {
                 echo "<td>{$playeradropflag} {$playerawins}-{$playerbwins} {$playerbdropflag}</td>";
-                $ezypaste .= "{$match->playera} {$playerawins}-{$playerbwins} {$match->playerb}<br />";
-                echo "<td class=\"match_{$match->verification}\">{$match->playerb}</td>";
+                $ezypaste .= "{$match->playera} {$playerawins}-{$playerbwins} {$playerb->gameName($event->client)}<br />";
+                echo "<td class=\"match_{$match->verification}\">{$playerb->gameName($event->client)}</td>";
             }
         }
         echo '<td align="center">';
@@ -1155,11 +1167,8 @@ function medalList($event)
     echo '</table>';
 }
 
-function kValueDropMenu($kvalue)
+function kValueDropMenu(int $kvalue)
 {
-    if (strcmp($kvalue, '') == 0) {
-        $kvalue = -1;
-    }
     $names = [''      => '- K-Value -', 8 => 'Casual (Alt Event)', 16 => 'Regular (less than 24 players)',
         24            => 'Large (24 or more players)', 32 => 'Championship', ];
     print_select_input('K-Value', 'kvalue', $names, $kvalue);
@@ -1561,7 +1570,7 @@ function updateMatches()
     $event = new Event($_POST['name']);
     if (isset($_POST['matchdelete'])) {
         foreach ($_POST['matchdelete'] as $matchid) {
-            Match::destroy($matchid);
+            Matchup::destroy($matchid);
         }
     }
 
@@ -1596,8 +1605,8 @@ function updateMatches()
 
             if ((strcasecmp($resultForA, 'notset') != 0) && (strcasecmp($resultForB, 'notset') != 0)) {
                 $matchid = $_POST['hostupdatesmatches'][$ndx];
-                Match::saveReport($resultForA, $matchid, 'a');
-                Match::saveReport($resultForB, $matchid, 'b');
+                Matchup::saveReport($resultForA, $matchid, 'a');
+                Matchup::saveReport($resultForB, $matchid, 'b');
             }
         }
     }

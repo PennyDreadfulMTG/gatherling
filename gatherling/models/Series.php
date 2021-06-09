@@ -1,5 +1,10 @@
 <?php
 
+namespace Gatherling;
+
+use Exception;
+use PDO;
+
 class Series
 {
     public $name;

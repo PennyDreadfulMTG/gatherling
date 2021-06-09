@@ -1,6 +1,9 @@
 <html>
 
 <?php
+
+use Gatherling\Database;
+
 require_once 'lib.php';
 $db = Database::getConnection();
 

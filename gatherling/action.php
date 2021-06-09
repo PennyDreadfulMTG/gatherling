@@ -2,6 +2,12 @@
 
 /// Information banner informing user that they have pending actions.
 /// Appears at top of each page
+
+use Gatherling\Entry;
+use Gatherling\Event;
+use Gatherling\Player;
+use Gatherling\Series;
+
 require_once 'lib.php';
 session_start();
 $player = Player::getSessionPlayer();
@@ -47,7 +53,7 @@ if (!is_null($player)) {
             // } else {
             //     $subevent_id = $event->mainid;
             // }
-            // $matches_remaining = Match::unresolvedMatchesCheck($subevent_id, $event->current_round);
+            // $matches_remaining = Matchup::unresolvedMatchesCheck($subevent_id, $event->current_round);
             // $message = $message . "There are $matches_remaining unreported matches.";
         }
     }

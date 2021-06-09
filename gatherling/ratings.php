@@ -1,4 +1,10 @@
 <?php
+
+use Gatherling\Database;
+use Gatherling\Pagination;
+use Gatherling\Player;
+use Gatherling\Ratings;
+
 include 'lib.php';
 session_start();
 

@@ -1,5 +1,8 @@
 <?php
 
+use Gatherling\Database;
+use Gatherling\Player;
+
 require_once 'lib.php';
 session_start();
 

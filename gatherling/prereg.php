@@ -1,5 +1,9 @@
 <?php
 
+use Gatherling\Event;
+use Gatherling\Player;
+use Gatherling\Series;
+
 require_once 'lib.php';
 session_start();
 $prevent_registration = 0;

@@ -1,5 +1,11 @@
 <?php
 
+namespace Gatherling;
+
+use Exception;
+use mysqli;
+use PDO;
+
 class Database
 {
     public static function getConnection()
@@ -25,7 +31,7 @@ class Database
                 self::single_result($sql);
                 $db_selected = $instance->select_db($CONFIG['db_database']);
                 if (!$db_selected) {
-                    exit('Error creating database: '.mysqli_error()."\n");
+                    exit('Error creating database: '.mysqli_error($instance)."\n");
                 }
             }
 
@@ -72,7 +78,7 @@ class Database
         $db = self::getConnection();
         $stmt = $db->prepare($sql);
         if (!$stmt) {
-            throw new Exception($stmt->error, 1);
+            throw new Exception($db->error, 1);
         }
         $stmt->bind_param($paramType, $param);
         $stmt->execute();
@@ -117,7 +123,7 @@ class Database
         $db = self::getConnection();
         $stmt = $db->prepare($sql);
         if (!$stmt) {
-            throw new Exception($stmt->error, 1);
+            throw new Exception($db->error, 1);
         }
         $stmt->bind_param($paramType, $param);
         $stmt->execute();
@@ -169,7 +175,7 @@ class Database
         $db = self::getConnection();
         $stmt = $db->prepare($query);
         if (!$stmt) {
-            throw new Exception($stmt->error, 1);
+            throw new Exception($db->error, 1);
         }
         if (count($params) == 1) {
             list($one) = $params;
@@ -219,7 +225,7 @@ class Database
         $db = self::getConnection();
         $stmt = $db->prepare($query);
         if (!$stmt) {
-            throw new Exception($stmt->error, 1);
+            throw new Exception($db->error, 1);
         }
         if (count($params) == 1) {
             list($one) = $params;

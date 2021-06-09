@@ -1,6 +1,10 @@
 <?php
 
-class Match
+namespace Gatherling;
+
+use Exception;
+
+class Matchup
 {
     public $id;
     public $subevent;
@@ -187,12 +191,11 @@ class Match
             return 'Draw';
         }
 
-        throw new Exception("Player $playername is not in match {$match->id}");
+        throw new Exception("Player $playername is not in match {$this->id}");
     }
 
-    public function playerDropped($player)
+    public function playerDropped(string $player)
     {
-        $playername = $this->toName($player);
         $entry = new Entry($this->event_id, $player);
 
         return $entry->drop_round == $this->round;

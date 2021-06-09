@@ -132,14 +132,14 @@ final class EventsTest extends TestCase
     {
         $matches = $event->getRoundMatches(1);
         $this->assertEquals(count($matches), 3);
-        Match::saveReport('W20', $matches[0]->id, 'a');
-        Match::saveReport('L20', $matches[0]->id, 'b');
-        Match::saveReport('W20', $matches[1]->id, 'a');
-        Match::saveReport('W20', $matches[1]->id, 'b');
+        Matchup::saveReport('W20', $matches[0]->id, 'a');
+        Matchup::saveReport('L20', $matches[0]->id, 'b');
+        Matchup::saveReport('W20', $matches[1]->id, 'a');
+        Matchup::saveReport('W20', $matches[1]->id, 'b');
         $matches = $event->getRoundMatches(1);
         $this->assertEquals($matches[0]->verification, 'verified');
         $this->assertEquals($matches[1]->verification, 'failed');
-        Match::saveReport('L20', $matches[1]->id, 'b');
+        Matchup::saveReport('L20', $matches[1]->id, 'b');
         $matches = $event->getRoundMatches(1);
         $this->assertEquals($matches[1]->verification, 'verified');
 

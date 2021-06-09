@@ -1,4 +1,8 @@
 <?php
+
+use Gatherling\Database;
+use Gatherling\Player;
+
 include 'lib.php';
 include 'lib_form_helper.php';
 session_start();

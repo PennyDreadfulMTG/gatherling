@@ -1,4 +1,7 @@
 <?php
+
+use Gatherling\Player;
+
 include 'lib.php';
 session_start();
 $in = testLogin();

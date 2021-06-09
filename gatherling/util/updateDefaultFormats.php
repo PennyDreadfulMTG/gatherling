@@ -1,5 +1,7 @@
 <?php
 
+namespace Gatherling;
+
 require_once __DIR__.'/../lib.php';
 
 if (PHP_SAPI != 'cli' && $_SERVER['REQUEST_METHOD'] == 'GET') { // unauthorized POST is okay
