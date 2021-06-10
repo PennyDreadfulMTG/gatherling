@@ -47,5 +47,5 @@ if (file_exists('../.git/HEAD')) {
 Sentry\init([
     'dsn'         => 'https://f8ec94b8d8b24b71b111fe96b0cc22b5@o531055.ingest.sentry.io/5657303',
     'environment' => $CONFIG['site_name'],
-    'release'     => $hash,
+    'release'     => $CONFIG['GIT_HASH'],
 ]);

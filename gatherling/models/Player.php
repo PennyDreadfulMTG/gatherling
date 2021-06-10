@@ -1224,7 +1224,7 @@ class Player
             $name = '<i class="ss ss-pmodo"></i>&nbsp;'.$this->mtgo_username;
         } elseif ($game == 'arena' && !empty($this->mtga_username)) {
             $name = '<i class="ss ss-parl3"></i>&nbsp;'.$this->mtga_username;
-        } elseif ($game != null && !empty($this->discord_handle)) {
+        } elseif ($game == 'paper' && !empty($this->discord_handle)) {
             $name = '<i class="fab fa-discord"></i>&nbsp;'.$this->discord_handle;
         }
 
