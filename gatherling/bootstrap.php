@@ -34,7 +34,11 @@ if (version_compare(phpversion(), 6) === -1) {
     require_once 'bootstrap_5.php';
 }
 
-require_once 'config.php';
+if (file_exists(__DIR__.'/config.php')) {
+    require_once 'config.php';
+} else {
+    $CONFIG = $_ENV;
+}
 
 $CONFIG['GIT_HASH'] = null;
 if (file_exists('../.git/HEAD')) {
