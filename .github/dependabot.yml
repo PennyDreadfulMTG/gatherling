@@ -1,0 +1,68 @@
+version: 2
+updates:
+- package-ecosystem: composer
+  directory: "/"
+  schedule:
+    interval: daily
+    timezone: Australia/Sydney
+  open-pull-requests-limit: 10
+  allow:
+  - dependency-type: direct
+  - dependency-type: indirect
+  ignore:
+  - dependency-name: guzzlehttp/psr7
+    versions:
+    - 1.8.0
+    - 1.8.1
+  - dependency-name: psr/container
+    versions:
+    - 1.1.0
+  - dependency-name: symfony/css-selector
+    versions:
+    - 5.2.4
+  - dependency-name: symfony/http-client
+    versions:
+    - 5.2.4
+  - dependency-name: symfony/dom-crawler
+    versions:
+    - 5.2.4
+  - dependency-name: symfony/options-resolver
+    versions:
+    - 5.2.4
+  - dependency-name: symfony/browser-kit
+    versions:
+    - 5.2.4
+  - dependency-name: sentry/sentry
+    versions:
+    - 3.1.5
+    - 3.2.0
+  - dependency-name: symfony/polyfill-intl-idn
+    versions:
+    - 1.22.1
+  - dependency-name: symfony/polyfill-intl-normalizer
+    versions:
+    - 1.22.1
+  - dependency-name: symfony/polyfill-mbstring
+    versions:
+    - 1.22.1
+  - dependency-name: symfony/polyfill-php80
+    versions:
+    - 1.22.1
+  - dependency-name: symfony/polyfill-php72
+    versions:
+    - 1.22.1
+  - dependency-name: symfony/polyfill-php73
+    versions:
+    - 1.22.1
+  - dependency-name: symfony/polyfill-ctype
+    versions:
+    - 1.22.1
+  - dependency-name: symfony/polyfill-uuid
+    versions:
+    - 1.22.1
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: daily
+    timezone: Australia/Sydney
+  open-pull-requests-limit: 10
