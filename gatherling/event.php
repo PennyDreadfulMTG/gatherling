@@ -93,15 +93,16 @@ if (!Player::isLoggedIn()) {
 print_header('Event Host Control Panel', true);
 ?>
 <div class="grid_10 suffix_1 prefix_1">
-<div id="gatherling_main" class="box">
-<div class="uppertitle"> Host Control Panel </div>
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle"> Host Control Panel </div>
 
-<?php
-content();
-?>
+        <?php
+        content();
+        ?>
 
-<div class="clear"></div>
-</div> </div>
+        <div class="clear"></div>
+    </div>
+</div>
 
 <?php print_footer(); ?>
 
@@ -411,22 +412,22 @@ function eventList($series = '', $season = '')
         $date = $dateArr[0];
         $kvalue = '';
         switch ($thisEvent['kvalue']) {
-        case 0:
-            $kvalue = 'none';
-            break;
-        case 8:
-            $kvalue = 'Casual';
-            break;
-        case 16:
-            $kvalue = 'Regular';
-            break;
-        case 24:
-            $kvalue = 'Large';
-            break;
-        case 32:
-            $kvalue = 'Championship';
-            break;
-    }
+            case 0:
+                $kvalue = 'none';
+                break;
+            case 8:
+                $kvalue = 'Casual';
+                break;
+            case 16:
+                $kvalue = 'Regular';
+                break;
+            case 24:
+                $kvalue = 'Large';
+                break;
+            case 32:
+                $kvalue = 'Championship';
+                break;
+        }
         echo '<tr><td>';
         echo '<a href="event.php?name='.rawurlencode($thisEvent['name']).'">';
         echo "{$thisEvent['name']}</a></td>";
@@ -583,6 +584,9 @@ function eventForm(Event $event = null, bool $forcenew = false)
         echo '<tr><th>Format</th><td>';
         formatDropMenu($event->format);
         echo '</td></tr>';
+        if (is_null($event->kvalue)) {
+            $event->kvalue = 16;
+        }
         kValueDropMenu($event->kvalue);
         echo '<tr><th>Host/Cohost</th><td>';
         stringField('host', $event->host, 20);
@@ -1169,8 +1173,10 @@ function medalList($event)
 
 function kValueDropMenu(int $kvalue)
 {
-    $names = [''      => '- K-Value -', 8 => 'Casual (Alt Event)', 16 => 'Regular (less than 24 players)',
-        24            => 'Large (24 or more players)', 32 => 'Championship', ];
+    $names = [
+        ''            => '- K-Value -', 8 => 'Casual (Alt Event)', 16 => 'Regular (less than 24 players)',
+        24            => 'Large (24 or more players)', 32 => 'Championship',
+    ];
     print_select_input('K-Value', 'kvalue', $names, $kvalue);
 }
 
@@ -1179,8 +1185,10 @@ function monthDropMenu($month)
     if (strcmp($month, '') == 0) {
         $month = -1;
     }
-    $names = ['January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December', ];
+    $names = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December',
+    ];
     echo '<select class="inputbox" name="month">';
     echo '<option value="">- Month -</option>';
     for ($m = 1; $m <= 12; $m++) {
@@ -1653,8 +1661,10 @@ function updateMatches()
         $rnd = '';
     }
 
-    if (strcmp($pA, '') != 0 && strcmp($pB, '') != 0
-    && strcmp($res, '') != 0 && strcmp($rnd, '') != 0) {
+    if (
+        strcmp($pA, '') != 0 && strcmp($pB, '') != 0
+        && strcmp($res, '') != 0 && strcmp($rnd, '') != 0
+    ) {
         $playerA = new Standings($event->name, $pA);
         $playerB = new Standings($event->name, $pB);
         if ($res == 'P') {
@@ -1761,8 +1771,10 @@ function autoInputForm($event)
 
 function autoInput()
 {
-    if (count($_POST['pairings']) == 0 ||
-      strlen($_POST['pairings'][0]) == 0) {
+    if (
+        count($_POST['pairings']) == 0 ||
+        strlen($_POST['pairings'][0]) == 0
+    ) {
         // No data.
         return;
     }
@@ -1811,23 +1823,31 @@ function autoInput()
             $playerB = $pairings[$rnd][$pair][1];
             $winner = 'D';
             if ($rnd == 0) {
-                if (isset($standings[$rnd][$playerA]) &&
-        $standings[$rnd][$playerA] > 1) {
+                if (
+                    isset($standings[$rnd][$playerA]) &&
+                    $standings[$rnd][$playerA] > 1
+                ) {
                     $winner = 'A';
                 }
-                if (isset($standings[$rnd][$playerB]) &&
-        $standings[$rnd][$playerB] > 1) {
+                if (
+                    isset($standings[$rnd][$playerB]) &&
+                    $standings[$rnd][$playerB] > 1
+                ) {
                     $winner = 'B';
                 }
             } else {
-                if (isset($standings[$rnd][$playerA]) &&
-        isset($standings[$rnd - 1][$playerA]) &&
-        $standings[$rnd][$playerA] - $standings[$rnd - 1][$playerA] > 1) {
+                if (
+                    isset($standings[$rnd][$playerA]) &&
+                    isset($standings[$rnd - 1][$playerA]) &&
+                    $standings[$rnd][$playerA] - $standings[$rnd - 1][$playerA] > 1
+                ) {
                     $winner = 'A';
                 }
-                if (isset($standings[$rnd][$playerB]) &&
-        isset($standings[$rnd - 1][$playerB]) &&
-        $standings[$rnd][$playerB] - $standings[$rnd - 1][$playerB] > 1) {
+                if (
+                    isset($standings[$rnd][$playerB]) &&
+                    isset($standings[$rnd - 1][$playerB]) &&
+                    $standings[$rnd][$playerB] - $standings[$rnd - 1][$playerB] > 1
+                ) {
                     $winner = 'B';
                 }
             }
@@ -2090,11 +2110,11 @@ function dciinputmatches($reg, $data)
         for ($round = 1; $round <= count($numberofrounds); $round++) {
             if ($numberofrounds[$round - 1] != 0) {
                 $playera = Player::findByName($reg[$playeraresults[$round - 1] - 1]); // find by name returns player object! not just a name!
-        $playerb = Player::findByName($reg[$playerbresults[$round - 1] - 1]); // may want to write a custom function later that just returns name
-        // should probably do a check to for NULL here for to see if player object
-        // was in fact returned for playera and playerb, just in case the dciregister
-        // function above failed to register
-        $result = 'D';
+                $playerb = Player::findByName($reg[$playerbresults[$round - 1] - 1]); // may want to write a custom function later that just returns name
+                // should probably do a check to for NULL here for to see if player object
+                // was in fact returned for playera and playerb, just in case the dciregister
+                // function above failed to register
+                $result = 'D';
                 // need to do a check for a bye here
                 if ($playerawins[$round - 1] > $playerbwins[$round - 1]) {
                     $result = 'A';
