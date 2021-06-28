@@ -5,8 +5,8 @@ use Wohali\OAuth2\Client\Provider\Exception\DiscordIdentityProviderException;
 
 session_start();
 
-require_once __DIR__ . '/lib.php';
-require __DIR__ . '/authlib.php';
+require_once __DIR__.'/lib.php';
+require __DIR__.'/authlib.php';
 
 global $CONFIG;
 global $provider;
@@ -20,6 +20,7 @@ if (isset($_GET['debug']) && isset($_SESSION['DISCORD_TOKEN'])) {
 
 if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     $token = load_cached_token();
+
     try {
         if ($token->hasExpired()) {
             $newAccessToken = $provider->getAccessToken('refresh_token', [
@@ -58,7 +59,7 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     }
     send_to_discord($scope);
 
-    // Check given state against previously stored one to mitigate CSRF attack
+// Check given state against previously stored one to mitigate CSRF attack
 } elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
     unset($_SESSION['oauth2state']);
     exit('Failed CSRF check. Please try again, or disable any browser extensions that might be causing issues.');
@@ -83,7 +84,7 @@ function send_to_discord($scope = null)
     $options = ['scope' => $scope];
     $authUrl = $provider->getAuthorizationUrl($options);
     $_SESSION['oauth2state'] = $provider->getState();
-    header('Location: ' . $authUrl);
+    header('Location: '.$authUrl);
 }
 
 /**
