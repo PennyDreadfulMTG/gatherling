@@ -775,7 +775,6 @@ upgrade_db(45, 'Increase card_name max length', function () {
         NOT NULL;');
 });
 upgrade_db(46, 'Increase standings.event size to match events.name', function () {
-
     do_query('ALTER TABLE `standings`
 	         CHANGE COLUMN `event` `event` VARCHAR(80) NULL DEFAULT NULL;');
     do_query('ALTER TABLE `season_points`
