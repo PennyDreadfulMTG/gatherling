@@ -1,11 +1,12 @@
 <?php
 
 use Gatherling\Player;
+use Wohali\OAuth2\Client\Provider\Exception\DiscordIdentityProviderException;
 
 session_start();
 
-require_once __DIR__.'/lib.php';
-require __DIR__.'/authlib.php';
+require_once __DIR__ . '/lib.php';
+require __DIR__ . '/authlib.php';
 
 global $CONFIG;
 global $provider;
@@ -19,14 +20,22 @@ if (isset($_GET['debug']) && isset($_SESSION['DISCORD_TOKEN'])) {
 
 if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     $token = load_cached_token();
+    try {
+        if ($token->hasExpired()) {
+            $newAccessToken = $provider->getAccessToken('refresh_token', [
+                'refresh_token' => $token->getRefreshToken(),
+            ]);
 
-    if ($token->hasExpired()) {
-        $newAccessToken = $provider->getAccessToken('refresh_token', [
-            'refresh_token' => $token->getRefreshToken(),
-        ]);
-
-        store_token($newAccessToken);
-        $token = $newAccessToken;
+            store_token($newAccessToken);
+            $token = $newAccessToken;
+        }
+    } catch (DiscordIdentityProviderException) {
+        if (isset($_REQUEST['scope'])) {
+            $scope = $_REQUEST['scope'];
+        } else {
+            $scope = null;
+        }
+        send_to_discord($scope);
     }
     // We might be here to upgrade our requested Discord permissions (Series Organizers setting up Discord Channels, for example)
     if (isset($_REQUEST['scope'])) {
@@ -49,7 +58,7 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     }
     send_to_discord($scope);
 
-// Check given state against previously stored one to mitigate CSRF attack
+    // Check given state against previously stored one to mitigate CSRF attack
 } elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
     unset($_SESSION['oauth2state']);
     exit('Failed CSRF check. Please try again, or disable any browser extensions that might be causing issues.');
@@ -74,7 +83,7 @@ function send_to_discord($scope = null)
     $options = ['scope' => $scope];
     $authUrl = $provider->getAuthorizationUrl($options);
     $_SESSION['oauth2state'] = $provider->getState();
-    header('Location: '.$authUrl);
+    header('Location: ' . $authUrl);
 }
 
 /**
@@ -125,37 +134,37 @@ function prompt_link_account($user)
 {
     print_header('Login'); ?>
     <div class="grid_10 suffix_1 prefix_1">
-    <div id="gatherling_main" class="box">
-    <div class="uppertitle"> Link Discord Account </div>
+        <div id="gatherling_main" class="box">
+            <div class="uppertitle"> Link Discord Account </div>
 
-    <form action="register.php" method="post">
-            <table class="form" align="center" style="border-width: 0px" cellpadding="3">
-                <tr>
-                    <th>Username</th>
-                    <td><input id="username" class="inputbox" type="text" name="username" value="" tabindex="1"></td>
-                </tr>
-                <tr>
-                    <td colspan="2">Please use your MTGO username if you have one.</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="buttons">
-                        <input type="hidden" name="pw1" value="">
-                        <input type="hidden" name="pw2" value="">
-                        <input type="hidden" name="email" value="<?=$user->getEmail()?>">
-                        <input type="hidden" name="emailstatus" value="0">
-                        <input type="hidden" name="timezone" value="0">
+            <form action="register.php" method="post">
+                <table class="form" align="center" style="border-width: 0px" cellpadding="3">
+                    <tr>
+                        <th>Username</th>
+                        <td><input id="username" class="inputbox" type="text" name="username" value="" tabindex="1"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Please use your MTGO username if you have one.</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="buttons">
+                            <input type="hidden" name="pw1" value="">
+                            <input type="hidden" name="pw2" value="">
+                            <input type="hidden" name="email" value="<?= $user->getEmail() ?>">
+                            <input type="hidden" name="emailstatus" value="0">
+                            <input type="hidden" name="timezone" value="0">
 
-                        <input class="inputbutton" type="submit" name="mode" value="Link"><br />
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div> <!-- gatherling_main -->
-</div> <!-- grid 10 pre 1 suff 1 -->
+                            <input class="inputbutton" type="submit" name="mode" value="Link"><br />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div> <!-- gatherling_main -->
+    </div> <!-- grid 10 pre 1 suff 1 -->
 
 <?php
-print_footer();
+    print_footer();
 }
