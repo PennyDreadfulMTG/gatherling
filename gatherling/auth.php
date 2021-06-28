@@ -29,7 +29,7 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
             store_token($newAccessToken);
             $token = $newAccessToken;
         }
-    } catch (DiscordIdentityProviderException) {
+    } catch (DiscordIdentityProviderException $e) {
         if (isset($_REQUEST['scope'])) {
             $scope = $_REQUEST['scope'];
         } else {
