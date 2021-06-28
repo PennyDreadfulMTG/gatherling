@@ -342,7 +342,7 @@ function eventList($series = '', $season = '')
     foreach ($playerSeries as $oneSeries) {
         $seriesEscaped[] = $db->escape_string($oneSeries);
     }
-    $seriesString = '"' . implode('","', $seriesEscaped) . '"';
+    $seriesString = '"'.implode('","', $seriesEscaped).'"';
     $query = "SELECT e.name AS name, e.format AS format,
     COUNT(DISTINCT n.player) AS players, e.host AS host, e.start AS start,
     e.finalized, e.cohost, e.series, e.kvalue
@@ -350,17 +350,17 @@ function eventList($series = '', $season = '')
     LEFT OUTER JOIN entries AS n ON n.event_id = e.id
     WHERE (e.host = \"{$db->escape_string($player->name)}\"
            OR e.cohost = \"{$db->escape_string($player->name)}\"
-           OR e.series IN (" . $seriesString . '))';
+           OR e.series IN (".$seriesString.'))';
     if (isset($_GET['format']) && strcmp($_GET['format'], '') != 0) {
-        $query = $query . " AND e.format=\"{$db->escape_string($_GET['format'])}\" ";
+        $query = $query." AND e.format=\"{$db->escape_string($_GET['format'])}\" ";
     }
     if (isset($_GET['series']) && strcmp($_GET['series'], '') != 0) {
-        $query = $query . " AND e.series=\"{$db->escape_string($_GET['series'])}\" ";
+        $query = $query." AND e.series=\"{$db->escape_string($_GET['series'])}\" ";
     }
     if (isset($_GET['season']) && strcmp($_GET['season'], '') != 0) {
-        $query = $query . " AND e.season=\"{$db->escape_string($_GET['season'])}\" ";
+        $query = $query." AND e.season=\"{$db->escape_string($_GET['season'])}\" ";
     }
-    $query = $query . ' GROUP BY e.name ORDER BY e.start DESC LIMIT 100';
+    $query = $query.' GROUP BY e.name ORDER BY e.start DESC LIMIT 100';
     $result = $db->query($query);
 
     $seriesShown = [];
@@ -429,7 +429,7 @@ function eventList($series = '', $season = '')
                 break;
         }
         echo '<tr><td>';
-        echo '<a href="event.php?name=' . rawurlencode($thisEvent['name']) . '">';
+        echo '<a href="event.php?name='.rawurlencode($thisEvent['name']).'">';
         echo "{$thisEvent['name']}</a></td>";
         echo "<td>{$thisEvent['format']}</td>";
         echo "<td>{$kvalue}</td>";
@@ -507,7 +507,7 @@ function eventForm(Event $event = null, bool $forcenew = false)
         autoInputForm($event);
     } elseif (strcmp($view, 'fileinput') == 0) {
         fileInputForm($event);
-        // file3InputForm($event); DCI 3 files currently don't work. Re-enable once they do.
+    // file3InputForm($event); DCI 3 files currently don't work. Re-enable once they do.
     } elseif (strcmp($view, 'points_adj') == 0) {
         pointsAdjustmentForm($event);
     } elseif (strcmp($view, 'reports') == 0) {
@@ -584,7 +584,9 @@ function eventForm(Event $event = null, bool $forcenew = false)
         echo '<tr><th>Format</th><td>';
         formatDropMenu($event->format);
         echo '</td></tr>';
-        if (is_null($event->kvalue)) $event->kvalue = 16;
+        if (is_null($event->kvalue)) {
+            $event->kvalue = 16;
+        }
         kValueDropMenu($event->kvalue);
         echo '<tr><th>Host/Cohost</th><td>';
         stringField('host', $event->host, 20);
@@ -747,7 +749,7 @@ function playerList($event)
                 echo '<input type="checkbox" name="dropplayer[]" ';
                 echo "value=\"{$entry->player->name}\"></td>";
             } else {
-                echo "<td>{$drop_icon} {$entry->drop_round} <a href=\"event.php?view=reg&player=" . $entry->player->name . '&event=' . $event->name . '&action=undrop&event_id=' . $event->id . '">(undrop)</a></td>'; // else echo a symbol to represent player has dropped
+                echo "<td>{$drop_icon} {$entry->drop_round} <a href=\"event.php?view=reg&player=".$entry->player->name.'&event='.$event->name.'&action=undrop&event_id='.$event->id.'">(undrop)</a></td>'; // else echo a symbol to represent player has dropped
             }
         }
         if ($event->finalized && !$event->active) {
@@ -779,7 +781,7 @@ function playerList($event)
         echo "<td>$decklink</td>";
         if ($format->tribal) {
             if ($entry->deck != null) {
-                echo '<td>' . $entry->deck->tribe . '</td>';
+                echo '<td>'.$entry->deck->tribe.'</td>';
             } else {
                 echo '<td> </td>'; // leave tribe blank
             }
@@ -1136,25 +1138,25 @@ function medalList($event)
     echo '<tr><td align="center"><b>Medal</td>';
     echo '<td align="center"><b>Player</td></tr>';
     echo '<tr><td align="center">';
-    echo image_tag('1st.png') . '</td>';
+    echo image_tag('1st.png').'</td>';
     echo '<td align="center">';
     playerDropMenu($event, '1', $event->active, $def1);
     echo '</td></tr>';
     echo '<tr><td align="center">';
-    echo image_tag('2nd.png') . '</td>';
+    echo image_tag('2nd.png').'</td>';
     echo '<td align="center">';
     playerDropMenu($event, '2', $event->active, $def2);
     echo '</td></tr>';
     for ($i = 3; $i < 5; $i++) {
         echo '<tr><td align="center">';
-        echo image_tag('t4.png') . '</td>';
+        echo image_tag('t4.png').'</td>';
         echo '<td align="center">';
         playerDropMenu($event, $i, $event->active, $def4[$i - 3]);
         echo '</td></tr>';
     }
     for ($i = 5; $i < 9; $i++) {
         echo '<tr><td align="center">';
-        echo image_tag('t8.png') . '</td>';
+        echo image_tag('t8.png').'</td>';
         echo '<td align="center">';
         playerDropMenu($event, $i, $event->active, $def8[$i - 5]);
         echo '</td></tr>';
@@ -1172,7 +1174,7 @@ function medalList($event)
 function kValueDropMenu(int $kvalue)
 {
     $names = [
-        ''      => '- K-Value -', 8 => 'Casual (Alt Event)', 16 => 'Regular (less than 24 players)',
+        ''            => '- K-Value -', 8 => 'Casual (Alt Event)', 16 => 'Regular (less than 24 players)',
         24            => 'Large (24 or more players)', 32 => 'Championship',
     ];
     print_select_input('K-Value', 'kvalue', $names, $kvalue);
@@ -1504,9 +1506,9 @@ function resultDropMenu($name = 'newmatchresult', $extra_options = [])
 function initialByeDropMenu($name = 'initial_byes', $playername = '', $current_byes = 0)
 {
     echo "<select class=\"inputbox\" name=\"{$name}\">";
-    echo "<option value=\"$playername 0\"" . ($current_byes == 0 ? ' selected' : '') . '>None</option>';
+    echo "<option value=\"$playername 0\"".($current_byes == 0 ? ' selected' : '').'>None</option>';
     for ($i = 1; $i < 3; $i++) {
-        echo "<option value=\"$playername $i\"" . ($current_byes == $i ? ' selected' : '') . ">$i</option>";
+        echo "<option value=\"$playername $i\"".($current_byes == $i ? ' selected' : '').">$i</option>";
     }
     echo '</select>';
 }
@@ -1515,15 +1517,15 @@ function controlPanel($event, $cur = '')
 {
     $name = $event->name;
     echo '<tr><td colspan="2" align="center">';
-    echo '<a href="event.php?name=' . rawurlencode($name) . '&view=settings">Event Settings</a>';
-    echo ' | <a href="event.php?name=' . rawurlencode($name) . '&view=reg">Registration</a>';
-    echo ' | <a href="event.php?name=' . rawurlencode($name) . '&view=match">Match Listing</a>';
-    echo ' | <a href="event.php?name=' . rawurlencode($name) . '&view=standings">Standings</a>';
-    echo ' | <a href="event.php?name=' . rawurlencode($name) . '&view=medal">Medals</a>';
+    echo '<a href="event.php?name='.rawurlencode($name).'&view=settings">Event Settings</a>';
+    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=reg">Registration</a>';
+    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=match">Match Listing</a>';
+    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=standings">Standings</a>';
+    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=medal">Medals</a>';
     // echo " | <a href=\"event.php?name=$name&view=autoinput\">Auto-Input</a>"; hiding until I fix the auto-input feature
     // echo ' | <a href="event.php?name='.rawurlencode($name).'&view=fileinput">DCI-R File Input</a>';
-    echo ' | <a href="event.php?name=' . rawurlencode($name) . '&view=points_adj">Season Points Adj.</a>';
-    echo ' | <a href="event.php?name=' . rawurlencode($name) . '&view=reports">Reports</a>';
+    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=points_adj">Season Points Adj.</a>';
+    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=reports">Reports</a>';
     echo '</td></tr>';
 }
 
@@ -1730,8 +1732,8 @@ function autoInputForm($event)
         } else {
             for ($rnd = 1; $rnd <= $subevent->rounds; $rnd++) {
                 $printrnd = $rnd + $totalrnds;
-                $pairfield = $printrnd . 'p';
-                $standfield = $printrnd . 's';
+                $pairfield = $printrnd.'p';
+                $standfield = $printrnd.'s';
                 echo '<tr><td colspan="2" align="center"><b>';
                 echo "Round $printrnd Pairings</td></tr>";
                 echo '<tr><td colspan="2" align="center">';
