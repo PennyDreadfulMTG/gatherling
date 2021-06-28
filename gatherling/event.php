@@ -583,6 +583,7 @@ function eventForm(Event $event = null, bool $forcenew = false)
         echo '<tr><th>Format</th><td>';
         formatDropMenu($event->format);
         echo '</td></tr>';
+        if (is_null($event->kvalue)) $event->kvalue = 16;
         kValueDropMenu($event->kvalue);
         echo '<tr><th>Host/Cohost</th><td>';
         stringField('host', $event->host, 20);
