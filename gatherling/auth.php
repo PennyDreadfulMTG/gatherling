@@ -3,10 +3,10 @@
 use Gatherling\Player;
 use Wohali\OAuth2\Client\Provider\Exception\DiscordIdentityProviderException;
 
-session_start();
-
 require_once __DIR__.'/lib.php';
 require __DIR__.'/authlib.php';
+
+session_start();
 
 global $CONFIG;
 global $provider;

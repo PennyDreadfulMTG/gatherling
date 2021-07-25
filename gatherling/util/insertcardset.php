@@ -1,5 +1,9 @@
 <?php
 
+use Gatherling\Database;
+use Gatherling\Format;
+use Gatherling\Player;
+
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 if (file_exists('../lib.php')) {
