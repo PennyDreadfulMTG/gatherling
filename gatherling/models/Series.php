@@ -914,7 +914,7 @@ class Series
         $seasonevents = $series->getSeasonEventNames($season);
         $points = $series->seasonPointsTable($season);
         $cutoff = $series->getSeasonCutoff($season);
-        uasort($points, 'Series::reverse_total_sort');
+        uasort($points, 'Gatherling\Series::reverse_total_sort');
 
         echo "<h3><center>Scoreboard for {$series->name} season {$season}</center></h3>";
         echo '<table class="scoreboard">';
