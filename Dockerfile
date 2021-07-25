@@ -18,8 +18,6 @@ WORKDIR /var/www/html/
 COPY ./gatherling /var/www/html/
 COPY --from=compose /restore/vendor /var/www/html/vendor
 RUN php admin/db-upgrade.php
-# RUN php util/scryfallsync.php
-RUN php util/updateDefaultFormats.php
 
 ## Expose used ports
 EXPOSE 80
