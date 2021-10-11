@@ -1,7 +1,6 @@
 <?php
+namespace Gatherling;
 
-use Gatherling\Database;
-use Gatherling\Player;
 
 include 'lib.php';
 include 'lib_form_helper.php';
@@ -54,12 +53,19 @@ function do_page()
         $view = $_POST['view'];
     }
 
-    if ($view == 'no_view') {
-        // Show Nothing
-    } elseif ($view == 'list_sets') {
-        printSetList();
-    } elseif ($view == 'edit_set') {
-        printEditSet();
+    switch ($view) {
+        case 'edit_card':
+            printEditCard();
+            break;
+        case 'edit_set':
+            printEditSet();
+            break;
+        case 'list_sets':
+            printSetList();
+            break;
+        case 'no_view':
+        default:
+            break;
     }
 }
 
@@ -107,6 +113,14 @@ function handleActions()
                 }
             }
         }
+    }
+    elseif ($_POST['action'] == 'modify_card') {
+        $db = Database::getConnection();
+        $stmt = $db->prepare('UPDATE `cards` SET `name` = ?, `type` = ?, `rarity` = ?, `scryfallId` = ? WHERE `id` = ?');
+        if (!$stmt)
+            echo $db->error;
+        $stmt->bind_param('ssssd', $_REQUEST['name'], $_REQUEST['type'], $_REQUEST['rarity'], $_REQUEST['sfId'], $_REQUEST['id']);
+        $stmt->execute();
     }
 }
 
@@ -164,9 +178,27 @@ function printEditSet()
     $set = $_REQUEST['set'];
     echo "<h4>Editing '$set'</h4>";
 
-    $cards = [];
+    echo '<form action="cardscp.php" method="post"><table>';
+    echo '<input type="hidden" name="view" value="edit_set" />';
+    echo "<input type=\"hidden\" name=\"set\" value=\"$set\" />";
+    echo '<input type="hidden" name="action" value="modify_set" />';
+
     $db = Database::getConnection();
+    $stmt = $db->prepare('SELECT `code`, `released`, `standard_legal`, `modern_legal` FROM `cardsets` WHERE `name` = ?');
+    $stmt->bind_param('s', $set);
+    $stmt->execute();
+    $stmt->bind_result($setcode, $released, $standard_legal, $modern_legal);
+    $stmt->fetch();
+    $stmt->close();
+
+    print_text_input('Set Code', 'code', $setcode);
+    print_text_input('Release Date', 'released', $released);
+    print_checkbox_input('Standard Legal', 'standard_legal', $standard_legal);
+    print_checkbox_input('Modern Legal', 'modern_legal', $modern_legal);
+
+    $cards = [];
     $stmt = $db->prepare('SELECT `id`, `name`, `type`, `rarity`, `scryfallId` FROM `cards` WHERE `cardset` = ?');
+
     $stmt->bind_param('s', $set);
     $stmt->execute();
     $stmt->bind_result($id, $name, $type, $rarity, $sfId);
@@ -174,12 +206,8 @@ function printEditSet()
         $cards[] = ['name' => $name, 'type' => $type, 'rarity' => $rarity, 'id' => $id, 'sfId' => $sfId];
     }
     $stmt->close();
-    echo '<form action="cardscp.php" method="post"><table>';
-    echo '<input type="hidden" name="view" value="edit_set" />';
-    echo "<input type=\"hidden\" name=\"set\" value=\"$set\" />";
-    echo '<input type="hidden" name="action" value="modify_set" />';
 
-    echo '<tr><th>ID</th><th>Name</th><th>Type</th><th>Rarity</th><th># of Decks</th><th>Delete</th></tr>';
+    echo "<tr><th>ID</th><th>Name</th><th>Type</th><th>Rarity</th><th># of Decks</th><th>Delete</th></tr>\n";
     foreach ($cards as $card) {
         $count = Database::single_result_single_param('SELECT COUNT(*) FROM `deckcontents` WHERE card = ?;', 'd', $card['id']);
         echo "<tr><td>{$card['id']}</td><td>{$card['name']}</td>";
@@ -195,9 +223,48 @@ function printEditSet()
         if ($checked) {
             echo ' checked="yes"';
         }
-        echo ' /></td></tr>';
+        echo " /></td><td><a href='cardscp.php?view=edit_card&id={$card['id']}'>Edit</a></td>";
+        echo "</tr>\n";
     }
     echo '</table>';
     echo '<input id="update_reg" class="inputbutton" type="submit" name="mode" value="Modify Set" />';
     echo '</form>';
+}
+
+function printEditCard() {
+    $id = $_REQUEST['id'];
+
+    $db = Database::getConnection();
+    $stmt = $db->prepare('SELECT `id`, `name`, `type`, `rarity`, `scryfallId`, `is_changeling`, `cardset` FROM `cards` WHERE `id` = ?');
+
+    $stmt->bind_param('s', $id);
+    $stmt->execute();
+    $stmt->bind_result($id, $name, $type, $rarity, $sfId, $is_changeling, $cardset);
+    $stmt->fetch();
+    $stmt->close();
+
+    echo "<h4>Editing '$id' ($cardset)</h4>";
+
+    echo '<form action="cardscp.php" method="post"><table>';
+    echo '<input type="hidden" name="view" value="edit_card" />';
+    echo "<input type=\"hidden\" name=\"id\" value=\"$id\" />";
+    echo '<input type="hidden" name="action" value="modify_card" />';
+
+    echo '<table style="border-width: 0px" align="center">';
+
+    print_text_input('Card Name', 'name', $name, 100);
+    print_text_input('Typeline', 'type', $type, 100);
+    print_text_input('Rarity', 'rarity', $rarity);
+    print_text_input('Scryfall ID', 'sfId', $sfId, 36);
+    print_checkbox_input('Changeling', 'is_changeling', $is_changeling);
+
+
+    echo '</table>';
+    echo '<input id="update_reg" class="inputbutton" type="submit" name="mode" value="Update Card" />';
+    echo '</form>';
+
+    if (str_contains($type, 'Creature')){
+        $creatureType = Format::removeTypeCrap($type);
+        echo "Calculated Tribe(s): $creatureType";
+    }
 }
