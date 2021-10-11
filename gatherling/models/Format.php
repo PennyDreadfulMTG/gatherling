@@ -866,12 +866,13 @@ class Format
         // leave only the tribal sub types
         $typeString = str_ireplace('Tribal ', '', $typeString);
         $typeString = str_ireplace('Creature ', '', $typeString);
-        $typeString = str_ireplace('Artifact ', '', $typeString);
+        $typeString = str_ireplace('Snow ', '', $typeString);
         $typeString = str_ireplace('Artifact ', '', $typeString);
         $typeString = str_ireplace('Instant ', '', $typeString);
         $typeString = str_ireplace('Enchantment ', '', $typeString);
         $typeString = str_ireplace('Sorcery ', '', $typeString);
         $typeString = str_ireplace('Legendary ', '', $typeString);
+        $typeString = str_ireplace('//', '', $typeString);
         $typeString = str_ireplace('- ', '', $typeString);
         $typeString = str_ireplace('	', ' ', $typeString); // Not gonna ask how a tab ended up in the db
 

@@ -107,7 +107,7 @@ function sync($setname, $cards)
     $names = [];
     foreach ($cards as $c) {
         $name = normaliseCardName($c->name);
-        if ($c->layout == 'flip' || $c->layout == 'adventure') {
+        if ($c->layout == 'flip' || $c->layout == 'adventure' || $c->layout == 'transform' || $c->layout == 'modal_dfc') {
             $name = explode('/', $name)[0];
             $c->name = $name;
         }

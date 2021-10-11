@@ -1,11 +1,11 @@
-FROM php:7.2-apache as compose
+FROM php:7.4-apache as compose
 WORKDIR /restore
 COPY composer.* ./
 RUN apt-get update && \
     apt-get install -y git zip unzip
 
 RUN curl --silent --show-error https://getcomposer.org/installer | php
-RUN php composer.phar install
+RUN php composer.phar --version && php composer.phar install
 
 
 FROM php:7.4-apache
