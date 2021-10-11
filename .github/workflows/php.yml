@@ -49,7 +49,7 @@ jobs:
     - run: php gatherling/util/insertcardset.php M10
     - run: php gatherling/util/insertcardset.php ELD
     - run: php gatherling/util/updateDefaultFormats.php
-    - uses: php-actions/phpunit@v2
+    - uses: php-actions/phpunit@v9
     # - run: phpunit -v tests/
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
