@@ -5,6 +5,10 @@ require_once 'gatherling/lib.php';
 // declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Gatherling\Deck;
+use Gatherling\Event;
+use Gatherling\Matchup;
+use Gatherling\Series;
 
 final class EventsTest extends TestCase
 {
