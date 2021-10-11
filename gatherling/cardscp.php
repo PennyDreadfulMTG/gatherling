@@ -1,6 +1,6 @@
 <?php
-namespace Gatherling;
 
+namespace Gatherling;
 
 include 'lib.php';
 include 'lib_form_helper.php';
@@ -113,12 +113,12 @@ function handleActions()
                 }
             }
         }
-    }
-    elseif ($_POST['action'] == 'modify_card') {
+    } elseif ($_POST['action'] == 'modify_card') {
         $db = Database::getConnection();
         $stmt = $db->prepare('UPDATE `cards` SET `name` = ?, `type` = ?, `rarity` = ?, `scryfallId` = ? WHERE `id` = ?');
-        if (!$stmt)
+        if (!$stmt) {
             echo $db->error;
+        }
         $stmt->bind_param('ssssd', $_REQUEST['name'], $_REQUEST['type'], $_REQUEST['rarity'], $_REQUEST['sfId'], $_REQUEST['id']);
         $stmt->execute();
     }
@@ -231,7 +231,8 @@ function printEditSet()
     echo '</form>';
 }
 
-function printEditCard() {
+function printEditCard()
+{
     $id = $_REQUEST['id'];
 
     $db = Database::getConnection();
@@ -258,12 +259,11 @@ function printEditCard() {
     print_text_input('Scryfall ID', 'sfId', $sfId, 36);
     print_checkbox_input('Changeling', 'is_changeling', $is_changeling);
 
-
     echo '</table>';
     echo '<input id="update_reg" class="inputbutton" type="submit" name="mode" value="Update Card" />';
     echo '</form>';
 
-    if (str_contains($type, 'Creature')){
+    if (str_contains($type, 'Creature')) {
         $creatureType = Format::removeTypeCrap($type);
         echo "Calculated Tribe(s): $creatureType";
     }
