@@ -207,8 +207,10 @@ class Player
         }
     }
 
-    public static function sanitizeUsername($playername) {
+    public static function sanitizeUsername($playername)
+    {
         $playername = str_replace('’', "'", $playername);
+
         return $playername;
     }
 
