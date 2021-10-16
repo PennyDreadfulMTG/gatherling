@@ -32,18 +32,23 @@ jobs:
     - name: Setup problem matchers for PHPUnit
       run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-    # - name: Cache Composer packages
-    #   id: composer-cache
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: vendor
-    #     key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-php-
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v2
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
 
     - name: Install dependencies
-      # if: steps.composer-cache.outputs.cache-hit != 'true'
+      if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
+    - name: Wait for MySQL server to be ready
+      run: |
+        while ! mysqladmin ping -h"127.0.0.1" --silent; do
+          sleep 1
+        done
     - run: cp gatherling/config.php.github gatherling/config.php
     - run: php gatherling/admin/db-upgrade.php
     - run: php gatherling/util/insertcardset.php M10
