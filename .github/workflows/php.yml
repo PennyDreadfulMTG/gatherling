@@ -32,24 +32,23 @@ jobs:
     - name: Setup problem matchers for PHPUnit
       run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v2
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+    # - name: Cache Composer packages
+    #   id: composer-cache
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: vendor
+    #     key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-php-
 
     - name: Install dependencies
-      if: steps.composer-cache.outputs.cache-hit != 'true'
+      # if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
     - run: cp gatherling/config.php.github gatherling/config.php
     - run: php gatherling/admin/db-upgrade.php
     - run: php gatherling/util/insertcardset.php M10
     - run: php gatherling/util/insertcardset.php ELD
     - run: php gatherling/util/updateDefaultFormats.php
-    # - uses: php-actions/phpunit@v2
     - run: vendor/bin/phpunit -v tests/
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
