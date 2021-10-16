@@ -102,6 +102,7 @@ class Player
         if ($username == '' || $password == '') {
             return false;
         }
+        $username = self::sanitizeUsername($username);
 
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT password FROM players WHERE name = ?');
@@ -147,6 +148,7 @@ class Player
 
     public static function findByName($playername)
     {
+        $playername = self::sanitizeUsername($playername);
         $database = Database::getConnection();
         $stmt = $database->prepare('SELECT name FROM players WHERE name = ?');
         $stmt->bind_param('s', $playername);
@@ -205,6 +207,13 @@ class Player
         }
     }
 
+    public static function sanitizeUsername($playername)
+    {
+        $playername = str_replace('’', "'", $playername);
+
+        return $playername;
+    }
+
     public static function createByName($playername)
     {
         $db = Database::getConnection();
@@ -218,6 +227,7 @@ class Player
 
     public static function findOrCreateByName($playername)
     {
+        $playername = self::sanitizeUsername($playername);
         $found = self::findByName($playername);
         if (is_null($found)) {
             return self::createByName($playername);

@@ -44,12 +44,16 @@ jobs:
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
+    - name: Wait for MySQL server to be ready
+      run: |
+        while ! mysqladmin ping -h"127.0.0.1" --silent; do
+          sleep 1
+        done
     - run: cp gatherling/config.php.github gatherling/config.php
     - run: php gatherling/admin/db-upgrade.php
     - run: php gatherling/util/insertcardset.php M10
     - run: php gatherling/util/insertcardset.php ELD
     - run: php gatherling/util/updateDefaultFormats.php
-    # - uses: php-actions/phpunit@v2
     - run: vendor/bin/phpunit -v tests/
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
