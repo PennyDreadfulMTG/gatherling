@@ -1172,11 +1172,9 @@ class Event
                         $this->singleElimination($round);
                         break;
                     case 'League':
-                        //$this->current_round ++;
-                        //$this->save();
-                        break;
                     case 'Round Robin':
-                        //Do later
+                    case 'Free-For-All':
+                        // These don't advance normally
                         break;
                 }
 

@@ -6,7 +6,7 @@ use Exception;
 
 class Player
 {
-    public $name;
+    public ?string $name;
     public $password;
     public $host;
     public $super;
@@ -18,10 +18,10 @@ class Player
     public $verified;
     public $theme;
     public $discord_id;
-    public $discord_handle;
+    public ?string $discord_handle;
     public $api_key;
-    public $mtga_username;
-    public $mtgo_username;
+    public ?string $mtga_username;
+    public ?string $mtgo_username;
 
     public function __construct($name)
     {

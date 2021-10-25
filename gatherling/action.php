@@ -65,6 +65,8 @@ if (!is_null($player)) {
             $message = '<a href="player.php?mode=edit_accounts">Set your MTGO username so that your opponent can find you.</a>.';
         } elseif ($event->client == 2 && empty($player->mtga_username)) {
             $message = '<a href="player.php?mode=edit_accounts">Set your MTGA username so that your opponent can Direct Challenge you.</a>.';
+        } elseif ($event->client == 3 && empty($player->discord_handle)) {
+            $message = '<a href="auth.php">Connect your Discord account, so your opponent can communicate with you.</a>.';
         } elseif ($event->isLeague()) {
             // Do nothing
         } elseif ($match->result != 'BYE' && $match->verification == 'unverified') {
