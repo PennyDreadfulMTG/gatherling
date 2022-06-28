@@ -1368,16 +1368,16 @@
         },
         {
             "name": "sentry/sentry",
-            "version": "3.6.0",
+            "version": "3.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getsentry/sentry-php.git",
-                "reference": "6d1a6ee29c558be373bfe08d454a3c116c02dd0d"
+                "reference": "5b8f2934b0b20bb01da11c76985ceb5bd6c6af91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/6d1a6ee29c558be373bfe08d454a3c116c02dd0d",
-                "reference": "6d1a6ee29c558be373bfe08d454a3c116c02dd0d",
+                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/5b8f2934b0b20bb01da11c76985ceb5bd6c6af91",
+                "reference": "5b8f2934b0b20bb01da11c76985ceb5bd6c6af91",
                 "shasum": ""
             },
             "require": {
@@ -1457,7 +1457,7 @@
             ],
             "support": {
                 "issues": "https://github.com/getsentry/sentry-php/issues",
-                "source": "https://github.com/getsentry/sentry-php/tree/3.6.0"
+                "source": "https://github.com/getsentry/sentry-php/tree/3.6.1"
             },
             "funding": [
                 {
@@ -1469,7 +1469,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2022-06-09T20:33:39+00:00"
+            "time": "2022-06-27T07:58:00+00:00"
         },
         {
             "name": "symfony/browser-kit",
