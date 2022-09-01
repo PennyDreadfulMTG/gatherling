@@ -7,7 +7,7 @@
             "label": "Docker Compose",
             "type": "shell",
             "command": "docker-compose up",
-            "runOptions": { "runOn": "folderOpen"}
+            // "runOptions": { "runOn": "folderOpen"}
         }
     ]
 }
