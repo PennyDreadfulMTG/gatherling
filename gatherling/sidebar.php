@@ -60,7 +60,7 @@ function upcomingEvents()
     $db = Database::getConnection();
     $result = $db->query('SELECT UNIX_TIMESTAMP(DATE_SUB(start, INTERVAL 0 MINUTE)) AS d,
     format, series, name, threadurl, start FROM events
-    WHERE DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() ORDER BY start ASC LIMIT 20');
+    WHERE DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() AND private = 0 ORDER BY start ASC LIMIT 20');
     // interval in DATE_SUB was used to select eastern standard time, but since the server is now in Washington DC it is not needed
     $result or exit($db->error);
     while ($row = $result->fetch_assoc()) {

@@ -12,7 +12,7 @@ services:
       - ./gatherling:/var/www/html/local
       - ./:/var/repo
   db:
-    image: mysql:5
+    image: mariadb
     env_file: .env
     ports:
       - "3307:3306"
