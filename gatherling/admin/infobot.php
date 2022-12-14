@@ -1,6 +1,7 @@
 <?php
+use Gatherling\Player;
 
-require_once '../lib.php';
+require_once __DIR__.'/../lib.php';
 
 if (strncmp($_SERVER['HTTP_USER_AGENT'], 'infobot', 7) != 0) {
     exit("<error>You're not infobot!</error>");
