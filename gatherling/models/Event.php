@@ -495,7 +495,7 @@ class Event
 
     public function getTrophyImageLink()
     {
-        return "<a href=\"deck.php?mode=view&event={$this->name}\" class=\"borderless\">\n"
+        return "<a href=\"deck.php?mode=view&event={$this->id}\" class=\"borderless\">\n"
            .self::trophy_image_tag($this->name)."\n</a>\n";
     }
 

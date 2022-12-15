@@ -64,7 +64,7 @@ if ($series->discord_require_membership && $series->discord_guild_id) {
 $location = 'player.php';
 if ($_GET['action'] == 'reg' and $prevent_registration != 1) {
     $event->addPlayer($player->name);
-    $ename = urlencode($event->name);
+    $ename = $event->id;
     $location = "deck.php?player={$player->name}&event={$ename}&mode=create";
 } elseif ($_GET['action'] == 'unreg') {
     $event->removeEntry($player->name);

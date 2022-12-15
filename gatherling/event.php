@@ -699,6 +699,9 @@ function reportsForm($event)
     echo '</table>';
 }
 
+/**
+ * @param Gatherling/Event $event The event
+ */
 function playerList($event)
 {
     global $drop_icon;
@@ -749,7 +752,7 @@ function playerList($event)
                 echo '<input type="checkbox" name="dropplayer[]" ';
                 echo "value=\"{$entry->player->name}\"></td>";
             } else {
-                echo "<td>{$drop_icon} {$entry->drop_round} <a href=\"event.php?view=reg&player=".$entry->player->name.'&event='.$event->name.'&action=undrop&event_id='.$event->id.'">(undrop)</a></td>'; // else echo a symbol to represent player has dropped
+                echo "<td>{$drop_icon} {$entry->drop_round} <a href=\"event.php?view=reg&player=".$entry->player->name.'&event='.$event->id.'&action=undrop&event_id='.$event->id.'">(undrop)</a></td>'; // else echo a symbol to represent player has dropped
             }
         }
         if ($event->finalized && !$event->active) {
@@ -1379,7 +1382,7 @@ function trophyField($event)
     if ($event->hastrophy) {
         echo '<tr><td>&nbsp;</td></tr>';
         echo '<tr><td colspan="2" align="center">';
-        echo "<img src=\"displayTrophy.php?event={$event->name}\" alt=\"Trophy\" /></td></tr>";
+        echo "<img src=\"displayTrophy.php?event={$event->id}\" alt=\"Trophy\" /></td></tr>";
     }
     echo '<tr><th>Trophy Image</th><td>';
     echo '<input  id="trophy" class="inputbox" type="file" name="trophy">&nbsp';

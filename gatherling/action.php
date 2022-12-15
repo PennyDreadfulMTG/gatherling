@@ -37,7 +37,7 @@ if (!is_null($player)) {
         }
         $recent = $series->mostRecentEvent();
         if (!$recent->finalized && !$recent->active && !empty($recent->name)) {
-            $message = "Your event <a href=\"event.php?event={$recent->name}\">{$recent->name}</a> is ready to start. <br />";
+            $message = "Your event <a href=\"event.php?event={$recent->id}\">{$recent->name}</a> is ready to start. <br />";
             $reg = count($recent->getPlayers());
             $valid = count($recent->getRegisteredPlayers());
             $message .= "It has $reg entries, of whom $valid have valid decklists.";
@@ -47,7 +47,7 @@ if (!is_null($player)) {
     $active_events = Event::getActiveEvents();
     foreach ($active_events as $event) {
         if ($event->authCheck($player->name) && !$event->private && !$event->isLeague()) {
-            $message = "Your event <a href=\"event.php?event={$event->name}\">{$event->name}</a> is currently active.";
+            $message = "Your event <a href=\"event.php?event={$event->id}\">{$event->name}</a> is currently active.";
             // if ($event->current_round > ($event->mainrounds)) {
             //     $subevent_id = $event->finalid;
             // } else {
