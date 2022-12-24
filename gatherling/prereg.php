@@ -9,6 +9,10 @@ session_start();
 $prevent_registration = 0;
 $player = Player::getSessionPlayer();
 
+if ($player == null) {
+    linkToLogin('your Player Control Panel', 'player.php');
+}
+
 if (!isset($_GET['event']) || !isset($_GET['action'])) {
     header('Location: player.php');
     exit;
