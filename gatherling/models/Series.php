@@ -44,7 +44,8 @@ class Series
         }
 
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT isactive, day, normalstart, prereg_default, mtgo_room, discord_guild_id, discord_channel_name, discord_guild_name, discord_guild_invite, discord_require_membership FROM series WHERE name = ?');
+        $sql = 'SELECT isactive, day, normalstart, prereg_default, mtgo_room, discord_guild_id, discord_channel_name, discord_guild_name, discord_guild_invite, discord_require_membership FROM series WHERE name = ?';
+        $stmt = $db->prepare($sql);
         $stmt or exit($db->error);
         $stmt->bind_param('s', $name);
         $stmt->execute();
@@ -127,16 +128,25 @@ class Series
         }
     }
 
+    /**
+     * @param string $name
+     */
     public function isOrganizer($name)
     {
         return in_array(strtolower($name), array_map('strtolower', $this->organizers));
     }
 
+    /**
+     * @param string $name
+     */
     public function isPlayerBanned($name)
     {
         return in_array(strtolower($name), array_map('strtolower', $this->bannedplayers));
     }
 
+    /**
+     * @param string $name
+     */
     public function addOrganizer($name)
     {
         if (empty($name)) {
@@ -149,6 +159,9 @@ class Series
         $stmt->close();
     }
 
+    /**
+     * @param string $name
+     */
     public function addBannedPlayer($name, $reason)
     {
         if (empty($name)) {
@@ -161,6 +174,9 @@ class Series
         $stmt->close();
     }
 
+    /**
+     * @param string $name
+     */
     public function removeOrganizer($name)
     {
         $db = Database::getConnection();
@@ -170,6 +186,9 @@ class Series
         $stmt->close();
     }
 
+    /**
+     * @param string $name
+     */
     public function removeBannedPlayer($name)
     {
         $db = Database::getConnection();
