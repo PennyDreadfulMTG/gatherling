@@ -12,6 +12,7 @@ class Entry
     public $medal;
     public $drop_round;
     public $initial_byes;
+    public $ignored;
 
     public static function findByEventAndPlayer($event_id, $playername)
     {
