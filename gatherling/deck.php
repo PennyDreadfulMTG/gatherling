@@ -422,7 +422,7 @@ function deckInfoCell($deck)
         if ($player && $event->authCheck($player)) {
             $targetUrl = 'event';
         }
-        $line3 .= " in <a href=\"${targetUrl}.php?event=".rawurlencode($deck->eventname)."\"><span class=\"eventname\" title=\"{$day}\">{$event->name}</span></a>\n";
+        $line3 .= " in <a href=\"{$targetUrl}.php?event=".rawurlencode($deck->eventname)."\"><span class=\"eventname\" title=\"{$day}\">{$event->name}</span></a>\n";
     } else {
         $line3 .= 'Never played (?) according to records.';
     }

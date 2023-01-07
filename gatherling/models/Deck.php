@@ -28,6 +28,15 @@ class Deck
     public $deck_color_str;  // Holds the final string color string
     public $created_date; // Date deck was created
 
+    public $deck_hash;
+    public $sideboard_hash;
+    public $whole_hash;
+
+    public $unparsed_cards;
+    public $unparsed_side;
+    public $deck_contents_cache;
+    public $identical_decks;
+
     public $medal; // has a medal
 
     public $new; // is new
@@ -933,7 +942,7 @@ class Deck
 
     public function findIdenticalDecks()
     {
-        if (!isset($this->identicalDecks)) {
+        if (!isset($this->identical_decks)) {
             $db = Database::getConnection();
             $stmt = $db->prepare('SELECT d.id
                             FROM decks d, entries n, events e

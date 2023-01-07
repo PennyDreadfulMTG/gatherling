@@ -27,6 +27,8 @@ class Series
     public $discord_guild_invite;
     public $discord_require_membership;
 
+    public $new;
+
     public function __construct($name)
     {
         if ($name == '') {

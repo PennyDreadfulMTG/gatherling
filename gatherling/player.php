@@ -472,7 +472,7 @@ function print_recentDeckTable()
             if ($event->authCheck($player->name)) {
                 $targetUrl = 'event';
             }
-            echo "<td style=\"white-space: nowrap;\"><a href=\"${targetUrl}.php?event={$deck->eventname}\">{$deck->eventname}</a></a></td>\n";
+            echo "<td style=\"white-space: nowrap;\"><a href=\"{$targetUrl}.php?event={$deck->eventname}\">{$deck->eventname}</a></a></td>\n";
             echo '<td width="99%" align="right">'.$deck->recordString()."</td></tr>\n";
         }
     }

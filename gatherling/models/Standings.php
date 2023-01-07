@@ -4,6 +4,7 @@ namespace Gatherling;
 
 class Standings
 {
+    public $id;
     public $event;  // belongs_to event
     public $player; // belongs_to player
     public $active;
