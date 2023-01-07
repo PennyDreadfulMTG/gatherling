@@ -501,8 +501,8 @@ class Event
 
     public function isHost($name)
     {
-        $ishost = strcasecmp($name, $this->host) == 0;
-        $iscohost = strcasecmp($name, $this->cohost) == 0;
+        $ishost = !is_null($this->host) && strcasecmp($name, $this->host) == 0;
+        $iscohost = !is_null($this->cohost) && strcasecmp($name, $this->cohost) == 0;
 
         return $ishost || $iscohost;
     }
@@ -767,6 +767,7 @@ class Event
 
     public function getRoundMatches($roundnum)
     {
+        $roundnum = intval($roundnum);
         $db = Database::getConnection();
         if ($roundnum > $this->mainrounds) {
             $subevnum = 2;
