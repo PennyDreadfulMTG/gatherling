@@ -27,12 +27,12 @@ for ($i = 0; $i < 10; $i++) {
         sleep($i);
         continue;
     } else {
-        info("Connection successful!");
+        info('Connection successful!');
         break;
     }
 }
 if ($db === null) {
-    info("Failed to connect to MySQL database for upgrade.");
+    info('Failed to connect to MySQL database for upgrade.');
     exit(1);
 }
 
