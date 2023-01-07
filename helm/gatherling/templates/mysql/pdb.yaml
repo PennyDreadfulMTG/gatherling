@@ -1,0 +1,15 @@
+{{- if eq .Values.environment.type "dev" -}}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "gatherling.fullname.mysql" . }}
+  labels:
+    gatherling.com/role: mysql
+    {{- include "gatherling.labels" . | nindent 4 }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      gatherling.com/role: mysql
+      {{- include "gatherling.selectorLabels" . | nindent 6 }}
+{{- end -}}

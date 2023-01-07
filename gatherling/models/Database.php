@@ -14,29 +14,38 @@ class Database
 
         if (!isset($instance)) {
             global $CONFIG;
-            $instance = new mysqli(
+            $instance_attempt = new mysqli(
                 $CONFIG['db_hostname'],
                 $CONFIG['db_username'],
                 $CONFIG['db_password']
             );
             if (mysqli_connect_errno()) {
-                echo mysqli_connect_error();
-                exit("\nfailed to connect to mysql server");
+                if (PHP_SAPI == 'cli') {
+                    // When running the db-upgrade script, we want to return null
+                    // so that it can retry connections as needed.
+                    return null;
+                } else {
+                    echo mysqli_connect_error();
+                    exit(1);
+                }
             }
-            $db_selected = $instance->select_db($CONFIG['db_database']);
+            $db_selected = $instance_attempt->select_db($CONFIG['db_database']);
             if (!$db_selected) {
                 // If we couldn't, then it either doesn't exist, or we can't see it.
                 $sql = "CREATE DATABASE {$CONFIG['db_database']}";
 
                 self::single_result($sql);
-                $db_selected = $instance->select_db($CONFIG['db_database']);
+                $db_selected = $instance_attempt->select_db($CONFIG['db_database']);
                 if (!$db_selected) {
-                    exit('Error creating database: '.mysqli_error($instance)."\n");
+                    exit('Error creating database: '.mysqli_error($instance_attempt)."\n");
                 }
             }
 
             $sql = "SET time_zone = 'America/New_York'"; // Ensure EST
-            $instance->query($sql);
+            $instance_attempt->query($sql);
+
+            // Instance is now ready to go.
+            $instance = $instance_attempt;
         }
 
         return $instance;

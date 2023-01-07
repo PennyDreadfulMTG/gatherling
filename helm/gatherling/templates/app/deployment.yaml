@@ -1,0 +1,170 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gatherling.fullname" . }}
+  labels:
+    gatherling.com/role: app
+    {{- include "gatherling.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.app.replicaCount }}
+  selector:
+    matchLabels:
+      gatherling.com/role: app
+      {{- include "gatherling.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        gatherling.com/role: app
+        {{- include "gatherling.selectorLabels" . | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 33
+        runAsGroup: 33
+        fsGroup: 33
+      # This init container performs the DB upgrade script on the database before Gatherling starts.
+      initContainers:
+      - name: db-upgrade
+        image: {{ .Values.app.image | quote }}
+        imagePullPolicy: IfNotPresent
+        command: [ 'php', 'admin/db-upgrade.php' ]
+        env:
+        {{- if eq .Values.environment.type "dev" }}
+        - name: db_hostname
+          value: {{ include "gatherling.fullname.mysql" . }}
+        - name: db_username
+          value: root
+        - name: db_database
+          value: gatherling
+        - name: db_password
+          value: ""
+        {{- else }}
+        - name: db_hostname
+          value: {{ .Values.mysql.host | quote }}
+        - name: db_username
+          value: {{ .Values.mysql.user | quote }}
+        - name: db_database
+          value: {{ .Values.mysql.database | quote }}
+        - name: db_password
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.mysql.passwordSecret.name | quote }}
+              key: {{ .Values.mysql.passwordSecret.key | quote }}
+              optional: false
+        {{- end }}
+        - name: base_url
+          value: {{ .Values.app.url | quote }}
+        - name: site_name
+          value: {{ .Values.app.name | quote }}
+        - name: style
+        {{- if eq .Values.environment.type "dev" }}
+          value: development
+        {{- else }}
+          value: Chandra
+        {{- end }}
+        {{- if .Values.app.analyticsId }}
+        - name: analytics_account
+          value: {{ .Values.app.analyticsId | quote }}
+        {{- end -}}
+        {{- if .Values.app.infobot }}
+        - name: infobot_passkey
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.app.infobot.passkeySecret.name | quote }}
+              key: {{ .Values.app.infobot.passkeySecret.key | quote }}
+              optional: false
+        - name: infobot_prefix
+          value: {{ .Values.app.infobot.prefix | quote }}
+        {{- end -}}
+        {{- if .Values.app.discord }}
+        - name: DISCORD_CLIENT_ID
+          value: {{ .Values.app.discord.clientId | quote }}
+        - name: DISCORD_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.app.discord.clientSecret.name | quote }}
+              key: {{ .Values.app.discord.clientSecret.key | quote }}
+              optional: false
+        {{- end }}
+      # This is the actual Gatherling container that runs the application.
+      containers:
+      - name: gatherling
+        image: {{ .Values.app.image | quote }}
+        imagePullPolicy: IfNotPresent
+        {{- if .Values.app.resources }}
+        resources: {{ .Values.app.resources | toJson }}
+        {{- end }}
+        ports:
+        - containerPort: 80
+          name: http
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          failureThreshold: 5
+          periodSeconds: 10
+        startupProbe:
+          httpGet:
+            path: /
+            port: 80
+          failureThreshold: 30
+          periodSeconds: 10
+        env:
+        {{- if eq .Values.environment.type "dev" }}
+        - name: db_hostname
+          value: {{ include "gatherling.fullname.mysql" . }}
+        - name: db_username
+          value: root
+        - name: db_database
+          value: gatherling
+        - name: db_password
+          value: ""
+        {{- else }}
+        - name: db_hostname
+          value: {{ .Values.mysql.host | quote }}
+        - name: db_username
+          value: {{ .Values.mysql.user | quote }}
+        - name: db_database
+          value: {{ .Values.mysql.database | quote }}
+        - name: db_password
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.mysql.passwordSecret.name | quote }}
+              key: {{ .Values.mysql.passwordSecret.key | quote }}
+              optional: false
+        {{- end }}
+        - name: base_url
+          value: {{ .Values.app.url | quote }}
+        - name: site_name
+          value: {{ .Values.app.name | quote }}
+        - name: style
+          value: Chandra
+        {{- if .Values.app.analyticsId }}
+        - name: analytics_account
+          value: {{ .Values.app.analyticsId | quote }}
+        {{- end -}}
+        {{- if .Values.infobot }}
+        - name: infobot_passkey
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.infobot.passkeySecret.name | quote }}
+              key: {{ .Values.infobot.passkeySecret.key | quote }}
+              optional: false
+        - name: infobot_prefix
+          value: {{ .Values.infobot.prefix | quote }}
+        {{- end -}}
+        {{- if .Values.discord }}
+        - name: DISCORD_CLIENT_ID
+          value: {{ .Values.discord.clientId | quote }}
+        - name: DISCORD_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.discord.clientSecret.name | quote }}
+              key: {{ .Values.discord.clientSecret.key | quote }}
+              optional: false
+        {{- end }}

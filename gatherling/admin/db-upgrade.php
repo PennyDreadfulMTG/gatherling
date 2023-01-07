@@ -15,7 +15,26 @@ ini_set('max_execution_time', 300);
 
 require_once __DIR__.'/../lib.php';
 
-$db = Database::getConnection();
+// Try to connect multiple times in case the MySQL container is still starting up in the test environment.
+$db = null;
+for ($i = 0; $i < 10; $i++) {
+    $attempt = $i + 1;
+    info("Attempting to connect to database (attempt #$attempt)...");
+    global $db;
+    $db = Database::getConnection();
+    if ($db === null && $i < 9) {
+        info("Connection failed, waiting $i seconds and trying again...");
+        sleep($i);
+        continue;
+    } else {
+        info("Connection successful!");
+        break;
+    }
+}
+if ($db === null) {
+    info("Failed to connect to MySQL database for upgrade.");
+    exit(1);
+}
 
 function info($text, $newline = true)
 {

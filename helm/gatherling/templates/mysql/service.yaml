@@ -1,0 +1,16 @@
+{{- if eq .Values.environment.type "dev" -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gatherling.fullname.mysql" . }}
+  labels:
+    gatherling.com/role: mysql
+    {{- include "gatherling.labels" . | nindent 4 }}
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+  selector:
+    gatherling.com/role: mysql
+    {{- include "gatherling.selectorLabels" . | nindent 4 }}
+{{- end -}}
