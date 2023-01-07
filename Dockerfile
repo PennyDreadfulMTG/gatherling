@@ -1,4 +1,4 @@
-FROM php:7.4-apache as compose
+FROM php:8-apache as compose
 WORKDIR /restore
 COPY composer.* ./
 RUN apt-get update && \
@@ -8,7 +8,7 @@ RUN curl --silent --show-error https://getcomposer.org/installer | php
 RUN php composer.phar --version && php composer.phar install
 
 
-FROM php:7.4-apache
+FROM php:8-apache
 LABEL maintainer="Katelyn Gigante"
 
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
@@ -17,7 +17,6 @@ RUN mkdir -p /var/www/html/
 WORKDIR /var/www/html/
 COPY ./gatherling /var/www/html/
 COPY --from=compose /restore/vendor /var/www/html/vendor
-RUN php admin/db-upgrade.php
 
 ## Expose used ports
 EXPOSE 80
