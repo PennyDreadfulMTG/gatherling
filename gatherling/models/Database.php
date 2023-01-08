@@ -12,9 +12,9 @@ class Database
     {
         static $instance;
 
-        if (!isset($instance)) {
+        if (!isset($instance) || is_null($instance)) {
             global $CONFIG;
-            $instance_attempt = new mysqli(
+            $instance = new mysqli(
                 $CONFIG['db_hostname'],
                 $CONFIG['db_username'],
                 $CONFIG['db_password']
@@ -29,23 +29,23 @@ class Database
                     exit(1);
                 }
             }
-            $db_selected = $instance_attempt->select_db($CONFIG['db_database']);
+            $db_selected = $instance->select_db($CONFIG['db_database']);
             if (!$db_selected) {
                 // If we couldn't, then it either doesn't exist, or we can't see it.
                 $sql = "CREATE DATABASE {$CONFIG['db_database']}";
 
                 self::single_result($sql);
-                $db_selected = $instance_attempt->select_db($CONFIG['db_database']);
+                $db_selected = $instance->select_db($CONFIG['db_database']);
                 if (!$db_selected) {
-                    exit('Error creating database: '.mysqli_error($instance_attempt)."\n");
+                    exit('Error creating database: '.mysqli_error($instance)."\n");
                 }
             }
 
             $sql = "SET time_zone = 'America/New_York'"; // Ensure EST
-            $instance_attempt->query($sql);
+            $instance->query($sql);
 
             // Instance is now ready to go.
-            $instance = $instance_attempt;
+            $instance = $instance;
         }
 
         return $instance;
