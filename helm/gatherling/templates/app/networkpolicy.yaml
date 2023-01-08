@@ -1,0 +1,26 @@
+{{- if ne .Values.environment.type "dev" -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "gatherling.fullname" . }}
+  labels:
+    gatherling.com/role: app
+    {{- include "gatherling.labels" . | nindent 4 }}
+spec:
+  podSelector: {}
+  ingress:
+  # Allow the Nginx Ingress Controller to send HTTP traffic to the app.
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: ingress-nginx
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/component: controller
+          app.kubernetes.io/name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: http
+  policyTypes:
+  - Ingress
+{{- end -}}

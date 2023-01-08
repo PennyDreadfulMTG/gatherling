@@ -12,7 +12,7 @@ class Database
     {
         static $instance;
 
-        if (!isset($instance)) {
+        if (!isset($instance) || is_null($instance)) {
             global $CONFIG;
             $instance = new mysqli(
                 $CONFIG['db_hostname'],
@@ -20,8 +20,14 @@ class Database
                 $CONFIG['db_password']
             );
             if (mysqli_connect_errno()) {
-                echo mysqli_connect_error();
-                exit("\nfailed to connect to mysql server");
+                if (PHP_SAPI == 'cli') {
+                    // When running the db-upgrade script, we want to return null
+                    // so that it can retry connections as needed.
+                    return null;
+                } else {
+                    echo mysqli_connect_error();
+                    exit(1);
+                }
             }
             $db_selected = $instance->select_db($CONFIG['db_database']);
             if (!$db_selected) {
@@ -37,6 +43,9 @@ class Database
 
             $sql = "SET time_zone = 'America/New_York'"; // Ensure EST
             $instance->query($sql);
+
+            // Instance is now ready to go.
+            $instance = $instance;
         }
 
         return $instance;

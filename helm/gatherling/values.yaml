@@ -1,0 +1,66 @@
+environment:
+  type: dev
+
+app:
+  name: DevGatherling
+  host: gatherling.dev
+  url: http://127.0.0.1:30080/
+  image: ghcr.io/PennyDreadfulMTG/gatherling/app
+  replicaCount: 1
+  
+
+  # Configure the Google Analytics account to use.
+  #
+  # analyticsId: UA-00000000-1
+
+  # Configure the resource allocations for the Gatherling app itself.
+  #
+  # resources:
+  #   requests:
+  #     cpu: 10m
+  #     memory: 150Mi
+  #   limits:
+  #     cpu: 1000m
+  #     memory: 600Mi
+
+  # If you want to enable TLS, turn it on here and then set the ClusterIssuer to use.
+  #
+  ingress:
+    tls: false
+    # clusterIssuer: letsencrypt
+
+  # If you have set it up with Infobot, set the following values.
+  #
+  # infobot:
+  #   passkeySecret:
+  #     name: mysecret
+  #     key: keyname
+  #   prefix: a
+
+  # If you need to support Discord logins, set the following values.
+  #
+  # discord:
+  #   clientId: "..."
+  #   clientSecret:
+  #     name: mydiscordsecret
+  #     key: keyname
+
+# If the environment is 'dev', a MySQL
+# server will be run inside Kubernetes
+# for testing purposes.
+mysqlDev:
+  image: ghcr.io/PennyDreadfulMTG/gatherling/mysql
+
+# These settings are only used if
+# the environment is 'production',
+# in which case the application
+# will connect to an external MySQL
+# instance.
+mysql:
+  host: localhost
+  user: root
+  passwordSecret:
+    # Should be a generic Kubernetes secret in the same namespace.
+    name: mysecret
+    key: keyname
+  database: gatherling

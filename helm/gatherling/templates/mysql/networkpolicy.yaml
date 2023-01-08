@@ -1,0 +1,26 @@
+{{- if eq .Values.environment.type "dev" -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "gatherling.fullname.mysql" . }}
+  labels:
+    gatherling.com/role: mysql
+    {{- include "gatherling.labels" . | nindent 4 }}
+spec:
+  podSelector: 
+    matchLabels:
+      gatherling.com/role: mysql
+      {{- include "gatherling.selectorLabels" . | nindent 6 }}
+  ingress:
+  - from:
+    # Allow the application pods to connect.
+    - podSelector:
+        matchLabels:
+          gatherling.com/role: app
+          {{- include "gatherling.selectorLabels" . | nindent 10 }}
+    ports:
+    - protocol: TCP
+      port: mysql
+  policyTypes:
+  - Ingress
+{{- end -}}

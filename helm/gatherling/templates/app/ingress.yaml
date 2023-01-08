@@ -1,0 +1,35 @@
+{{- if ne .Values.environment.type "dev" -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "gatherling.fullname" . }}
+  labels:
+    gatherling.com/role: app
+    {{- include "gatherling.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.app.ingress.clusterIssuer }}
+    cert-manager.io/cluster-issuer: {{ .Values.app.ingress.clusterIssuer | quote }}
+    {{- end }}
+    {{- if .Values.app.ingress.tls }}
+    kubernetes.io/ingress.allow-http: "false"
+    {{- end }}
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  {{- if .Values.app.ingress.tls }}
+  tls:
+    - hosts:
+      - {{ .Values.app.host | quote }}
+      secretName: {{ include "gatherling.fullname" . }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.app.host | quote }}
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: {{ include "gatherling.fullname" . }}
+                port: 
+                  number: 80
+{{- end -}}
