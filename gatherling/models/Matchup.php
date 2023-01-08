@@ -82,21 +82,29 @@ class Matchup
 
     /**
      * @param string $name
+     *
      * @return bool
      */
     private function playerA($name)
     {
-        if (is_null($name)) return 0;
+        if (is_null($name)) {
+            return 0;
+        }
+
         return strcasecmp($this->playera, $name) == 0;
     }
 
     /**
      * @param string $name
+     *
      * @return bool
      */
     private function playerB($name)
     {
-        if (is_null($name)) return 0;
+        if (is_null($name)) {
+            return 0;
+        }
+
         return strcasecmp($this->playerb, $name) == 0;
     }
 
