@@ -88,7 +88,7 @@ class Matchup
     private function playerA($name)
     {
         if (is_null($name)) {
-            return 0;
+            return false;
         }
 
         return strcasecmp($this->playera, $name) == 0;
@@ -102,7 +102,7 @@ class Matchup
     private function playerB($name)
     {
         if (is_null($name)) {
-            return 0;
+            return false;
         }
 
         return strcasecmp($this->playerb, $name) == 0;
