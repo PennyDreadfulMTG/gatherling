@@ -11,7 +11,7 @@ RUN php composer.phar --version && php composer.phar install
 FROM php:7.4-apache
 LABEL maintainer="Katelyn Gigante"
 
-RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable mysqli
 
 RUN mkdir -p /var/www/html/
 WORKDIR /var/www/html/
