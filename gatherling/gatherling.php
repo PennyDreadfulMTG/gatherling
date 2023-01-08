@@ -2,7 +2,6 @@
 $gatherlingoutofservice = 0;
 if ($gatherlingoutofservice != 1) {
     include 'lib.php';
-    include 'config.php';
     session_start();
     print_header('Home'); ?>
 
