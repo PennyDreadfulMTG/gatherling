@@ -20,8 +20,16 @@ print_header('Deck Database');
 $event = null;
 
 if (isset($_GET['event'])) {
-    $event = new Event($_GET['event']);
-    echo '<div class="uppertitle">Your Deck For '.$event->name.'</div>';
+    if (!Event::exists($_GET['event']))
+    {
+        unset($_GET['event']);
+        echo '<div class="uppertitle">Deck Database</div>';
+    }
+    else
+    {
+        $event = new Event($_GET['event']);
+        echo '<div class="uppertitle">Your Deck For '.$event->name.'</div>';
+    }
 } else {
     echo '<div class="uppertitle">Deck Database</div>';
 }
