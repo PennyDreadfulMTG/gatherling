@@ -43,9 +43,6 @@ class Database
 
             $sql = "SET time_zone = 'America/New_York'"; // Ensure EST
             $instance->query($sql);
-
-            // Instance is now ready to go.
-            $instance = $instance;
         }
 
         return $instance;
