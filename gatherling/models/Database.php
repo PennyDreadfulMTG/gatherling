@@ -43,9 +43,6 @@ class Database
 
             $sql = "SET time_zone = 'America/New_York'"; // Ensure EST
             $instance->query($sql);
-
-            // Instance is now ready to go.
-            $instance = $instance;
         }
 
         return $instance;
@@ -58,7 +55,7 @@ class Database
         if (!isset($pdo_instance)) {
             global $CONFIG;
             $pdo_instance = new PDO(
-                'mysql:hostname='.$CONFIG['db_hostname'].';dbname='.$CONFIG['db_database'],
+                'mysql:hostname='.$CONFIG['db_hostname'].';port=3306;dbname='.$CONFIG['db_database'],
                 $CONFIG['db_username'],
                 $CONFIG['db_password']
             );
