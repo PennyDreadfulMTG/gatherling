@@ -1236,12 +1236,14 @@ class Player
             $name = '<i class="ss ss-parl3"></i>&nbsp;'.$this->mtga_username;
         } elseif ($game == 'paper' && !empty($this->discord_handle)) {
             $name = '<i class="fab fa-discord"></i>&nbsp;'.$this->discord_handle;
+        } elseif ($game == 'gatherling') {
+            $name = '<i class="ss ss-dd2"></i>&nbsp;'.$this->name;
         }
 
         return $name;
     }
 
-    public function linkTo($game = null)
+    public function linkTo($game = 'gatherling')
     {
         $name = $this->gameName($game);
         $result = "<a href=\"profile.php?player={$this->name}\">{$name}";

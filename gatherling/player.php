@@ -360,11 +360,11 @@ function print_mainPlayerCP($player, $result)
 
     /// History
     echo '<div id="past" class="tabcontent">';
-    echo "<div class=\"alpha grid_5\">\n";
+    echo "<div class=\"grid_7\">\n";
     echo "<div id=\"gatherling_lefthalf\">\n";
     print_recentDeckTable();
     echo "</div></div>\n";
-    echo "<div class=\"omega grid_5\">\n";
+    echo "<div class=\"grid_7\">\n";
     echo "<div id=\"gatherling_righthalf\">\n";
     print_recentMatchTable();
     echo "</div></div>\n";
@@ -732,7 +732,7 @@ function print_recentMatchTable()
         echo "<td width=\"4\"><b>$res</b> <b>{$match->getPlayerWins($player->name)}</b><b> - </b><b>{$match->getPlayerLosses($player->name)}</b></td>";
         echo "<td>vs.</td>\n";
         $oppplayer = new Player($opp);
-        echo '<td>'.$oppplayer->linkTo()."</td></tr>\n";
+        echo '<td>'.$oppplayer->linkTo($event->client)."</td></tr>\n";
     }
     echo "</table>\n";
 }
