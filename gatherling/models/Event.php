@@ -937,8 +937,17 @@ class Event
     public static function exists($name)
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE name = ?');
-        $stmt->bind_param('s', $name);
+        $sql = 'SELECT name FROM events WHERE ';
+        if (is_numeric($name)) {
+            $sql .= 'id = ?';
+            $pt = 'd';
+        } else {
+            $sql .= 'name = ?';
+            $pt = 's';
+        }
+
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param($pt, $name);
         $stmt->execute();
         $stmt->store_result();
         $event_exists = $stmt->num_rows > 0;
