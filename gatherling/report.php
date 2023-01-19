@@ -83,7 +83,8 @@ print_header('Player Control Panel');
     switch ($dispmode) {
     case 'submit_result':
     if (!isset($_GET['match_id'])) {
-        print_mainPlayerCP($player, '');
+        // print_mainPlayerCP($player, '');
+        redirect('player.php');
         break;
     }
     print_submit_resultForm($_GET['match_id']);

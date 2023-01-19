@@ -103,6 +103,8 @@ class Matchup
     {
         if (is_null($name)) {
             return false;
+        } elseif (is_null($this->playerb)) {
+            return false;
         }
 
         return strcasecmp($this->playerb, $name) == 0;
