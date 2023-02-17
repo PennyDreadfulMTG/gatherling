@@ -68,6 +68,7 @@ function arg($key, $default = null)
 //## Models
 /**
  * @param Gatherling\Event $event
+ *
  * @return mixed
  */
 function repr_json_event($event)
@@ -139,6 +140,7 @@ function repr_json_event($event)
 
 /**
  * @param Gatherling\Deck $deck
+ *
  * @return mixed
  */
 function repr_json_deck($deck)
@@ -166,13 +168,14 @@ function repr_json_series($series)
 
 /**
  * @param Gatherling\Player $player
- * @param int $client
+ * @param int               $client
+ *
  * @return mixed
  */
 function repr_json_player($player, $client = null)
 {
     $json = populate([], $player, ['name', 'verified', 'discord_id', 'discord_handle', 'mtga_username', 'mtgo_username']);
-    $json["display_name"] = $player->gameName($client);
+    $json['display_name'] = $player->gameName($client);
 
     return $json;
 }
