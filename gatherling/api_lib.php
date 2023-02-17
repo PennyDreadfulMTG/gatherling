@@ -232,12 +232,6 @@ function drop_player_from_event($event, $name)
 function create_series($newseries, $active, $day)
 {
     $result = [];
-    $authorized = false;
-    if (is_admin()) {
-        $authorized = true;
-    } else {
-    }
-
     if (!is_admin()) {
         $result['error'] = 'Unauthorized';
         $result['success'] = false;
