@@ -207,6 +207,26 @@ class Player
         }
     }
 
+    public static function findByEmail($emailAddress)
+    {
+        $database = Database::getConnection();
+        $stmt = $database->prepare('SELECT name FROM players WHERE email = ?');
+        $stmt->bind_param('s', $playername);
+        $stmt->execute();
+        $stmt->bind_result($resname);
+        $good = false;
+        if ($stmt->fetch()) {
+            $good = true;
+        }
+        $stmt->close();
+
+        if ($good) {
+            return new self($resname);
+        } else {
+            return;
+        }
+    }
+
     public static function sanitizeUsername($playername)
     {
         $playername = str_replace('’', "'", $playername);
