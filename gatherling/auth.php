@@ -110,15 +110,26 @@ function do_login($token)
             $player = Player::getSessionPlayer();
             $player->discord_id = $_SESSION['DISCORD_ID'];
             $player->discord_handle = $_SESSION['DISCORD_NAME'];
+            if (empty($player->emailAddress) && $user->getVerified()) {
+                $player->emailAddress = $user->getEmail();
+            }
             $player->save();
             redirect('player.php');
         }
 
         $player = Player::findByDiscordID($user->getId());
+        if (!$player && $user->getVerified()) {
+            $player = Player::findByEmail($user->getEmail());
+        }
         if ($player) {
             $_SESSION['username'] = $player->name;
             if ($player->discord_handle != $_SESSION['DISCORD_NAME']) {
                 $player->discord_handle = $_SESSION['DISCORD_NAME'];
+                $player->discord_id = $_SESSION['DISCORD_ID'];
+                if (empty($player->emailAddress) && $user->getVerified()) {
+                    $player->emailAddress = $user->getEmail();
+                }
+
                 $player->save();
             }
             redirect('player.php');

@@ -66,12 +66,26 @@ function arg($key, $default = null)
 }
 
 //## Models
+/**
+ * @param Gatherling\Event $event
+ *
+ * @return mixed
+ */
 function repr_json_event($event)
 {
     $series = new Series($event->series);
     $json = [];
     // Event Properties
     $json = populate($json, $event, ['name', 'series', 'season', 'number', 'format', 'host', 'cohost', 'active', 'finalized', 'current_round', 'start', 'mainrounds', 'mainstruct', 'finalrounds', 'finalstruct']);
+    if ($event->client == 1) {
+        $json['client'] = 'mtgo';
+    } elseif ($event->client == 2) {
+        $json['client'] = 'arena';
+    } elseif ($event->client == 3) {
+        $json['client'] = 'paper';
+    } else {
+        $json['client'] = $event->client;
+    }
 
     // Series Properties
     $json = populate($json, $series, ['mtgo_room']);
@@ -118,12 +132,17 @@ function repr_json_event($event)
     $json['players'] = [];
     foreach (Standings::getEventStandings($event->name, 0) as $s) {
         $json['standings'][] = populate([], $s, ['player', 'active', 'score', 'matches_played', 'matches_won', 'draws', 'games_won', 'games_played', 'byes', 'OP_Match', 'PL_Game', 'OP_Game', 'seed']);
-        $json['players'][] = repr_json_player(new Player($s->player));
+        $json['players'][] = repr_json_player(new Player($s->player), $event->client);
     }
 
     return $json;
 }
 
+/**
+ * @param Gatherling\Deck $deck
+ *
+ * @return mixed
+ */
 function repr_json_deck($deck)
 {
     $json = [];
@@ -147,9 +166,16 @@ function repr_json_series($series)
     return $json;
 }
 
-function repr_json_player($player)
+/**
+ * @param Gatherling\Player $player
+ * @param int               $client
+ *
+ * @return mixed
+ */
+function repr_json_player($player, $client = null)
 {
     $json = populate([], $player, ['name', 'verified', 'discord_id', 'discord_handle', 'mtga_username', 'mtgo_username']);
+    $json['display_name'] = $player->gameName($client);
 
     return $json;
 }
@@ -209,12 +235,6 @@ function drop_player_from_event($event, $name)
 function create_series($newseries, $active, $day)
 {
     $result = [];
-    $authorized = false;
-    if (is_admin()) {
-        $authorized = true;
-    } else {
-    }
-
     if (!is_admin()) {
         $result['error'] = 'Unauthorized';
         $result['success'] = false;
