@@ -166,14 +166,18 @@ switch ($action) {
         if ($player = Player::findByDiscordID($name)) {
             $result[] = repr_json_player($player);
         }
-        if ($player = Player::findByDiscordHandle($name))
+        if ($player = Player::findByDiscordHandle($name)) {
             $result[] = repr_json_player($player);
-        if ($player = Player::findByName($name))
+        }
+        if ($player = Player::findByName($name)) {
             $result[] = repr_json_player($player);
-        if ($player = Player::findByMTGO($name))
+        }
+        if ($player = Player::findByMTGO($name)) {
             $result[] = repr_json_player($player);
-        if ($player = Player::findByMTGA($name))
+        }
+        if ($player = Player::findByMTGA($name)) {
             $result[] = repr_json_player($player);
+        }
 
     break;
 
