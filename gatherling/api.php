@@ -160,6 +160,23 @@ switch ($action) {
         $result = repr_json_player($player);
     break;
 
+    case 'find_player':
+        $name = arg('name');
+        $result = [];
+        if ($player = Player::findByDiscordID($name)) {
+            $result[] = repr_json_player($player);
+        }
+        if ($player = Player::findByDiscordHandle($name))
+            $result[] = repr_json_player($player);
+        if ($player = Player::findByName($name))
+            $result[] = repr_json_player($player);
+        if ($player = Player::findByMTGO($name))
+            $result[] = repr_json_player($player);
+        if ($player = Player::findByMTGA($name))
+            $result[] = repr_json_player($player);
+
+    break;
+
     default:
     $result['error'] = "Unknown action '{$action}'";
     break;
