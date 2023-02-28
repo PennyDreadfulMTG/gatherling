@@ -161,7 +161,7 @@ class Player
         $stmt->close();
 
         if ($good) {
-            return new self($playername);
+            return new self($resname);
         } else {
             return;
         }
@@ -211,6 +211,48 @@ class Player
     {
         $database = Database::getConnection();
         $stmt = $database->prepare('SELECT name FROM players WHERE email = ?');
+        $stmt->bind_param('s', $emailAddress);
+        $stmt->execute();
+        $stmt->bind_result($resname);
+        $good = false;
+        if ($stmt->fetch()) {
+            $good = true;
+        }
+        $stmt->close();
+
+        if ($good) {
+            return new self($resname);
+        } else {
+            return;
+        }
+    }
+
+    public static function findByMTGO($playername)
+    {
+        $playername = self::sanitizeUsername($playername);
+        $database = Database::getConnection();
+        $stmt = $database->prepare('SELECT name FROM players WHERE mtgo_username = ?');
+        $stmt->bind_param('s', $playername);
+        $stmt->execute();
+        $stmt->bind_result($resname);
+        $good = false;
+        if ($stmt->fetch()) {
+            $good = true;
+        }
+        $stmt->close();
+
+        if ($good) {
+            return new self($resname);
+        } else {
+            return;
+        }
+    }
+
+    public static function findByMTGA($playername)
+    {
+        $playername = self::sanitizeUsername($playername);
+        $database = Database::getConnection();
+        $stmt = $database->prepare('SELECT name FROM players WHERE mtga_username = ?');
         $stmt->bind_param('s', $playername);
         $stmt->execute();
         $stmt->bind_result($resname);
