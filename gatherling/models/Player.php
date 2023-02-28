@@ -66,11 +66,13 @@ class Player
         $stmt->close();
     }
 
+    /** @return bool  */
     public static function isLoggedIn()
     {
         return isset($_SESSION['username']);
     }
 
+    /** @return void  */
     public static function logOut()
     {
         unset($_SESSION['sessionname']);
@@ -78,6 +80,7 @@ class Player
         session_destroy();
     }
 
+    /** @return string|bool */
     public static function loginName()
     {
         if (self::isLoggedIn()) {
@@ -146,6 +149,10 @@ class Player
         $stmt->close();
     }
 
+    /**
+     * @param string $playername
+     * @return Player|void
+     */
     public static function findByName($playername)
     {
         $playername = self::sanitizeUsername($playername);
@@ -167,6 +174,10 @@ class Player
         }
     }
 
+    /**
+     * @param string $playername
+     * @return Player|void
+     */
     public static function findByDiscordID($playername)
     {
         $database = Database::getConnection();
@@ -187,6 +198,10 @@ class Player
         }
     }
 
+    /**
+     * @param string $playername
+     * @return Player|void
+     */
     public static function findByDiscordHandle($playername)
     {
         $database = Database::getConnection();
@@ -207,6 +222,10 @@ class Player
         }
     }
 
+    /**
+     * @param string $emailAddress
+     * @return Player|void
+     */
     public static function findByEmail($emailAddress)
     {
         $database = Database::getConnection();

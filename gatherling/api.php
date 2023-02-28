@@ -133,10 +133,11 @@ switch ($action) {
     break;
 
     case 'whoami':
-    $player = Player::getSessionPlayer();
-    if (is_null($player)) {
-        error('Not Logged in', ['name' => null]);
-    }
+        auth();
+        $player = Player::getSessionPlayer();
+        if (is_null($player)) {
+            error('Not Logged in', ['name' => null]);
+        }
 
         $result = repr_json_player($player);
     break;
