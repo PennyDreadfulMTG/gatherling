@@ -602,13 +602,15 @@ function print_ActiveEvents()
             $subevent_id = $event->mainid;
         }
         if (Standings::playerActive($event->name, $player->name) == 1) {
-            if ($structure == 'League') {
+            $entry = new Entry($event->id, $player->name);
+            if (is_null($entry->deck) || !$entry->deck->isValid()) {
+                echo "<td>".$entry->createDeckLink()."</td>";
+            } elseif ($structure == 'League') {
                 $count = $event->getPlayerLeagueMatchCount($player->name) + 1;
                 if ($count < 6) {
                     $Leagues[] = "<tr><td>{$event->name} Match: {$count}</td><td><a href=\"report.php?mode=submit_league_result&event={$event->name}&round={$event->current_round}&subevent={$subevent_id}\">Report League Game</a></td></tr>";
                 }
-            }
-            if ($structure == 'League Match') {
+            } elseif ($structure == 'League Match') {
                 $count = $event->getPlayerLeagueMatchCount($player->name);
                 if ($count < 1) {
                     $Leagues[] = "<tr><td>{$event->name} Match: {$event->current_round}</td><td><a href=\"report.php?mode=submit_league_result&event={$event->name}&round={$event->current_round}&subevent={$subevent_id}\">Report League Game</a></td></tr>";
