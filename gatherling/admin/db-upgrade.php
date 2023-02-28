@@ -797,7 +797,13 @@ upgrade_db(46, 'Increase standings.event size to match events.name', function ()
     do_query('ALTER TABLE `standings`
 	         CHANGE COLUMN `event` `event` VARCHAR(80) NULL DEFAULT NULL;');
     do_query('ALTER TABLE `season_points`
-	CHANGE COLUMN `event` `event` VARCHAR(80) NULL DEFAULT NULL;');
+	        CHANGE COLUMN `event` `event` VARCHAR(80) NULL DEFAULT NULL;');
+});
+upgrade_db(47, 'Increase length of some fields', function () {
+    do_query("ALTER TABLE `decks`
+	        CHANGE COLUMN `name` `name` VARCHAR(120) NOT NULL COLLATE 'latin1_swedish_ci' AFTER `id`;");
+    do_query("ALTER TABLE `players`
+	        CHANGE COLUMN `email` `email` VARCHAR(120) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci' AFTER `name`;");
 });
 $db->autocommit(true);
 
