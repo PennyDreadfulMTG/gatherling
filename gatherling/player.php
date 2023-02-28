@@ -604,7 +604,7 @@ function print_ActiveEvents()
         if (Standings::playerActive($event->name, $player->name) == 1) {
             $entry = new Entry($event->id, $player->name);
             if (is_null($entry->deck) || !$entry->deck->isValid()) {
-                echo "<td>".$entry->createDeckLink()."</td>";
+                echo '<td>'.$entry->createDeckLink().'</td>';
             } elseif ($structure == 'League') {
                 $count = $event->getPlayerLeagueMatchCount($player->name) + 1;
                 if ($count < 6) {
