@@ -165,19 +165,19 @@ switch ($action) {
         $name = arg('name');
         $result = [];
         if ($player = Player::findByDiscordID($name)) {
-            $result[] = repr_json_player($player, "discord");
+            $result[] = repr_json_player($player, 'discord');
         }
         if ($player = Player::findByDiscordHandle($name)) {
-            $result[] = repr_json_player($player, "discord");
+            $result[] = repr_json_player($player, 'discord');
         }
         if ($player = Player::findByName($name)) {
-            $result[] = repr_json_player($player, "gatherling");
+            $result[] = repr_json_player($player, 'gatherling');
         }
         if ($player = Player::findByMTGO($name)) {
-            $result[] = repr_json_player($player, "mtgo");
+            $result[] = repr_json_player($player, 'mtgo');
         }
         if ($player = Player::findByMTGA($name)) {
-            $result[] = repr_json_player($player, "mtga");
+            $result[] = repr_json_player($player, 'mtga');
         }
 
     break;

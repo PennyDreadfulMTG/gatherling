@@ -151,6 +151,7 @@ class Player
 
     /**
      * @param string $playername
+     *
      * @return Player|void
      */
     public static function findByName($playername)
@@ -176,6 +177,7 @@ class Player
 
     /**
      * @param string $playername
+     *
      * @return Player|void
      */
     public static function findByDiscordID($playername)
@@ -200,6 +202,7 @@ class Player
 
     /**
      * @param string $playername
+     *
      * @return Player|void
      */
     public static function findByDiscordHandle($playername)
@@ -224,6 +227,7 @@ class Player
 
     /**
      * @param string $emailAddress
+     *
      * @return Player|void
      */
     public static function findByEmail($emailAddress)
@@ -1308,9 +1312,9 @@ class Player
             $game = 'arena';
         } elseif ($game == 3) {
             $game = 'paper';
-        } elseif ($game == 'discord')
+        } elseif ($game == 'discord') {
             $game = 'paper';
-
+        }
 
         $name = $this->name;
         if ($game == 'mtgo' && !empty($this->mtgo_username)) {
