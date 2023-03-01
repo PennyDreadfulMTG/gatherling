@@ -40,6 +40,28 @@ function is_admin()
     return false;
 }
 
+/** @return bool  */
+function auth()
+{
+    if (isset($_SERVER['HTTP_X_USERNAME']) && isset($_SERVER['HTTP_X_APIKEY'])) {
+        $username = $_SERVER['HTTP_X_USERNAME'];
+        $apikey = $_SERVER['HTTP_X_APIKEY'];
+        if (is_null($username) || is_null($apikey)) {
+            return false;
+        }
+
+        $player = Player::findByName($username);
+        if (is_null($player)) {
+            return false;
+        }
+        if ($player->api_key == $apikey) {
+            $_SESSION['username'] = $player->name;
+        }
+    }
+
+    return Player::isLoggedIn();
+}
+
 function error($msg, $extra = null)
 {
     $result = [];
