@@ -285,7 +285,7 @@ function fullmetagame($event)
     }
     $db = Database::getConnection();
     $succ = $db->query('CREATE TEMPORARY TABLE meta(
-		player VARCHAR(40), deckname VARCHAR(40), archetype VARCHAR(20),
+		player VARCHAR(40), deckname VARCHAR(120), archetype VARCHAR(20),
 		colors VARCHAR(10), medal VARCHAR(10), id BIGINT UNSIGNED,
     srtordr TINYINT UNSIGNED DEFAULT 0)');
     if (!$succ) {
