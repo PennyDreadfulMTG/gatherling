@@ -1308,7 +1308,9 @@ class Player
             $game = 'arena';
         } elseif ($game == 3) {
             $game = 'paper';
-        }
+        } elseif ($game == 'discord')
+            $game = 'paper';
+
 
         $name = $this->name;
         if ($game == 'mtgo' && !empty($this->mtgo_username)) {
