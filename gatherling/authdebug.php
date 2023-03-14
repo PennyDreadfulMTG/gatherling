@@ -29,7 +29,6 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     unset($_SESSION['oauth2state']);
     exit('Invalid state');
 } else {
-
     // Step 2. Get an access token using the provided authorization code
     $token = $provider->getAccessToken('authorization_code', [
         'code' => $_GET['code'],

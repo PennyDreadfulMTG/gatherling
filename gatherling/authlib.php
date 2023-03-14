@@ -51,7 +51,6 @@ function debug_info($token)
         printf('Hello %s#%s!<br/><br/>', $user->getUsername(), $user->getDiscriminator());
         var_export($user->toArray());
     } catch (Exception $e) {
-
         // Failed to get user details
         exit($e);
     }

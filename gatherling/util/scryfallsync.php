@@ -83,16 +83,16 @@ function convert_settype($sf_type)
     switch ($sf_type) {
         case 'core':
         case 'starter':
-          return 'Core';
+            return 'Core';
 
         case 'expansion':
-          return 'Block';
+            return 'Block';
 
         case 'token':
         case 'memorabilia':
             return 'Ignore';
-          default:
-          return 'Extra';
+        default:
+            return 'Extra';
     }
 }
 

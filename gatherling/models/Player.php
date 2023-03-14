@@ -383,7 +383,7 @@ class Player
             case 12.75: return '[UTC + 12:45] Chatham Islands Time';
             case 13: return '[UTC + 13] Tonga Time, Phoenix Islands Time';
             case 14: return '[UTC + 14] Line Island Time';
-            }
+        }
     }
 
     /** Returns true if a player has hosted at least one event. */

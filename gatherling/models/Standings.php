@@ -188,8 +188,8 @@ class Standings
             // do calc
             if ($opponent->byes > 0) {
                 if ($opponent->matches_played != 0) {
-                    $opp_score = ($opponent->matches_won - ($opponent->byes)) + ($opponent->draws * .333);
-                    $opp_win_percentage = (($opp_score) / $opponent->matches_played);
+                    $opp_score = ($opponent->matches_won - $opponent->byes) + ($opponent->draws * .333);
+                    $opp_win_percentage = ($opp_score / $opponent->matches_played);
                     if ($opp_win_percentage < .33) {
                         $opp_win_percentage = .33;
                     }

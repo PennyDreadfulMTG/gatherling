@@ -325,27 +325,27 @@ class Matchup
             $zero = 0;
 
             switch ($result) {
-            case 'W20':
-                //echo "writing a 2-0 win";
-                $stmt->bind_param('ddd', $two, $zero, $match_id);
-                break;
-            case 'W21':
-                //echo "writing a 2-1 win";
-                $stmt->bind_param('ddd', $two, $one, $match_id);
-                break;
-            case 'L20':
-                //echo "writing a 2-0 loss";
-                $stmt->bind_param('ddd', $zero, $two, $match_id);
-                break;
-            case 'L21':
-                //echo "writing a 2-1 loss";
-                $stmt->bind_param('ddd', $one, $two, $match_id);
-                break;
-            case 'D':
-                //writing a draw
-                $stmt->bind_param('ddd', $one, $one, $match_id);
-                break;
-        }
+                case 'W20':
+                    //echo "writing a 2-0 win";
+                    $stmt->bind_param('ddd', $two, $zero, $match_id);
+                    break;
+                case 'W21':
+                    //echo "writing a 2-1 win";
+                    $stmt->bind_param('ddd', $two, $one, $match_id);
+                    break;
+                case 'L20':
+                    //echo "writing a 2-0 loss";
+                    $stmt->bind_param('ddd', $zero, $two, $match_id);
+                    break;
+                case 'L21':
+                    //echo "writing a 2-1 loss";
+                    $stmt->bind_param('ddd', $one, $two, $match_id);
+                    break;
+                case 'D':
+                    //writing a draw
+                    $stmt->bind_param('ddd', $one, $one, $match_id);
+                    break;
+            }
 
             $stmt->execute();
             self::validateReport($match_id);
