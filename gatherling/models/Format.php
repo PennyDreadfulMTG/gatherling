@@ -269,7 +269,7 @@ class Format
 
         switch ($this->type) {
             case 'System':
-                 // Only supers can save or delete system formats
+                // Only supers can save or delete system formats
                 if ($player->isSuper()) {
                     $authorized = true;
                 }
@@ -456,7 +456,7 @@ class Format
 
     public function noFormatLoaded()
     {
-        return ($this->name == '') || (is_null($this->name));
+        return ($this->name == '') || is_null($this->name);
     }
 
     public function getLegalCardsets()
@@ -817,18 +817,18 @@ class Format
             case 'Rat Colony':
             case 'Shadowborn Apostle':
             case 'Persistent Petitioners':
-             case 'Swamp':
-             case 'Plains':
-             case 'Island':
-             case 'Mountain':
-             case 'Forest':
-             case 'Wastes':
-             case 'Snow-Covered Swamp':
-             case 'Snow-Covered Plains':
-             case 'Snow-Covered Island':
-             case 'Snow-Covered Mountain':
-             case 'Snow-Covered Forest':
-                 return true;
+            case 'Swamp':
+            case 'Plains':
+            case 'Island':
+            case 'Mountain':
+            case 'Forest':
+            case 'Wastes':
+            case 'Snow-Covered Swamp':
+            case 'Snow-Covered Plains':
+            case 'Snow-Covered Island':
+            case 'Snow-Covered Mountain':
+            case 'Snow-Covered Forest':
+                return true;
             default:
                 return false;
         }
@@ -989,7 +989,7 @@ class Format
             reset($tribesTied);
             $underdogKey = key($tribesTied);
         // get first key, which should be lowest from sort
-            // Smallest Tribe is then selected
+        // Smallest Tribe is then selected
         } else {
             reset($subTypeCount);
             $underdogKey = key($subTypeCount); // get first key, which should highest from sort
@@ -1081,7 +1081,7 @@ class Format
             reset($tribesTied);
             $tribeKey = key($tribesTied);
         // get first key, which should be lowest from sort
-            // Smallest Tribe is then selected
+        // Smallest Tribe is then selected
         } else {
             reset($subTypeCount);
             $tribeKey = key($subTypeCount); // get first key, which should highest from sort
@@ -1260,8 +1260,8 @@ class Format
             }
         } else {
             return true; // mainCard and sideCard don't match so is automatically legal
-                         // individual quantity check has already been done. We are only
-                         // interested in finding too many of the same card between the side and main
+            // individual quantity check has already been done. We are only
+            // interested in finding too many of the same card between the side and main
         }
 
         return false;

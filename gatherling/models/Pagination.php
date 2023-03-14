@@ -101,7 +101,6 @@ class Pagination
      */
     public function __construct()
     {
-
         // set the default base url
         $this->base_url();
     }
@@ -129,7 +128,6 @@ class Pagination
      */
     public function always_show_navigation($show = true)
     {
-
         // set property
         $this->_properties['always_show_navigation'] = $show;
     }
@@ -165,7 +163,6 @@ class Pagination
      */
     public function avoid_duplicate_content($avoid_duplicate_content = true)
     {
-
         // set property
         $this->_properties['avoid_duplicate_content'] = $avoid_duplicate_content;
     }
@@ -218,7 +215,6 @@ class Pagination
      */
     public function base_url($base_url = '', $preserve_query_string = true)
     {
-
         // set the base URL
         $base_url = ($base_url == '' ? $_SERVER['REQUEST_URI'] : $base_url);
 
@@ -250,10 +246,8 @@ class Pagination
      */
     public function get_page()
     {
-
         // unless page was not specifically set through the "set_page" method
         if (!$this->_properties['page_set']) {
-
             // if
             if (
 
@@ -264,14 +258,12 @@ class Pagination
                 preg_match('/\b'.preg_quote($this->_properties['variable_name']).'([0-9]+)\b/i', $_SERVER['REQUEST_URI'], $matches) > 0
 
             ) {
-
                 // set the current page to whatever it is indicated in the URL
                 $this->set_page((int) $matches[1]);
             }
 
             // if page propagation is done through GET and the current page is set in $_GET
             elseif (isset($_GET[$this->_properties['variable_name']])) {
-
                 // set the current page to whatever it was set to
                 $this->set_page((int) $_GET[$this->_properties['variable_name']]);
             }
@@ -292,7 +284,6 @@ class Pagination
 
         // if there are any pages
         if ($this->_properties['total_pages'] > 0) {
-
             // if current page is beyond the total number pages
             /// make the current page be the last page
             if ($this->_properties['page'] > $this->_properties['total_pages']) {
@@ -332,7 +323,6 @@ class Pagination
      */
     public function get_pages()
     {
-
         // return the total number of pages based on the total number of records and number of records to be shown per page
         return @ceil($this->_properties['records'] / $this->_properties['records_per_page']);
     }
@@ -358,7 +348,6 @@ class Pagination
      */
     public function labels($previous = 'Previous page', $next = 'Next page')
     {
-
         // set the labels
         $this->_properties['previous'] = $previous;
         $this->_properties['next'] = $next;
@@ -399,7 +388,6 @@ class Pagination
      */
     public function method($method = 'get')
     {
-
         // set the page propagation method
         $this->_properties['method'] = (strtolower($method) == 'url' ? 'url' : 'get');
     }
@@ -423,7 +411,6 @@ class Pagination
      */
     public function navigation_position($position)
     {
-
         // set the positioning of next/previous page links
         $this->_properties['navigation_position'] = (in_array(strtolower($position), ['left', 'right']) ? strtolower($position) : 'outside');
     }
@@ -447,7 +434,6 @@ class Pagination
      */
     public function padding($enabled = true)
     {
-
         // set padding
         $this->_properties['padding'] = $enabled;
     }
@@ -471,7 +457,6 @@ class Pagination
      */
     public function records($records)
     {
-
         // the number of records
         // make sure we save it as an integer
         $this->_properties['records'] = (int) $records;
@@ -497,7 +482,6 @@ class Pagination
      */
     public function records_per_page($records_per_page)
     {
-
         // the number of records displayed on one page
         // make sure we save it as an integer
         $this->_properties['records_per_page'] = (int) $records_per_page;
@@ -523,7 +507,6 @@ class Pagination
      */
     public function render($return_output = false)
     {
-
         // get some properties of the class
         $this->get_page();
 
@@ -537,10 +520,8 @@ class Pagination
 
         // if we're showing records in reverse order
         if ($this->_properties['reverse']) {
-
             // if "next page" and "previous page" links are to be shown to the left of the links to individual pages
             if ($this->_properties['navigation_position'] == 'left') {
-
                 // first show next/previous and then page links
                 $output .= $this->_show_next().$this->_show_previous().$this->_show_pages();
             }
@@ -555,12 +536,10 @@ class Pagination
                 $output .= $this->_show_next().$this->_show_pages().$this->_show_previous();
             }
 
-            // if we're showing records in natural order
+        // if we're showing records in natural order
         } else {
-
             // if "next page" and "previous page" links are to be shown to the left of the links to individual pages
             if ($this->_properties['navigation_position'] == 'left') {
-
                 // first show next/previous and then page links
                 $output .= $this->_show_previous().$this->_show_next().$this->_show_pages();
             }
@@ -610,7 +589,6 @@ class Pagination
      */
     public function reverse($reverse = false)
     {
-
         // set how the pagination links should be generated
         $this->_properties['reverse'] = $reverse;
     }
@@ -635,7 +613,6 @@ class Pagination
      */
     public function selectable_pages($selectable_pages)
     {
-
         // the number of selectable pages
         // make sure we save it as an integer
         $this->_properties['selectable_pages'] = (int) $selectable_pages;
@@ -662,7 +639,6 @@ class Pagination
      */
     public function set_page($page)
     {
-
         // set the current page
         // make sure we save it as an integer
         $this->_properties['page'] = (int) $page;
@@ -696,7 +672,6 @@ class Pagination
      */
     public function trailing_slash($enabled)
     {
-
         // set the state of trailing slashes
         $this->_properties['trailing_slash'] = $enabled;
     }
@@ -719,7 +694,6 @@ class Pagination
      */
     public function variable_name($variable_name)
     {
-
         // set the variable name
         $this->_properties['variable_name'] = strtolower($variable_name);
     }
@@ -732,13 +706,10 @@ class Pagination
      */
     private function _build_uri($page)
     {
-
         // if page propagation method is through SEO friendly URLs
         if ($this->_properties['method'] == 'url') {
-
             // see if the current page is already set in the URL
             if (preg_match('/\b'.$this->_properties['variable_name'].'([0-9]+)\b/i', $this->_properties['base_url'], $matches) > 0) {
-
                 // build string
                 $url = str_replace('//', '/', preg_replace(
 
@@ -746,7 +717,7 @@ class Pagination
                     '/\b'.$this->_properties['variable_name'].'([0-9]+)\b/i',
 
                     // if on the first page, remove it in order to avoid duplicate content
-                    ($page == 1 ? '' : $this->_properties['variable_name'].$page),
+                    $page == 1 ? '' : $this->_properties['variable_name'].$page,
                     $this->_properties['base_url']
                 ));
 
@@ -775,7 +746,6 @@ class Pagination
 
         // if page propagation is to be done through GET
         } else {
-
             // if values in the query string - other than those set through base_url() - are not to be preserved
             // preserve only those set initially
             if (!$this->_properties['preserve_query_string']) {
@@ -789,7 +759,6 @@ class Pagination
 
             // if we are avoiding duplicate content and if not the first/last page (depending on whether the pagination links are shown in natural or reversed order)
             if (!$this->_properties['avoid_duplicate_content'] || ($page != ($this->_properties['reverse'] ? $this->_properties['total_pages'] : 1))) {
-
                 // add/update the page number
                 $query[$this->_properties['variable_name']] = $page;
             }
@@ -845,16 +814,14 @@ class Pagination
 
         // if the total number of pages is lesser than the number of selectable pages
         if ($this->_properties['total_pages'] <= $this->_properties['selectable_pages']) {
-
             // iterate ascendingly or descendingly depending on whether we're showing links in reverse order or not)
             for (
 
                 $i = ($this->_properties['reverse'] ? $this->_properties['total_pages'] : 1);
-                ($this->_properties['reverse'] ? $i >= 1 : $i <= $this->_properties['total_pages']);
-                ($this->_properties['reverse'] ? $i-- : $i++)
+                $this->_properties['reverse'] ? $i >= 1 : $i <= $this->_properties['total_pages'];
+                $this->_properties['reverse'] ? $i-- : $i++
 
             ) {
-
                 // render the link for each page
                 $output .= '<li><a href="'.$this->_build_uri($i).'" '.
 
@@ -867,9 +834,8 @@ class Pagination
                     '</a></li>';
             }
 
-            // if the total number of pages is greater than the number of selectable pages
+        // if the total number of pages is greater than the number of selectable pages
         } else {
-
             // start with a link to the first or last page, depending if we're displaying links in reverse order or not
             $output .= '<li><a href="'.$this->_build_uri($this->_properties['reverse'] ? $this->_properties['total_pages'] : 1).'" '.
 
@@ -880,7 +846,7 @@ class Pagination
                 ($this->_properties['padding'] ?
 
                     // apply padding
-                    str_pad(($this->_properties['reverse'] ? $this->_properties['total_pages'] : 1), strlen($this->_properties['total_pages']), '0', STR_PAD_LEFT) :
+                    str_pad($this->_properties['reverse'] ? $this->_properties['total_pages'] : 1, strlen($this->_properties['total_pages']), '0', STR_PAD_LEFT) :
 
                     // show the page number
                     ($this->_properties['reverse'] ? $this->_properties['total_pages'] : 1)).
@@ -917,7 +883,6 @@ class Pagination
                 (!$this->_properties['reverse'] && $this->_properties['page'] >= $scroll_from)
 
             ) {
-
                 // by default, the starting_page should be whatever the current page plus/minus $adjacent
                 // depending on whether we're showing links in reverse order or not
                 $starting_page = $this->_properties['page'] + ($this->_properties['reverse'] ? $adjacent : -$adjacent);
@@ -929,7 +894,6 @@ class Pagination
                     (!$this->_properties['reverse'] && $this->_properties['total_pages'] - $starting_page < ($this->_properties['selectable_pages'] - 2))
 
                 ) {
-
                     // adjust the value of $starting_page again
                     if ($this->_properties['reverse']) {
                         $starting_page = $this->_properties['selectable_pages'] - 1;
@@ -994,7 +958,7 @@ class Pagination
                 ($this->_properties['page'] == $i ? 'class="current"' : '').'>'.
 
                 // also, apply padding if necessary
-                ($this->_properties['padding'] ? str_pad(($this->_properties['reverse'] ? 1 : $this->_properties['total_pages']), strlen($this->_properties['total_pages']), '0', STR_PAD_LEFT) : ($this->_properties['reverse'] ? 1 : $this->_properties['total_pages'])).
+                ($this->_properties['padding'] ? str_pad($this->_properties['reverse'] ? 1 : $this->_properties['total_pages'], strlen($this->_properties['total_pages']), '0', STR_PAD_LEFT) : ($this->_properties['reverse'] ? 1 : $this->_properties['total_pages'])).
 
                 '</a></li>';
         }

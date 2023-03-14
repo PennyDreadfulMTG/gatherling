@@ -66,10 +66,10 @@ class Pairings
 
         if (!in_array($player2['player'], $player1['opponents'])) {
             $weight += $this->quality($highest_points, $highest_points) + 1;
-            if ($player2['player'] == $this->byeName && $player1['score'] == ($this->lowestScoreWithoutBye)) {
+            if ($player2['player'] == $this->byeName && $player1['score'] == $this->lowestScoreWithoutBye) {
                 $weight += $this->quality($highest_points, $highest_points) + 1;
             }
-            if ($player1['player'] == $this->byeName && $player2['score'] == ($this->lowestScoreWithoutBye)) {
+            if ($player1['player'] == $this->byeName && $player2['score'] == $this->lowestScoreWithoutBye) {
                 $weight += $this->quality($highest_points, $highest_points) + 1;
             }
 

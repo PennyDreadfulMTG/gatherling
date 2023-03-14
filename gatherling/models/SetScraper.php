@@ -11,7 +11,6 @@ class SetScraper
 {
     public static function getSetList()
     { // gets a list of sets from magicthegathering.io
-
         $url = 'https://mtgjson.com/api/v5/SetList.json';
 
         $options = [

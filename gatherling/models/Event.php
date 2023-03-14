@@ -1264,7 +1264,7 @@ class Event
                         $this->award_bye($player1);
                     } else {
                         $player2 = new Standings($this->name, $active_players[$pairing[$i]]['player']);
-                        $this->addPairing($player1, $player2, ($this->current_round + 1), 'P');
+                        $this->addPairing($player1, $player2, $this->current_round + 1, 'P');
                         $player2->matched = 1;
                         $player2->save();
                     }
@@ -1337,7 +1337,7 @@ class Event
     public function singleElimination($round)
     {
         if ($round == 'final') {
-            if ($this->current_round == ($this->mainrounds)) {
+            if ($this->current_round == $this->mainrounds) {
                 if ($this->finalrounds == 2) {
                     $this->top4Seeding();
                 } elseif ($this->finalrounds == 3) {
@@ -1346,13 +1346,13 @@ class Event
                     $this->top2Seeding();
                 }
             } else {
-                $top_cut = (($this->finalrounds - (($this->current_round) - $this->mainrounds)) * 2);
+                $top_cut = (($this->finalrounds - ($this->current_round - $this->mainrounds)) * 2);
                 $this->singleEliminationPairing($top_cut);
             }
         } elseif ($this->current_round == 0) {
             $this->singleEliminationByeCheck(2, 1);
         } else {
-            $round = (($this->mainrounds - ($this->current_round)));
+            $round = ($this->mainrounds - $this->current_round);
             $top_cut = pow(2, $round);
             $this->singleEliminationPairing($top_cut);
         }
@@ -1372,7 +1372,7 @@ class Event
             if ($players[$counter] == null || $players[$counter]->player == null) {
                 $this->award_bye($playera);
             } else {
-                $this->addPairing($playera, $players[$counter], ($this->current_round + 1), 'P');
+                $this->addPairing($playera, $players[$counter], $this->current_round + 1, 'P');
             }
             $counter++;
         }
@@ -1384,11 +1384,11 @@ class Event
         $players = $this->standing->getEventStandings($this->name, 2);
         if (count($players) > $check) {
             $rounds++;
-            $this->singleEliminationByeCheck(($check * 2), $rounds);
+            $this->singleEliminationByeCheck($check * 2, $rounds);
         } else {
             $byes_needed = $check - count($players);
             while ($byes_needed > 0) {
-                $bye = rand(0, (count($players) - 1));
+                $bye = rand(0, count($players) - 1);
                 $this->award_bye($players[$bye]);
                 Standings::writeSeed($this->name, $players[$bye]->player, $seedcounter);
                 $seedcounter++;
@@ -1402,7 +1402,7 @@ class Event
                 $playera = $players[$counter];
                 $counter++;
                 $playerb = $players[$counter];
-                $this->addPairing($playera, $playerb, ($this->current_round + 1), 'P');
+                $this->addPairing($playera, $playerb, $this->current_round + 1, 'P');
                 Standings::writeSeed($this->name, $playera->player, $seedcounter);
                 $seedcounter++;
                 Standings::writeSeed($this->name, $playerb->player, $seedcounter);
@@ -1424,7 +1424,7 @@ class Event
     public function top2Seeding()
     {
         $players = $this->standing->getEventStandings($this->name, 3);
-        $this->addPairing($players[0], $players[1], ($this->current_round + 1), 'P');
+        $this->addPairing($players[0], $players[1], $this->current_round + 1, 'P');
         Standings::writeSeed($this->name, $players[0]->player, 1);
         Standings::writeSeed($this->name, $players[1]->player, 2);
     }
@@ -1435,8 +1435,8 @@ class Event
         if (count($players) < 4) {
             $this->top2Seeding();
         } else {
-            $this->addPairing($players[0], $players[3], ($this->current_round + 1), 'P');
-            $this->addPairing($players[1], $players[2], ($this->current_round + 1), 'P');
+            $this->addPairing($players[0], $players[3], $this->current_round + 1, 'P');
+            $this->addPairing($players[1], $players[2], $this->current_round + 1, 'P');
             Standings::writeSeed($this->name, $players[0]->player, 1);
             Standings::writeSeed($this->name, $players[1]->player, 3);
             Standings::writeSeed($this->name, $players[2]->player, 2);
@@ -1450,10 +1450,10 @@ class Event
         if (count($players) < 8) {
             $this->top4Seeding();
         } else {
-            $this->addPairing($players[0], $players[7], ($this->current_round + 1), 'P');
-            $this->addPairing($players[3], $players[4], ($this->current_round + 1), 'P');
-            $this->addPairing($players[1], $players[6], ($this->current_round + 1), 'P');
-            $this->addPairing($players[2], $players[5], ($this->current_round + 1), 'P');
+            $this->addPairing($players[0], $players[7], $this->current_round + 1, 'P');
+            $this->addPairing($players[3], $players[4], $this->current_round + 1, 'P');
+            $this->addPairing($players[1], $players[6], $this->current_round + 1, 'P');
+            $this->addPairing($players[2], $players[5], $this->current_round + 1, 'P');
             Standings::writeSeed($this->name, $players[0]->player, 1);
             Standings::writeSeed($this->name, $players[7]->player, 2);
             Standings::writeSeed($this->name, $players[3]->player, 3);
@@ -1467,7 +1467,7 @@ class Event
 
     public function award_bye($player)
     {
-        $this->addPairing($player, $player, ($this->current_round + 1), 'BYE');
+        $this->addPairing($player, $player, $this->current_round + 1, 'BYE');
     }
 
     /**
@@ -1630,7 +1630,7 @@ class Event
     // It will always restart the top N if it is after the end rounds.
     public function repairRound()
     {
-        if ($this->current_round <= ($this->mainrounds)) {
+        if ($this->current_round <= $this->mainrounds) {
             $round = $this->current_round;
             $subevent = $this->mainid;
         } else {
@@ -1654,7 +1654,7 @@ class Event
 
     public function assignMedals()
     {
-        if ($this->current_round > ($this->mainrounds)) {
+        if ($this->current_round > $this->mainrounds) {
             $structure = $this->finalstruct;
             $subevent_id = $this->finalid;
             $round = 'final';
@@ -1665,21 +1665,21 @@ class Event
         }
 
         switch ($structure) {
-       case 'Swiss':
-       case 'Swiss (Blossom)':
-           $this->AssignMedalsbyStandings();
-           break;
-       case 'Single Elimination':
-           $this->assignTropiesFromMatches();
-           break;
-       case 'League':
-       case 'League Match':
-           $this->AssignMedalsbyStandings();
-           break;
-       case 'Round Robin':
-           //Do later
-           break;
-     }
+            case 'Swiss':
+            case 'Swiss (Blossom)':
+                $this->AssignMedalsbyStandings();
+                break;
+            case 'Single Elimination':
+                $this->assignTropiesFromMatches();
+                break;
+            case 'League':
+            case 'League Match':
+                $this->AssignMedalsbyStandings();
+                break;
+            case 'Round Robin':
+                //Do later
+                break;
+        }
     }
 
     public function AssignMedalsbyStandings()

@@ -67,16 +67,16 @@ if ($set == 'Time Spiral "Timeshifted"') {
 }
 $settype = $data->type;
 switch ($settype) {
-  case 'core':
-  case 'starter':
-    $settype = 'Core';
-    break;
-  case 'expansion':
-    $settype = 'Block';
-    break;
-  default:
-    $settype = 'Extra';
-    break;
+    case 'core':
+    case 'starter':
+        $settype = 'Core';
+        break;
+    case 'expansion':
+        $settype = 'Block';
+        break;
+    default:
+        $settype = 'Extra';
+        break;
 }
 $releasedate = $data->releaseDate;
 

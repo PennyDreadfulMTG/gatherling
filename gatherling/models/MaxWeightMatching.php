@@ -374,7 +374,7 @@ class MaxWeightMatching
             $this->mate[$this->endpoint[$p]] = $p ^ 1;
             $this->mate[$this->endpoint[$p ^ 1]] = $p;
             if ($DEBUG) {
-                $DEBUG('PAIR(a) '.$this->endpoint[$p].' '.$this->endpoint[$p ^ 1].' (k='.($this->floorintdiv($p, 2)).')');
+                $DEBUG('PAIR(a) '.$this->endpoint[$p].' '.$this->endpoint[$p ^ 1].' (k='.$this->floorintdiv($p, 2).')');
             }
         }
         $this->blossomchilds[$b] = array_merge(array_slice($this->blossomchilds[$b], $i), array_slice($this->blossomchilds[$b], 0, $i));
@@ -419,7 +419,7 @@ class MaxWeightMatching
                 $this->mate[$j] = $this->labelend[$bt];
                 $p = $this->labelend[$bt] ^ 1;
                 if ($DEBUG) {
-                    $DEBUG("PAIR(c) $s $t (k=".($this->floorintdiv($p, 2)).')');
+                    $DEBUG("PAIR(c) $s $t (k=".$this->floorintdiv($p, 2).')');
                 }
             }
         }
