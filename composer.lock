@@ -1368,16 +1368,16 @@
         },
         {
             "name": "sentry/sentry",
-            "version": "3.15.0",
+            "version": "3.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getsentry/sentry-php.git",
-                "reference": "c6a0e24d2f8da8d8f57cdcc87ca635248c1a91c5"
+                "reference": "5326a8786b8c7c3a51ea0c6d06e6cb6a9dfa6779"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/c6a0e24d2f8da8d8f57cdcc87ca635248c1a91c5",
-                "reference": "c6a0e24d2f8da8d8f57cdcc87ca635248c1a91c5",
+                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/5326a8786b8c7c3a51ea0c6d06e6cb6a9dfa6779",
+                "reference": "5326a8786b8c7c3a51ea0c6d06e6cb6a9dfa6779",
                 "shasum": ""
             },
             "require": {
@@ -1456,7 +1456,7 @@
             ],
             "support": {
                 "issues": "https://github.com/getsentry/sentry-php/issues",
-                "source": "https://github.com/getsentry/sentry-php/tree/3.15.0"
+                "source": "https://github.com/getsentry/sentry-php/tree/3.16.0"
             },
             "funding": [
                 {
@@ -1468,7 +1468,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2023-03-13T11:45:26+00:00"
+            "time": "2023-03-16T10:37:16+00:00"
         },
         {
             "name": "symfony/browser-kit",
