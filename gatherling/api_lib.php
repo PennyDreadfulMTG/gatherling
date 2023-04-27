@@ -204,6 +204,11 @@ function repr_json_player($player, $client = null)
 
 //## Actions
 
+/**
+ * @param Gatherling\Event $event
+ * @param string $name
+ * @return (bool|string|int)[]|false[]|(string|false)[]
+ */
 function add_player_to_event($event, $name)
 {
     if ($event->authCheck($_SESSION['username'])) {
@@ -224,6 +229,11 @@ function add_player_to_event($event, $name)
     return $result;
 }
 
+/**
+ * @param Gatherling\Event $event
+ * @param string $name
+ * @return array
+ */
 function delete_player_from_event($event, $name)
 {
     if ($event->authCheck($_SESSION['username'])) {
@@ -238,6 +248,11 @@ function delete_player_from_event($event, $name)
     return $result;
 }
 
+/**
+ * @param Gatherling\Event $event
+ * @param string $name
+ * @return array
+ */
 function drop_player_from_event($event, $name)
 {
     if ($event->authCheck($_SESSION['username'])) {
@@ -319,6 +334,14 @@ function create_event()
     return $result;
 }
 
+/**
+ * @param Gatherling\Event $event
+ * @param mixed $round
+ * @param string $a
+ * @param string $b
+ * @param string $res
+ * @return void
+ */
 function create_pairing($event, $round, $a, $b, $res)
 {
     if (!is_admin() && !$event->authCheck(Player::loginName())) {
