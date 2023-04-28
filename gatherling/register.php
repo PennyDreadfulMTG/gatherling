@@ -94,6 +94,9 @@ function doRegister()
         if (isset($_SESSION['DISCORD_ID'])) {
             $player->discord_id = $_SESSION['DISCORD_ID'];
         }
+        if (isset($_SESSION['DISCORD_NAME'])) {
+            $player->discord_handle = $_SESSION['DISCORD_NAME'];
+        }
         $player->save();
         $_SESSION['username'] = $_POST['username'];
     }
