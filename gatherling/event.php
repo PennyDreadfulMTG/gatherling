@@ -365,10 +365,15 @@ function eventList($series = '', $season = '')
 
     $seriesShown = [];
     $results = [];
+    $finalizedResults = [];
     while ($thisEvent = $result->fetch_assoc()) {
-        $results[] = $thisEvent;
+        if ($thisEvent['finalized'] == 1)
+            $finalizedResults[] = $thisEvent;
+        else
+            $results[] = $thisEvent;
         $seriesShown[] = $thisEvent['series'];
     }
+    $results = array_merge($results, $finalizedResults);
 
     if (isset($_GET['series']) && $_GET['series'] != '') {
         $seriesShown = $playerSeries;

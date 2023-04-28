@@ -119,6 +119,7 @@ switch ($action) {
         break;
 
     case 'create_pairing':
+        auth();
         $event = new Event(arg('event'));
         $round = arg('round');
         $a = arg('player_a');
