@@ -98,7 +98,7 @@ function repr_json_event($event)
     $series = new Series($event->series);
     $json = [];
     // Event Properties
-    $json = populate($json, $event, ['name', 'series', 'season', 'number', 'format', 'host', 'cohost', 'active', 'finalized', 'current_round', 'start', 'mainrounds', 'mainstruct', 'finalrounds', 'finalstruct']);
+    $json = populate($json, $event, ['id', 'name', 'series', 'season', 'number', 'format', 'host', 'cohost', 'active', 'finalized', 'current_round', 'start', 'mainrounds', 'mainstruct', 'finalrounds', 'finalstruct']);
     if ($event->client == 1) {
         $json['client'] = 'mtgo';
     } elseif ($event->client == 2) {
