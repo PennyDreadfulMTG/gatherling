@@ -12,15 +12,15 @@ print_header('Deck Search');
 <script src="/styles/Chandra/js/sorttable.js"></script>
 
 <div class="grid_10 suffix_1 prefix_1">
-<div id="gatherling_main" class="box">
-<div class="uppertitle group">Deck Search </div>
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle group">Deck Search </div>
 
-<?php
-handleRequest();
+        <?php
+        handleRequest();
 
-?>
+        ?>
 
-</div>
+    </div>
 </div>
 
 <?php print_footer(); ?>
@@ -104,7 +104,7 @@ function handleRequest()
         } else {
             showSearchForm(0);
             foreach ($decksearch->errors as $value) {
-                echo $value.'<br />';
+                echo $value . '<br />';
             }
         }
     } else {
@@ -159,11 +159,11 @@ function showMostPlayedDecks()
 
     while ($stmt->fetch()) {
         echo "<td>{$count} times</td>";
-        echo '<td><a href="profile.php?player='.$playerName.'&mode=Lookup+Profile">'.$playerName.'</a></td>';
-        echo '<td><a href="deck.php?mode=view&id='.$deckid.'">'.$deckName.'</a></td>';
-        echo '<td>'.$archetype.'</td>';
-        echo '<td>'.$format.'</td>';
-        echo '<td>'.$created.'</td>';
+        echo '<td><a href="profile.php?player=' . $playerName . '&mode=Lookup+Profile">' . $playerName . '</a></td>';
+        echo '<td><a href="deck.php?mode=view&id=' . $deckid . '">' . $deckName . '</a></td>';
+        echo '<td>' . $archetype . '</td>';
+        echo '<td>' . $format . '</td>';
+        echo '<td>' . $created . '</td>';
         echo '</tr>';
     }
 
@@ -179,7 +179,7 @@ function showSearchForm($res_num = null)
     echo '<br />';
     echo '<div class="ds_inputbox group">';
     echo '<div class="ds_left group">';
-    echo '<form  method="post" action="'.htmlspecialchars($_SERVER['PHP_SELF']).'?mode=search">';
+    echo '<form  method="post" action="' . htmlspecialchars($_SERVER['PHP_SELF']) . '?mode=search">';
     echo '<label class="ds_label" for="player">Player Name: <input class="ds_input" type="text" name="player"  value="';
     if (isset($_SESSION['player'])) {
         echo $_SESSION['player'];
@@ -235,7 +235,7 @@ function showSearchForm($res_num = null)
     echo '</center>';
     echo '<div class="ds_results group">';
     if ($res_num) {
-        echo $res_num.' decks found';
+        echo $res_num . ' decks found';
     }
     echo '</div>';
     echo '</div>';
@@ -273,11 +273,11 @@ function checkboxMenu($colors = null)
         $r = '';
     }
 
-    echo "<label class=\"ds_checkbox\" for=\"color[g]\"><input type=\"checkbox\" name=\"color[g]\" value=\"g\" $g/>".image_tag('manag.png', ['class' => 'ds_mana_image']).'</label>';
-    echo "<label class=\"ds_checkbox\" for=\"color[u]\"><input type=\"checkbox\" name=\"color[u]\" value=\"u\" $u/>".image_tag('manau.png', ['class' => 'ds_mana_image']).'</label>';
-    echo "<label class=\"ds_checkbox\" for=\"color[w]\"><input type=\"checkbox\" name=\"color[w]\" value=\"w\" $w/>".image_tag('manaw.png', ['class' => 'ds_mana_image']).'</label>';
-    echo "<label class=\"ds_checkbox\" for=\"color[b]\"><input type=\"checkbox\" name=\"color[b]\" value=\"b\" $b/>".image_tag('manab.png', ['class' => 'ds_mana_image']).'</label>';
-    echo "<label class=\"ds_checkbox\" for=\"color[r]\"><input type=\"checkbox\" name=\"color[r]\" value=\"r\" $r/>".image_tag('manar.png', ['class' => 'ds_mana_image']).'</label>';
+    echo "<label class=\"ds_checkbox\" for=\"color[g]\"><input type=\"checkbox\" name=\"color[g]\" value=\"g\" $g/>" . image_tag('manag.png', ['class' => 'ds_mana_image']) . '</label>';
+    echo "<label class=\"ds_checkbox\" for=\"color[u]\"><input type=\"checkbox\" name=\"color[u]\" value=\"u\" $u/>" . image_tag('manau.png', ['class' => 'ds_mana_image']) . '</label>';
+    echo "<label class=\"ds_checkbox\" for=\"color[w]\"><input type=\"checkbox\" name=\"color[w]\" value=\"w\" $w/>" . image_tag('manaw.png', ['class' => 'ds_mana_image']) . '</label>';
+    echo "<label class=\"ds_checkbox\" for=\"color[b]\"><input type=\"checkbox\" name=\"color[b]\" value=\"b\" $b/>" . image_tag('manab.png', ['class' => 'ds_mana_image']) . '</label>';
+    echo "<label class=\"ds_checkbox\" for=\"color[r]\"><input type=\"checkbox\" name=\"color[r]\" value=\"r\" $r/>" . image_tag('manar.png', ['class' => 'ds_mana_image']) . '</label>';
 }
 
 function archetypeDropMenu($archetype = null, $useAll = 0, $form_name = 'archetype')
@@ -332,6 +332,10 @@ function medalsDropMenu($name, $options, $selected = null)
 
 function formatDropMenuDS($format, $useAll = 0, $form_name = 'format')
 {
+    if (is_null($format)) {
+        $format = '';
+    }
+
     $db = Database::getConnection();
     $query = 'SELECT name FROM formats ORDER BY priority desc, name';
     $result = $db->query($query) or exit($db->error);
@@ -362,7 +366,7 @@ function displayDecksFromID($id_arr)
 
     //get the ids for the current page
     $ids_populated = array_slice($ids_populated, (($pagination->get_page() - 1)
-                                    * $records_per_page), $records_per_page);
+        * $records_per_page), $records_per_page);
 
     echo '<br />';
     echo '<div class="ds_inputbox group">';
@@ -379,18 +383,18 @@ function displayDecksFromID($id_arr)
 
     foreach ($ids_populated as $index => $deckinfo) {
         $display_date = date('d-m-Y', strtotime($deckinfo['created_date'])); ?>
-        <tr<?php echo $index % 2 ? ' class="even"' : ''?>>
-        <?php
-            if (strlen($deckinfo['name']) > 23) {
-                $deckinfo['name'] = preg_replace('/\s+?(\S+)?$/', '', substr($deckinfo['name'], 0, 22)).'...';
-            }
+        <tr<?php echo $index % 2 ? ' class="even"' : '' ?>>
+    <?php
+        if (strlen($deckinfo['name']) > 23) {
+            $deckinfo['name'] = preg_replace('/\s+?(\S+)?$/', '', substr($deckinfo['name'], 0, 22)) . '...';
+        }
         //echo "<tr" . ($index % 2) ? ' class="even"' : '' . ">";
-        echo '<td><a href="profile.php?player='.$deckinfo['playername'].'&mode=Lookup+Profile">'.$deckinfo['playername'].'</a></td>';
-        echo '<td><a href="deck.php?mode=view&id='.$deckinfo['id'].'">'.$deckinfo['name'].'</a></td>';
-        echo '<td>'.$deckinfo['archetype'].'</td>';
-        echo '<td>'.$deckinfo['format'].'</td>';
-        echo '<td>'.$display_date.'</td>';
-        echo '<td align=center>'.$deckinfo['record'].'</td>';
+        echo '<td><a href="profile.php?player=' . $deckinfo['playername'] . '&mode=Lookup+Profile">' . $deckinfo['playername'] . '</a></td>';
+        echo '<td><a href="deck.php?mode=view&id=' . $deckinfo['id'] . '">' . $deckinfo['name'] . '</a></td>';
+        echo '<td>' . $deckinfo['archetype'] . '</td>';
+        echo '<td>' . $deckinfo['format'] . '</td>';
+        echo '<td>' . $display_date . '</td>';
+        echo '<td align=center>' . $deckinfo['record'] . '</td>';
         echo '</tr>';
     }
 
