@@ -128,7 +128,7 @@ class Player
         // Test if it is a shared client
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
-        //Is it a proxy address
+            //Is it a proxy address
         } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
         } else {
@@ -184,7 +184,7 @@ class Player
     {
         $database = Database::getConnection();
         $stmt = $database->prepare('SELECT name FROM players WHERE discord_id = ?');
-        $stmt->bind_param('i', $playername);
+        $stmt->bind_param('s', $playername);
         $stmt->execute();
         $stmt->bind_result($resname);
         $good = false;
@@ -325,7 +325,7 @@ class Player
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('UPDATE players SET password = ?, rememberme = ?, host = ?, super = ?, email = ?, email_privacy = ?, timezone = ?, discord_id = ?, discord_handle = ?, mtga_username = ?, mtgo_username = ? WHERE name = ?');
-        $stmt->bind_param('sdddsdddssss', $this->password, $this->rememberMe, $this->host, $this->super, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->discord_id, $this->discord_handle, $this->mtga_username, $this->mtgo_username, $this->name);
+        $stmt->bind_param('sdddsddsssss', $this->password, $this->rememberMe, $this->host, $this->super, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->discord_id, $this->discord_handle, $this->mtga_username, $this->mtgo_username, $this->name);
         $stmt->execute();
         $stmt->close();
     }
@@ -1149,14 +1149,16 @@ class Player
 
         $res = [];
         while ($stmt->fetch()) {
-            $res[] = ['name'      => $name,
+            $res[] = [
+                'name'      => $name,
                 'cnt'             => $cnt,
                 'id'              => $id,
                 't8'              => $t8,
                 't4'              => $t4,
                 '2nd'             => $secnd,
                 '1st'             => $first,
-                'score'           => $score, ];
+                'score'           => $score,
+            ];
         }
         $stmt->close();
 
@@ -1242,6 +1244,22 @@ class Player
         $stmt->bind_param('ss', $hash_pass, $this->name);
         $stmt->execute();
         $stmt->close();
+    }
+
+    /**
+     * @return string
+     * @throws Exception
+     */
+    public function setApiKey()
+    {
+        $key = bin2hex(random_bytes(32));
+        $db = Database::getConnection();
+        $stmt = $db->prepare('UPDATE players SET api_key = ? WHERE name = ?');
+        $hash_pass = hash('sha256', $key);
+        $stmt->bind_param('ss', $hash_pass, $this->name);
+        $stmt->execute();
+        $stmt->close();
+        return $key;
     }
 
     public function setVerified($toset)
