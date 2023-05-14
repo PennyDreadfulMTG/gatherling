@@ -805,6 +805,14 @@ upgrade_db(47, 'Increase length of some fields', function () {
     do_query("ALTER TABLE `players`
 	        CHANGE COLUMN `email` `email` VARCHAR(120) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci' AFTER `name`;");
 });
+upgrade_db(48, 'Increase length of API Key', function () {
+    do_query("ALTER TABLE `players`
+            CHANGE COLUMN `api_key` `api_key` VARCHAR(80) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci' AFTER `mtgo_username`;");
+});
+upgrade_db(49, 'change discord_id column type', function () {
+    do_query('ALTER TABLE `players`
+            CHANGE COLUMN `discord_id` `discord_id` VARCHAR(20) NULL DEFAULT NULL AFTER `theme`;');
+});
 $db->autocommit(true);
 
 info('DB is up to date!');

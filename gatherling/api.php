@@ -183,6 +183,15 @@ switch ($action) {
 
         break;
 
+    case 'generate_apikey':
+        if (!auth()) {
+            error('Not Logged in');
+        }
+        $player = Player::getSessionPlayer();
+        $result['username'] = $player->name;
+        $result['key'] = $player->setApiKey();
+        break;
+
     default:
         $result['error'] = "Unknown action '{$action}'";
         break;

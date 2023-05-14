@@ -28,7 +28,7 @@ Vue.use(Toasted);
 //   });
 
   Vue.component('nametag', {
-    props: ['id', 'name', 'mtgo_username', 'discord_username', 'client', 'email'],
+    props: ['id', 'name', 'mtgo_username', 'discord_handle', 'client', 'email', 'display_name'],
     template: '<a href=\"profile.php?player={{ name }}\">{{ name }}</a>'
   });
 
