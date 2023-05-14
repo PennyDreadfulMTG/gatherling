@@ -128,7 +128,7 @@ class Player
         // Test if it is a shared client
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
-            //Is it a proxy address
+        //Is it a proxy address
         } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
         } else {
@@ -1150,7 +1150,7 @@ class Player
         $res = [];
         while ($stmt->fetch()) {
             $res[] = [
-                'name'      => $name,
+                'name'            => $name,
                 'cnt'             => $cnt,
                 'id'              => $id,
                 't8'              => $t8,
@@ -1247,8 +1247,9 @@ class Player
     }
 
     /**
-     * @return string
      * @throws Exception
+     *
+     * @return string
      */
     public function setApiKey()
     {
@@ -1259,6 +1260,7 @@ class Player
         $stmt->bind_param('ss', $hash_pass, $this->name);
         $stmt->execute();
         $stmt->close();
+
         return $key;
     }
 

@@ -13,7 +13,7 @@ ini_set('max_execution_time', 300);
 
 // If this fails with foreign key errors, execute `ALTER SCHEMA <gatherling> DEFAULT CHARACTER SET latin1;`
 
-require_once __DIR__ . '/../lib.php';
+require_once __DIR__.'/../lib.php';
 
 // Try to connect multiple times in case the MySQL container is still starting up in the test environment.
 $db = null;
@@ -90,14 +90,14 @@ function upgrade_db($new_version, $text, $func)
 function redirect_deck_update($latest_id = 0)
 {
     $url = explode('?', $_SERVER['REQUEST_URI']);
-    $url = $url[0] . '?deckupdate=' . $latest_id;
+    $url = $url[0].'?deckupdate='.$latest_id;
     echo "<a href=\"{$url}\">Continue</a>";
     echo "<script type=\"text/javascript\"> window.location = \"http://{$_SERVER['SERVER_NAME']}$url\"; </script>";
     exit(0);
 }
 
 if (isset($_GET['deckupdate'])) {
-    $deckquery = do_query('SELECT id FROM decks WHERE id > ' . intval($_GET['deckupdate']));
+    $deckquery = do_query('SELECT id FROM decks WHERE id > '.intval($_GET['deckupdate']));
     $timestart = time();
     while ($deckid = $deckquery->fetch_array()) {
         flush();
@@ -809,9 +809,9 @@ upgrade_db(48, 'Increase length of API Key', function () {
     do_query("ALTER TABLE `players`
             CHANGE COLUMN `api_key` `api_key` VARCHAR(80) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci' AFTER `mtgo_username`;");
 });
-upgrade_db(49, "change discord_id column type", function () {
-    do_query("ALTER TABLE `players`
-            CHANGE COLUMN `discord_id` `discord_id` VARCHAR(20) NULL DEFAULT NULL AFTER `theme`;");
+upgrade_db(49, 'change discord_id column type', function () {
+    do_query('ALTER TABLE `players`
+            CHANGE COLUMN `discord_id` `discord_id` VARCHAR(20) NULL DEFAULT NULL AFTER `theme`;');
 });
 $db->autocommit(true);
 
