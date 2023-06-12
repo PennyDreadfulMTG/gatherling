@@ -536,7 +536,7 @@ class Pagination
                 $output .= $this->_show_next().$this->_show_pages().$this->_show_previous();
             }
 
-        // if we're showing records in natural order
+            // if we're showing records in natural order
         } else {
             // if "next page" and "previous page" links are to be shown to the left of the links to individual pages
             if ($this->_properties['navigation_position'] == 'left') {
@@ -721,8 +721,8 @@ class Pagination
                     $this->_properties['base_url']
                 ));
 
-            // if the current page is not yet in the URL, set it, unless we're on the first page
-            // case in which we don't set it in order to avoid duplicate content
+                // if the current page is not yet in the URL, set it, unless we're on the first page
+                // case in which we don't set it in order to avoid duplicate content
             } else {
                 $url = rtrim($this->_properties['base_url'], '/').'/'.($this->_properties['variable_name'].$page);
             }
@@ -744,7 +744,7 @@ class Pagination
             // return the built string also appending the query string, if any
             return $url.($query != '' ? '?'.$query : '');
 
-        // if page propagation is to be done through GET
+            // if page propagation is to be done through GET
         } else {
             // if values in the query string - other than those set through base_url() - are not to be preserved
             // preserve only those set initially
@@ -834,7 +834,7 @@ class Pagination
                     '</a></li>';
             }
 
-        // if the total number of pages is greater than the number of selectable pages
+            // if the total number of pages is greater than the number of selectable pages
         } else {
             // start with a link to the first or last page, depending if we're displaying links in reverse order or not
             $output .= '<li><a href="'.$this->_build_uri($this->_properties['reverse'] ? $this->_properties['total_pages'] : 1).'" '.

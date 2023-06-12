@@ -24,7 +24,7 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
 } elseif (!isset($_GET['code'])) {
     send_to_discord();
 
-// Check given state against previously stored one to mitigate CSRF attack
+    // Check given state against previously stored one to mitigate CSRF attack
 } elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
     unset($_SESSION['oauth2state']);
     exit('Invalid state');
