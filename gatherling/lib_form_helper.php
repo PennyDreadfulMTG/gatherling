@@ -1,5 +1,7 @@
 <?php
 
+use Gatherling\Event;
+use Gatherling\Player;
 use Gatherling\Standings;
 
 require_once 'lib.php';
@@ -143,23 +145,25 @@ function timeZoneDropMenu($selected = null)
 }
 
 /**
- * @param string $event
+ * @param string $eventname
  * @param string $round
  * @param mixed  $player
  * @param int    $subevent
  *
  * @return void
  */
-function leagueOpponentDropMenu($event, $round, $player, $subevent)
+function leagueOpponentDropMenu($eventname, $round, $player, $subevent)
 {
-    $player_standings = new Standings($event, $player->name);
+    $event = new Event($eventname);
+    $player_standings = new Standings($eventname, $player->name);
     $playernames = $player_standings->League_getAvailable_Opponents($subevent, $round);
 
     echo '<select class="inputbox" name="opponent"> Opponent';
 
     if (count($playernames)) {
         foreach ($playernames as $playername) {
-            echo "<option value=\"{$playername}\">{$playername}</option>";
+            $oppplayer = new Player($playername);
+            echo "<option value=\"{$playername}\">{$oppplayer->gameName($event->client)}</option>";
         }
     } else {
         echo '<option value="">-No Available Opponents-</option>';
