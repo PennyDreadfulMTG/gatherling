@@ -38,7 +38,7 @@ while ($ndx > 7000) {
                 $stmt->execute() or exit($stmt->error);
                 echo '<a href="deck.php?mode=view&id='.$deck->id.'">'.$deck->name.'</a> Deck ID: '.$deck->id.' Sucessfully updated<br />';
                 $successUpdatedDecks++;
-            //if ($decksChecked > 10) { die; }
+                //if ($decksChecked > 10) { die; }
             } else {
                 echo  $deck->id.' Has no data in entries, missing playername, no player association. Deck will be deleted<br />';
                 $failedUpdatedDecks++;
