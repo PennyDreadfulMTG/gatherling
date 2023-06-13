@@ -75,7 +75,7 @@ function do_page()
         $view = $_REQUEST['view'];
     }
 
-    if (!isset($_REQUEST['format'])) {
+    if (!isset($_REQUEST['format']) || empty($_REQUEST['format'])) {
         printLoadFormat($seriesName);
         formatCPMenu(new Format(''), $seriesName);
 

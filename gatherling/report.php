@@ -186,7 +186,7 @@ function print_submit_resultForm($match_id, $drop = false)
     }
     $oppplayer = new Player($opp);
     echo "<center><h3>Report Game Results</h3>
-    Enter results for <em>$event->name</em> round $event->current_round vs. $oppplayer->name</center>\n";
+    Enter results for <em>$event->name</em> round $event->current_round vs. {$oppplayer->gameName($event->client)}</center>\n";
 
     echo "<form action=\"report.php\" method=\"post\">\n";
     echo "<input name=\"mode\" type=\"hidden\" value=\"verify_result\" />\n";

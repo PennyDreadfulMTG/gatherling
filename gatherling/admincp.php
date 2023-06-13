@@ -59,8 +59,6 @@ function do_page()
         printChangePasswordForm();
     } elseif ($view == 'create_series') {
         printCreateNewSeriesForm();
-    } elseif ($view == 'format_editor') {
-        redirect('formatcp.php');
     } elseif (($view == 'add_cardset')) {
         printAddCardSet();
     } elseif ($view == 'calc_ratings') {
@@ -288,19 +286,5 @@ function printNewFormat()
     echo '<tr><td colspan="2">New Format Name: <input type="text" name="newformatname" STYLE="width: 175px"/></td></tr>';
     echo '<td colspan="2" class="buttons">';
     echo '<input class="inputbutton" type="submit" value="Create New Format" name ="action" /></td></tr>';
-    echo'</table></form>';
-}
-
-function printLoadFormat()
-{
-    echo "<h4>Load Format</h4>\n";
-    echo '<form action="admincp.php" method="post">';
-    echo '<input type="hidden" name="view" value="format_editor" />';
-    echo '<table class="form" style="border-width: 0px;" align="center">';
-    echo '<tr><td>';
-    formatsDropMenu('All');
-    echo '</td>';
-    echo '<td colspan="2" class="buttons">';
-    echo '<input class="inputbutton" type="submit" value="Load Format" name ="action" /></td></tr>';
     echo'</table></form>';
 }
