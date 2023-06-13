@@ -767,6 +767,7 @@ class Event
 
     /**
      * @param int $roundnum
+     *
      * @return Matchup[]
      */
     public function getRoundMatches($roundnum)
@@ -1565,6 +1566,7 @@ class Event
 
     /**
      * @param string $structure
+     *
      * @return void
      */
     public function recalculateScores($structure)
