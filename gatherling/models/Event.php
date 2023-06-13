@@ -765,6 +765,10 @@ class Event
         return $matches;
     }
 
+    /**
+     * @param int $roundnum
+     * @return Matchup[]
+     */
     public function getRoundMatches($roundnum)
     {
         $roundnum = intval($roundnum);
@@ -1559,6 +1563,10 @@ class Event
         return $event;
     }
 
+    /**
+     * @param string $structure
+     * @return void
+     */
     public function recalculateScores($structure)
     {
         $this->resetScores();
