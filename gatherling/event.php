@@ -1083,6 +1083,7 @@ function matchList(Event $event)
     echo '</form></table>';
     if (!$event->finalized) {
         echo '<p>Paste stuff:<br />';
+        echo "This event will be {$event->structureSummary()}<br/><br/>";
         echo "<code>{$ezypaste}</code></p>";
     }
 

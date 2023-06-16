@@ -1813,4 +1813,45 @@ class Event
         $this->active = 1;
         $this->save();
     }
+
+    public function structureSummary()
+    {
+        function to_english($structure, $rounds, $isfinals)
+        {
+            if ($structure == 'Single Elimination' && $isfinals)
+            {
+                if ($rounds == 3)
+                    return 'Top 8 cut';
+                if ($rounds == 2)
+                    return 'Top 4 cut';
+                if ($rounds == 1)
+                    return 'Top 2 cut';
+            }
+            elseif ($structure == 'League')
+            {
+                $str = "";
+                if ($rounds > 1) {
+                    $str = "{$rounds} runs of ";
+                }
+                $str .= " 5 open matches";
+                return $str;
+            }
+            elseif ($structure == 'League Match'){
+                return "{$rounds} open matches";
+            }
+            if ($rounds == 1)
+            {
+                return "{$rounds} round of {$structure}";
+            }
+            else {
+                return "{$rounds} rounds of {$structure}";
+            }
+        }
+
+        $ret = to_english($this->mainstruct, $this->mainrounds, false);
+        if ($this->finalrounds > 0)
+            $ret = $ret . " followed by " . to_english($this->finalstruct, $this->finalrounds, true);
+
+        return $ret;
+    }
 }
