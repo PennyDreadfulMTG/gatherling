@@ -16,6 +16,7 @@ function populate($array, $src, $keys)
     return $array;
 }
 
+/** @return bool  */
 function is_admin()
 {
     if (!isset($_SESSION['infobot'])) {
@@ -62,6 +63,11 @@ function auth()
     return Player::isLoggedIn();
 }
 
+/**
+ * @param string $msg
+ * @param mixed $extra
+ * @return never
+ */
 function error($msg, $extra = null)
 {
     $result = [];
@@ -74,6 +80,11 @@ function error($msg, $extra = null)
     exit(json_encode($result));
 }
 
+/**
+ * @param string $key
+ * @param mixed $default
+ * @return mixed
+ */
 function arg($key, $default = null)
 {
     if (!isset($_REQUEST[$key])) {
@@ -181,6 +192,10 @@ function repr_json_deck($deck)
     return $json;
 }
 
+/**
+ * @param string $series
+ * @return mixed
+ */
 function repr_json_series($series)
 {
     $json = populate([], $series, ['name', 'active', 'start_day', 'start_time', 'organizers', 'mtgo_room', 'this_season_format', 'this_season_master_link', 'this_season_season']);
@@ -272,6 +287,12 @@ function drop_player_from_event($event, $name)
     return $result;
 }
 
+/**
+ * @param string $newseries
+ * @param bool $active
+ * @param string $day
+ * @return array
+ */
 function create_series($newseries, $active, $day)
 {
     $result = [];
