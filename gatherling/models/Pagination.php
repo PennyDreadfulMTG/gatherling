@@ -97,7 +97,7 @@ class Pagination
      *
      *  Initializes the class and the default properties.
      *
-     *  @return void
+     * @return void
      */
     public function __construct()
     {
@@ -117,14 +117,14 @@ class Pagination
      *  $pagination->always_show_navigation(false);
      *  </code>
      *
-     *  @param  bool     $show   (Optional) If set to FALSE, the "previous page" and "next page" links will only be
-     *                              shown if there are more pages than set through {@link selectable_pages()}.
+     * @param bool $show (Optional) If set to FALSE, the "previous page" and "next page" links will only be
+     *                   shown if there are more pages than set through {@link selectable_pages()}.
      *
      *                              Default is TRUE.
      *
      *  @since  2.0
      *
-     *  @return void
+     * @return void
      */
     public function always_show_navigation($show = true)
     {
@@ -150,14 +150,14 @@ class Pagination
      *  $pagination->avoid_duplicate_content(false);
      *  </code>
      *
-     *  @param  bool     $avoid_duplicate_content    (Optional) If set to FALSE, the library will have for the first
-     *                                                  page (or last, if you are displaying links in {@link reverse() reverse}
-     *                                                  order) a different path than the one you have when you are accessing
-     *                                                  the page for the first (unpaginated) time.
+     * @param bool $avoid_duplicate_content (Optional) If set to FALSE, the library will have for the first
+     *                                      page (or last, if you are displaying links in {@link reverse() reverse}
+     *                                      order) a different path than the one you have when you are accessing
+     *                                      the page for the first (unpaginated) time.
      *
      *                                                  Default is TRUE.
      *
-     *  @return void
+     * @return void
      *
      *  @since  2.0
      */
@@ -201,17 +201,17 @@ class Pagination
      *
      *  <samp>If you want to preserve the hash in the URL, make sure you load the zebra_pagination.js file!</samp>
      *
-     *  @param  string      $base_url                   (Optional) The base URL to be used when generating the navigation
-     *                                                  links
+     * @param string $base_url (Optional) The base URL to be used when generating the navigation
+     *                         links
      *
      *                                                  Defaults is whatever returned by
      *                                                  {@link http://www.php.net/manual/en/reserved.variables.server.php $_SERVER['REQUEST_URI']}
-     *  @param  bool     $preserve_query_string      (Optional) Indicates whether values in query strings, other than
-     *                                                  those set in $base_url, should be preserved
+     * @param bool $preserve_query_string (Optional) Indicates whether values in query strings, other than
+     *                                    those set in $base_url, should be preserved
      *
      *                                                  Default is TRUE
      *
-     *  @return void
+     * @return void
      */
     public function base_url($base_url = '', $preserve_query_string = true)
     {
@@ -242,7 +242,7 @@ class Pagination
      *  echo $pagination->get_page();
      *  </code>
      *
-     *  @return int     Returns the current page's number
+     * @return int Returns the current page's number
      */
     public function get_page()
     {
@@ -318,8 +318,8 @@ class Pagination
      *
      *  @since  2.1
      *
-     *  @return int     Returns the total number of pages, based on the total number of records and the number of
-     *                      records to be shown per page.
+     * @return int Returns the total number of pages, based on the total number of records and the number of
+     *             records to be shown per page.
      */
     public function get_pages()
     {
@@ -335,14 +335,14 @@ class Pagination
      *  $pagination->labels('Previous', 'Next');
      *  </code>
      *
-     *  @param  string  $previous   (Optional) The label for the "previous page" link.
+     * @param string $previous (Optional) The label for the "previous page" link.
      *
      *                              Default is "Previous page".
-     *  @param  string  $next       (Optional) The label for the "next page" link.
+     * @param string $next (Optional) The label for the "next page" link.
      *
      *                              Default is "Next page".
      *
-     *  @return void
+     * @return void
      *
      *  @since  2.0
      */
@@ -361,7 +361,7 @@ class Pagination
      *  $pagination->method('url');
      *  </code>
      *
-     *  @param  string  $method     (Optional) The method to be used for page propagation.
+     * @param string $method (Optional) The method to be used for page propagation.
      *
      *                              Values can be:
      *
@@ -398,8 +398,8 @@ class Pagination
      *  These links can also be shown both on the left or on the right of the links to individual pages by setting the
      *  method's argument to "left" or "right" respectively.
      *
-     *  @param  string  $position   Setting this argument to "left" or "right" will instruct the script to show next/previous
-     *                              page links on the left or on the right of the links to individual pages.
+     * @param string $position Setting this argument to "left" or "right" will instruct the script to show next/previous
+     *                         page links on the left or on the right of the links to individual pages.
      *
      *                              Allowed values are "left", "right" and "outside".
      *
@@ -407,7 +407,7 @@ class Pagination
      *
      *  @since  2.1
      *
-     *  @return void
+     * @return void
      */
     public function navigation_position($position)
     {
@@ -425,12 +425,12 @@ class Pagination
      *  $pagination->padding(false);
      *  </code>
      *
-     *  @param  bool     $enabled    (Optional) Setting this property to FALSE will disable padding rather than
-     *                                  enabling it.
+     * @param bool $enabled (Optional) Setting this property to FALSE will disable padding rather than
+     *                      enabling it.
      *
      *                                  Default is TRUE.
      *
-     *  @return void
+     * @return void
      */
     public function padding($enabled = true)
     {
@@ -451,9 +451,9 @@ class Pagination
      *  $pagination->records(100);
      *  </code>
      *
-     *  @param  int     $records    The total number of records that need to be paginated
+     * @param int $records The total number of records that need to be paginated
      *
-     *  @return void
+     * @return void
      */
     public function records($records)
     {
@@ -474,11 +474,11 @@ class Pagination
      *  $pagination->records_per_page(20);
      *  </code>
      *
-     *  @param  int     $records_per_page   The number of records displayed on one page.
+     * @param int $records_per_page The number of records displayed on one page.
      *
      *                      Default is 10.
      *
-     *  @return void
+     * @return void
      */
     public function records_per_page($records_per_page)
     {
@@ -498,12 +498,12 @@ class Pagination
      *  $output = $pagination->render(true);
      *  </code>
      *
-     *  @param  bool     $return_output      (Optional) Setting this argument to TRUE will instruct the script to
-     *                                          return the generated output rather than outputting it to the screen.
+     * @param bool $return_output (Optional) Setting this argument to TRUE will instruct the script to
+     *                            return the generated output rather than outputting it to the screen.
      *
      *                                          Default is FALSE.
      *
-     *  @return void
+     * @return void
      */
     public function render($return_output = false)
     {
@@ -579,11 +579,11 @@ class Pagination
      *  $pagination->reverse(true);
      *  </code>
      *
-     *  @param  bool     $reverse    (Optional) Set it to TRUE to generate navigation links in reverse order.
+     * @param bool $reverse (Optional) Set it to TRUE to generate navigation links in reverse order.
      *
      *                                  Default is FALSE.
      *
-     *  @return void
+     * @return void
      *
      *  @since  2.0
      */
@@ -601,15 +601,15 @@ class Pagination
      *  $pagination->selectable_pages(15);
      *  </code>
      *
-     *  @param  int     $selectable_pages   The number of links to be displayed at once (besides the "previous page"
-     *                                          and "next page" links).
+     * @param int $selectable_pages The number of links to be displayed at once (besides the "previous page"
+     *                              and "next page" links).
      *
      *                                          <i>You should set this to an odd number so that the same number of links
      *                                          will be shown to the left and to the right of the current page.</i>
      *
      *                                          Default is 11.
      *
-     *  @return void
+     * @return void
      */
     public function selectable_pages($selectable_pages)
     {
@@ -626,7 +626,7 @@ class Pagination
      *  $pagination->set_page(5);
      *  </code>
      *
-     *  @param  int     $page           The page's number.
+     * @param int $page The page's number.
      *
      *                                      A number lower than <b>1</b> will be interpreted as <b>1</b>, while a number
      *                                      greater than the total number of pages will be interpreted as the last page.
@@ -635,7 +635,7 @@ class Pagination
      *                                      records (set through {@link records()}) and the number of records that are
      *                                      shown on one page (set through {@link records_per_page()}).
      *
-     *  @return void
+     * @return void
      */
     public function set_page($page)
     {
@@ -663,12 +663,12 @@ class Pagination
      *  $pagination->trailing_slash(false);
      *  </code>
      *
-     *  @param  bool     $enabled    (Optional) Setting this property to FALSE will disable trailing slashes on generated
-     *                                  URLs when {@link method} is "url".
+     * @param bool $enabled (Optional) Setting this property to FALSE will disable trailing slashes on generated
+     *                      URLs when {@link method} is "url".
      *
      *                                  Default is TRUE (trailing slashes are enabled by default).
      *
-     *  @return void
+     * @return void
      */
     public function trailing_slash($enabled)
     {
@@ -686,11 +686,11 @@ class Pagination
      *  $pagination->variable_name('foo');
      *  </code>
      *
-     *  @param  string  $variable_name      A string representing the variable name to be used for page propagation.
+     * @param string $variable_name A string representing the variable name to be used for page propagation.
      *
      *                                      Default is "page".
      *
-     *  @return void
+     * @return void
      */
     public function variable_name($variable_name)
     {
@@ -702,7 +702,7 @@ class Pagination
      *  Generate the link for the page given as argument.
      *
      *
-     *  @return void
+     * @return void
      */
     private function _build_uri($page)
     {
