@@ -22,6 +22,7 @@ class Series
     public $prereg_default;
 
     public $discord_guild_id;
+    public $discord_channel_id;
     public $discord_channel_name;
     public $discord_guild_name;
     public $discord_guild_invite;
@@ -46,7 +47,7 @@ class Series
         }
 
         $db = Database::getConnection();
-        $sql = 'SELECT isactive, day, normalstart, prereg_default, mtgo_room, discord_guild_id, discord_channel_name, discord_guild_name, discord_guild_invite, discord_require_membership FROM series WHERE name = ?';
+        $sql = 'SELECT isactive, day, normalstart, prereg_default, mtgo_room, discord_guild_id, discord_channel_id, discord_channel_name, discord_guild_name, discord_guild_invite, discord_require_membership FROM series WHERE name = ?';
         $stmt = $db->prepare($sql);
         $stmt or exit($db->error);
         $stmt->bind_param('s', $name);
@@ -58,6 +59,7 @@ class Series
             $this->prereg_default,
             $this->mtgo_room,
             $this->discord_guild_id,
+            $this->discord_channel_id,
             $this->discord_channel_name,
             $this->discord_guild_name,
             $this->discord_guild_invite,

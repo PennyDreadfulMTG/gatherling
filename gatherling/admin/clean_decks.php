@@ -1,5 +1,9 @@
 <?php
 
+use Gatherling\Database;
+use Gatherling\Deck;
+use Gatherling\Player;
+
 require '../lib.php';
 
 session_start();

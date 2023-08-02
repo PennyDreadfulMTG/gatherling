@@ -38,9 +38,9 @@ switch ($action) {
         try {
             $series = new Series($seriesname);
             $result = repr_json_series($series);
-            $result['sucess'] = true;
+            $result['success'] = true;
         } catch (Exception $e) {
-            $result['sucess'] = false;
+            $result['success'] = false;
             $result['error'] = $e->getMessage();
         }
         break;

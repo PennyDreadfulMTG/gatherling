@@ -499,6 +499,11 @@ class Event
            .self::trophy_image_tag($this->name)."\n</a>\n";
     }
 
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
     public function isHost($name)
     {
         $ishost = !is_null($this->host) && strcasecmp($name, $this->host) == 0;
@@ -507,11 +512,17 @@ class Event
         return $ishost || $iscohost;
     }
 
+    /** @return bool  */
     public function isFinalized()
     {
         return $this->finalized != 0;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
     public function isOrganizer($name)
     {
         $isOrganizer = false;
@@ -528,6 +539,11 @@ class Event
         return $isOrganizer;
     }
 
+    /**
+     * @param string $playername
+     *
+     * @return bool
+     */
     public function authCheck($playername)
     {
         $player = new Player($playername);
@@ -541,6 +557,11 @@ class Event
         return false;
     }
 
+    /**
+     * @throws Exception
+     *
+     * @return int
+     */
     public function getPlayerCount()
     {
         return Database::single_result_single_param('SELECT count(*) FROM entries WHERE event_id = ?', 'd', $this->id);
@@ -1707,6 +1728,8 @@ class Event
 
         $t8 = [];
         $t4 = [];
+        $sec = null;
+        $win = null;
 
         switch ($medalCount) {
             case 8:

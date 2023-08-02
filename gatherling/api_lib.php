@@ -1,5 +1,7 @@
 <?php
 
+require_once 'lib.php';
+
 //## Helper Functions
 
 use Gatherling\Event;
@@ -16,6 +18,7 @@ function populate($array, $src, $keys)
     return $array;
 }
 
+/** @return bool  */
 function is_admin()
 {
     if (!isset($_SESSION['infobot'])) {
@@ -62,6 +65,12 @@ function auth()
     return Player::isLoggedIn();
 }
 
+/**
+ * @param string $msg
+ * @param mixed  $extra
+ *
+ * @return never
+ */
 function error($msg, $extra = null)
 {
     $result = [];
@@ -74,6 +83,12 @@ function error($msg, $extra = null)
     exit(json_encode($result));
 }
 
+/**
+ * @param string $key
+ * @param mixed  $default
+ *
+ * @return mixed
+ */
 function arg($key, $default = null)
 {
     if (!isset($_REQUEST[$key])) {
@@ -181,9 +196,14 @@ function repr_json_deck($deck)
     return $json;
 }
 
+/**
+ * @param Gatherling\Series $series
+ *
+ * @return mixed
+ */
 function repr_json_series($series)
 {
-    $json = populate([], $series, ['name', 'active', 'start_day', 'start_time', 'organizers', 'mtgo_room', 'this_season_format', 'this_season_master_link', 'this_season_season']);
+    $json = populate([], $series, ['name', 'active', 'start_day', 'start_time', 'organizers', 'mtgo_room', 'this_season_format', 'this_season_master_link', 'this_season_season', 'discord_guild_id', 'discord_channel_id', 'discord_channel_name', 'discord_guild_name']);
 
     return $json;
 }
@@ -272,6 +292,13 @@ function drop_player_from_event($event, $name)
     return $result;
 }
 
+/**
+ * @param string $newseries
+ * @param bool   $active
+ * @param string $day
+ *
+ * @return array
+ */
 function create_series($newseries, $active, $day)
 {
     $result = [];
