@@ -501,6 +501,7 @@ class Event
 
     /**
      * @param string $name
+     *
      * @return bool
      */
     public function isHost($name)
@@ -519,6 +520,7 @@ class Event
 
     /**
      * @param string $name
+     *
      * @return bool
      */
     public function isOrganizer($name)
@@ -539,6 +541,7 @@ class Event
 
     /**
      * @param string $playername
+     *
      * @return bool
      */
     public function authCheck($playername)
@@ -555,8 +558,9 @@ class Event
     }
 
     /**
-     * @return int
      * @throws Exception
+     *
+     * @return int
      */
     public function getPlayerCount()
     {

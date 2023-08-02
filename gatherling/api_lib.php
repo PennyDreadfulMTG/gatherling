@@ -67,7 +67,8 @@ function auth()
 
 /**
  * @param string $msg
- * @param mixed $extra
+ * @param mixed  $extra
+ *
  * @return never
  */
 function error($msg, $extra = null)
@@ -84,7 +85,8 @@ function error($msg, $extra = null)
 
 /**
  * @param string $key
- * @param mixed $default
+ * @param mixed  $default
+ *
  * @return mixed
  */
 function arg($key, $default = null)
@@ -196,6 +198,7 @@ function repr_json_deck($deck)
 
 /**
  * @param Gatherling\Series $series
+ *
  * @return mixed
  */
 function repr_json_series($series)
@@ -291,8 +294,9 @@ function drop_player_from_event($event, $name)
 
 /**
  * @param string $newseries
- * @param bool $active
+ * @param bool   $active
  * @param string $day
+ *
  * @return array
  */
 function create_series($newseries, $active, $day)

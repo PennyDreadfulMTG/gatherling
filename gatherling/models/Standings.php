@@ -89,7 +89,8 @@ class Standings
 
     /**
      * @param string $eventname
-     * @param int $isactive
+     * @param int    $isactive
+     *
      * @return Standings[]
      */
     public static function getEventStandings($eventname, $isactive)

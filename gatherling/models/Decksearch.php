@@ -151,7 +151,7 @@ class Decksearch
      *
      *  @param [$color_str_input] Array of the input color
      *
-     *  @return mixed true if success/false otherwise
+     * @return mixed true if success/false otherwise
      */
     public function searchByColor($color_str_input)
     {
