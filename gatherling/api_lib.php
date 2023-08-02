@@ -1,5 +1,7 @@
 <?php
 
+require_once 'lib.php';
+
 //## Helper Functions
 
 use Gatherling\Event;
@@ -193,12 +195,12 @@ function repr_json_deck($deck)
 }
 
 /**
- * @param string $series
+ * @param Gatherling\Series $series
  * @return mixed
  */
 function repr_json_series($series)
 {
-    $json = populate([], $series, ['name', 'active', 'start_day', 'start_time', 'organizers', 'mtgo_room', 'this_season_format', 'this_season_master_link', 'this_season_season']);
+    $json = populate([], $series, ['name', 'active', 'start_day', 'start_time', 'organizers', 'mtgo_room', 'this_season_format', 'this_season_master_link', 'this_season_season', 'discord_guild_id', 'discord_channel_id', 'discord_channel_name', 'discord_guild_name']);
 
     return $json;
 }

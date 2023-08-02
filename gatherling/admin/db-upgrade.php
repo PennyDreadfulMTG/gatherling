@@ -813,6 +813,12 @@ upgrade_db(49, 'change discord_id column type', function () {
     do_query('ALTER TABLE `players`
             CHANGE COLUMN `discord_id` `discord_id` VARCHAR(20) NULL DEFAULT NULL AFTER `theme`;');
 });
+upgrade_db(50, 'Fix series discord fields', function () {
+    do_query('ALTER TABLE `series`
+	        CHANGE COLUMN `discord_guild_id` `discord_guild_id` VARCHAR(20) NULL DEFAULT NULL AFTER `mtgo_room`,
+	        ADD COLUMN `discord_channel_id` VARCHAR(20) NULL DEFAULT NULL AFTER `discord_guild_id`,
+	        CHANGE COLUMN `discord_require_membership` `discord_require_membership` INT NULL DEFAULT NULL AFTER `discord_guild_invite`;');
+});
 $db->autocommit(true);
 
 info('DB is up to date!');
