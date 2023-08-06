@@ -131,6 +131,7 @@ function repr_json_event($event)
     if ($matches) {
         $json['matches'] = [];
         $json['unreported'] = [];
+        $json['waiting_on'] = [];
         $addrounds = 0;
         $roundnum = 0;
         $timing = 0;
@@ -143,6 +144,7 @@ function repr_json_event($event)
             if ($roundnum != $m->round) {
                 $roundnum = $m->round;
                 $json['unreported'] = [];
+                $json['waiting_on'] = [];
             }
             $data['round'] = $m->round + $addrounds;
             $json['matches'][] = $data;
@@ -152,6 +154,11 @@ function repr_json_event($event)
                 }
                 if (!$m->reportSubmitted($m->playerb)) {
                     $json['unreported'][] = $m->playerb;
+                }
+                if (!$m->reportSubmitted($m->playera) && $m->reportSubmitted($m->playerb)) {
+                    $json['waiting_on'][] = $m->playera;
+                } elseif ($m->reportSubmitted($m->playera) && !$m->reportSubmitted($m->playerb)) {
+                    $json['waiting_on'][] = $m->playerb;
                 }
             }
         }
