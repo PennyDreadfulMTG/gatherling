@@ -443,11 +443,14 @@ function card_catalog()
         }
     }
     $query->close();
+
     return $result;
 }
 
-function cardname_from_id($id) {
-    $sql = "SELECT c.name as name FROM cards c WHERE c.scryfallId = ?";
+function cardname_from_id($id)
+{
+    $sql = 'SELECT c.name as name FROM cards c WHERE c.scryfallId = ?';
     $name = Database::single_result_single_param($sql, 's', $id);
+
     return $name;
 }
