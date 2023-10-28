@@ -4,6 +4,7 @@ require_once 'lib.php';
 
 //## Helper Functions
 
+use Gatherling\Database;
 use Gatherling\Event;
 use Gatherling\Player;
 use Gatherling\Series;
@@ -428,4 +429,25 @@ function create_pairing($event, $round, $a, $b, $res)
     } else {
         $event->addMatch($playerA, $playerB, $round, $res, $pAWins, $pBWins);
     }
+}
+
+/** @return string[]  */
+function card_catalog()
+{
+    $result = [];
+    $db = Database::getConnection();
+    $query = $db->query('SELECT c.name as name FROM cards c');
+    while ($row = $query->fetch_assoc()) {
+        if (!in_array($row['name'], $result)) {
+            $result[] = $row['name'];
+        }
+    }
+    $query->close();
+    return $result;
+}
+
+function cardname_from_id($id) {
+    $sql = "SELECT c.name as name FROM cards c WHERE c.scryfallId = ?";
+    $name = Database::single_result_single_param($sql, 's', $id);
+    return $name;
 }

@@ -192,6 +192,14 @@ switch ($action) {
         $result['key'] = $player->setApiKey();
         break;
 
+    case 'known_cards_catalog':
+        $result = card_catalog();
+        break;
+
+    case 'cardname_from_id':
+        $result = cardname_from_id(arg('id'));
+        break;
+
     default:
         $result['error'] = "Unknown action '{$action}'";
         break;
