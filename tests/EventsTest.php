@@ -15,9 +15,10 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 final class EventsTest extends TestCase
 {
     /**
-     * @return Series
      * @throws InvalidArgumentException
      * @throws ExpectationFailedException
+     *
+     * @return Series
      */
     public function testSeriesCreation()
     {
@@ -38,10 +39,13 @@ final class EventsTest extends TestCase
 
     /**
      * @param Series $series
-     * @return Event
+     *
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws ExpectationFailedException
+     *
+     * @return Event
+     *
      * @depends testSeriesCreation
      */
     public function testEventCreation($series)
@@ -91,10 +95,13 @@ final class EventsTest extends TestCase
 
     /**
      * @param Event $event
-     * @return Event
+     *
      * @throws InvalidArgumentException
      * @throws ExpectationFailedException
      * @throws Exception
+     *
+     * @return Event
+     *
      * @depends testEventCreation
      */
     public function testRegistration($event)
@@ -131,9 +138,12 @@ final class EventsTest extends TestCase
 
     /**
      * @param Event $event
-     * @return Event
+     *
      * @throws InvalidArgumentException
      * @throws ExpectationFailedException
+     *
+     * @return Event
+     *
      * @depends testRegistration
      */
     public function testEventStart($event)
@@ -141,7 +151,7 @@ final class EventsTest extends TestCase
         $this->assertEquals($event->active, 0);
         $this->assertEquals($event->current_round, 0);
 
-        $event->startEvent(True);
+        $event->startEvent(true);
 
         $event = new Event($event->name);
         $this->assertEquals($event->active, 1);
@@ -152,9 +162,12 @@ final class EventsTest extends TestCase
 
     /**
      * @param Event $event
-     * @return mixed
+     *
      * @throws InvalidArgumentException
      * @throws ExpectationFailedException
+     *
+     * @return mixed
+     *
      * @depends testEventStart
      */
     public function testReporting($event)
@@ -178,11 +191,13 @@ final class EventsTest extends TestCase
 
 /**
  * @param string $player
- * @param Event $event
+ * @param Event  $event
  * @param string $main
  * @param string $side
- * @return Deck
+ *
  * @throws Exception
+ *
+ * @return Deck
  */
 function insertDeck($player, $event, $main, $side)
 {

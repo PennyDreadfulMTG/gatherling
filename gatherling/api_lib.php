@@ -449,8 +449,10 @@ function card_catalog()
 
 /**
  * @param string $id
- * @return string
+ *
  * @throws Exception
+ *
+ * @return string
  */
 function cardname_from_id($id)
 {
