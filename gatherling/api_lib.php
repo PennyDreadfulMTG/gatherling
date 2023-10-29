@@ -4,6 +4,7 @@ require_once 'lib.php';
 
 //## Helper Functions
 
+use Gatherling\Database;
 use Gatherling\Event;
 use Gatherling\Player;
 use Gatherling\Series;
@@ -131,6 +132,7 @@ function repr_json_event($event)
     if ($matches) {
         $json['matches'] = [];
         $json['unreported'] = [];
+        $json['waiting_on'] = [];
         $addrounds = 0;
         $roundnum = 0;
         $timing = 0;
@@ -143,6 +145,7 @@ function repr_json_event($event)
             if ($roundnum != $m->round) {
                 $roundnum = $m->round;
                 $json['unreported'] = [];
+                $json['waiting_on'] = [];
             }
             $data['round'] = $m->round + $addrounds;
             $json['matches'][] = $data;
@@ -152,6 +155,11 @@ function repr_json_event($event)
                 }
                 if (!$m->reportSubmitted($m->playerb)) {
                     $json['unreported'][] = $m->playerb;
+                }
+                if (!$m->reportSubmitted($m->playera) && $m->reportSubmitted($m->playerb)) {
+                    $json['waiting_on'][] = $m->playera;
+                } elseif ($m->reportSubmitted($m->playera) && !$m->reportSubmitted($m->playerb)) {
+                    $json['waiting_on'][] = $m->playerb;
                 }
             }
         }
@@ -421,4 +429,35 @@ function create_pairing($event, $round, $a, $b, $res)
     } else {
         $event->addMatch($playerA, $playerB, $round, $res, $pAWins, $pBWins);
     }
+}
+
+/** @return string[]  */
+function card_catalog()
+{
+    $result = [];
+    $db = Database::getConnection();
+    $query = $db->query('SELECT c.name as name FROM cards c');
+    while ($row = $query->fetch_assoc()) {
+        if (!in_array($row['name'], $result)) {
+            $result[] = $row['name'];
+        }
+    }
+    $query->close();
+
+    return $result;
+}
+
+/**
+ * @param string $id
+ *
+ * @throws Exception
+ *
+ * @return string
+ */
+function cardname_from_id($id)
+{
+    $sql = 'SELECT c.name as name FROM cards c WHERE c.scryfallId = ?';
+    $name = Database::single_result_single_param($sql, 's', $id);
+
+    return $name;
 }

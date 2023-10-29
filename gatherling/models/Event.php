@@ -1827,9 +1827,9 @@ class Event
         }
     }
 
-    public function startEvent()
+    public function startEvent($precheck)
     {
-        $entries = $this->getRegisteredEntries(true);
+        $entries = $this->getRegisteredEntries($precheck);
         Standings::startEvent($entries, $this->name);
         // $this->dropInvalidEntries();
         $this->pairCurrentRound();

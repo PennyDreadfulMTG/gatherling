@@ -276,7 +276,9 @@ function content()
             authFailed();
         } else {
             if (mode_is('Start Event')) {
-                $event->startEvent();
+                $event->startEvent(true);
+            } elseif (mode_is('Start Event (No Deck Check)')) {
+                $event->startEvent(false);
             } elseif (mode_is('Recalculate Standings')) {
                 $structure = $event->mainstruct;
                 $event->recalculateScores($structure);
@@ -851,7 +853,9 @@ function playerList($event)
     echo "<input type=\"hidden\" name=\"name\" value=\"{$event->name}\" />";
     echo '<table><th>Round Actions</th><tr>';
     if ($event->active == 0 && $event->finalized == 0) {
-        echo '<td><input id="start_event" class="inputbutton" type="submit" name="mode" value="Start Event" /></td></tr>';
+        echo '<td><input id="start_event" class="inputbutton" type="submit" name="mode" value="Start Event" />';
+        echo '<input id="start_event" class="inputbutton" type="submit" name="mode" value="Start Event (No Deck Check)" />';
+        echo '</td></tr>';
         echo '<p>Paste stuff:<br />';
         echo "<code>{$deckless}</code></p>";
     } elseif ($event->active == 1) {
