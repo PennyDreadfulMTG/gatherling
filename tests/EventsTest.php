@@ -8,10 +8,17 @@ use Gatherling\Deck;
 use Gatherling\Event;
 use Gatherling\Matchup;
 use Gatherling\Series;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 final class EventsTest extends TestCase
 {
+    /**
+     * @return Series
+     * @throws InvalidArgumentException
+     * @throws ExpectationFailedException
+     */
     public function testSeriesCreation()
     {
         if (!Series::exists('Test')) {
@@ -30,6 +37,11 @@ final class EventsTest extends TestCase
     }
 
     /**
+     * @param Series $series
+     * @return Event
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws ExpectationFailedException
      * @depends testSeriesCreation
      */
     public function testEventCreation($series)
@@ -78,6 +90,11 @@ final class EventsTest extends TestCase
     }
 
     /**
+     * @param Event $event
+     * @return Event
+     * @throws InvalidArgumentException
+     * @throws ExpectationFailedException
+     * @throws Exception
      * @depends testEventCreation
      */
     public function testRegistration($event)
@@ -113,6 +130,10 @@ final class EventsTest extends TestCase
     }
 
     /**
+     * @param Event $event
+     * @return Event
+     * @throws InvalidArgumentException
+     * @throws ExpectationFailedException
      * @depends testRegistration
      */
     public function testEventStart($event)
@@ -120,7 +141,7 @@ final class EventsTest extends TestCase
         $this->assertEquals($event->active, 0);
         $this->assertEquals($event->current_round, 0);
 
-        $event->startEvent();
+        $event->startEvent(True);
 
         $event = new Event($event->name);
         $this->assertEquals($event->active, 1);
@@ -130,6 +151,10 @@ final class EventsTest extends TestCase
     }
 
     /**
+     * @param Event $event
+     * @return mixed
+     * @throws InvalidArgumentException
+     * @throws ExpectationFailedException
      * @depends testEventStart
      */
     public function testReporting($event)
@@ -151,6 +176,14 @@ final class EventsTest extends TestCase
     }
 }
 
+/**
+ * @param string $player
+ * @param Event $event
+ * @param string $main
+ * @param string $side
+ * @return Deck
+ * @throws Exception
+ */
 function insertDeck($player, $event, $main, $side)
 {
     $deck = new Deck(0);

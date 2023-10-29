@@ -447,6 +447,11 @@ function card_catalog()
     return $result;
 }
 
+/**
+ * @param string $id
+ * @return string
+ * @throws Exception
+ */
 function cardname_from_id($id)
 {
     $sql = 'SELECT c.name as name FROM cards c WHERE c.scryfallId = ?';
