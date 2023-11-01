@@ -680,7 +680,7 @@ class Event
      *
      * @return Entry[]
      */
-    public function getRegisteredEntries($deleteinvalid = false)
+    public function getRegisteredEntries($deleteinvalid = false, $skip_invalid = false)
     {
         $players = $this->getPlayers();
 
@@ -690,6 +690,9 @@ class Event
             if (is_null($entry->deck) || !$entry->deck->isValid()) {
                 if ($deleteinvalid) {
                     $entry->removeEntry($player);
+                    continue;
+                }
+                if ($skip_invalid) {
                     continue;
                 }
             }
