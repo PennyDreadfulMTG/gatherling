@@ -328,7 +328,8 @@ class Standings
 
     /**
      * @param Entry[] $entries
-     * @param string $event_name
+     * @param string  $event_name
+     *
      * @return void
      */
     public static function startEvent($entries, $event_name)

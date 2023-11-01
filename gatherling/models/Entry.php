@@ -210,6 +210,7 @@ class Entry
 
     /**
      * @param int $byeqty
+     *
      * @return void
      */
     public function setInitialByes($byeqty)

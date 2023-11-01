@@ -677,6 +677,7 @@ class Event
 
     /**
      * @param bool $deleteinvalid
+     *
      * @return Entry[]
      */
     public function getRegisteredEntries($deleteinvalid = false)
@@ -1245,8 +1246,9 @@ class Event
         Standings::resetMatched($this->name);
         $active_entries = Entry::getActivePlayers($this->id);
 
-        if ($skip_invalid)
+        if ($skip_invalid) {
             $this->skipInvalidDecks($active_entries);
+        }
         $this->assignInitialByes($active_entries, $this->current_round + 1);
 
         $db = Database::getConnection();
