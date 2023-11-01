@@ -819,6 +819,10 @@ upgrade_db(50, 'Fix series discord fields', function () {
 	        ADD COLUMN `discord_channel_id` VARCHAR(20) NULL DEFAULT NULL AFTER `discord_guild_id`,
 	        CHANGE COLUMN `discord_require_membership` `discord_require_membership` INT NULL DEFAULT NULL AFTER `discord_guild_invite`;');
 });
+upgrade_db(51, 'Add Initial Seed', function () {
+    do_query('ALTER TABLE `entries`
+            ADD COLUMN `initial_seed` INT NULL DEFAULT 127 AFTER `initial_byes`;');
+});
 $db->autocommit(true);
 
 info('DB is up to date!');

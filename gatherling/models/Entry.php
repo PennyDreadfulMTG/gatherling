@@ -12,6 +12,7 @@ class Entry
     public $medal;
     public $drop_round;
     public $initial_byes;
+    public $initial_seed;
     public $ignored;
 
     public static function findByEventAndPlayer($event_id, $playername)
@@ -84,12 +85,12 @@ class Entry
     public function __construct($event_id, $playername)
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT deck, medal, ignored, drop_round, initial_byes FROM entries WHERE event_id = ? AND player = ?');
+        $stmt = $db->prepare('SELECT deck, medal, ignored, drop_round, initial_byes, initial_seed FROM entries WHERE event_id = ? AND player = ?');
         $stmt or exit($db->error);
         $stmt->bind_param('ds', $event_id, $playername);
         $stmt->execute();
         $this->ignored = 0;
-        $stmt->bind_result($deckid, $this->medal, $this->ignored, $this->drop_round, $this->initial_byes);
+        $stmt->bind_result($deckid, $this->medal, $this->ignored, $this->drop_round, $this->initial_byes, $this->initial_seed);
 
         if ($stmt->fetch() == null) {
             throw new Exception('Entry for '.$playername.' in '.$event_id.' not found');
@@ -207,11 +208,32 @@ class Entry
         }
     }
 
+    /**
+     * @param int $byeqty
+     * @return void
+     */
     public function setInitialByes($byeqty)
     {
         $db = Database::getConnection();
         $db->autocommit(false);
         $stmt = $db->prepare('UPDATE entries SET initial_byes = ? WHERE player = ? AND event_id = ?');
+        $stmt->bind_param('dsd', $byeqty, $this->player->name, $this->event->id);
+        $stmt->execute();
+        if ($stmt->affected_rows < 0) {
+            $db->rollback();
+            $db->autocommit(true);
+
+            throw new Exception('Entry for '.$this->player->name.' in '.$this->event->name.' not found');
+        }
+        $db->commit();
+        $db->autocommit(true);
+    }
+
+    public function setInitialSeed($byeqty)
+    {
+        $db = Database::getConnection();
+        $db->autocommit(false);
+        $stmt = $db->prepare('UPDATE entries SET initial_seed = ? WHERE player = ? AND event_id = ?');
         $stmt->bind_param('dsd', $byeqty, $this->player->name, $this->event->id);
         $stmt->execute();
         if ($stmt->affected_rows < 0) {

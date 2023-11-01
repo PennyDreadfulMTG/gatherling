@@ -660,6 +660,9 @@ class Event
         );
     }
 
+    /**
+     * @return Entry[]
+     */
     public function getEntries()
     {
         $players = $this->getPlayers();
@@ -672,6 +675,10 @@ class Event
         return $entries;
     }
 
+    /**
+     * @param bool $deleteinvalid
+     * @return Entry[]
+     */
     public function getRegisteredEntries($deleteinvalid = false)
     {
         $players = $this->getPlayers();
@@ -682,8 +689,8 @@ class Event
             if (is_null($entry->deck) || !$entry->deck->isValid()) {
                 if ($deleteinvalid) {
                     $entry->removeEntry($player);
+                    continue;
                 }
-                continue;
             }
             $entries[] = $entry;
         }
@@ -1175,7 +1182,7 @@ class Event
     // All this should probably go somewhere else
     // Pairs the round which is currently running.
     // This should probably be in Standings?
-    public function pairCurrentRound()
+    public function pairCurrentRound($skip_invalid = false)
     {
         //Check if all matches in the current round are finished
         if (count($this->unfinishedMatches()) === 0) {
@@ -1202,7 +1209,7 @@ class Event
                 switch ($structure) {
                     case 'Swiss':
                     case 'Swiss (Blossom)':
-                        $this->swissPairingBlossom($subevent_id);
+                        $this->swissPairingBlossom($subevent_id, $skip_invalid);
                         break;
                     case 'Single Elimination':
                         $this->singleElimination($round);
@@ -1233,12 +1240,13 @@ class Event
     }
 
     // Pairs the current swiss round by using the Blossom method
-    public function swissPairingBlossom($subevent_id)
+    public function swissPairingBlossom($subevent_id, $skip_invalid)
     {
         Standings::resetMatched($this->name);
         $active_entries = Entry::getActivePlayers($this->id);
 
-        $this->skipInvalidDecks($active_entries);
+        if ($skip_invalid)
+            $this->skipInvalidDecks($active_entries);
         $this->assignInitialByes($active_entries, $this->current_round + 1);
 
         $db = Database::getConnection();
@@ -1832,7 +1840,7 @@ class Event
         $entries = $this->getRegisteredEntries($precheck);
         Standings::startEvent($entries, $this->name);
         // $this->dropInvalidEntries();
-        $this->pairCurrentRound();
+        $this->pairCurrentRound($precheck);
         $this->active = 1;
         $this->save();
     }
