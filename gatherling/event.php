@@ -743,7 +743,12 @@ function playerList($event)
         if ($format->tribal) {
             echo '<th>Tribe</th>';
         }
-        echo '<th>Byes</th>';
+        if ($event->mainstruct == 'Swiss')
+            echo '<th>Byes</th>';
+        elseif ($event->mainstruct == 'Single Elimination')
+            echo '<th>Seed</th>';
+        else
+            echo '<th></th>';
         echo '<th>Delete</th></tr>';
     } else {
         echo '<tr><td align="center" colspan="5"><i>';
@@ -797,10 +802,21 @@ function playerList($event)
             }
         }
         echo '<td align="center">';
-        if ($event->active == 1 || $event->finalized) {
-            echo $entry->initial_byes;
-        } else {
-            initialByeDropMenu('initial_byes[]', $entry->player->name, $entry->initial_byes);
+        if ($event->mainstruct == 'Swiss')
+        {
+            if ($event->active == 1 || $event->finalized) {
+                echo $entry->initial_byes;
+            } else {
+                initialByeDropMenu('initial_byes[]', $entry->player->name, $entry->initial_byes);
+            }
+        }
+        elseif ($event->mainstruct == 'Single Elimination')
+        {
+            if ($event->active == 1 || $event->finalized) {
+                echo $entry->initial_seed;
+            } else {
+                initialSeedDropMenu('initial_seed[]', $entry->player->name, $entry->initial_seed, $numentries);
+            }
         }
         echo '</td>';
         echo '<td align="center">';
@@ -844,6 +860,8 @@ function playerList($event)
     if ($event->active == 0 && $event->finalized == 0) {
         echo '<table><tr><td colspan="2">';
         echo '<font color= "red"><b><p class="squeeze">Warning: Players who have not entered deck lists will be dropped automatically!</p></b></font>';
+        if ($event->mainstruct == 'Single Elimination')
+            echo '<p>Note: When assigning initial seeds, players will be paired 1v2, 3v4, 5v6, etc.</p>';
         echo '</td></tr></table>';
     }
 
@@ -1529,6 +1547,16 @@ function initialByeDropMenu($name = 'initial_byes', $playername = '', $current_b
     echo '</select>';
 }
 
+function initialSeedDropMenu($name = 'initial_seed', $playername = '', $current_seed = 127, $numentries = 8)
+{
+    echo "<select class=\"inputbox\" name=\"{$name}\">";
+    echo "<option value=\"$playername 127\"".($current_seed == 127 ? ' selected' : '').'>None</option>';
+    for ($i = 1; $i <= $numentries; $i++) {
+        echo "<option value=\"$playername $i\"".($current_seed == $i ? ' selected' : '').">$i</option>";
+    }
+    echo '</select>';
+}
+
 function controlPanel($event, $cur = '')
 {
     $name = $event->name;
@@ -1584,6 +1612,22 @@ function updateReg()
                 }
                 $entry = new Entry($event->id, $playername);
                 $entry->setInitialByes($bye_qty);
+            }
+        }
+    }
+
+    if (isset($_POST['initial_seed'])) {
+        foreach ($_POST['initial_seed'] as $seeddata) {
+            if (!empty(trim($seeddata))) {
+                $array_data = explode(' ', $seeddata);
+                $seed = intval($array_data[count($array_data) - 1]);
+                unset($array_data[count($array_data) - 1]);
+                $playername = implode(' ', $array_data);
+                if (in_array($playername, $dropped)) {
+                    continue;
+                }
+                $entry = new Entry($event->id, $playername);
+                $entry->setInitialSeed($seed);
             }
         }
     }

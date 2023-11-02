@@ -112,7 +112,7 @@ final class EventsTest extends TestCase
         // 8 players have expressed interest in the event.
         $this->assertEquals(10, count($event->getEntries()));
         // No players have filled out decklists.
-        $this->assertEquals(0, count($event->getRegisteredEntries()));
+        $this->assertEquals(0, count($event->getRegisteredEntries(false, true)));
 
         $deck = insertDeck('testplayer0', $event, '60 Plains', '');
         $this->assertEmpty($deck->errors, json_encode($deck->errors));
@@ -131,7 +131,7 @@ final class EventsTest extends TestCase
         $deck = insertDeck('testplayer7', $event, "55 Mountain\n5 Seven Dwarves", '5 Seven Dwarves');
         $this->assertNotEmpty($deck->errors, json_encode($deck->errors), 'Too Many Dwarves');
         // 5 Valid decks (0, 1, 2, and 4, 5), 3 invalid deck (3, 6, 7), and 3 not submitted decks.
-        $this->assertEquals(5, count($event->getRegisteredEntries()));
+        $this->assertEquals(5, count($event->getRegisteredEntries(false, true)));
 
         return $event;
     }

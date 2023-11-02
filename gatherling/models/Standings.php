@@ -22,7 +22,7 @@ class Standings
     public $matched;
     public $new;
 
-    public function __construct($eventname, $playername)
+    public function __construct($eventname, $playername, $initial_seed = 127)
     {
         // Check to see if we are doing event standings of player standings
         if ($playername == '0') {
@@ -31,7 +31,6 @@ class Standings
 
             return;
         } else {
-            //echo "past loop";
             $db = Database::getConnection();
             $stmt = $db->prepare('SELECT active, matches_played, games_won, games_played, byes, OP_Match, PL_Game, OP_Game, score, seed, matched, matches_won, draws FROM standings WHERE event = ? AND player = ? limit 1');
             $stmt or exit($db->error);
@@ -42,6 +41,7 @@ class Standings
             $this->event = $eventname;
             if ($stmt->fetch() == null) { // No entry in standings table,
                 $this->new = true;
+                $this->seed = $initial_seed;
             }
             $stmt->close();
         }
@@ -63,7 +63,6 @@ class Standings
                 $this->OP_Match = 0;
                 $this->PL_Game = 0;
                 $this->OP_Game = 0;
-                $this->seed = 127;
                 $this->matched = 0;
                 $this->draws = 0;
 
@@ -327,10 +326,16 @@ class Standings
         return $opponent_names;
     }
 
+    /**
+     * @param Entry[] $entries
+     * @param string  $event_name
+     *
+     * @return void
+     */
     public static function startEvent($entries, $event_name)
     {
         foreach ($entries as $entry) {
-            $standing = new self($event_name, $entry->player->name);
+            $standing = new self($event_name, $entry->player->name, $entry->initial_seed);
             $standing->save();
         }
     }
