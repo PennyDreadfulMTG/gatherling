@@ -104,6 +104,22 @@ switch ($action) {
         }
         break;
 
+    case 'upcoming_events':
+        $events = [];
+        $db = Database::getConnection();
+        $query = $db->query('SELECT e.name as name FROM events e
+                         WHERE e.start > NOW()
+                         ORDER BY e.start ASC');
+        while ($row = $query->fetch_assoc()) {
+            $events[] = $row['name'];
+        }
+        $query->close();
+        foreach ($events as $eventname) {
+            $event = new Event($eventname);
+            $result[$event->name] = repr_json_event($event);
+        }
+        break;
+
     case 'create_series':
         $series = $_REQUEST['series'];
         $active = true;
