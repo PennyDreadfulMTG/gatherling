@@ -988,8 +988,8 @@ class Format
             asort($tribesTied); // sorts tribe size by value from low to high for tie breaker
             reset($tribesTied);
             $underdogKey = key($tribesTied);
-            // get first key, which should be lowest from sort
-            // Smallest Tribe is then selected
+        // get first key, which should be lowest from sort
+        // Smallest Tribe is then selected
         } else {
             reset($subTypeCount);
             $underdogKey = key($subTypeCount); // get first key, which should highest from sort
@@ -1080,8 +1080,8 @@ class Format
             asort($tribesTied); // sorts tribe size by value from low to high for tie breaker
             reset($tribesTied);
             $tribeKey = key($tribesTied);
-            // get first key, which should be lowest from sort
-            // Smallest Tribe is then selected
+        // get first key, which should be lowest from sort
+        // Smallest Tribe is then selected
         } else {
             reset($subTypeCount);
             $tribeKey = key($subTypeCount); // get first key, which should highest from sort
