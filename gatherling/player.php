@@ -607,7 +607,7 @@ function print_ActiveEvents()
                 echo '<td>'.$entry->createDeckLink().'</td>';
             } elseif ($structure == 'League') {
                 $count = $event->getPlayerLeagueMatchCount($player->name) + 1;
-                if ($count < 6) {
+                if ($count < 7) {
                     $Leagues[] = "<tr><td>{$event->name} Match: {$count}</td><td><a href=\"report.php?mode=submit_league_result&event={$event->name}&round={$event->current_round}&subevent={$subevent_id}\">Report League Game</a></td></tr>";
                 }
             } elseif ($structure == 'League Match') {
