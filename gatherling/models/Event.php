@@ -1183,6 +1183,11 @@ class Event
         return false;
     }
 
+    public function leagueLength()
+    {
+        return 6; // TODO: This should be customizable.
+    }
+
     // All this should probably go somewhere else
     // Pairs the round which is currently running.
     // This should probably be in Standings?

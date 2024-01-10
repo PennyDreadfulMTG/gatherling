@@ -277,7 +277,7 @@ class Standings
      *
      * @return void|array
      */
-    public function League_getAvailable_Opponents($subevent, $round)
+    public function League_getAvailable_Opponents($subevent, $round, $league_length)
     {
         $opponentsAlreadyFaced = [];
         $allPlayers = [];
@@ -310,7 +310,7 @@ class Standings
         if ($structure == 'League Match' && count($opponentsAlreadyFaced) >= 1) {
             return [];
         }
-        if (count($opponentsAlreadyFaced) >= 5) {
+        if (count($opponentsAlreadyFaced) >= $league_length) {
             return [];
         }
         // Get all opponents who haven't dropped from event and exclude myself
