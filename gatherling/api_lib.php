@@ -5,6 +5,7 @@ require_once 'lib.php';
 //## Helper Functions
 
 use Gatherling\Database;
+use Gatherling\Deck;
 use Gatherling\Event;
 use Gatherling\Player;
 use Gatherling\Series;
@@ -212,7 +213,10 @@ function repr_json_deck($deck)
 function repr_json_series($series)
 {
     $json = populate([], $series, ['name', 'active', 'start_day', 'start_time', 'organizers', 'mtgo_room', 'this_season_format', 'this_season_master_link', 'this_season_season', 'discord_guild_id', 'discord_channel_id', 'discord_channel_name', 'discord_guild_name']);
-
+    $mostRecent = $series->mostRecentEvent();
+    $json['most_recent_season'] = $mostRecent->season;
+    $json['most_recent_number'] = $mostRecent->number;
+    $json['most_recent_id'] = $mostRecent->id;
     return $json;
 }
 
@@ -235,10 +239,11 @@ function repr_json_player($player, $client = null)
 /**
  * @param Gatherling\Event $event
  * @param string           $name
+ * @param string           $decklist
  *
  * @return (bool|string|int)[]|false[]|(string|false)[]
  */
-function add_player_to_event($event, $name)
+function add_player_to_event($event, $name, $decklist)
 {
     if ($event->authCheck($_SESSION['username'])) {
         if ($event->addPlayer($name)) {
@@ -249,6 +254,20 @@ function add_player_to_event($event, $name)
             $result['event_running'] = $event->active == 1;
         } else {
             $result['success'] = false;
+        }
+        if (!empty($decklist))
+        {
+            $decklist = str_replace("|", "\n", $decklist);
+
+            $deck = new Deck(0);
+            $deck->playername = $player->name;
+            $deck->eventname = $event->name;
+            $deck->event_id = $event->id;
+            $deck->maindeck_cards = parseCardsWithQuantity($decklist);
+            $deck->sideboard_cards = parseCardsWithQuantity("");
+            $deck->save();
+
+            return $deck;
         }
     } else {
         $result['error'] = 'Unauthorized';
