@@ -47,9 +47,10 @@ switch ($action) {
 
     case 'addplayer':
     case 'add_player':
-        $event = new Event($_GET['event']);
-        $player = $_GET['addplayer'];
-        $result = add_player_to_event($event, $player);
+        $event = new Event(arg('event'));
+        $player = arg('addplayer');
+        $decklist = arg('decklist', '');
+        $result = add_player_to_event($event, $player, $decklist);
         break;
 
     case 'delplayer':
@@ -131,6 +132,7 @@ switch ($action) {
         break;
 
     case 'create_event':
+        auth();
         $result = create_event();
         break;
 
@@ -214,6 +216,13 @@ switch ($action) {
 
     case 'cardname_from_id':
         $result = cardname_from_id(arg('id'));
+        break;
+
+    case 'start_event':
+        auth();
+        $event = new Event(arg('event'));
+        $event->startEvent(true);
+        $result = repr_json_event($event);
         break;
 
     default:
