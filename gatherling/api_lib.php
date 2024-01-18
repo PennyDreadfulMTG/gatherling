@@ -217,6 +217,7 @@ function repr_json_series($series)
     $json['most_recent_season'] = $mostRecent->season;
     $json['most_recent_number'] = $mostRecent->number;
     $json['most_recent_id'] = $mostRecent->id;
+
     return $json;
 }
 
@@ -255,16 +256,15 @@ function add_player_to_event($event, $name, $decklist)
         } else {
             $result['success'] = false;
         }
-        if (!empty($decklist))
-        {
-            $decklist = str_replace("|", "\n", $decklist);
+        if (!empty($decklist)) {
+            $decklist = str_replace('|', "\n", $decklist);
 
             $deck = new Deck(0);
             $deck->playername = $player->name;
             $deck->eventname = $event->name;
             $deck->event_id = $event->id;
             $deck->maindeck_cards = parseCardsWithQuantity($decklist);
-            $deck->sideboard_cards = parseCardsWithQuantity("");
+            $deck->sideboard_cards = parseCardsWithQuantity('');
             $deck->save();
 
             return $deck;
