@@ -60,7 +60,7 @@ function auth()
     }
 
     if (is_null($username) || is_null($apikey)) {
-        return "Auth not provided";
+        return 'Auth not provided';
     }
 
     $player = Player::findByName($username);
@@ -69,9 +69,8 @@ function auth()
     }
     if ($player->api_key == $apikey) {
         $_SESSION['username'] = $player->name;
-    }
-    else {
-        return "Invalid API Key";
+    } else {
+        return 'Invalid API Key';
     }
 
     return Player::isLoggedIn();
