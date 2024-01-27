@@ -45,7 +45,7 @@ function is_admin()
     return false;
 }
 
-/** @return bool  */
+/** @return string  */
 function auth()
 {
     $username = null;
@@ -60,15 +60,18 @@ function auth()
     }
 
     if (is_null($username) || is_null($apikey)) {
-        return false;
+        return "Auth not provided";
     }
 
     $player = Player::findByName($username);
     if (is_null($player)) {
-        return false;
+        return "Can't find a user called $username";
     }
     if ($player->api_key == $apikey) {
         $_SESSION['username'] = $player->name;
+    }
+    else {
+        return "Invalid API Key";
     }
 
     return Player::isLoggedIn();

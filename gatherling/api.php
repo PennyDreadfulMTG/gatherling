@@ -157,10 +157,10 @@ switch ($action) {
         break;
 
     case 'whoami':
-        auth();
+        $auth_error = auth();
         $player = Player::getSessionPlayer();
         if (is_null($player)) {
-            error('Not Logged in', ['name' => null]);
+            error('Not Logged in', ['name' => null, 'auth_error' => $auth_error]);
         }
 
         $result = repr_json_player($player);
