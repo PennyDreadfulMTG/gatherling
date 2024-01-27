@@ -48,9 +48,9 @@ function is_admin()
 /** @return bool  */
 function auth()
 {
-    if (isset($_SERVER['HTTP_X_USERNAME']) && isset($_SERVER['HTTP_X_APIKEY'])) {
-        $username = $_SERVER['HTTP_X_USERNAME'];
-        $apikey = $_SERVER['HTTP_X_APIKEY'];
+    if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
+        $username = $_SERVER['PHP_AUTH_USER'];
+        $apikey = $_SERVER['PHP_AUTH_PW'];
         if (is_null($username) || is_null($apikey)) {
             return false;
         }
@@ -246,6 +246,7 @@ function repr_json_player($player, $client = null)
  */
 function add_player_to_event($event, $name, $decklist)
 {
+    $result = [];
     if ($event->authCheck($_SESSION['username'])) {
         if ($event->addPlayer($name)) {
             $player = new Player($name);
@@ -267,7 +268,7 @@ function add_player_to_event($event, $name, $decklist)
             $deck->sideboard_cards = parseCardsWithQuantity('');
             $deck->save();
 
-            return $deck;
+            $result['deck'] = repr_json_deck($deck);
         }
     } else {
         $result['error'] = 'Unauthorized';
