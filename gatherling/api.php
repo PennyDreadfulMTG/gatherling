@@ -60,6 +60,7 @@ switch ($action) {
 
     case 'delplayer':
     case 'delete_player':
+        auth();
         $event = new Event($_GET['event']);
         $player = $_GET['delplayer'];
         $result = delete_player_from_event($event, $player);

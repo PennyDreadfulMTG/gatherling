@@ -385,6 +385,7 @@ function json_headers()
     header('Cache-Control: no-cache');
     header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
     header('Access-Control-Allow-Origin: *');
+    header('HTTP_X_USERNAME: '.Player::loginName());
 }
 
 function distance_of_time_in_words($from_time, $to_time = 0, $truncate = false)
