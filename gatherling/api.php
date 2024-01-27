@@ -26,9 +26,12 @@ switch ($action) {
 
     case 'eventinfo':
     case 'event_info':
-        $eventname = $_REQUEST['event'];
-        $event = new Event($eventname);
-        $result = repr_json_event($event);
+        if (Event::exists(arg('event'))) {
+            $event = new Event(arg('event'));
+            $result = repr_json_event($event);
+        } else {
+            $result['error'] = 'Event not found';
+        }
         break;
 
     case 'seriesinfo':
@@ -47,6 +50,7 @@ switch ($action) {
 
     case 'addplayer':
     case 'add_player':
+        auth();
         $event = new Event(arg('event'));
         $player = arg('addplayer');
         $decklist = arg('decklist', '');

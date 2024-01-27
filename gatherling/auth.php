@@ -152,6 +152,9 @@ function prompt_link_account($user)
             <form action="register.php" method="post">
                 <table class="form" align="center" style="border-width: 0px" cellpadding="3">
                     <tr>
+                        <td colspan="2">If you already have a Gatherling account, please <a href="login.php?target=auth.php">Log In</a> in with your password, and link via Player Settings.</td>
+                    </tr>
+                    <tr>
                         <th>Username</th>
                         <td><input id="username" class="inputbox" type="text" name="username" value="" tabindex="1"></td>
                     </tr>
