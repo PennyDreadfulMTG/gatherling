@@ -48,20 +48,27 @@ function is_admin()
 /** @return bool  */
 function auth()
 {
+    $username = null;
+    $apikey = null;
     if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
         $username = $_SERVER['PHP_AUTH_USER'];
         $apikey = $_SERVER['PHP_AUTH_PW'];
-        if (is_null($username) || is_null($apikey)) {
-            return false;
-        }
+    }
+    if (isset($_SERVER['HTTP_X_USERNAME']) && isset($_SERVER['HTTP_X_APIKEY'])) {
+        $username = $_SERVER['HTTP_X_USERNAME'];
+        $apikey = $_SERVER['HTTP_X_APIKEY'];
+    }
 
-        $player = Player::findByName($username);
-        if (is_null($player)) {
-            return false;
-        }
-        if ($player->api_key == $apikey) {
-            $_SESSION['username'] = $player->name;
-        }
+    if (is_null($username) || is_null($apikey)) {
+        return false;
+    }
+
+    $player = Player::findByName($username);
+    if (is_null($player)) {
+        return false;
+    }
+    if ($player->api_key == $apikey) {
+        $_SESSION['username'] = $player->name;
     }
 
     return Player::isLoggedIn();
