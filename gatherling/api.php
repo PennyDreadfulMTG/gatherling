@@ -34,7 +34,6 @@ switch ($action) {
         }
         break;
 
-
     case 'seriesinfo':
     case 'series_info':
         $seriesname = $_REQUEST['series'];
