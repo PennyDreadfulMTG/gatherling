@@ -67,7 +67,7 @@ function auth()
     if (is_null($player)) {
         return "Can't find a user called $username";
     }
-    if ($player->api_key == $apikey) {
+    if ($player->api_key == hash('sha256', $apikey)) {
         $_SESSION['username'] = $player->name;
     } else {
         return 'Invalid API Key';
