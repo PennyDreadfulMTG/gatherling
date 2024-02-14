@@ -4,7 +4,9 @@
     "require": {
         "wohali/oauth2-discord-new": "^1.0",
         "sentry/sdk": "^4.0",
-        "ypho/scryfall": "^1.0"
+        "ypho/scryfall": "^1.0",
+        "ext-curl": "*",
+        "firebase/php-jwt": "^6.10"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "3.*",
