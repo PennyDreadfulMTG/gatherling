@@ -1,14 +1,15 @@
 <?php
 
 // Use Brevo to send an email from us to a single recipient. Brevo supports multiple recipients, attachments, etc. but we don't need that yet.
-function sendEmail($to, $subj, $msg): bool {
+function sendEmail($to, $subj, $msg): bool
+{
     global $CONFIG;
 
     $body = [
-        'sender' => ['name' => 'Gatherling', 'email' => 'no-reply@gatherling.com'],
-        'to' => [['name' => $to, 'email' => $to]],
-        'subject' => $subj,
-        'htmlContent' => $msg
+        'sender'      => ['name' => 'Gatherling', 'email' => 'no-reply@gatherling.com'],
+        'to'          => [['name' => $to, 'email' => $to]],
+        'subject'     => $subj,
+        'htmlContent' => $msg,
     ];
 
     $ch = curl_init();
@@ -20,7 +21,7 @@ function sendEmail($to, $subj, $msg): bool {
 
     $headers = [];
     $headers[] = 'Accept: application/json';
-    $headers[] = 'Api-Key: ' . $CONFIG['brevo_api_key'];
+    $headers[] = 'Api-Key: '.$CONFIG['brevo_api_key'];
     $headers[] = 'Content-Type: application/json';
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
@@ -32,5 +33,6 @@ function sendEmail($to, $subj, $msg): bool {
     if ($response_code >= 300) {
         return false;
     }
+
     return true;
 }
