@@ -23,7 +23,7 @@ if (isset($_POST['view']) && $_POST['view'] === 'new_password') {
 } elseif (isset($_GET['token'])) {
     printNewPasswordForm($_GET['token']);
 } elseif (isset($_POST['view']) && $_POST['view'] === 'send_login_link') {
-    if (isset($_POST['identifier']) && strpos($_POST['identifier'], '@') !== false) {
+    if (isset($_POST['identifier']) && str_contains($_POST['identifier'], '@')) {
         $player = Player::findByEmail($_POST['identifier']);
     } else {
         $player = Player::findByName($_POST['identifier']);
@@ -47,7 +47,7 @@ if (isset($_POST['view']) && $_POST['view'] === 'new_password') {
 printPageFooter();
 print_footer();
 
-function printPageHeader() {
+function printPageHeader(): void {
     ?>
     <div class="grid_10 suffix_1 prefix_1">
         <div id="gatherling_main" class="box">
@@ -57,15 +57,15 @@ function printPageHeader() {
     <?php
 }
 
-function printPageFooter() {
+function printPageFooter(): void {
     ?>
-        </center>
+            </center>
         </div> <!-- gatherling_main -->
     </div> <!-- grid 10 pre 1 suff 1 -->
 <?php
 }
 
-function printForgotForm() {
+function printForgotForm(): void {
     ?>
         <p>Enter your email or username and we'll send you a link to get back into your account.</p>
         <form action="forgot.php" method="post">
@@ -82,7 +82,7 @@ function printForgotForm() {
     <?php
 }
 
-function printNewPasswordForm($token) {
+function printNewPasswordForm($token): void {
     ?>
         <p>Enter your new password.</p>
         <form action="forgot.php" method="post">
