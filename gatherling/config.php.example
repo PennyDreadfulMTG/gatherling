@@ -30,6 +30,12 @@ $CONFIG['analytics_account'] = 'UA-37926034-1';
 # How long to store session cookies in seconds
 $CONFIG['cookie_lifetime'] = 5184000;
 
+# API Key for Brevo email sending (password reset)
+$CONFIG['brevo_api_key'] = 'xkeysib-foobar-baz';
+
+# Encryption key for password reset JWT
+$CONFIG['password_reset_key'] = 'foo-bar-baz';
+
 # === Infobot PARAMETERS ==
 # If you have set it up with infobot or PDBot to contact the site, you can change the passkey here.
 # If you haven't set it up, leave this blank.
