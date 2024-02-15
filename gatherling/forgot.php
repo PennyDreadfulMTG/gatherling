@@ -135,7 +135,11 @@ function generateSecureResetLink($name): string {
 function resetPassword($token, $newPassword): bool {
     global $CONFIG;
 
-    $payload = JWT::decode($token, new Key($CONFIG['password_reset_key'], 'HS256'));
+    try {
+        $payload = JWT::decode($token, new Key($CONFIG['password_reset_key'], 'HS256'));
+    } catch (Exception) {
+        return false;
+    }
     if (!isset($payload->name) || !isset($payload->exp)) {
         return false;
     }
