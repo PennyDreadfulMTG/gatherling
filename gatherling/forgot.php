@@ -137,7 +137,7 @@ function resetPassword($token, $newPassword): bool {
 
     try {
         $payload = JWT::decode($token, new Key($CONFIG['password_reset_key'], 'HS256'));
-    } catch (Exception) {
+    } catch (Exception $e) {
         return false;
     }
     if (!isset($payload->name) || !isset($payload->exp)) {
