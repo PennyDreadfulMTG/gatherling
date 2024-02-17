@@ -155,13 +155,7 @@ function insertCard($card, $set, $rarity, $stmt)
     if (isset($card->subtypes) && count($card->subtypes) > 0) {
         $typeline = $typeline.' - '.implode(' ', $card->subtypes);
     }
-    $name = $card->name;
-    if ($card->layout == 'split' || $card->layout == 'aftermath') {
-        // SPLIT CARDS!!!!!!
-        $name = implode('/', $card->names);
-        // TODO: Make sure we get the $ism flags right. (We currently don't)
-    }
-    $name = normaliseCardName($name);
+    $name = normaliseCardName($card->name);
     echo '<table class="new_card">';
     echo '<tr><th>Name:</th><td>'.$name.'</td></tr>';
     foreach (['manaCost', 'convertedManaCost', 'type', 'rarity'] as $attr) {

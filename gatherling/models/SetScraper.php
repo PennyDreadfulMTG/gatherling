@@ -2,11 +2,6 @@
 
 namespace Gatherling;
 
-function sortSets($a, $b)
-{
-    return strtotime($a->releaseDate) < strtotime($b->releaseDate);
-}
-
 class SetScraper
 {
     public static function getSetList()
@@ -22,28 +17,33 @@ class SetScraper
         ];
 
         $context = stream_context_create($options);
-        $sets = json_decode(file_get_contents($url, false, $context));
+        $s = file_get_contents($url, false, $context);
+        $sets = json_decode($s);
         if (!$sets) {
             return [];
         }
         $sets = $sets->data;
-        usort($sets, 'sortSets');
-
-        $dropdown = [];
 
         $knowncodes = Database::list_result('SELECT code FROM cardsets;');
 
-        foreach ($sets as $s) {
-            $installed = false;
-            foreach ($knowncodes as $c) {
-                if (strcasecmp($s->code, $c) == 0) {
-                    $installed = true;
-                }
-            }
-            if (!$installed) {
-                $dropdown[$s->code] = $s->name;
+        // Turn this into a dict for faster lookup
+        $knowncodesDict = [];
+        foreach ($knowncodes as $k => $v) {
+            // Some codes are NULL in the db, including for Alara Reborn, Ninth Edition and others. I'm not solving that now.
+            if ($v) {
+                $knowncodesDict[$v] = true;
             }
         }
+
+        $unknownSets = array_filter($sets, function ($set) use ($knowncodesDict) {
+            return !isset($knowncodesDict[$set->code]);
+        });
+
+        $dropdown = [];
+        foreach ($unknownSets as $unknownSet) {
+            $dropdown[$unknownSet->code] = $unknownSet->name;
+        }
+        asort($dropdown);
 
         return $dropdown;
     }
