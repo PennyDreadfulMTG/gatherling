@@ -18,6 +18,10 @@ WORKDIR /var/www/html/
 COPY ./gatherling /var/www/html/
 COPY --from=compose /restore/vendor /var/www/html/vendor
 
+# Let us upload larger files than 2M so that we can install cardsets from MTGJSON
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini && \
+    sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /usr/local/etc/php/php.ini
+
 ## Expose used ports
 EXPOSE 80
 
