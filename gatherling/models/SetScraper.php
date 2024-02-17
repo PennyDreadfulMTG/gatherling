@@ -35,7 +35,7 @@ class SetScraper
             }
         }
 
-        $unknownSets = array_filter($sets, function($set) use ($knowncodesDict) {
+        $unknownSets = array_filter($sets, function ($set) use ($knowncodesDict) {
             return !isset($knowncodesDict[$set->code]);
         });
 
@@ -44,6 +44,7 @@ class SetScraper
             $dropdown[$unknownSet->code] = $unknownSet->name;
         }
         asort($dropdown);
+
         return $dropdown;
     }
 }
