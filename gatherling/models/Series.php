@@ -284,9 +284,7 @@ class Series
                           LEFT JOIN events
                           ON events.series = series.name
                           GROUP BY series.name
-                          ORDER BY isactive
-                          DESC, count(events.name)
-                          DESC, name');
+                          ORDER BY series.name');
         $stmt->execute();
         $stmt->bind_result($onename);
         $names = [];
