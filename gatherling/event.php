@@ -944,11 +944,12 @@ function printUnverifiedPlayerCell(Event $event, Matchup $match, Player $player)
     global $drop_icon;
     $playername = $player->name;
     $displayname = $player->gameName($event->client);
+    $displaynameText = $player->gameName($event->client, false);
     $dropped = $match->playerDropped($playername);
     if ($dropped) {
         echo "<td>{$drop_icon}";
     } else {
-        echo "<td><input type=\"checkbox\" name=\"dropplayer[]\" value=\"{$playername}\" title='Drop $displayname from the event'>";
+        echo "<td><input type=\"checkbox\" name=\"dropplayer[]\" value=\"{$playername}\" title='Drop $displaynameText from the event'>";
     }
     if (($match->getPlayerWins($playername) > 0) || ($match->getPlayerLosses($playername) > 0)) {
         if ($match->getPlayerWins($playername) > $match->getPlayerLosses($playername)) {

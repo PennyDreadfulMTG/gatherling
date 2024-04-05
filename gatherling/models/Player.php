@@ -1324,7 +1324,7 @@ class Player
         return $series;
     }
 
-    public function gameName($game = null)
+    public function gameName($game = null, $html = true)
     {
         if ($game == 1) {
             $game = 'mtgo';
@@ -1334,6 +1334,10 @@ class Player
             $game = 'paper';
         } elseif ($game == 'discord') {
             $game = 'paper';
+        }
+
+        if (!$html) {
+            return $this->name;
         }
 
         $name = $this->name;
