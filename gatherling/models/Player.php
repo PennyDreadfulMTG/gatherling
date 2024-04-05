@@ -1311,7 +1311,7 @@ class Player
             return Series::allNames();
         }
         $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT series FROM series_organizers WHERE player = ?');
+        $stmt = $db->prepare('SELECT series FROM series_organizers WHERE player = ? ORDER BY series');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
         $series = [];
