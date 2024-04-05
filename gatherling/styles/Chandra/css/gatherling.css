@@ -248,13 +248,14 @@ a.create_deck_link {
     color: #333;
 }
 #table-decksearch td, #table-decksearch th {
-    border-top-color: 454545;
+    border-top-color: #454545;
     border-bottom: 1px solid #454545;
     color: #CCCCCC;
 }
 #table-decksearch th {
     color: white;
-    text-shadow: black 0.1em 0.1em 0.2em font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+    text-shadow: black 0.1em 0.1em 0.2em;
+    font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
     font-weight: normal;
     padding: 7px 7px 8px;
     text-align: left;

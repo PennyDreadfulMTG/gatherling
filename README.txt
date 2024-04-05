@@ -9,3 +9,6 @@ Setup:
 3. Visit `/admin/db-upgrade.php`
 4. Sign up a player by visiting register.php.
 5. Visit /util/updateDefaultFormats.php
+
+Tests:
+$ vendor/bin/phpunit -v tests/
