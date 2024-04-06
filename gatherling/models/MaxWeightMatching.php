@@ -10,6 +10,26 @@ $CHECK_OPTIMUM = true;
 class MaxWeightMatching
 {
     private $maxcardinality;
+    private $edges;
+    private $nedge;
+    private $nvertex;
+    private $endpoint;
+    private $neighbend;
+    private $mate;
+    private $label;
+    private $labelend;
+    private $inblossom;
+    private $blossomparent;
+    private $blossomchilds;
+    private $blossombase;
+    private $blossomendps;
+    private $bestedge;
+    private $blossombestedges;
+    private $unusedblossoms;
+    private $dualvar;
+    private $allowedge;
+    private $queue;
+    private $bestedgeto;
 
     public function __construct($edges, $maxcardinality = false)
     {
