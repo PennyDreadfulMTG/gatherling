@@ -1582,7 +1582,7 @@ class Event
                 }
 
                 if ($structure != 'League' && $this->active === 1) {
-                    $this->pairCurrentRound();
+                    $this->pairCurrentRound(true);
                 }
             }
         }
@@ -1698,7 +1698,7 @@ class Event
         $this->save();
         $this->recalculateScores('Swiss');
         Standings::updateStandings($this->name, $this->mainid, 1);
-        $this->pairCurrentRound();
+        $this->pairCurrentRound(true);
     }
 
     public function assignMedals()
