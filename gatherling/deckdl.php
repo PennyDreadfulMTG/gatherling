@@ -1,6 +1,7 @@
 <?php
 
 use Gatherling\Deck;
+use Gatherling\Player;
 
 require_once 'lib.php';
 
@@ -18,6 +19,11 @@ if ($id == 0) {
 }
 
 $deck = new Deck($id);
+
+if (!$deck->canView(Player::loginName())) {
+    header('location: player.php');
+    exit;
+}
 
 $content = '';
 
