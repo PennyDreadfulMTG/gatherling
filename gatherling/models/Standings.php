@@ -318,7 +318,8 @@ class Standings
                                                           FROM standings
                                                           WHERE event = ?
                                                           AND active = 1
-                                                          AND player <> ?', 'ss', $this->event, $this->player);
+                                                          AND player <> ?
+                                                          ORDER BY player', 'ss', $this->event, $this->player);
 
         // prune all opponents by opponents I have already played
         $opponent_names = array_diff($allPlayers, $opponentsAlreadyFaced);

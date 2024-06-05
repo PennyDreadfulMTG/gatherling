@@ -163,7 +163,7 @@ function leagueOpponentDropMenu($eventname, $round, $player, $subevent)
     if (count($playernames)) {
         foreach ($playernames as $playername) {
             $oppplayer = new Player($playername);
-            echo "<option value=\"{$playername}\">{$oppplayer->gameName($event->client)}</option>";
+            echo "<option value=\"{$playername}\">{$oppplayer->gameName($event->client, false)}</option>";
         }
     } else {
         echo '<option value="">-No Available Opponents-</option>';
