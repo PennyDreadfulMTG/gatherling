@@ -3,12 +3,13 @@ Gatherling
 An online MTG website for running tournaments.
 
 Setup:
-1. Copy config.php.example to config.php and fill in the
-   variables needed.
-2. Run `composer install`
-3. Visit `/admin/db-upgrade.php`
-4. Sign up a player by visiting register.php.
-5. Visit /util/updateDefaultFormats.php
+- Install PHP, MariaDB, Composer, php-curl, php-mysqli.
+- sudo mysql_tzinfo_to_sql /usr/share/zoneinfo | sudo mysql -u root mysql
+- Copy config.php.example to config.php and fill in the variables needed.
+- Run `composer install`
+- Visit `/admin/db-upgrade.php`
+- Sign up a player by visiting register.php.
+- Visit /util/updateDefaultFormats.php
 
 Tests:
 $ vendor/bin/phpunit -v tests/
