@@ -723,14 +723,16 @@ upgrade_db(38, 'Entries use deck_id', function () {
 });
 
 upgrade_db(39, '"Duel Decks: Mirrodin Pure vs. New Phyrexia" is too long.', function () {
-    do_query('ALTER TABLE `cards`
-	CHANGE COLUMN `cardset` `cardset` VARCHAR(60) NOT NULL,
-	CHANGE COLUMN `is_changeling` `is_changeling` TINYINT(1) NULL DEFAULT NULL,
-    CHANGE COLUMN `is_online` `is_online` TINYINT(1) NULL DEFAULT NULL;');
+    do_query('ALTER TABLE `cards` DROP FOREIGN KEY `cards_ibfk_1`;');
+    do_query('ALTER TABLE `setlegality` DROP FOREIGN KEY `setlegality_ibfk_2`;');
     do_query('ALTER TABLE `cardsets`
-	CHANGE COLUMN `name` `name` VARCHAR(60) NOT NULL,
-	CHANGE COLUMN `standard_legal` `standard_legal` TINYINT(1) NULL DEFAULT 0,
-	CHANGE COLUMN `modern_legal` `modern_legal` TINYINT(1) NULL DEFAULT 0;');
+        CHANGE COLUMN `name` `name` VARCHAR(60) NOT NULL,
+        CHANGE COLUMN `standard_legal` `standard_legal` TINYINT(1) NULL DEFAULT 0,
+        CHANGE COLUMN `modern_legal` `modern_legal` TINYINT(1) NULL DEFAULT 0;');
+    do_query('ALTER TABLE `cards`
+        CHANGE COLUMN `cardset` `cardset` VARCHAR(60) NOT NULL;');
+    do_query('ALTER TABLE `cards` ADD CONSTRAINT `cards_ibfk_1` FOREIGN KEY (`cardset`) REFERENCES `cardsets` (`name`) ON UPDATE CASCADE;');
+    do_query('ALTER TABLE `setlegality` ADD CONSTRAINT `setlegality_ibfk_2` FOREIGN KEY (`cardset`) REFERENCES `cardsets` (`name`) ON UPDATE CASCADE;');
 });
 
 upgrade_db(40, 'We need longer card names.', function () {
@@ -794,10 +796,12 @@ upgrade_db(45, 'Increase card_name max length', function () {
         NOT NULL;');
 });
 upgrade_db(46, 'Increase standings.event size to match events.name', function () {
+    do_query('ALTER TABLE `season_points` DROP FOREIGN KEY `season_points_ibfk_2`;');
     do_query('ALTER TABLE `standings`
 	         CHANGE COLUMN `event` `event` VARCHAR(80) NULL DEFAULT NULL;');
     do_query('ALTER TABLE `season_points`
 	        CHANGE COLUMN `event` `event` VARCHAR(80) NULL DEFAULT NULL;');
+    do_query('ALTER TABLE `season_points` ADD CONSTRAINT `season_points_ibfk_2` FOREIGN KEY (`event`) REFERENCES `events` (`name`);');
 });
 upgrade_db(47, 'Increase length of some fields', function () {
     do_query("ALTER TABLE `decks`
