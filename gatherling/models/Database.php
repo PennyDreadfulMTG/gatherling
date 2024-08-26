@@ -73,7 +73,6 @@ class Database
         $stmt = $db->prepare($sql);
 
         if (!$stmt) {
-            // Handle error, e.g., log it or return a specific value
             return false;
         }
 
