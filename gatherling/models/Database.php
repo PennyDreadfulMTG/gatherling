@@ -6,6 +6,9 @@ use Exception;
 use mysqli;
 use PDO;
 
+// Use PHP7 default error reporting to avoid a complex refactor
+mysqli_report(MYSQLI_REPORT_OFF);
+
 class Database
 {
     public static function getConnection()
