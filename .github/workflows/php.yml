@@ -25,7 +25,8 @@ jobs:
     - name: Setup PHP with PECL extension
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.4'
+        php-version: '8.1'
+        extensions: curl, mysqli
 
     - name: Setup problem matchers for PHP
       run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
