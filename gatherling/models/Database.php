@@ -71,12 +71,23 @@ class Database
     {
         $db = self::getConnection();
         $stmt = $db->prepare($sql);
-        $stmt->execute();
-        $stmt->bind_result($result);
-        $stmt->fetch();
-        $stmt->close();
 
-        return $result;
+        if (!$stmt) {
+            // Handle error, e.g., log it or return a specific value
+            return false;
+        }
+
+        $stmt->execute();
+
+        if (stripos(trim($sql), 'SELECT') === 0) {
+            $stmt->bind_result($result);
+            $stmt->fetch();
+            $stmt->close();
+            return $result;
+        } else {
+            $stmt->close();
+            return true;
+        }
     }
 
     // Does PHP have an arguments[] property that would allow processing of any number of parameters?
