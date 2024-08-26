@@ -83,9 +83,11 @@ class Database
             $stmt->bind_result($result);
             $stmt->fetch();
             $stmt->close();
+
             return $result;
         } else {
             $stmt->close();
+
             return true;
         }
     }
