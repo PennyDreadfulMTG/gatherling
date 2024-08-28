@@ -198,7 +198,9 @@ function updatePennyDreadful($name, $url)
 function findSetForCard($card)
 {
     $card = urlencode($card);
-    $data = json_decode(file_get_contents("http://api.scryfall.com/cards/named?exact={$card}"));
+    $options = ['http' => ['header' => "User-Agent: gatherling.com/1.0\r\n"]];
+    $context = stream_context_create($options);
+    $data = json_decode(file_get_contents("http://api.scryfall.com/cards/named?exact={$card}", false, $context));
 
     return strtoupper($data->set);
 }

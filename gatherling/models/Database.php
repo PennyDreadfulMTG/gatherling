@@ -6,6 +6,9 @@ use Exception;
 use mysqli;
 use PDO;
 
+// Use PHP7 default error reporting to avoid a complex refactor
+mysqli_report(MYSQLI_REPORT_OFF);
+
 class Database
 {
     public static function getConnection()
@@ -68,12 +71,24 @@ class Database
     {
         $db = self::getConnection();
         $stmt = $db->prepare($sql);
-        $stmt->execute();
-        $stmt->bind_result($result);
-        $stmt->fetch();
-        $stmt->close();
 
-        return $result;
+        if (!$stmt) {
+            return false;
+        }
+
+        $stmt->execute();
+
+        if (stripos(trim($sql), 'SELECT') === 0) {
+            $stmt->bind_result($result);
+            $stmt->fetch();
+            $stmt->close();
+
+            return $result;
+        } else {
+            $stmt->close();
+
+            return true;
+        }
     }
 
     // Does PHP have an arguments[] property that would allow processing of any number of parameters?
