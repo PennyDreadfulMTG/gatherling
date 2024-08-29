@@ -178,14 +178,6 @@ del {
     height: 90px;
     border: 1px solid gray;
 }
-#sidecolumn {
-    margin-bottom: 10px;
-    text-align: center;
-}
-.cardsidecolumn {
-    margin-bottom: 10px;
-    float: right;
-}
 .box {
     border-radius: 5px;
    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
@@ -201,7 +193,9 @@ del {
     border: 1px solid black;
     padding-bottom: 10px;
 }
-.box p, .box ul, .box .uppertitle, .box table {
+.box p, .box ul, .box .uppertitle, .box table, .box form,
+.box h1, .box h2, .box h3, .box h4, .box h5, .box h6,
+.box img {
     padding: 5px 10px;
 }
 .uppertitle {

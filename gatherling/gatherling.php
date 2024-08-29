@@ -254,11 +254,11 @@ if ($gatherlingoutofservice != 1) {
 
     </div>
 
-    <div id="sidecolumn" class="grid_4">
+    <div class="grid_4">
         <div class="clear"></div>
         <?php include 'sidebar.php'; ?>
         <div class="clear"></div>
-    </div> <!-- sidecolumn -->
+    </div>
 
     <?php print_footer(); ?>
 

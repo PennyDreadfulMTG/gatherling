@@ -5,76 +5,64 @@ use Gatherling\Series;
 include 'lib.php';
 session_start();
 
-print_header('Event Information');
-?>
-
-<div class="grid_10 suffix_1 prefix_1">
-<div id="gatherling_main" class="box">
-<div class="uppertitle"> Series Events </div>
-
-<?php
 $active_series = Series::activeNames();
 
-foreach ($active_series as $series_name) {
-    $series = new Series($series_name);
-    if (strtotime($series->mostRecentEvent()->start) + (86400 * 7 * 4) < time() && !$series->nextEvent()) {
-        continue;
-    } ?>
-<div class="series">
-  <div class="series-name"><?php echo "$series->name"; ?></div>
-  <div class="series-logo"><?php echo Series::image_tag($series->name); ?></div>
-
-  <div class="series-info">
-    <table>
-    <?php
-    $season_format_name = str_replace(' ', '', $series->this_season_format);
-    $season_format_link = 'format.php?mode=desc&id='.$season_format_name; ?>
-    <tr> <th> Hosted by </th> <td>
-    <?php
-        $count = 0;
-    foreach ($series->organizers as $player) {
-        if ($count > 0) {
-            echo ', ';
-        }
-        echo $player;
-        $count += 1;
-        if ($count >= 3) {
-            break;
-        }
-    } ?>  </td></tr>
-    <tr> <th> Format </th> <td> <a href="<?php echo $season_format_link?>"> <?php echo $series->this_season_format ?></a> </td> </tr>
-    <?php
-    $start_format = '%I:%M %P';
-    if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
-        $start_format = str_replace('P', 'p', $start_format);
-    } ?>
-    <tr> <th> Regular Time </th> <td> <?php echo $series->start_day ?>, <?php echo strftime($start_format, strtotime($series->start_time)) ?> Eastern Time </td> </tr>
-    <tr> <th> Rules </th> <td> <a href="<?php echo (empty($series->this_season_master_link)) ? $series->mostRecentEvent()->threadurl : $series->this_season_master_link ?>">Season <?php echo $series->this_season_season ?> Master Document</a> </td> </tr>
-    <tr> <th> Most Recent Event </th> <td> <?php echo $series->mostRecentEvent()->linkReport() ?> </td> </tr>
-    <?php
-    $nextevent = $series->nextEvent();
-    if ($nextevent) {
-        $next_format = '%B %e %I:%M %P';
-        if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
-            $next_format = str_replace('P', 'p', $next_format);
-            $next_format = str_replace('e', '#d', $next_format);
-        } ?>
-      <tr> <th> Next Event </th> <td> <?php echo strftime($next_format.' registration', strtotime($nextevent->start) - minutes(30)) ?> </td> </tr>
-    <?php
-    } else {
+print_header('Event Information'); ?>
+    <div id="gatherling_main" class="box grid_12">
+        <div class="uppertitle">Series Events</div>
+        <?php
+            foreach ($active_series as $series_name) {
+                series($series_name);
+            }
         ?>
-      <tr> <th> Next Event </th> <td> Not scheduled yet </td> </tr>
+    </div>
+<?php print_footer();
+
+function series($series_name) {
+    $series = new Series($series_name);
+    $mostRecentEvent = $series->mostRecentEvent();
+    $nextEvent = $series->nextEvent();
+    if (strtotime($mostRecentEvent->start) + (86400 * 7 * 4) < time() && !$nextEvent) {
+        return;
+    }
+    $next_event_start = $nextEvent ? date('F j h:i a', strtotime($nextEvent->start) - minutes(30)) . " registration" : "Not scheduled yet";
+    $format_name = $nextEvent ? $nextEvent->format : $mostRecentEvent-> format;
+    ?>
+        <div class="series">
+            <h2 class="series-name"><?= $series->name ?></h2>
+            <div class="series-content">
+                <div class="series-logo"><?= Series::image_tag($series->name) ?></div>
+                <div class="series-info">
+                    <table>
+                        <tr>
+                            <th> Hosted by </th>
+                            <td><?= implode(", ", array_slice($series->organizers, 0, 3)) ?></td>
+                        </tr>
+                        <tr>
+                            <th>Format</th>
+                            <td><?php echo $format_name ?></td>
+                        </tr>
+                        <tr>
+                            <th>Regular Time</th>
+                            <td><?php echo $series->start_day ?>, <?php echo date('h:i a', strtotime($series->start_time)) ?> Eastern Time</td>
+                        </tr>
+                        <tr>
+                            <th>Rules </th>
+                            <td><a href="<?php echo (empty($series->this_season_master_link)) ? $mostRecentEvent->threadurl : $series->this_season_master_link ?>">Season <?php echo $series->this_season_season ?> Master Document</a></td>
+                        </tr>
+                        <tr>
+                            <th>Most Recent Event</th>
+                            <td><?php echo $mostRecentEvent->linkReport() ?></td>
+                        </tr>
+                        <tr>
+                            <th>Next Event</th>
+                            <td><?= $next_event_start ?></td>
+                        </tr>
+                    </table>
+                </div> <!-- .series-content -->
+          </div> <!-- .series-info -->
+
+        </div> <!-- .series -->
+
     <?php
-    } ?>
-    </table>
-  </div> <!-- Series-info -->
-</div> <!-- Series -->
-<?php
-} ?>
-
-<div class="clear"></div>
-</div> <!-- gatherling_main -->
-</div> <!-- grid_10 suffix_1 prefix_1 -->
-
-<?php print_footer(); ?>
-
+}
