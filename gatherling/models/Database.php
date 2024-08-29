@@ -9,13 +9,15 @@ use PDO;
 // Use PHP7 default error reporting to avoid a complex refactor
 mysqli_report(MYSQLI_REPORT_OFF);
 
+define('SLOW_QUERY_MS', 1000);
+
 class Database
 {
     public static function getConnection()
     {
         static $instance;
 
-        if (!isset($instance) || is_null($instance)) {
+        if (!isset($instance)) {
             global $CONFIG;
             $instance = new mysqli(
                 $CONFIG['db_hostname'],
@@ -279,8 +281,14 @@ class Database
             list($one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten) = $params;
             $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten);
         }
+        $start = microtime(true);
         if (!$stmt->execute()) {
             throw new Exception($stmt->error, 1);
+        }
+        $duration = microtime(true) - $start;
+        if ($duration * 1000 > SLOW_QUERY_MS) {
+            $display_duration = round($duration / 1000, 1);
+            error_log("Slow query ({$display_duration}s) – $query");
         }
         $stmt->bind_result($result);
         $stmt->fetch();
