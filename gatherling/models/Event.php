@@ -1164,7 +1164,7 @@ class Event
 
     public static function trophy_image_tag($eventname)
     {
-        return "<img style=\"border-width: 0px\" src=\"displayTrophy.php?event={$eventname}\" />";
+        return "<img style=\"border-width: 0px; max-width: 260px\" src=\"displayTrophy.php?event={$eventname}\" />";
     }
 
     public function isLeague()
