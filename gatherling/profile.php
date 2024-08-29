@@ -354,7 +354,7 @@ function editForm($timezone, $email, $public)
     }
     echo'>Only allow admininstrators and event hosts to view my email';
     echo '<br><input type="hidden" name="profile_edit" value="2">';
-    echo "<br><input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Sumbit Changes\" />\n";
+    echo "<br><input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Submit Changes\" />\n";
     echo "</form></center>\n";
     echo "<div class=\"clear\"></div>\n";
     echo "</div> </div>\n";
