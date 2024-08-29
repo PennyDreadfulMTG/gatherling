@@ -57,6 +57,8 @@ print_header('Home'); ?>
 
 </div>
 
+<div class="clear"></div>
+
 <?php
 print_footer();
 
