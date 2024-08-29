@@ -15,7 +15,7 @@ $stmt->close();
 
 // Send a transparent 1x1 png if there's no logo in the db rather than showing a broken image.
 if (!$content) {
-    $type = "image/png";
+    $type = 'image/png';
     $content = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=');
 }
 
