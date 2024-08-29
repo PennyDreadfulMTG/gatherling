@@ -7,7 +7,6 @@
 use Gatherling\Player;
 
 include 'lib.php';
-session_start();
 
 print_header('Message');
 

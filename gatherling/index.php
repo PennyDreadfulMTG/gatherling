@@ -13,7 +13,6 @@ if ($version < 51) {
     return;
 }
 
-session_start();
 print_header('Home'); ?>
 
 <div id="gatherling_main" class="box grid_12">

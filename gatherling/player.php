@@ -10,7 +10,6 @@ use Gatherling\Standings;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
-session_start();
 $player = Player::getSessionPlayer();
 if ($player == null) {
     linkToLogin('your Player Control Panel');

@@ -5,7 +5,6 @@ namespace Gatherling;
 require_once __DIR__ . '/../lib.php';
 
 if (PHP_SAPI != 'cli' && $_SERVER['REQUEST_METHOD'] == 'GET') { // unauthorized POST is okay
-    session_start();
     ini_set('max_execution_time', 300);
     if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
         redirect('index.php');

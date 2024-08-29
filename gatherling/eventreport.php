@@ -10,7 +10,6 @@ use Gatherling\Series;
 use Gatherling\Standings;
 
 include 'lib.php';
-session_start();
 
 print_header('Event Report');
 

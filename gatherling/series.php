@@ -3,7 +3,6 @@
 use Gatherling\Series;
 
 include 'lib.php';
-session_start();
 
 $active_series = Series::activeNames();
 

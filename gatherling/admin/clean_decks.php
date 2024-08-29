@@ -6,8 +6,6 @@ use Gatherling\Player;
 
 require '../lib.php';
 
-session_start();
-
 $some_admin = Player::getSessionPlayer();
 if (!is_null($some_admin)) {
     if (!$some_admin->isSuper()) {

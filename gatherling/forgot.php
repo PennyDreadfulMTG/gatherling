@@ -8,7 +8,6 @@ include 'email.php';
 include 'lib.php';
 require_once 'lib_form_helper.php';
 
-session_start();
 print_header('Login');
 printPageHeader();
 

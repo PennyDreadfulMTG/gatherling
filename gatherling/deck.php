@@ -8,7 +8,6 @@ use Gatherling\Player;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
-session_start();
 
 print_header('Deck Database');
 

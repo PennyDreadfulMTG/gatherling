@@ -5,7 +5,6 @@ use Gatherling\Decksearch;
 use Gatherling\Pagination;
 
 require_once 'lib.php';
-session_start();
 
 print_header('Deck Search');
 ?>
@@ -18,7 +17,7 @@ print_header('Deck Search');
         <?php
         handleRequest();
 
-        ?>
+?>
 
     </div>
 </div>

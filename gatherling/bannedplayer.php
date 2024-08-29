@@ -3,7 +3,6 @@
 use Gatherling\Player;
 
 require_once 'lib.php';
-session_start();
 $player = Player::getSessionPlayer();
 
 print_header('You have been banned');

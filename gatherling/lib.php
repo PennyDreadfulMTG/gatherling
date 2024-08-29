@@ -14,6 +14,10 @@ if (isset($CONFIG['cookie_lifetime'])) {
 header('Strict-Transport-Security: max-age=63072000; includeSubDomains; preload');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 
+if (php_sapi_name() !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 $HC = '#DDDDDD';
 $R1 = '#EEEEEE';
 $R2 = '#FFFFFF';

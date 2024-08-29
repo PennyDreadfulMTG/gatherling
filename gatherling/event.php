@@ -12,7 +12,6 @@ use Gatherling\Standings;
 
 include 'lib.php';
 include 'lib_form_helper.php';
-session_start();
 
 $verified_url = theme_file('images/verified.png');
 $dot_url = theme_file('images/dot.png');
@@ -98,7 +97,7 @@ print_header('Event Host Control Panel', true);
 
         <?php
         content();
-        ?>
+?>
 
         <div class="clear"></div>
     </div>

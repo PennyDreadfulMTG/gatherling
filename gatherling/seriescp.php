@@ -6,7 +6,6 @@ use Gatherling\Series;
 
 include 'lib.php';
 include 'lib_form_helper.php';
-session_start();
 
 if (!Player::isLoggedIn()) {
     linkToLogin('Series Control Panel');

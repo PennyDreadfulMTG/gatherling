@@ -6,7 +6,6 @@ use Gatherling\Player;
 use Gatherling\Ratings;
 
 include 'lib.php';
-session_start();
 
 print_header('Ratings');
 ?>
