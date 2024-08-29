@@ -50,16 +50,7 @@ function print_header($title, $enable_vue = false, $js = null, $extra_head_conte
 {
     global $CONFIG;
 
-    // if player ip address changes could be a hacker breaking in.
-    // Once you implement a remember me cookie, this will also
-    // destroy the remember me cookie if the IP's don't match
-    // if (Player::isLoggedIn()) {
-    //     $player = new Player(Player::loginName());
-    //     if ($player->getIPAddresss() != Player::getClientIPAddress()) {
-    //         Player::logOut();
-    //         redirect("login.php?ipaddresschanged=true");
-    //     }
-    // }
+    $git_hash = git_hash();
 
     echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
     echo "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">\n";
@@ -69,7 +60,7 @@ function print_header($title, $enable_vue = false, $js = null, $extra_head_conte
     echo "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n";
     echo "    <meta name=\"google-site-verification\" content=\"VWE-XX0CgPTHYgUqJ6t13N75y-p_Q9dgtqXikM3EsBo\" />\n";
     echo "    <title>{$CONFIG['site_name']} | {$title}</title>\n";
-    echo '    <link rel="stylesheet" type="text/css" media="all" href="'.theme_file('css/stylesheet.css')."\" />\n";
+    echo '    <link rel="stylesheet" type="text/css" media="all" href="'.theme_file('css/stylesheet.css')."?v=$git_hash\" />\n";
     echo "     <link href=\"//cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css\" rel=\"stylesheet\" type=\"text/css\" />\n";
     echo "     <script src=\"//code.jquery.com/jquery-latest.min.js\"></script>\n";
     echo "     <script src=\"//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js\"></script>\n";
@@ -172,7 +163,8 @@ function print_footer()
     echo "<div class=\"prefix_1 suffix_1\">\n";
     echo "<div id=\"gatherling_footer\" class=\"box\">\n";
     version_tagline();
-    print_git_hash();
+    echo ' ';
+    echo git_hash();
     echo "</div><!-- prefix_1 suffix_1 -->\n";
     echo "</div><!-- gatherling_footer -->\n";
     echo "<div class=\"clear\"></div>\n";
@@ -523,21 +515,20 @@ function print_warning_if($conditional)
     }
 }
 
-function print_git_hash()
+function git_hash()
 {
     global $CONFIG;
     if (!is_null($hash = $CONFIG['GIT_HASH'])) {
-        echo '<br/>'.$hash;
-
-        return true;
+        return substr($hash, 0, 7);
     }
 
-    return false;
+    return '';
 }
 
 function version_tagline()
 {
-    echo 'Gatherling version 5.0.1 ("No rest. No mercy. No matter what.")';
+    echo 'Gatherling version 5.1.0 ("Have no fear of perfection – you’ll never reach it.")';
+    // echo 'Gatherling version 5.0.1 ("No rest. No mercy. No matter what.")';
     // echo 'Gatherling version 5.0.0 ("Hulk, no! Just for once in your life, don\'t smash!")';
     // echo 'Gatherling version 4.9.0 ("Where we’re going, we don’t need roads")';
     // echo 'Gatherling version 4.8.8 ("Fish fingers and custard")';
