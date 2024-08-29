@@ -78,8 +78,6 @@ function print_header($title, $enable_vue = false, $js = null, $extra_head_conte
     echo '    <link rel="stylesheet" type="text/css" media="all" href="' . theme_file('css/stylesheet.css') . "?v=$git_hash\" />\n";
     echo "     <link href=\"//cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css\" rel=\"stylesheet\" type=\"text/css\" />\n";
     echo "     <script src=\"//code.jquery.com/jquery-latest.min.js\"></script>\n";
-    echo "     <script src=\"//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js\"></script>\n";
-    echo "     <script src=\"//cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.21/moment-timezone-with-data.min.js\"></script>\n";
     if ($enable_vue) {
         echo "     <script src=\"//cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js\"></script>\n";
         echo "     <script src=\"//cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.min.js\"></script>\n";
