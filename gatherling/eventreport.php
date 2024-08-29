@@ -14,7 +14,6 @@ include 'lib.php';
 function main() {
     $eventName = $_GET['event'] ?? $_GET['name'] ?? null;
     ob_start();
-    print_header('Event Report');
     ?>
     <div class="grid_10 prefix_1 suffix_1">
         <div id="gatherling_main" class="box">
