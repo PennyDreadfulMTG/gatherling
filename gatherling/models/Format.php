@@ -953,7 +953,7 @@ class Format
             }
         }
 
-        foreach ($subTypeCount as $type=>$amt) {
+        foreach ($subTypeCount as $type => $amt) {
             echo "$type: $amt<br />";
         }
 

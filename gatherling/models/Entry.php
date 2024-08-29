@@ -155,10 +155,12 @@ class Entry
     {
         $player = new Player($username);
 
-        if ($player->isSuper() ||
-        $this->event->isHost($username) ||
-        $this->event->isOrganizer($username) ||
-        strcasecmp($username, $this->player->name) == 0) {
+        if (
+            $player->isSuper() ||
+            $this->event->isHost($username) ||
+            $this->event->isOrganizer($username) ||
+            strcasecmp($username, $this->player->name) == 0
+        ) {
             return true;
         }
 
@@ -200,7 +202,8 @@ class Entry
     }
 
     public function createDeckLink()
-    { // creates a link to enter a deck list once a player is registered for the event
+    {
+        // creates a link to enter a deck list once a player is registered for the event
         if ($this->canCreateDeck(Player::loginName())) {
             return '<a class="create_deck_link" style="color: red;" href="deck.php?player='.urlencode($this->player->name).'&event='.urlencode($this->event->id).'&mode=create">[Create Deck]</a>';
         } else {

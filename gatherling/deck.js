@@ -1,4 +1,5 @@
-function deckAjaxResult(data) {
+function deckAjaxResult(data)
+{
     if (data.id != 0) {
         $("#deck-name").val(data.name);
         $("#deck-archetype").val(data.archetype);
@@ -15,8 +16,8 @@ function deckAjaxResult(data) {
     }
 }
 
-$(document).ready(function() {
-    $("#autoenter-deck").change(function() {
+$(document).ready(function () {
+    $("#autoenter-deck").change(function () {
         var selid = $("#autoenter-deck").val();
         $.ajax({
             url: 'ajax.php?deck=' + selid,
@@ -31,33 +32,32 @@ String.prototype.beforeLastIndex = function (delimiter) {
 };
 
 String.prototype.afterLastIndex = function (delimiter) {
-    return this.substr(this.lastIndexOf(delimiter)+1) || this + "";
+    return this.substr(this.lastIndexOf(delimiter) + 1) || this + "";
 };
 
-$('input[type=file]').on("change", function(e) {
+$('input[type=file]').on("change", function (e) {
     var file = e.target.files[0];
     var fileExt = file.name.afterLastIndex('.');
     reader = new FileReader();
     reader.onload = function (e) {
         $("#deck-name").val(file.name.beforeLastIndex('.'));
-        if (fileExt ==='txt') {
+        if (fileExt === 'txt') {
             txt = e.target.result.replace(/\n\r/g, '\n');
             split = txt.split('\n\n');
             $("#deck-contents").val(split[0]);
             if (split.length > 1) {
                 $("#deck-sideboard").val(split[1]);
             }
-        } else if (fileExt ==='dek') {
+        } else if (fileExt === 'dek') {
             $.ajax({
                 url: 'deckXmlParser.php',
                 type:'POST',
-                async: false,  
+                async: false,
                 data:
                 {
                     data:e.target.result
                 },
-                success: function(result)
-                {
+                success: function (result) {
                     deckData = JSON.parse(result);
                     $("#deck-contents").val(deckData.main.join("\n"));
                     $("#deck-sideboard").val(deckData.side.join("\n"));

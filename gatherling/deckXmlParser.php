@@ -40,4 +40,4 @@ for ($x = 0; $x < $noOfRows; $x++) {
         $sideboard[] = "$quantityToAdd $nameToAdd";
     }
 }
-echo json_encode(['main'=>$maindeck, 'side'=>$sideboard]);
+echo json_encode(['main' => $maindeck, 'side' => $sideboard]);

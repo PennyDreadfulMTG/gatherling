@@ -8,7 +8,6 @@ use Gatherling\Series;
 
 require_once 'lib.php';
 require_once 'api_lib.php';
-session_start();
 
 $action = '';
 if (isset($_REQUEST['action'])) {

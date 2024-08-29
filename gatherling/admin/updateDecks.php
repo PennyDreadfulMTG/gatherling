@@ -1,6 +1,5 @@
 <?php
 
-session_start();
 require_once '../lib.php';
 
 $some_admin = Player::getSessionPlayer();

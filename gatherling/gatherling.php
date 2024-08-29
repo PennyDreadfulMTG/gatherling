@@ -1,6 +1,5 @@
 <?php
 include 'lib.php';
-session_start();
 print_header('Home'); ?>
 
 <div id="maincolumn" class="grid_8">

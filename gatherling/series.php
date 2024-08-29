@@ -3,7 +3,6 @@
 use Gatherling\Series;
 
 include 'lib.php';
-session_start();
 
 $active_series = Series::activeNames();
 
@@ -11,14 +10,15 @@ print_header('Event Information'); ?>
     <div id="gatherling_main" class="box grid_12">
         <div class="uppertitle">Series Events</div>
         <?php
-            foreach ($active_series as $series_name) {
-                series($series_name);
-            }
+        foreach ($active_series as $series_name) {
+            series($series_name);
+        }
         ?>
     </div>
 <?php print_footer();
 
-function series($series_name) {
+function series($series_name)
+{
     $series = new Series($series_name);
     $mostRecentEvent = $series->mostRecentEvent();
     $nextEvent = $series->nextEvent();

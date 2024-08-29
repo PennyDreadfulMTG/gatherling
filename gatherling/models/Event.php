@@ -548,9 +548,11 @@ class Event
     {
         $player = new Player($playername);
 
-        if ($player->isSuper() ||
-        $this->isHost($playername) ||
-        $this->isOrganizer($playername)) {
+        if (
+            $player->isSuper() ||
+            $this->isHost($playername) ||
+            $this->isOrganizer($playername)
+        ) {
             return true;
         }
 
@@ -585,8 +587,10 @@ class Event
             if ($checkActive) {
                 $standings = new Standings($this->name, $player);
             }
-            if ($entry->deck->isValid()
-                && (!$checkActive || $standings->active)) {
+            if (
+                $entry->deck->isValid()
+                && (!$checkActive || $standings->active)
+            ) {
                 $registeredPlayers[] = $player;
             }
         }
@@ -1273,7 +1277,7 @@ class Event
         if (count($active_players) > 0) {
             $bye_data = [];
             if (count($active_players) % 2 != 0) {
-                $bye_data = ['player'=> $this->getByeProxyName(), 'score'=>  0, 'opponents'=> [], 'paired'=>false];
+                $bye_data = ['player' => $this->getByeProxyName(), 'score' =>  0, 'opponents' => [], 'paired' => false];
             }
 
             for ($i = 0; $i < count($active_players); $i++) {

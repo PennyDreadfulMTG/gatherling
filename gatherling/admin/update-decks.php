@@ -10,7 +10,6 @@ require '../lib.php';
 
 // Need to be logged in as admin before you can even try this.
 
-session_start();
 $some_admin = Player::getSessionPlayer();
 
 if (!$some_admin->isSuper()) {

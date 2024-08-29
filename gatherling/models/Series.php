@@ -216,8 +216,10 @@ class Series
     {
         $player = new Player($playername);
 
-        if ($player->isSuper() ||
-        $this->isOrganizer($player->name)) {
+        if (
+            $player->isSuper() ||
+            $this->isOrganizer($player->name)
+        ) {
             return true;
         }
 

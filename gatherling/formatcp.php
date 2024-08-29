@@ -6,7 +6,6 @@ use Gatherling\Player;
 
 include 'lib.php';
 include 'lib_form_helper.php';
-session_start();
 $hasError = false;
 $errormsg = '';
 
@@ -94,21 +93,21 @@ function do_page()
     } else {
         switch ($view) {
             case 'settings':
-            printFormatSettings($active_format, $seriesName);
-            break;
+                printFormatSettings($active_format, $seriesName);
+                break;
             case 'bandr':
-            printBandR($active_format, $seriesName);
-            break;
+                printBandR($active_format, $seriesName);
+                break;
             case 'tribal':
-            printTribalBandR($active_format, $seriesName);
-            break;
+                printTribalBandR($active_format, $seriesName);
+                break;
             case 'cardsets':
-            printCardSets($active_format, $seriesName);
-            break;
+                printCardSets($active_format, $seriesName);
+                break;
             case 'no_view':
-            break;
+                break;
             default:
-            echo 'Unknown View!';
+                echo 'Unknown View!';
         }
     }
     echo '</center><div class="clear"></div></div>';
@@ -644,7 +643,7 @@ function printNewFormat($seriesName = '')
     echo "<h4>New Format</h4>\n";
     echo '<form action="formatcp.php" method="post">';
     echo '<input type="hidden" name="view" value="no_view" />';
-    echo '<input type="hidden" name="series" value="'.$seriesName.'" />';
+    echo '<input type="hidden" name="series" value="' . $seriesName . '" />';
     echo '<table class="form" style="border-width: 0px;" align="center">';
     echo '<tr><td colspan="2">New Format Name: <input type="text" name="newformatname" STYLE="width: 175px"/></td></tr>';
     echo '<td colspan="2" class="buttons">';

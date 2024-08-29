@@ -453,11 +453,13 @@ class Deck
         $event = $this->getEvent();
         $player = new Player($username);
 
-        if ($player->isSuper() ||
-        $event->isHost($username) ||
-        $event->isOrganizer($username) ||
-        (!$event->finalized && !$this->isValid() && strcasecmp($username, $this->playername) == 0) ||
-        (!$event->finalized && !$event->active && strcasecmp($username, $this->playername) == 0)) {
+        if (
+            $player->isSuper() ||
+            $event->isHost($username) ||
+            $event->isOrganizer($username) ||
+            (!$event->finalized && !$this->isValid() && strcasecmp($username, $this->playername) == 0) ||
+            (!$event->finalized && !$event->active && strcasecmp($username, $this->playername) == 0)
+        ) {
             return true;
         }
 
@@ -474,10 +476,12 @@ class Deck
         } elseif ($event->current_round > $event->mainrounds && !$event->private_finals) {
             return true;
         } else {
-            if ($player->isSuper() ||
-           $event->isHost($username) ||
-           $event->isOrganizer($username) ||
-           strcasecmp($username, $this->playername) == 0) {
+            if (
+                $player->isSuper() ||
+                $event->isHost($username) ||
+                $event->isOrganizer($username) ||
+                strcasecmp($username, $this->playername) == 0
+            ) {
                 return true;
             }
         }
@@ -892,8 +896,10 @@ class Deck
             $this->errors[] = "This format allows a maximum of {$format->max_main_cards_allowed} Maindeck Cards";
         }
 
-        if ($this->sideboard_cardcount < $format->min_side_cards_allowed ||
-        $this->sideboard_cardcount > $format->max_side_cards_allowed) {
+        if (
+            $this->sideboard_cardcount < $format->min_side_cards_allowed ||
+            $this->sideboard_cardcount > $format->max_side_cards_allowed
+        ) {
             $this->errors[] = "A legal sideboard for this format has between $format->min_side_cards_allowed cards, and
                               $format->max_side_cards_allowed cards.";
         }

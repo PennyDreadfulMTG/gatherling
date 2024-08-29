@@ -3,12 +3,12 @@
   var _gaq = _gaq || [];
 <?php
   include_once 'lib.php';
-  global $CONFIG;
-  $account = '';
-  if (array_key_exists('analytics_account', $CONFIG)) {
-      $account = $CONFIG['analytics_account'];
-  }
-  echo "_gaq.push(['_setAccount', '$account']);";
+global $CONFIG;
+$account = '';
+if (array_key_exists('analytics_account', $CONFIG)) {
+    $account = $CONFIG['analytics_account'];
+}
+echo "_gaq.push(['_setAccount', '$account']);";
 ?>
 
   _gaq.push(['_trackPageview']);

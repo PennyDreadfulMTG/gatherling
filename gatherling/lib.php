@@ -14,11 +14,27 @@ if (isset($CONFIG['cookie_lifetime'])) {
 header('Strict-Transport-Security: max-age=63072000; includeSubDomains; preload');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 
+if (php_sapi_name() !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 $HC = '#DDDDDD';
 $R1 = '#EEEEEE';
 $R2 = '#FFFFFF';
 $CC = $R1;
 date_default_timezone_set('US/Eastern'); // force time functions to use US/Eastern time
+
+require_once 'util/time.php';
+
+function page($title, $contents): string
+{
+    ob_start();
+    print_header($title);
+    echo $contents;
+    print_footer();
+
+    return ob_get_clean();
+}
 
 function is_assoc($array)
 {
@@ -63,8 +79,6 @@ function print_header($title, $enable_vue = false, $js = null, $extra_head_conte
     echo '    <link rel="stylesheet" type="text/css" media="all" href="'.theme_file('css/stylesheet.css')."?v=$git_hash\" />\n";
     echo "     <link href=\"//cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css\" rel=\"stylesheet\" type=\"text/css\" />\n";
     echo "     <script src=\"//code.jquery.com/jquery-latest.min.js\"></script>\n";
-    echo "     <script src=\"//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js\"></script>\n";
-    echo "     <script src=\"//cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.21/moment-timezone-with-data.min.js\"></script>\n";
     if ($enable_vue) {
         echo "     <script src=\"//cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js\"></script>\n";
         echo "     <script src=\"//cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.min.js\"></script>\n";
@@ -374,51 +388,6 @@ function json_headers()
     header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
     header('Access-Control-Allow-Origin: *');
     header('HTTP_X_USERNAME: '.Player::loginName());
-}
-
-function distance_of_time_in_words($from_time, $to_time = 0, $truncate = false)
-{
-    $inputSeconds = abs($from_time - $to_time);
-
-    $secondsInAMinute = 60;
-    $secondsInAnHour = 60 * $secondsInAMinute;
-    $secondsInADay = 24 * $secondsInAnHour;
-
-    // extract days
-    $days = floor($inputSeconds / $secondsInADay);
-
-    // extract hours
-    $hourSeconds = $inputSeconds % $secondsInADay;
-    $hours = floor($hourSeconds / $secondsInAnHour);
-
-    // extract minutes
-    $minuteSeconds = $hourSeconds % $secondsInAnHour;
-    $minutes = floor($minuteSeconds / $secondsInAMinute);
-
-    // extract the remaining seconds
-    $remainingSeconds = $minuteSeconds % $secondsInAMinute;
-    $seconds = ceil($remainingSeconds);
-
-    $parts = [];
-    if ($days > 7) {
-        $weeks = floor($days / 7);
-        $days = $days % 7;
-        $parts[] = "$weeks Week".(($weeks > 1) ? 's' : '');
-    }
-    if ($days > 0) {
-        $parts[] = "$days Day".(($days > 1) ? 's' : '');
-    }
-    if ($hours > 0) {
-        $parts[] = "$hours Hour".(($hours > 1) ? 's' : '');
-    }
-    if ($minutes > 0) {
-        $parts[] = "$minutes Minute".(($minutes > 1) ? 's' : '');
-    }
-    if ($truncate) {
-        $parts = array_slice($parts, 0, 2);
-    }
-
-    return implode(', ', $parts);
 }
 
 function not_allowed($reason)

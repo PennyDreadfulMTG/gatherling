@@ -9,7 +9,6 @@ use Gatherling\Player;
 use Gatherling\Series;
 
 require_once 'lib.php';
-session_start();
 $player = Player::getSessionPlayer();
 if (!is_null($player)) {
     $message = null;

@@ -35,7 +35,6 @@ if (PHP_SAPI == 'cli') {
         exit('No set provided.');
     }
 } else { // CGI
-    session_start();
     ini_set('max_execution_time', 300);
     if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
         redirect('index.php');

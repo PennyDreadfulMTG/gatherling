@@ -10,36 +10,29 @@ use Gatherling\Series;
 use Gatherling\Standings;
 
 include 'lib.php';
-session_start();
 
-print_header('Event Report');
-
-?>
-<div class="grid_10 prefix_1 suffix_1">
-<div id="gatherling_main" class="box">
-<div class="uppertitle"> Event Report </div>
-
-<?php
-if (!isset($_GET['event']) && isset($_GET['name'])) {
-    $_GET['event'] = $_GET['name'];
+function main() {
+    $eventName = $_GET['event'] ?? $_GET['name'] ?? null;
+    ob_start();
+    ?>
+    <div class="grid_10 prefix_1 suffix_1">
+        <div id="gatherling_main" class="box">
+            <div class="uppertitle">Event Report</div>
+            <?php
+                if ($eventName && Event::exists($eventName)) {
+                    $event = new Event($eventName);
+                    showReport($event);
+                } else {
+                    eventList();
+                }
+            ?>
+        </div>
+    </div>
+    <?php
+    echo page('Event Report', ob_get_clean());
 }
-if (isset($_GET['event']) && Event::exists($_GET['event'])) {
-    $event = new Event($_GET['event']);
-    showReport($event);
-} else {
-    eventList();
-}
 
-?>
-
-</div>
-</div>
-
-<?php print_footer(); ?>
-
-<?php
-
-function eventList($series = '', $season = '')
+function eventList()
 {
     $db = Database::getConnection();
     $result = $db->query('SELECT e.name AS name, e.format AS format,
@@ -96,9 +89,11 @@ function eventList($series = '', $season = '')
     echo '<td><b>Host(s)</td></tr>';
     $count = 0;
     while ($count < 100 && $thisEvent = $result->fetch_assoc()) {
-        if (($onlyformat && strcmp($thisEvent['format'], $onlyformat) != 0)
-     || ($onlyseries && strcmp($thisEvent['series'], $onlyseries) != 0)
-     || ($onlyseason && strcmp($thisEvent['season'], $onlyseason) != 0)) {
+        if (
+            ($onlyformat && strcmp($thisEvent['format'], $onlyformat) != 0)
+            || ($onlyseries && strcmp($thisEvent['series'], $onlyseries) != 0)
+            || ($onlyseason && strcmp($thisEvent['season'], $onlyseason) != 0)
+        ) {
             continue;
         }
         $dateStr = $thisEvent['start'];
@@ -177,9 +172,9 @@ function finalists($event)
             $deckinfoarr = deckInfo($finaldeck);
         }
         $redstar = '<font color="#FF0000">*</font>';
-        $append = ' '.$finalist['medal'];
+        $append = ' ' . $finalist['medal'];
         if ($finalist['medal'] == 't8' || $finalist['medal'] == 't4') {
-            $append = ' '.strtoupper($finalist['medal']);
+            $append = ' ' . strtoupper($finalist['medal']);
         }
         $medalSTR = medalImgStr($finalist['medal']);
         $medalSTR .= $append;
@@ -206,14 +201,14 @@ function prereg($event)
     if (is_null($player)) {
         echo "<a href='login.php'>Sign in</a> or <a href='register.php'>make an account</a> to Register";
     } elseif ($event->hasRegistrant($player->name)) {
-        echo 'You are registered for this event! <a href="prereg.php?action=unreg&event='.rawurlencode($event->name).'">(Unreg)</a>';
+        echo 'You are registered for this event! <a href="prereg.php?action=unreg&event=' . rawurlencode($event->name) . '">(Unreg)</a>';
     } elseif ($event->is_full()) {
         echo 'This event is currently at capacity.';
     } else {
-        echo '<a href="prereg.php?action=reg&event='.rawurlencode($event->name).'">Register for '.$event->name.'</a>';
+        echo '<a href="prereg.php?action=reg&event=' . rawurlencode($event->name) . '">Register for ' . $event->name . '</a>';
     }
     echo '</td></tr>';
-    echo '<tr><td class="eventtime" start="'.$event->start.'"> Starts in '.distance_of_time_in_words(time(), strtotime($event->start), true).'</td></tr>';
+    echo '<tr><td>' . time_element(strtotime($event->start), time()) . '</td></tr>';
 
     echo '</table>';
 }
@@ -247,11 +242,11 @@ function metastats($event)
         }
     }
     echo '<tr><td>&nbsp;</td></tr><tr>';
-    echo '<td align="center">'.image_tag('manaw.png')."</td>\n";
-    echo '<td align="center">'.image_tag('manag.png')."</td>\n";
-    echo '<td align="center">'.image_tag('manau.png')."</td>\n";
-    echo '<td align="center">'.image_tag('manar.png')."</td>\n";
-    echo '<td align="center">'.image_tag('manab.png')."</td>\n";
+    echo '<td align="center">' . image_tag('manaw.png') . "</td>\n";
+    echo '<td align="center">' . image_tag('manag.png') . "</td>\n";
+    echo '<td align="center">' . image_tag('manau.png') . "</td>\n";
+    echo '<td align="center">' . image_tag('manar.png') . "</td>\n";
+    echo '<td align="center">' . image_tag('manab.png') . "</td>\n";
     echo '</tr>';
     echo '<tr>';
     foreach ($colorcnt as $col => $cnt) {
@@ -331,7 +326,7 @@ function fullmetagame($event)
                 $bg = rowColor();
                 $color = $row['colors'];
                 echo '<tr><td colspan=1></td><td>';
-                echo image_tag("mana{$color}.png")."&nbsp;</td>\n";
+                echo image_tag("mana{$color}.png") . "&nbsp;</td>\n";
                 echo "<td colspan=\"4\" align=\"left\"><span>{$row['srtordr']} Players</span>";
                 echo "</td></tr>\n";
             }
@@ -341,11 +336,11 @@ function fullmetagame($event)
             echo "</td>\n<td align=\"left\">";
 
             if ($row['medal'] != 'z') {  // puts medal next to name of person who won it
-                echo medalImgStr($row['medal']).'&nbsp;';
+                echo medalImgStr($row['medal']) . '&nbsp;';
             }
             $play = new Player($row['player']);
             $entry = new Entry($event->id, $play->name);
-            echo $play->linkTo()."</td>\n";
+            echo $play->linkTo() . "</td>\n";
             echo "<td align=\left\">{$entry->recordString()}</td>";
             echo '<td align="left">';
             echo "<a href=\"deck.php?mode=view&id={$row['id']}\">";
@@ -363,9 +358,9 @@ function fullmetagame($event)
 
             echo '<tr><td>';
             if ($format->tribal && ($event->current_round > 1)) {
-                echo '<td>'.$entry->deck->tribe.'</td>';
+                echo '<td>' . $entry->deck->tribe . '</td>';
             }
-            echo '<td>'.$play->linkTo($event->client)."</td><td align=\left\">{$entry->recordString()}</td></tr>";
+            echo '<td>' . $play->linkTo($event->client) . "</td><td align=\left\">{$entry->recordString()}</td></tr>";
         }
     }
     if ($event->active || $event->finalized) {
@@ -478,7 +473,7 @@ function infoCell($event)
 function trophyCell($event)
 {
     if ($event->hastrophy) {
-        echo Event::trophy_image_tag($event->name)."<br />\n";
+        echo Event::trophy_image_tag($event->name) . "<br />\n";
     } else {
         echo image_tag('notrophy.png');
     }
@@ -495,4 +490,7 @@ function trophyCell($event)
         echo "<br />\n";
     }
 }
-?>
+
+if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+    main();
+}

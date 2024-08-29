@@ -5,13 +5,14 @@ namespace Gatherling;
 class SetScraper
 {
     public static function getSetList()
-    { // gets a list of sets from magicthegathering.io
+    {
+        // gets a list of sets from magicthegathering.io
         $url = 'https://mtgjson.com/api/v5/SetList.json';
 
         $options = [
-            'http'=> [
-                'method'=> 'GET',
-                'header'=> "Accept-language: en\r\n".
+            'http' => [
+                'method' => 'GET',
+                'header' => "Accept-language: en\r\n".
                     "User-Agent: Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b Safari/531.21.102011-10-16 20:23:10\r\n", // i.e. An iPad
             ],
         ];

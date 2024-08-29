@@ -1,6 +1,5 @@
 <?php
 
-session_start();
 require_once '../lib.php';
 
 $cardsets = Database::list_result('SELECT name FROM cardsets');

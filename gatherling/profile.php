@@ -5,7 +5,6 @@ use Gatherling\Player;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
-session_start();
 
 print_header('Player Profile');
 
@@ -171,8 +170,7 @@ function infoTable($player)
     echo "<td align=\"right\">$favS ($pcgS%)</td></tr>\n";
     echo "<tr><td>Last Active:</td>\n";
     if (!is_null($lastevent)) {
-        $lastActive = date('F j, Y', strtotime($lastevent->start));
-        echo "<td align=\"right\">$lastActive<br>({$lastevent->name})</td></tr>\n";
+        echo "<td align=\"right\">" . time_element(strtotime($lastevent->start), time()) . "<br>({$lastevent->name})</td></tr>\n";
     } else {
         echo "<td align=\"right\">Never</td></tr>\n";
     }
@@ -277,7 +275,7 @@ function medalCell($medal, $count)
 
 function inlineMedal($medal)
 {
-    echo medalImgStr($medal).'&nbsp;';
+    echo medalImgStr($medal) . '&nbsp;';
 }
 
 function deckRecordString($deckname, $player)
@@ -300,9 +298,9 @@ function deckRecordString($deckname, $player)
             $draws++;
         }
     }
-    $recordString = $wins.'-'.$losses;
+    $recordString = $wins . '-' . $losses;
     if ($draws > 0) {
-        $recordString .= '-'.$draws;
+        $recordString .= '-' . $draws;
     }
 
     return $recordString;

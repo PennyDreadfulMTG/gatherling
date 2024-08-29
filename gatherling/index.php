@@ -13,7 +13,6 @@ if ($version < 51) {
     return;
 }
 
-session_start();
 print_header('Home'); ?>
 
 <div id="gatherling_main" class="box grid_12">
@@ -71,7 +70,7 @@ function activeEvents()
             $name = $event->name;
             $format = $event->format;
             $round = $event->current_round;
-            $col2 = '<a href="eventreport.php?event='.rawurlencode($name)."\">{$name}</a>";
+            $col2 = '<a href="eventreport.php?event=' . rawurlencode($name) . "\">{$name}</a>";
             ?>
                 <tr>
                     <td><?= $format ?></td>
@@ -87,30 +86,24 @@ function activeEvents()
 function upcomingEvents()
 {
     $db = Database::getConnection();
-    $result = $db->query('SELECT UNIX_TIMESTAMP(DATE_SUB(start, INTERVAL 0 MINUTE)) AS d,
-    format, series, name, threadurl, start FROM events
+    $result = $db->query('SELECT UNIX_TIMESTAMP(start) AS d,
+    format, series, name, threadurl FROM events
     WHERE DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() AND private = 0 ORDER BY start ASC LIMIT 20');
     // interval in DATE_SUB was used to select eastern standard time, but since the server is now in Washington DC it is not needed
     $result or exit($db->error);
     echo "<table class=\"events\">\n";
     while ($row = $result->fetch_assoc()) {
-        $dateStr = date('D j M', $row['d']);
-        $timeStr = date('g:i A', $row['d']);
         $name = $row['name'];
         $format = $row['format'];
-        $start = $row['start'];
-        $col2 = '<a href="eventreport.php?event='.rawurlencode($name)."\">$name</a>";
+        $col2 = '<a href="eventreport.php?event=' . rawurlencode($name) . "\">$name</a>";
         ?>
             <tr>
                 <td><?= $col2 ?><br><?= $format ?></td>
-                <td class="eventtime timeclear" start="<?= $start ?>"><?= $dateStr ?></td>
-                <td class="timeclear"><?= $timeStr ?></td>
+                <td><?= time_element($row['d'], time()) ?></td>
             </tr>
         <?php
     }
     echo "</table>\n";
-    echo "<p class=\"timeclear\"><i>All times are EST.</i></p>\n";
-    echo '<script src="time.js"></script>';
 
     $result->close();
 }

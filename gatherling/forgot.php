@@ -2,14 +2,12 @@
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-
 use Gatherling\Player;
 
 include 'email.php';
 include 'lib.php';
 require_once 'lib_form_helper.php';
 
-session_start();
 print_header('Login');
 printPageHeader();
 
@@ -47,7 +45,8 @@ if (isset($_POST['view']) && $_POST['view'] === 'new_password') {
 printPageFooter();
 print_footer();
 
-function printPageHeader(): void {
+function printPageHeader(): void
+{
     ?>
     <div class="grid_10 suffix_1 prefix_1">
         <div id="gatherling_main" class="box">
@@ -57,15 +56,17 @@ function printPageHeader(): void {
     <?php
 }
 
-function printPageFooter(): void {
+function printPageFooter(): void
+{
     ?>
             </center>
         </div> <!-- gatherling_main -->
     </div> <!-- grid 10 pre 1 suff 1 -->
-<?php
+    <?php
 }
 
-function printForgotForm(): void {
+function printForgotForm(): void
+{
     ?>
         <p>Enter your email or username and we'll send you a link to get back into your account.</p>
         <form action="forgot.php" method="post">
@@ -82,7 +83,8 @@ function printForgotForm(): void {
     <?php
 }
 
-function printNewPasswordForm($token): void {
+function printNewPasswordForm($token): void
+{
     ?>
         <p>Enter your new password.</p>
         <form action="forgot.php" method="post">
@@ -98,7 +100,8 @@ function printNewPasswordForm($token): void {
     <?php
 }
 
-function sendLoginLink($player): bool {
+function sendLoginLink($player): bool
+{
     $link = generateSecureResetLink($player->name);
     $body = <<<END
         <p>Hi $player->name,</p>
@@ -115,7 +118,8 @@ function sendLoginLink($player): bool {
     return sendEmail($player->emailAddress, 'Gatherling Login Link', $body);
 }
 
-function generateSecureResetLink($name): string {
+function generateSecureResetLink($name): string
+{
     global $CONFIG;
 
     $key = $CONFIG['password_reset_key'];
@@ -132,7 +136,8 @@ function generateSecureResetLink($name): string {
     return $CONFIG['base_url'] . "/forgot.php?token=$token";
 }
 
-function resetPassword($token, $newPassword): bool {
+function resetPassword($token, $newPassword): bool
+{
     global $CONFIG;
 
     try {

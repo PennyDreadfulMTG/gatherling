@@ -6,7 +6,6 @@ use Gatherling\Series;
 
 include 'lib.php';
 include 'lib_form_helper.php';
-session_start();
 
 if (!Player::isLoggedIn()) {
     linkToLogin('Series Control Panel');
@@ -77,40 +76,40 @@ function do_page()
         return;
     } else {
         switch ($view) {
-      case 'no_view':
-      case 'settings':
-        printSeriesForm($active_series);
-        printLogoForm($active_series);
-        break;
-      case 'recent_events':
-        printRecentEventsTable($active_series);
-        break;
-      case 'points_management':
-        printPointsForm($active_series);
-        break;
-      case 'organizers':
-        printSeriesOrganizersForm($active_series);
-        break;
-      case 'bannedplayers':
-        printPlayerBanForm($active_series);
-        break;
-      case 'format_editor':
-        $esn = urlencode($active_series_name);
-        redirect("formatcp.php?series=$esn");
-        break;
-      case 'trophies':
-        printMissingTrophies($active_series);
-        break;
-      case 'season_standings':
-        $active_series->seasonStandings($active_series, $active_series->currentSeason());
-        break;
-      case 'points_adj':
-        seasonPointsAdj();
-        break;
-      case 'discord':
-        printDiscordForm($active_series);
-        break;
-    }
+            case 'no_view':
+            case 'settings':
+                printSeriesForm($active_series);
+                printLogoForm($active_series);
+                break;
+            case 'recent_events':
+                printRecentEventsTable($active_series);
+                break;
+            case 'points_management':
+                printPointsForm($active_series);
+                break;
+            case 'organizers':
+                printSeriesOrganizersForm($active_series);
+                break;
+            case 'bannedplayers':
+                printPlayerBanForm($active_series);
+                break;
+            case 'format_editor':
+                $esn = urlencode($active_series_name);
+                redirect("formatcp.php?series=$esn");
+                break;
+            case 'trophies':
+                printMissingTrophies($active_series);
+                break;
+            case 'season_standings':
+                $active_series->seasonStandings($active_series, $active_series->currentSeason());
+                break;
+            case 'points_adj':
+                seasonPointsAdj();
+                break;
+            case 'discord':
+                printDiscordForm($active_series);
+                break;
+        }
     }
 }
 
@@ -126,17 +125,11 @@ function printMissingTrophies($series)
         echo '<tr><td colspan="4" style="text-align: center; font-weight: bold;">No Events Yet!</td></tr>';
     }
 
+    $now = time();
     foreach ($recentEvents as $event) {
         if (!$event->hastrophy) {
             echo "<tr><td style=\"text-align: center;\"><a href=\"event.php?name={$event->name}\">{$event->name}</a></td> ";
-            $format = '%b %e';
-            // Check for Windows to find and replace the %e
-            // modifier correctly
-            if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
-                $format = preg_replace('#(?<!%)((?:%%)*)%e#', '\1%#d', $format);
-            }
-            $timefmted = strftime($format, strtotime($event->start));
-            echo "<td style=\"text-align: center;\">{$timefmted}</td>";
+            echo "<td style=\"text-align: center;\">" . time_element(strtotime($event->start), $now) . "</td>";
             $finalists = $event->getFinalists();
             foreach ($finalists as $finalist) {
                 if ($finalist['medal'] == '1st') {
@@ -378,7 +371,7 @@ function printLogoForm($series)
     echo '<table class="form" style="border-width: 0px;" align="center">';
     echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
     echo '<tr><th>Current Logo</th>';
-    echo '<td>'.Series::image_tag($series->name).'</td></tr>';
+    echo '<td>' . Series::image_tag($series->name) . '</td></tr>';
     echo '<tr><th>Upload New Logo</th>';
     echo '<td><input class="inputbox" type="file" name="logo" /> ';
     echo '<input class="inputbutton" type="submit" name="action" value="Change Logo" /></td></tr>';
@@ -418,19 +411,14 @@ function printRecentEventsTable($series)
     if (count($recentEvents) == 0) {
         echo '<tr><td colspan="4" style="text-align: center; font-weight: bold;"> No Events Yet! </td> </tr>';
     }
+    $now = time();
     foreach ($recentEvents as $event) {
         echo "<tr> <td> <a href=\"event.php?name={$event->name}\">{$event->name}</a> </td> ";
-        $format = '%b %e';
-        // Check for Windows to find and replace the %e
-        // modifier correctly
-        if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
-            $format = preg_replace('#(?<!%)((?:%%)*)%e#', '\1%#d', $format);
-        }
-        $timefmted = strftime($format, strtotime($event->start));
-        echo "<td> {$timefmted} </td> <td style=\"text-align: center;\"> {$event->getPlayerCount()} </td>";
-        echo "<td> {$event->host}";
+        echo "<td>" . time_element(strtotime($event->start), $now) . "</td>";
+        echo "<td style=\"text-align: center;\"> {$event->getPlayerCount()} </td>";
+        echo "<td>{$event->host}";
         if ($event->cohost != '') {
-            echo " / {$event->cohost} </td> ";
+            echo " / {$event->cohost}</td>";
         }
         echo '</tr>';
     }
@@ -467,7 +455,7 @@ function handleActions()
         $series = new Series($seriesname);
         if ($series->authCheck(Player::loginName())) {
             $series->active = $newactive;
-            $series->start_time = $newtime.':00';
+            $series->start_time = $newtime . ':00';
             $series->start_day = $newday;
             $series->prereg_default = $prereg;
             $series->mtgo_room = $room;

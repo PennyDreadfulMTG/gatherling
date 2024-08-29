@@ -2,8 +2,6 @@
 
 require 'lib.php';
 
-session_start();
-
 $some_admin = Player::getSessionPlayer();
 if (!$some_admin->isSuper()) {
     header('Location: gatherling.php');

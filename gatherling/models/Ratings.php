@@ -209,7 +209,7 @@ class Ratings
     {
         $db = Database::getConnection();
 
-        foreach ($players as $player=>$data) {
+        foreach ($players as $player => $data) {
             $rating = $data['rating'];
             $wins = $data['wins'];
             $losses = $data['losses'];

@@ -3,7 +3,6 @@
 use Gatherling\Player;
 
 include 'lib.php';
-session_start();
 $in = testLogin();
 print_header('Login');
 
@@ -18,15 +17,15 @@ print_header('Login');
     printIPAddressChanged();
 }?>
 <?php
-  if (isset($_REQUEST['message'])) {
-      $message = htmlspecialchars($_REQUEST['message'], ENT_QUOTES, 'UTF-8');
-      echo "<div align=\"center\" class=\"error\">$message</div>";
-  }
+if (isset($_REQUEST['message'])) {
+    $message = htmlspecialchars($_REQUEST['message'], ENT_QUOTES, 'UTF-8');
+    echo "<div align=\"center\" class=\"error\">$message</div>";
+}
 
   $username = '';
-  if (isset($_REQUEST['username'])) {
-      $username = $_REQUEST['username'];
-  }
+if (isset($_REQUEST['username'])) {
+    $username = $_REQUEST['username'];
+}
 ?>
         <form action="login.php" method="post">
             <table class="form" align="center" style="border-width: 0px" cellpadding="3">
@@ -44,10 +43,10 @@ print_header('Login');
                 <tr>
                     <td colspan="2" class="buttons">
                     <?php
-                      if (isset($_REQUEST['target'])) {
-                          $target = htmlspecialchars($_REQUEST['target'], ENT_QUOTES, 'UTF-8');
-                          echo "<input type=\"hidden\" name=\"target\" value=\"$target\">";
-                      }
+                    if (isset($_REQUEST['target'])) {
+                        $target = htmlspecialchars($_REQUEST['target'], ENT_QUOTES, 'UTF-8');
+                        echo "<input type=\"hidden\" name=\"target\" value=\"$target\">";
+                    }
                     ?>
                         <input class="inputbutton" type="submit" name="mode" value="Log In">
                         <?php
@@ -68,10 +67,10 @@ print_header('Login');
 
 <?php
 function printLoginFailed()
-                        {
+{
                             echo "<span class=\"error\"><center>Incorrect username or password. Please try again.</center></span>\n";
                             echo '<br />';
-                        }
+}
 
 function printIPAddressChanged()
 {
