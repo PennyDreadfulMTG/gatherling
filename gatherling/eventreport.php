@@ -38,7 +38,7 @@ if (isset($_GET['event']) && Event::exists($_GET['event'])) {
 
 <?php
 
-function eventList($series = '', $season = '')
+function eventList()
 {
     $db = Database::getConnection();
     $result = $db->query('SELECT e.name AS name, e.format AS format,
