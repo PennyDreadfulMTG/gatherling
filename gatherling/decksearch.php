@@ -6,26 +6,19 @@ use Gatherling\Pagination;
 
 require_once 'lib.php';
 
-print_header('Deck Search');
-?>
-<script src="/styles/Chandra/js/sorttable.js"></script>
-
-<div class="grid_10 suffix_1 prefix_1">
-    <div id="gatherling_main" class="box">
-        <div class="uppertitle group">Deck Search </div>
-
-        <?php
-        handleRequest();
-
-?>
-
+function main(): void {
+    ob_start();
+    ?>
+    <script src="/styles/Chandra/js/sorttable.js"></script>
+    <div class="grid_10 suffix_1 prefix_1">
+        <div id="gatherling_main" class="box">
+            <div class="uppertitle group">Deck Search</div>
+            <?php handleRequest(); ?>
+        </div>
     </div>
-</div>
-
-<?php print_footer(); ?>
-
-
-<?php
+    <?php
+    echo page('Deck Search', ob_get_clean());
+}
 
 function handleRequest()
 {
@@ -162,7 +155,7 @@ function showMostPlayedDecks()
         echo '<td><a href="deck.php?mode=view&id=' . $deckid . '">' . $deckName . '</a></td>';
         echo '<td>' . $archetype . '</td>';
         echo '<td>' . $format . '</td>';
-        echo '<td>' . $created . '</td>';
+        echo '<td>' . time_element(strtotime($created), time()) . '</td>';
         echo '</tr>';
     }
 
@@ -308,7 +301,7 @@ function seriesDropMenu($series = null, $useAll = 0, $form_name = 'series')
     echo "<option value=\"\">$title</option>";
     while ($thisSeries = $result->fetch_assoc()) {
         $name = $thisSeries['name'];
-        $selStr = (strcmp($name, $series) == 0) ? 'selected' : '';
+        $selStr = ($series && strcmp($name, $series) == 0) ? 'selected' : '';
         echo "<option value=\"$name\" $selStr>$name</option>";
     }
     echo '</select>';
@@ -403,4 +396,8 @@ function displayDecksFromID($id_arr)
     $pagination->render();
     echo '<br />';
     echo '<br />';
+}
+
+if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+    main();
 }

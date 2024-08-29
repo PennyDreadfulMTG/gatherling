@@ -320,8 +320,6 @@ a.create_deck_link {
 }
 #table-decksearch th {
     color: white;
-    text-shadow: black 0.1em 0.1em 0.2em;
-    font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
     font-weight: normal;
     padding: 7px 7px 8px;
     text-align: left;
@@ -805,7 +803,7 @@ del {
 }
 .box p, .box ul, .box .uppertitle, .box table, .box form,
 .box h1, .box h2, .box h3, .box h4, .box h5, .box h6,
-.box img {
+.box .series-logo img {
     padding: 5px 10px;
 }
 .uppertitle {
