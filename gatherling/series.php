@@ -25,7 +25,7 @@ function series($series_name)
     if (strtotime($mostRecentEvent->start) + (86400 * 7 * 4) < time() && !$nextEvent) {
         return;
     }
-    $next_event_start = $nextEvent ? date('F j h:i a', strtotime($nextEvent->start) - minutes(30)) . " registration" : "Not scheduled yet";
+    $next_event_start = $nextEvent ? time_element(strtotime($nextEvent->start), time()) : "Not scheduled yet";
     $format_name = $nextEvent ? $nextEvent->format : $mostRecentEvent-> format;
     ?>
         <div class="series">
