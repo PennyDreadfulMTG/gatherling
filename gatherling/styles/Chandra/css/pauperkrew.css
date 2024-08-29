@@ -61,7 +61,7 @@ a.emailPop {
 }
 .borderless:hover {
     border: 1px solid #262626;
-   /* colors border on img anchors so border matches back ground and is unseen */
+   /* colors border on img anchors so border matches background and is unseen */
 }
 a:link {
     color: #D88F6D;
