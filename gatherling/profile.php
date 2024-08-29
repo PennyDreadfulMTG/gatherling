@@ -322,7 +322,6 @@ function searchForm($name)
 
 function editForm($timezone, $email, $public)
 {
-    echo "<div class=\"grid_10 prefix_1 suffix_1\">\n";
     echo "<form action=\"profile.php\" mode=\"POST\">\n";
     echo '<label for="timezone">Time Zone:</label>';
     timeZoneDropMenu($timezone);
@@ -340,7 +339,4 @@ function editForm($timezone, $email, $public)
     echo '<br><input type="hidden" name="profile_edit" value="2">';
     echo "<br><input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Submit Changes\" />\n";
     echo "</form>\n";
-    echo "</div>\n";
 }
-
-?>
