@@ -7,7 +7,7 @@
         "ext-mysqli": "*",
         "wohali/oauth2-discord-new": "^1.0",
         "sentry/sdk": "^4.0",
-        "ypho/scryfall": "^1.0",
+        "ypho/scryfall": "^2.0",
         "firebase/php-jwt": "^6.10"
     },
     "require-dev": {
