@@ -61,9 +61,11 @@ function activeEvents()
             $col2 = '<a href="eventreport.php?event=' . rawurlencode($name) . "\">{$name}</a>";
             ?>
                 <tr>
-                    <td><?= $format ?></td>
-                    <td><?= $col2 ?></td>
-                    <td>Round <?= $round ?></td>
+                    <td>
+                        <?= $col2 ?><br>
+                        <?= $format ?>
+                    </td>
+                    <td style="text-align: right">Round <?= $round ?></td>
                 </tr>
             <?php
         }
@@ -87,7 +89,7 @@ function upcomingEvents()
         ?>
             <tr>
                 <td><?= $col2 ?><br><?= $format ?></td>
-                <td><?= time_element($row['d'], time()) ?></td>
+                <td style="text-align: right"><?= time_element($row['d'], time()) ?></td>
             </tr>
         <?php
     }
