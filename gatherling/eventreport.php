@@ -11,32 +11,27 @@ use Gatherling\Standings;
 
 include 'lib.php';
 
-print_header('Event Report');
-
-?>
-<div class="grid_10 prefix_1 suffix_1">
-<div id="gatherling_main" class="box">
-<div class="uppertitle"> Event Report </div>
-
-<?php
-if (!isset($_GET['event']) && isset($_GET['name'])) {
-    $_GET['event'] = $_GET['name'];
+function main() {
+    $eventName = $_GET['event'] ?? $_GET['name'] ?? null;
+    ob_start();
+    print_header('Event Report');
+    ?>
+    <div class="grid_10 prefix_1 suffix_1">
+        <div id="gatherling_main" class="box">
+            <div class="uppertitle">Event Report</div>
+            <?php
+                if ($eventName && Event::exists($eventName)) {
+                    $event = new Event($eventName);
+                    showReport($event);
+                } else {
+                    eventList();
+                }
+            ?>
+        </div>
+    </div>
+    <?php
+    echo page('Event Report', ob_get_clean());
 }
-if (isset($_GET['event']) && Event::exists($_GET['event'])) {
-    $event = new Event($_GET['event']);
-    showReport($event);
-} else {
-    eventList();
-}
-
-?>
-
-</div>
-</div>
-
-<?php print_footer(); ?>
-
-<?php
 
 function eventList()
 {
@@ -496,4 +491,7 @@ function trophyCell($event)
         echo "<br />\n";
     }
 }
-?>
+
+if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+    main();
+}

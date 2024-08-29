@@ -24,6 +24,15 @@ $R2 = '#FFFFFF';
 $CC = $R1;
 date_default_timezone_set('US/Eastern'); // force time functions to use US/Eastern time
 
+function page($title, $contents): string
+{
+    ob_start();
+    print_header($title);
+    echo $contents;
+    print_footer();
+    return ob_get_clean();
+}
+
 function is_assoc($array)
 {
     return (bool) count(array_filter(array_keys($array), 'is_string'));
