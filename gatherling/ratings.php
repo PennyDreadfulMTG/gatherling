@@ -152,7 +152,7 @@ function currentThrough($format)
     $stmt->bind_result($name);
     $stmt->fetch();
     $stmt->close();
-    $date = strftime('%Y-%m-%d', strtotime($start));
+    $date = date('Y-m-d', strtotime($start));
     echo "<b>Ratings current through {$date} - <span style=\"color: #D45E28\">{$name}</span></b>";
 }
 
