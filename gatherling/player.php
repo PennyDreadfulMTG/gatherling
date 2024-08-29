@@ -547,8 +547,8 @@ function print_preRegistration()
     }
 
     foreach ($available_events as $event) {
-        echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a></td>";
-        echo '<td>' . time_element(strtotime($event->start), time()) . '</td>';
+        echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a>";
+        echo '<br>' . time_element(strtotime($event->start), time()) . '</td>';
 
         if ($event->is_full()) {
             echo '<td>This event is currently at capacity.</td>';
