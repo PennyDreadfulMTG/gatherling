@@ -808,6 +808,7 @@ class Event
      */
     public function getRoundMatches($roundnum)
     {
+        $all_rounds = $roundnum == 'ALL';
         $roundnum = intval($roundnum);
         $db = Database::getConnection();
         if ($roundnum > $this->mainrounds) {
@@ -817,7 +818,7 @@ class Event
             $subevnum = 1;
         }
 
-        if ($roundnum == 'ALL') {
+        if ($all_rounds) {
             $stmt = $db->prepare("SELECT m.id FROM matches m, subevents s, events e
         WHERE m.subevent = s.id AND s.parent = e.name AND e.name = ? AND
         s.timing = ? AND m.result <> 'P'");

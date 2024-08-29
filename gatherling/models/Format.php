@@ -195,7 +195,7 @@ class Format
         $tribe = Database::single_result_single_param('SELECT name
                                            FROM tribes
                                            WHERE name = ?', 's', $type);
-        if (strcasecmp($tribe, $type) == 0) {
+        if ($type && $tribe && strcasecmp($tribe, $type) == 0) {
             return true;
         }
 
