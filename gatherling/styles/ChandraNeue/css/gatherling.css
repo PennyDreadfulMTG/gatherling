@@ -47,37 +47,26 @@ table.bracket td.even {
     vertical-align: middle;
 }
 .series {
-    position: relative;
     background: #262626;
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    border-top: 1px solid #4F4F4F;
+    border-bottom: 1px solid #4F4F4F;
     min-height: 200px;
     margin-bottom: 20px;
+    padding-bottom: 20px;
+}
+.series .series-content {
+    display: flex;
 }
 .series .series-name {
-    position: absolute;
     width: 400px;
     font-size: 22px;
     font-weight: bold;
     right: 0px;
 }
 .series .series-logo {
-    position: absolute;
-    width: 280px;
-    height: 200px;
-    left: 20px;
-    line-height: 200px;
-    text-align: center;
-    vertical-align: middle;
-    padding-top: 10px
-}
-.series .series-organizers {
-    position: absolute;
-    width: 400px;
-    right: 0px;
-    top: 50px;
+    margin-right: 40px;
 }
 .series .series-logo img {
     max-width: 280px;
@@ -91,18 +80,10 @@ table.bracket td.even {
 }
 .series-organizers ul li {
     display: inline-block;
-    text-align: center;
     font-weight: bold;
     width: 100px;
     height: 20px;
     margin-left: 0;
-}
-.series .series-info {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 400px;
-    text-align: center;
 }
 .series .series-info table {
     margin: 0;
@@ -309,16 +290,9 @@ a.create_deck_link {
     color: #CCCCCC;
     background-color: #353535;
     border-radius: 5px;
-   /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
-    -moz-border-radius: 5px;
-   /* border radius is specified different ways for different legacy browsers. */
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
     width: 450px;
-    border-radius: 5px;
     padding: 5px;
     margin: 0;
-    magin-bottom: 10px;
     float:right;
 }
 .ds_input:hover {
