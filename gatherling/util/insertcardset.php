@@ -152,14 +152,14 @@ function insertCard($card, $set, $rarity, $stmt)
 {
     $typeline = implode(' ', $card->types);
     if (isset($card->subtypes) && count($card->subtypes) > 0) {
-        $typeline = $typeline . ' - ' . implode(' ', $card->subtypes);
+        $typeline = $typeline.' - '.implode(' ', $card->subtypes);
     }
     $name = normaliseCardName($card->name);
     echo '<table class="new_card">';
-    echo '<tr><th>Name:</th><td>' . $name . '</td></tr>';
+    echo '<tr><th>Name:</th><td>'.$name.'</td></tr>';
     foreach (['manaCost', 'convertedManaCost', 'type', 'rarity'] as $attr) {
         if (isset($card->{$attr})) {
-            echo "<tr><th>{$attr}:</th><td>" . $card->{$attr} . '</td></tr>';
+            echo "<tr><th>{$attr}:</th><td>".$card->{$attr}.'</td></tr>';
         }
     }
     echo '<tr><th>Card Colors:</th><td>';

@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/lib.php';
-require __DIR__ . '/authlib.php';
+require_once __DIR__.'/lib.php';
+require __DIR__.'/authlib.php';
 
 global $CONFIG;
 global $provider;
@@ -43,7 +43,7 @@ function send_to_discord()
     $options = ['scope' => ['identify', 'email']];
     $authUrl = $provider->getAuthorizationUrl($options);
     $_SESSION['oauth2state'] = $provider->getState();
-    header('Location: ' . $authUrl);
+    header('Location: '.$authUrl);
 }
 
 function store_token($token)

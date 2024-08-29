@@ -2,7 +2,7 @@
 
 function time_element($datetime, $now): string
 {
-    return '<time datetime="' . date('c', $datetime) . '">' . human_date($datetime, $now) . '</time>';
+    return '<time datetime="'.date('c', $datetime).'">'.human_date($datetime, $now).'</time>';
 }
 
 function human_date($datetime, $now): string
@@ -19,19 +19,20 @@ function human_date($datetime, $now): string
     }
     $suffix = $datetime > $now ? 'from now' : 'ago';
     $INTERVALS = [
-        'week' => 60 * 60 * 24 * 7,
-        'day' => 60 * 60 * 24,
-        'hour' => 60 * 60,
+        'week'   => 60 * 60 * 24 * 7,
+        'day'    => 60 * 60 * 24,
+        'hour'   => 60 * 60,
         'minute' => 60,
         'second' => 1,
     ];
     foreach ($INTERVALS as $interval => $duration) {
         if ($elapsed > $duration) {
-            return pluralize(intdiv($elapsed, $duration), $interval) . " $suffix";
+            return pluralize(intdiv($elapsed, $duration), $interval)." $suffix";
         }
     }
 }
 
-function pluralize($n, $noun): string {
-    return $n . ' ' . $noun . ($n != 1 ? 's' : '');
+function pluralize($n, $noun): string
+{
+    return $n.' '.$noun.($n != 1 ? 's' : '');
 }

@@ -30,17 +30,17 @@ $content = '';
 foreach ($deck->maindeck_cards as $card => $qty) {
     // Æ to AE litigation
     $card = normaliseCardName($card);
-    $content .= $qty . ' ' . $card . "\r\n";
+    $content .= $qty.' '.$card."\r\n";
 }
 
 $content .= "\r\nSideboard\r\n";
 
 foreach ($deck->sideboard_cards as $card => $qty) {
     $card = normaliseCardName($card);
-    $content .= $qty . ' ' . $card . "\r\n";
+    $content .= $qty.' '.$card."\r\n";
 }
 
-$filename = preg_replace('/ /', '_', $deck->name) . '.txt';
+$filename = preg_replace('/ /', '_', $deck->name).'.txt';
 header('Content-type: text/plain');
 header("Content-Disposition: attachment; filename=$filename");
 echo $content;

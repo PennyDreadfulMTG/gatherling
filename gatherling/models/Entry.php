@@ -93,7 +93,7 @@ class Entry
         $stmt->bind_result($deckid, $this->medal, $this->ignored, $this->drop_round, $this->initial_byes, $this->initial_seed);
 
         if ($stmt->fetch() == null) {
-            throw new Exception('Entry for ' . $playername . ' in ' . $event_id . ' not found');
+            throw new Exception('Entry for '.$playername.' in '.$event_id.' not found');
         }
         $stmt->close();
 
@@ -128,9 +128,9 @@ class Entry
         }
 
         if ($draws == 0) {
-            return $wins . '-' . $losses;
+            return $wins.'-'.$losses;
         } else {
-            return $wins . '-' . $losses . '-' . $draws;
+            return $wins.'-'.$losses.'-'.$draws;
         }
     }
 
@@ -203,9 +203,9 @@ class Entry
 
     public function createDeckLink()
     {
- // creates a link to enter a deck list once a player is registered for the event
+        // creates a link to enter a deck list once a player is registered for the event
         if ($this->canCreateDeck(Player::loginName())) {
-            return '<a class="create_deck_link" style="color: red;" href="deck.php?player=' . urlencode($this->player->name) . '&event=' . urlencode($this->event->id) . '&mode=create">[Create Deck]</a>';
+            return '<a class="create_deck_link" style="color: red;" href="deck.php?player='.urlencode($this->player->name).'&event='.urlencode($this->event->id).'&mode=create">[Create Deck]</a>';
         } else {
             return '(no deck entered)';
         }
@@ -227,7 +227,7 @@ class Entry
             $db->rollback();
             $db->autocommit(true);
 
-            throw new Exception('Entry for ' . $this->player->name . ' in ' . $this->event->name . ' not found');
+            throw new Exception('Entry for '.$this->player->name.' in '.$this->event->name.' not found');
         }
         $db->commit();
         $db->autocommit(true);
@@ -244,7 +244,7 @@ class Entry
             $db->rollback();
             $db->autocommit(true);
 
-            throw new Exception('Entry for ' . $this->player->name . ' in ' . $this->event->name . ' not found');
+            throw new Exception('Entry for '.$this->player->name.' in '.$this->event->name.' not found');
         }
         $db->commit();
         $db->autocommit(true);
