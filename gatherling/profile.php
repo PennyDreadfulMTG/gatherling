@@ -39,16 +39,10 @@ if (isset($_REQUEST['time_zone'])) {
     searchForm($playername);
 ?>
 <div class="grid_10 suffix_1 prefix_1">
-<div id="gatherling_main" class="box">
-<div class="uppertitle"> Player Profile </div>
-
-<?php
-
-content($profile_edit);
-
-?>
-
-</div>
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle">Player Profile</div>
+        <?php content($profile_edit); ?>
+    </div>
 </div>
 
 <?php print_footer(); ?>
@@ -57,34 +51,30 @@ content($profile_edit);
 function content($profile_edit)
 {
     global $playername;
-    if (rtrim($playername) != '') {
-        $player = Player::findByName($playername);
-        if (!is_null($player)) {
-            if ($profile_edit == 1) {
-                editForm($player->timezone, $player->emailAddress, $player->emailPrivacy);
-            } elseif ($profile_edit == 2) {
-                $player->emailAddress = $_GET['email'];
-                $player->emailPrivacy = $_GET['email_public'];
-                $player->timezone = $_GET['timezone'];
-                $player->save();
-                profileTable($player);
-            } else {
-                profileTable($player);
-            }
-        } else {
-            echo "<center>\n";
-            echo "$playername could not be found in the database. Please check";
-            echo " your spelling and try again.\n";
-            echo "</center>\n";
-        }
-    } else {
-        echo "<center>\n";
-        echo 'Please <a href="login.php">log in</a> to see';
-        echo ' your profile. You may also use the search above without';
-        echo " logging in.\n";
-        echo "</center>\n";
+    if (rtrim($playername) === '') {
+        ?>
+            <p>Please <a href="login.php">log in</a> to see your profile. You may also use the search above without logging in.</p>
+        <?php
+        return;
     }
-    echo "<br /><br />\n";
+    $player = Player::findByName($playername);
+    if (is_null($player)) {
+        ?>
+            <p><b><?= $playername ?></b> could not be found in the database. Please check your spelling and try again.</p>
+        <?php
+        return;
+    }
+    if ($profile_edit == 1) {
+        editForm($player->timezone, $player->emailAddress, $player->emailPrivacy);
+    } elseif ($profile_edit == 2) {
+        $player->emailAddress = $_GET['email'];
+        $player->emailPrivacy = $_GET['email_public'];
+        $player->timezone = $_GET['timezone'];
+        $player->save();
+        profileTable($player);
+    } else {
+        profileTable($player);
+    }
 }
 
 function profileTable($player)
@@ -135,9 +125,6 @@ function infoTable($player)
     }
 
     $line1 = strtoupper($player->name);
-    // if ($player->verified) {
-    //     $line1 .= image_tag('verified.png', ['title' => 'Verified their MTGO account']);
-    // }
 
     $matches = $player->getAllMatches();
     $nummatches = count($matches);
@@ -146,29 +133,28 @@ function infoTable($player)
     $hosted = $player->getHostedEventsCount();
     $lastevent = $player->getLastEventPlayed();
     $emailAddress = $player->emailAddress;
-    // $timezone = $player->timezone;
     if ($player->emailIsPublic() == 0) {
         $emailprivacy = 'Admin Viewable Only';
     } else {
         $emailprivacy = 'Publicly Viewable';
     }
 
-    echo "<table style=\"border-width: 0px;\" width=250>\n";
-    echo '<tr><td align="left" colspan=2 style="font-size: 10pt;">';
+    echo "<table>\n";
+    echo '<tr><td colspan="2">';
     echo "<b>$line1</td></tr>\n";
     if ($player->mtgo_username) {
-        echo '<tr><td align="left" colspan=2 style="font-size: 10pt;">';
+        echo '<tr><td colspan="2">';
         echo "<i class=\"ss ss-pmodo\"></i> {$player->mtgo_username}</td></tr>\n";
     }
     if ($player->mtga_username) {
-        echo '<tr><td align="left" colspan=2 style="font-size: 10pt;">';
+        echo '<tr><td colspan="2">';
         echo "<i class=\"ss ss-parl3\"></i> {$player->mtga_username}</td></tr>\n";
     }
     if ($player->discord_handle) {
-        echo '<tr><td align="left" colspan=2 style="font-size: 10pt;">';
+        echo '<tr><td colspan="2">';
         echo "<i class=\"fab fa-discord\"></i> {$player->discord_handle}</td></tr>\n";
     }
-    echo "<tr><td>Rating:</td>\n";
+    echo "<tr><td style=\"min-width: 16ch\">Rating:</td>\n";
     echo "<td align=\"right\">{$rating}</td></tr>\n";
     echo "<tr><td>Matches Played:</td>\n";
     echo "<td align=\"right\">$nummatches</td></tr>\n";
@@ -186,7 +172,7 @@ function infoTable($player)
     echo "<tr><td>Last Active:</td>\n";
     if (!is_null($lastevent)) {
         $lastActive = date('F j, Y', strtotime($lastevent->start));
-        echo "<td align=\"right\">$lastActive ({$lastevent->name})</td></tr>\n";
+        echo "<td align=\"right\">$lastActive<br>({$lastevent->name})</td></tr>\n";
     } else {
         echo "<td align=\"right\">Never</td></tr>\n";
     }
@@ -195,14 +181,12 @@ function infoTable($player)
     if ($emailprivacy == 'Admin Viewable Only') {
         echo "<td align=\"right\">$emailprivacy</td></tr>\n";
     } else {
-        echo "<td align=\"right\">$emailAddress ($emailprivacy)</td></tr>\n";
+        echo "<td align=\"right\">$emailAddress<br>($emailprivacy)</td></tr>\n";
     }
 
     echo "<tr><td>Time Zone:</td>\n";
     echo "<td align=\"right\">{$player->time_zone()}</td></tr>\n";
     echo "<tr><td align=\"center\" colspan='2'><a href=\"profile.php?profile_edit=1\" class=\"borderless\">Edit Player Information</a></td></tr>\n";
-    //timeZoneDropMenu($player->timezone);
-    echo '';
     echo '</table>';
 }
 
@@ -213,7 +197,7 @@ function medalTable($player)
     echo "<table style=\"border-width: 0px\" width=260>\n";
     echo "<tr><td align=\"center\" colspan=4><b>MEDALS EARNED</td></tr>\n";
     if (count($medalcount) == 0) {
-        echo '<tr><td align="center" colspan=2>';
+        echo '<tr><td align="center" colspan="2">';
         echo "<i>{$player->name} has not earned any medals.</td></tr>\n";
     } else {
         medalCell('1st', $medalcount['1st']);
@@ -327,20 +311,20 @@ function deckRecordString($deckname, $player)
 function searchForm($name)
 {
     echo "<div class=\"grid_10 prefix_1 suffix_1\"> <div class=\"box\" id=\"gatherling_simpleform\">\n";
+    echo "<div class=\"uppertitle\">Player Lookup</div>\n";
     echo "<form action=\"profile.php\" mode=\"post\">\n";
-    echo '<center>Player Lookup: ';
     echo "<input class=\"inputbox\" type=\"text\" name=\"player\" value=\"$name\" />";
     echo "<input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Lookup Profile\" />\n";
-    echo "</form></center>\n";
+    echo "</form>\n";
     echo "<div class=\"clear\"></div>\n";
     echo "</div> </div>\n";
 }
 
 function editForm($timezone, $email, $public)
 {
-    echo "<div class=\"grid_10 prefix_1 suffix_1\"> <div class=\"box\" id=\"gatherling_simpleform\">\n";
+    echo "<div class=\"grid_10 prefix_1 suffix_1\">\n";
     echo "<form action=\"profile.php\" mode=\"POST\">\n";
-    echo '<center>Time Zone: ';
+    echo '<label for="timezone">Time Zone:</label>';
     timeZoneDropMenu($timezone);
     echo "<br><label for=\"player\">Email Address: </label><input class=\"inputbox\" type=\"text\" name=\"email\" value=\"$email\" />";
     echo '<br><input type="radio" name="email_public" value="1"';
@@ -355,9 +339,8 @@ function editForm($timezone, $email, $public)
     echo'>Only allow admininstrators and event hosts to view my email';
     echo '<br><input type="hidden" name="profile_edit" value="2">';
     echo "<br><input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Submit Changes\" />\n";
-    echo "</form></center>\n";
-    echo "<div class=\"clear\"></div>\n";
-    echo "</div> </div>\n";
+    echo "</form>\n";
+    echo "</div>\n";
 }
 
 ?>

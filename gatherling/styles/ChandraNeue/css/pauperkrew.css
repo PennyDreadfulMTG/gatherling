@@ -193,7 +193,7 @@ del {
     border: 1px solid black;
     padding-bottom: 10px;
 }
-.box p, .box ul, .box .uppertitle, .box table {
+.box p, .box ul, .box .uppertitle, .box table, .box form {
     padding: 5px 10px;
 }
 .uppertitle {
