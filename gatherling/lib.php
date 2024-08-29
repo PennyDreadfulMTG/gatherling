@@ -172,6 +172,7 @@ function print_footer()
     echo "<div class=\"prefix_1 suffix_1\">\n";
     echo "<div id=\"gatherling_footer\" class=\"box\">\n";
     version_tagline();
+    echo " ";
     print_git_hash();
     echo "</div><!-- prefix_1 suffix_1 -->\n";
     echo "</div><!-- gatherling_footer -->\n";
@@ -527,17 +528,16 @@ function print_git_hash()
 {
     global $CONFIG;
     if (!is_null($hash = $CONFIG['GIT_HASH'])) {
-        echo '<br/>'.$hash;
-
+        echo substr($hash, 0, 7);
         return true;
     }
-
     return false;
 }
 
 function version_tagline()
 {
-    echo 'Gatherling version 5.0.1 ("No rest. No mercy. No matter what.")';
+    echo 'Gatherling version 5.1.0 ("Have no fear of perfection – you’ll never reach it.")';
+    // echo 'Gatherling version 5.0.1 ("No rest. No mercy. No matter what.")';
     // echo 'Gatherling version 5.0.0 ("Hulk, no! Just for once in your life, don\'t smash!")';
     // echo 'Gatherling version 4.9.0 ("Where we’re going, we don’t need roads")';
     // echo 'Gatherling version 4.8.8 ("Fish fingers and custard")';

@@ -419,14 +419,15 @@ table.center {
 }
 #gatherling_footer {
     background-color: #262626;
+    color: #666;
     text-align: center;
-    font-variant: small-caps;
     padding: 20px;
     margin-bottom: 30px;
     margin-top: 30px;
     margin-left: 10px;
     margin-right: 10px;
     clear: both;
+    font-size: 14px;
 }
 #gatherling_main .eventname {
     border-bottom: 1px dotted black;
