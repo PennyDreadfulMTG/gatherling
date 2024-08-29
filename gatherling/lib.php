@@ -32,6 +32,7 @@ function page($title, $contents): string
     print_header($title);
     echo $contents;
     print_footer();
+
     return ob_get_clean();
 }
 
@@ -47,18 +48,18 @@ function theme_file($name)
 {
     global $CONFIG;
     if (Player::isLoggedIn()) {
-        $user_dir = 'styles/' . Player::getSessionPlayer()->theme . '/';
-        if (file_exists($user_dir . $name)) {
-            return $user_dir . $name;
+        $user_dir = 'styles/'.Player::getSessionPlayer()->theme.'/';
+        if (file_exists($user_dir.$name)) {
+            return $user_dir.$name;
         }
     }
     $theme_dir = "styles/{$CONFIG['style']}/";
     $default_dir = 'styles/Chandra/';
-    if (file_exists($theme_dir . $name)) {
-        return $theme_dir . $name;
+    if (file_exists($theme_dir.$name)) {
+        return $theme_dir.$name;
     }
 
-    return $default_dir . $name;
+    return $default_dir.$name;
 }
 
 function print_header($title, $enable_vue = false, $js = null, $extra_head_content = '')
@@ -75,7 +76,7 @@ function print_header($title, $enable_vue = false, $js = null, $extra_head_conte
     echo "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n";
     echo "    <meta name=\"google-site-verification\" content=\"VWE-XX0CgPTHYgUqJ6t13N75y-p_Q9dgtqXikM3EsBo\" />\n";
     echo "    <title>{$CONFIG['site_name']} | {$title}</title>\n";
-    echo '    <link rel="stylesheet" type="text/css" media="all" href="' . theme_file('css/stylesheet.css') . "?v=$git_hash\" />\n";
+    echo '    <link rel="stylesheet" type="text/css" media="all" href="'.theme_file('css/stylesheet.css')."?v=$git_hash\" />\n";
     echo "     <link href=\"//cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css\" rel=\"stylesheet\" type=\"text/css\" />\n";
     echo "     <script src=\"//code.jquery.com/jquery-latest.min.js\"></script>\n";
     if ($enable_vue) {
@@ -240,7 +241,7 @@ function image_tag($filename, $extra_attr = null)
             $tag .= "{$key}=\"{$value}\" ";
         }
     }
-    $tag .= 'src="' . theme_file("images/{$filename}") . '" />';
+    $tag .= 'src="'.theme_file("images/{$filename}").'" />';
 
     return $tag;
 }
@@ -386,7 +387,7 @@ function json_headers()
     header('Cache-Control: no-cache');
     header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
     header('Access-Control-Allow-Origin: *');
-    header('HTTP_X_USERNAME: ' . Player::loginName());
+    header('HTTP_X_USERNAME: '.Player::loginName());
 }
 
 function not_allowed($reason)

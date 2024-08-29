@@ -2,7 +2,7 @@
 
 namespace Gatherling;
 
-require_once __DIR__ . '/../lib.php';
+require_once __DIR__.'/../lib.php';
 
 if (PHP_SAPI != 'cli' && $_SERVER['REQUEST_METHOD'] == 'GET') { // unauthorized POST is okay
     ini_set('max_execution_time', 300);

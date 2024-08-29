@@ -13,7 +13,7 @@ ini_set('max_execution_time', 300);
 
 // If this fails with foreign key errors, execute `ALTER SCHEMA <gatherling> DEFAULT CHARACTER SET latin1;`
 
-require_once __DIR__ . '/../lib.php';
+require_once __DIR__.'/../lib.php';
 
 // Try to connect multiple times in case the MySQL container is still starting up in the test environment.
 $db = null;
@@ -90,14 +90,14 @@ function upgrade_db($new_version, $text, $func)
 function redirect_deck_update($latest_id = 0)
 {
     $url = explode('?', $_SERVER['REQUEST_URI']);
-    $url = $url[0] . '?deckupdate=' . $latest_id;
+    $url = $url[0].'?deckupdate='.$latest_id;
     echo "<a href=\"{$url}\">Continue</a>";
     echo "<script type=\"text/javascript\"> window.location = \"http://{$_SERVER['SERVER_NAME']}$url\"; </script>";
     exit(0);
 }
 
 if (isset($_GET['deckupdate'])) {
-    $deckquery = do_query('SELECT id FROM decks WHERE id > ' . intval($_GET['deckupdate']));
+    $deckquery = do_query('SELECT id FROM decks WHERE id > '.intval($_GET['deckupdate']));
     $timestart = time();
     while ($deckid = $deckquery->fetch_array()) {
         flush();

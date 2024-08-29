@@ -61,7 +61,7 @@ class Player
             $this->mtgo_username
         );
         if ($stmt->fetch() == null) {
-            throw new Exception('Player ' . $name . ' is not found.');
+            throw new Exception('Player '.$name.' is not found.');
         }
         $stmt->close();
     }
@@ -851,7 +851,7 @@ class Player
         $stmt->fetch();
         $stmt->close();
 
-        return $wins . '-' . $losses;
+        return $wins.'-'.$losses;
     }
 
     public function getMaxRating($format = 'Composite')
@@ -912,9 +912,9 @@ class Player
         }
 
         if ($draws == 0) {
-            return $wins . '-' . $losses;
+            return $wins.'-'.$losses;
         } else {
-            return $wins . '-' . $losses . '-' . $draws;
+            return $wins.'-'.$losses.'-'.$draws;
         }
     }
 
@@ -940,9 +940,9 @@ class Player
         }
 
         if ($draws == 0) {
-            return $wins . '-' . $losses;
+            return $wins.'-'.$losses;
         } else {
-            return $wins . '-' . $losses . '-' . $draws;
+            return $wins.'-'.$losses.'-'.$draws;
         }
     }
 
@@ -1382,13 +1382,13 @@ class Player
 
         $name = $this->name;
         if ($game == 'mtgo' && !empty($this->mtgo_username)) {
-            $name = '<i class="ss ss-pmodo"></i>&nbsp;' . $this->mtgo_username;
+            $name = '<i class="ss ss-pmodo"></i>&nbsp;'.$this->mtgo_username;
         } elseif ($game == 'arena' && !empty($this->mtga_username)) {
-            $name = '<i class="ss ss-parl3"></i>&nbsp;' . $this->mtga_username;
+            $name = '<i class="ss ss-parl3"></i>&nbsp;'.$this->mtga_username;
         } elseif ($game == 'paper' && !empty($this->discord_handle)) {
-            $name = '<i class="fab fa-discord"></i>&nbsp;' . $this->discord_handle;
+            $name = '<i class="fab fa-discord"></i>&nbsp;'.$this->discord_handle;
         } elseif ($game == 'gatherling') {
-            $name = '<i class="ss ss-dd2"></i>&nbsp;' . $this->name;
+            $name = '<i class="ss ss-dd2"></i>&nbsp;'.$this->name;
         }
 
         return $name;

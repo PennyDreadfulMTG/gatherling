@@ -2,7 +2,7 @@
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-require_once __DIR__ . '/../lib.php';
+require_once __DIR__.'/../lib.php';
 
 function info($text, $newline = true)
 {
@@ -170,10 +170,10 @@ function insertCard($card, $set, $typeline, $stmt)
     $name = $card->name;
     $name = normaliseCardName($name);
     echo '<table class="new_card">';
-    echo '<tr><th>Name:</th><td>' . $name . '</td></tr>';
+    echo '<tr><th>Name:</th><td>'.$name.'</td></tr>';
     foreach (['manaCost', 'convertedManaCost', 'type', 'rarity'] as $attr) {
         if (isset($card->{$attr})) {
-            echo "<tr><th>{$attr}:</th><td>" . $card->{$attr} . '</td></tr>';
+            echo "<tr><th>{$attr}:</th><td>".$card->{$attr}.'</td></tr>';
         }
     }
     echo '<tr><th>Card Colors:</th><td>';
