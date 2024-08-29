@@ -25,9 +25,8 @@ function series($series_name) {
     if (strtotime($mostRecentEvent->start) + (86400 * 7 * 4) < time() && !$nextEvent) {
         return;
     }
-    $start_format = 'h:i a';
-    $next_format = 'F j h:i a';
-    $next_event_start = $nextEvent ? date($next_format, strtotime($nextEvent->start) - minutes(30)) . " registration" : "Not scheduled yet";
+    $next_event_start = $nextEvent ? date('F j h:i a', strtotime($nextEvent->start) - minutes(30)) . " registration" : "Not scheduled yet";
+    $format_name = $nextEvent ? $nextEvent->format : $mostRecentEvent-> format;
     ?>
         <div class="series">
             <h2 class="series-name"><?= $series->name ?></h2>
@@ -35,21 +34,17 @@ function series($series_name) {
                 <div class="series-logo"><?= Series::image_tag($series->name) ?></div>
                 <div class="series-info">
                     <table>
-                        <?php
-                        $season_format_name = str_replace(' ', '', $series->this_season_format);
-                        $season_format_link = 'format.php?mode=desc&id='.$season_format_name;
-                        ?>
                         <tr>
                             <th> Hosted by </th>
                             <td><?= implode(", ", array_slice($series->organizers, 0, 3)) ?></td>
                         </tr>
                         <tr>
                             <th>Format</th>
-                            <td><a href="<?php echo $season_format_link?>"> <?php echo $series->this_season_format ?></a></td>
+                            <td><?php echo $format_name ?></td>
                         </tr>
                         <tr>
                             <th>Regular Time</th>
-                            <td><?php echo $series->start_day ?>, <?php echo date($start_format, strtotime($series->start_time)) ?> Eastern Time</td>
+                            <td><?php echo $series->start_day ?>, <?php echo date('h:i a', strtotime($series->start_time)) ?> Eastern Time</td>
                         </tr>
                         <tr>
                             <th>Rules </th>

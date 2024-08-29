@@ -66,6 +66,7 @@ table.bracket td.even {
     right: 0px;
 }
 .series .series-logo {
+    width: 360px;
     margin-right: 40px;
 }
 .series .series-logo img {
