@@ -178,14 +178,6 @@ del {
     height: 90px;
     border: 1px solid gray;
 }
-#sidecolumn {
-    margin-bottom: 10px;
-    text-align: center;
-}
-.cardsidecolumn {
-    margin-bottom: 10px;
-    float: right;
-}
 .box {
     border-radius: 5px;
    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
