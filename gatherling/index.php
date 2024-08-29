@@ -7,59 +7,47 @@ use Gatherling\Matchup;
 use Gatherling\Player;
 
 include 'lib.php';
-$version = Database::single_result('SELECT version FROM db_version LIMIT 1');
-if ($version < 51) {
-    require 'outofservice.php';
-    return;
+
+function main(): void {
+    ob_start();
+    ?>
+        <div id="gatherling_main" class="box grid_12">
+            <div class="uppertitle">Gatherling</div>
+            <p>Welcome to Gatherling! The place for player-run Magic Online tournaments. Report bugs or give feedback on the <a href="https://discord.gg/F9SrMwV">Discord</a>.</a></p>
+        </div>
+        <div id="maincolumn" class="grid_8">
+            <div class="box">
+                <div class="uppertitle">Active Events</div>
+                <?php activeEvents(); ?>
+            </div>
+            <div class="box">
+                <div class="uppertitle">Upcoming Events</div>
+                <?php upcomingEvents(); ?>
+            </div>
+            <div class="box">
+                <div class="uppertitle">Gatherling Statistics</div>
+                <?php stats(); ?>
+            </div>
+        </div>
+        <div class="grid_4">
+            <div class="box pad">
+                <?php
+                $player = Player::getSessionPlayer();
+                if ($player != null) {
+                    playerBox($player);
+                } else {
+                    loginBox();
+                } ?>
+            </div>
+            <div class="box">
+                <div class="uppertitle">Recent Winners</div>
+                <?php recentWinners(); ?>
+            </div>
+        </div>
+        <div class="clear"></div>
+    <?php
+    echo page('Home', ob_get_clean());
 }
-
-print_header('Home'); ?>
-
-<div id="gatherling_main" class="box grid_12">
-    <div class="uppertitle">Gatherling</div>
-    <p>Welcome to Gatherling! The place for player-run Magic Online tournaments. Report bugs or give feedback on the <a href="https://discord.gg/F9SrMwV">Discord</a>.</a></p>
-</div>
-
-<div id="maincolumn" class="grid_8">
-
-    <div class="box">
-        <div class="uppertitle">Active Events</div>
-        <?php activeEvents(); ?>
-    </div>
-
-    <div class="box">
-        <div class="uppertitle">Upcoming Events</div>
-        <?php upcomingEvents(); ?>
-    </div>
-
-    <div class="box">
-        <div class="uppertitle">Gatherling Statistics</div>
-        <?php stats(); ?>
-    </div>
-
-</div>
-
-<div class="grid_4">
-    <div class="box pad">
-        <?php
-        $player = Player::getSessionPlayer();
-        if ($player != null) {
-            playerBox($player);
-        } else {
-            loginBox();
-        } ?>
-    </div>
-    <div class="box">
-        <div class="uppertitle">Recent Winners</div>
-        <?php recentWinners(); ?>
-    </div>
-
-</div>
-
-<div class="clear"></div>
-
-<?php
-print_footer();
 
 function activeEvents()
 {
@@ -73,9 +61,11 @@ function activeEvents()
             $col2 = '<a href="eventreport.php?event=' . rawurlencode($name) . "\">{$name}</a>";
             ?>
                 <tr>
-                    <td><?= $format ?></td>
-                    <td><?= $col2 ?></td>
-                    <td>Round <?= $round ?></td>
+                    <td>
+                        <?= $col2 ?><br>
+                        <?= $format ?>
+                    </td>
+                    <td style="text-align: right">Round <?= $round ?></td>
                 </tr>
             <?php
         }
@@ -99,7 +89,7 @@ function upcomingEvents()
         ?>
             <tr>
                 <td><?= $col2 ?><br><?= $format ?></td>
-                <td><?= time_element($row['d'], time()) ?></td>
+                <td style="text-align: right"><?= time_element($row['d'], time()) ?></td>
             </tr>
         <?php
     }
@@ -209,4 +199,8 @@ function recentWinners()
     }
     echo '</table>';
     $result->close();
+}
+
+if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+    main();
 }

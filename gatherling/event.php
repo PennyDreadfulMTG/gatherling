@@ -164,7 +164,7 @@ function content()
         $newevent->number = $oldevent->number + 1;
         $newevent->format = $oldevent->format;
 
-        $newevent->start = strftime('%Y-%m-%d %H:%M:00', strtotime($oldevent->start) + (86400 * 7));
+        $newevent->start = date('Y-m-d H:i:00', strtotime($oldevent->start) + (86400 * 7));
         $newevent->kvalue = $oldevent->kvalue;
         $newevent->finalized = 0;
         $newevent->prereg_allowed = $oldevent->prereg_allowed;
@@ -219,7 +219,7 @@ function content()
         $newevent->number = 1;
         $newevent->format = $oldevent->format;
 
-        $newevent->start = strftime('%Y-%m-%d %H:%M:00', strtotime($oldevent->start) + (86400 * 7));
+        $newevent->start = date('Y-m-d H:i:00', strtotime($oldevent->start) + (86400 * 7));
         $newevent->kvalue = $oldevent->kvalue;
         $newevent->finalized = 0;
         $newevent->prereg_allowed = $oldevent->prereg_allowed;
@@ -529,11 +529,11 @@ function eventForm(Event $event = null, bool $forcenew = false)
             $hour = $datearr[4];
             $minutes = $datearr[5];
         } else {
-            $year = strftime('Y', time());
-            $month = strftime('B', time());
-            $day = strftime('Y', time());
-            $hour = strftime('H', time());
-            $minutes = strftime('M', time());
+            $year = date('Y', time());
+            $month = date('n', time());
+            $day = date('j', time());
+            $hour = date('H', time());
+            $minutes = date('i', time());
         }
 
         if ($edit) {

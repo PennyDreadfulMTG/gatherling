@@ -57,7 +57,7 @@ class MaxWeightMatching
 
         $this->endpoint = [];
         $arrayRange = range(0, 2 * $this->nedge - 1);
-        foreach ($arrayRange as $p) { // BAKERT range is one higher in python so -1 here and everywhere else we use range().
+        foreach ($arrayRange as $p) {
             $this->endpoint[] = $this->edges[$this->floorintdiv($p, 2)][$p % 2];
         }
 
@@ -120,7 +120,7 @@ class MaxWeightMatching
         }
         $b = $this->inblossom[$w];
         assert($this->label[$w] == 0 && $this->label[$b] == 0);
-        $this->label[$w] = $this->label[$b] = $t; // BAKERT issue ???
+        $this->label[$w] = $this->label[$b] = $t;
         $this->labelend[$w] = $this->labelend[$b] = $p;
         $this->bestedge[$w] = $this->bestedge[$b] = -1;
         if ($t == 1) {
@@ -737,7 +737,7 @@ class MaxWeightMatching
                             assert(($kslack % 2) == 0);
                             $d = $this->floorintdiv($kslack, 2);
                         } else {
-                            $d = $kslack / 2; // ORIGINALLY SINGLE SLASH DIVISION IN PYTHON SO NOT CONVERTED TO INTDIV BAKERT
+                            $d = $kslack / 2; // ORIGINALLY SINGLE SLASH DIVISION IN PYTHON SO NOT CONVERTED TO INTDIV
                         }
                         if ($deltatype == -1 || $d < $delta) {
                             $delta = $d;
