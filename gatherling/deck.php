@@ -25,7 +25,7 @@ if (isset($_GET['event'])) {
         echo '<div class="uppertitle">Deck Database</div>';
     } else {
         $event = new Event($_GET['event']);
-        echo '<div class="uppertitle">Your Deck For '.$event->name.'</div>';
+        echo '<div class="uppertitle">'.$event->name.'</div>';
     }
 } else {
     echo '<div class="uppertitle">Deck Database</div>';
@@ -147,7 +147,7 @@ function deckForm($deck = null)
     echo "<tr><th valign=\"top\"><b>Directions:</th>\n";
     echo '<td>To enter your deck, please give it ';
     echo 'a name and select an archetype from the drop-down menu below. If ';
-    echo 'you do not specify and archetype, your deck will be labeled as ';
+    echo 'you do not specify an archetype, your deck will be labeled as ';
     echo '"Unclassified". To enter cards, save your deck as a .txt or .dek file ';
     echo 'using the official MTGO client, and then copy and paste the maindeck ';
     echo 'and sideboard into the appropriate text boxes. ';
@@ -213,7 +213,7 @@ function deckRegisterForm()
     echo "<tr><td valign=\"top\"><b>Directions:</td>\n";
     echo '<td>To enter your deck, please give it ';
     echo 'a name and select an archetype from the drop-down menu below. If ';
-    echo 'you do not specify and archetype, your deck will be labeled as ';
+    echo 'you do not specify an archetype, your deck will be labeled as ';
     echo '"Unclassified". To enter cards, save your deck as a .txt or .dek file ';
     echo 'using the official MTGO client, and then copy and paste the maindeck ';
     echo 'and sideboard into the appropriate text boxes. ';
@@ -557,21 +557,21 @@ function matchupTable($deck)
                 if ($oppdeck != null) {
                     $deckcell = $oppdeck->linkTo();
                 }
-                echo "<tr><td align=\"right\">$rnd:&nbsp;</td>\n";
-                echo "<td align=\"left\"><b><font color=\"$color\">$res</font>:&nbsp;</td>\n";
-                echo "<td width=30>{$match->getPlayerWins($deck->playername)} - {$match->getPlayerLosses($deck->playername)}</td>";
-                echo "<td>vs.&nbsp;</td>\n";
-                echo '<td align="left">'.$opp->linkTo()."&nbsp;</td>\n";
+                echo "<tr><td>$rnd:&nbsp;</td>\n";
+                echo "<td><b style=\"color: $color\">$res</b></td>\n";
+                echo "<td class=\"score\">{$match->getPlayerWins($deck->playername)}-{$match->getPlayerLosses($deck->playername)}</td>";
+                echo "<td>vs.</td>\n";
+                echo '<td class=\"player\">'.$opp->linkTo()."</td>\n";
                 if (!$event->active && $event->finalized) {
-                    echo "<td align=\"right\">$deckcell&nbsp;</td></tr>\n";
+                    echo "<td>$deckcell</td></tr>\n";
                 }
             } else {
-                echo "<tr><td align=\"right\">$rnd:&nbsp;</td>\n";
-                echo "<td align=\"left\"><b>$res:&nbsp;</td>\n";
-                echo '<td width=30>0 - 0</td>';
-                echo "<td>vs.&nbsp;</td>\n";
-                echo "<td align=\"left\"> No Opponent&nbsp;</td>\n";
-                echo "<td align=\"right\">No Deck Found&nbsp;</td></tr>\n";
+                echo "<tr><td>$rnd:</td>\n";
+                echo "<td><b>$res</td>\n";
+                echo '<td class=\"score\">0 - 0</td>';
+                echo "<td>vs.</td>\n";
+                echo "<td>No Opponent</td>\n";
+                echo "<td>No Deck Found</td></tr>\n";
             }
         }
     } else {

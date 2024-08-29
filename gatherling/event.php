@@ -754,7 +754,7 @@ function playerList($event)
         echo '<tr><td align="center" colspan="5"><i>';
         echo 'No players are currently registered for this event.</i></td></tr>';
     }
-    $deckless = 'Still waiting on decklists from ';
+    $deckless = [];
     foreach ($entries as $entry) {
         echo "<tr id=\"entry_row_{$entry->player->name}\">";
         // Show drop box if event is active.
@@ -784,7 +784,7 @@ function playerList($event)
         if ($entry->deck) {
             $decklink = $entry->deck->linkTo();
         } else {
-            $deckless .= "{$playername}, ";
+            $deckless[] = $playername;
             $decklink = $entry->createDeckLink();
         }
         $rstar = '<font color="red">*</font>';
@@ -875,7 +875,8 @@ function playerList($event)
         echo '<input id="start_event" class="inputbutton" type="submit" name="mode" value="Start Event (No Deck Check)" />';
         echo '</td></tr>';
         echo '<p>Paste stuff:<br />';
-        echo "<code>{$deckless}</code></p>";
+        $deckless_s = implode(', ', $deckless);
+        echo "<code>Need decklists from $deckless_s</code></p>";
     } elseif ($event->active == 1) {
         echo '<td><input id="start_event" class="inputbutton" type="submit" name="mode" value="Recalculate Standings" />';
         echo '<input id="start_event" class="inputbutton" type="submit" name="mode" value="Reset Event" />';

@@ -19,7 +19,7 @@ print_header('Login');
 }?>
 <?php
   if (isset($_REQUEST['message'])) {
-      $message = filter_var($_REQUEST['message'], FILTER_SANITIZE_STRING);
+      $message = htmlspecialchars($_REQUEST['message'], ENT_QUOTES, 'UTF-8');
       echo "<div align=\"center\" class=\"error\">$message</div>";
   }
 
@@ -45,7 +45,7 @@ print_header('Login');
                     <td colspan="2" class="buttons">
                     <?php
                       if (isset($_REQUEST['target'])) {
-                          $target = filter_var($_REQUEST['target'], FILTER_SANITIZE_STRING);
+                          $target = htmlspecialchars($_REQUEST['target'], ENT_QUOTES, 'UTF-8');
                           echo "<input type=\"hidden\" name=\"target\" value=\"$target\">";
                       }
                     ?>

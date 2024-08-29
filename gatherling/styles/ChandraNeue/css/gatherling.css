@@ -463,8 +463,8 @@ a.create_deck_link {
 }
 .banner_alert {
     background: black;
-    border: red;
-    border-style: dotted;
+    border: red dotted;
+    padding: 10px;
 }
 
 .discordlogin {
@@ -473,15 +473,6 @@ a.create_deck_link {
     font-family: 'Helvetica', 'Arial', sans-serif;
     text-decoration: none;
 }
-
-/* .discordlogin::before {
-    font-family: "Font Awesome 5 Free";
-    content: "\uf392";
-    display: inline-block;
-    padding-right: 3px;
-    vertical-align: middle;
-    font-weight: 900;
-} */
 
 .discordlogin::before {
     display: inline-block;
@@ -530,4 +521,30 @@ a.create_deck_link {
   display: none;
   padding: 50px 20px;
   height: 100%;
+}
+
+.box table td {
+    padding: 8px 12px;
+}
+table.events {
+    width: 100%;
+}
+table.events td {
+    padding: 8px 12px;
+}
+table.events td:first-child {
+    padding-left: 0;
+}
+table.events  td:last-child {
+    padding-right: 0;
+}
+.winners {
+    border-collapse: collapse;
+}
+.winners tr.player-deck td {
+    border-bottom: 1px solid white;
+    padding-bottom: 24px;
+}
+.score, .player {
+    white-space: nowrap;
 }

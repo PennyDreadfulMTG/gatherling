@@ -1,0 +1,67 @@
+table,
+tr,
+th,
+td,
+ul {
+    color: #ccc;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+body {
+    font: 16px/1.45 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
+}
+hr {
+    border: 0 white solid;
+    border-top-width: 1px;
+    clear: both;
+    height: 0;
+}
+h1 {
+    font-size: 28px;
+}
+h2 {
+    font-size: 26px;
+}
+h3 {
+    font-size: 24px;
+}
+h4 {
+    font-size: 22px;
+}
+h5 {
+    font-size: 20px;
+}
+h6 {
+    font-size: 18px;
+}
+ol {
+    list-style: decimal;
+}
+ul {
+    list-style: disc;
+}
+li {
+    margin-left: 30px;
+}
+p,
+dl,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ol,
+ul,
+pre,
+table,
+address,
+fieldset {
+    margin: 0;
+}

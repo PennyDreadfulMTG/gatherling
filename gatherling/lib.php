@@ -66,6 +66,7 @@ function print_header($title, $enable_vue = false, $js = null, $extra_head_conte
     echo "  <head>\n";
     echo "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n";
     echo "    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />\n";
+    echo "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n";
     echo "    <meta name=\"google-site-verification\" content=\"VWE-XX0CgPTHYgUqJ6t13N75y-p_Q9dgtqXikM3EsBo\" />\n";
     echo "    <title>{$CONFIG['site_name']} | {$title}</title>\n";
     echo '    <link rel="stylesheet" type="text/css" media="all" href="'.theme_file('css/stylesheet.css')."\" />\n";
@@ -91,11 +92,6 @@ function print_header($title, $enable_vue = false, $js = null, $extra_head_conte
   <body>
     <div id="maincontainer" class="container_12">
         <div id="header_bar" class="box">
-            <div id="header_gatherling">
-EOT;
-    //  echo image_tag("header_gatherling.png");
-    echo <<<'EOT'
-            </div>
             <div id="header_logo">
 EOT;
     echo image_tag('header_logo.png');
