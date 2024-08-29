@@ -163,7 +163,7 @@ function print_footer()
     echo "<div class=\"prefix_1 suffix_1\">\n";
     echo "<div id=\"gatherling_footer\" class=\"box\">\n";
     version_tagline();
-    echo " ";
+    echo ' ';
     echo git_hash();
     echo "</div><!-- prefix_1 suffix_1 -->\n";
     echo "</div><!-- gatherling_footer -->\n";
@@ -521,6 +521,7 @@ function git_hash()
     if (!is_null($hash = $CONFIG['GIT_HASH'])) {
         return substr($hash, 0, 7);
     }
+
     return '';
 }
 
