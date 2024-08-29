@@ -92,11 +92,6 @@ function print_header($title, $enable_vue = false, $js = null, $extra_head_conte
   <body>
     <div id="maincontainer" class="container_12">
         <div id="header_bar" class="box">
-            <div id="header_gatherling">
-EOT;
-    //  echo image_tag("header_gatherling.png");
-    echo <<<'EOT'
-            </div>
             <div id="header_logo">
 EOT;
     echo image_tag('header_logo.png');
