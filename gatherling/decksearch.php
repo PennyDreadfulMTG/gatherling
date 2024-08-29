@@ -31,7 +31,7 @@ function handleRequest()
         $_GET['mode'] = '';
     }
 
-    if (strcmp($_GET['mode'], 'search') == 0 && !isset($_GET['page'])) {
+    if (isset($_GET['mode']) && strcmp($_GET['mode'], 'search') == 0 && !isset($_GET['page'])) {
         if (!empty($_POST['format'])) {
             $decksearch->searchByFormat($_POST['format']);
             $_SESSION['format'] = $_POST['format'];
@@ -282,10 +282,10 @@ function archetypeDropMenu($archetype = null, $useAll = 0, $form_name = 'archety
     echo "<option value=\"\">$title</option>";
     while ($thisArchetype = $result->fetch_assoc()) {
         $name = $thisArchetype['name'];
-        $selStr = (strcmp($name, $archetype) == 0) ? 'selected' : '';
+        $selStr = ($archetype && strcmp($name, $archetype) == 0) ? 'selected' : '';
         echo "<option value=\"$name\" $selStr>$name</option>";
     }
-    $selStr = (strcmp('Unclassified', $archetype) == 0) ? 'selected' : '';
+    $selStr = ($archetype && strcmp('Unclassified', $archetype) == 0) ? 'selected' : '';
     echo "<option value=\"Unclassified\" $selStr>Unclassified</option>";
     echo '</select>';
     $result->close();
@@ -336,7 +336,7 @@ function formatDropMenuDS($format, $useAll = 0, $form_name = 'format')
     echo "<option value=\"\">$title</option>";
     while ($thisFormat = $result->fetch_assoc()) {
         $name = $thisFormat['name'];
-        $selStr = (strcmp($name, $format) == 0) ? 'selected' : '';
+        $selStr = ($format && strcmp($name, $format) == 0) ? 'selected' : '';
         echo "<option value=\"$name\" $selStr>$name</option>";
     }
     echo '</select>';
