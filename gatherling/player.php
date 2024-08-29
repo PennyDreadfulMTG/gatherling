@@ -505,6 +505,7 @@ function print_preRegistration()
 
     $arena = false;
     $mtgo = false;
+    $now = time();
     foreach ($upcoming_events as $event) {
         if ($event->client == 1) {
             $mtgo = true;
@@ -518,9 +519,9 @@ function print_preRegistration()
         }
         echo '<tr><td><a href="'.$targetUrl.'.php?event='.rawurlencode($event->name)."\">{$event->name}</a></td>";
         if (time() >= strtotime($event->start)) {
-            echo '<td class="eventtime" start="'.$event->start.'"> Starting soon</td>';
+            echo '<td>Starting soon</td>';
         } else {
-            echo '<td class="eventtime" start="'.$event->start.'"> Starts in '.distance_of_time_in_words(time(), strtotime($event->start), true).'</td>';
+            echo '<td>' . time_element(strtotime($event->start), $now) . '</td>';
         }
         $entry = new Entry($event->id, $player->name);
         if (is_null($entry->deck)) {
@@ -547,7 +548,7 @@ function print_preRegistration()
 
     foreach ($available_events as $event) {
         echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a></td>";
-        echo '<td class="eventtime" start="'.$event->start.'"> Starts in '.distance_of_time_in_words(time(), strtotime($event->start), true).'</td>';
+        echo '<td>' . time_element(strtotime($event->start), time()) . '</td>';
 
         if ($event->is_full()) {
             echo '<td>This event is currently at capacity.</td>';
@@ -561,7 +562,6 @@ function print_preRegistration()
         echo '</tr>';
     }
     echo '</table>';
-    echo '<script src="time.js"></script>';
 }
 
 //* Modified above function to display active events and a link to current standings

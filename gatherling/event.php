@@ -414,9 +414,6 @@ function eventList($series = '', $season = '')
     echo '<td align="center"><b>Finalized</td></tr>';
 
     foreach ($results as $thisEvent) {
-        $dateStr = $thisEvent['start'];
-        $dateArr = explode(' ', $dateStr);
-        $date = $dateArr[0];
         $kvalue = '';
         switch ($thisEvent['kvalue']) {
             case 0:

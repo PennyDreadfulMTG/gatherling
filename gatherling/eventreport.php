@@ -208,7 +208,7 @@ function prereg($event)
         echo '<a href="prereg.php?action=reg&event=' . rawurlencode($event->name) . '">Register for ' . $event->name . '</a>';
     }
     echo '</td></tr>';
-    echo '<tr><td class="eventtime" start="' . $event->start . '"> Starts in ' . distance_of_time_in_words(time(), strtotime($event->start), true) . '</td></tr>';
+    echo '<tr><td>' . time_element(strtotime($event->start), time()) . '</td></tr>';
 
     echo '</table>';
 }

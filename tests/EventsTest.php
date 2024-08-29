@@ -1,8 +1,8 @@
 <?php
 
-require_once 'gatherling/lib.php';
+declare(strict_types=1);
 
-// declare(strict_types=1);
+require_once 'gatherling/lib.php';
 
 use Gatherling\Deck;
 use Gatherling\Event;

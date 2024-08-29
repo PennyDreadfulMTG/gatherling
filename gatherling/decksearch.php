@@ -380,19 +380,18 @@ function displayDecksFromID($id_arr)
     echo '</thead>';
     echo '<tbody>';
 
-    foreach ($ids_populated as $index => $deckinfo) {
-        $display_date = date('d-m-Y', strtotime($deckinfo['created_date'])); ?>
+    $now = time();
+    foreach ($ids_populated as $index => $deckinfo) { ?>
         <tr<?php echo $index % 2 ? ' class="even"' : '' ?>>
         <?php
         if (strlen($deckinfo['name']) > 23) {
             $deckinfo['name'] = preg_replace('/\s+?(\S+)?$/', '', substr($deckinfo['name'], 0, 22)) . '...';
         }
-        //echo "<tr" . ($index % 2) ? ' class="even"' : '' . ">";
         echo '<td><a href="profile.php?player=' . $deckinfo['playername'] . '&mode=Lookup+Profile">' . $deckinfo['playername'] . '</a></td>';
         echo '<td><a href="deck.php?mode=view&id=' . $deckinfo['id'] . '">' . $deckinfo['name'] . '</a></td>';
         echo '<td>' . $deckinfo['archetype'] . '</td>';
         echo '<td>' . $deckinfo['format'] . '</td>';
-        echo '<td>' . $display_date . '</td>';
+        echo '<td>' . time_element(strtotime($deckinfo['created_date']), $now) . '</td>';
         echo '<td align=center>' . $deckinfo['record'] . '</td>';
         echo '</tr>';
     }

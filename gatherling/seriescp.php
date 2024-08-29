@@ -125,17 +125,11 @@ function printMissingTrophies($series)
         echo '<tr><td colspan="4" style="text-align: center; font-weight: bold;">No Events Yet!</td></tr>';
     }
 
+    $now = time();
     foreach ($recentEvents as $event) {
         if (!$event->hastrophy) {
             echo "<tr><td style=\"text-align: center;\"><a href=\"event.php?name={$event->name}\">{$event->name}</a></td> ";
-            $format = '%b %e';
-            // Check for Windows to find and replace the %e
-            // modifier correctly
-            if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
-                $format = preg_replace('#(?<!%)((?:%%)*)%e#', '\1%#d', $format);
-            }
-            $timefmted = strftime($format, strtotime($event->start));
-            echo "<td style=\"text-align: center;\">{$timefmted}</td>";
+            echo "<td style=\"text-align: center;\">" . time_element(strtotime($event->start), $now) . "</td>";
             $finalists = $event->getFinalists();
             foreach ($finalists as $finalist) {
                 if ($finalist['medal'] == '1st') {
@@ -417,19 +411,14 @@ function printRecentEventsTable($series)
     if (count($recentEvents) == 0) {
         echo '<tr><td colspan="4" style="text-align: center; font-weight: bold;"> No Events Yet! </td> </tr>';
     }
+    $now = time();
     foreach ($recentEvents as $event) {
         echo "<tr> <td> <a href=\"event.php?name={$event->name}\">{$event->name}</a> </td> ";
-        $format = '%b %e';
-        // Check for Windows to find and replace the %e
-        // modifier correctly
-        if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
-            $format = preg_replace('#(?<!%)((?:%%)*)%e#', '\1%#d', $format);
-        }
-        $timefmted = strftime($format, strtotime($event->start));
-        echo "<td> {$timefmted} </td> <td style=\"text-align: center;\"> {$event->getPlayerCount()} </td>";
-        echo "<td> {$event->host}";
+        echo "<td>" . time_element(strtotime($event->start), $now) . "</td>";
+        echo "<td style=\"text-align: center;\"> {$event->getPlayerCount()} </td>";
+        echo "<td>{$event->host}";
         if ($event->cohost != '') {
-            echo " / {$event->cohost} </td> ";
+            echo " / {$event->cohost}</td>";
         }
         echo '</tr>';
     }
