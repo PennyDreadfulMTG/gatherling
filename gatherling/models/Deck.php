@@ -218,7 +218,7 @@ class Deck
         $str = '';
         foreach ($count as $color => $n) {
             if ($n > 0) {
-                $str = $str.image_tag("mana{$color}.png");
+                $str = $str . image_tag("mana{$color}.png");
             }
         }
 
@@ -453,11 +453,13 @@ class Deck
         $event = $this->getEvent();
         $player = new Player($username);
 
-        if ($player->isSuper() ||
-        $event->isHost($username) ||
-        $event->isOrganizer($username) ||
-        (!$event->finalized && !$this->isValid() && strcasecmp($username, $this->playername) == 0) ||
-        (!$event->finalized && !$event->active && strcasecmp($username, $this->playername) == 0)) {
+        if (
+            $player->isSuper() ||
+            $event->isHost($username) ||
+            $event->isOrganizer($username) ||
+            (!$event->finalized && !$this->isValid() && strcasecmp($username, $this->playername) == 0) ||
+            (!$event->finalized && !$event->active && strcasecmp($username, $this->playername) == 0)
+        ) {
             return true;
         }
 
@@ -474,10 +476,12 @@ class Deck
         } elseif ($event->current_round > $event->mainrounds && !$event->private_finals) {
             return true;
         } else {
-            if ($player->isSuper() ||
-           $event->isHost($username) ||
-           $event->isOrganizer($username) ||
-           strcasecmp($username, $this->playername) == 0) {
+            if (
+                $player->isSuper() ||
+                $event->isHost($username) ||
+                $event->isOrganizer($username) ||
+                strcasecmp($username, $this->playername) == 0
+            ) {
                 return true;
             }
         }
@@ -619,7 +623,7 @@ class Deck
                 $db->rollback();
                 $db->autocommit(true);
 
-                throw new Exception('Entry for '.$this->playername.' in '.$this->eventname.' not found');
+                throw new Exception('Entry for ' . $this->playername . ' in ' . $this->eventname . ' not found');
             }
         } else {
             $stmt = $db->prepare('UPDATE decks SET archetype = ?, name = ?, format = ?, tribe = ?, deck_colors = ?, notes = ? WHERE id = ?');
@@ -631,7 +635,7 @@ class Deck
                 $db->rollback();
                 $db->autocommit(true);
 
-                throw new Exception('Can\'t update deck '.$this->id);
+                throw new Exception('Can\'t update deck ' . $this->id);
             }
             $format = new Format($this->format);
         }
@@ -869,7 +873,7 @@ class Deck
             $db->rollback();
             $db->autocommit(true);
 
-            throw new Exception('Can\'t update deck '.$this->id);
+            throw new Exception('Can\'t update deck ' . $this->id);
         }
 
         $this->deck_contents_cache = implode('|', array_merge(
@@ -892,8 +896,10 @@ class Deck
             $this->errors[] = "This format allows a maximum of {$format->max_main_cards_allowed} Maindeck Cards";
         }
 
-        if ($this->sideboard_cardcount < $format->min_side_cards_allowed ||
-        $this->sideboard_cardcount > $format->max_side_cards_allowed) {
+        if (
+            $this->sideboard_cardcount < $format->min_side_cards_allowed ||
+            $this->sideboard_cardcount > $format->max_side_cards_allowed
+        ) {
             $this->errors[] = "A legal sideboard for this format has between $format->min_side_cards_allowed cards, and
                               $format->max_side_cards_allowed cards.";
         }
@@ -926,9 +932,9 @@ class Deck
         // Autonamer Function
         if ($this->name == 'Temp') {
             if ($format->tribal) {
-                $this->name = strtoupper($this->deck_color_str).' '.$this->tribe;
+                $this->name = strtoupper($this->deck_color_str) . ' ' . $this->tribe;
             } else {
-                $this->name = strtoupper($this->deck_color_str).' '.$this->archetype;
+                $this->name = strtoupper($this->deck_color_str) . ' ' . $this->archetype;
             }
             $stmt = $db->prepare('UPDATE decks set name = ? WHERE id = ?');
             $stmt->bind_param('ss', $this->name, $this->id);
@@ -999,17 +1005,17 @@ class Deck
         sort($cards, SORT_STRING);
         $maindeckStr = '';
         foreach ($cards as $cardname) {
-            $maindeckStr .= $this->maindeck_cards[$cardname].$cardname;
+            $maindeckStr .= $this->maindeck_cards[$cardname] . $cardname;
         }
         $this->deck_hash = sha1($maindeckStr);
         $sideboardStr = '';
         $cards = array_keys($this->sideboard_cards);
         sort($cards, SORT_STRING);
         foreach ($cards as $cardname) {
-            $sideboardStr .= $this->sideboard_cards[$cardname].$cardname;
+            $sideboardStr .= $this->sideboard_cards[$cardname] . $cardname;
         }
         $this->sideboard_hash = sha1($sideboardStr);
-        $this->whole_hash = sha1($maindeckStr.'<sb>'.$sideboardStr);
+        $this->whole_hash = sha1($maindeckStr . '<sb>' . $sideboardStr);
         $db = Database::getConnection();
         $stmt = $db->prepare('UPDATE decks SET sideboard_hash = ?, deck_hash = ?, whole_hash = ? where id = ?');
         $stmt->bind_param('sssd', $this->sideboard_hash, $this->deck_hash, $this->whole_hash, $this->id);

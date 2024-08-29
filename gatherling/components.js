@@ -3,7 +3,7 @@ const store = new Vuex.Store({
         events: []
     },
     mutations: {
-        setEvents (state, events) {
+        setEvents(state, events) {
             state.events = events;
         }
     }
@@ -28,11 +28,11 @@ Vue.use(Toasted);
 //   });
 
   Vue.component('nametag', {
-    props: ['id', 'name', 'mtgo_username', 'discord_handle', 'client', 'email', 'display_name'],
-    template: '<a href=\"profile.php?player={{ name }}\">{{ name }}</a>'
-  });
+        props: ['id', 'name', 'mtgo_username', 'discord_handle', 'client', 'email', 'display_name'],
+        template: '<a href=\"profile.php?player={{ name }}\">{{ name }}</a>'
+    });
 
   var app = new Vue({
-    el: '#maincontainer',
-    store
-  })
+        el: '#maincontainer',
+        store
+    })

@@ -248,9 +248,11 @@ class MaxWeightMatching
                         list($i, $j) = [$j, $i];
                     }
                     $bj = $this->inblossom[$j];
-                    if ($bj != $b && $this->label[$bj] == 1 &&
+                    if (
+                        $bj != $b && $this->label[$bj] == 1 &&
                         ($this->bestedgeto[$bj] == -1 ||
-                        $this->slack($k) < $this->slack($this->bestedgeto[$bj]))) {
+                        $this->slack($k) < $this->slack($this->bestedgeto[$bj]))
+                    ) {
                         $this->bestedgeto[$bj] = $k;
                     }
                 }
@@ -272,7 +274,7 @@ class MaxWeightMatching
             }
         }
         if ($DEBUG) {
-            $DEBUG("blossomchilds[$b]=".$this->arr_repr($this->blossomchilds[$b]));
+            $DEBUG("blossomchilds[$b]=" . $this->arr_repr($this->blossomchilds[$b]));
         }
     }
 
@@ -280,7 +282,7 @@ class MaxWeightMatching
     {
         global $DEBUG;
         if ($DEBUG) {
-            $DEBUG("expandBlossom($b,$endstage) ".$this->arr_repr($this->blossomchilds[$b]));
+            $DEBUG("expandBlossom($b,$endstage) " . $this->arr_repr($this->blossomchilds[$b]));
         }
         foreach ($this->blossomchilds[$b] as $s) {
             $this->blossomparent[$s] = -1;
@@ -394,7 +396,7 @@ class MaxWeightMatching
             $this->mate[$this->endpoint[$p]] = $p ^ 1;
             $this->mate[$this->endpoint[$p ^ 1]] = $p;
             if ($DEBUG) {
-                $DEBUG('PAIR(a) '.$this->endpoint[$p].' '.$this->endpoint[$p ^ 1].' (k='.$this->floorintdiv($p, 2).')');
+                $DEBUG('PAIR(a) ' . $this->endpoint[$p] . ' ' . $this->endpoint[$p ^ 1] . ' (k=' . $this->floorintdiv($p, 2) . ')');
             }
         }
         $this->blossomchilds[$b] = array_merge(array_slice($this->blossomchilds[$b], $i), array_slice($this->blossomchilds[$b], 0, $i));
@@ -439,7 +441,7 @@ class MaxWeightMatching
                 $this->mate[$j] = $this->labelend[$bt];
                 $p = $this->labelend[$bt] ^ 1;
                 if ($DEBUG) {
-                    $DEBUG("PAIR(c) $s $t (k=".$this->floorintdiv($p, 2).')');
+                    $DEBUG("PAIR(c) $s $t (k=" . $this->floorintdiv($p, 2) . ')');
                 }
             }
         }
@@ -518,7 +520,7 @@ class MaxWeightMatching
                     }
                 }
                 if ($DEBUG && ($this->bestedge[$v] != -1 || $bk != -1) && ($this->bestedge[$v] == -1 || $bd != $this->slack($this->bestedge[$v]))) {
-                    $DEBUG('v='.$v.' bk='.$bk.' bd='.$bd.' $this->bestedge[$v]='.$this->bestedge[$v].' slack='.$this->slack($this->bestedge[$v]));
+                    $DEBUG('v=' . $v . ' bk=' . $bk . ' bd=' . $bd . ' $this->bestedge[$v]=' . $this->bestedge[$v] . ' slack=' . $this->slack($this->bestedge[$v]));
                 }
                 assert(($bk == -1 && $this->bestedge[$v] == -1) || ($this->bestedge[$v] != -1 && $bd == $this->slack($this->bestedge[$v])));
             }
@@ -561,7 +563,7 @@ class MaxWeightMatching
             }
         }
         if ($DEBUG && $bd != $tbd) {
-            $DEBUG("bk=$bk tbk=$tbk bd=".$this->arr_repr($bd).' tbd='.$this->arr_repr($tbd));
+            $DEBUG("bk=$bk tbk=$tbk bd=" . $this->arr_repr($bd) . ' tbd=' . $this->arr_repr($tbd));
         }
         assert($bd == $tbd);
     }
@@ -603,12 +605,12 @@ class MaxWeightMatching
             }
         }
 
-        return rtrim($s, ', ').']';
+        return rtrim($s, ', ') . ']';
     }
 
     public function print_arr($arr)
     {
-        echo $this->arr_repr($arr)."\n";
+        echo $this->arr_repr($arr) . "\n";
     }
 
     public function main()
@@ -747,9 +749,11 @@ class MaxWeightMatching
 
                 $arrayRange3 = range($this->nvertex, 2 * $this->nvertex - 1);
                 foreach ($arrayRange3 as $b) {
-                    if ($this->blossombase[$b] >= 0 && $this->blossomparent[$b] == -1 &&
+                    if (
+                        $this->blossombase[$b] >= 0 && $this->blossomparent[$b] == -1 &&
                             $this->label[$b] == 2 &&
-                            ($deltatype == -1 || $this->dualvar[$b] < $delta)) {
+                            ($deltatype == -1 || $this->dualvar[$b] < $delta)
+                    ) {
                         $delta = $this->dualvar[$b];
                         $deltatype = 4;
                         $deltablossom = $b;
@@ -808,8 +812,10 @@ class MaxWeightMatching
 
             $arrayRange2 = range($this->nvertex, 2 * $this->nvertex - 1);
             foreach ($arrayRange2 as $b) {
-                if ($this->blossomparent[$b] == -1 && $this->blossombase[$b] >= 0 &&
-                        $this->label[$b] == 1 && $this->dualvar[$b] == 0) {
+                if (
+                    $this->blossomparent[$b] == -1 && $this->blossombase[$b] >= 0 &&
+                        $this->label[$b] == 1 && $this->dualvar[$b] == 0
+                ) {
                     $this->expandBlossom($b, true);
                 }
             }

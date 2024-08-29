@@ -13,3 +13,7 @@ Setup:
 
 Tests:
 $ vendor/bin/phpunit -v tests/
+
+Lint:
+$ vendor/bin/phpcs --standard=PSR12 --runtime-set testVersion 8.1 --ignore=vendor .
+$ vendor/bin/phpcbf --standard=PSR12 --runtime-set testVersion 8.1 --ignore=vendor . # autofix

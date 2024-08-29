@@ -1,6 +1,7 @@
-function update_cta() {
+function update_cta()
+{
 
-    $.get("action.php", function(data) {
+    $.get("action.php", function (data) {
         $("#action").html(data)
     });
 }

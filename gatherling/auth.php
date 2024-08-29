@@ -3,8 +3,8 @@
 use Gatherling\Player;
 use Wohali\OAuth2\Client\Provider\Exception\DiscordIdentityProviderException;
 
-require_once __DIR__.'/lib.php';
-require __DIR__.'/authlib.php';
+require_once __DIR__ . '/lib.php';
+require __DIR__ . '/authlib.php';
 
 session_start();
 
@@ -64,7 +64,6 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     unset($_SESSION['oauth2state']);
     exit('Failed CSRF check. Please try again, or disable any browser extensions that might be causing issues.');
 } else {
-
     // Step 2. Get an access token using the provided authorization code
     $token = $provider->getAccessToken('authorization_code', [
         'code' => $_GET['code'],
@@ -84,7 +83,7 @@ function send_to_discord($scope = null)
     $options = ['scope' => $scope];
     $authUrl = $provider->getAuthorizationUrl($options);
     $_SESSION['oauth2state'] = $provider->getState();
-    header('Location: '.$authUrl);
+    header('Location: ' . $authUrl);
 }
 
 /**
@@ -180,6 +179,6 @@ function prompt_link_account($user)
         </div> <!-- gatherling_main -->
     </div> <!-- grid 10 pre 1 suff 1 -->
 
-<?php
+    <?php
     print_footer();
 }

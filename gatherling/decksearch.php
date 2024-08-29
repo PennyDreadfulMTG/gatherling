@@ -384,7 +384,7 @@ function displayDecksFromID($id_arr)
     foreach ($ids_populated as $index => $deckinfo) {
         $display_date = date('d-m-Y', strtotime($deckinfo['created_date'])); ?>
         <tr<?php echo $index % 2 ? ' class="even"' : '' ?>>
-    <?php
+        <?php
         if (strlen($deckinfo['name']) > 23) {
             $deckinfo['name'] = preg_replace('/\s+?(\S+)?$/', '', substr($deckinfo['name'], 0, 22)) . '...';
         }

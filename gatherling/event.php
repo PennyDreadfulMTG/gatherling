@@ -344,7 +344,7 @@ function eventList($series = '', $season = '')
     foreach ($playerSeries as $oneSeries) {
         $seriesEscaped[] = $db->escape_string($oneSeries);
     }
-    $seriesString = '"'.implode('","', $seriesEscaped).'"';
+    $seriesString = '"' . implode('","', $seriesEscaped) . '"';
     $query = "SELECT e.name AS name, e.format AS format,
     COUNT(DISTINCT n.player) AS players, e.host AS host, e.start AS start,
     e.finalized, e.cohost, e.series, e.kvalue
@@ -352,27 +352,28 @@ function eventList($series = '', $season = '')
     LEFT OUTER JOIN entries AS n ON n.event_id = e.id
     WHERE (e.host = \"{$db->escape_string($player->name)}\"
            OR e.cohost = \"{$db->escape_string($player->name)}\"
-           OR e.series IN (".$seriesString.'))';
+           OR e.series IN (" . $seriesString . '))';
     if (isset($_GET['format']) && strcmp($_GET['format'], '') != 0) {
-        $query = $query." AND e.format=\"{$db->escape_string($_GET['format'])}\" ";
+        $query = $query . " AND e.format=\"{$db->escape_string($_GET['format'])}\" ";
     }
     if (isset($_GET['series']) && strcmp($_GET['series'], '') != 0) {
-        $query = $query." AND e.series=\"{$db->escape_string($_GET['series'])}\" ";
+        $query = $query . " AND e.series=\"{$db->escape_string($_GET['series'])}\" ";
     }
     if (isset($_GET['season']) && strcmp($_GET['season'], '') != 0) {
-        $query = $query." AND e.season=\"{$db->escape_string($_GET['season'])}\" ";
+        $query = $query . " AND e.season=\"{$db->escape_string($_GET['season'])}\" ";
     }
-    $query = $query.' GROUP BY e.name ORDER BY e.start DESC LIMIT 100';
+    $query = $query . ' GROUP BY e.name ORDER BY e.start DESC LIMIT 100';
     $result = $db->query($query);
 
     $seriesShown = [];
     $results = [];
     $finalizedResults = [];
     while ($thisEvent = $result->fetch_assoc()) {
-        if ($thisEvent['finalized'] == 1)
+        if ($thisEvent['finalized'] == 1) {
             $finalizedResults[] = $thisEvent;
-        else
+        } else {
             $results[] = $thisEvent;
+        }
         $seriesShown[] = $thisEvent['series'];
     }
     $results = array_merge($results, $finalizedResults);
@@ -436,7 +437,7 @@ function eventList($series = '', $season = '')
                 break;
         }
         echo '<tr><td>';
-        echo '<a href="event.php?name='.rawurlencode($thisEvent['name']).'">';
+        echo '<a href="event.php?name=' . rawurlencode($thisEvent['name']) . '">';
         echo "{$thisEvent['name']}</a></td>";
         echo "<td>{$thisEvent['format']}</td>";
         echo "<td>{$kvalue}</td>";
@@ -743,12 +744,13 @@ function playerList($event)
         if ($format->tribal) {
             echo '<th>Tribe</th>';
         }
-        if ($event->mainstruct == 'Swiss')
+        if ($event->mainstruct == 'Swiss') {
             echo '<th>Byes</th>';
-        elseif ($event->mainstruct == 'Single Elimination')
+        } elseif ($event->mainstruct == 'Single Elimination') {
             echo '<th>Seed</th>';
-        else
+        } else {
             echo '<th></th>';
+        }
         echo '<th>Delete</th></tr>';
     } else {
         echo '<tr><td align="center" colspan="5"><i>';
@@ -764,7 +766,7 @@ function playerList($event)
                 echo '<input type="checkbox" name="dropplayer[]" ';
                 echo "value=\"{$entry->player->name}\"></td>";
             } else {
-                echo "<td>{$drop_icon} {$entry->drop_round} <a href=\"event.php?view=reg&player=".$entry->player->name.'&event='.$event->id.'&action=undrop&event_id='.$event->id.'">(undrop)</a></td>'; // else echo a symbol to represent player has dropped
+                echo "<td>{$drop_icon} {$entry->drop_round} <a href=\"event.php?view=reg&player=" . $entry->player->name . '&event=' . $event->id . '&action=undrop&event_id=' . $event->id . '">(undrop)</a></td>'; // else echo a symbol to represent player has dropped
             }
         }
         if ($event->finalized && !$event->active) {
@@ -796,22 +798,19 @@ function playerList($event)
         echo "<td>$decklink</td>";
         if ($format->tribal) {
             if ($entry->deck != null) {
-                echo '<td>'.$entry->deck->tribe.'</td>';
+                echo '<td>' . $entry->deck->tribe . '</td>';
             } else {
                 echo '<td> </td>'; // leave tribe blank
             }
         }
         echo '<td align="center">';
-        if ($event->mainstruct == 'Swiss')
-        {
+        if ($event->mainstruct == 'Swiss') {
             if ($event->active == 1 || $event->finalized) {
                 echo $entry->initial_byes;
             } else {
                 initialByeDropMenu('initial_byes[]', $entry->player->name, $entry->initial_byes);
             }
-        }
-        elseif ($event->mainstruct == 'Single Elimination')
-        {
+        } elseif ($event->mainstruct == 'Single Elimination') {
             if ($event->active == 1 || $event->finalized) {
                 echo $entry->initial_seed;
             } else {
@@ -860,8 +859,9 @@ function playerList($event)
     if ($event->active == 0 && $event->finalized == 0) {
         echo '<table><tr><td colspan="2">';
         echo '<font color= "red"><b><p class="squeeze">Warning: Players who have not entered deck lists will be dropped automatically!</p></b></font>';
-        if ($event->mainstruct == 'Single Elimination')
+        if ($event->mainstruct == 'Single Elimination') {
             echo '<p>Note: When assigning initial seeds, players will be paired 1v2, 3v4, 5v6, etc.</p>';
+        }
         echo '</td></tr></table>';
     }
 
@@ -1107,8 +1107,7 @@ function matchList(Event $event)
     echo '</form></table>';
     if (!$event->finalized) {
         echo '<p>Paste stuff:<br />';
-        if ($event->current_round <= 1)
-        {
+        if ($event->current_round <= 1) {
             echo "This event will be {$event->structureSummary()}<br/><br/>";
         }
         echo "<code>{$ezypaste}</code></p>";
@@ -1174,25 +1173,25 @@ function medalList($event)
     echo '<tr><td align="center"><b>Medal</td>';
     echo '<td align="center"><b>Player</td></tr>';
     echo '<tr><td align="center">';
-    echo image_tag('1st.png').'</td>';
+    echo image_tag('1st.png') . '</td>';
     echo '<td align="center">';
     playerDropMenu($event, '1', $event->active, $def1);
     echo '</td></tr>';
     echo '<tr><td align="center">';
-    echo image_tag('2nd.png').'</td>';
+    echo image_tag('2nd.png') . '</td>';
     echo '<td align="center">';
     playerDropMenu($event, '2', $event->active, $def2);
     echo '</td></tr>';
     for ($i = 3; $i < 5; $i++) {
         echo '<tr><td align="center">';
-        echo image_tag('t4.png').'</td>';
+        echo image_tag('t4.png') . '</td>';
         echo '<td align="center">';
         playerDropMenu($event, $i, $event->active, $def4[$i - 3]);
         echo '</td></tr>';
     }
     for ($i = 5; $i < 9; $i++) {
         echo '<tr><td align="center">';
-        echo image_tag('t8.png').'</td>';
+        echo image_tag('t8.png') . '</td>';
         echo '<td align="center">';
         playerDropMenu($event, $i, $event->active, $def8[$i - 5]);
         echo '</td></tr>';
@@ -1542,9 +1541,9 @@ function resultDropMenu($name = 'newmatchresult', $extra_options = [])
 function initialByeDropMenu($name = 'initial_byes', $playername = '', $current_byes = 0)
 {
     echo "<select class=\"inputbox\" name=\"{$name}\">";
-    echo "<option value=\"$playername 0\"".($current_byes == 0 ? ' selected' : '').'>None</option>';
+    echo "<option value=\"$playername 0\"" . ($current_byes == 0 ? ' selected' : '') . '>None</option>';
     for ($i = 1; $i < 3; $i++) {
-        echo "<option value=\"$playername $i\"".($current_byes == $i ? ' selected' : '').">$i</option>";
+        echo "<option value=\"$playername $i\"" . ($current_byes == $i ? ' selected' : '') . ">$i</option>";
     }
     echo '</select>';
 }
@@ -1552,9 +1551,9 @@ function initialByeDropMenu($name = 'initial_byes', $playername = '', $current_b
 function initialSeedDropMenu($name = 'initial_seed', $playername = '', $current_seed = 127, $numentries = 8)
 {
     echo "<select class=\"inputbox\" name=\"{$name}\">";
-    echo "<option value=\"$playername 127\"".($current_seed == 127 ? ' selected' : '').'>None</option>';
+    echo "<option value=\"$playername 127\"" . ($current_seed == 127 ? ' selected' : '') . '>None</option>';
     for ($i = 1; $i <= $numentries; $i++) {
-        echo "<option value=\"$playername $i\"".($current_seed == $i ? ' selected' : '').">$i</option>";
+        echo "<option value=\"$playername $i\"" . ($current_seed == $i ? ' selected' : '') . ">$i</option>";
     }
     echo '</select>';
 }
@@ -1563,15 +1562,15 @@ function controlPanel($event, $cur = '')
 {
     $name = $event->name;
     echo '<tr><td colspan="2" align="center">';
-    echo '<a href="event.php?name='.rawurlencode($name).'&view=settings">Event Settings</a>';
-    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=reg">Registration</a>';
-    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=match">Match Listing</a>';
-    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=standings">Standings</a>';
-    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=medal">Medals</a>';
+    echo '<a href="event.php?name=' . rawurlencode($name) . '&view=settings">Event Settings</a>';
+    echo ' | <a href="event.php?name=' . rawurlencode($name) . '&view=reg">Registration</a>';
+    echo ' | <a href="event.php?name=' . rawurlencode($name) . '&view=match">Match Listing</a>';
+    echo ' | <a href="event.php?name=' . rawurlencode($name) . '&view=standings">Standings</a>';
+    echo ' | <a href="event.php?name=' . rawurlencode($name) . '&view=medal">Medals</a>';
     // echo " | <a href=\"event.php?name=$name&view=autoinput\">Auto-Input</a>"; hiding until I fix the auto-input feature
     // echo ' | <a href="event.php?name='.rawurlencode($name).'&view=fileinput">DCI-R File Input</a>';
-    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=points_adj">Season Points Adj.</a>';
-    echo ' | <a href="event.php?name='.rawurlencode($name).'&view=reports">Reports</a>';
+    echo ' | <a href="event.php?name=' . rawurlencode($name) . '&view=points_adj">Season Points Adj.</a>';
+    echo ' | <a href="event.php?name=' . rawurlencode($name) . '&view=reports">Reports</a>';
     echo '</td></tr>';
 }
 
@@ -1794,8 +1793,8 @@ function autoInputForm($event)
         } else {
             for ($rnd = 1; $rnd <= $subevent->rounds; $rnd++) {
                 $printrnd = $rnd + $totalrnds;
-                $pairfield = $printrnd.'p';
-                $standfield = $printrnd.'s';
+                $pairfield = $printrnd . 'p';
+                $standfield = $printrnd . 's';
                 echo '<tr><td colspan="2" align="center"><b>';
                 echo "Round $printrnd Pairings</td></tr>";
                 echo '<tr><td colspan="2" align="center">';
@@ -1972,11 +1971,13 @@ function extractPairings($text)
     $lines = explode("\n", $text);
     $loc = 0;
     for ($ndx = 0; $ndx < count($lines); $ndx++) {
-        if (preg_match(
-            "/^\s*[0-9]+\s+([0-9]+\s+)?([0-9a-z_.\- ]+),.*\s+[0-9]+\s+([0-9a-z_.\- ]+),/i",
-            $lines[$ndx],
-            $m
-        )) {
+        if (
+            preg_match(
+                "/^\s*[0-9]+\s+([0-9]+\s+)?([0-9a-z_.\- ]+),.*\s+[0-9]+\s+([0-9a-z_.\- ]+),/i",
+                $lines[$ndx],
+                $m
+            )
+        ) {
             $pairings[$loc] = [$m[2], $m[3]];
             $loc++;
         }
@@ -1990,11 +1991,13 @@ function extractBye($text)
     $lines = explode("\n", $text);
     $loc = 0;
     for ($ndx = 0; $ndx < count($lines); $ndx++) {
-        if (preg_match(
-            "/^\s*[0-9]+\s+([0-9]+\s+)?([0-9a-z_.\- ]+),.*\s+\* BYE \*/i",
-            $lines[$ndx],
-            $m
-        )) {
+        if (
+            preg_match(
+                "/^\s*[0-9]+\s+([0-9]+\s+)?([0-9a-z_.\- ]+),.*\s+\* BYE \*/i",
+                $lines[$ndx],
+                $m
+            )
+        ) {
             return $m[2];
         }
     }
@@ -2005,11 +2008,13 @@ function extractStandings($text)
     $standings = [];
     $lines = explode("\n", $text);
     for ($ndx = 0; $ndx < count($lines); $ndx++) {
-        if (preg_match(
-            "/^\s*[0-9]+\s+([0-9]+\s+)?([0-9a-z_.\- ]+),.*\s+([0-9]+)\s+/i",
-            $lines[$ndx],
-            $m
-        )) {
+        if (
+            preg_match(
+                "/^\s*[0-9]+\s+([0-9]+\s+)?([0-9a-z_.\- ]+),.*\s+([0-9]+)\s+/i",
+                $lines[$ndx],
+                $m
+            )
+        ) {
             $standings[$m[2]] = $m[3];
         }
     }

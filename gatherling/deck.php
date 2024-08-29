@@ -25,7 +25,7 @@ if (isset($_GET['event'])) {
         echo '<div class="uppertitle">Deck Database</div>';
     } else {
         $event = new Event($_GET['event']);
-        echo '<div class="uppertitle">'.$event->name.'</div>';
+        echo '<div class="uppertitle">' . $event->name . '</div>';
     }
 } else {
     echo '<div class="uppertitle">Deck Database</div>';
@@ -124,12 +124,12 @@ function deckForm($deck = null)
     $vals = ['contents' => '', 'sideboard' => ''];
     if (!$create) {
         foreach ($deck->maindeck_cards as $card => $amt) {
-            $line = $amt.' '.$card."\n";
-            $vals['contents'] = $vals['contents'].$line;
+            $line = $amt . ' ' . $card . "\n";
+            $vals['contents'] = $vals['contents'] . $line;
         }
         foreach ($deck->sideboard_cards as $card => $amt) {
-            $line = $amt.' '.$card."\n";
-            $vals['sideboard'] = $vals['sideboard'].$line;
+            $line = $amt . ' ' . $card . "\n";
+            $vals['sideboard'] = $vals['sideboard'] . $line;
         }
         $vals['desc'] = $deck->notes;
         $vals['archetype'] = $deck->archetype;
@@ -263,7 +263,7 @@ function archetypeDropMenu($def = '')
 {
     $archetypes = Deck::getArchetypes();
     $archetypes = array_combine($archetypes, $archetypes);
-    $archetypes = ['Unclassified'=>'- Archetype -'] + $archetypes;
+    $archetypes = ['Unclassified' => '- Archetype -'] + $archetypes;
     print_select_input('Archetype', 'archetype', $archetypes, $def, 'deck-archetype');
 }
 
@@ -406,15 +406,15 @@ function deckInfoCell($deck)
     $nsidecards = $deck->getCardCount($deck->sideboard_cards);
     $event = $deck->getEvent();
     $day = date('F j, Y', strtotime($event->start));
-    $mstr = image_tag($deck->medal.'.png').'&nbsp;';
+    $mstr = image_tag($deck->medal . '.png') . '&nbsp;';
     if ($deck->medal == '1st') {
-        $placing = $mstr.'1st by';
+        $placing = $mstr . '1st by';
     } elseif ($deck->medal == '2nd') {
-        $placing = $mstr.'2nd by';
+        $placing = $mstr . '2nd by';
     } elseif ($deck->medal == 't4') {
-        $placing = $mstr.'Top 4 by';
+        $placing = $mstr . 'Top 4 by';
     } elseif ($deck->medal == 't8') {
-        $placing = $mstr.'Top 8 by';
+        $placing = $mstr . 'Top 8 by';
     } else {
         $placing = 'Played by';
     }
@@ -427,7 +427,7 @@ function deckInfoCell($deck)
         if ($player && $event->authCheck($player)) {
             $targetUrl = 'event';
         }
-        $line3 .= " in <a href=\"{$targetUrl}.php?event=".rawurlencode($deck->eventname)."\"><span class=\"eventname\" title=\"{$day}\">{$event->name}</span></a>\n";
+        $line3 .= " in <a href=\"{$targetUrl}.php?event=" . rawurlencode($deck->eventname) . "\"><span class=\"eventname\" title=\"{$day}\">{$event->name}</span></a>\n";
     } else {
         $line3 .= 'Never played (?) according to records.';
     }
@@ -437,24 +437,24 @@ function deckInfoCell($deck)
     if (empty($name)) {
         $name = '** NO NAME **';
     }
-    $line1 = '<b>'.strtoupper($name).'</b>';
+    $line1 = '<b>' . strtoupper($name) . '</b>';
     if (!$deck->isValid()) {
         $line1 .= $rstar;
     }
     $cardcountsline = "{$nmaincards} Maindeck cards and {$nsidecards} Sideboard";
-    $line2 = $event->format.' &middot; '.$deck->getColorImages();
-    $line3 .= '<i>('.$deck->recordString().')</i>';
+    $line2 = $event->format . ' &middot; ' . $deck->getColorImages();
+    $line3 .= '<i>(' . $deck->recordString() . ')</i>';
     $format = new Format($event->format);
     if ($format->tribal > 0) {
-        $line2 .= ' '.$deck->tribe.'  '.$deck->archetype."</td></tr>\n";
+        $line2 .= ' ' . $deck->tribe . '  ' . $deck->archetype . "</td></tr>\n";
     } else {
-        $line2 .= $deck->archetype."</td></tr>\n ";
+        $line2 .= $deck->archetype . "</td></tr>\n ";
     }
 
     echo "<table style=\"border-width: 0px\">\n";
     echo "<tr><td style=\"font-size: 10pt;\">$line1 (deck id: $deck->id)</td></tr>\n";
     if ($format->tribal > 0) {
-        echo '<tr><td>Tribe: '.$deck->tribe.'</td></tr>';
+        echo '<tr><td>Tribe: ' . $deck->tribe . '</td></tr>';
     }
     echo "<tr><td>$cardcountsline</td></tr>\n";
     echo "<tr><td>$line2";
@@ -509,7 +509,7 @@ function exactMatchTable($deck)
         $cell1 = medalImgStr($deck->medal);
         $cell4 = $deck->recordString();
         echo "<tr><td>$cell1</td>\n";
-        echo '<td style="width: 140px">'.$deck->linkTo()."</td>\n";
+        echo '<td style="width: 140px">' . $deck->linkTo() . "</td>\n";
         echo "<td>{$deck->playername}</td>\n";
         echo "<td><a href=\"{$deck->getEvent()->threadurl}\">{$deck->eventname}</a></td>\n";
         echo "<td style=\"text-align: right; width: 30px;\">$cell4</td></tr>\n";
@@ -530,9 +530,9 @@ function matchupTable($deck)
         }
 
         foreach ($matches as $match) {
-            $rnd = 'R'.$match->round;
+            $rnd = 'R' . $match->round;
             if ($match->timing > 1 && $match->type == 'Single Elimination') {
-                $rnd = 'T'.pow(2, $match->rounds - $match->round + 1);
+                $rnd = 'T' . pow(2, $match->rounds - $match->round + 1);
             }
             $color = '#FF9900';
             $res = 'Draw';
@@ -561,7 +561,7 @@ function matchupTable($deck)
                 echo "<td><b style=\"color: $color\">$res</b></td>\n";
                 echo "<td class=\"score\">{$match->getPlayerWins($deck->playername)}-{$match->getPlayerLosses($deck->playername)}</td>";
                 echo "<td>vs.</td>\n";
-                echo '<td class=\"player\">'.$opp->linkTo()."</td>\n";
+                echo '<td class=\"player\">' . $opp->linkTo() . "</td>\n";
                 if (!$event->active && $event->finalized) {
                     echo "<td>$deckcell</td></tr>\n";
                 }
@@ -581,138 +581,138 @@ function matchupTable($deck)
     echo "</table>\n";
 }
 
-  function deckErrorTable($deckErrors)
-  {
-      echo "<table style=\"border-width: 0px; width: 100%; \" cellpadding=1>\n";
-      echo '<tr><td><span class="error"><b>ERRORS</spa></td></tr>';
-      foreach ($deckErrors as $error) {
-          echo "<tr><td><span class=\"error\">{$error}</span></td></tr>";
-      }
-      echo '</table>';
-  }
+function deckErrorTable($deckErrors)
+{
+    echo "<table style=\"border-width: 0px; width: 100%; \" cellpadding=1>\n";
+    echo '<tr><td><span class="error"><b>ERRORS</spa></td></tr>';
+    foreach ($deckErrors as $error) {
+        echo "<tr><td><span class=\"error\">{$error}</span></td></tr>";
+    }
+    echo '</table>';
+}
 
-  function maindeckTable($deck)
-  {
-      $creatures = $deck->getCreatureCards();
-      $creaturesCount = $deck->getCardCount($creatures);
+function maindeckTable($deck)
+{
+    $creatures = $deck->getCreatureCards();
+    $creaturesCount = $deck->getCardCount($creatures);
 
-      $lands = $deck->getLandCards();
-      $landsCount = $deck->getCardCount($lands);
+    $lands = $deck->getLandCards();
+    $landsCount = $deck->getCardCount($lands);
 
-      $other = $deck->getOtherCardS();
-      $otherSpellsCount = $deck->getCardCount($other);
+    $other = $deck->getOtherCardS();
+    $otherSpellsCount = $deck->getCardCount($other);
 
-      echo "<table style=\"border-width: 0px\" cellpadding=1>\n";
-      echo "<tr><td colspan=1><b>MAINDECK ({$deck->getCardCount($deck->maindeck_cards)} Cards)</td></tr>\n";
-      echo "<tr><td colspan=2><i>{$creaturesCount} Creatures</td></tr>\n";
-      foreach ($creatures as $card => $amt) {
-          echo "<tr><td>{$amt} ";
-          printCardLink($card);
-          echo "</td></tr>\n";
-      }
-      echo "<tr><td colspan=2><i>{$otherSpellsCount} Spells</td></tr>\n";
-      foreach ($other as $card => $amt) {
-          echo "<tr><td>{$amt} ";
-          printCardLink($card);
-          echo "</td></tr>\n";
-      }
-      echo "<tr><td colspan=2><i>{$landsCount} Lands</td></tr>\n";
-      foreach ($lands as $card => $amt) {
-          echo "<tr><td>{$amt} ";
-          printCardLink($card);
-          echo "</td></tr>\n";
-      }
-      echo "</table>\n";
-  }
+    echo "<table style=\"border-width: 0px\" cellpadding=1>\n";
+    echo "<tr><td colspan=1><b>MAINDECK ({$deck->getCardCount($deck->maindeck_cards)} Cards)</td></tr>\n";
+    echo "<tr><td colspan=2><i>{$creaturesCount} Creatures</td></tr>\n";
+    foreach ($creatures as $card => $amt) {
+        echo "<tr><td>{$amt} ";
+        printCardLink($card);
+        echo "</td></tr>\n";
+    }
+    echo "<tr><td colspan=2><i>{$otherSpellsCount} Spells</td></tr>\n";
+    foreach ($other as $card => $amt) {
+        echo "<tr><td>{$amt} ";
+        printCardLink($card);
+        echo "</td></tr>\n";
+    }
+    echo "<tr><td colspan=2><i>{$landsCount} Lands</td></tr>\n";
+    foreach ($lands as $card => $amt) {
+        echo "<tr><td>{$amt} ";
+        printCardLink($card);
+        echo "</td></tr>\n";
+    }
+    echo "</table>\n";
+}
 
-  function ccTable($deck)
-  {
-      $convertedcosts = $deck->getCastingCosts();
+function ccTable($deck)
+{
+    $convertedcosts = $deck->getCastingCosts();
 
-      echo "<table style=\"border-width: 0px;\">\n";
-      echo '<tr><td colspan=2 align="center" width=150><b>CASTING COSTS</td></tr>';
-      $total = 0;
-      $cards = 0;
-      foreach ($convertedcosts as $cost => $amt) {
-          echo '<tr><td align="right" width=75>';
-          echo image_tag("mana{$cost}.png");
-          echo " &nbsp;</td>\n";
-          echo "<td width=75 align=\"left\">x {$amt}</td></tr>\n";
-          $total += $cost * $amt;
-          $cards += $amt;
-      }
-      if ($cards == 0) {
-          $cards = 1;
-      }
-      $avg = $total / $cards;
-      echo '<tr><td align="right"><i>Avg CMC:&nbsp;</td><td align="left"><i>';
-      printf('%1.2f', $avg);
-      echo "</td></tr>\n";
-      echo '</table>';
-  }
+    echo "<table style=\"border-width: 0px;\">\n";
+    echo '<tr><td colspan=2 align="center" width=150><b>CASTING COSTS</td></tr>';
+    $total = 0;
+    $cards = 0;
+    foreach ($convertedcosts as $cost => $amt) {
+        echo '<tr><td align="right" width=75>';
+        echo image_tag("mana{$cost}.png");
+        echo " &nbsp;</td>\n";
+        echo "<td width=75 align=\"left\">x {$amt}</td></tr>\n";
+        $total += $cost * $amt;
+        $cards += $amt;
+    }
+    if ($cards == 0) {
+        $cards = 1;
+    }
+    $avg = $total / $cards;
+    echo '<tr><td align="right"><i>Avg CMC:&nbsp;</td><td align="left"><i>';
+    printf('%1.2f', $avg);
+    echo "</td></tr>\n";
+    echo '</table>';
+}
 
-  function symbolTable($deck)
-  {
-      echo "<table style=\"border-width: 0px\">\n";
-      echo '<tr><td align="center" colspan=2 width=150><b>MANA SYMBOLS';
-      echo "</td></tr>\n";
-      $cnts = $deck->getColorCounts();
-      asort($cnts);
-      $cnts = array_reverse($cnts, true);
-      $sum = 0;
-      foreach ($cnts as $color => $num) {
-          if ($num > 0) {
-              echo '<tr><td align="right" width=75>';
-              echo image_tag("mana{$color}.png");
-              echo "&nbsp;</td>\n";
-              echo "<td align=\"left\">$num</td></tr>\n";
-              $sum += $num;
-          }
-      }
-      echo "<tr><td align=\"right\"><i>Total:&nbsp;</td>\n";
-      echo "<td align=\"left\"><i>$sum</td></tr>\n";
-      echo "</table>\n";
-  }
+function symbolTable($deck)
+{
+    echo "<table style=\"border-width: 0px\">\n";
+    echo '<tr><td align="center" colspan=2 width=150><b>MANA SYMBOLS';
+    echo "</td></tr>\n";
+    $cnts = $deck->getColorCounts();
+    asort($cnts);
+    $cnts = array_reverse($cnts, true);
+    $sum = 0;
+    foreach ($cnts as $color => $num) {
+        if ($num > 0) {
+            echo '<tr><td align="right" width=75>';
+            echo image_tag("mana{$color}.png");
+            echo "&nbsp;</td>\n";
+            echo "<td align=\"left\">$num</td></tr>\n";
+            $sum += $num;
+        }
+    }
+    echo "<tr><td align=\"right\"><i>Total:&nbsp;</td>\n";
+    echo "<td align=\"left\"><i>$sum</td></tr>\n";
+    echo "</table>\n";
+}
 
-  function authFailed()
-  {
-      echo 'You are not permitted to make that change.  Reasons why you cannot make changes to a deck are: <br /> ';
-      echo '<ul>';
-      echo '<li>You are not the player who played/created the deck for this event.';
-      echo '<li>The event has already started and become active.</li>';
-      echo '<li>The event has completed and become finalized.</li>';
-      echo '</ul>';
-      echo 'Please contact the event host to modify this deck. If you <b>are</b> the event host ';
-      echo 'or feel that you should have privilege to modify this deck, you ';
-      echo 'should contact the admin via <a href="https://discord.gg/2VJ8Fa6">the Discord server</a>.<br><br>';
-  }
+function authFailed()
+{
+    echo 'You are not permitted to make that change.  Reasons why you cannot make changes to a deck are: <br /> ';
+    echo '<ul>';
+    echo '<li>You are not the player who played/created the deck for this event.';
+    echo '<li>The event has already started and become active.</li>';
+    echo '<li>The event has completed and become finalized.</li>';
+    echo '</ul>';
+    echo 'Please contact the event host to modify this deck. If you <b>are</b> the event host ';
+    echo 'or feel that you should have privilege to modify this deck, you ';
+    echo 'should contact the admin via <a href="https://discord.gg/2VJ8Fa6">the Discord server</a>.<br><br>';
+}
 
-  function loginRequired()
-  {
-      echo "<center>You can't do that unless you <a href=\"login.php\">log in first</a></center>";
-  }
+function loginRequired()
+{
+    echo "<center>You can't do that unless you <a href=\"login.php\">log in first</a></center>";
+}
 
-  function checkDeckAuth($event, $player, $deck = null)
-  {
-      if (!Player::isLoggedIn()) {
-          loginRequired();
+function checkDeckAuth($event, $player, $deck = null)
+{
+    if (!Player::isLoggedIn()) {
+        loginRequired();
 
-          return false;
-      }
-      if (is_null($deck) && $event->id > 0) {
-          // Creating a deck.
-          $entry = new Entry($event->id, $player);
-          $auth = $entry->canCreateDeck(Player::loginName());
-      } else {
-          // Updating a deck.
-          $auth = $deck->canEdit(Player::loginName());
-      }
+        return false;
+    }
+    if (is_null($deck) && $event->id > 0) {
+        // Creating a deck.
+        $entry = new Entry($event->id, $player);
+        $auth = $entry->canCreateDeck(Player::loginName());
+    } else {
+        // Updating a deck.
+        $auth = $deck->canEdit(Player::loginName());
+    }
 
-      if (!$auth) {
-          authFailed();
-      }
+    if (!$auth) {
+        authFailed();
+    }
 
-      return $auth;
-  }
+    return $auth;
+}
 
-  ?>
+?>

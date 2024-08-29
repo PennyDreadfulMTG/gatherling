@@ -26,7 +26,7 @@ final class EventsTest extends TestCase
             $series = new Series('');
             $series->name = 'Test';
             $series->active = true;
-            $series->start_time = '00:00'.':00';
+            $series->start_time = '00:00' . ':00';
             $series->start_day = 'Friday';
             $series->save();
         }
@@ -107,7 +107,7 @@ final class EventsTest extends TestCase
     public function testRegistration($event)
     {
         for ($i = 0; $i < 10; $i++) {
-            $event->addPlayer('testplayer'.$i);
+            $event->addPlayer('testplayer' . $i);
         }
         // 8 players have expressed interest in the event.
         $this->assertEquals(10, count($event->getEntries()));

@@ -77,40 +77,40 @@ function do_page()
         return;
     } else {
         switch ($view) {
-      case 'no_view':
-      case 'settings':
-        printSeriesForm($active_series);
-        printLogoForm($active_series);
-        break;
-      case 'recent_events':
-        printRecentEventsTable($active_series);
-        break;
-      case 'points_management':
-        printPointsForm($active_series);
-        break;
-      case 'organizers':
-        printSeriesOrganizersForm($active_series);
-        break;
-      case 'bannedplayers':
-        printPlayerBanForm($active_series);
-        break;
-      case 'format_editor':
-        $esn = urlencode($active_series_name);
-        redirect("formatcp.php?series=$esn");
-        break;
-      case 'trophies':
-        printMissingTrophies($active_series);
-        break;
-      case 'season_standings':
-        $active_series->seasonStandings($active_series, $active_series->currentSeason());
-        break;
-      case 'points_adj':
-        seasonPointsAdj();
-        break;
-      case 'discord':
-        printDiscordForm($active_series);
-        break;
-    }
+            case 'no_view':
+            case 'settings':
+                printSeriesForm($active_series);
+                printLogoForm($active_series);
+                break;
+            case 'recent_events':
+                printRecentEventsTable($active_series);
+                break;
+            case 'points_management':
+                printPointsForm($active_series);
+                break;
+            case 'organizers':
+                printSeriesOrganizersForm($active_series);
+                break;
+            case 'bannedplayers':
+                printPlayerBanForm($active_series);
+                break;
+            case 'format_editor':
+                $esn = urlencode($active_series_name);
+                redirect("formatcp.php?series=$esn");
+                break;
+            case 'trophies':
+                printMissingTrophies($active_series);
+                break;
+            case 'season_standings':
+                $active_series->seasonStandings($active_series, $active_series->currentSeason());
+                break;
+            case 'points_adj':
+                seasonPointsAdj();
+                break;
+            case 'discord':
+                printDiscordForm($active_series);
+                break;
+        }
     }
 }
 
@@ -378,7 +378,7 @@ function printLogoForm($series)
     echo '<table class="form" style="border-width: 0px;" align="center">';
     echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
     echo '<tr><th>Current Logo</th>';
-    echo '<td>'.Series::image_tag($series->name).'</td></tr>';
+    echo '<td>' . Series::image_tag($series->name) . '</td></tr>';
     echo '<tr><th>Upload New Logo</th>';
     echo '<td><input class="inputbox" type="file" name="logo" /> ';
     echo '<input class="inputbutton" type="submit" name="action" value="Change Logo" /></td></tr>';
@@ -467,7 +467,7 @@ function handleActions()
         $series = new Series($seriesname);
         if ($series->authCheck(Player::loginName())) {
             $series->active = $newactive;
-            $series->start_time = $newtime.':00';
+            $series->start_time = $newtime . ':00';
             $series->start_day = $newday;
             $series->prereg_default = $prereg;
             $series->mtgo_room = $room;

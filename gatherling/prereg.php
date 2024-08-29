@@ -49,7 +49,7 @@ if ($series->discord_require_membership && $series->discord_guild_id) {
         header('Location: auth.php');
     }
 
-    require __DIR__.'/authlib.php';
+    require __DIR__ . '/authlib.php';
     global $provider;
 
     $token = load_cached_token();

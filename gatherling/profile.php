@@ -277,7 +277,7 @@ function medalCell($medal, $count)
 
 function inlineMedal($medal)
 {
-    echo medalImgStr($medal).'&nbsp;';
+    echo medalImgStr($medal) . '&nbsp;';
 }
 
 function deckRecordString($deckname, $player)
@@ -300,9 +300,9 @@ function deckRecordString($deckname, $player)
             $draws++;
         }
     }
-    $recordString = $wins.'-'.$losses;
+    $recordString = $wins . '-' . $losses;
     if ($draws > 0) {
-        $recordString .= '-'.$draws;
+        $recordString .= '-' . $draws;
     }
 
     return $recordString;

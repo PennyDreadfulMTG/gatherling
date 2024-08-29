@@ -71,7 +71,7 @@ function activeEvents()
             $name = $event->name;
             $format = $event->format;
             $round = $event->current_round;
-            $col2 = '<a href="eventreport.php?event='.rawurlencode($name)."\">{$name}</a>";
+            $col2 = '<a href="eventreport.php?event=' . rawurlencode($name) . "\">{$name}</a>";
             ?>
                 <tr>
                     <td><?= $format ?></td>
@@ -99,7 +99,7 @@ function upcomingEvents()
         $name = $row['name'];
         $format = $row['format'];
         $start = $row['start'];
-        $col2 = '<a href="eventreport.php?event='.rawurlencode($name)."\">$name</a>";
+        $col2 = '<a href="eventreport.php?event=' . rawurlencode($name) . "\">$name</a>";
         ?>
             <tr>
                 <td><?= $col2 ?><br><?= $format ?></td>

@@ -137,7 +137,7 @@ class Event
                 $this->client
             );
             if ($stmt->fetch() == null) {
-                throw new Exception('Event '.$name.' not found in DB');
+                throw new Exception('Event ' . $name . ' not found in DB');
             }
         }
 
@@ -496,7 +496,7 @@ class Event
     public function getTrophyImageLink()
     {
         return "<a href=\"deck.php?mode=view&event={$this->id}\" class=\"borderless\">\n"
-           .self::trophy_image_tag($this->name)."\n</a>\n";
+           . self::trophy_image_tag($this->name) . "\n</a>\n";
     }
 
     /**
@@ -548,9 +548,11 @@ class Event
     {
         $player = new Player($playername);
 
-        if ($player->isSuper() ||
-        $this->isHost($playername) ||
-        $this->isOrganizer($playername)) {
+        if (
+            $player->isSuper() ||
+            $this->isHost($playername) ||
+            $this->isOrganizer($playername)
+        ) {
             return true;
         }
 
@@ -585,8 +587,10 @@ class Event
             if ($checkActive) {
                 $standings = new Standings($this->name, $player);
             }
-            if ($entry->deck->isValid()
-                && (!$checkActive || $standings->active)) {
+            if (
+                $entry->deck->isValid()
+                && (!$checkActive || $standings->active)
+            ) {
                 $registeredPlayers[] = $player;
             }
         }
@@ -1044,7 +1048,7 @@ class Event
 
     public function makeLink($text)
     {
-        return '<a href="event.php?name='.urlencode($this->name)."\">{$text}</a>";
+        return '<a href="event.php?name=' . urlencode($this->name) . "\">{$text}</a>";
     }
 
     public function linkTo()
@@ -1054,7 +1058,7 @@ class Event
 
     public function linkReport()
     {
-        return '<a href="eventreport.php?event='.urlencode($this->name)."\">{$this->name}</a>";
+        return '<a href="eventreport.php?event=' . urlencode($this->name) . "\">{$this->name}</a>";
     }
 
     public static function count()
@@ -1273,7 +1277,7 @@ class Event
         if (count($active_players) > 0) {
             $bye_data = [];
             if (count($active_players) % 2 != 0) {
-                $bye_data = ['player'=> $this->getByeProxyName(), 'score'=>  0, 'opponents'=> [], 'paired'=>false];
+                $bye_data = ['player' => $this->getByeProxyName(), 'score' =>  0, 'opponents' => [], 'paired' => false];
             }
 
             for ($i = 0; $i < count($active_players); $i++) {
@@ -1352,8 +1356,8 @@ class Event
     {
         $byeNum = 0;
         while (true) {
-            if (is_null(Player::findByName('BYE'.$byeNum))) {
-                return 'BYE'.$byeNum;
+            if (is_null(Player::findByName('BYE' . $byeNum))) {
+                return 'BYE' . $byeNum;
             }
             $byeNum++;
         }
@@ -1889,7 +1893,7 @@ class Event
 
         $ret = to_english($this->mainstruct, $this->mainrounds, false);
         if ($this->finalrounds > 0) {
-            $ret = $ret.' followed by '.to_english($this->finalstruct, $this->finalrounds, true);
+            $ret = $ret . ' followed by ' . to_english($this->finalstruct, $this->finalrounds, true);
         }
 
         return $ret;

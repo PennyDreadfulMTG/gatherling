@@ -30,7 +30,7 @@ while ($ndx > 0) {
         if ($deck != null || $deck->id != 0) {
             if ($deck->playername == null) {
                 $totalHangingDecks++;
-                echo '<a href="deck.php?mode=view&id='.$deck->id.'">'.$deck->name.'</a> Deck ID: '.$deck->id." is a hanging deck and will be deleted.<br />\n";
+                echo '<a href="deck.php?mode=view&id=' . $deck->id . '">' . $deck->name . '</a> Deck ID: ' . $deck->id . " is a hanging deck and will be deleted.<br />\n";
                 $deck->delete();
             }
         }

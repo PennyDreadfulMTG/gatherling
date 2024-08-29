@@ -42,7 +42,7 @@ class Database
                 self::single_result($sql);
                 $db_selected = $instance->select_db($CONFIG['db_database']);
                 if (!$db_selected) {
-                    exit('Error creating database: '.mysqli_error($instance)."\n");
+                    exit('Error creating database: ' . mysqli_error($instance) . "\n");
                 }
             }
 
@@ -60,7 +60,7 @@ class Database
         if (!isset($pdo_instance)) {
             global $CONFIG;
             $pdo_instance = new PDO(
-                'mysql:hostname='.$CONFIG['db_hostname'].';port=3306;dbname='.$CONFIG['db_database'],
+                'mysql:hostname=' . $CONFIG['db_hostname'] . ';port=3306;dbname=' . $CONFIG['db_database'],
                 $CONFIG['db_username'],
                 $CONFIG['db_password']
             );
