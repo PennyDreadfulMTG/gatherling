@@ -107,7 +107,7 @@ EOT;
         <div id="mainmenu_submenu" class="grid_12 menubar">
         <ul>
           <li><span class=\"inputbutton\"><a href="./index.php">Home</a></span></li>
-          <li><a href="https://discord.gg/F9SrMwV">Discord</a></li>
+          <li><a href="https://discord.gg/F9SrMwV"><i class="fab fa-discord"></i> Discord</a></li>
           <li><a href="./series.php">Events</a></li>
           <li><a href="./gatherling.php">Gatherling</a></li>
           <li><a href="./ratings.php">Ratings</a></li>

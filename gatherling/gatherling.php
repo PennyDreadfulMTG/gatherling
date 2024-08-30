@@ -115,8 +115,7 @@ print_header('Home'); ?>
             I am opening it up to any competent person who would like to take over Gatherling.com, please contact me.
             Make sure you are ready for the commitment, myself and many others have put a lot of work into Gatherling.com
             coding and marketing it to get it to what it is today. I do not want to see this site end as I am sure
-            no one reading this does either. You may send me a request to take over the site
-            <a href="http://www.gatherling.com/message.php?mode=Send&type=Update%20Request">here</a>.
+            no one reading this does either. <s>You may send me a request to take over the site here</s>.
         </p>
         <p>
             In your request please tell me about what you think qualifies you to take over the site as well as why you

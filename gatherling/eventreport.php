@@ -474,8 +474,6 @@ function trophyCell($event)
 {
     if ($event->hastrophy) {
         echo Event::trophy_image_tag($event->name) . "<br />\n";
-    } else {
-        echo image_tag('notrophy.png');
     }
     $deck = $event->getPlaceDeck('1st');
     $player = $event->getPlacePlayer('1st');

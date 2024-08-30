@@ -1129,6 +1129,17 @@ upgrade_db(52, 'Update character set to utf8mb4', function () {
 
     // We will now be able to import Assassin's Creed without error!
 });
+upgrade_db(53, 'Consistent db engine for all tables', function () {
+    do_query('ALTER TABLE season_points ENGINE=InnoDB;');
+    do_query('ALTER TABLE series_stewards ENGINE=InnoDB;');
+    do_query('ALTER TABLE decktypes ENGINE=InnoDB;');
+    do_query('ALTER TABLE db_version ENGINE=InnoDB;');
+    do_query('ALTER TABLE deckerrors ENGINE=InnoDB;');
+    do_query('ALTER TABLE subformats ENGINE=InnoDB;');
+    do_query('ALTER TABLE tribes ENGINE=InnoDB;');
+    do_query('ALTER TABLE series_organizers ENGINE=InnoDB;');
+    do_query('ALTER TABLE series_seasons ENGINE=InnoDB;');
+});
 $db->autocommit(true);
 
 info('DB is up to date!');

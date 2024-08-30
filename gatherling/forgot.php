@@ -4,7 +4,7 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Gatherling\Player;
 
-include 'email.php';
+include 'util/email.php';
 include 'lib.php';
 require_once 'lib_form_helper.php';
 
