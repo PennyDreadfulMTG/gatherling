@@ -827,6 +827,308 @@ upgrade_db(51, 'Add Initial Seed', function () {
     do_query('ALTER TABLE `entries`
             ADD COLUMN `initial_seed` INT NULL DEFAULT 127 AFTER `initial_byes`;');
 });
+upgrade_db(52, 'Update character set to utf8mb4', function () {
+    // Check out some cards that are kind of duplicated and clean that up so we can re-add the unique index later
+    do_query("SELECT * FROM cards WHERE name LIKE '% Strip' AND cardset = 'Weatherlight';");
+    do_query("SELECT * FROM cards WHERE name LIKE '% Owl Keeper' AND cardset = 'Coldsnap';");
+    do_query("UPDATE bans SET card_name = 'Jötun Owl Keeper', card = 5734 WHERE card = 66516;");
+    do_query("DELETE FROM cards WHERE id IN (92465, 66516);");
+
+    // Clean up some players that are hack attempts that also mess up re-adding the unique index
+    do_query("DELETE FROM players WHERE name LIKE '%type c:%';");
+    do_query("DELETE FROM players WHERE name LIKE '%cat /etc%';");
+    do_query("DELETE FROM players WHERE name LIKE '//../../../../../../../../etc/passwd%';");
+    do_query("DELETE FROM players WHERE name LIKE 'c:%';");
+
+    // Remove all FKs, then change collation to utf8mb4, then put all FKs back
+
+    // Dropping foreign key trophies_ibfk_1 on table trophies
+    do_query("ALTER TABLE `trophies` DROP FOREIGN KEY `trophies_ibfk_1`;");
+    // Dropping foreign key matches_ibfk_1 on table matches
+    do_query("ALTER TABLE `matches` DROP FOREIGN KEY `matches_ibfk_1`;");
+    // Dropping foreign key matches_ibfk_2 on table matches
+    do_query("ALTER TABLE `matches` DROP FOREIGN KEY `matches_ibfk_2`;");
+    // Dropping foreign key matches_ibfk_3 on table matches
+    do_query("ALTER TABLE `matches` DROP FOREIGN KEY `matches_ibfk_3`;");
+    // Dropping foreign key setlegality_ibfk_1 on table setlegality
+    do_query("ALTER TABLE `setlegality` DROP FOREIGN KEY `setlegality_ibfk_1`;");
+    // Dropping foreign key setlegality_ibfk_2 on table setlegality
+    do_query("ALTER TABLE `setlegality` DROP FOREIGN KEY `setlegality_ibfk_2`;");
+    // Dropping foreign key cards_ibfk_1 on table cards
+    do_query("ALTER TABLE `cards` DROP FOREIGN KEY `cards_ibfk_1`;");
+    // Dropping foreign key subevents_ibfk_1 on table subevents
+    do_query("ALTER TABLE `subevents` DROP FOREIGN KEY `subevents_ibfk_1`;");
+    // Dropping foreign key events_ibfk_1 on table events
+    do_query("ALTER TABLE `events` DROP FOREIGN KEY `events_ibfk_1`;");
+    // Dropping foreign key events_ibfk_2 on table events
+    do_query("ALTER TABLE `events` DROP FOREIGN KEY `events_ibfk_2`;");
+    // Dropping foreign key events_ibfk_3 on table events
+    do_query("ALTER TABLE `events` DROP FOREIGN KEY `events_ibfk_3`;");
+    // Dropping foreign key events_ibfk_4 on table events
+    do_query("ALTER TABLE `events` DROP FOREIGN KEY `events_ibfk_4`;");
+    // Dropping foreign key events_ibfk_5 on table events
+    do_query("ALTER TABLE `events` DROP FOREIGN KEY `events_ibfk_5`;");
+    // Dropping foreign key deckcontents_ibfk_1 on table deckcontents
+    do_query("ALTER TABLE `deckcontents` DROP FOREIGN KEY `deckcontents_ibfk_1`;");
+    // Dropping foreign key deckcontents_ibfk_2 on table deckcontents
+    do_query("ALTER TABLE `deckcontents` DROP FOREIGN KEY `deckcontents_ibfk_2`;");
+    // Dropping foreign key FK_decks_formats on table decks
+    do_query("ALTER TABLE `decks` DROP FOREIGN KEY `FK_decks_formats`;");
+    // Dropping foreign key decks_ibfk_1 on table decks
+    do_query("ALTER TABLE `decks` DROP FOREIGN KEY `decks_ibfk_1`;");
+    // Dropping foreign key standings_ibfk_2 on table standings
+    do_query("ALTER TABLE `standings` DROP FOREIGN KEY `standings_ibfk_2`;");
+    // Dropping foreign key standings_ibfk_3 on table standings
+    do_query("ALTER TABLE `standings` DROP FOREIGN KEY `standings_ibfk_3`;");
+    // Dropping foreign key bans_ibfk_1 on table bans
+    do_query("ALTER TABLE `bans` DROP FOREIGN KEY `bans_ibfk_1`;");
+    // Dropping foreign key bans_ibfk_2 on table bans
+    do_query("ALTER TABLE `bans` DROP FOREIGN KEY `bans_ibfk_2`;");
+    // Dropping foreign key entries_ibfk_2 on table entries
+    do_query("ALTER TABLE `entries` DROP FOREIGN KEY `entries_ibfk_2`;");
+    // Dropping foreign key entries_ibfk_3 on table entries
+    do_query("ALTER TABLE `entries` DROP FOREIGN KEY `entries_ibfk_3`;");
+    // Dropping foreign key entries_ibfk_4 on table entries
+    do_query("ALTER TABLE `entries` DROP FOREIGN KEY `entries_ibfk_4`;");
+
+    // Drop some unique indexes that cause problems during the conversion to utf8mb4
+    do_query('ALTER TABLE cards DROP INDEX unique_index;');
+    do_query('ALTER TABLE players DROP INDEX name;');
+
+    // Altering tables to utf8mb4
+    do_query("ALTER TABLE `archetypes` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `bans` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `cards` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `cardsets` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `client` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `db_version` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `deckcontents` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `deckerrors` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `decks` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `decktypes` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `entries` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `events` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `formats` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `matches` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `playerbans` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `players` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `ratings` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `restricted` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `restrictedtotribe` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `season_points` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `series` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `series_organizers` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `series_seasons` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `series_stewards` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `setlegality` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `standings` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `stewards` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `subevents` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `subformats` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `subformats` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `subtype_bans` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `tribe_bans` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `tribes` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    do_query("ALTER TABLE `trophies` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+
+    // Put the unique indexes we removed earlier back in place
+    do_query("ALTER TABLE players ADD UNIQUE INDEX name (name);");
+    do_query("ALTER TABLE cards ADD UNIQUE INDEX (name, cardset);");
+
+    // Recreating foreign key trophies_ibfk_1 on table trophies
+    do_query("
+        ALTER TABLE `trophies`
+        ADD CONSTRAINT `trophies_ibfk_1` FOREIGN KEY (`event`)
+        REFERENCES `events` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key matches_ibfk_1 on table matches
+    do_query("
+        ALTER TABLE `matches`
+        ADD CONSTRAINT `matches_ibfk_1` FOREIGN KEY (`playera`)
+        REFERENCES `players` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key matches_ibfk_2 on table matches
+    do_query("
+        ALTER TABLE `matches`
+        ADD CONSTRAINT `matches_ibfk_2` FOREIGN KEY (`playerb`)
+        REFERENCES `players` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key matches_ibfk_3 on table matches
+    do_query("
+        ALTER TABLE `matches`
+        ADD CONSTRAINT `matches_ibfk_3` FOREIGN KEY (`subevent`)
+        REFERENCES `subevents` (`id`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key setlegality_ibfk_1 on table setlegality
+    do_query("
+        ALTER TABLE `setlegality`
+        ADD CONSTRAINT `setlegality_ibfk_1` FOREIGN KEY (`format`)
+        REFERENCES `formats` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key setlegality_ibfk_2 on table setlegality
+    do_query("
+        ALTER TABLE `setlegality`
+        ADD CONSTRAINT `setlegality_ibfk_2` FOREIGN KEY (`cardset`)
+        REFERENCES `cardsets` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key cards_ibfk_1 on table cards
+    do_query("
+        ALTER TABLE `cards`
+        ADD CONSTRAINT `cards_ibfk_1` FOREIGN KEY (`cardset`)
+        REFERENCES `cardsets` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key subevents_ibfk_1 on table subevents
+    do_query("
+        ALTER TABLE `subevents`
+        ADD CONSTRAINT `subevents_ibfk_1` FOREIGN KEY (`parent`)
+        REFERENCES `events` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key events_ibfk_1 on table events
+    do_query("
+        ALTER TABLE `events`
+        ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`format`)
+        REFERENCES `formats` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key events_ibfk_2 on table events
+    do_query("
+        ALTER TABLE `events`
+        ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`host`)
+        REFERENCES `players` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key events_ibfk_3 on table events
+    do_query("
+        ALTER TABLE `events`
+        ADD CONSTRAINT `events_ibfk_3` FOREIGN KEY (`series`)
+        REFERENCES `series` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key events_ibfk_4 on table events
+    do_query("
+        ALTER TABLE `events`
+        ADD CONSTRAINT `events_ibfk_4` FOREIGN KEY (`cohost`)
+        REFERENCES `players` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key events_ibfk_5 on table events
+    do_query("
+        ALTER TABLE `events`
+        ADD CONSTRAINT `events_ibfk_5` FOREIGN KEY (`client`)
+        REFERENCES `client` (`id`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key deckcontents_ibfk_1 on table deckcontents
+    do_query("
+        ALTER TABLE `deckcontents`
+        ADD CONSTRAINT `deckcontents_ibfk_1` FOREIGN KEY (`card`)
+        REFERENCES `cards` (`id`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key deckcontents_ibfk_2 on table deckcontents
+    do_query("
+        ALTER TABLE `deckcontents`
+        ADD CONSTRAINT `deckcontents_ibfk_2` FOREIGN KEY (`deck`)
+        REFERENCES `decks` (`id`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key FK_decks_formats on table decks
+    do_query("
+        ALTER TABLE `decks`
+        ADD CONSTRAINT `FK_decks_formats` FOREIGN KEY (`format`)
+        REFERENCES `formats` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key decks_ibfk_1 on table decks
+    do_query("
+        ALTER TABLE `decks`
+        ADD CONSTRAINT `decks_ibfk_1` FOREIGN KEY (`playername`)
+        REFERENCES `players` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key standings_ibfk_2 on table standings
+    do_query("
+        ALTER TABLE `standings`
+        ADD CONSTRAINT `standings_ibfk_2` FOREIGN KEY (`event`)
+        REFERENCES `events` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key standings_ibfk_3 on table standings
+    do_query("
+        ALTER TABLE `standings`
+        ADD CONSTRAINT `standings_ibfk_3` FOREIGN KEY (`player`)
+        REFERENCES `players` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key bans_ibfk_1 on table bans
+    do_query("
+        ALTER TABLE `bans`
+        ADD CONSTRAINT `bans_ibfk_1` FOREIGN KEY (`card`)
+        REFERENCES `cards` (`id`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key bans_ibfk_2 on table bans
+    do_query("
+        ALTER TABLE `bans`
+        ADD CONSTRAINT `bans_ibfk_2` FOREIGN KEY (`format`)
+        REFERENCES `formats` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key entries_ibfk_2 on table entries
+    do_query("
+        ALTER TABLE `entries`
+        ADD CONSTRAINT `entries_ibfk_2` FOREIGN KEY (`player`)
+        REFERENCES `players` (`name`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key entries_ibfk_3 on table entries
+    do_query("
+        ALTER TABLE `entries`
+        ADD CONSTRAINT `entries_ibfk_3` FOREIGN KEY (`deck`)
+        REFERENCES `decks` (`id`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // Recreating foreign key entries_ibfk_4 on table entries
+    do_query("
+        ALTER TABLE `entries`
+        ADD CONSTRAINT `entries_ibfk_4` FOREIGN KEY (`event_id`)
+        REFERENCES `events` (`id`)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    // We will now be able to import Assassin's Creed without error!
+});
 $db->autocommit(true);
 
 info('DB is up to date!');
