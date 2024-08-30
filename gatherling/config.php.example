@@ -19,7 +19,7 @@ $CONFIG['base_url'] = "http://localhost/gatherling/";
 $CONFIG['site_name'] = "Gatherling";
 
 # The Style of the site.
-$CONFIG['style'] = "Chandra";
+$CONFIG['style'] = "ChandraNeue";
 
 # A description for the ical calendar which is accessible at calendar.php
 $CONFIG['calendar_description'] = "a description for the events calendar";
