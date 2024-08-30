@@ -1,17 +1,23 @@
 <?php
 
+// Runs schema.sql if the db doesn't exist, then runs any database migrations that haven't run yet.
+// There's a lot of historical cruft in here that doesn't run because schema.sql will set db_version
+// when it runs.
+
+// Add your migration with a new higher version number at the bottom of this file.
+
+// If you get in a mess or otherwise want to checkpoint the database instead of continuing to pile on
+// migrations to run at dev setup time you can do so with:
+//
+//     $ mysqldump --no-data --routines --triggers --single-transaction gatherli_gatherling > gatherling/schema.sql
+//     $ mysqldump --no-create-info --single-transaction gatherli_gatherling archetypes db_version client >> gatherling/schema.sql
+//
+// The second command makes sure the archetypes, client and db_version table are populated.
+
 namespace Gatherling;
 
 error_reporting(E_ALL);
 ini_set('max_execution_time', 300);
-
-// Upgrades the database.  There are a couple of pretty crude checks for
-// versions 0 (no database) and 1 (no version table).  Hopefully it will
-// work for you, but you can always just run the schema yourself.
-//
-// Use at your own risk!
-
-// If this fails with foreign key errors, execute `ALTER SCHEMA <gatherling> DEFAULT CHARACTER SET latin1;`
 
 require_once __DIR__.'/../lib.php';
 

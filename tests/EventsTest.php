@@ -69,6 +69,7 @@ final class EventsTest extends TestCase
         $event->format = 'Modern';
         $event->host = null;
         $event->cohost = null;
+        $event->client = 1;
         $event->kvalue = 16;
         $event->series = $series->name;
         $event->season = 1;
