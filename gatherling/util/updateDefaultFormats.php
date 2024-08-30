@@ -68,32 +68,29 @@ function updateStandard()
     }
     $expected = [];
     foreach ($legal->sets as $set) {
-        $enter = strtotime($set->enter_date);
-        $exit = strtotime($set->exit_date);
         $now = time();
-        if ($exit == null) {
-            $exit = $now + 1;
-        }
+        $enter = strtotime($set->enter_date);
+        $exit = is_null($set->exit_date) ? $now + 1 : strtotime($set->exit_date);
         if ($exit < $now) {
             // Set has rotated out.
         } elseif ($enter == null || $enter > $now) {
             // Set is yet to be released. (And probably not available in MTGJSON yet)
-        } else {
-            // The ones we care about.
-            $db = Database::getConnection();
-            $stmt = $db->prepare('SELECT name, type, standard_legal FROM cardsets WHERE code = ?');
-            $stmt->bind_param('s', $set->code);
-            $stmt->execute();
-            $stmt->bind_result($setName, $setType, $standard_legal);
-            $success = $stmt->fetch();
-            $stmt->close();
-            if (!$success) {
-                addSet($set->code, 0);
-
-                return;
-            }
-            $expected[] = $setName;
+            break;
         }
+        // Found one we care about.
+        $db = Database::getConnection();
+        $stmt = $db->prepare('SELECT name, type, standard_legal FROM cardsets WHERE code = ?');
+        $stmt->bind_param('s', $set->code);
+        $stmt->execute();
+        $stmt->bind_result($setName, $setType, $standard_legal);
+        $success = $stmt->fetch();
+        $stmt->close();
+        if (!$success) {
+            addSet($set->code, 0);
+
+            return;
+        }
+        $expected[] = $setName;
     }
     foreach ($fmt->getLegalCardsets() as $setName) {
         if (!in_array($setName, $expected, true)) {
