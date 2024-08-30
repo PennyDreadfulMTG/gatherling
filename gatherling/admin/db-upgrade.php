@@ -10,9 +10,9 @@
 // migrations to run at dev setup time you can do so with:
 //
 //     $ mysqldump --no-data --routines --triggers --single-transaction gatherli_gatherling > gatherling/schema.sql
-//     $ mysqldump --no-create-info --single-transaction gatherli_gatherling archetypes db_version >> gatherling/schema.sql
+//     $ mysqldump --no-create-info --single-transaction gatherli_gatherling archetypes db_version client >> gatherling/schema.sql
 //
-// The second command makes sure the archetypes table and the db_version table are populated.
+// The second command makes sure the archetypes, client and db_version table are populated.
 
 namespace Gatherling;
 
