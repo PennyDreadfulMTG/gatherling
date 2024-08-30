@@ -1,0 +1,45 @@
+<?php
+
+# === Database ===
+
+$CONFIG['db_hostname'] = 'db';
+$CONFIG['db_username'] = 'gatherling';
+$CONFIG['db_password'] = 'gath';
+$CONFIG['db_database'] = 'gatherling';
+
+# === Website ===
+
+# The base url where gatherling is installed.  This should be an absolute URL, with HTTPS.
+$CONFIG['base_url'] = "http://localhost/";
+
+# The name of your site.  This is used in a lot of places.
+$CONFIG['site_name'] = "Gatherling";
+
+# The Style of the site.
+$CONFIG['style'] = "ChandraNeue";
+
+# A description for the ical calendar which is accessible at calendar.php
+$CONFIG['calendar_description'] = "a description for the events calendar";
+
+# Google Analytics account ID.
+$CONFIG['analytics_account'] = '';
+
+# How long to store session cookies in seconds
+$CONFIG['cookie_lifetime'] = 5184000;
+
+# API Key for Brevo email sending (password reset)
+$CONFIG['brevo_api_key'] = 'xkeysib-foobar-baz';
+
+# Encryption key for password reset JWT
+$CONFIG['password_reset_key'] = 'foo-bar-baz';
+
+# === Infobot PARAMETERS ==
+# If you have set it up with infobot or PDBot to contact the site, you can change the passkey here.
+# If you haven't set it up, leave this blank.
+$CONFIG['infobot_passkey'] = "";
+
+# Infobot/PDBot need to know which gatherling server to verify a user on.
+# Put your unique key here
+$CONFIG['infobot_prefix'] = "";
+
+# THAT'S ALL FOLKS!

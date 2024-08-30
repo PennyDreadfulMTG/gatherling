@@ -11,6 +11,17 @@ Setup:
 - Sign up a player by visiting register.php.
 - Visit /util/updateDefaultFormats.php
 
+Dev Setup:
+You can set up in the same way as above or you may prefer to use a dockerized instance.
+- Install Docker.
+- `cp config.php.docker config.php`
+- `docker-compose up`
+
+This brings up the website on ports 80 and 81, mysql on port 3307, and phpmyadmin on port 8080.
+You can change the ports in docker-composer.yml.
+
+- Visit http://localhost/admin/db-upgrade.php to initialize the database.
+
 Tests:
 $ vendor/bin/phpunit -v tests/
 
