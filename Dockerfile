@@ -1,17 +1,22 @@
-FROM php:8.1-apache
-LABEL maintainer="Katelyn Gigante"
-
-RUN mkdir -p /var/www/html/
-WORKDIR /var/www/html/
-
+FROM php:8.1-apache as compose
+WORKDIR /restore
+COPY composer.* ./
 RUN apt-get update && apt-get install -y git zip unzip
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable mysqli
 
-COPY composer.* ./
-
 RUN curl --silent --show-error https://getcomposer.org/installer | php
 RUN php composer.phar --version && php composer.phar install
+
+FROM php:8.1-apache
+LABEL maintainer="Katelyn Gigante"
+RUN apt-get update && apt-get install -y git zip unzip
+
+RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable mysqli
+
+RUN mkdir -p /var/www/html/
+WORKDIR /var/www/html/
+COPY --from=compose /restore/vendor /var/www/html/vendor
 
 # Let us upload larger files than 2M so that we can install cardsets from MTGJSON
 RUN printf 'upload_max_filesize = 128M\n' >>/usr/local/etc/php/conf.d/uploads.ini
