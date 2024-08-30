@@ -18,7 +18,7 @@ services:
       - "3307:3306"
     volumes:
       - ./backups:/docker-entrypoint-initdb.d
-  phpmyadmin:
-    image: phpmyadmin
+  adminer:
+    image: adminer
     ports:
-      - 8080:80
+      - 8080:8080

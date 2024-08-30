@@ -17,7 +17,7 @@ You can set up in the same way as above or you may prefer to use a dockerized in
 - `cp config.php.docker config.php`
 - `docker-compose up`
 
-This brings up the website on ports 80 and 81, mysql on port 3307, and phpmyadmin on port 8080.
+This brings up the website on ports 80 and 81, mysql on port 3307, and adminer on port 8080.
 You can change the ports in docker-composer.yml.
 
 - Visit http://localhost/admin/db-upgrade.php to initialize the database.
