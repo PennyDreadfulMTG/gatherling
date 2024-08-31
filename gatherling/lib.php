@@ -302,7 +302,7 @@ function timeDropMenu(int|string $hour, int|string $minutes = 0): string
     ]);
 }
 
-function json_headers()
+function json_headers(): void
 {
     header('Content-type: application/json');
     header('Cache-Control: no-cache');
@@ -311,17 +311,17 @@ function json_headers()
     header('HTTP_X_USERNAME: '.Player::loginName());
 }
 
-function not_allowed($reason)
+function not_allowed($reason): void
 {
     echo "<span class=\"notallowed inputbutton\" title=\"{$reason}\">&#x26A0;</span>";
 }
 
-function displayPlayerEmailPopUp($player, $email)
+function displayPlayerEmailPopUp($player, $email): void
 {
     echo "<a class=\"emailPop\" style=\"color: green\" title=\"{$email}\">{$player}</a>";
 }
 
-function tribeBanDropMenu($format)
+function tribeBanDropMenu($format): void
 {
     $allTribes = Format::getTribesList();
     $bannedTribes = $format->getTribesBanned();
