@@ -36,114 +36,44 @@ function mode_is(string $str): bool
     if (isset($_REQUEST['mode']) and $_REQUEST['mode'] != '') {
         $mode = $_REQUEST['mode'];
     }
-
     return strcmp($mode, $str) == 0;
 }
 
 function content(): void
 {
-    if (!isset($_GET['series'])) {
-        $_GET['series'] = '';
-    }
-    if (!isset($_GET['season'])) {
-        $_GET['season'] = '';
-    }
-
-    if (isset($_GET['event']) && !isset($_GET['name'])) {
-        $_GET['name'] = $_GET['event'];
-    }
+    $getSeriesName = $_GET['series'] ?? '';
+    $season = $_GET['season'] ?? '';
+    $requestEventName = $_REQUEST['name'] ?? '';
+    $getEventName = $_GET['name'] ?? $_GET['event'] ?? null;
+    $action = $_GET['action'] ?? null;
+    $eventId = $_GET['event_id'] ?? null;
+    $player = $_GET['player'] ?? null;
 
     if (mode_is('Create New Event')) {
-        echo createNewEvent();
+        echo createNewEvent($getSeriesName, $season);
     } elseif (mode_is('Create A New Event')) {
         eventForm(null, true);
     } elseif (mode_is('Create Next Event')) {
-        $newEvent = newEventFromEventName($_REQUEST['name'] ?? '');
+        $newEvent = newEventFromEventName($requestEventName);
         eventForm($newEvent, true);
     } elseif (mode_is('Create Next Season')) {
-        $newEvent = newEventFromEventName($_REQUEST['name'] ?? '', true);
+        $newEvent = newEventFromEventName($requestEventName, true);
         eventForm($newEvent, true);
-    } elseif (isset($_GET['name'])) {
-        $event = new Event($_GET['name']);
-        if (!$event->authCheck(Player::loginName())) {
-            echo authFailed();
-            return;
-        }
-        if (isset($_GET['action'])) {
-            if (strcmp($_GET['action'], 'undrop') == 0) {
-                $entry = new Entry($_GET['event_id'], $_GET['player']);
-                if ($entry->deck && $entry->deck->isValid()) {
-                    $event->undropPlayer($_GET['player']);
-                }
-            }
-        }
-        eventForm($event);
+    } elseif (isset($getEventName)) {
+        getEvent($getEventName, $action, $eventId, $player);
     } elseif (isset($_POST['name'])) {
-        $event = new Event($_POST['name']);
-
-        if (!$event->authCheck(Player::loginName())) {
-            echo authFailed();
-        } else {
-            if (mode_is('Start Event')) {
-                $event->startEvent(true);
-            } elseif (mode_is('Start Event (No Deck Check)')) {
-                $event->startEvent(false);
-            } elseif (mode_is('Recalculate Standings')) {
-                $structure = $event->mainstruct;
-                $event->recalculateScores($structure);
-                Standings::updateStandings($event->name, $event->mainid, 1);
-            } elseif (mode_is('End Current League Round')) {
-                $event->recalculateScores('League');
-                Standings::updateStandings($event->name, $event->mainid, 1);
-                $event->pairCurrentRound();
-            } elseif (mode_is('Reset Event')) {
-                $event->resetEvent();
-            } elseif (mode_is('Delete Matches and Re-Pair Round')) {
-                $event->repairRound();
-            } elseif (mode_is('Reactivate Event')) {
-                $event->active = 1;
-                $event->finalized = 0;
-                $event->save();
-            } elseif (mode_is('Assign Medals')) {
-                $event->assignMedals();
-            } elseif (mode_is('Set Current Round to')) {
-                $event->repairRound();
-            } elseif (mode_is('Update Registration')) {
-                updateReg();
-            } elseif (mode_is('Update Match Listing')) {
-                updateMatches();
-            } elseif (mode_is('Update Medals')) {
-                updateMedals();
-            } elseif (mode_is('Update Adjustments')) {
-                updateAdjustments();
-            } elseif (mode_is('Upload Trophy')) {
-                if (insertTrophy()) {
-                    $event->hastrophy = 1;
-                    $_GET['view'] = 'settings';
-                }
-            } elseif (mode_is('Update Event Info')) {
-                $event = updateEvent();
-                $_GET['view'] = 'settings';
-            }
-            eventForm($event);
-        }
+        postEvent($_POST['name']);
     } else {
-        if (!isset($_POST['series'])) {
-            $_POST['series'] = '';
-        }
-        if (!isset($_POST['season'])) {
-            $_POST['season'] = '';
-        }
-        echo eventList();
+        echo eventList($getSeriesName, $season);
     }
 }
 
-function createNewEvent(): string
+function createNewEvent(string $seriesName, string $season): string
 {
     $series = new Series($_POST['series']);
     if (($series->authCheck(Player::loginName())) && isset($_POST['insert'])) {
         insertEvent();
-        return eventList();
+        return eventList($seriesName, $season);
     }
     return authFailed();
 }
@@ -184,12 +114,85 @@ function newEventFromEventName(string $eventName, bool $newSeason = false): Even
     return $newEvent;
 }
 
-function eventList(): string
+// This is a helper function that handles all requests that have a name={eventName} in the querystring
+// In some future happier time maybe it will be teased apart usefully.
+function getEvent(string $eventName, ?string $action, ?string $eventId, ?string $player): void
+{
+    $event = new Event($eventName);
+    if (!$event->authCheck(Player::loginName())) {
+        echo authFailed();
+        return;
+    }
+    if ($action && strcmp($action, 'undrop') == 0) {
+        $entry = new Entry($eventId, $player);
+        if ($entry->deck && $entry->deck->isValid()) {
+            $event->undropPlayer($player);
+        }
+    }
+    eventForm($event);
+}
+
+// This is a helper function that handles all the (many) requests that have a name={eventName} in the request body
+// In some future happier time maybe it will be teased apart usefully.
+function postEvent(string $eventName): void
+{
+    $event = new Event($eventName);
+
+    if (!$event->authCheck(Player::loginName())) {
+        echo authFailed();
+        return;
+    }
+
+    if (mode_is('Start Event')) {
+        $event->startEvent(true);
+    } elseif (mode_is('Start Event (No Deck Check)')) {
+        $event->startEvent(false);
+    } elseif (mode_is('Recalculate Standings')) {
+        $structure = $event->mainstruct;
+        $event->recalculateScores($structure);
+        Standings::updateStandings($event->name, $event->mainid, 1);
+    } elseif (mode_is('End Current League Round')) {
+        $event->recalculateScores('League');
+        Standings::updateStandings($event->name, $event->mainid, 1);
+        $event->pairCurrentRound();
+    } elseif (mode_is('Reset Event')) {
+        $event->resetEvent();
+    } elseif (mode_is('Delete Matches and Re-Pair Round')) {
+        $event->repairRound();
+    } elseif (mode_is('Reactivate Event')) {
+        $event->active = 1;
+        $event->finalized = 0;
+        $event->save();
+    } elseif (mode_is('Assign Medals')) {
+        $event->assignMedals();
+    } elseif (mode_is('Set Current Round to')) {
+        $event->repairRound();
+    } elseif (mode_is('Update Registration')) {
+        updateReg();
+    } elseif (mode_is('Update Match Listing')) {
+        updateMatches();
+    } elseif (mode_is('Update Medals')) {
+        updateMedals();
+    } elseif (mode_is('Update Adjustments')) {
+        updateAdjustments();
+    } elseif (mode_is('Upload Trophy')) {
+        if (insertTrophy()) {
+            $event->hastrophy = 1;
+            $_GET['view'] = 'settings';
+        }
+    } elseif (mode_is('Update Event Info')) {
+        $event = updateEvent();
+        $_GET['view'] = 'settings';
+    }
+    eventForm($event);
+}
+
+function eventList(string $seriesName, string $season): string
 {
     $player = Player::getSessionPlayer();
     $playerSeries = $player->organizersSeries();
 
-    $result = queryEvents($player, $playerSeries);
+    $result = queryEvents($player, $playerSeries, $seriesName);
     $seriesShown = $results = $finalizedResults = [];
 
     while ($event = $result->fetch_assoc()) {
@@ -205,7 +208,7 @@ function eventList(): string
     $hasMore = $result->num_rows == 100;
     $result->close();
 
-    if (isset($_GET['series']) && $_GET['series'] != '') {
+    if ($seriesName) {
         $seriesShown = $playerSeries;
     } else {
         $seriesShown = array_unique($seriesShown);
@@ -230,15 +233,15 @@ function eventList(): string
 
     return render_name('partials/eventList', [
         'formatDropMenu' => formatDropMenuArgs($_GET['format'], true),
-        'seriesDropMenu' => Series::dropMenuArgs($_GET['series'], true, $seriesShown),
-        'seasonDropMenu' => seasonDropMenuArgs($_GET['season'], true),
+        'seriesDropMenu' => Series::dropMenuArgs($seriesName, true, $seriesShown),
+        'seasonDropMenu' => seasonDropMenuArgs($season, true),
         'hasPlayerSeries' => count($playerSeries) > 0,
         'results' => $results,
         'hasMore' => $hasMore,
     ]);
 }
 
-function queryEvents(Player $player, array $playerSeries): mysqli_result|bool
+function queryEvents(Player $player, array $playerSeries, string $seriesName): mysqli_result|bool
 {
     $db = Database::getConnection();
     $seriesEscaped = [];
@@ -258,8 +261,8 @@ function queryEvents(Player $player, array $playerSeries): mysqli_result|bool
     if (isset($_GET['format']) && strcmp($_GET['format'], '') != 0) {
         $query = $query . " AND e.format=\"{$db->escape_string($_GET['format'])}\" ";
     }
-    if (isset($_GET['series']) && strcmp($_GET['series'], '') != 0) {
-        $query = $query . " AND e.series=\"{$db->escape_string($_GET['series'])}\" ";
+    if (strcmp($seriesName, '') != 0) {
+        $query = $query . " AND e.series=\"{$db->escape_string($seriesName)}\" ";
     }
     if (isset($_GET['season']) && strcmp($_GET['season'], '') != 0) {
         $query = $query . " AND e.season=\"{$db->escape_string($_GET['season'])}\" ";
