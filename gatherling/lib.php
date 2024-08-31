@@ -203,7 +203,7 @@ function formatDropMenu($format, $useAll = 0, $form_name = 'format', $show_meta 
     $title = ($useAll == 0) ? '- Format -' : 'All';
     $formats = $result->fetch_all(MYSQLI_ASSOC);
     $html = render_name('partials/formatDropDown', [
-        'form_name' => $form_name,
+        'formName' => $form_name,
         'title' => $title,
         'formats' => $formats,
     ]);
