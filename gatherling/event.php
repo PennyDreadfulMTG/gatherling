@@ -219,10 +219,6 @@ function content(): void
                 $event->assignMedals();
             } elseif (mode_is('Set Current Round to')) {
                 $event->repairRound();
-            } elseif (mode_is('Parse DCI Files')) {
-                dciInput();
-            } elseif (mode_is('Parse DCIv3 Files')) {
-                dci3Input();
             } elseif (mode_is('Update Registration')) {
                 updateReg();
             } elseif (mode_is('Update Match Listing')) {
