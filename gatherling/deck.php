@@ -695,5 +695,3 @@ function checkDeckAuth($event, $player, $deck = null)
 
     return $auth;
 }
-
-?>
