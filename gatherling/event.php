@@ -359,8 +359,8 @@ function eventForm(Event $event = null, bool $forceNew = false): void
                 $view = 'reg';
             }
         }
-        $view = isset($_GET['view']) ? $_GET['view'] : $view;
-        $view = isset($_POST['view']) ? $_POST['view'] : $view;
+        $view = $_GET['view'] ?? $view;
+        $view = $_POST['view'] ?? $view;
     } else {
         $view = 'edit';
     }
