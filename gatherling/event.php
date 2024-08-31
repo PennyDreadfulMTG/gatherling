@@ -1378,18 +1378,6 @@ function insertTrophy()
     }
 }
 
-function medalDropMenu()
-{
-    echo '<select name="medal">';
-    echo '<option value="dot">- Medal -</option>';
-    echo '<option value="dot">No Medal</option>';
-    echo '<option value="1st">1st Place</option>';
-    echo '<option value="2nd">2nd Place</option>';
-    echo '<option value="t4">Top 4</option>';
-    echo '<option value="t8">Top 8</option>';
-    echo '</select>';
-}
-
 function playerByeMenu($event, $def = "\n")
 {
     $playernames = $event->getRegisteredPlayers(true);
