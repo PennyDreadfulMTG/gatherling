@@ -76,7 +76,7 @@ function eventList()
     echo Series::dropMenu($_GET['series'], true);
     echo '</td></tr>';
     echo '<tr><td>Season</td><td>';
-    seasonDropMenu($_GET['season'], 1);
+    echo seasonDropMenu($_GET['season'], true);
     echo '</td></tr>';
     echo '<tr><td>&nbsp;</td></tr>';
     echo '<tr><td colspan="2" align="center">';

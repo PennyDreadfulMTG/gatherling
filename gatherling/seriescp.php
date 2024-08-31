@@ -334,7 +334,7 @@ function printPointsForm($series)
     echo '<center>';
     echo '<form action="seriescp.php">';
     echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
-    seasonDropMenu($chosen_season);
+    echo seasonDropMenu($chosen_season);
     echo '<input type="hidden" name="view" value="points_management" />';
     echo '<input class="inputbutton" type="submit" value="Choose Season" />';
     echo '</form>';

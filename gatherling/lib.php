@@ -183,7 +183,7 @@ function medalImgStr($medal)
     return image_tag("$medal.png", ['style' => 'border-width: 0px']);
 }
 
-function seasonDropMenu($season, $useall = 0): void
+function seasonDropMenu(int|string $season, bool $useall = false): string
 {
     $db = Database::getConnection();
     $query = 'SELECT MAX(season) AS m FROM events';
@@ -192,7 +192,7 @@ function seasonDropMenu($season, $useall = 0): void
     $max = $maxarr['m'];
     $title = ($useall == 0) ? '- Season - ' : 'All';
     $result->close();
-    echo numDropMenu('season', $title, max(10, $max + 1), $season);
+    return numDropMenu('season', $title, max(10, $max + 1), $season);
 }
 
 function formatDropMenu(string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): string

@@ -324,7 +324,7 @@ function eventList(): void
     echo Series::dropMenu($_GET['series'], true, $seriesShown);
     echo '</td></tr>';
     echo '<tr><th>Season</th><td>';
-    seasonDropMenu($_GET['season'], 1);
+    echo seasonDropMenu($_GET['season'], true);
     echo '</td></tr>';
     echo '<tr><td>&nbsp;</td></tr>';
     echo '<tr><td colspan="2" class="buttons">';
@@ -507,7 +507,7 @@ function eventForm(Event $event = null, bool $forcenew = false)
         echo Series::dropMenu($event->series, false, $seriesList);
         echo '</td></tr>';
         echo '<tr><th>Season</th><td>';
-        seasonDropMenu($event->season);
+        echo seasonDropMenu($event->season);
         echo '</td></tr>';
         echo '<tr><th>Number</th><td>';
         echo numDropMenu('number', '- Event Number -', Event::largestEventNum() + 5, $event->number, 0, 'Custom');
