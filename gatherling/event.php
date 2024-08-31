@@ -1378,21 +1378,21 @@ function insertTrophy()
     }
 }
 
-function playerByeMenu($event, $def = "\n")
+function playerByeMenu(Event $event): void
 {
-    $playernames = $event->getRegisteredPlayers(true);
-    echo '<select class="inputbox" name="newbyeplayer">';
-    if (strcmp("\n", $def) == 0) {
-        echo '<option value="">- Bye Player -</option>';
-    } else {
-        echo '<option value="">- None -</option>';
+    $playerNames = $event->getRegisteredPlayers(true);
+    $options = [];
+    foreach ($playerNames as $player) {
+        $options[] = [
+            'value' => $player,
+            'text' => $player,
+        ];
     }
-    foreach ($playernames as $player) {
-        $selstr = (strcmp($player, $def) == 0) ? 'selected' : '';
-        echo "<option value=\"{$player}\" $selstr>";
-        echo "{$player}</option>";
-    }
-    echo '</select>';
+    echo render_name('partials/dropMenu', [
+        'name' => 'newbyeplayer',
+        'default' => '- Bye Player -',
+        'options' => $options,
+    ]);
 }
 
 function playerDropMenu($event, $letter, $active, $def = "\n")
