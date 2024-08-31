@@ -1178,7 +1178,7 @@ function clientDropMenu(string $field, int $def): string
     return $s;
 }
 
-function insertEvent()
+function insertEvent(): Event
 {
     if (!isset($_POST['naming'])) {
         $_POST['naming'] = '';
