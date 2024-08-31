@@ -984,9 +984,9 @@ function matchList(Event $event)
         echo "<input type=\"hidden\" name=\"newmatchround\" value=\"{$event->current_round}\">";
         echo '<input type="hidden" name="newmatchresult" value="P">';
         echo '<tr><td align="center" colspan="7">';
-        playerDropMenu($event, 'A', $event->active);
+        playerDropMenu($event, 'A');
         echo ' vs ';
-        playerDropMenu($event, 'B', $event->active);
+        playerDropMenu($event, 'B');
         echo '</td></tr>';
         echo '<tr><td>&nbsp;</td></tr>';
         echo '<tr><td align="center" colspan="7"><b>Award Bye</b></td></tr>';
@@ -998,9 +998,9 @@ function matchList(Event $event)
         echo '<b>Add a Match</b></td></tr>';
         echo '<tr><td align="center" colspan="7">';
         roundDropMenu($event, $_POST['newmatchround']);
-        playerDropMenu($event, 'A', $event->active);
+        playerDropMenu($event, 'A');
         resultDropMenu('newmatchresult');
-        playerDropMenu($event, 'B', $event->active);
+        playerDropMenu($event, 'B');
         echo '</td></tr>';
     }
     echo '<tr><td>&nbsp;</td></tr>';
@@ -1078,25 +1078,25 @@ function medalList($event)
     echo '<tr><td align="center">';
     echo image_tag('1st.png') . '</td>';
     echo '<td align="center">';
-    playerDropMenu($event, '1', $event->active, $def1);
+    playerDropMenu($event, '1', $def1);
     echo '</td></tr>';
     echo '<tr><td align="center">';
     echo image_tag('2nd.png') . '</td>';
     echo '<td align="center">';
-    playerDropMenu($event, '2', $event->active, $def2);
+    playerDropMenu($event, '2', $def2);
     echo '</td></tr>';
     for ($i = 3; $i < 5; $i++) {
         echo '<tr><td align="center">';
         echo image_tag('t4.png') . '</td>';
         echo '<td align="center">';
-        playerDropMenu($event, $i, $event->active, $def4[$i - 3]);
+        playerDropMenu($event, $i, $def4[$i - 3]);
         echo '</td></tr>';
     }
     for ($i = 5; $i < 9; $i++) {
         echo '<tr><td align="center">';
         echo image_tag('t8.png') . '</td>';
         echo '<td align="center">';
-        playerDropMenu($event, $i, $event->active, $def8[$i - 5]);
+        playerDropMenu($event, $i, $def8[$i - 5]);
         echo '</td></tr>';
     }
     echo '<tr><td>&nbsp;</td></tr>';
@@ -1395,27 +1395,28 @@ function playerByeMenu(Event $event): void
     ]);
 }
 
-function playerDropMenu($event, $letter, $active, $def = "\n")
+function playerDropMenu(Event $event, string|int $letter, $def = "\n"): void
 {
-    // If $acive is set to one, function assumes event is active
-    // and will only use registered players who are still active
-    // (ie. who haven't dropped)
-    // if $active is not set, function will return all registered
-    // players
-    $playernames = $event->getRegisteredPlayers($active);
+    // If the event is active, only list players who haven't already dropped.
+    // Otherwise, list all registered players.
+    $playerNames = $event->getRegisteredPlayers($event->active);
+    sort($playerNames, SORT_STRING | SORT_NATURAL | SORT_FLAG_CASE);
 
-    echo "<select class=\"inputbox\" name=\"newmatchplayer$letter\">";
-    if (strcmp("\n", $def) == 0) {
-        echo "<option value=\"\">- Player $letter -</option>";
-    } else {
-        echo '<option value="">- None -</option>';
+    $default = strcmp("\n", $def) == 0 ? "- Player $letter -" : '- None -';
+    $options = [];
+    foreach ($playerNames as $player) {
+        $options[] = [
+            'isSelected' => strcmp($player, $def) == 0,
+            'value' => $player,
+            'text' => $player,
+        ];
     }
-    foreach ($playernames as $player) {
-        $selstr = (strcmp($player, $def) == 0) ? 'selected' : '';
-        echo "<option value=\"{$player}\" $selstr>";
-        echo "{$player}</option>";
-    }
-    echo '</select>';
+
+    echo render_name('partials/dropMenu', [
+        'name' => "newmatchplayer$letter",
+        'default' => $default,
+        'options' => $options,
+    ]);
 }
 
 function roundDropMenu($event, $selected)
