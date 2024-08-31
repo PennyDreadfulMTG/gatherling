@@ -257,13 +257,12 @@ function numDropMenu(string $field, string $title, int $max, string|int $def, in
     ]);
 }
 
-function timeDropMenu($hour, $minutes = 0)
+function timeDropMenu(int|string $hour, int|string $minutes = 0): string
 {
     if (strcmp($hour, '') == 0) {
         $hour = -1;
     }
-    echo '<select class="inputbox" name="hour">';
-    echo '<option value="">- Hour -</option>';
+    $options = [];
     for ($h = 0; $h < 24; $h++) {
         for ($m = 0; $m < 60; $m += 30) {
             $hstring = $h;
@@ -289,16 +288,18 @@ function timeDropMenu($hour, $minutes = 0)
                 $mstring = '';
                 $apstring = '';
             }
-            $selStr = ($hour == $h) && ($minutes == $m) ? 'selected' : '';
-            echo "<option value=\"$h:$m\" $selStr>$hstring$mstring$apstring</option>";
+            $options[] = [
+                'value' => "$h:$m",
+                'text' => "$hstring$mstring$apstring",
+                'isSelected' => $hour == $h && $minutes == $m,
+            ];
         }
     }
-    echo '</select>';
-}
-
-function minutes($mins)
-{
-    return $mins * 60;
+    return render_name('partials/dropMenu', [
+        'name' => 'hour',
+        'default' => '- Hour -',
+        'options' => $options,
+    ]);
 }
 
 function json_headers()

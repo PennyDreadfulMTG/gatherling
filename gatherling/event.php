@@ -484,7 +484,7 @@ function eventForm(Event $event = null, bool $forceNew = false): void
         echo numDropMenu('year', '- Year -', date('Y') + 1, $year, 2011);
         echo monthDropMenu($month);
         echo numDropMenu('day', '- Day- ', 31, $day, 1);
-        timeDropMenu($hour, $minutes);
+        echo timeDropMenu($hour, $minutes);
         echo '</td></tr>';
         echo '<tr><th>Series</th><td>';
         $seriesList = Player::getSessionPlayer()->organizersSeries();

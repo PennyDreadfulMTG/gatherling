@@ -203,7 +203,7 @@ function printSeriesForm($series)
     // Start time
     echo '<tr><th> Normal start time </th> <td> ';
     $time_parts = explode(':', $series->start_time);
-    timeDropMenu($time_parts[0], $time_parts[1]);
+    echo timeDropMenu($time_parts[0], $time_parts[1]);
     echo '</td> </tr>';
     // Pre-registration on by default?
     echo '<tr><th>Pre-Registration Default</th>';
