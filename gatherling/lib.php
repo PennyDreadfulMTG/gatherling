@@ -40,7 +40,7 @@ function page($title, $contents): string
     return ob_get_clean();
 }
 
-function render_name($template_name, $context): string
+function render_name(string $template_name, array $context = []): string
 {
     $m = new Mustache_Engine([
         'cache' => '/tmp/gatherling/mustache/templates',

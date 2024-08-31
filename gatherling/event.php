@@ -1235,7 +1235,7 @@ function insertEvent(): Event
     return $event;
 }
 
-function updateEvent()
+function updateEvent(): Event
 {
     if (!isset($_POST['finalized'])) {
         $_POST['finalized'] = 0;
@@ -1487,7 +1487,7 @@ function controlPanel(Event $event): string
     return '<tr><td colspan="2" align="center">' . $panel . '</td></tr>';
 }
 
-function updateReg()
+function updateReg(): void
 {
     $event = new Event($_POST['name']);
 
@@ -1540,7 +1540,7 @@ function updateReg()
     }
 }
 
-function updateMatches()
+function updateMatches(): void
 {
     $event = new Event($_POST['name']);
     if (isset($_POST['matchdelete'])) {
@@ -1647,9 +1647,8 @@ function updateMatches()
     }
 }
 
-function updateMedals()
+function updateMedals(): void
 {
-    $name = $_POST['name'];
     $event = new Event($_POST['name']);
 
     $winner = $_POST['newmatchplayer1'];
@@ -1660,9 +1659,8 @@ function updateMedals()
     $event->setFinalists($winner, $second, $t4, $t8);
 }
 
-function updateAdjustments()
+function updateAdjustments(): void
 {
-    $name = $_POST['name'];
     $event = new Event($_POST['name']);
 
     $adjustments = $_POST['adjustments'];
