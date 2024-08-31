@@ -186,7 +186,6 @@ class Standings
 
     public function calculateStandings($eventname, $subevent, $round)
     {
-        $players = self::getEventStandings($eventname, 0);
         $opponents = $this->getOpponents($eventname, $subevent, $round);
         $OMW = 0;
         $OGW = 0;
