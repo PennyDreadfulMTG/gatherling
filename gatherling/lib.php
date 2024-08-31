@@ -179,7 +179,7 @@ function medalImgStr($medal)
     return image_tag("$medal.png", ['style' => 'border-width: 0px']);
 }
 
-function seasonDropMenu($season, $useall = 0)
+function seasonDropMenu($season, $useall = 0): void
 {
     $db = Database::getConnection();
     $query = 'SELECT MAX(season) AS m FROM events';
