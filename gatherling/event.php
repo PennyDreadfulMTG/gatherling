@@ -312,7 +312,7 @@ function eventForm(Event $event = null, bool $forceNew = false): void
     } elseif (strcmp($view, 'standings') == 0) {
         standingsList($event);
     } elseif (strcmp($view, 'medal') == 0) {
-        medalList($event);
+        echo medalList($event);
     } elseif (strcmp($view, 'points_adj') == 0) {
         pointsAdjustmentForm($event);
     } elseif (strcmp($view, 'reports') == 0) {
@@ -917,73 +917,19 @@ function standingsList(Event $event): void
     Standings::printEventStandings($event->name, Player::loginName());
 }
 
-function medalList(Event $event): void
+function medalList(Event $event): string
 {
-    $def1 = '';
-    $def2 = '';
-    $def4 = ['', ''];
-    $def8 = ['', '', '', ''];
-
     $finalists = $event->getFinalists();
-
-    $t4used = 0;
-    $t8used = 0;
-    foreach ($finalists as $finalist) {
-        if ($finalist['medal'] == '1st') {
-            $def1 = $finalist['player'];
-        } elseif ($finalist['medal'] == '2nd') {
-            $def2 = $finalist['player'];
-        } elseif ($finalist['medal'] == 't4') {
-            $def4[$t4used++] = $finalist['player'];
-        } elseif ($finalist['medal'] == 't8') {
-            $def8[$t8used++] = $finalist['player'];
-        }
+    $pos = 0;
+    foreach ($finalists as &$finalist) {
+        $finalist['playerDropMenu'] = playerDropMenuArgs($event, "$pos", $finalist['player']);
+        $finalist['img'] = theme_file("images/{$finalist['medal']}.png");
+        $pos++;
     }
-    // Start a new form
-    echo '<form action="event.php" method="post" ';
-    echo 'enctype="multipart/form-data">';
-    echo "<input type=\"hidden\" name=\"name\" value=\"{$event->name}\">";
-    echo '<table style="border-width: 0px" align="center">';
-
-    echo '<tr><td colspan="2">';
-    echo '<input type="hidden" name="view" value="reg">';
-    echo '<table align="center" style="border-width: 0px;">';
-    echo '<tr><td align="center" colspan="2"><b>Medals</td></tr>';
-    echo '<tr><td colspan="2" width=200>&nbsp;</td></tr>';
-    echo '<tr><td align="center"><b>Medal</td>';
-    echo '<td align="center"><b>Player</td></tr>';
-    echo '<tr><td align="center">';
-    echo image_tag('1st.png') . '</td>';
-    echo '<td align="center">';
-    echo playerDropMenu($event, '1', $def1);
-    echo '</td></tr>';
-    echo '<tr><td align="center">';
-    echo image_tag('2nd.png') . '</td>';
-    echo '<td align="center">';
-    echo playerDropMenu($event, '2', $def2);
-    echo '</td></tr>';
-    for ($i = 3; $i < 5; $i++) {
-        echo '<tr><td align="center">';
-        echo image_tag('t4.png') . '</td>';
-        echo '<td align="center">';
-        echo playerDropMenu($event, $i, $def4[$i - 3]);
-        echo '</td></tr>';
-    }
-    for ($i = 5; $i < 9; $i++) {
-        echo '<tr><td align="center">';
-        echo image_tag('t8.png') . '</td>';
-        echo '<td align="center">';
-        echo playerDropMenu($event, $i, $def8[$i - 5]);
-        echo '</td></tr>';
-    }
-    echo '<tr><td>&nbsp;</td></tr>';
-    echo '<tr><td colspan="2" align="center">';
-    echo '<input class="inputbutton" type="submit" name="mode" value="Update Medals">';
-    echo '</form>';
-    echo '</td></tr>';
-    echo '</table>';
-    echo '</td></tr>';
-    echo '</table>';
+    return render_name('partials/medalList', [
+        'eventName' => $event->name,
+        'finalists' => $finalists,
+    ]);
 }
 
 function kValueDropMenu(int $kvalue): void
@@ -1264,7 +1210,7 @@ function playerByeMenu(Event $event): string
     ]);
 }
 
-function playerDropMenu(Event $event, string|int $letter, $def = "\n"): string
+function playerDropMenuArgs(Event $event, string|int $letter, $def = "\n"): array
 {
     // If the event is active, only list players who haven't already dropped.
     // Otherwise, list all registered players.
@@ -1280,12 +1226,17 @@ function playerDropMenu(Event $event, string|int $letter, $def = "\n"): string
             'text' => $player,
         ];
     }
-
-    return render_name('partials/dropMenu', [
+    return [
         'name' => "newmatchplayer$letter",
         'default' => $default,
         'options' => $options,
-    ]);
+    ];
+}
+
+function playerDropMenu(Event $event, string|int $letter, $def = "\n"): string
+{
+    $args = playerDropMenuArgs($event, $letter, $def);
+    return render_name('partials/dropMenu', $args);
 }
 
 function roundDropMenu(Event $event, int|string $selected): string

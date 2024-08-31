@@ -1,0 +1,30 @@
+<form action="event.php" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="name" value="{{eventName}}">
+    <table style="border-width: 0px" align="center">
+        <tr><td colspan="2">
+            <input type="hidden" name="view" value="reg">
+            <table align="center" style="border-width: 0px;">
+                <tr><td align="center" colspan="2"><b>Medals</td></tr>
+                <tr><td colspan="2" width=200>&nbsp;</td></tr>
+                <tr><td align="center"><b>Medal</td>
+                    <td align="center"><b>Player</td></tr>
+                {{#finalists}}
+                    <tr>
+                        <td align="center">
+                            <img alt="1st" src="{{img}}" />
+                        </td>
+                        <td align="center">
+                            {{#playerDropMenu}}
+                                {{> dropMenu}}
+                            {{/playerDropMenu}}
+                        </td>
+                    </tr>
+                {{/finalists}}
+                <tr><td>&nbsp;</td></tr>
+                <tr><td colspan="2" align="center">
+                    <input class="inputbutton" type="submit" name="mode" value="Update Medals">
+</form>
+</td></tr>
+</table>
+</td></tr>
+</table>
