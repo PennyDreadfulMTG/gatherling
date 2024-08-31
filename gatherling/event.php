@@ -1,6 +1,5 @@
 <?php
 
-// declare(strict_types=1);
 use Gatherling\Database;
 use Gatherling\Entry;
 use Gatherling\Event;
