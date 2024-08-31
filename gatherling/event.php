@@ -711,7 +711,7 @@ function playerList($event)
             if ($event->active == 1 || $event->finalized) {
                 echo $entry->initial_byes;
             } else {
-                initialByeDropMenu('initial_byes[]', $entry->player->name, $entry->initial_byes);
+                echo initialByeDropMenu('initial_byes[]', $entry->player->name, $entry->initial_byes);
             }
         } elseif ($event->mainstruct == 'Single Elimination') {
             if ($event->active == 1 || $event->finalized) {
@@ -1448,14 +1448,20 @@ function resultDropMenu($name = 'newmatchresult', $extra_options = [])
     echo '</select>';
 }
 
-function initialByeDropMenu($name = 'initial_byes', $playername = '', $current_byes = 0)
+function initialByeDropMenu(string $name = 'initial_byes', string $playername = '', int $current_byes = 0): string
 {
-    echo "<select class=\"inputbox\" name=\"{$name}\">";
-    echo "<option value=\"$playername 0\"" . ($current_byes == 0 ? ' selected' : '') . '>None</option>';
-    for ($i = 1; $i < 3; $i++) {
-        echo "<option value=\"$playername $i\"" . ($current_byes == $i ? ' selected' : '') . ">$i</option>";
+    $options = [];
+    for ($i = 0; $i < 3; $i++) {
+        $options[] = [
+            'value' => "$playername $i",
+            'text' => $i == 0 ? 'None' : "$i",
+            'isSelected' => $current_byes == $i,
+        ];
     }
-    echo '</select>';
+    return render_name('partials/dropMenu', [
+        'name' => $name,
+        'options' => $options,
+    ]);
 }
 
 function initialSeedDropMenu($name = 'initial_seed', $playername = '', $current_seed = 127, $numentries = 8)
