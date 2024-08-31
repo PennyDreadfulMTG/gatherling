@@ -1154,17 +1154,30 @@ function structDropMenu($field, $def)
     echo '</select>';
 }
 
-function clientDropMenu($field, $def)
+function clientDropMenu(string $field, int $def): void
 {
-    $names = [null, 'MTGO', 'Arena', 'Other'];
-    echo "<tr><th><label for='$field'>Game Client</label></th>";
-    echo "<td><select class=\"inputbox\" name=\"$field\" id=\"$field\">";
-    echo '<option value="">- Client -</option>';
-    for ($i = 1; $i < count($names); $i++) {
-        $selStr = ($def == $i) ? 'selected' : '';
-        echo "<option value=\"{$i}\" $selStr>{$names[$i]}</option>";
+    $clients = [
+        1 => 'MTGO',
+        2 => 'Arena',
+        3 => 'Other',
+    ];
+    $options = [];
+    foreach ($clients as $value => $text) {
+        $options[] = [
+            'isSelected' => $def == $value,
+            'value' => $value,
+            'text' => $text,
+        ];
     }
-    echo '</select></td></tr>';
+    echo "<tr><th><label for='$field'>Game Client</label></th>";
+    echo "<td>";
+    echo render_name('partials/dropMenu', [
+        'id' => $field,
+        'name' => $field,
+        'default' => '- Client -',
+        'options' => $options,
+    ]);
+    echo '</td></tr>';
 }
 
 function noEvent($event)
