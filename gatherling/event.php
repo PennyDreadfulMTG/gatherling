@@ -1166,20 +1166,16 @@ function clientDropMenu(string $field, int $def): string
             'text' => $text,
         ];
     }
-    echo "<tr><th><label for='$field'>Game Client</label></th>";
-    echo "<td>";
-    return render_name('partials/dropMenu', [
+    $s = "<tr><th><label for='$field'>Game Client</label></th>";
+    $s .= "<td>";
+    $s .= render_name('partials/dropMenu', [
         'id' => $field,
         'name' => $field,
         'default' => '- Client -',
         'options' => $options,
     ]);
-    echo '</td></tr>';
-}
-
-function noEvent($event)
-{
-    return "The requested event \"$event\" could not be found.";
+    $s .= '</td></tr>';
+    return $s;
 }
 
 function insertEvent()
