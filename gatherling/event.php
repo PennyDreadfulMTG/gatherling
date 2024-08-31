@@ -717,7 +717,7 @@ function playerList($event)
             if ($event->active == 1 || $event->finalized) {
                 echo $entry->initial_seed;
             } else {
-                initialSeedDropMenu('initial_seed[]', $entry->player->name, $entry->initial_seed, $numentries);
+                echo initialSeedDropMenu('initial_seed[]', $entry->player->name, $entry->initial_seed, $numentries);
             }
         }
         echo '</td>';
@@ -1464,14 +1464,22 @@ function initialByeDropMenu(string $name = 'initial_byes', string $playername = 
     ]);
 }
 
-function initialSeedDropMenu($name = 'initial_seed', $playername = '', $current_seed = 127, $numentries = 8)
+function initialSeedDropMenu(string $name, string $playername, int $current_seed, int $numEntries): string
 {
-    echo "<select class=\"inputbox\" name=\"{$name}\">";
-    echo "<option value=\"$playername 127\"" . ($current_seed == 127 ? ' selected' : '') . '>None</option>';
-    for ($i = 1; $i <= $numentries; $i++) {
-        echo "<option value=\"$playername $i\"" . ($current_seed == $i ? ' selected' : '') . ">$i</option>";
+    $options = [
+        ['value' => "$playername 127", 'text' => 'None', 'isSelected' => $current_seed == 127],
+    ];
+    for ($i = 1; $i <= $numEntries; $i++) {
+        $options[] = [
+            'value' => "$playername $i",
+            'text' => "$i",
+            'isSelected' => $current_seed == $i,
+        ];
     }
-    echo '</select>';
+    return render_name('partials/dropMenu', [
+       'name' => $name,
+       'options' => $options,
+    ]);
 }
 
 function controlPanel($event, $cur = '')
