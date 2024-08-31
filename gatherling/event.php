@@ -59,115 +59,11 @@ function content(): void
     } elseif (mode_is('Create A New Event')) {
         eventForm(null, true);
     } elseif (mode_is('Create Next Event')) {
-        $eventName = $_REQUEST['name'];
-
-        try {
-            $oldevent = new Event($eventName);
-        } catch (Exception $exc) {
-            if ($exc->getMessage() == "Event $eventName not found in DB") {
-                $seriesName = preg_replace('/ 1.00$/', '', $eventName);
-                $oldevent = new Event('');
-                $oldevent->name = $eventName;
-                $oldevent->season = 1;
-                $oldevent->number = 0;
-                $oldevent->series = $seriesName;
-            } else {
-                echo $exc->getMessage();
-            }
-        }
-        $newevent = new Event('');
-        $newevent->season = $oldevent->season;
-        $newevent->number = $oldevent->number + 1;
-        $newevent->format = $oldevent->format;
-
-        $newevent->start = date('Y-m-d H:i:00', strtotime($oldevent->start) + (86400 * 7));
-        $newevent->kvalue = $oldevent->kvalue;
-        $newevent->finalized = 0;
-        $newevent->prereg_allowed = $oldevent->prereg_allowed;
-        $newevent->threadurl = $oldevent->threadurl;
-        $newevent->reporturl = $oldevent->reporturl;
-        $newevent->metaurl = $oldevent->metaurl;
-
-        $newevent->player_editdecks = $oldevent->player_editdecks;
-
-        $newevent->series = $oldevent->series;
-        $newevent->host = $oldevent->host;
-        $newevent->cohost = $oldevent->cohost;
-
-        $newevent->mainrounds = $oldevent->mainrounds;
-        $newevent->mainstruct = $oldevent->mainstruct;
-        $newevent->finalrounds = $oldevent->finalrounds;
-        $newevent->finalstruct = $oldevent->finalstruct;
-
-        $newevent->player_reportable = $oldevent->player_reportable;
-        $newevent->prereg_cap = $oldevent->prereg_cap;
-        $newevent->private_decks = $oldevent->private_decks;
-        $newevent->private_finals = $oldevent->private_finals;
-
-        $newevent->player_reportable = $oldevent->player_reportable;
-        $newevent->player_reported_draws = $oldevent->player_reported_draws;
-        $newevent->prereg_cap = $oldevent->prereg_cap;
-        $newevent->late_entry_limit = $oldevent->late_entry_limit;
-        $newevent->private = $oldevent->private;
-
-        $newevent->name = sprintf('%s %d.%02d', $newevent->series, $newevent->season, $newevent->number);
-
-        eventForm($newevent, true);
+        $newEvent = newEventFromEventName($_REQUEST['name'] ?? '');
+        eventForm($newEvent, true);
     } elseif (mode_is('Create Next Season')) {
-        $eventName = $_REQUEST['name'];
-
-        try {
-            $oldevent = new Event($eventName);
-        } catch (Exception $exc) {
-            if ($exc->getMessage() == "Event $eventName not found in DB") {
-                $seriesName = preg_replace('/ 1.00$/', '', $eventName);
-                $oldevent = new Event('');
-                $oldevent->name = $eventName;
-                $oldevent->season = 0;
-                $oldevent->number = 0;
-                $oldevent->series = $seriesName;
-            } else {
-                echo $exc->getMessage();
-            }
-        }
-        $newevent = new Event('');
-        $newevent->season = $oldevent->season + 1;
-        $newevent->number = 1;
-        $newevent->format = $oldevent->format;
-
-        $newevent->start = date('Y-m-d H:i:00', strtotime($oldevent->start) + (86400 * 7));
-        $newevent->kvalue = $oldevent->kvalue;
-        $newevent->finalized = 0;
-        $newevent->prereg_allowed = $oldevent->prereg_allowed;
-        $newevent->threadurl = $oldevent->threadurl;
-        $newevent->reporturl = $oldevent->reporturl;
-        $newevent->metaurl = $oldevent->metaurl;
-
-        $newevent->player_editdecks = $oldevent->player_editdecks;
-
-        $newevent->series = $oldevent->series;
-        $newevent->host = $oldevent->host;
-        $newevent->cohost = $oldevent->cohost;
-
-        $newevent->mainrounds = $oldevent->mainrounds;
-        $newevent->mainstruct = $oldevent->mainstruct;
-        $newevent->finalrounds = $oldevent->finalrounds;
-        $newevent->finalstruct = $oldevent->finalstruct;
-
-        $newevent->player_reportable = $oldevent->player_reportable;
-        $newevent->prereg_cap = $oldevent->prereg_cap;
-        $newevent->private_decks = $oldevent->private_decks;
-        $newevent->private_finals = $oldevent->private_finals;
-
-        $newevent->player_reportable = $oldevent->player_reportable;
-        $newevent->player_reported_draws = $oldevent->player_reported_draws;
-        $newevent->prereg_cap = $oldevent->prereg_cap;
-        $newevent->late_entry_limit = $oldevent->late_entry_limit;
-        $newevent->private = $oldevent->private;
-
-        $newevent->name = sprintf('%s %d.%02d', $newevent->series, $newevent->season, $newevent->number);
-
-        eventForm($newevent, true);
+        $newEvent = newEventFromEventName($_REQUEST['name'] ?? '', true);
+        eventForm($newEvent, true);
     } elseif (isset($_GET['name'])) {
         $event = new Event($_GET['name']);
         if (!$event->authCheck(Player::loginName())) {
@@ -251,6 +147,42 @@ function createNewEvent(): string
         return eventList();
     }
     return authFailed();
+}
+
+function newEventFromEventName(string $eventName, bool $newSeason = false): Event
+{
+    try {
+        $oldEvent = new Event($eventName);
+    } catch (Exception $exc) {
+        if ($exc->getMessage() == "Event $eventName not found in DB") {
+            $seriesName = preg_replace('/ 1.00$/', '', $eventName);
+            $oldEvent = new Event('');
+            $oldEvent->name = $eventName;
+            $oldEvent->season = $newSeason ? 1 : 0;
+            $oldEvent->number = 0;
+            $oldEvent->series = $seriesName;
+        } else {
+            throw $exc;
+        }
+    }
+
+    $newEvent = new Event('');
+    $newEvent->season = $oldEvent->season + ($newSeason ? 1 : 0);
+    $newEvent->number = $newSeason ? 1 : $oldEvent->number + 1;
+    $newEvent->start = date('Y-m-d H:i:00', strtotime($oldEvent->start) + (86400 * 7));
+    $newEvent->finalized = 0;
+    $newEvent->name = sprintf('%s %d.%02d', $newEvent->series, $newEvent->season, $newEvent->number);
+
+    $copiableFields = ['format', 'kvalue', 'prereg_allowed', 'threadurl', 'reporturl', 'metaurl',
+        'series', 'host', 'cohost', 'mainrounds', 'mainstruct', 'finalrounds', 'finalstruct',
+        'private_decks', 'private_finals', 'player_reportable', 'player_reported_draws', 'prereg_cap',
+        'late_entry_limit', 'private', 'player_editdecks'];
+
+    foreach ($copiableFields as $field) {
+        $newEvent->$field = $oldEvent->$field;
+    }
+
+    return $newEvent;
 }
 
 function eventList(): string
