@@ -521,12 +521,12 @@ function eventForm(Event $event = null, bool $forceNew = false): void
         echo '<tr><th>Main Event Structure</th><td>';
         echo numDropMenu('mainrounds', '- No. of Rounds -', 10, $event->mainrounds, 1);
         echo ' rounds of ';
-        structDropMenu('mainstruct', $event->mainstruct);
+        echo structDropMenu('mainstruct', $event->mainstruct);
         echo '</td></tr>';
         echo '<tr><th>Finals Structure</th><td>';
         echo numDropMenu('finalrounds', '- No. of Rounds -', 10, $event->finalrounds, 0);
         echo ' rounds of ';
-        structDropMenu('finalstruct', $event->finalstruct);
+        echo structDropMenu('finalstruct', $event->finalstruct);
         echo '</td></tr>';
         print_checkbox_input('Allow Pre-Registration', 'prereg_allowed', $event->prereg_allowed, null, true);
         print_text_input('Late Entry Limit', 'late_entry_limit', $event->late_entry_limit, 4, 'The event host may still add players after this round.');
@@ -1133,22 +1133,28 @@ function monthDropMenu($month): string
     ]);
 }
 
-function structDropMenu($field, $def)
+function structDropMenu(string $field, string $def): string
 {
-    $names = ['Swiss', 'Single Elimination', /*"Round Robin",*/ 'League', 'League Match'];
+    $names = ['Swiss', 'Single Elimination', 'League', 'League Match'];
     if ($def == 'Swiss (Blossom)') {
         $def = 'Swiss';
     }
-    if (in_array($def, ['Swiss (Blossom)', 'Round Robin'])) { // Disabled structures.
-        $names[] = $def;
+    if ($def == 'Round Robin') {
+        $names[] = 'Round Robin';
     }
-    echo "<select class=\"inputbox\" name=\"$field\">";
-    echo '<option value="">- Structure -</option>';
-    for ($i = 0; $i < count($names); $i++) {
-        $selStr = (strcmp($def, $names[$i]) == 0) ? 'selected' : '';
-        echo "<option value=\"{$names[$i]}\" $selStr>{$names[$i]}</option>";
+    $options = [];
+    foreach ($names as $name) {
+        $options[] = [
+            'value' => $name,
+            'text' => $name,
+            'isSelected' => strcmp($def, $name) == 0,
+        ];
     }
-    echo '</select>';
+    return render_name('partials/dropMenu', [
+        'name' => $field,
+        'default' => '- Structure -',
+        'options' => $options,
+    ]);
 }
 
 function clientDropMenu(string $field, int $def): string
