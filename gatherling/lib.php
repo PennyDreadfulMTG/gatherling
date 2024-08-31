@@ -52,7 +52,7 @@ function render_name($template_name, $context): string
     return $m->render($template_name, $context);
 }
 
-function is_assoc($array)
+function is_assoc(array $array): bool
 {
     return (bool) count(array_filter(array_keys($array), 'is_string'));
 }
