@@ -1,0 +1,8 @@
+<select class="inputbox" name="{{name}}">
+    {{#default}}
+        <option value="">{{default}}</option>
+    {{/default}}
+    {{#options}}
+        <option value="{{value}}" {{#isSelected}}selected{{/isSelected}}>{{value}}</option>
+    {{/options}}
+</select>

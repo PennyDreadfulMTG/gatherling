@@ -27,30 +27,24 @@ print_header('Event Host Control Panel', true);
 <div class="grid_10 suffix_1 prefix_1">
     <div id="gatherling_main" class="box">
         <div class="uppertitle"> Host Control Panel </div>
-
-        <?php
-        content();
-?>
-
+            <?php content(); ?>
         <div class="clear"></div>
     </div>
 </div>
-
-<?php print_footer(); ?>
-
 <?php
+print_footer();
 
-function mode_is(string $str)
+function mode_is(string $str): bool
 {
     $mode = '';
     if (isset($_REQUEST['mode']) and $_REQUEST['mode'] != '') {
         $mode = $_REQUEST['mode'];
     }
 
-    return (bool) (strcmp($mode, $str) == 0);
+    return strcmp($mode, $str) == 0;
 }
 
-function content()
+function content(): void
 {
     $event = null;
 
@@ -267,7 +261,7 @@ function content()
     }
 }
 
-function eventList($series = '', $season = '')
+function eventList(): void
 {
     $db = Database::getConnection();
     $player = Player::getSessionPlayer();

@@ -905,22 +905,23 @@ class Series
         return $cutoff;
     }
 
-    public static function dropMenu($series, $useall = 0, $limitTo = [])
+    public static function dropMenu($series, $useall = 0, $limitTo = []): void
     {
-        $allseries = [];
-        if (count($limitTo) == 0) {
-            $allseries = self::allNames();
-        } else {
-            $allseries = $limitTo;
+        $allseries = empty($limitTo) ? self::allNames() : $limitTo;
+        $default = $useall ? 'All' : '- Series -';
+        $options = [];
+        foreach ($allseries as $name) {
+            $options[] = [
+                'name' => $name,
+                'value' => $name,
+                'isSelected' =>  strcmp($series, $name) == 0,
+            ];
         }
-        echo '<select class="inputbox" name="series">';
-        $title = ($useall == 0) ? '- Series -' : 'All';
-        echo "<option value=\"\">$title</option>";
-        foreach ($allseries as $thisSeries) {
-            $selStr = (strcmp($series, $thisSeries) == 0) ? 'selected' : '';
-            echo "<option value=\"$thisSeries\" $selStr>$thisSeries</option>";
-        }
-        echo '</select>';
+        echo render_name('partials/dropMenu', [
+            'name' => 'series',
+            'default' => $default,
+            'options' => $options,
+        ]);
     }
 
     private static function reverse_total_sort($a, $b)

@@ -191,27 +191,27 @@ function seasonDropMenu($season, $useall = 0)
     numDropMenu('season', $title, max(10, $max + 1), $season);
 }
 
-function formatDropMenu($format, $useAll = 0, $form_name = 'format', $show_meta = true)
+function formatDropMenu($format, $useAll = 0, $formName = 'format', $showMeta = true): void
 {
     $db = Database::getConnection();
     $query = 'SELECT name FROM formats';
-    if (!$show_meta) {
+    if (!$showMeta) {
         $query .= ' WHERE NOT is_meta_format ';
     }
     $query .= ' ORDER BY priority desc, name';
     $result = $db->query($query) or exit($db->error);
-    $title = ($useAll == 0) ? '- Format -' : 'All';
     $formats = $result->fetch_all(MYSQLI_ASSOC);
+    $result->close();
+    $default = $useAll == 0 ? '- Format -' : 'All';
     foreach ($formats as &$f) {
+        $f['value'] = $f['name'];
         $f['isSelected'] = $f['name'] === $format;
     }
-    $html = render_name('partials/formatDropDown', [
-        'formName' => $form_name,
-        'title' => $title,
-        'formats' => $formats,
+    echo render_name('partials/dropMenu', [
+        'name' => $formName,
+        'default' => $default,
+        'options' => $formats,
     ]);
-    echo $html;
-    $result->close();
 }
 
 function emailStatusDropDown($currentStatus = 1)
@@ -226,19 +226,6 @@ function emailStatusDropDown($currentStatus = 1)
         echo '<option value="1" selected>Public</option>';
     } else {
         echo '<option value="1">Public</option>';
-    }
-    echo '</select>';
-}
-
-function dropMenu($name, $options, $selected = null)
-{
-    echo "<select class=\"inputbox\" name=\"{$name}\">";
-    foreach ($options as $option) {
-        $setxt = '';
-        if (!is_null($selected) && $selected == $option) {
-            $setxt = ' selected';
-        }
-        echo "<option value=\"{$option}\"{$setxt}>{$option}</option>";
     }
     echo '</select>';
 }
