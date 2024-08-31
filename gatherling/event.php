@@ -1118,7 +1118,7 @@ function kValueDropMenu(int $kvalue)
     print_select_input('K-Value', 'kvalue', $names, $kvalue);
 }
 
-function monthDropMenu($month)
+function monthDropMenu($month): void
 {
     if (strcmp($month, '') == 0) {
         $month = -1;
@@ -1127,13 +1127,19 @@ function monthDropMenu($month)
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December',
     ];
-    echo '<select class="inputbox" name="month">';
-    echo '<option value="">- Month -</option>';
+    $options = [];
     for ($m = 1; $m <= 12; $m++) {
-        $selStr = ($month == $m) ? 'selected' : '';
-        echo "<option value=\"$m\" $selStr>{$names[$m - 1]}</option>";
+        $options[] = [
+            'isSelected' => $month == $m,
+            'value' => $m,
+            'text' => $names[$m - 1],
+        ];
     }
-    echo '</select>';
+    echo render_name('partials/dropMenu', [
+       'name' => 'month',
+       'default' => '- Month -',
+       'options' => $options,
+    ]);
 }
 
 function structDropMenu($field, $def)
