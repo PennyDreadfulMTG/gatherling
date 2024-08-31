@@ -102,7 +102,7 @@ function print_header($title, $enable_vue = false): void
     ]);
 }
 
-function print_footer()
+function print_footer(): void
 {
     echo render_name('partials/footer', [
        'versionTagline' => version_tagline(),
@@ -230,22 +230,33 @@ function emailStatusDropDown($currentStatus = 1)
     echo '</select>';
 }
 
-function numDropMenu($field, $title, $max, $def, $min = 0, $special = '')
+function numDropMenu($field, $title, $max, $def, $min = 0, $special = ''): void
 {
     if (strcmp($def, '') == 0) {
         $def = -1;
     }
-    echo "<select class=\"inputbox\" name=\"$field\">";
-    echo "<option value=\"\">$title</option>";
+
+    $options = [];
     if (strcmp($special, '') != 0) {
-        $sel = ($def == 128) ? 'selected' : '';
-        echo "<option value=\"128\" $sel>$special</option>";
+        $options[] = [
+            'name' => $special,
+            'value' => 128,
+            'isSelected' => $def == 128,
+        ];
     }
     for ($n = $min; $n <= $max; $n++) {
-        $selStr = ($n == $def) ? 'selected' : '';
-        echo "<option value=\"$n\" $selStr>$n</option>";
+        $options[] = [
+            'name' => $n,
+            'value' => $n,
+            'isSelected' => $n == $def,
+        ];
     }
-    echo '</select>';
+
+    echo render_name('partials/dropMenu', [
+        'name' => $field,
+        'default' => $title,
+        'options' => $options,
+    ]);
 }
 
 function timeDropMenu($hour, $minutes = 0)
