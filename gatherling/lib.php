@@ -151,37 +151,13 @@ EOT;
         $tabs += 1;
     }
 
-    echo <<<EOT
-<div id="submenu" class="grid_12 tabs_$tabs menubar">
-  <ul>
-    <li><a href="profile.php">Profile</a></li>
-    <li><a href="player.php">Player CP</a></li>
-    <li><a href="eventreport.php">Metagame</a></li>
-    <li><a href="decksearch.php">Deck Search</a></li>
-EOT;
-    if ($player == null) {
-        echo "<li class=\"last\"><a href=\"login.php\">Login</a></li>\n";
-    } else {
-        echo "<li class=\"last\"><a href=\"logout.php\">Logout [{$player->name}]</a></li>\n";
-    }
-
-    if ($host || $super) {
-        echo "<li><a href=\"event.php\">Host CP</a></li>\n";
-    }
-
-    if ($organizer || $super) {
-        echo "<li><a href=\"seriescp.php\">Series CP</a></li>\n";
-    }
-
-    if ($organizer || $super) {
-        echo "<li><a href=\"formatcp.php\">Format CP</a></li>\n";
-    }
-
-    if ($super) {
-        echo "<li><a href=\"admincp.php\">Admin CP</a></li>\n";
-    }
-
-    echo "</ul> </div>\n";
+    echo render_name('partials/menu', [
+        'tabs' => $tabs,
+        'player' => $player,
+        'isHost' => $host || $super,
+        'isOrganizer' => $organizer,
+        'super' => $super,
+    ]);
 }
 
 function print_footer()
