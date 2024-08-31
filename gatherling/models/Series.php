@@ -912,7 +912,7 @@ class Series
         $options = [];
         foreach ($allseries as $name) {
             $options[] = [
-                'name' => $name,
+                'text' => $name,
                 'value' => $name,
                 'isSelected' =>  strcmp($series, $name) == 0,
             ];

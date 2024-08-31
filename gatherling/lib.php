@@ -208,7 +208,7 @@ function formatDropMenu($format, $useAll = 0, $formName = 'format', $showMeta = 
     $result->close();
     $default = $useAll == 0 ? '- Format -' : 'All';
     foreach ($formats as &$f) {
-        $f['value'] = $f['name'];
+        $f['text'] = $f['value'] = $f['name'];
         $f['isSelected'] = $f['name'] === $format;
     }
     echo render_name('partials/dropMenu', [
@@ -243,14 +243,14 @@ function numDropMenu($field, $title, $max, $def, $min = 0, $special = ''): void
     $options = [];
     if (strcmp($special, '') != 0) {
         $options[] = [
-            'name' => $special,
+            'text' => $special,
             'value' => 128,
             'isSelected' => $def == 128,
         ];
     }
     for ($n = $min; $n <= $max; $n++) {
         $options[] = [
-            'name' => $n,
+            'text' => $n,
             'value' => $n,
             'isSelected' => $n == $def,
         ];
