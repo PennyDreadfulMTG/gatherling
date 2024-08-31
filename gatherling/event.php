@@ -314,7 +314,7 @@ function eventForm(Event $event = null, bool $forceNew = false): void
     } elseif (strcmp($view, 'medal') == 0) {
         echo medalList($event);
     } elseif (strcmp($view, 'points_adj') == 0) {
-        pointsAdjustmentForm($event);
+        echo pointsAdjustmentForm($event);
     } elseif (strcmp($view, 'reports') == 0) {
         echo reportsForm($event);
     } else {
@@ -680,44 +680,26 @@ function playerList(Event $event): void
     echo '</div>';
 }
 
-function pointsAdjustmentForm(Event $event): void
+function pointsAdjustmentForm(Event $event): string
 {
-    $entries = $event->getEntries();
-
-    // Start a new form
-    echo '<form action="event.php" method="post">';
-    echo "<input type=\"hidden\" name=\"name\" value=\"{$event->name}\" />";
-    echo '<table style="border-width: 0px" align="center">';
-    echo '<input type="hidden" name="view" value="points_adj">';
-    echo '<tr class="top"><th>Player</th><th></th><th>Deck</th><th>Points<br />Adj.</th><th>Reason</th></tr>';
-    foreach ($entries as $entry) {
-        $name = $entry->player->name;
-        $adjustment = $event->getSeasonPointAdjustment($name);
-        echo "<tr><td>{$name}</td>";
+    $eventEntries = $event->getEntries();
+    $entries = [];
+    foreach ($eventEntries as $entry) {
+        $player = get_object_vars($entry);
+        $player['player'] = $entry->player;
+        $player['adjustment'] = $event->getSeasonPointAdjustment($entry->player->name);
         if ($entry->medal != '') {
-            $img = medalImgStr($entry->medal);
-            echo "<td>{$img}</td>";
-        } else {
-            echo '<td></td>';
+            $player['medalImg'] = theme_file("images/{$entry->medal}.png");
         }
         if ($entry->deck != null) {
-            $img = image_tag('verified.png', ['title' => 'Player posted deck']);
-            echo "<td>{$img}</td>";
-        } else {
-            echo '<td> </td>';
+            $player['verifiedImg'] = theme_file('images/verified.png');
         }
-        if ($adjustment != null) {
-            echo "<td style=\"text-align: center;\"> <input type=\"text\" style=\"width: 50px;\" name=\"adjustments[{$name}]\" value=\"{$adjustment['adjustment']}\" /></td>";
-            echo "<td><input class=\"inputbox\" type=\"text\" style=\"width: 400px;\" name=\"reasons[{$name}]\" value=\"{$adjustment['reason']}\" /></td>";
-        } else {
-            echo "<td style=\"text-align: center;\"><input class=\"inputbox\" type=\"text\" style=\"width: 50px;\" name=\"adjustments[{$name}]\" value=\"\" /></td>";
-            echo "<td><input class=\"inputbox\" type=\"text\" style=\"width: 400px;\" name=\"reasons[{$name}]\" value=\"\" /></td>";
-        }
-        echo '</tr>';
+        $entries[] = $player;
     }
-    echo '<tr><td colspan="3" class="buttons"> ';
-    echo '<input class="inputbutton" type="submit" name="mode" value="Update Adjustments" />';
-    echo '</td></tr></table></form>';
+    return render_name('partials/pointsAdjustmentForm', [
+        'eventName' => $event->name,
+        'entries' => $entries,
+    ]);
 }
 
 function printUnverifiedPlayerCell(Event $event, Matchup $match, Player $player)
