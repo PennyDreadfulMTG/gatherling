@@ -202,6 +202,9 @@ function formatDropMenu($format, $useAll = 0, $form_name = 'format', $show_meta 
     $result = $db->query($query) or exit($db->error);
     $title = ($useAll == 0) ? '- Format -' : 'All';
     $formats = $result->fetch_all(MYSQLI_ASSOC);
+    foreach ($formats as &$f) {
+        $f['isSelected'] = $f['name'] === $format;
+    }
     $html = render_name('partials/formatDropDown', [
         'formName' => $form_name,
         'title' => $title,
