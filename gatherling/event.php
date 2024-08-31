@@ -389,9 +389,9 @@ function eventList(): void
     echo '</table></form>';
 }
 
-function eventForm(Event $event = null, bool $forcenew = false)
+function eventForm(Event $event = null, bool $forceNew = false): void
 {
-    if ($forcenew) {
+    if ($forceNew) {
         $edit = 0;
     } elseif ($event != null && $event->name == '') {
         $edit = 0;
