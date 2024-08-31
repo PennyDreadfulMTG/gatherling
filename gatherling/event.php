@@ -585,54 +585,34 @@ function eventForm(Event $event = null, bool $forcenew = false)
     echo '</table>';
 }
 
-function reportsForm($event)
+function reportsForm(Event $event): void
 {
-    /* @var $entries \www\models\Event.php
-     */
-    $entries = $event->getEntriesByDateTime();
-    $entries2 = $event->getEntriesByMedal();
-    $numEntries = count($entries);
-    $emailAd = '---------';
+    $entriesByDateTime = $event->getEntriesByDateTime();
+    $entriesByMedal = $event->getEntriesByMedal();
+    $hasEntries = count($entriesByDateTime) > 0;
 
-    echo '<table style="border-width: 0px" align="center">';
-    echo '<center><h2><b>Player Information</b></h2></center>';
-    echo '<tr><td>&nbsp;</td></tr>';
-    if ($numEntries > 0) {
-        echo '<tr><th>Players by final placing</th><th>Player</th><th>Email</th></tr>';
+    $assembleEntries = function ($entries) {
         $count = 1;
-        foreach ($entries2 as $entryName) {
-            $player = new Player($entryName);
-            if ($player->emailAddress != '') {
-                $emailAd = $player->emailAddress;
-            } else {
-                $emailAd = '---------';
-            }
-            echo "<tr><td align=\"center\">$count</td><td>$entryName</td><td align=\"center\">$emailAd</td></tr>";
-            $count++;
-        }
-
-        echo '<tr><th>Registration Order</th><th>Player</th><th>Email</th></tr>';
-        $count = 1;
+        $result = [];
         foreach ($entries as $entryName) {
             $player = new Player($entryName);
-            if ($player->emailAddress != '') {
-                $emailAd = $player->emailAddress;
-            } else {
-                $emailAd = '---------';
-            }
-            echo "<tr><td align=\"center\">$count</td><td>$entryName</td><td align=\"center\">$emailAd</td></tr>";
+            $result[] = [
+                'n' => $count,
+                'entryName' => $entryName,
+                'emailAd' => $player->emailAddress != '' ? $player->emailAddress : '---------'
+            ];
             $count++;
         }
-    } else {
-        echo '<tr><td align="center" colspan="5"><i>';
-        echo 'No players are currently registered for this event.</i></td></tr>';
-    }
-    echo '</table>';
+        return $result;
+    };
+
+    echo render_name('partials/reportsForm', [
+        'hasEntries' => $hasEntries,
+        'standings' => $assembleEntries($entriesByMedal),
+        'registrants' => $assembleEntries($entriesByDateTime),
+    ]);
 }
 
-/**
- * @param Gatherling/Event $event The event
- */
 function playerList($event)
 {
     global $drop_icon;
