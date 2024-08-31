@@ -907,6 +907,11 @@ class Series
 
     public static function dropMenu(?string $series, bool $useall = false, array $limitTo = []): string
     {
+        return render_name('partials/dropMenu', self::dropMenuArgs($series, $useall, $limitTo));
+    }
+
+    public static function dropMenuArgs(?string $series, bool $useall = false, array $limitTo = []): array
+    {
         $allseries = empty($limitTo) ? self::allNames() : $limitTo;
         $default = $useall ? 'All' : '- Series -';
         $options = [];
@@ -917,11 +922,11 @@ class Series
                 'isSelected' =>  $series && strcmp($series, $name) == 0,
             ];
         }
-        return render_name('partials/dropMenu', [
+        return [
             'name' => 'series',
             'default' => $default,
             'options' => $options,
-        ]);
+        ];
     }
 
     private static function reverse_total_sort($a, $b)

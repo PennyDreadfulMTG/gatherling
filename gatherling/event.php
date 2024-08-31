@@ -58,7 +58,7 @@ function content(): void
         $series = new Series($_POST['series']);
         if (($series->authCheck(Player::loginName())) && isset($_POST['insert'])) {
             insertEvent();
-            eventList();
+            echo eventList();
         } else {
             echo authFailed();
         }
@@ -249,28 +249,81 @@ function content(): void
         if (!isset($_POST['season'])) {
             $_POST['season'] = '';
         }
-        eventList($_POST['series'], $_POST['season']);
+        echo eventList();
     }
 }
 
-function eventList(): void
+function eventList(): string
 {
-    $db = Database::getConnection();
     $player = Player::getSessionPlayer();
     $playerSeries = $player->organizersSeries();
+
+    $result = queryEvents($player, $playerSeries);
+    $seriesShown = $results = $finalizedResults = [];
+
+    while ($event = $result->fetch_assoc()) {
+        if ($event['finalized'] == 1) {
+            $finalizedResults[] = $event;
+        } else {
+            $results[] = $event;
+        }
+        $seriesShown[] = $event['series'];
+    }
+    $results = array_merge($results, $finalizedResults);
+
+    $hasMore = $result->num_rows == 100;
+    $result->close();
+
+    if (isset($_GET['series']) && $_GET['series'] != '') {
+        $seriesShown = $playerSeries;
+    } else {
+        $seriesShown = array_unique($seriesShown);
+    }
+
+    if (!isset($_GET['format'])) {
+        $_GET['format'] = '';
+    }
+
+    $kvalueMap = [
+        0 => 'none',
+        8 => 'Casual',
+        16 => 'Regular',
+        24 => 'Large',
+        32 => 'Championship'
+    ];
+
+    foreach ($results as $event) {
+        $event['kvalueDisplay'] = $kvalueMap[$event['kvalue']] ?? '';
+        $event['url'] = 'event.php?name=' . rawurlencode($event['name']);
+    }
+
+    return render_name('partials/eventList', [
+        'formatDropMenu' => formatDropMenuArgs($_GET['format'], true),
+        'seriesDropMenu' => Series::dropMenuArgs($_GET['series'], true, $seriesShown),
+        'seasonDropMenu' => seasonDropMenuArgs($_GET['season'], true),
+        'hasPlayerSeries' => count($playerSeries) > 0,
+        'results' => $results,
+        'hasMore' => $hasMore,
+    ]);
+}
+
+function queryEvents(Player $player, array $playerSeries): mysqli_result|bool
+{
+    $db = Database::getConnection();
     $seriesEscaped = [];
     foreach ($playerSeries as $oneSeries) {
         $seriesEscaped[] = $db->escape_string($oneSeries);
     }
     $seriesString = '"' . implode('","', $seriesEscaped) . '"';
+
     $query = "SELECT e.name AS name, e.format AS format,
-    COUNT(DISTINCT n.player) AS players, e.host AS host, e.start AS start,
-    e.finalized, e.cohost, e.series, e.kvalue
-    FROM events e
-    LEFT OUTER JOIN entries AS n ON n.event_id = e.id
-    WHERE (e.host = \"{$db->escape_string($player->name)}\"
-           OR e.cohost = \"{$db->escape_string($player->name)}\"
-           OR e.series IN (" . $seriesString . '))';
+        COUNT(DISTINCT n.player) AS players, e.host AS host, e.start AS start,
+        e.finalized, e.cohost, e.series, e.kvalue
+        FROM events e
+        LEFT OUTER JOIN entries AS n ON n.event_id = e.id
+        WHERE (e.host = \"{$db->escape_string($player->name)}\"
+            OR e.cohost = \"{$db->escape_string($player->name)}\"
+            OR e.series IN (" . $seriesString . '))';
     if (isset($_GET['format']) && strcmp($_GET['format'], '') != 0) {
         $query = $query . " AND e.format=\"{$db->escape_string($_GET['format'])}\" ";
     }
@@ -281,108 +334,7 @@ function eventList(): void
         $query = $query . " AND e.season=\"{$db->escape_string($_GET['season'])}\" ";
     }
     $query = $query . ' GROUP BY e.name ORDER BY e.start DESC LIMIT 100';
-    $result = $db->query($query);
-
-    $seriesShown = [];
-    $results = [];
-    $finalizedResults = [];
-    while ($thisEvent = $result->fetch_assoc()) {
-        if ($thisEvent['finalized'] == 1) {
-            $finalizedResults[] = $thisEvent;
-        } else {
-            $results[] = $thisEvent;
-        }
-        $seriesShown[] = $thisEvent['series'];
-    }
-    $results = array_merge($results, $finalizedResults);
-
-    if (isset($_GET['series']) && $_GET['series'] != '') {
-        $seriesShown = $playerSeries;
-    } else {
-        $seriesShown = array_unique($seriesShown);
-    }
-
-    echo '<form action="event.php" method="get">';
-    echo '<table class="form" style="border-width: 0px" align="center">';
-    echo '<tr><td colspan="2" align="center"><b>Filters</td></tr>';
-    echo '<tr><td>&nbsp;</td></tr>';
-    echo '<tr><th>Format</th><td>';
-    if (!isset($_GET['format'])) {
-        $_GET['format'] = '';
-    }
-    echo formatDropMenu($_GET['format'], true);
-    echo '</td></tr>';
-    echo '<tr><th>Series</th><td>';
-    echo Series::dropMenu($_GET['series'], true, $seriesShown);
-    echo '</td></tr>';
-    echo '<tr><th>Season</th><td>';
-    echo seasonDropMenu($_GET['season'], true);
-    echo '</td></tr>';
-    echo '<tr><td>&nbsp;</td></tr>';
-    echo '<tr><td colspan="2" class="buttons">';
-    if (count($playerSeries) > 0) {
-        echo "<input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Create A New Event\" />\n";
-    }
-    echo "<input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Filter Events\" />\n";
-    echo '</td></tr></table>';
-    echo '<table style="border-width: 0px" align="center" cellpadding="3">';
-    echo '<tr><td colspan="5">&nbsp;</td></tr>';
-    echo '<tr><td><b>Event</b></td><td><b>Format</b></td><td><b>K-Value</b></td>';
-    echo '<td align="center"><b>Players</td>';
-    echo '<td><b>Host(s)</td>';
-    echo '<td align="center"><b>Finalized</td></tr>';
-
-    foreach ($results as $thisEvent) {
-        $kvalue = '';
-        switch ($thisEvent['kvalue']) {
-            case 0:
-                $kvalue = 'none';
-                break;
-            case 8:
-                $kvalue = 'Casual';
-                break;
-            case 16:
-                $kvalue = 'Regular';
-                break;
-            case 24:
-                $kvalue = 'Large';
-                break;
-            case 32:
-                $kvalue = 'Championship';
-                break;
-        }
-        echo '<tr><td>';
-        echo '<a href="event.php?name=' . rawurlencode($thisEvent['name']) . '">';
-        echo "{$thisEvent['name']}</a></td>";
-        echo "<td>{$thisEvent['format']}</td>";
-        echo "<td>{$kvalue}</td>";
-        echo "<td align=\"center\">{$thisEvent['players']}</td>";
-        echo "<td>{$thisEvent['host']}";
-        $ch = $thisEvent['cohost'];
-        if (!is_null($ch) && strcmp($ch, '') != 0) {
-            echo "/$ch";
-        }
-        echo '</td>';
-        //echo "<td>$date</td>";
-        echo '<td align="center">';
-        if ($thisEvent['finalized'] == 1) {
-            echo '&#x2714;';
-        }
-        echo '</td>';
-        echo '</tr>';
-    }
-
-    if ($result->num_rows == 100) {
-        echo '<tr><td colspan="5" width="500">&nbsp;</td></tr>';
-        echo '<tr><td colspan="5" align="center">';
-        echo '<i>This list only shows the 100 most recent results. ';
-        echo 'Please use the filters at the top of this page to find older ';
-        echo 'results.</i></td></tr>';
-    }
-    $result->close();
-
-    echo '<tr><td colspan="5" width="500">&nbsp;</td></tr>';
-    echo '</table></form>';
+    return $db->query($query);
 }
 
 function eventForm(Event $event = null, bool $forceNew = false): void
