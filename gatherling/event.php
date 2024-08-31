@@ -1672,10 +1672,7 @@ function updateAdjustments(): void
     }
 }
 
-function authFailed()
+function authFailed(): string
 {
-    echo 'You are not permitted to make that change. Please contact the ';
-    echo 'event host to modify this event. If you <b>are</b> the event host, ';
-    echo 'or feel that you should have privilege to modify this event, you ';
-    echo 'should contact the admin via <a href="https://discord.gg/2VJ8Fa6">the Discord server</a>.<br><br>';
+    render_name('partials/authFailed');
 }
