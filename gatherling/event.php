@@ -60,7 +60,7 @@ function content(): void
             insertEvent();
             eventList();
         } else {
-            authFailed();
+            echo authFailed();
         }
     } elseif (mode_is('Create A New Event')) {
         eventForm(null, true);
@@ -177,8 +177,7 @@ function content(): void
     } elseif (isset($_GET['name'])) {
         $event = new Event($_GET['name']);
         if (!$event->authCheck(Player::loginName())) {
-            authFailed();
-
+            echo authFailed();
             return;
         }
         if (isset($_GET['action'])) {
@@ -194,7 +193,7 @@ function content(): void
         $event = new Event($_POST['name']);
 
         if (!$event->authCheck(Player::loginName())) {
-            authFailed();
+            echo authFailed();
         } else {
             if (mode_is('Start Event')) {
                 $event->startEvent(true);
@@ -1671,5 +1670,5 @@ function updateAdjustments(): void
 
 function authFailed(): string
 {
-    render_name('partials/authFailed');
+    return render_name('partials/authFailed');
 }
