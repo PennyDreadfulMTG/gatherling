@@ -55,13 +55,7 @@ function content(): void
     }
 
     if (mode_is('Create New Event')) {
-        $series = new Series($_POST['series']);
-        if (($series->authCheck(Player::loginName())) && isset($_POST['insert'])) {
-            insertEvent();
-            echo eventList();
-        } else {
-            echo authFailed();
-        }
+        echo createNewEvent();
     } elseif (mode_is('Create A New Event')) {
         eventForm(null, true);
     } elseif (mode_is('Create Next Event')) {
@@ -247,6 +241,16 @@ function content(): void
         }
         echo eventList();
     }
+}
+
+function createNewEvent(): string
+{
+    $series = new Series($_POST['series']);
+    if (($series->authCheck(Player::loginName())) && isset($_POST['insert'])) {
+        insertEvent();
+        return eventList();
+    }
+    return authFailed();
 }
 
 function eventList(): string
