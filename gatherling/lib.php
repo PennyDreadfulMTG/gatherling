@@ -26,6 +26,10 @@ date_default_timezone_set('US/Eastern'); // force time functions to use US/Easte
 
 require_once 'util/time.php';
 
+const MTGO = 1;
+const MTGA = 2;
+const PAPER = 3;
+
 function page($title, $contents): string
 {
     ob_start();

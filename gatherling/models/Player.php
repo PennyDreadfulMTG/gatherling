@@ -1364,46 +1364,34 @@ class Player
         return $series;
     }
 
-    public function gameName($game = null, $html = true)
+    public function gameName($game = null, $html = true): string
     {
-        if ($game == 1) {
-            $game = 'mtgo';
-        } elseif ($game == 2) {
-            $game = 'arena';
-        } elseif ($game == 3) {
-            $game = 'paper';
-        } elseif ($game == 'discord') {
-            $game = 'paper';
-        }
-
-        if (!$html) {
-            return $this->name;
-        }
-
+        $iconClass = null;
         $name = $this->name;
-        if ($game == 'mtgo' && !empty($this->mtgo_username)) {
-            $name = '<i class="ss ss-pmodo"></i>&nbsp;'.$this->mtgo_username;
-        } elseif ($game == 'arena' && !empty($this->mtga_username)) {
-            $name = '<i class="ss ss-parl3"></i>&nbsp;'.$this->mtga_username;
-        } elseif ($game == 'paper' && !empty($this->discord_handle)) {
-            $name = '<i class="fab fa-discord"></i>&nbsp;'.$this->discord_handle;
-        } elseif ($game == 'gatherling') {
-            $name = '<i class="ss ss-dd2"></i>&nbsp;'.$this->name;
+        if ($html) {
+            if ($game == MTGO && !empty($this->mtgo_username)) {
+                $iconClass = 'ss ss-pmodo';
+                $name = $this->mtgo_username;
+            } elseif ($game == MTGA && !empty($this->mtga_username)) {
+                $iconClass = 'ss ss-parl3';
+                $name = $this->mtga_username;
+            } elseif (($game == PAPER || $game == 'discord') && !empty($this->discord_handle)) {
+                $iconClass = 'fab fa-discord';
+                $name = $this->discord_handle;
+            } elseif ($game == 'gatherling') {
+                $iconClass = "ss ss-dd2";
+            }
         }
-
-        return $name;
+        return render_name('partials/gameName', [
+            'iconClass' => $iconClass,
+            'name' => $name,
+        ]);
     }
 
-    public function linkTo($game = 'gatherling')
+    public function linkTo(string $game = 'gatherling'): string
     {
         $name = $this->gameName($game);
-        $result = "<a href=\"profile.php?player={$this->name}\">{$name}";
-        // if ($this->verified == 1) {
-        //     $result .= image_tag('verified.png', ['width' => '12', 'height' => '12']);
-        // }
-        $result .= '</a>';
-
-        return $result;
+        return "<a href=\"profile.php?player={$this->name}\">{$name}</a>";
     }
 
     public static function activeCount()
