@@ -1507,13 +1507,6 @@ function updateReg()
         $event->addPlayer($_POST['newentry']);
     }
 
-    // if (isset($_POST['earned_byes'])) {
-    //     foreach ($_POST['earned_byes'] as $playername) {
-    //         $entry = new Entry($event->id, $playername);
-    //         $entry->add_earned_byes($playername, $playername[1]);
-    //     }
-    // }
-
     if (isset($_POST['initial_byes'])) {
         foreach ($_POST['initial_byes'] as $byedata) {
             if (!empty(trim($byedata))) {
