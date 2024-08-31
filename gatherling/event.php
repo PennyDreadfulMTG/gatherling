@@ -13,9 +13,6 @@ use Gatherling\Standings;
 include 'lib.php';
 include 'lib_form_helper.php';
 
-$verified_url = theme_file('images/verified.png');
-$dot_url = theme_file('images/dot.png');
-
 $drop_icon = '&#x2690;';
 
 if (!Player::isLoggedIn()) {
