@@ -539,7 +539,10 @@ function eventForm(Event $event = null, bool $forceNew = false): void
         print_checkbox_input('Finals List Privacy', 'private_finals', $event->private_finals);
         print_checkbox_input('Allow Player Reported Draws', 'player_reported_draws', $event->player_reported_draws, 'This allows players to report a draw result for matches.');
         print_checkbox_input('Private Event', 'private', $event->private, 'This event is invisible to non-participants');
+        echo '<tr><th><label for="client">Game Client</label></th>';
+        echo "<td>";
         echo clientDropMenu('client', $event->client);
+        echo '</td></tr>';
 
         if ($edit == 0) {
             echo '<tr><td>&nbsp;</td></tr>';
@@ -1172,16 +1175,12 @@ function clientDropMenu(string $field, int $def): string
             'text' => $text,
         ];
     }
-    $s = "<tr><th><label for='$field'>Game Client</label></th>";
-    $s .= "<td>";
-    $s .= render_name('partials/dropMenu', [
+    return render_name('partials/dropMenu', [
         'id' => $field,
         'name' => $field,
         'default' => '- Client -',
         'options' => $options,
     ]);
-    $s .= '</td></tr>';
-    return $s;
 }
 
 function insertEvent(): Event
