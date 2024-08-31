@@ -46,8 +46,6 @@ function mode_is(string $str): bool
 
 function content(): void
 {
-    $event = null;
-
     if (!isset($_GET['series'])) {
         $_GET['series'] = '';
     }
