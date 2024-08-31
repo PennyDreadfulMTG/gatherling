@@ -192,10 +192,10 @@ function seasonDropMenu($season, $useall = 0): void
     $max = $maxarr['m'];
     $title = ($useall == 0) ? '- Season - ' : 'All';
     $result->close();
-    numDropMenu('season', $title, max(10, $max + 1), $season);
+    echo numDropMenu('season', $title, max(10, $max + 1), $season);
 }
 
-function formatDropMenu($format, $useAll = 0, $formName = 'format', $showMeta = true): void
+function formatDropMenu(string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): string
 {
     $db = Database::getConnection();
     $query = 'SELECT name FROM formats';
@@ -211,7 +211,7 @@ function formatDropMenu($format, $useAll = 0, $formName = 'format', $showMeta = 
         $f['text'] = $f['value'] = $f['name'];
         $f['isSelected'] = $f['name'] === $format;
     }
-    echo render_name('partials/dropMenu', [
+    return render_name('partials/dropMenu', [
         'name' => $formName,
         'default' => $default,
         'options' => $formats,
@@ -234,14 +234,14 @@ function emailStatusDropDown($currentStatus = 1)
     echo '</select>';
 }
 
-function numDropMenu($field, $title, $max, $def, $min = 0, $special = ''): void
+function numDropMenu(string $field, string $title, int $max, string|int $def, int $min = 0, ?string $special = null): string
 {
     if ($def && strcmp($def, '') == 0) {
         $def = -1;
     }
 
     $options = [];
-    if (strcmp($special, '') != 0) {
+    if ($special) {
         $options[] = [
             'text' => $special,
             'value' => 128,
@@ -256,7 +256,7 @@ function numDropMenu($field, $title, $max, $def, $min = 0, $special = ''): void
         ];
     }
 
-    echo render_name('partials/dropMenu', [
+    return render_name('partials/dropMenu', [
         'name' => $field,
         'default' => $title,
         'options' => $options,

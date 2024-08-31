@@ -1275,7 +1275,7 @@ function printMetaFormatSettings($active_format, $seriesName)
         echo '</tr>';
     }
     echo '<tr><td>';
-    formatDropMenu(null, 0, 'addchild', false);
+    echo formatDropMenu(null, false, 'addchild', false);
     echo '</td>';
     echo '<td colspan="2" class="buttons">';
     echo '<input class="inputbutton" type="submit" value="Update Children" name ="action" />';

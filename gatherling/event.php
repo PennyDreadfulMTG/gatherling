@@ -318,10 +318,10 @@ function eventList(): void
     if (!isset($_GET['format'])) {
         $_GET['format'] = '';
     }
-    formatDropMenu($_GET['format'], 1);
+    echo formatDropMenu($_GET['format'], true);
     echo '</td></tr>';
     echo '<tr><th>Series</th><td>';
-    Series::dropMenu($_GET['series'], 1, $seriesShown);
+    echo Series::dropMenu($_GET['series'], true, $seriesShown);
     echo '</td></tr>';
     echo '<tr><th>Season</th><td>';
     seasonDropMenu($_GET['season'], 1);
@@ -442,7 +442,7 @@ function eventForm(Event $event = null, bool $forcenew = false)
     } elseif (strcmp($view, 'points_adj') == 0) {
         pointsAdjustmentForm($event);
     } elseif (strcmp($view, 'reports') == 0) {
-        reportsForm($event);
+        echo reportsForm($event);
     } else {
         echo '<form action="event.php" method="post" ';
         echo 'enctype="multipart/form-data">';
@@ -493,9 +493,9 @@ function eventForm(Event $event = null, bool $forcenew = false)
         }
 
         echo '<tr><th>Date & Time</th><td>';
-        numDropMenu('year', '- Year -', date('Y') + 1, $year, 2011);
-        monthDropMenu($month);
-        numDropMenu('day', '- Day- ', 31, $day, 1);
+        echo numDropMenu('year', '- Year -', date('Y') + 1, $year, 2011);
+        echo monthDropMenu($month);
+        echo numDropMenu('day', '- Day- ', 31, $day, 1);
         timeDropMenu($hour, $minutes);
         echo '</td></tr>';
         echo '<tr><th>Series</th><td>';
@@ -504,16 +504,16 @@ function eventForm(Event $event = null, bool $forcenew = false)
             $seriesList[] = $event->series;
         }
         $seriesList = array_unique($seriesList);
-        Series::dropMenu($event->series, 0, $seriesList);
+        echo Series::dropMenu($event->series, false, $seriesList);
         echo '</td></tr>';
         echo '<tr><th>Season</th><td>';
         seasonDropMenu($event->season);
         echo '</td></tr>';
         echo '<tr><th>Number</th><td>';
-        numDropMenu('number', '- Event Number -', Event::largestEventNum() + 5, $event->number, 0, 'Custom');
+        echo numDropMenu('number', '- Event Number -', Event::largestEventNum() + 5, $event->number, 0, 'Custom');
         echo '</td><tr>';
         echo '<tr><th>Format</th><td>';
-        formatDropMenu($event->format);
+        echo formatDropMenu($event->format);
         echo '</td></tr>';
         if (is_null($event->kvalue)) {
             $event->kvalue = 16;
@@ -528,12 +528,12 @@ function eventForm(Event $event = null, bool $forcenew = false)
         print_text_input('Metagame URL', 'metaurl', $event->metaurl, 60, null, null, true);
         print_text_input('Report URL', 'reporturl', $event->reporturl, 60, null, null, true);
         echo '<tr><th>Main Event Structure</th><td>';
-        numDropMenu('mainrounds', '- No. of Rounds -', 10, $event->mainrounds, 1);
+        echo numDropMenu('mainrounds', '- No. of Rounds -', 10, $event->mainrounds, 1);
         echo ' rounds of ';
         structDropMenu('mainstruct', $event->mainstruct);
         echo '</td></tr>';
         echo '<tr><th>Finals Structure</th><td>';
-        numDropMenu('finalrounds', '- No. of Rounds -', 10, $event->finalrounds, 0);
+        echo numDropMenu('finalrounds', '- No. of Rounds -', 10, $event->finalrounds, 0);
         echo ' rounds of ';
         structDropMenu('finalstruct', $event->finalstruct);
         echo '</td></tr>';
@@ -548,7 +548,7 @@ function eventForm(Event $event = null, bool $forcenew = false)
         print_checkbox_input('Finals List Privacy', 'private_finals', $event->private_finals);
         print_checkbox_input('Allow Player Reported Draws', 'player_reported_draws', $event->player_reported_draws, 'This allows players to report a draw result for matches.');
         print_checkbox_input('Private Event', 'private', $event->private, 'This event is invisible to non-participants');
-        clientDropMenu('client', $event->client);
+        echo clientDropMenu('client', $event->client);
 
         if ($edit == 0) {
             echo '<tr><td>&nbsp;</td></tr>';
@@ -562,7 +562,7 @@ function eventForm(Event $event = null, bool $forcenew = false)
 
             echo '<tr><th>Current Round</th>';
             echo '<td>';
-            roundDropMenu($event, $event->current_round);
+            echo roundDropMenu($event, $event->current_round);
             echo '</td></tr>';
             trophyField($event);
             echo '<tr><td>&nbsp;</td></tr>';
@@ -585,7 +585,7 @@ function eventForm(Event $event = null, bool $forcenew = false)
     echo '</table>';
 }
 
-function reportsForm(Event $event): void
+function reportsForm(Event $event): string
 {
     $entriesByDateTime = $event->getEntriesByDateTime();
     $entriesByMedal = $event->getEntriesByMedal();
@@ -606,7 +606,7 @@ function reportsForm(Event $event): void
         return $result;
     };
 
-    echo render_name('partials/reportsForm', [
+    return render_name('partials/reportsForm', [
         'hasEntries' => $hasEntries,
         'standings' => $assembleEntries($entriesByMedal),
         'registrants' => $assembleEntries($entriesByDateTime),
@@ -950,7 +950,7 @@ function matchList(Event $event)
             printUnverifiedPlayerCell($event, $match, $playera);
             echo '<td>';
             echo "<input type=\"hidden\" name=\"hostupdatesmatches[]\" value=\"{$match->id}\">";
-            resultDropMenu('matchresult[]');
+            echo resultDropMenu('matchresult[]');
             echo '</td>';
             printUnverifiedPlayerCell($event, $match, $playerb);
         } else {
@@ -984,23 +984,23 @@ function matchList(Event $event)
         echo "<input type=\"hidden\" name=\"newmatchround\" value=\"{$event->current_round}\">";
         echo '<input type="hidden" name="newmatchresult" value="P">';
         echo '<tr><td align="center" colspan="7">';
-        playerDropMenu($event, 'A');
+        echo playerDropMenu($event, 'A');
         echo ' vs ';
-        playerDropMenu($event, 'B');
+        echo playerDropMenu($event, 'B');
         echo '</td></tr>';
         echo '<tr><td>&nbsp;</td></tr>';
         echo '<tr><td align="center" colspan="7"><b>Award Bye</b></td></tr>';
         echo '<tr><td align="center" colspan="7">';
-        playerByeMenu($event);
+        echo playerByeMenu($event);
         echo '</td></tr>';
     } else {
         echo '<tr><td align="center" colspan="7">';
         echo '<b>Add a Match</b></td></tr>';
         echo '<tr><td align="center" colspan="7">';
-        roundDropMenu($event, $_POST['newmatchround']);
-        playerDropMenu($event, 'A');
-        resultDropMenu('newmatchresult');
-        playerDropMenu($event, 'B');
+        echo roundDropMenu($event, $_POST['newmatchround']);
+        echo playerDropMenu($event, 'A');
+        echo resultDropMenu('newmatchresult');
+        echo playerDropMenu($event, 'B');
         echo '</td></tr>';
     }
     echo '<tr><td>&nbsp;</td></tr>';
@@ -1078,25 +1078,25 @@ function medalList($event)
     echo '<tr><td align="center">';
     echo image_tag('1st.png') . '</td>';
     echo '<td align="center">';
-    playerDropMenu($event, '1', $def1);
+    echo playerDropMenu($event, '1', $def1);
     echo '</td></tr>';
     echo '<tr><td align="center">';
     echo image_tag('2nd.png') . '</td>';
     echo '<td align="center">';
-    playerDropMenu($event, '2', $def2);
+    echo playerDropMenu($event, '2', $def2);
     echo '</td></tr>';
     for ($i = 3; $i < 5; $i++) {
         echo '<tr><td align="center">';
         echo image_tag('t4.png') . '</td>';
         echo '<td align="center">';
-        playerDropMenu($event, $i, $def4[$i - 3]);
+        echo playerDropMenu($event, $i, $def4[$i - 3]);
         echo '</td></tr>';
     }
     for ($i = 5; $i < 9; $i++) {
         echo '<tr><td align="center">';
         echo image_tag('t8.png') . '</td>';
         echo '<td align="center">';
-        playerDropMenu($event, $i, $def8[$i - 5]);
+        echo playerDropMenu($event, $i, $def8[$i - 5]);
         echo '</td></tr>';
     }
     echo '<tr><td>&nbsp;</td></tr>';
@@ -1118,7 +1118,7 @@ function kValueDropMenu(int $kvalue)
     print_select_input('K-Value', 'kvalue', $names, $kvalue);
 }
 
-function monthDropMenu($month): void
+function monthDropMenu($month): string
 {
     if (strcmp($month, '') == 0) {
         $month = -1;
@@ -1135,7 +1135,7 @@ function monthDropMenu($month): void
             'text' => $names[$m - 1],
         ];
     }
-    echo render_name('partials/dropMenu', [
+    return render_name('partials/dropMenu', [
        'name' => 'month',
        'default' => '- Month -',
        'options' => $options,
@@ -1160,7 +1160,7 @@ function structDropMenu($field, $def)
     echo '</select>';
 }
 
-function clientDropMenu(string $field, int $def): void
+function clientDropMenu(string $field, int $def): string
 {
     $clients = [
         1 => 'MTGO',
@@ -1177,7 +1177,7 @@ function clientDropMenu(string $field, int $def): void
     }
     echo "<tr><th><label for='$field'>Game Client</label></th>";
     echo "<td>";
-    echo render_name('partials/dropMenu', [
+    return render_name('partials/dropMenu', [
         'id' => $field,
         'name' => $field,
         'default' => '- Client -',
@@ -1378,7 +1378,7 @@ function insertTrophy()
     }
 }
 
-function playerByeMenu(Event $event): void
+function playerByeMenu(Event $event): string
 {
     $playerNames = $event->getRegisteredPlayers(true);
     $options = [];
@@ -1388,14 +1388,14 @@ function playerByeMenu(Event $event): void
             'text' => $player,
         ];
     }
-    echo render_name('partials/dropMenu', [
+    return render_name('partials/dropMenu', [
         'name' => 'newbyeplayer',
         'default' => '- Bye Player -',
         'options' => $options,
     ]);
 }
 
-function playerDropMenu(Event $event, string|int $letter, $def = "\n"): void
+function playerDropMenu(Event $event, string|int $letter, $def = "\n"): string
 {
     // If the event is active, only list players who haven't already dropped.
     // Otherwise, list all registered players.
@@ -1412,14 +1412,14 @@ function playerDropMenu(Event $event, string|int $letter, $def = "\n"): void
         ];
     }
 
-    echo render_name('partials/dropMenu', [
+    return render_name('partials/dropMenu', [
         'name' => "newmatchplayer$letter",
         'default' => $default,
         'options' => $options,
     ]);
 }
 
-function roundDropMenu(Event $event, int|string $selected): void
+function roundDropMenu(Event $event, int|string $selected): string
 {
     $options = [];
     for ($r = 1; $r <= ($event->mainrounds + $event->finalrounds); $r++) {
@@ -1431,14 +1431,14 @@ function roundDropMenu(Event $event, int|string $selected): void
         ];
     }
 
-    echo render_name('partials/dropMenu', [
+    return render_name('partials/dropMenu', [
        'name' => 'newmatchround',
        'default' => '- Round -',
        'options' => $options,
     ]);
 }
 
-function resultDropMenu(string $name = 'newmatchresult', array $extra_options = []): void
+function resultDropMenu(string $name = 'newmatchresult', array $extra_options = []): string
 {
     $options = [
         ['value' => '2-0', 'text' => '2-0'],
@@ -1451,7 +1451,7 @@ function resultDropMenu(string $name = 'newmatchresult', array $extra_options = 
     foreach ($extra_options as $value => $text) {
         $options[] = ['value' => $value, 'text' => $text];
     }
-    echo render_name('partials/dropMenu', [
+    return render_name('partials/dropMenu', [
         'name' => $name,
         'default' => '- Result -',
         'options' => $options,

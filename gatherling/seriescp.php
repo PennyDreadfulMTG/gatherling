@@ -312,7 +312,7 @@ function printPointsRule($rule, $key, $rules, $formtype = 'text', $size = 4)
         echo ' /></td></tr>';
     } elseif ($formtype == 'format') {
         echo '<td> ';
-        formatDropMenu($rules[$key], 0, "new_rules[{$key}]");
+        echo formatDropMenu($rules[$key], false, "new_rules[{$key}]");
         echo '</td></tr>';
     }
 }

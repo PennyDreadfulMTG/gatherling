@@ -905,7 +905,7 @@ class Series
         return $cutoff;
     }
 
-    public static function dropMenu($series, $useall = 0, $limitTo = []): void
+    public static function dropMenu(?string $series, bool $useall = false, array $limitTo = []): string
     {
         $allseries = empty($limitTo) ? self::allNames() : $limitTo;
         $default = $useall ? 'All' : '- Series -';
@@ -917,7 +917,7 @@ class Series
                 'isSelected' =>  $series && strcmp($series, $name) == 0,
             ];
         }
-        echo render_name('partials/dropMenu', [
+        return render_name('partials/dropMenu', [
             'name' => 'series',
             'default' => $default,
             'options' => $options,

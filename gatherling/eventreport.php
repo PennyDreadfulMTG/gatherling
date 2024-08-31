@@ -70,10 +70,10 @@ function eventList()
     echo '<tr><td colspan="2" align="center"><b>Filters</td></tr>';
     echo '<tr><td>&nbsp;</td></tr>';
     echo '<tr><td>Format</td><td>';
-    formatDropMenu($_GET['format'], 1);
+    echo formatDropMenu($_GET['format'], true);
     echo '</td></tr>';
     echo '<tr><td>Series</td><td>';
-    Series::dropMenu($_GET['series'], 1);
+    echo Series::dropMenu($_GET['series'], true);
     echo '</td></tr>';
     echo '<tr><td>Season</td><td>';
     seasonDropMenu($_GET['season'], 1);
