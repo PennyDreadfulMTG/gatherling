@@ -36,6 +36,18 @@ function page($title, $contents): string
     return ob_get_clean();
 }
 
+function render_name($template_name, $context): string
+{
+    $m = new Mustache_Engine([
+        'cache' => '/tmp',
+        'loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__) . '/views'),
+        'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__) . '/views/partials'),
+        'entity_flags' => ENT_QUOTES,
+        'strict_callables' => true,
+    ]);
+    return $m->render($template_name, $context);
+}
+
 function is_assoc($array)
 {
     return (bool) count(array_filter(array_keys($array), 'is_string'));
@@ -278,15 +290,14 @@ function formatDropMenu($format, $useAll = 0, $form_name = 'format', $show_meta 
     }
     $query .= ' ORDER BY priority desc, name';
     $result = $db->query($query) or exit($db->error);
-    echo "<select class=\"inputbox\" name=\"{$form_name}\">";
     $title = ($useAll == 0) ? '- Format -' : 'All';
-    echo "<option value=\"\">$title</option>";
-    while ($thisFormat = $result->fetch_assoc()) {
-        $name = $thisFormat['name'];
-        $selStr = (strcmp($name, $format) == 0) ? 'selected' : '';
-        echo "<option value=\"$name\" $selStr>$name</option>";
-    }
-    echo '</select>';
+    $formats = $result->fetch_all(MYSQLI_ASSOC);
+    $html = render_name('formatDropDown', [
+        'form_name' => $form_name,
+        'title' => $title,
+        'formats' => $formats,
+    ]);
+    echo $html;
     $result->close();
 }
 
