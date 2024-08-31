@@ -172,12 +172,6 @@ function image_tag($filename, $extra_attr = null)
     return $tag;
 }
 
-function noHost()
-{
-    echo "<center>\n";
-    echo "Only hosts and admins may access that page.</center>\n";
-}
-
 function medalImgStr($medal)
 {
     return image_tag("$medal.png", ['style' => 'border-width: 0px']);
