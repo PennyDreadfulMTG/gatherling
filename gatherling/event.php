@@ -45,6 +45,7 @@ function content(): void
     $season = $_GET['season'] ?? '';
     $requestEventName = $_REQUEST['name'] ?? '';
     $getEventName = $_GET['name'] ?? $_GET['event'] ?? null;
+    $postEventName = $_POST['name'] ?? null;
     $action = $_GET['action'] ?? null;
     $eventId = $_GET['event_id'] ?? null;
     $player = $_GET['player'] ?? null;
@@ -61,8 +62,8 @@ function content(): void
         eventForm($newEvent, true);
     } elseif (isset($getEventName)) {
         getEvent($getEventName, $action, $eventId, $player);
-    } elseif (isset($_POST['name'])) {
-        postEvent($_POST['name']);
+    } elseif (isset($postEventName)) {
+        postEvent($postEventName);
     } else {
         echo eventList($getSeriesName, $season);
     }
