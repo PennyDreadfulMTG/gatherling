@@ -43,7 +43,7 @@ function page($title, $contents): string
 function render_name($template_name, $context): string
 {
     $m = new Mustache_Engine([
-        'cache' => '/tmp',
+        'cache' => '/tmp/gatherling/mustache/templates',
         'loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__) . '/views'),
         'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__) . '/views/partials'),
         'entity_flags' => ENT_QUOTES,
