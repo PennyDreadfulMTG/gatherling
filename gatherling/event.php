@@ -1419,19 +1419,23 @@ function playerDropMenu(Event $event, string|int $letter, $def = "\n"): void
     ]);
 }
 
-function roundDropMenu($event, $selected)
+function roundDropMenu(Event $event, int|string $selected): void
 {
-    echo '<select class="inputbox" name="newmatchround">';
-    echo '<option value="">- Round -</option>';
+    $options = [];
     for ($r = 1; $r <= ($event->mainrounds + $event->finalrounds); $r++) {
-        $star = ($r > $event->mainrounds) ? '*' : '';
-        echo "<option value=\"$r\"";
-        if ($selected == $r) {
-            echo ' selected';
-        }
-        echo ">$r$star</option>";
+        $star = $r > $event->mainrounds ? '*' : '';
+        $options[] = [
+            'isSelected' => $selected == $r,
+            'value' => $r,
+            'text' => "$r$star",
+        ];
     }
-    echo '</select>';
+
+    echo render_name('partials/dropMenu', [
+       'name' => 'newmatchround',
+       'default' => '- Round -',
+       'options' => $options,
+    ]);
 }
 
 function resultDropMenu($name = 'newmatchresult', $extra_options = [])
