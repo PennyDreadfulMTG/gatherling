@@ -188,7 +188,7 @@ function print_footer()
 {
     echo "<div class=\"prefix_1 suffix_1\">\n";
     echo "<div id=\"gatherling_footer\" class=\"box\">\n";
-    version_tagline();
+    echo version_tagline();
     echo ' ';
     echo git_hash();
     echo "</div><!-- prefix_1 suffix_1 -->\n";
@@ -505,9 +505,9 @@ function git_hash()
     return '';
 }
 
-function version_tagline()
+function version_tagline(): string
 {
-    echo 'Gatherling version 5.1.0 ("Have no fear of perfection – you’ll never reach it.")';
+    return 'Gatherling version 5.1.0 ("Have no fear of perfection – you’ll never reach it.")';
     // echo 'Gatherling version 5.0.1 ("No rest. No mercy. No matter what.")';
     // echo 'Gatherling version 5.0.0 ("Hulk, no! Just for once in your life, don\'t smash!")';
     // echo 'Gatherling version 4.9.0 ("Where we’re going, we don’t need roads")';
