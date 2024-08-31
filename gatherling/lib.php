@@ -177,13 +177,13 @@ function medalImgStr($medal)
     return image_tag("$medal.png", ['style' => 'border-width: 0px']);
 }
 
-function seasonDropMenu(int|string $season, bool $useall = false): string
+function seasonDropMenu(int|string|null $season, bool $useall = false): string
 {
     $args = seasonDropMenuArgs($season, $useall);
     return render_name('partials/dropMenu', $args);
 }
 
-function seasonDropMenuArgs(int|string $season, bool $useall = false): array
+function seasonDropMenuArgs(int|string|null $season, bool $useall = false): array
 {
     $db = Database::getConnection();
     $query = 'SELECT MAX(season) AS m FROM events';
@@ -195,12 +195,13 @@ function seasonDropMenuArgs(int|string $season, bool $useall = false): array
     return numDropMenuArgs('season', $title, max(10, $max + 1), $season);
 }
 
-function formatDropMenu(string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): string
+function formatDropMenu(?string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): string
 {
-    return render_name('partials/dropMenu', formatDropMenuArgs($format, $useAll, $formName, $showMeta));
+    $args = formatDropMenuArgs($format, $useAll, $formName, $showMeta);
+    return render_name('partials/dropMenu', $args);
 }
 
-function formatDropMenuArgs(string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): array
+function formatDropMenuArgs(?string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): array
 {
     $db = Database::getConnection();
     $query = 'SELECT name FROM formats';
@@ -239,12 +240,12 @@ function emailStatusDropDown($currentStatus = 1)
     echo '</select>';
 }
 
-function numDropMenu(string $field, string $title, int $max, string|int $def, int $min = 0, ?string $special = null): string
+function numDropMenu(string $field, string $title, int $max, string|int|null $def, int $min = 0, ?string $special = null): string
 {
     return render_name('partials/dropMenu', numDropMenuArgs($field, $title, $max, $def, $min, $special));
 }
 
-function numDropMenuArgs(string $field, string $title, int $max, string|int $def, int $min = 0, ?string $special = null): array
+function numDropMenuArgs(string $field, string $title, int $max, string|int|null $def, int $min = 0, ?string $special = null): array
 {
     if ($def && strcmp($def, '') == 0) {
         $def = -1;
