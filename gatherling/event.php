@@ -604,7 +604,7 @@ function reportsForm(Event $event): string
     ]);
 }
 
-function playerList($event)
+function playerList(Event $event): void
 {
     global $drop_icon;
     $entries = $event->getEntries();
@@ -794,7 +794,7 @@ function playerList($event)
     echo '</div>';
 }
 
-function pointsAdjustmentForm($event)
+function pointsAdjustmentForm(Event $event): void
 {
     $entries = $event->getEntries();
 
@@ -862,7 +862,7 @@ function printUnverifiedPlayerCell(Event $event, Matchup $match, Player $player)
     }
 }
 
-function matchList(Event $event)
+function matchList(Event $event): void
 {
     global $drop_icon;
     $matches = $event->getMatches();
@@ -1026,12 +1026,12 @@ function matchList(Event $event)
     }
 }
 
-function standingsList($event)
+function standingsList(Event $event): void
 {
     Standings::printEventStandings($event->name, Player::loginName());
 }
 
-function medalList($event)
+function medalList(Event $event): void
 {
     $def1 = '';
     $def2 = '';
@@ -1100,7 +1100,7 @@ function medalList($event)
     echo '</table>';
 }
 
-function kValueDropMenu(int $kvalue)
+function kValueDropMenu(int $kvalue): void
 {
     $names = [
         ''            => '- K-Value -', 8 => 'Casual (Alt Event)', 16 => 'Regular (less than 24 players)',
@@ -1324,7 +1324,7 @@ function updateEvent()
     return $event;
 }
 
-function trophyField($event)
+function trophyField(Event $event): void
 {
     if ($event->hastrophy) {
         echo '<tr><td>&nbsp;</td></tr>';
