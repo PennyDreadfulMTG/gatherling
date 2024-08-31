@@ -558,7 +558,7 @@ function eventForm(Event $event = null, bool $forceNew = false): void
             echo '<td>';
             echo roundDropMenu($event, $event->current_round);
             echo '</td></tr>';
-            trophyField($event);
+            echo trophyField($event);
             echo '<tr><td>&nbsp;</td></tr>';
             echo '<tr><td colspan="2" class="buttons">';
             echo ' <input class="inputbutton" type="submit" name="mode" value="Update Event Info" />';
@@ -1323,17 +1323,12 @@ function updateEvent()
     return $event;
 }
 
-function trophyField(Event $event): void
+function trophyField(Event $event): string
 {
-    if ($event->hastrophy) {
-        echo '<tr><td>&nbsp;</td></tr>';
-        echo '<tr><td colspan="2" align="center">';
-        echo "<img src=\"displayTrophy.php?event={$event->id}\" alt=\"Trophy\" /></td></tr>";
-    }
-    echo '<tr><th>Trophy Image</th><td>';
-    echo '<input  id="trophy" class="inputbox" type="file" name="trophy">&nbsp';
-    echo '<input class="inputbutton" type="submit" name="mode" value="Upload Trophy">';
-    echo '</tr>';
+    return render_name('partials/trophyField', [
+        'hasTrophy' => $event->hastrophy,
+        'eventName' => $event->name,
+    ]);
 }
 
 function insertTrophy()
