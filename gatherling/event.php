@@ -224,7 +224,7 @@ function eventList(): string
         32 => 'Championship'
     ];
 
-    foreach ($results as $event) {
+    foreach ($results as &$event) {
         $event['kvalueDisplay'] = $kvalueMap[$event['kvalue']] ?? '';
         $event['url'] = 'event.php?name=' . rawurlencode($event['name']);
     }
