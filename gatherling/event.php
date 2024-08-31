@@ -1438,19 +1438,24 @@ function roundDropMenu(Event $event, int|string $selected): void
     ]);
 }
 
-function resultDropMenu($name = 'newmatchresult', $extra_options = [])
+function resultDropMenu(string $name = 'newmatchresult', array $extra_options = []): void
 {
-    echo "<select class=\"inputbox\" name=\"{$name}\">";
-    echo '<option value="">- Result -</option>';
-    echo '<option value="2-0">2-0</option>';
-    echo '<option value="2-1">2-1</option>';
-    echo '<option value="1-2">1-2</option>';
-    echo '<option value="0-2">0-2</option>';
-    echo '<option value="D">Draw</option>';
+    $options = [
+        ['value' => '2-0', 'text' => '2-0'],
+        ['value' => '2-1', 'text' => '2-1'],
+        ['value' => '1-2', 'text' => '1-2'],
+        ['value' => '0-2', 'text' => '0-2'],
+        ['value' => 'D', 'text' => 'Draw'],
+
+    ];
     foreach ($extra_options as $value => $text) {
-        echo "<option value=\"{$value}\">{$text}</option>";
+        $options[] = ['value' => $value, 'text' => $text];
     }
-    echo '</select>';
+    echo render_name('partials/dropMenu', [
+        'name' => $name,
+        'default' => '- Result -',
+        'options' => $options,
+    ]);
 }
 
 function initialByeDropMenu(string $name = 'initial_byes', string $playername = '', int $current_byes = 0): string
