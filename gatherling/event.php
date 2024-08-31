@@ -1331,38 +1331,37 @@ function trophyField(Event $event): string
     ]);
 }
 
-function insertTrophy()
+function insertTrophy(): bool
 {
-    if ($_FILES['trophy']['size'] > 0) {
-        $file = $_FILES['trophy'];
-        $event = $_POST['name'];
-
-        $name = $file['name'];
-        $tmp = $file['tmp_name'];
-        $size = $file['size'];
-        $type = $file['type'];
-
-        $f = fopen($tmp, 'rb');
-
-        $db = Database::getPDOConnection();
-        $stmt = $db->prepare('DELETE FROM trophies WHERE event = ?');
-        $stmt->bindParam(1, $event, PDO::PARAM_STR);
-        if (!$stmt->execute()) {
-            throw new Exception($stmt->error, 1);
-        }
-        $stmt = $db->prepare('INSERT INTO trophies(event, size, type, image)
-      VALUES(?, ?, ?, ?)');
-        $stmt->bindParam(1, $event, PDO::PARAM_STR);
-        $stmt->bindParam(2, $size, PDO::PARAM_INT);
-        $stmt->bindParam(3, $type, PDO::PARAM_STR);
-        $stmt->bindParam(4, $f, PDO::PARAM_LOB);
-        if (!$stmt->execute()) {
-            throw new Exception($stmt->error, 1);
-        }
-        fclose($f);
-
-        return true;
+    if ($_FILES['trophy']['size'] <= 0) {
+        return false;
     }
+    $file = $_FILES['trophy'];
+    $event = $_POST['name'];
+
+    $tmp = $file['tmp_name'];
+    $size = $file['size'];
+    $type = $file['type'];
+
+    $f = fopen($tmp, 'rb');
+
+    $db = Database::getPDOConnection();
+    $stmt = $db->prepare('DELETE FROM trophies WHERE event = ?');
+    $stmt->bindParam(1, $event, PDO::PARAM_STR);
+    if (!$stmt->execute()) {
+        throw new Exception($stmt->error, 1);
+    }
+    $stmt = $db->prepare('INSERT INTO trophies(event, size, type, image) VALUES(?, ?, ?, ?)');
+    $stmt->bindParam(1, $event, PDO::PARAM_STR);
+    $stmt->bindParam(2, $size, PDO::PARAM_INT);
+    $stmt->bindParam(3, $type, PDO::PARAM_STR);
+    $stmt->bindParam(4, $f, PDO::PARAM_LOB);
+    if (!$stmt->execute()) {
+        throw new Exception($stmt->error, 1);
+    }
+    fclose($f);
+
+    return true;
 }
 
 function playerByeMenu(Event $event): string
