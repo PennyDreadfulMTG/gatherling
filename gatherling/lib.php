@@ -236,7 +236,7 @@ function emailStatusDropDown($currentStatus = 1)
 
 function numDropMenu($field, $title, $max, $def, $min = 0, $special = ''): void
 {
-    if (strcmp($def, '') == 0) {
+    if ($def && strcmp($def, '') == 0) {
         $def = -1;
     }
 

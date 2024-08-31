@@ -914,7 +914,7 @@ class Series
             $options[] = [
                 'text' => $name,
                 'value' => $name,
-                'isSelected' =>  strcmp($series, $name) == 0,
+                'isSelected' =>  $series && strcmp($series, $name) == 0,
             ];
         }
         echo render_name('partials/dropMenu', [
