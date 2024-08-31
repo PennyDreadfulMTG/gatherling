@@ -74,106 +74,40 @@ function theme_file($name)
     return $default_dir.$name;
 }
 
-function print_header($title, $enable_vue = false, $js = null, $extra_head_content = '')
+function print_header($title, $enable_vue = false): void
 {
     global $CONFIG;
 
-    $git_hash = git_hash();
-
-    echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
-    echo "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">\n";
-    echo "  <head>\n";
-    echo "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n";
-    echo "    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />\n";
-    echo "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n";
-    echo "    <meta name=\"google-site-verification\" content=\"VWE-XX0CgPTHYgUqJ6t13N75y-p_Q9dgtqXikM3EsBo\" />\n";
-    echo "    <title>{$CONFIG['site_name']} | {$title}</title>\n";
-    echo '    <link rel="stylesheet" type="text/css" media="all" href="'.theme_file('css/stylesheet.css')."?v=$git_hash\" />\n";
-    echo "     <link href=\"//cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css\" rel=\"stylesheet\" type=\"text/css\" />\n";
-    echo "     <script src=\"//code.jquery.com/jquery-latest.min.js\"></script>\n";
-    if ($enable_vue) {
-        echo "     <script src=\"//cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js\"></script>\n";
-        echo "     <script src=\"//cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.min.js\"></script>\n";
-        echo '     <script src="https://unpkg.com/vue-toasted"></script>';
-        echo "     <script src=\"components.js\" defer></script>\n";
-    }
-    if ($js) {
-        echo '    <script type="text/javascript">';
-        echo $js;
-        echo '    </script>';
-    }
-    echo $extra_head_content;
-    include_once 'analyticstracking.php'; // google analytics tracking
-    echo <<<'EOT'
-  </head>
-  <body>
-    <div id="maincontainer" class="container_12">
-        <div id="header_bar" class="box">
-            <div id="header_logo">
-EOT;
-    echo image_tag('header_logo.png');
-    echo <<<EOT
-            </div>
-            <div id="action"></div>
-        </div>
-        <div id="mainmenu_submenu" class="grid_12 menubar">
-        <ul>
-          <li><span class=\"inputbutton\"><a href="./index.php">Home</a></span></li>
-          <li><a href="https://discord.gg/F9SrMwV"><i class="fab fa-discord"></i> Discord</a></li>
-          <li><a href="./series.php">Events</a></li>
-          <li><a href="./gatherling.php">Gatherling</a></li>
-          <li><a href="./ratings.php">Ratings</a></li>
-          <li><a href="https://pennydreadfulmagic.com/bugs/">Known Bugs</a></li>
-        </ul>
-      </div>
-EOT;
-
     $player = Player::getSessionPlayer();
-
-    $super = false;
-    $host = false;
-    $organizer = false;
-
-    if ($player != null) {
-        $host = $player->isHost();
-        $super = $player->isSuper();
-        $organizer = count($player->organizersSeries()) > 0;
+    if (!$player) {
+        $isHost = $isOrganizer = $isSuper = false;
+    } else {
+        $isSuper = $player->isSuper();
+        $isHost = $isSuper || $player->isHost();
+        $isOrganizer = count($player->organizersSeries()) > 0;
     }
 
-    $tabs = 5;
-    if ($super || $organizer) {
-        $tabs += 1;
-    }
-    if ($host) {
-        $tabs += 1;
-    }
-    if ($super) {
-        $tabs += 1;
-    }
-
-    echo render_name('partials/menu', [
-        'tabs' => $tabs,
+    echo render_name('partials/header', [
+        'siteName' => $CONFIG['site_name'],
+        'title' => $title,
+        'css' => theme_file('css/stylesheet.css'),
+        'enableVue' => $enable_vue,
+        'gitHash' => git_hash(),
+        'headerLogoImg' => theme_file('images/header_logo.png'),
         'player' => $player,
-        'isHost' => $host || $super,
-        'isOrganizer' => $organizer,
-        'super' => $super,
+        'isHost' => $isHost,
+        'isOrganizer' => $isOrganizer,
+        'isSuper' => $isSuper,
+        'versionTagline' => version_tagline(),
     ]);
 }
 
 function print_footer()
 {
-    echo "<div class=\"prefix_1 suffix_1\">\n";
-    echo "<div id=\"gatherling_footer\" class=\"box\">\n";
-    echo version_tagline();
-    echo ' ';
-    echo git_hash();
-    echo "</div><!-- prefix_1 suffix_1 -->\n";
-    echo "</div><!-- gatherling_footer -->\n";
-    echo "<div class=\"clear\"></div>\n";
-    echo "</div> <!-- container -->\n";
-    echo "<script src=\"action.js\" defer></script>\n";
-    echo "</body>\n";
-    echo "</html>\n";
+    echo render_name('partials/footer', [
+       'versionTagline' => version_tagline(),
+       'gitHash' => git_hash(),
+    ]);
 }
 
 function headerColor()

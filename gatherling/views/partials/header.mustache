@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ siteName }} | {{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ css }}?v={{ gitHash }}">
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css">
+    <script src="//code.jquery.com/jquery-latest.min.js"></script>
+    {{#enableVue}}
+        <script src="//cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.min.js"></script>
+        <script src="https://unpkg.com/vue-toasted"></script>
+        <script src="components.js" defer></script>
+    {{/enableVue}}
+</head>
+<body>
+    <div id="maincontainer" class="container_12">
+        <div id="header_bar" class="box">
+            <div id="header_logo">
+                <img alt="" src="{{headerLogoImg}}">
+            </div>
+        <div id="action"></div>
+    </div>
+    <div id="mainmenu_submenu" class="grid_12 menubar">
+        <ul>
+            <li><a href="./index.php">Home</a></li>
+            <li><a href="https://discord.gg/F9SrMwV"><i class="fab fa-discord"></i> Discord</a></li>
+            <li><a href="./series.php">Events</a></li>
+            <li><a href="./gatherling.php">Gatherling</a></li>
+            <li><a href="./ratings.php">Ratings</a></li>
+            <li><a href="https://pennydreadfulmagic.com/bugs/">Known Bugs</a></li>
+        </ul>
+    </div>
+    {{> menu}}

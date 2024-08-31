@@ -881,18 +881,6 @@ del {
 #mainmenu ul li.last a, #mainmenu_submenu ul li.last a {
     width: 115px;
 }
-div.tabs_5 ul li a {
-    width: 187px;
-}
-div.tabs_6 ul li a {
-    width: 155px;
-}
-div.tabs_7 ul li a {
-    width: 133px;
-}
-div.tabs_8 ul li a {
-    width: 116px;
-}
 #mainmenu ul li a:visited, #mainmenu_submenu ul li a:visited, #submenu ul li a:visited {
     color: #D87D49;
 }
