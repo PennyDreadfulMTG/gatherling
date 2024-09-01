@@ -26,6 +26,10 @@ date_default_timezone_set('US/Eastern'); // force time functions to use US/Easte
 
 require_once 'util/time.php';
 
+const MTGO = 1;
+const MTGA = 2;
+const PAPER = 3;
+
 function page($title, $contents): string
 {
     ob_start();
@@ -36,7 +40,20 @@ function page($title, $contents): string
     return ob_get_clean();
 }
 
-function is_assoc($array)
+function render_name(string $template_name, array $context = []): string
+{
+    $m = new Mustache_Engine([
+        'cache'            => '/tmp/gatherling/mustache/templates',
+        'loader'           => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views'),
+        'partials_loader'  => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
+        'entity_flags'     => ENT_QUOTES,
+        'strict_callables' => true,
+    ]);
+
+    return $m->render($template_name, $context);
+}
+
+function is_assoc(array $array): bool
 {
     return (bool) count(array_filter(array_keys($array), 'is_string'));
 }
@@ -62,130 +79,40 @@ function theme_file($name)
     return $default_dir.$name;
 }
 
-function print_header($title, $enable_vue = false, $js = null, $extra_head_content = '')
+function print_header($title, $enable_vue = false): void
 {
     global $CONFIG;
 
-    $git_hash = git_hash();
-
-    echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
-    echo "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">\n";
-    echo "  <head>\n";
-    echo "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n";
-    echo "    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />\n";
-    echo "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n";
-    echo "    <meta name=\"google-site-verification\" content=\"VWE-XX0CgPTHYgUqJ6t13N75y-p_Q9dgtqXikM3EsBo\" />\n";
-    echo "    <title>{$CONFIG['site_name']} | {$title}</title>\n";
-    echo '    <link rel="stylesheet" type="text/css" media="all" href="'.theme_file('css/stylesheet.css')."?v=$git_hash\" />\n";
-    echo "     <link href=\"//cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css\" rel=\"stylesheet\" type=\"text/css\" />\n";
-    echo "     <script src=\"//code.jquery.com/jquery-latest.min.js\"></script>\n";
-    if ($enable_vue) {
-        echo "     <script src=\"//cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js\"></script>\n";
-        echo "     <script src=\"//cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.min.js\"></script>\n";
-        echo '     <script src="https://unpkg.com/vue-toasted"></script>';
-        echo "     <script src=\"components.js\" defer></script>\n";
-    }
-    if ($js) {
-        echo '    <script type="text/javascript">';
-        echo $js;
-        echo '    </script>';
-    }
-    echo $extra_head_content;
-    include_once 'analyticstracking.php'; // google analytics tracking
-    echo <<<'EOT'
-  </head>
-  <body>
-    <div id="maincontainer" class="container_12">
-        <div id="header_bar" class="box">
-            <div id="header_logo">
-EOT;
-    echo image_tag('header_logo.png');
-    echo <<<EOT
-            </div>
-            <div id="action"></div>
-        </div>
-        <div id="mainmenu_submenu" class="grid_12 menubar">
-        <ul>
-          <li><span class=\"inputbutton\"><a href="./index.php">Home</a></span></li>
-          <li><a href="https://discord.gg/F9SrMwV"><i class="fab fa-discord"></i> Discord</a></li>
-          <li><a href="./series.php">Events</a></li>
-          <li><a href="./gatherling.php">Gatherling</a></li>
-          <li><a href="./ratings.php">Ratings</a></li>
-          <li><a href="https://pennydreadfulmagic.com/bugs/">Known Bugs</a></li>
-        </ul>
-      </div>
-EOT;
-
     $player = Player::getSessionPlayer();
-
-    $super = false;
-    $host = false;
-    $organizer = false;
-
-    if ($player != null) {
-        $host = $player->isHost();
-        $super = $player->isSuper();
-        $organizer = count($player->organizersSeries()) > 0;
-    }
-
-    $tabs = 5;
-    if ($super || $organizer) {
-        $tabs += 1;
-    }
-    if ($host) {
-        $tabs += 1;
-    }
-    if ($super) {
-        $tabs += 1;
-    }
-
-    echo <<<EOT
-<div id="submenu" class="grid_12 tabs_$tabs menubar">
-  <ul>
-    <li><a href="profile.php">Profile</a></li>
-    <li><a href="player.php">Player CP</a></li>
-    <li><a href="eventreport.php">Metagame</a></li>
-    <li><a href="decksearch.php">Deck Search</a></li>
-EOT;
-    if ($player == null) {
-        echo "<li class=\"last\"><a href=\"login.php\">Login</a></li>\n";
+    if (!$player) {
+        $isHost = $isOrganizer = $isSuper = false;
     } else {
-        echo "<li class=\"last\"><a href=\"logout.php\">Logout [{$player->name}]</a></li>\n";
+        $isSuper = $player->isSuper();
+        $isHost = $isSuper || $player->isHost();
+        $isOrganizer = count($player->organizersSeries()) > 0;
     }
 
-    if ($host || $super) {
-        echo "<li><a href=\"event.php\">Host CP</a></li>\n";
-    }
-
-    if ($organizer || $super) {
-        echo "<li><a href=\"seriescp.php\">Series CP</a></li>\n";
-    }
-
-    if ($organizer || $super) {
-        echo "<li><a href=\"formatcp.php\">Format CP</a></li>\n";
-    }
-
-    if ($super) {
-        echo "<li><a href=\"admincp.php\">Admin CP</a></li>\n";
-    }
-
-    echo "</ul> </div>\n";
+    echo render_name('partials/header', [
+        'siteName'       => $CONFIG['site_name'],
+        'title'          => $title,
+        'css'            => theme_file('css/stylesheet.css'),
+        'enableVue'      => $enable_vue,
+        'gitHash'        => git_hash(),
+        'headerLogoImg'  => theme_file('images/header_logo.png'),
+        'player'         => $player,
+        'isHost'         => $isHost,
+        'isOrganizer'    => $isOrganizer,
+        'isSuper'        => $isSuper,
+        'versionTagline' => version_tagline(),
+    ]);
 }
 
-function print_footer()
+function print_footer(): void
 {
-    echo "<div class=\"prefix_1 suffix_1\">\n";
-    echo "<div id=\"gatherling_footer\" class=\"box\">\n";
-    version_tagline();
-    echo ' ';
-    echo git_hash();
-    echo "</div><!-- prefix_1 suffix_1 -->\n";
-    echo "</div><!-- gatherling_footer -->\n";
-    echo "<div class=\"clear\"></div>\n";
-    echo "</div> <!-- container -->\n";
-    echo "<script src=\"action.js\" defer></script>\n";
-    echo "</body>\n";
-    echo "</html>\n";
+    echo render_name('partials/footer', [
+        'versionTagline' => version_tagline(),
+        'gitHash'        => git_hash(),
+    ]);
 }
 
 function headerColor()
@@ -246,18 +173,19 @@ function image_tag($filename, $extra_attr = null)
     return $tag;
 }
 
-function noHost()
-{
-    echo "<center>\n";
-    echo "Only hosts and admins may access that page.</center>\n";
-}
-
 function medalImgStr($medal)
 {
     return image_tag("$medal.png", ['style' => 'border-width: 0px']);
 }
 
-function seasonDropMenu($season, $useall = 0)
+function seasonDropMenu(int|string|null $season, bool $useall = false): string
+{
+    $args = seasonDropMenuArgs($season, $useall);
+
+    return render_name('partials/dropMenu', $args);
+}
+
+function seasonDropMenuArgs(int|string|null $season, bool $useall = false): array
 {
     $db = Database::getConnection();
     $query = 'SELECT MAX(season) AS m FROM events';
@@ -266,28 +194,39 @@ function seasonDropMenu($season, $useall = 0)
     $max = $maxarr['m'];
     $title = ($useall == 0) ? '- Season - ' : 'All';
     $result->close();
-    numDropMenu('season', $title, max(10, $max + 1), $season);
+
+    return numDropMenuArgs('season', $title, max(10, $max + 1), $season);
 }
 
-function formatDropMenu($format, $useAll = 0, $form_name = 'format', $show_meta = true)
+function formatDropMenu(?string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): string
+{
+    $args = formatDropMenuArgs($format, $useAll, $formName, $showMeta);
+
+    return render_name('partials/dropMenu', $args);
+}
+
+function formatDropMenuArgs(?string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): array
 {
     $db = Database::getConnection();
     $query = 'SELECT name FROM formats';
-    if (!$show_meta) {
+    if (!$showMeta) {
         $query .= ' WHERE NOT is_meta_format ';
     }
     $query .= ' ORDER BY priority desc, name';
     $result = $db->query($query) or exit($db->error);
-    echo "<select class=\"inputbox\" name=\"{$form_name}\">";
-    $title = ($useAll == 0) ? '- Format -' : 'All';
-    echo "<option value=\"\">$title</option>";
-    while ($thisFormat = $result->fetch_assoc()) {
-        $name = $thisFormat['name'];
-        $selStr = (strcmp($name, $format) == 0) ? 'selected' : '';
-        echo "<option value=\"$name\" $selStr>$name</option>";
-    }
-    echo '</select>';
+    $formats = $result->fetch_all(MYSQLI_ASSOC);
     $result->close();
+    $default = $useAll == 0 ? '- Format -' : 'All';
+    foreach ($formats as &$f) {
+        $f['text'] = $f['value'] = $f['name'];
+        $f['isSelected'] = $f['name'] === $format;
+    }
+
+    return [
+        'name'    => $formName,
+        'default' => $default,
+        'options' => $formats,
+    ];
 }
 
 function emailStatusDropDown($currentStatus = 1)
@@ -306,44 +245,46 @@ function emailStatusDropDown($currentStatus = 1)
     echo '</select>';
 }
 
-function dropMenu($name, $options, $selected = null)
+function numDropMenu(string $field, string $title, int $max, string|int|null $def, int $min = 0, ?string $special = null): string
 {
-    echo "<select class=\"inputbox\" name=\"{$name}\">";
-    foreach ($options as $option) {
-        $setxt = '';
-        if (!is_null($selected) && $selected == $option) {
-            $setxt = ' selected';
-        }
-        echo "<option value=\"{$option}\"{$setxt}>{$option}</option>";
-    }
-    echo '</select>';
+    return render_name('partials/dropMenu', numDropMenuArgs($field, $title, $max, $def, $min, $special));
 }
 
-function numDropMenu($field, $title, $max, $def, $min = 0, $special = '')
+function numDropMenuArgs(string $field, string $title, int $max, string|int|null $def, int $min = 0, ?string $special = null): array
 {
-    if (strcmp($def, '') == 0) {
+    if ($def && strcmp($def, '') == 0) {
         $def = -1;
     }
-    echo "<select class=\"inputbox\" name=\"$field\">";
-    echo "<option value=\"\">$title</option>";
-    if (strcmp($special, '') != 0) {
-        $sel = ($def == 128) ? 'selected' : '';
-        echo "<option value=\"128\" $sel>$special</option>";
+
+    $options = [];
+    if ($special) {
+        $options[] = [
+            'text'       => $special,
+            'value'      => 128,
+            'isSelected' => $def == 128,
+        ];
     }
     for ($n = $min; $n <= $max; $n++) {
-        $selStr = ($n == $def) ? 'selected' : '';
-        echo "<option value=\"$n\" $selStr>$n</option>";
+        $options[] = [
+            'text'       => $n,
+            'value'      => $n,
+            'isSelected' => $n == $def,
+        ];
     }
-    echo '</select>';
+
+    return [
+        'name'    => $field,
+        'default' => $title,
+        'options' => $options,
+    ];
 }
 
-function timeDropMenu($hour, $minutes = 0)
+function timeDropMenu(int|string $hour, int|string $minutes = 0): string
 {
     if (strcmp($hour, '') == 0) {
         $hour = -1;
     }
-    echo '<select class="inputbox" name="hour">';
-    echo '<option value="">- Hour -</option>';
+    $options = [];
     for ($h = 0; $h < 24; $h++) {
         for ($m = 0; $m < 60; $m += 30) {
             $hstring = $h;
@@ -369,19 +310,22 @@ function timeDropMenu($hour, $minutes = 0)
                 $mstring = '';
                 $apstring = '';
             }
-            $selStr = ($hour == $h) && ($minutes == $m) ? 'selected' : '';
-            echo "<option value=\"$h:$m\" $selStr>$hstring$mstring$apstring</option>";
+            $options[] = [
+                'value'      => "$h:$m",
+                'text'       => "$hstring$mstring$apstring",
+                'isSelected' => $hour == $h && $minutes == $m,
+            ];
         }
     }
-    echo '</select>';
+
+    return render_name('partials/dropMenu', [
+        'name'    => 'hour',
+        'default' => '- Hour -',
+        'options' => $options,
+    ]);
 }
 
-function minutes($mins)
-{
-    return $mins * 60;
-}
-
-function json_headers()
+function json_headers(): void
 {
     header('Content-type: application/json');
     header('Cache-Control: no-cache');
@@ -390,17 +334,17 @@ function json_headers()
     header('HTTP_X_USERNAME: '.Player::loginName());
 }
 
-function not_allowed($reason)
+function not_allowed($reason): void
 {
     echo "<span class=\"notallowed inputbutton\" title=\"{$reason}\">&#x26A0;</span>";
 }
 
-function displayPlayerEmailPopUp($player, $email)
+function displayPlayerEmailPopUp($player, $email): void
 {
     echo "<a class=\"emailPop\" style=\"color: green\" title=\"{$email}\">{$player}</a>";
 }
 
-function tribeBanDropMenu($format)
+function tribeBanDropMenu($format): void
 {
     $allTribes = Format::getTribesList();
     $bannedTribes = $format->getTribesBanned();
@@ -494,9 +438,9 @@ function git_hash()
     return '';
 }
 
-function version_tagline()
+function version_tagline(): string
 {
-    echo 'Gatherling version 5.1.0 ("Have no fear of perfection – you’ll never reach it.")';
+    return 'Gatherling version 5.1.0 ("Have no fear of perfection – you’ll never reach it.")';
     // echo 'Gatherling version 5.0.1 ("No rest. No mercy. No matter what.")';
     // echo 'Gatherling version 5.0.0 ("Hulk, no! Just for once in your life, don\'t smash!")';
     // echo 'Gatherling version 4.9.0 ("Where we’re going, we don’t need roads")';

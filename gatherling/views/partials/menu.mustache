@@ -1,0 +1,24 @@
+<div id="submenu" class="grid_12 tabs_{{tabs}} menubar">
+    <ul>
+        <li><a href="profile.php">Profile</a></li>
+        <li><a href="player.php">Player CP</a></li>
+        <li><a href="eventreport.php">Metagame</a></li>
+        <li><a href="decksearch.php">Deck Search</a></li>
+        {{#player}}
+            <li class="last"><a href="logout.php">Logout [{{player.name}}]</a></li>
+        {{/player}}
+        {{^player}}
+            <li class="last"><a href="login.php">Login</a></li>
+        {{/player}}
+        {{#isHost}}
+            <li><a href="event.php">Host CP</a></li>
+        {{/isHost}}
+        {{#isOrganizer}}
+            <li><a href="seriescp.php">Series CP</a></li>
+            <li><a href="formatcp.php">Format CP</a></li>
+        {{/isOrganizer}}
+        {{#isSuper}}
+            <li><a href="admincp.php">Admin CP</a></li>
+        {{/isSuper}}
+    </ul>
+</div>

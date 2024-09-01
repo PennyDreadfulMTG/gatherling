@@ -21,9 +21,6 @@ $CONFIG['style'] = "ChandraNeue";
 # A description for the ical calendar which is accessible at calendar.php
 $CONFIG['calendar_description'] = "a description for the events calendar";
 
-# Google Analytics account ID.
-$CONFIG['analytics_account'] = '';
-
 # How long to store session cookies in seconds
 $CONFIG['cookie_lifetime'] = 5184000;
 

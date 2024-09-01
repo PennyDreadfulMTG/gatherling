@@ -304,24 +304,6 @@ function updateDeck($deck)
     return $deck;
 }
 
-function printPlaceString($medal)
-{
-    $str = '';
-    if (strcmp($medal, 't8') == 0) {
-        $str = ' - Top 8';
-    }
-    if (strcmp($medal, 't4') == 0) {
-        $str = ' - Top 4';
-    }
-    if (strcmp($medal, '2nd') == 0) {
-        $str = ' - 2nd Place';
-    }
-    if (strcmp($medal, '1st') == 0) {
-        $str = ' - 1st Place';
-    }
-    echo "$str";
-}
-
 function deckProfile($deck)
 {
     if ($deck == null || $deck->id == 0) {
@@ -713,5 +695,3 @@ function checkDeckAuth($event, $player, $deck = null)
 
     return $auth;
 }
-
-?>

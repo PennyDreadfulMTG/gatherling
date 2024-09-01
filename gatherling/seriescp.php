@@ -203,7 +203,7 @@ function printSeriesForm($series)
     // Start time
     echo '<tr><th> Normal start time </th> <td> ';
     $time_parts = explode(':', $series->start_time);
-    timeDropMenu($time_parts[0], $time_parts[1]);
+    echo timeDropMenu($time_parts[0], $time_parts[1]);
     echo '</td> </tr>';
     // Pre-registration on by default?
     echo '<tr><th>Pre-Registration Default</th>';
@@ -312,7 +312,7 @@ function printPointsRule($rule, $key, $rules, $formtype = 'text', $size = 4)
         echo ' /></td></tr>';
     } elseif ($formtype == 'format') {
         echo '<td> ';
-        formatDropMenu($rules[$key], 0, "new_rules[{$key}]");
+        echo formatDropMenu($rules[$key], false, "new_rules[{$key}]");
         echo '</td></tr>';
     }
 }
@@ -334,7 +334,7 @@ function printPointsForm($series)
     echo '<center>';
     echo '<form action="seriescp.php">';
     echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
-    seasonDropMenu($chosen_season);
+    echo seasonDropMenu($chosen_season);
     echo '<input type="hidden" name="view" value="points_management" />';
     echo '<input class="inputbutton" type="submit" value="Choose Season" />';
     echo '</form>';
