@@ -11,6 +11,6 @@
     {{#hasGames}}
         <span class="match_{{verification}}">{{#displayName}}{{> gameName}}{{/displayName}}</span>
         {{#isDraw}}(Draw){{/isDraw}}
-        {{^isDraw}}({{matchResult}}{{wins}}-{{losses}}){{/isDraw}}
+        {{^isDraw}}({{matchResult}} {{wins}}-{{losses}}){{/isDraw}}
     {{/hasGames}}
 </td>
