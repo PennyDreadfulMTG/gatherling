@@ -1364,7 +1364,7 @@ class Player
         return $series;
     }
 
-    public function gameName($game = null, $html = true): string
+    public function gameNameArgs($game = null, $html = true): array
     {
         $iconClass = null;
         $name = $this->name;
@@ -1382,10 +1382,16 @@ class Player
                 $iconClass = "ss ss-dd2";
             }
         }
-        return render_name('partials/gameName', [
+        return [
             'iconClass' => $iconClass,
             'name' => $name,
-        ]);
+        ];
+    }
+
+    public function gameName($game = null, $html = true): string
+    {
+        $args = $this->gameNameArgs($game, $html);
+        return render_name('partials/gameName', $args);
     }
 
     public function linkTo(string $game = 'gatherling'): string

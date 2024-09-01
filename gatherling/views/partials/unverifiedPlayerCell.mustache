@@ -1,0 +1,16 @@
+<td>
+    {{#hasDropped}}
+        &#x2690;
+    {{/hasDropped}}
+    {{^hasDropped}}
+        <input type="checkbox" name="dropplayer[]" value="{{playerName}}" title="Drop {{displayNameText}} from the event">
+    {{/hasDropped}}
+    {{^hasGames}}
+        {{#displayName}}{{> gameName}}{{/displayName}}
+    {{/hasGames}}
+    {{#hasGames}}
+        <span class="match_{{verification}}">{{#displayName}}{{> gameName}}{{/displayName}}</span>
+        {{#isDraw}}(Draw){{/isDraw}}
+        {{^isDraw}}({{matchResult}}{{wins}}-{{losses}}){{/isDraw}}
+    {{/hasGames}}
+</td>

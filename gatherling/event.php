@@ -702,32 +702,25 @@ function pointsAdjustmentForm(Event $event): string
     ]);
 }
 
-function printUnverifiedPlayerCell(Event $event, Matchup $match, Player $player)
+function unverifiedPlayerCell(Event $event, Matchup $match, Player $player): string
 {
-    global $drop_icon;
-    $playername = $player->name;
-    $displayname = $player->gameName($event->client);
-    $displaynameText = $player->gameName($event->client, false);
-    $dropped = $match->playerDropped($playername);
-    if ($dropped) {
-        echo "<td>{$drop_icon}";
-    } else {
-        echo "<td><input type=\"checkbox\" name=\"dropplayer[]\" value=\"{$playername}\" title='Drop $displaynameText from the event'>";
-    }
-    if (($match->getPlayerWins($playername) > 0) || ($match->getPlayerLosses($playername) > 0)) {
-        if ($match->getPlayerWins($playername) > $match->getPlayerLosses($playername)) {
-            $matchresult = 'W ';
-        } else {
-            $matchresult = 'L ';
-        }
-        if (($match->getPlayerWins($playername) == 1) && ($match->getPlayerLosses($playername) == 1)) {
-            echo "<span class=\"match_{$match->verification}\">{$displayname}</span> (Draw)</td>";
-        } else {
-            echo "<span class=\"match_{$match->verification}\">{$displayname}</span> ({$matchresult}{$match->getPlayerWins($playername)}-{$match->getPlayerLosses($playername)})</td>";
-        }
-    } else {
-        echo "{$displayname}</td>";
-    }
+    $playerName = $player->name;
+    $wins = $match->getPlayerWins($playerName);
+    $losses = $match->getPlayerLosses($playerName);
+    $matchResult = ($wins + $losses > 0) ? ($wins > $losses ? 'W' : 'L') : null;
+
+    return render_name('partials/unverifiedPlayerCell', [
+        'playerName' => $playerName,
+        'displayName' => $player->gameNameArgs($event->client),
+        'displayNameText' => $player->gameName($event->client, false),
+        'hasDropped' => $match->playerDropped($playerName),
+        'hasGames' => ($wins + $losses > 0),
+        'matchResult' => $matchResult,
+        'isDraw' => ($wins == 1 && $losses == 1),
+        'verification' => $match->verification,
+        'wins' => $wins,
+        'losses' => $losses,
+    ]);
 }
 
 function matchList(Event $event): void
@@ -806,12 +799,12 @@ function matchList(Event $event): void
 
         if (strcasecmp($match->verification, 'verified') != 0 && $event->finalized == 0) {
             $ezypaste .= "{$playera->gameName($event->client)} vs. {$playerb->gameName($event->client)}<br />";
-            printUnverifiedPlayerCell($event, $match, $playera);
+            echo unverifiedPlayerCell($event, $match, $playera);
             echo '<td>';
             echo "<input type=\"hidden\" name=\"hostupdatesmatches[]\" value=\"{$match->id}\">";
             echo resultDropMenu('matchresult[]');
             echo '</td>';
-            printUnverifiedPlayerCell($event, $match, $playerb);
+            echo unverifiedPlayerCell($event, $match, $playerb);
         } else {
             $playerawins = $match->getPlayerWins($match->playera);
             $playerbwins = $match->getPlayerWins($match->playerb);
