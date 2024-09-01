@@ -1379,24 +1379,27 @@ class Player
                 $iconClass = 'fab fa-discord';
                 $name = $this->discord_handle;
             } elseif ($game == 'gatherling') {
-                $iconClass = "ss ss-dd2";
+                $iconClass = 'ss ss-dd2';
             }
         }
+
         return [
             'iconClass' => $iconClass,
-            'name' => $name,
+            'name'      => $name,
         ];
     }
 
     public function gameName($game = null, $html = true): string
     {
         $args = $this->gameNameArgs($game, $html);
+
         return render_name('partials/gameName', $args);
     }
 
     public function linkTo(string $game = 'gatherling'): string
     {
         $name = $this->gameName($game);
+
         return "<a href=\"profile.php?player={$this->name}\">{$name}</a>";
     }
 

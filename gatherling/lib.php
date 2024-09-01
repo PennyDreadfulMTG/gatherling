@@ -43,12 +43,13 @@ function page($title, $contents): string
 function render_name(string $template_name, array $context = []): string
 {
     $m = new Mustache_Engine([
-        'cache' => '/tmp/gatherling/mustache/templates',
-        'loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__) . '/views'),
-        'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__) . '/views/partials'),
-        'entity_flags' => ENT_QUOTES,
+        'cache'            => '/tmp/gatherling/mustache/templates',
+        'loader'           => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views'),
+        'partials_loader'  => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
+        'entity_flags'     => ENT_QUOTES,
         'strict_callables' => true,
     ]);
+
     return $m->render($template_name, $context);
 }
 
@@ -92,16 +93,16 @@ function print_header($title, $enable_vue = false): void
     }
 
     echo render_name('partials/header', [
-        'siteName' => $CONFIG['site_name'],
-        'title' => $title,
-        'css' => theme_file('css/stylesheet.css'),
-        'enableVue' => $enable_vue,
-        'gitHash' => git_hash(),
-        'headerLogoImg' => theme_file('images/header_logo.png'),
-        'player' => $player,
-        'isHost' => $isHost,
-        'isOrganizer' => $isOrganizer,
-        'isSuper' => $isSuper,
+        'siteName'       => $CONFIG['site_name'],
+        'title'          => $title,
+        'css'            => theme_file('css/stylesheet.css'),
+        'enableVue'      => $enable_vue,
+        'gitHash'        => git_hash(),
+        'headerLogoImg'  => theme_file('images/header_logo.png'),
+        'player'         => $player,
+        'isHost'         => $isHost,
+        'isOrganizer'    => $isOrganizer,
+        'isSuper'        => $isSuper,
         'versionTagline' => version_tagline(),
     ]);
 }
@@ -109,8 +110,8 @@ function print_header($title, $enable_vue = false): void
 function print_footer(): void
 {
     echo render_name('partials/footer', [
-       'versionTagline' => version_tagline(),
-       'gitHash' => git_hash(),
+        'versionTagline' => version_tagline(),
+        'gitHash'        => git_hash(),
     ]);
 }
 
@@ -180,6 +181,7 @@ function medalImgStr($medal)
 function seasonDropMenu(int|string|null $season, bool $useall = false): string
 {
     $args = seasonDropMenuArgs($season, $useall);
+
     return render_name('partials/dropMenu', $args);
 }
 
@@ -192,12 +194,14 @@ function seasonDropMenuArgs(int|string|null $season, bool $useall = false): arra
     $max = $maxarr['m'];
     $title = ($useall == 0) ? '- Season - ' : 'All';
     $result->close();
+
     return numDropMenuArgs('season', $title, max(10, $max + 1), $season);
 }
 
 function formatDropMenu(?string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): string
 {
     $args = formatDropMenuArgs($format, $useAll, $formName, $showMeta);
+
     return render_name('partials/dropMenu', $args);
 }
 
@@ -217,8 +221,9 @@ function formatDropMenuArgs(?string $format, bool $useAll = false, string $formN
         $f['text'] = $f['value'] = $f['name'];
         $f['isSelected'] = $f['name'] === $format;
     }
+
     return [
-        'name' => $formName,
+        'name'    => $formName,
         'default' => $default,
         'options' => $formats,
     ];
@@ -254,20 +259,21 @@ function numDropMenuArgs(string $field, string $title, int $max, string|int|null
     $options = [];
     if ($special) {
         $options[] = [
-            'text' => $special,
-            'value' => 128,
+            'text'       => $special,
+            'value'      => 128,
             'isSelected' => $def == 128,
         ];
     }
     for ($n = $min; $n <= $max; $n++) {
         $options[] = [
-            'text' => $n,
-            'value' => $n,
+            'text'       => $n,
+            'value'      => $n,
             'isSelected' => $n == $def,
         ];
     }
+
     return [
-        'name' => $field,
+        'name'    => $field,
         'default' => $title,
         'options' => $options,
     ];
@@ -305,14 +311,15 @@ function timeDropMenu(int|string $hour, int|string $minutes = 0): string
                 $apstring = '';
             }
             $options[] = [
-                'value' => "$h:$m",
-                'text' => "$hstring$mstring$apstring",
+                'value'      => "$h:$m",
+                'text'       => "$hstring$mstring$apstring",
                 'isSelected' => $hour == $h && $minutes == $m,
             ];
         }
     }
+
     return render_name('partials/dropMenu', [
-        'name' => 'hour',
+        'name'    => 'hour',
         'default' => '- Hour -',
         'options' => $options,
     ]);
