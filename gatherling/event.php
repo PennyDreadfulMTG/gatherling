@@ -691,17 +691,6 @@ function matchList(Event $event, string|int|null $newMatchRound): string
     $rounds = array_values($rounds);
 
     $lastRound = $rounds[count($rounds) - 1];
-    foreach ($lastRound['matches'] as &$match) {
-        if ($isActiveUnverified) {
-            $match[''] = 'a';
-        } elseif ($match['isBye']) {
-
-        } elseif ($match['isDraw']) {
-
-        } else {
-
-        }
-    }
 
     $playerADropMenu = playerDropMenuArgs($event, 'A');
     $playerBDropMenu = playerDropMenuArgs($event, 'B');
