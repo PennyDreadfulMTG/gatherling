@@ -6,7 +6,8 @@ use Gatherling\Event;
 use Gatherling\Matchup;
 use Gatherling\Player;
 
-class MatchList extends EventFrame {
+class MatchList extends EventFrame
+{
     public array $roundLinks;
     public bool $hasMatches;
     public array $rounds;
@@ -28,7 +29,7 @@ class MatchList extends EventFrame {
         for ($n = 1; $n <= $event->current_round; $n++) {
             $roundLinks[] = [
                 'text' => "Round $n",
-                'href' => 'event.php?view=match&name=' . rawurlencode($event->name) . "#round-{$n}"
+                'href' => 'event.php?view=match&name='.rawurlencode($event->name)."#round-{$n}",
             ];
         }
         $hasMatches = count($matches) > 0;
@@ -130,11 +131,12 @@ function playerByeMenuArgs(Event $event): array
     foreach ($playerNames as $player) {
         $options[] = [
             'value' => $player,
-            'text' => $player,
+            'text'  => $player,
         ];
     }
+
     return [
-        'name' => 'newbyeplayer',
+        'name'    => 'newbyeplayer',
         'default' => '- Bye Player -',
         'options' => $options,
     ];
@@ -153,8 +155,9 @@ function resultDropMenuArgs(string $name, array $extraOptions = []): array
     foreach ($extraOptions as $value => $text) {
         $options[] = ['value' => $value, 'text' => $text];
     }
+
     return [
-        'name' => $name,
+        'name'    => $name,
         'default' => '- Result -',
         'options' => $options,
     ];
@@ -168,16 +171,15 @@ function unverifiedPlayerCellArgs(Event $event, Matchup $match, Player $player):
     $matchResult = ($wins + $losses > 0) ? ($wins > $losses ? 'W' : 'L') : null;
 
     return [
-        'playerName' => $playerName,
-        'displayName' => $player->gameNameArgs($event->client),
+        'playerName'      => $playerName,
+        'displayName'     => $player->gameNameArgs($event->client),
         'displayNameText' => $player->gameName($event->client, false),
-        'hasDropped' => $match->playerDropped($playerName),
-        'hasGames' => ($wins + $losses > 0),
-        'matchResult' => $matchResult,
-        'isDraw' => ($wins == 1 && $losses == 1),
-        'verification' => $match->verification,
-        'wins' => $wins,
-        'losses' => $losses,
+        'hasDropped'      => $match->playerDropped($playerName),
+        'hasGames'        => ($wins + $losses > 0),
+        'matchResult'     => $matchResult,
+        'isDraw'          => ($wins == 1 && $losses == 1),
+        'verification'    => $match->verification,
+        'wins'            => $wins,
+        'losses'          => $losses,
     ];
 }
-

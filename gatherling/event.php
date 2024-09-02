@@ -21,6 +21,7 @@ function main(): void
 {
     if (!Player::isLoggedIn()) {
         linkToLogin('Host Control Panel');
+
         return;
     }
 
@@ -57,15 +58,17 @@ function mode_is(string $str): bool
     if (isset($_REQUEST['mode']) and $_REQUEST['mode'] != '') {
         $mode = $_REQUEST['mode'];
     }
+
     return strcmp($mode, $str) == 0;
 }
 
 function createNewEvent(): Event|bool
 {
     $series = new Series($_POST['series']);
-    if (($series->authCheck(Player::loginName())) && isset($_POST['insert'])) {
+    if ($series->authCheck(Player::loginName()) && isset($_POST['insert'])) {
         return insertEvent();
     }
+
     return false;
 }
 
@@ -120,6 +123,7 @@ function getEvent(string $eventName, ?string $action, ?string $eventId, ?string 
             $event->undropPlayer($player);
         }
     }
+
     return eventFrame($event);
 }
 
@@ -174,6 +178,7 @@ function postEvent(string $eventName): Page
         $event = updateEvent();
         $_GET['view'] = 'settings';
     }
+
     return eventFrame($event);
 }
 
@@ -196,6 +201,7 @@ function eventFrame(Event $event = null, bool $forceNew = false): EventFrame
         if (!isset($_POST['newmatchround'])) {
             $_POST['newmatchround'] = '';
         }
+
         return new MatchList($event, $_POST['newmatchround']);
     } elseif (strcmp($view, 'standings') == 0) {
         return new StandingsList($event, Player::loginName());
@@ -206,6 +212,7 @@ function eventFrame(Event $event = null, bool $forceNew = false): EventFrame
     } elseif (strcmp($view, 'reports') == 0) {
         return new ReportsForm($event);
     }
+
     return new EventForm($event, $edit);
 }
 

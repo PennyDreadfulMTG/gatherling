@@ -5,7 +5,8 @@ namespace Gatherling\Pages;
 use Gatherling\Event;
 use Gatherling\Player;
 
-class ReportsForm extends EventFrame {
+class ReportsForm extends EventFrame
+{
     public bool $hasEntries;
     public array $standings;
     public array $registrants;
@@ -23,12 +24,13 @@ class ReportsForm extends EventFrame {
             foreach ($entries as $entryName) {
                 $player = new Player($entryName);
                 $result[] = [
-                    'n' => $count,
+                    'n'         => $count,
                     'entryName' => $entryName,
-                    'emailAd' => $player->emailAddress != '' ? $player->emailAddress : '---------'
+                    'emailAd'   => $player->emailAddress != '' ? $player->emailAddress : '---------',
                 ];
                 $count++;
             }
+
             return $result;
         };
 

@@ -6,7 +6,8 @@ namespace Gatherling\Pages;
 // Also handles setting event and title properties.
 use Gatherling\Event;
 
-abstract class EventFrame extends Page {
+abstract class EventFrame extends Page
+{
     public string $title = 'Event Host Control Panel';
     public array $event;
     public array $controlPanelLinks;
@@ -18,24 +19,25 @@ abstract class EventFrame extends Page {
         $this->controlPanelLinks = $this->controlPanelLinks();
     }
 
-    function controlPanelLinks(): array
+    public function controlPanelLinks(): array
     {
         $views = [
-            'settings' => 'Event Settings',
-            'reg' => 'Registration',
-            'match' => 'Match Listing',
-            'standings' => 'Standings',
-            'medal' => 'Medals',
+            'settings'   => 'Event Settings',
+            'reg'        => 'Registration',
+            'match'      => 'Match Listing',
+            'standings'  => 'Standings',
+            'medal'      => 'Medals',
             'points_adj' => 'Season Points Adj.',
-            'reports' => 'Reports',
+            'reports'    => 'Reports',
         ];
         $links = [];
         foreach ($views as $view => $text) {
             $links[] = [
-                'href' => 'event.php?name=' . rawurlencode($this->event['name']) . '&view=' . $view,
+                'href' => 'event.php?name='.rawurlencode($this->event['name']).'&view='.$view,
                 'text' => $text,
             ];
         }
+
         return $links;
     }
 }

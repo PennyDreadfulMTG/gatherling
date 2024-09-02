@@ -2,7 +2,6 @@
 
 use Gatherling\Database;
 use Gatherling\Format;
-use Gatherling\Page;
 use Gatherling\Player;
 
 require_once 'bootstrap.php';
@@ -163,6 +162,7 @@ function medalImgStr($medal): string
 function seasonDropMenu(int|string|null $season, bool $useall = false): string
 {
     $args = seasonDropMenuArgs($season, $useall);
+
     return renderTemplate('partials/dropMenu', $args);
 }
 
@@ -258,6 +258,7 @@ function numDropMenuArgs(string $field, string $title, int $max, string|int|null
 function timeDropMenu(int|string $hour, int|string $minutes = 0): string
 {
     $args = timeDropMenuArgs($hour, $minutes);
+
     return renderTemplate('partials/dropMenu', $args);
 }
 
@@ -299,6 +300,7 @@ function timeDropMenuArgs(int|string $hour, int|string $minutes = 0): array
             ];
         }
     }
+
     return [
         'name'    => 'hour',
         'default' => '- Hour -',

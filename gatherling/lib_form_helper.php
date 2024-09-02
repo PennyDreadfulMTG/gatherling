@@ -9,6 +9,7 @@ require_once 'lib.php';
 function textInput(string $label, string $name, mixed $value = '', int $size = 0, ?string $reminderText = null, ?string $id = null): string
 {
     $args = textInputArgs($label, $name, $value, $size, $reminderText, $id);
+
     return renderTemplate('partials/textInput', $args);
 }
 
@@ -20,28 +21,30 @@ function textInputArgs(string $label, string $name, mixed $value = '', int $size
     if (!isset($value)) {
         $value = '';
     }
+
     return [
-        'id' => $id,
-        'name' => $name,
-        'label' => $label,
-        'size' => $size,
+        'id'           => $id,
+        'name'         => $name,
+        'label'        => $label,
+        'size'         => $size,
         'reminderText' => $reminderText,
-        'value' => $value,
+        'value'        => $value,
     ];
 }
 
 function checkboxInput(string $label, string $name, bool $isChecked = false, ?string $reminderText = null): string
 {
     $args = checkboxInputArgs($label, $name, $isChecked, $reminderText);
+
     return renderTemplate('partials/checkboxInput', $args);
 }
 
 function checkboxInputArgs(string $label, string $name, bool $isChecked = false, ?string $reminderText = null): array
 {
     return [
-        'name' => $name,
-        'label' => $label,
-        'isChecked' => $isChecked,
+        'name'         => $name,
+        'label'        => $label,
+        'isChecked'    => $isChecked,
         'reminderText' => $reminderText,
     ];
 }
@@ -66,6 +69,7 @@ function print_submit($label, $name = 'action')
 function select(string $name, array $options = [], mixed $selected = null, ?string $id = null): string
 {
     $args = selectArgs($name, $options, $selected, $id);
+
     return renderTemplate('partials/select', $args);
 }
 
@@ -78,13 +82,14 @@ function selectArgs(string $name, array $options = [], mixed $selected = null, ?
     foreach ($options as $option => $text) {
         $opts[] = [
             'isSelected' => !is_null($selected) && $selected == $option,
-            'value' => $option,
-            'text' => $text,
+            'value'      => $option,
+            'text'       => $text,
         ];
     }
+
     return [
-        'id' => $id,
-        'name' => $name,
+        'id'      => $id,
+        'name'    => $name,
         'options' => $opts,
     ];
 }
@@ -92,6 +97,7 @@ function selectArgs(string $name, array $options = [], mixed $selected = null, ?
 function selectInput(string $label, string $name, ?array $options, mixed $selected = null, ?string $id = null): string
 {
     $args = selectInputArgs($label, $name, $options, $selected, $id);
+
     return renderTemplate('partials/selectInput', $args);
 }
 
@@ -100,10 +106,11 @@ function selectInputArgs(string $label, string $name, ?array $options, mixed $se
     if (is_null($id)) {
         $id = $name;
     }
+
     return [
-        'id' => $id,
-        'name' => $name,
-        'label' => $label,
+        'id'     => $id,
+        'name'   => $name,
+        'label'  => $label,
         'select' => selectArgs($name, $options, $selected, $id),
     ];
 }

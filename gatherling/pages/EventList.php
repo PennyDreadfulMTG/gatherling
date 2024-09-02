@@ -6,7 +6,8 @@ use Gatherling\Database;
 use Gatherling\Player;
 use Gatherling\Series;
 
-class EventList extends Page {
+class EventList extends Page
+{
     public string $title = 'Event Host Control Panel';
     public array $formatDropMenu;
     public array $seriesDropMenu;
@@ -48,16 +49,16 @@ class EventList extends Page {
         }
 
         $kvalueMap = [
-            0 => 'none',
-            8 => 'Casual',
+            0  => 'none',
+            8  => 'Casual',
             16 => 'Regular',
             24 => 'Large',
-            32 => 'Championship'
+            32 => 'Championship',
         ];
 
         foreach ($results as &$event) {
             $event['kvalueDisplay'] = $kvalueMap[$event['kvalue']] ?? '';
-            $event['url'] = 'event.php?name=' . rawurlencode($event['name']);
+            $event['url'] = 'event.php?name='.rawurlencode($event['name']);
         }
 
         $this->formatDropMenu = formatDropMenuArgs($_GET['format'], true);
@@ -76,7 +77,7 @@ function queryEvents(Player $player, array $playerSeries, string $seriesName): \
     foreach ($playerSeries as $oneSeries) {
         $seriesEscaped[] = $db->escape_string($oneSeries);
     }
-    $seriesString = '"' . implode('","', $seriesEscaped) . '"';
+    $seriesString = '"'.implode('","', $seriesEscaped).'"';
 
     $query = "SELECT e.name AS name, e.format AS format,
         COUNT(DISTINCT n.player) AS players, e.host AS host, e.start AS start,
@@ -85,16 +86,17 @@ function queryEvents(Player $player, array $playerSeries, string $seriesName): \
         LEFT OUTER JOIN entries AS n ON n.event_id = e.id
         WHERE (e.host = \"{$db->escape_string($player->name)}\"
             OR e.cohost = \"{$db->escape_string($player->name)}\"
-            OR e.series IN (" . $seriesString . '))';
+            OR e.series IN (".$seriesString.'))';
     if (isset($_GET['format']) && strcmp($_GET['format'], '') != 0) {
-        $query = $query . " AND e.format=\"{$db->escape_string($_GET['format'])}\" ";
+        $query = $query." AND e.format=\"{$db->escape_string($_GET['format'])}\" ";
     }
     if (strcmp($seriesName, '') != 0) {
-        $query = $query . " AND e.series=\"{$db->escape_string($seriesName)}\" ";
+        $query = $query." AND e.series=\"{$db->escape_string($seriesName)}\" ";
     }
     if (isset($_GET['season']) && strcmp($_GET['season'], '') != 0) {
-        $query = $query . " AND e.season=\"{$db->escape_string($_GET['season'])}\" ";
+        $query = $query." AND e.season=\"{$db->escape_string($_GET['season'])}\" ";
     }
-    $query = $query . ' GROUP BY e.name ORDER BY e.start DESC LIMIT 100';
+    $query = $query.' GROUP BY e.name ORDER BY e.start DESC LIMIT 100';
+
     return $db->query($query);
 }

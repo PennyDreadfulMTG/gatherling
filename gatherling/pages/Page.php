@@ -4,7 +4,8 @@ namespace Gatherling\Pages;
 
 use Gatherling\Player;
 
-abstract class Page {
+abstract class Page
+{
     public bool $enableVue = false;
     public string $contentSafe;
     public string $css;
@@ -21,7 +22,8 @@ abstract class Page {
     public string $title;
     public string $versionTagline;
 
-    public function __construct() {
+    public function __construct()
+    {
         global $CONFIG;
 
         $this->siteName = $CONFIG['site_name'];
@@ -32,18 +34,22 @@ abstract class Page {
         $this->isHost = $this->player->isHost();
         $this->isOrganizer = count($this->player->organizersSeries()) > 0;
         $this->isSuper = $this->player->isSuper();
-        $this->tabs = 5 + (int)$this->isHost + (int)$this->isOrganizer + (int)$this->isSuper;
+        $this->tabs = 5 + (int) $this->isHost + (int) $this->isOrganizer + (int) $this->isSuper;
         $this->versionTagline = version_tagline();
     }
 
-    public function template(): string {
+    public function template(): string
+    {
         $className = get_called_class();
         $baseName = ($pos = strrpos($className, '\\')) !== false ? substr($className, $pos + 1) : $className;
+
         return lcfirst($baseName);
     }
 
-    public function render(): string {
+    public function render(): string
+    {
         $this->contentSafe = renderTemplate($this->template(), $this);
+
         return renderTemplate('page', $this);
     }
 }

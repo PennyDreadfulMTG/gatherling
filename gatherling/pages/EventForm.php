@@ -6,7 +6,8 @@ use Gatherling\Event;
 use Gatherling\Player;
 use Gatherling\Series;
 
-class EventForm extends EventFrame {
+class EventForm extends EventFrame
+{
     public bool $currentlyEditing;
     public array $navLinks;
     public array $yearDropMenu;
@@ -43,7 +44,8 @@ class EventForm extends EventFrame {
     public bool $showCreateNextEvent;
     public bool $showCreateNextSeason;
 
-    public function __construct(Event $event, bool $edit) {
+    public function __construct(Event $event, bool $edit)
+    {
         parent::__construct($event);
         if ($event->start != null) {
             $date = $event->start;
@@ -70,7 +72,7 @@ class EventForm extends EventFrame {
         if ($nextEvent) {
             $navLinks[] = $nextEvent->makeLinkArgs('Next »');
         }
-        $yearDropMenu = numDropMenuArgs('year', '- Year -', (int)date('Y') + 1, $year, 2011);
+        $yearDropMenu = numDropMenuArgs('year', '- Year -', (int) date('Y') + 1, $year, 2011);
         $monthDropMenu = monthDropMenuArgs($month);
         $dayDropMenu = numDropMenuArgs('day', '- Day- ', 31, $day, 1);
         $timeDropMenu = timeDropMenuArgs($hour, $minutes);
@@ -90,8 +92,8 @@ class EventForm extends EventFrame {
             $event->kvalue = 16;
         }
         $kValueDropMenu = kValueSelectInput($event->kvalue);
-        $hostField = stringFieldArgs('host', $event-> host, 20);
-        $cohostField = stringFieldArgs('cohost', $event-> host, 20);
+        $hostField = stringFieldArgs('host', $event->host, 20);
+        $cohostField = stringFieldArgs('cohost', $event->host, 20);
         $eventThreadUrlField = textInputArgs('Event Thread URL', 'threadurl', $event->threadurl, 60);
         $metagameUrlField = textInputArgs('Metagame URL', 'metaurl', $event->metaurl, 60);
         $reportUrlField = textInputArgs('Report URL', 'reporturl', $event->reporturl, 60);
@@ -172,13 +174,14 @@ function clientDropMenuArgs(string $field, int $def): array
     foreach ($clients as $value => $text) {
         $options[] = [
             'isSelected' => $def == $value,
-            'value' => $value,
-            'text' => $text,
+            'value'      => $value,
+            'text'       => $text,
         ];
     }
+
     return [
-        'id' => $field,
-        'name' => $field,
+        'id'      => $field,
+        'name'    => $field,
         'default' => '- Client -',
         'options' => $options,
     ];
@@ -190,6 +193,7 @@ function kValueSelectInput(int $kvalue): array
         ''            => '- K-Value -', 8 => 'Casual (Alt Event)', 16 => 'Regular (less than 24 players)',
         24            => 'Large (24 or more players)', 32 => 'Championship',
     ];
+
     return selectInputArgs('K-Value', 'kvalue', $names, $kvalue);
 }
 
@@ -206,12 +210,13 @@ function monthDropMenuArgs(string|int $month): array
     for ($m = 1; $m <= 12; $m++) {
         $options[] = [
             'isSelected' => $month == $m,
-            'value' => $m,
-            'text' => $names[$m - 1],
+            'value'      => $m,
+            'text'       => $names[$m - 1],
         ];
     }
+
     return [
-        'name' => 'month',
+        'name'    => 'month',
         'default' => '- Month -',
         'options' => $options,
     ];
@@ -229,13 +234,14 @@ function structDropMenuArgs(string $field, string $def): array
     $options = [];
     foreach ($names as $name) {
         $options[] = [
-            'value' => $name,
-            'text' => $name,
+            'value'      => $name,
+            'text'       => $name,
             'isSelected' => strcmp($def, $name) == 0,
         ];
     }
+
     return [
-        'name' => $field,
+        'name'    => $field,
         'default' => '- Structure -',
         'options' => $options,
     ];

@@ -90,7 +90,7 @@ class Standings
 
     /**
      * @param string $eventname
-     * @param int $isactive
+     * @param int    $isactive
      *
      * @return Standings[]
      */
@@ -129,6 +129,7 @@ class Standings
     public static function eventStandings(?string $eventName, ?string $playerName = null): string
     {
         $args = self::eventStandingsArgs($eventName, $playerName);
+
         return renderTemplate('partials/eventStandings', $args);
     }
 
@@ -148,6 +149,7 @@ class Standings
             $rank++;
             $standingInfoList[] = $standingInfo;
         }
+
         return [
             'standings' => $standingInfoList,
         ];

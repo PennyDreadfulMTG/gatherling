@@ -4,7 +4,8 @@ namespace Gatherling\Pages;
 
 use Gatherling\Event;
 
-class MedalList extends EventFrame {
+class MedalList extends EventFrame
+{
     public array $finalists;
 
     public function __construct(Event $event)

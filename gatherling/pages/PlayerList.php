@@ -7,7 +7,8 @@ use Gatherling\Event;
 use Gatherling\Format;
 use Gatherling\Standings;
 
-class PlayerList extends EventFrame {
+class PlayerList extends EventFrame
+{
     public bool $isActive;
     public bool $isOngoing;
     public bool $isFinished;
@@ -25,7 +26,8 @@ class PlayerList extends EventFrame {
     public bool $showCreateNextSeason;
     public array $deckless;
 
-    public function __construct(Event $event) {
+    public function __construct(Event $event)
+    {
         parent::__construct($event);
         $isActive = $event->active == 1;
         $isOngoing = $event->active == 1 && !$event->finalized;
@@ -36,7 +38,7 @@ class PlayerList extends EventFrame {
 
         $deckless = $entryInfoList = [];
         foreach ($entries as $entry) {
-            $entryInfoList[] = entryListArgs($entry, $numEntries, (bool)$format->tribal);
+            $entryInfoList[] = entryListArgs($entry, $numEntries, (bool) $format->tribal);
             if (!$entry->deck) {
                 $deckless[] = $entry->player->gameNameArgs($entry->event->client);
             }
@@ -103,6 +105,7 @@ function entryListArgs(Entry $entry, int $numEntries, bool $isTribal): array
     } else {
         $entryInfo['notAllowed'] = notAllowedArgs("Can't delete player, they have matches recorded.");
     }
+
     return $entryInfo;
 }
 
@@ -111,13 +114,14 @@ function initialByeDropMenuArgs(string $name = 'initial_byes', string $playerNam
     $options = [];
     for ($i = 0; $i < 3; $i++) {
         $options[] = [
-            'value' => "$playerName $i",
-            'text' => $i == 0 ? 'None' : "$i",
+            'value'      => "$playerName $i",
+            'text'       => $i == 0 ? 'None' : "$i",
             'isSelected' => $currentByes == $i,
         ];
     }
+
     return [
-        'name' => $name,
+        'name'    => $name,
         'options' => $options,
     ];
 }
@@ -129,13 +133,14 @@ function initialSeedDropMenuArgs(string $name, string $playerName, int $currentS
     ];
     for ($i = 1; $i <= $numEntries; $i++) {
         $options[] = [
-            'value' => "$playerName $i",
-            'text' => "$i",
+            'value'      => "$playerName $i",
+            'text'       => "$i",
             'isSelected' => $currentSeed == $i,
         ];
     }
+
     return [
-        'name' => $name,
+        'name'    => $name,
         'options' => $options,
     ];
 }

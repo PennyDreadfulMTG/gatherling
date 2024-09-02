@@ -1041,7 +1041,7 @@ class Event
     public function makeLinkArgs($text): array
     {
         return [
-            'href' => 'event.php?name=' . urlencode($this->name),
+            'href' => 'event.php?name='.urlencode($this->name),
             'text' => $text,
         ];
     }

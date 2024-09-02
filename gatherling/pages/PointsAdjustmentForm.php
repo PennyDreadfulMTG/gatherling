@@ -2,7 +2,8 @@
 
 namespace Gatherling\Pages;
 
-class PointsAdjustmentForm extends EventFrame {
+class PointsAdjustmentForm extends EventFrame
+{
     public array $entries;
 
     public function __construct($event)
