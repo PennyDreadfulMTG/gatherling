@@ -337,6 +337,7 @@ function json_headers(): void
 function notAllowed(string $reason): string
 {
     $args = notAllowedArgs($reason);
+
     return render_name('partials/notAllowed', $args);
 }
 
@@ -544,22 +545,25 @@ function print_tooltip($text, $tooltip)
     echo "<span class=\"tooltip\" title=\"$tooltip\">$text</span>";
 }
 
-
 // Our standard template variable naming is camelCase.
 // Some of our objects have properties named in snake_case.
 // So when we grab the values from an object to pass into
 // a template with get_object_vars let's also preserve the
 // naming standard by transforming the case.
-function getObjectVarsCamelCase(object $obj): array {
+function getObjectVarsCamelCase(object $obj): array
+{
     $vars = get_object_vars($obj);
+
     return arrayMapRecursive('snakeToCamel', $vars);
 }
 
-function snakeToCamel(string $string): string {
+function snakeToCamel(string $string): string
+{
     return lcfirst(str_replace('_', '', ucwords($string, '_')));
 }
 
-function arrayMapRecursive(callable $func, array $arr): array {
+function arrayMapRecursive(callable $func, array $arr): array
+{
     $result = [];
 
     foreach ($arr as $key => $value) {

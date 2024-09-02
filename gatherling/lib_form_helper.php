@@ -96,14 +96,16 @@ function print_select_input($label, $name, $options, $selected = null, $id = nul
 function stringField($field, $def, $len): string
 {
     $args = stringFieldArgs($field, $def, $len);
+
     return render_name('partials/stringField', $args);
 }
 
-function stringFieldArgs(string $field, mixed $def, int $len): array {
+function stringFieldArgs(string $field, mixed $def, int $len): array
+{
     return [
         'field' => $field,
-        'def' => $def,
-        'len' => $len,
+        'def'   => $def,
+        'len'   => $len,
     ];
 }
 

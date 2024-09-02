@@ -205,6 +205,7 @@ class Entry
     {
         // creates a link to enter a deck list once a player is registered for the event
         $args = $this->createDeckLinkArgs();
+
         return render_name('partials/createDeckLink', $args);
     }
 
@@ -216,7 +217,8 @@ class Entry
         if (!$args['canCreateDeck']) {
             return $args;
         }
-        $args['createDeckLink'] = 'deck.php?player=' . urlencode($this->player->name) . '&event=' . urlencode($this->event->id) . '&mode=create';
+        $args['createDeckLink'] = 'deck.php?player='.urlencode($this->player->name).'&event='.urlencode($this->event->id).'&mode=create';
+
         return $args;
     }
 

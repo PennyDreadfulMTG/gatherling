@@ -21,8 +21,8 @@ final class LibTest extends TestCase
         $arr = getObjectVarsCamelCase($parent);
         $this->assertEquals([
             'monkey' => 'business',
-            'child' => [
-                'baz' => 'quux',
+            'child'  => [
+                'baz'   => 'quux',
                 'child' => [
                     'foo' => 'bar',
                 ],

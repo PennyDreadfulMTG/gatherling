@@ -1039,6 +1039,7 @@ class Deck
     public function linkTo(): string
     {
         $args = $this->linkToArgs();
+
         return render_name('partials/linkTo', $args);
     }
 
@@ -1047,12 +1048,13 @@ class Deck
         $args = [
             'new' => $this->new,
         ];
-        if ($this-> new) {
+        if ($this->new) {
             return $args;
         }
         $args['id'] = $this->id;
         $args['name'] = empty($this->name) ? '** NO NAME **' : $this->name;
         $args['valid'] = $this->isValid();
+
         return $args;
     }
 }
