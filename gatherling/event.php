@@ -1037,7 +1037,7 @@ function roundDropMenu(Event $event, int|string $selected): string
 function roundDropMenuArgs(Event $event, int|string $selected): array
 {
     $options = [];
-    for ($r = 1; $r <= ($event->mainrounds + $event->finalrounds); $r++) {
+    for ($r = 1; $r <= ((int)$event->mainrounds + (int)$event->finalrounds); $r++) {
         $star = $r > $event->mainrounds ? '*' : '';
         $options[] = [
             'isSelected' => $selected == $r,
