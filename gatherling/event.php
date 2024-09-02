@@ -99,7 +99,6 @@ function newEventFromEventName(string $eventName, bool $newSeason = false): Even
     $newEvent->number = $newSeason ? 1 : $oldEvent->number + 1;
     $newEvent->start = date('Y-m-d H:i:00', strtotime($oldEvent->start) + (86400 * 7));
     $newEvent->finalized = 0;
-    $newEvent->name = sprintf('%s %d.%02d', $newEvent->series, $newEvent->season, $newEvent->number);
 
     $copiableFields = ['format', 'kvalue', 'prereg_allowed', 'threadurl', 'reporturl', 'metaurl',
         'series', 'host', 'cohost', 'mainrounds', 'mainstruct', 'finalrounds', 'finalstruct',
@@ -109,6 +108,8 @@ function newEventFromEventName(string $eventName, bool $newSeason = false): Even
     foreach ($copiableFields as $field) {
         $newEvent->$field = $oldEvent->$field;
     }
+
+    $newEvent->name = sprintf('%s %d.%02d', $newEvent->series, $newEvent->season, $newEvent->number);
 
     return $newEvent;
 }
