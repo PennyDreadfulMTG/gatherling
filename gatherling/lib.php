@@ -53,11 +53,6 @@ function renderTemplate(string $template_name, array $context = []): string
     return $m->render($template_name, $context);
 }
 
-function is_assoc(array $array): bool
-{
-    return (bool) count(array_filter(array_keys($array), 'is_string'));
-}
-
 /** Gets the correct name, relative to the gatherling root dir, for a file in the theme.
  *  Allows for overrides, falls back to default/.
  */
