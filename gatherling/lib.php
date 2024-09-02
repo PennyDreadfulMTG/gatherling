@@ -56,7 +56,7 @@ function renderTemplate(string $template_name, array $context = []): string
 /** Gets the correct name, relative to the gatherling root dir, for a file in the theme.
  *  Allows for overrides, falls back to default/.
  */
-function theme_file($name)
+function theme_file($name): string
 {
     global $CONFIG;
     if (Player::isLoggedIn()) {
@@ -110,7 +110,7 @@ function print_footer(): void
     ]);
 }
 
-function headerColor()
+function headerColor(): string
 {
     global $HC, $CC, $R1, $R2;
     $CC = $R2;
@@ -118,19 +118,7 @@ function headerColor()
     return $HC;
 }
 
-function rowColor()
-{
-    global $CC, $R1, $R2;
-    if (strcmp($CC, $R1) == 0) {
-        $CC = $R2;
-    } else {
-        $CC = $R1;
-    }
-
-    return $CC;
-}
-
-function linkToLogin($pagename = null, $redirect = null, $message = null, $username = null)
+function linkToLogin($pagename = null, $redirect = null, $message = null, $username = null): void
 {
     if (is_null($redirect)) {
         $redirect = $_SERVER['REQUEST_URI'];
@@ -144,16 +132,16 @@ function linkToLogin($pagename = null, $redirect = null, $message = null, $usern
     echo "Please <a href=\"login.php?target={$_SERVER['REQUEST_URI']}\">Click Here</a> to log in.\n";
 }
 
-function printCardLink($card)
+function printCardLink($card): void
 {
     $gathererName = preg_replace('/ /', ']+[', $card);
     $gathererName = str_replace('/', ']+[', $gathererName);
     echo '<span class="cardHoverImageWrapper">';
     echo "<a href=\"http://gatherer.wizards.com/Pages/Search/Default.aspx?name=+[{$gathererName}]\" ";
-    echo "class=\"linkedCardName\" target=\"_blank\">{$card}<span class=\"linkCardHoverImage\"><p class=\"crop\" style=\"background-image: url(http://gatherer.wizards.com/Handlers/Image.ashx?name={$card}&type=card\"><img src=\"http://gatherer.wizards.com/Handlers/Image.ashx?name={$card}&type=card\"></p></span></a></span>";
+    echo "class=\"linkedCardName\" target=\"_blank\">{$card}<span class=\"linkCardHoverImage\"><p class=\"crop\" style=\"background-image: url(http://gatherer.wizards.com/Handlers/Image.ashx?name={$card}&type=card\"><img alt=\"{$card}\" src=\"http://gatherer.wizards.com/Handlers/Image.ashx?name={$card}&type=card\"></p></span></a></span>";
 }
 
-function image_tag($filename, $extra_attr = null)
+function image_tag($filename, $extra_attr = null): string
 {
     $tag = '<img ';
     if (is_array($extra_attr)) {
@@ -166,7 +154,7 @@ function image_tag($filename, $extra_attr = null)
     return $tag;
 }
 
-function medalImgStr($medal)
+function medalImgStr($medal): string
 {
     return image_tag("$medal.png", ['style' => 'border-width: 0px']);
 }
@@ -174,7 +162,6 @@ function medalImgStr($medal)
 function seasonDropMenu(int|string|null $season, bool $useall = false): string
 {
     $args = seasonDropMenuArgs($season, $useall);
-
     return renderTemplate('partials/dropMenu', $args);
 }
 
@@ -183,8 +170,8 @@ function seasonDropMenuArgs(int|string|null $season, bool $useall = false): arra
     $db = Database::getConnection();
     $query = 'SELECT MAX(season) AS m FROM events';
     $result = $db->query($query) or exit($db->error);
-    $maxarr = $result->fetch_assoc();
-    $max = $maxarr['m'];
+    $maxArr = $result->fetch_assoc();
+    $max = $maxArr['m'];
     $title = ($useall == 0) ? '- Season - ' : 'All';
     $result->close();
 
@@ -222,7 +209,7 @@ function formatDropMenuArgs(?string $format, bool $useAll = false, string $formN
     ];
 }
 
-function emailStatusDropDown($currentStatus = 1)
+function emailStatusDropDown($currentStatus = 1): void
 {
     echo '<select class="inputbox" name="emailstatus">';
     if ($currentStatus == 0) {
@@ -236,11 +223,6 @@ function emailStatusDropDown($currentStatus = 1)
         echo '<option value="1">Public</option>';
     }
     echo '</select>';
-}
-
-function numDropMenu(string $field, string $title, int $max, string|int|null $def, int $min = 0, ?string $special = null): string
-{
-    return renderTemplate('partials/dropMenu', numDropMenuArgs($field, $title, $max, $def, $min, $special));
 }
 
 function numDropMenuArgs(string $field, string $title, int $max, string|int|null $def, int $min = 0, ?string $special = null): array
@@ -358,7 +340,7 @@ function tribeBanDropMenu($format): void
     echo '</select>';
 }
 
-function subTypeBanDropMenu($format)
+function subTypeBanDropMenu($format): void
 {
     $allSubTypes = Format::getTribesList();
     $bannedSubTypes = $format->getSubTypesBanned();
@@ -372,7 +354,7 @@ function subTypeBanDropMenu($format)
     echo '</select>';
 }
 
-function formatsDropMenu($formatType = '', $seriesName = 'System')
+function formatsDropMenu($formatType = '', $seriesName = 'System'): void
 {
     $formatNames = [];
 
@@ -403,7 +385,7 @@ function formatsDropMenu($formatType = '', $seriesName = 'System')
     }
 }
 
-function printOrganizerSelect($player_series, $selected)
+function printOrganizerSelect($player_series, $selected): void
 {
     $page = $_SERVER['PHP_SELF'];
     echo '<center>';
@@ -421,14 +403,14 @@ function printOrganizerSelect($player_series, $selected)
     echo '</form>';
 }
 
-function print_warning_if($conditional)
+function print_warning_if($conditional): void
 {
     if ($conditional) {
         echo '<span style="color: red;">⚠</span>';
     }
 }
 
-function git_hash()
+function git_hash(): string
 {
     global $CONFIG;
     if (!is_null($hash = $CONFIG['GIT_HASH'])) {
@@ -479,14 +461,14 @@ function version_tagline(): string
     // print "Gatherling version 1.9 (\"It's funny 'cause the squirrel got dead\")";
 }
 
-function redirect($page)
+function redirect($page): void
 {
     global $CONFIG;
     header("Location: {$CONFIG['base_url']}{$page}");
     exit(0);
 }
 
-function parseCards($cards)
+function parseCards($cards): array
 {
     if (!is_array($cards)) {
         $cardarr = [];
@@ -503,21 +485,21 @@ function parseCards($cards)
     return $cardarr;
 }
 
-function normaliseCardName($card, $tolower = false)
+function normaliseCardName($card, $toLower = false): string
 {
     $pattern = ['/é/', '/è/', '/ë/', '/ê/', '/É/', '/È/', '/Ë/', '/Ê/', '/á/', '/à/', '/ä/', '/â/', '/å/', '/Á/', '/À/', '/Ä/', '/Â/', '/Å/', '/ó/', '/ò/', '/ö/', '/ô/', '/Ó/', '/Ò/', '/Ö/', '/Ô/', '/í/', '/ì/', '/ï/', '/î/', '/Í/', '/Ì/', '/Ï/', '/Î/', '/ú/', '/ù/', '/ü/', '/û/', '/Ú/', '/Ù/', '/Ü/', '/Û/', '/ý/', '/ÿ/', '/Ý/', '/ø/', '/Ø/', '/œ/', '/Œ/', '/Æ/', '/AE/', '/ç/', '/Ç/', '/—/', '/−/', '/â€”/', '/’/', '/½/'];
     $replace = ['e', 'e', 'e', 'e', 'E', 'E', 'E', 'E', 'a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A', 'A', 'o', 'o', 'o', 'o', 'O', 'O', 'O', 'O', 'i', 'i', 'i', 'I', 'I', 'I', 'I', 'I', 'u', 'u', 'u', 'u', 'U', 'U', 'U', 'U', 'y', 'y', 'Y', 'o', 'O', 'ae', 'ae', 'Ae', 'Ae', 'c', 'C', '-', '-', '-', "'", '{1/2}'];
     $card = preg_replace($pattern, $replace, $card);
     $card = preg_replace("/\306/", 'AE', $card);
     $card = preg_replace("/ \/\/\/? /", '/', $card);
-    if ($tolower) {
+    if ($toLower) {
         $card = strtolower($card);
     }
 
-    return $card = trim($card);
+    return trim($card);
 }
 
-function parseCardsWithQuantity($cards)
+function parseCardsWithQuantity($cards): array
 {
     $cards = parseCards($cards);
     $badcards = [];
@@ -538,7 +520,7 @@ function parseCardsWithQuantity($cards)
     return $cardarr;
 }
 
-function print_tooltip($text, $tooltip)
+function print_tooltip($text, $tooltip): void
 {
     echo "<span class=\"tooltip\" title=\"$tooltip\">$text</span>";
 }
