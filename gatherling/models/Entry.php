@@ -206,7 +206,7 @@ class Entry
         // creates a link to enter a deck list once a player is registered for the event
         $args = $this->createDeckLinkArgs();
 
-        return render_name('partials/createDeckLink', $args);
+        return renderTemplate('partials/createDeckLink', $args);
     }
 
     public function createDeckLinkArgs(): array

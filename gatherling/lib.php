@@ -40,7 +40,7 @@ function page($title, $contents): string
     return ob_get_clean();
 }
 
-function render_name(string $template_name, array $context = []): string
+function renderTemplate(string $template_name, array $context = []): string
 {
     $m = new Mustache_Engine([
         'cache'            => '/tmp/gatherling/mustache/templates',
@@ -92,7 +92,7 @@ function print_header($title, $enable_vue = false): void
         $isOrganizer = count($player->organizersSeries()) > 0;
     }
 
-    echo render_name('partials/header', [
+    echo renderTemplate('partials/header', [
         'siteName'       => $CONFIG['site_name'],
         'title'          => $title,
         'css'            => theme_file('css/stylesheet.css'),
@@ -109,7 +109,7 @@ function print_header($title, $enable_vue = false): void
 
 function print_footer(): void
 {
-    echo render_name('partials/footer', [
+    echo renderTemplate('partials/footer', [
         'versionTagline' => version_tagline(),
         'gitHash'        => git_hash(),
     ]);
@@ -182,7 +182,7 @@ function seasonDropMenu(int|string|null $season, bool $useall = false): string
 {
     $args = seasonDropMenuArgs($season, $useall);
 
-    return render_name('partials/dropMenu', $args);
+    return renderTemplate('partials/dropMenu', $args);
 }
 
 function seasonDropMenuArgs(int|string|null $season, bool $useall = false): array
@@ -202,7 +202,7 @@ function formatDropMenu(?string $format, bool $useAll = false, string $formName 
 {
     $args = formatDropMenuArgs($format, $useAll, $formName, $showMeta);
 
-    return render_name('partials/dropMenu', $args);
+    return renderTemplate('partials/dropMenu', $args);
 }
 
 function formatDropMenuArgs(?string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): array
@@ -247,7 +247,7 @@ function emailStatusDropDown($currentStatus = 1)
 
 function numDropMenu(string $field, string $title, int $max, string|int|null $def, int $min = 0, ?string $special = null): string
 {
-    return render_name('partials/dropMenu', numDropMenuArgs($field, $title, $max, $def, $min, $special));
+    return renderTemplate('partials/dropMenu', numDropMenuArgs($field, $title, $max, $def, $min, $special));
 }
 
 function numDropMenuArgs(string $field, string $title, int $max, string|int|null $def, int $min = 0, ?string $special = null): array
@@ -282,7 +282,7 @@ function numDropMenuArgs(string $field, string $title, int $max, string|int|null
 function timeDropMenu(int|string $hour, int|string $minutes = 0): string
 {
     $args = timeDropMenuArgs($hour, $minutes);
-    return render_name('partials/dropMenu', $args);
+    return renderTemplate('partials/dropMenu', $args);
 }
 
 function timeDropMenuArgs(int|string $hour, int|string $minutes = 0): array
@@ -343,7 +343,7 @@ function notAllowed(string $reason): string
 {
     $args = notAllowedArgs($reason);
 
-    return render_name('partials/notAllowed', $args);
+    return renderTemplate('partials/notAllowed', $args);
 }
 
 function notAllowedArgs(string $reason): array

@@ -1393,7 +1393,7 @@ class Player
     {
         $args = $this->gameNameArgs($game, $html);
 
-        return render_name('partials/gameName', $args);
+        return renderTemplate('partials/gameName', $args);
     }
 
     public function linkTo(string $game = 'gatherling'): string

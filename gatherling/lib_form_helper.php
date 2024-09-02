@@ -9,7 +9,7 @@ require_once 'lib.php';
 function textInput(string $label, string $name, mixed $value = '', int $size = 0, ?string $reminderText = null, ?string $id = null): string
 {
     $args = textInputArgs($label, $name, $value, $size, $reminderText, $id);
-    return render_name('partials/textInput', $args);
+    return renderTemplate('partials/textInput', $args);
 }
 
 function textInputArgs(string $label, string $name, mixed $value = '', int $size = 0, ?string $reminderText = null, ?string $id = null): array
@@ -33,7 +33,7 @@ function textInputArgs(string $label, string $name, mixed $value = '', int $size
 function checkboxInput(string $label, string $name, bool $isChecked = false, ?string $reminderText = null): string
 {
     $args = checkboxInputArgs($label, $name, $isChecked, $reminderText);
-    return render_name('partials/checkboxInput', $args);
+    return renderTemplate('partials/checkboxInput', $args);
 }
 
 function checkboxInputArgs(string $label, string $name, bool $isChecked = false, ?string $reminderText = null): array
@@ -66,7 +66,7 @@ function print_submit($label, $name = 'action')
 function select(string $name, array $options = [], mixed $selected = null, ?string $id = null): string
 {
     $args = selectArgs($name, $options, $selected, $id);
-    return render_name('partials/select', $args);
+    return renderTemplate('partials/select', $args);
 }
 
 function selectArgs(string $name, array $options = [], mixed $selected = null, ?string $id = null): array
@@ -92,7 +92,7 @@ function selectArgs(string $name, array $options = [], mixed $selected = null, ?
 function selectInput(string $label, string $name, ?array $options, mixed $selected = null, ?string $id = null): string
 {
     $args = selectInputArgs($label, $name, $options, $selected, $id);
-    return render_name('partials/selectInput', $args);
+    return renderTemplate('partials/selectInput', $args);
 }
 
 function selectInputArgs(string $label, string $name, ?array $options, mixed $selected = null, ?string $id = null): array
@@ -112,7 +112,7 @@ function stringField($field, $def, $len): string
 {
     $args = stringFieldArgs($field, $def, $len);
 
-    return render_name('partials/stringField', $args);
+    return renderTemplate('partials/stringField', $args);
 }
 
 function stringFieldArgs(string $field, mixed $def, int $len): array

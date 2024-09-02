@@ -231,7 +231,7 @@ function eventList(string $seriesName, string $season): string
         $event['url'] = 'event.php?name=' . rawurlencode($event['name']);
     }
 
-    return render_name('partials/eventList', [
+    return renderTemplate('partials/eventList', [
         'formatDropMenu' => formatDropMenuArgs($_GET['format'], true),
         'seriesDropMenu' => Series::dropMenuArgs($seriesName, true, $seriesShown),
         'seasonDropMenu' => seasonDropMenuArgs($season, true),
@@ -300,10 +300,10 @@ function eventFrame(Event $event = null, bool $forceNew = false): string
     } elseif (strcmp($view, 'reports') == 0) {
         $contentSafe = reportsForm($event);
     } else {
-        $contentSafe = render_name('partials/editEventForm', editEventFormArgs($event, $edit));
+        $contentSafe = renderTemplate('partials/editEventForm', editEventFormArgs($event, $edit));
     }
 
-    return render_name('partials/eventForm', [
+    return renderTemplate('partials/eventForm', [
         'controlPanelLinks' => controlPanelLinks($event->name),
         'contentSafe' => $contentSafe,
     ]);
@@ -470,7 +470,7 @@ function reportsForm(Event $event): string
         return $result;
     };
 
-    return render_name('partials/reportsForm', [
+    return renderTemplate('partials/reportsForm', [
         'hasEntries' => $hasEntries,
         'standings' => $assembleEntries($entriesByMedal),
         'registrants' => $assembleEntries($entriesByDateTime),
@@ -507,7 +507,7 @@ function playerList(Event $event): string
         $showCreateNextSeason = Event::exists($nextSeasonName);
     }
 
-    return render_name('partials/playerList', [
+    return renderTemplate('partials/playerList', [
         'event' => $event,
         'isActive' => $isActive,
         'isOngoing' => $isOngoing,
@@ -576,7 +576,7 @@ function pointsAdjustmentForm(Event $event): string
         }
         $entries[] = $player;
     }
-    return render_name('partials/pointsAdjustmentForm', [
+    return renderTemplate('partials/pointsAdjustmentForm', [
         'eventName' => $event->name,
         'entries' => $entries,
     ]);
@@ -690,7 +690,7 @@ function matchList(Event $event, string|int|null $newMatchRound): string
     $structure = $event->current_round > $event->mainrounds ? $event->finalstruct : $event->mainstruct;
     $isLeague = $structure == 'League';
 
-    return render_name('partials/matchList', [
+    return renderTemplate('partials/matchList', [
         'roundLinks' => $roundLinks,
         'hasMatches' => $hasMatches,
         'rounds' => $rounds,
@@ -721,7 +721,7 @@ function medalList(Event $event): string
         $finalist['img'] = theme_file("images/{$finalist['medal']}.png");
         $pos++;
     }
-    return render_name('partials/medalList', [
+    return renderTemplate('partials/medalList', [
         'eventName' => $event->name,
         'finalists' => $finalists,
     ]);
@@ -1031,7 +1031,7 @@ function playerDropMenuArgs(Event $event, string|int $letter, $def = "\n"): arra
 function roundDropMenu(Event $event, int|string $selected): string
 {
     $args = roundDropMenuArgs($event, $selected);
-    return render_name('partials/dropMenu', $args);
+    return renderTemplate('partials/dropMenu', $args);
 }
 
 function roundDropMenuArgs(Event $event, int|string $selected): array
@@ -1294,5 +1294,5 @@ function updateAdjustments(): void
 
 function authFailed(): string
 {
-    return render_name('partials/authFailed');
+    return renderTemplate('partials/authFailed');
 }
