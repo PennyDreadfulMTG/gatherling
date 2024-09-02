@@ -690,7 +690,7 @@ function matchList(Event $event, string|int|null $newMatchRound): string
     // 0-index $rounds for mustache, if they start at 1 it will fail to loop over them.
     $rounds = array_values($rounds);
 
-    $lastRound = $rounds[count($rounds) - 1];
+    $lastRound = $rounds ? $rounds[count($rounds) - 1] : [];
 
     $playerADropMenu = playerDropMenuArgs($event, 'A');
     $playerBDropMenu = playerDropMenuArgs($event, 'B');
