@@ -12,8 +12,6 @@ use Gatherling\Standings;
 include 'lib.php';
 include 'lib_form_helper.php';
 
-$drop_icon = '&#x2690;';
-
 if (!Player::isLoggedIn()) {
     linkToLogin('Host Control Panel');
 }
@@ -308,7 +306,11 @@ function eventForm(Event $event = null, bool $forceNew = false): void
     if (strcmp($view, 'reg') == 0) {
         echo playerList($event);
     } elseif (strcmp($view, 'match') == 0) {
-        matchList($event);
+        // Prevent warnings in php output.  TODO: make this not needed.
+        if (!isset($_POST['newmatchround'])) {
+            $_POST['newmatchround'] = '';
+        }
+        echo matchList($event, $_POST['newmatchround']);
     } elseif (strcmp($view, 'standings') == 0) {
         standingsList($event);
     } elseif (strcmp($view, 'medal') == 0) {
@@ -595,14 +597,14 @@ function pointsAdjustmentForm(Event $event): string
     ]);
 }
 
-function unverifiedPlayerCell(Event $event, Matchup $match, Player $player): string
+function unverifiedPlayerCellArgs(Event $event, Matchup $match, Player $player): array
 {
     $playerName = $player->name;
     $wins = $match->getPlayerWins($playerName);
     $losses = $match->getPlayerLosses($playerName);
     $matchResult = ($wins + $losses > 0) ? ($wins > $losses ? 'W' : 'L') : null;
 
-    return render_name('partials/unverifiedPlayerCell', [
+    return [
         'playerName' => $playerName,
         'displayName' => $player->gameNameArgs($event->client),
         'displayNameText' => $player->gameName($event->client, false),
@@ -613,171 +615,122 @@ function unverifiedPlayerCell(Event $event, Matchup $match, Player $player): str
         'verification' => $match->verification,
         'wins' => $wins,
         'losses' => $losses,
-    ]);
+    ];
 }
 
-function matchList(Event $event): void
+function matchList(Event $event, string|int|null $newMatchRound): string
 {
-    global $drop_icon;
     $matches = $event->getMatches();
-    // Prevent warnings in php output.  TODO: make this not needed.
-    if (!isset($_POST['newmatchround'])) {
-        $_POST['newmatchround'] = '';
+    $roundLinks = [];
+    for ($n = 1; $n <= $event->current_round; $n++) {
+        $roundLinks[] = [
+            'text' => "Round $n",
+            'href' => 'event.php?view=match&name=' . rawurlencode($event->name) . "#round-{$n}"
+        ];
     }
-
-    echo '<p style="text-align: center"><b>Match List</b><br />';
-    echo '<i>* denotes a playoff/finals match.</i><br />';
-    echo '<i>To drop a player while entering match results, select the';
-    echo ' check box next to the players name.</i></p>';
-    // Quick links to rounds
-    echo '<p style="text-align: center">';
-    for ($r = 1; $r <= $event->current_round; $r++) {
-        echo "<a href=\"event.php?view=match&name={$event->name}#round-{$r}\">Round {$r}</a> ";
-    }
-    echo '</p>';
-    // Start a new form
-    echo '<form action="event.php" method="post" enctype="multipart/form-data">';
-    echo "<input type=\"hidden\" name=\"name\" value=\"{$event->name}\">";
-    echo "<input type=\"hidden\" name=\"eventname\" value=\"{$event->name}\">";
-    echo '<input type="hidden" name="view" value="match">';
-    echo '<table align="center" style="border-width: 0px;">';
-    if (count($matches) > 0) {
-        echo '<tr class="lefted"><th style="text-align: center; padding-right: 10px;">Round</th><th>Player A</th>';
-        echo '<th>Result</th>';
-        echo '<th>Player B</th>';
-        echo '<th style="text-align: center;">Delete</th></tr>';
-    } else {
-        echo '<tr><td align="center" colspan="5"><i>';
-        echo 'There are no matches listed for this event.</td></tr>';
-    }
+    $hasMatches = count($matches) > 0;
     $first = 1;
-    $rndadd = 0;
-    $thisround = 0;
-    $ezypaste = '';
+    $rndAdd = 0;
     $playersInMatches = [];
+    $rounds = [];
     foreach ($matches as $match) {
+        $matchInfo = getObjectVarsCamelCase($match);
         if ($first && $match->timing == 1) {
-            $rndadd = $match->rounds;
+            $rndAdd = $match->rounds;
         }
         $first = 0;
         // add final round to main round if in extra rounds to keep round correct
         if ($match->timing == 2) {
-            $printrnd = $match->round + $rndadd;
+            $printRnd = $match->round + $rndAdd;
         } else {
-            $printrnd = $match->round;
+            $printRnd = $match->round;
         }
-        $printplr = $match->getWinner();
-        if (is_null($printplr)) {
-            $printplr = 'Database Error';
-        }
-        $star = ($match->timing > 1) ? '*' : '';
-        if ($printrnd != $thisround) {
-            $thisround = $printrnd;
+        $matchInfo['printRnd'] = $printRnd;
+        $matchInfo['showStar'] = $match->timing > 1;
+        if (!isset($rounds[$printRnd])) {
             $extraRoundTitle = '';
             if ($match->timing > 1) {
                 $extraRoundTitle = "(Finals Round {$match->round})";
             }
-            $ezypaste = "Pairings for Round {$thisround} $extraRoundTitle<br />";
-            echo "<tr><td class=\"box\" align=\"center\" colspan=\"7\" style=\"background-color: Grey;color: Black\"> <a name=\"round-{$thisround}\"></a>ROUND {$thisround} {$extraRoundTitle} </td></tr>";
+            $rounds[$printRnd] = ['round' => $printRnd, 'extraRoundTitle' => $extraRoundTitle, 'matches' => []];
         }
-        echo "<tr><td align=\"center\">$printrnd$star</td>";
+
         if (!isset($playersInMatches[$match->playera])) {
             $playersInMatches[$match->playera] = new Player($match->playera);
         }
         if (!isset($playersInMatches[$match->playerb])) {
             $playersInMatches[$match->playerb] = new Player($match->playerb);
         }
-        $playera = $playersInMatches[$match->playera];
-        $playerb = $playersInMatches[$match->playerb];
+        $playerA = $playersInMatches[$match->playera];
+        $playerB = $playersInMatches[$match->playerb];
 
-        if (strcasecmp($match->verification, 'verified') != 0 && $event->finalized == 0) {
-            $ezypaste .= "{$playera->gameName($event->client)} vs. {$playerb->gameName($event->client)}<br />";
-            echo unverifiedPlayerCell($event, $match, $playera);
-            echo '<td>';
-            echo "<input type=\"hidden\" name=\"hostupdatesmatches[]\" value=\"{$match->id}\">";
-            echo resultDropMenu('matchresult[]');
-            echo '</td>';
-            echo unverifiedPlayerCell($event, $match, $playerb);
+        $isActiveUnverified = strcasecmp($match->verification, 'verified') != 0 && $event->finalized == 0;
+        if ($isActiveUnverified) {
+            $matchInfo['unverifiedPlayerCellA'] = unverifiedPlayerCellArgs($event, $match, $playerA);
+            $matchInfo['resultDropMenu'] = resultDropMenuArgs('matchresult[]');
+            $matchInfo['unverifiedPlayerCellB'] = unverifiedPlayerCellArgs($event, $match, $playerB);
         } else {
-            $playerawins = $match->getPlayerWins($match->playera);
-            $playerbwins = $match->getPlayerWins($match->playerb);
-            $playeradropflag = $match->playerDropped($match->playera) ? $drop_icon : '';
-            $playerbdropflag = $match->playerDropped($match->playerb) ? $drop_icon : '';
-            echo "<td class=\"match_{$match->verification}\">{$playera->gameName($event->client)}</td>";
-            if ($match->playera == $match->playerb) {
-                $ezypaste .= "{$playera->gameName($event->client)} has the BYE<br />";
-                echo '<td>BYE</td>';
-                echo '<td></td>';
-            } elseif (($match->getPlayerWins($match->playera) == 1) && ($match->getPlayerWins($match->playerb) == 1)) {
-                echo "<td>{$playeradropflag} Draw {$playerbdropflag}</td>";
-                $ezypaste .= "{$playera->gameName($event->client)} {$playerawins}-{$playerbwins} {$playerb->gameName($event->client)}<br />";
-                echo "<td class=\"match_{$match->verification}\">{$playerb->gameName($event->client)}</td>";
-            } else {
-                echo "<td>{$playeradropflag} {$playerawins}-{$playerbwins} {$playerbdropflag}</td>";
-                $ezypaste .= "{$match->playera} {$playerawins}-{$playerbwins} {$playerb->gameName($event->client)}<br />";
-                echo "<td class=\"match_{$match->verification}\">{$playerb->gameName($event->client)}</td>";
-            }
+            $playerAWins = $match->getPlayerWins($match->playera);
+            $playerBWins = $match->getPlayerWins($match->playerb);
+            $matchInfo['playerAWins'] = $playerAWins;
+            $matchInfo['playerBWins'] = $playerBWins;
+            $matchInfo['hasPlayerADropped'] = $match->playerDropped($match->playera);
+            $matchInfo['hasPlayerBDropped'] = $match->playerDropped($match->playerb);
+            $matchInfo['gameNameA'] = $playerA->gameNameArgs($event->client);
+            $matchInfo['gameNameB'] = $playerB->gameNameArgs($event->client);
+            $isBye = $match->playera == $match->playerb;
+            $isDraw = ($match->getPlayerWins($match->playera) == 1) && ($match->getPlayerWins($match->playerb) == 1);
+            $matchInfo['hasResult'] = !$isBye && !$isDraw;
+            $matchInfo['isBye'] = $isBye;
+            $matchInfo['isDraw'] = $isDraw;
         }
-        echo '<td align="center">';
-        echo "<input type=\"checkbox\" name=\"matchdelete[]\" title='Delete this pairing' ";
-        echo "value=\"{$match->id}\"></td></tr>";
+        $matchInfo['isActiveUnverified'] = $isActiveUnverified;
+        $rounds[$printRnd]['matches'][] = $matchInfo;
     }
-    $ezypaste .= 'Good luck everyone!<br />';
-    echo '<tr><td>&nbsp;</td></tr>';
+    // 0-index $rounds for mustache, if they start at 1 it will fail to loop over them.
+    $rounds = array_values($rounds);
+
+    $lastRound = $rounds[count($rounds) - 1];
+    foreach ($lastRound['matches'] as &$match) {
+        if ($isActiveUnverified) {
+            $match[''] = 'a';
+        } elseif ($match['isBye']) {
+
+        } elseif ($match['isDraw']) {
+
+        } else {
+
+        }
+    }
+
+    $playerADropMenu = playerDropMenuArgs($event, 'A');
+    $playerBDropMenu = playerDropMenuArgs($event, 'B');
+    $playerByeMenu = $roundDropMenu = $resultDropMenu = null;
     if ($event->active) {
-        echo '<tr><td align="center" colspan="7"><b>Add Pairing</b></td></tr>';
-        echo "<input type=\"hidden\" name=\"newmatchround\" value=\"{$event->current_round}\">";
-        echo '<input type="hidden" name="newmatchresult" value="P">';
-        echo '<tr><td align="center" colspan="7">';
-        echo playerDropMenu($event, 'A');
-        echo ' vs ';
-        echo playerDropMenu($event, 'B');
-        echo '</td></tr>';
-        echo '<tr><td>&nbsp;</td></tr>';
-        echo '<tr><td align="center" colspan="7"><b>Award Bye</b></td></tr>';
-        echo '<tr><td align="center" colspan="7">';
-        echo playerByeMenu($event);
-        echo '</td></tr>';
+        $playerByeMenu = playerByeMenuArgs($event);
     } else {
-        echo '<tr><td align="center" colspan="7">';
-        echo '<b>Add a Match</b></td></tr>';
-        echo '<tr><td align="center" colspan="7">';
-        echo roundDropMenu($event, $_POST['newmatchround']);
-        echo playerDropMenu($event, 'A');
-        echo resultDropMenu('newmatchresult');
-        echo playerDropMenu($event, 'B');
-        echo '</td></tr>';
-    }
-    echo '<tr><td>&nbsp;</td></tr>';
-    echo '<tr><td align="center" colspan="7">';
-    echo '<input class="inputbutton" type="submit" name="mode" value="Update Match Listing">';
-    echo '</td></tr>';
-    echo '</form></table>';
-    if (!$event->finalized) {
-        echo '<p>Paste stuff:<br />';
-        if ($event->current_round <= 1) {
-            echo "This event will be {$event->structureSummary()}<br/><br/>";
-        }
-        echo "<code>{$ezypaste}</code></p>";
+        $roundDropMenu = roundDropMenuArgs($event, $newMatchRound);
+        $resultDropMenu = resultDropMenuArgs('newmatchresult');
     }
 
-    if ($event->current_round > $event->mainrounds) {
-        $structure = $event->finalstruct;
-    } else {
-        $structure = $event->mainstruct;
-    }
+    $structure = $event->current_round > $event->mainrounds ? $event->finalstruct : $event->mainstruct;
+    $isLeague = $structure == 'League';
 
-    if ($structure == 'League') {
-        echo '<table style="border-width: 0px" align="center">';
-        echo '<tr><td>';
-        echo '<tr><td colspan="2" align="center">';
-        echo '<form action="event.php" method="post">';
-        echo "<input type=\"hidden\" name=\"name\" value=\"{$event->name}\" />";
-        echo '<input type="hidden" name="view" value="reg">';
-        echo '<input type="submit" name="mode" value="End Current League Round" />';
-        echo '</tr></td>';
-        echo '</table>';
-    }
+    return render_name('partials/matchList', [
+        'roundLinks' => $roundLinks,
+        'hasMatches' => $hasMatches,
+        'rounds' => $rounds,
+        'lastRound' => $lastRound,
+        'event' => getObjectVarsCamelCase($event),
+        'playerADropMenu' => $playerADropMenu,
+        'playerBDropMenu' => $playerBDropMenu,
+        'playerByeMenu' => $playerByeMenu,
+        'roundDropMenu' => $roundDropMenu,
+        'resultDropMenu' => $resultDropMenu,
+        'isBeforeRoundTwo' => $event->current_round <= 1,
+        'structureSummary' => $event->structureSummary(),
+        'isLeague' => $isLeague,
+    ]);
 }
 
 function standingsList(Event $event): void
@@ -1061,7 +1014,7 @@ function insertTrophy(): bool
     return true;
 }
 
-function playerByeMenu(Event $event): string
+function playerByeMenuArgs(Event $event): array
 {
     $playerNames = $event->getRegisteredPlayers(true);
     $options = [];
@@ -1071,11 +1024,11 @@ function playerByeMenu(Event $event): string
             'text' => $player,
         ];
     }
-    return render_name('partials/dropMenu', [
+    return [
         'name' => 'newbyeplayer',
         'default' => '- Bye Player -',
         'options' => $options,
-    ]);
+    ];
 }
 
 function playerDropMenuArgs(Event $event, string|int $letter, $def = "\n"): array
@@ -1101,13 +1054,13 @@ function playerDropMenuArgs(Event $event, string|int $letter, $def = "\n"): arra
     ];
 }
 
-function playerDropMenu(Event $event, string|int $letter, $def = "\n"): string
+function roundDropMenu(Event $event, int|string $selected): string
 {
-    $args = playerDropMenuArgs($event, $letter, $def);
+    $args = roundDropMenuArgs($event, $selected);
     return render_name('partials/dropMenu', $args);
 }
 
-function roundDropMenu(Event $event, int|string $selected): string
+function roundDropMenuArgs(Event $event, int|string $selected): array
 {
     $options = [];
     for ($r = 1; $r <= ($event->mainrounds + $event->finalrounds); $r++) {
@@ -1118,15 +1071,14 @@ function roundDropMenu(Event $event, int|string $selected): string
             'text' => "$r$star",
         ];
     }
-
-    return render_name('partials/dropMenu', [
-       'name' => 'newmatchround',
-       'default' => '- Round -',
-       'options' => $options,
-    ]);
+    return [
+        'name' => 'newmatchround',
+        'default' => '- Round -',
+        'options' => $options,
+    ];
 }
 
-function resultDropMenu(string $name = 'newmatchresult', array $extra_options = []): string
+function resultDropMenuArgs(string $name, array $extraOptions = []): array
 {
     $options = [
         ['value' => '2-0', 'text' => '2-0'],
@@ -1136,14 +1088,14 @@ function resultDropMenu(string $name = 'newmatchresult', array $extra_options = 
         ['value' => 'D', 'text' => 'Draw'],
 
     ];
-    foreach ($extra_options as $value => $text) {
+    foreach ($extraOptions as $value => $text) {
         $options[] = ['value' => $value, 'text' => $text];
     }
-    return render_name('partials/dropMenu', [
+    return [
         'name' => $name,
         'default' => '- Result -',
         'options' => $options,
-    ]);
+    ];
 }
 
 function initialByeDropMenuArgs(string $name = 'initial_byes', string $playerName = '', int $currentByes = 0): array
