@@ -298,10 +298,10 @@ function eventFrame(Event $event = null, bool $forceNew = false): string
     } elseif (strcmp($view, 'reports') == 0) {
         $contentSafe = reportsForm($event);
     } else {
-        $contentSafe = renderTemplate('partials/editEventForm', editEventFormArgs($event, $edit));
+        $contentSafe = renderTemplate('partials/eventForm', eventFormArgs($event, $edit));
     }
 
-    return renderTemplate('partials/eventForm', [
+    return renderTemplate('partials/eventFrame', [
         'controlPanelLinks' => controlPanelLinks($event->name),
         'contentSafe' => $contentSafe,
     ]);
@@ -328,7 +328,7 @@ function controlPanelLinks(string $eventName): array
     return $links;
 }
 
-function editEventFormArgs(Event $event, bool $edit): array
+function eventFormArgs(Event $event, bool $edit): array
 {
     if ($event->start != null) {
         $date = $event->start;
