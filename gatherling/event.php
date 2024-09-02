@@ -488,7 +488,7 @@ function playerList(Event $event): string
 
     $deckless = $entryInfoList = [];
     foreach ($entries as $entry) {
-        $entryInfoList[] = entryListArgs($entry, (bool)$format->tribal);
+        $entryInfoList[] = entryListArgs($entry, $numEntries, (bool)$format->tribal);
         if (!$entry->deck) {
             $deckless[] = $entry->player->gameNameArgs($entry->event->client);
         }
@@ -528,7 +528,7 @@ function playerList(Event $event): string
     ]);
 }
 
-function entryListArgs(Entry $entry, bool $isTribal): array
+function entryListArgs(Entry $entry, int $numEntries, bool $isTribal): array
 {
     $entryInfo = getObjectVarsCamelCase($entry);
     if ($entry->event->active == 1) {
