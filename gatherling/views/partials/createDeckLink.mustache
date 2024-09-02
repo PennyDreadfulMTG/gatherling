@@ -1,0 +1,10 @@
+{{^canCreateDeck}}
+    (no deck entered)
+{{/canCreateDeck}}
+{{#canCreateDeck}}
+    <a
+        class="create_deck_link"
+        style="color: red;"
+        href="{{createDeckLink}}"
+    >[Create Deck]</a>{{#invalidRegistration}}<font color="red">*</font>{{/invalidRegistration}}
+{{/canCreateDeck}}

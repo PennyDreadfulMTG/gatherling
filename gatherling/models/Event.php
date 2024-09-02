@@ -596,13 +596,6 @@ class Event
         return $registeredPlayers;
     }
 
-    public function hasActivePlayer($playername)
-    {
-        $count = Database::db_query_single('SELECT COUNT(player) FROM standings WHERE event = ? AND player = ? AND active = 1', 'ss', $this->name, $playername);
-
-        return $count == 1;
-    }
-
     public function hasRegistrant($playername)
     {
         $db = Database::getConnection();
@@ -1896,5 +1889,25 @@ class Event
         }
 
         return $ret;
+    }
+
+    public function isFinished(): bool
+    {
+        return $this->finalized && !$this->active;
+    }
+
+    public function isSwiss(): bool
+    {
+        return $this->mainstruct == 'Swiss';
+    }
+
+    public function isSingleElim(): bool
+    {
+        return $this->mainstruct == 'Single Elimination';
+    }
+
+    public function hasStarted(): bool
+    {
+        return $this->active == 1 || $this->finalized;
     }
 }

@@ -1036,20 +1036,25 @@ class Deck
         return $uniquecount;
     }
 
-    public function linkTo()
+    public function linkTo(): string
     {
-        $verify = 'deckverified';
-        if ($this->new) {
-            return 'Deck not found';
-        } else {
-            if (empty($this->name)) {
-                $this->name = '** NO NAME **';
-            }
-            if (!$this->isValid()) {
-                $verify = 'deckunverified';
-            }
+        $args = $this->linkToArgs();
 
-            return "<a class=\"$verify\" href=\"deck.php?mode=view&id={$this->id}\">{$this->name}</a>";
+        return render_name('partials/linkTo', $args);
+    }
+
+    public function linkToArgs(): array
+    {
+        $args = [
+            'new' => $this->new,
+        ];
+        if ($this->new) {
+            return $args;
         }
+        $args['id'] = $this->id;
+        $args['name'] = empty($this->name) ? '** NO NAME **' : $this->name;
+        $args['valid'] = $this->isValid();
+
+        return $args;
     }
 }

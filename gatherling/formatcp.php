@@ -701,21 +701,21 @@ function printFormatSettings($active_format, $seriesName)
     echo '<table class="form" style="border-width: 0px;" align="center">';
     echo '<tr><th>Minimum Mainboard Cards</th>';
     echo '<td style="width: 50px; text-align: center;">';
-    stringField('minmain', $active_format->min_main_cards_allowed, 5);
+    echo stringField('minmain', $active_format->min_main_cards_allowed, 5);
     print_warning_if($active_format->min_main_cards_allowed == 0);
     echo '</td>';
     echo '<th>&nbsp;Maximum Mainboard Cards&nbsp;</th>';
     echo '<td style="width: 50px; text-align: center;">';
-    stringField('maxmain', $active_format->max_main_cards_allowed, 5);
+    echo stringField('maxmain', $active_format->max_main_cards_allowed, 5);
     print_warning_if($active_format->max_main_cards_allowed == 0);
     echo '</td>';
     echo '</tr><tr><th>Minimum Sideboard Cards</th>';
     echo '<td style="width: 50px; text-align: center;">';
-    stringField('minside', $active_format->min_side_cards_allowed, 5);
+    echo stringField('minside', $active_format->min_side_cards_allowed, 5);
     echo '</td>';
     echo '<th>&nbsp;Maximum Sideboard Cards&nbsp;</th>';
     echo '<td style="width: 50px; text-align: center;">';
-    stringField('maxside', $active_format->max_side_cards_allowed, 5);
+    echo stringField('maxside', $active_format->max_side_cards_allowed, 5);
     echo '</td>';
     echo '</tr></table>';
 
@@ -930,7 +930,7 @@ function printBandR($active_format, $seriesName)
     } else {
         echo '<tr><td><font color="red">No cards have been restricted</font></td>';
         echo '<td style="width: 100px; text-align: center;">';
-        not_allowed('No Restricted Cards To Delete');
+        echo notAllowed('No Restricted Cards To Delete');
         echo '</td>';
         echo '</tr>';
     }
@@ -970,7 +970,7 @@ function printBandR($active_format, $seriesName)
     } else {
         echo '<tr><td><font color="red">No cards have been banned</font></td>';
         echo '<td style="width: 100px; text-align: center;">';
-        not_allowed('No Ban Cards To Delete');
+        echo notAllowed('No Ban Cards To Delete');
         echo '</td>';
         echo '</tr>';
     }
@@ -1010,7 +1010,7 @@ function printBandR($active_format, $seriesName)
     } else {
         echo '<tr><td><font color="red">No cards have been allowed</font></td>';
         echo '<td style="width: 100px; text-align: center;">';
-        not_allowed('No Legal List Cards to Delete');
+        echo notAllowed('No Legal List Cards to Delete');
         echo '</td>';
         echo '</tr>';
     }
@@ -1064,7 +1064,7 @@ function printTribalBandR($active_format, $seriesName)
     } else {
         echo '<tr><td><font color="red">No creatures have been restricted to tribe</font></td>';
         echo '<td style="width: 100px; text-align: center;">';
-        not_allowed('No Restricted To Tribe Creatures To Delete');
+        echo notAllowed('No Restricted To Tribe Creatures To Delete');
         echo '</td>';
         echo '</tr>';
     }
@@ -1095,7 +1095,7 @@ function printTribalBandR($active_format, $seriesName)
     } else {
         echo '<tr><td><font color="red">No Tribes Currently Banned</font></td>';
         echo '<td style="width: 100px; text-align: center;">';
-        not_allowed('No Selected Tribe To Delete');
+        echo notAllowed('No Selected Tribe To Delete');
         echo '</td>';
         echo '</tr>';
     }
@@ -1128,7 +1128,7 @@ function printTribalBandR($active_format, $seriesName)
     } else {
         echo '<tr><td><font color="red">No Subtypes Currently Banned</font></td>';
         echo '<td style="width: 100px; text-align: center;">';
-        not_allowed('No Selected SubType To Delete');
+        echo notAllowed('No Selected SubType To Delete');
         echo '</td>';
         echo '</tr>';
     }
@@ -1162,7 +1162,7 @@ function printCardSets($active_format, $seriesName)
     } else {
         echo '<tr><td><font color="red">No Core Sets are Allowed</font></td>';
         echo '<td style="width: 100px; text-align: center;">';
-        not_allowed('No Selected Card Set To Delete');
+        echo notAllowed('No Selected Card Set To Delete');
         echo '</td>';
         echo '</tr>';
     }
@@ -1190,7 +1190,7 @@ function printCardSets($active_format, $seriesName)
     } else {
         echo '<tr><td><font color="red">No Block Sets are Allowed</font></td>';
         echo '<td style="width: 100px; text-align: center;">';
-        not_allowed('No Selected Card Set To Delete');
+        echo notAllowed('No Selected Card Set To Delete');
         echo '</td>';
         echo '</tr>';
     }
@@ -1219,7 +1219,7 @@ function printCardSets($active_format, $seriesName)
     } else {
         echo '<tr><td><font color="red">No Extra Sets are Allowed</font></td>';
         echo '<td style="width: 100px; text-align: center;">';
-        not_allowed('No Selected Card Set To Delete');
+        echo notAllowed('No Selected Card Set To Delete');
         echo '</td>';
         echo '</tr>';
     }
@@ -1270,7 +1270,7 @@ function printMetaFormatSettings($active_format, $seriesName)
     } else {
         echo '<tr><td><font color="red">No Sub Formats added</font></td>';
         echo '<td style="width: 100px; text-align: center;">';
-        not_allowed('No Selected Format to Delete');
+        echo notAllowed('No Selected Format to Delete');
         echo '</td>';
         echo '</tr>';
     }
