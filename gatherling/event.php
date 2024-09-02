@@ -663,6 +663,8 @@ function matchList(Event $event, string|int|null $newMatchRound): string
         }
         $playerA = $playersInMatches[$match->playera];
         $playerB = $playersInMatches[$match->playerb];
+        $matchInfo['gameNameA'] = $playerA->gameNameArgs($event->client);
+        $matchInfo['gameNameB'] = $playerB->gameNameArgs($event->client);
 
         $isActiveUnverified = strcasecmp($match->verification, 'verified') != 0 && $event->finalized == 0;
         if ($isActiveUnverified) {
@@ -676,8 +678,6 @@ function matchList(Event $event, string|int|null $newMatchRound): string
             $matchInfo['playerBWins'] = $playerBWins;
             $matchInfo['hasPlayerADropped'] = $match->playerDropped($match->playera);
             $matchInfo['hasPlayerBDropped'] = $match->playerDropped($match->playerb);
-            $matchInfo['gameNameA'] = $playerA->gameNameArgs($event->client);
-            $matchInfo['gameNameB'] = $playerB->gameNameArgs($event->client);
             $isBye = $match->playera == $match->playerb;
             $isDraw = ($match->getPlayerWins($match->playera) == 1) && ($match->getPlayerWins($match->playerb) == 1);
             $matchInfo['hasResult'] = !$isBye && !$isDraw;

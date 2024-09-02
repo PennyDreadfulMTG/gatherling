@@ -136,16 +136,16 @@
                 Pairings for Round {{round}} {{extraRoundTitle}}<br />
                 {{#matches}}
                     {{#isActiveUnverified}}
-                        {{#gameNameA}}{{> gameName}}{{/gameNameA}} vs. {{#gameNameB}}{{> gameName}}{{/gameNameB}}
+                        {{#gameNameA}}{{> gameName}}{{/gameNameA}} vs. {{#gameNameB}}{{> gameName}}{{/gameNameB}}<br>
                     {{/isActiveUnverified}}
                     {{#isBye}}
                         {{#gameNameA}}{{> gameName}}{{/gameNameA}} has the BYE<br />
                     {{/isBye}}
                     {{#isDraw}}
-                        {{#gameNameA}}{{> gameName}}{{/gameNameA}} {{playerAWins}}-{{playerBWins}} {{#gameNameB}}{{> gameName}}{{/gameNameB}}<br />
+                        {{#gameNameA}}{{> gameName}}{{/gameNameA}} {{playerAWins}}-{{playerBWins}} {{#gameNameB}}{{> gameName}}{{/gameNameB}}<br>
                     {{/isDraw}}
                     {{#hasResult}}
-                        {{#gameNameA}}{{> gameName}}{{/gameNameA}} {{playerAWins}}-{{playerBWins}} {{#gameNameB}}{{> gameName}}{{/gameNameB}}<br />
+                        {{#gameNameA}}{{> gameName}}{{/gameNameA}} {{playerAWins}}-{{playerBWins}} {{#gameNameB}}{{> gameName}}{{/gameNameB}}<br>
                     {{/hasResult}}
                 {{/matches}}
             {{/lastRound}}
