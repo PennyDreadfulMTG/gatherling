@@ -1,83 +1,90 @@
-<form action="event.php" method="get">
-    <table class="form" style="border-width: 0px" align="center">
-        <tr>
-            <td colspan="2" class="c"><b>Filters</b></td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <th>Format</th>
-            <td>
-                {{#formatDropMenu}}
-                    {{> dropMenu}}
-                {{/formatDropMenu}}
-            </td>
-        </tr>
-        <tr>
-            <th>Series</th>
-            <td>
-                {{#seriesDropMenu}}
-                    {{> dropMenu}}
-                {{/seriesDropMenu}}
-            </td>
-        </tr>
-        <tr>
-            <th>Season</th>
-            <td>
-                {{#seasonDropMenu}}
-                    {{> dropMenu}}
-                {{/seasonDropMenu}}
-            </td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <td colspan="2" class="buttons">
-                {{#hasPlayerSeries}}
-                    <input class="inputbutton" type="submit" name="mode" value="Create A New Event" />
-                {{/hasPlayerSeries}}
-                <input class="inputbutton" type="submit" name="mode" value="Filter Events" />
-            </td>
-        </tr>
-    </table>
-    <table style="border-width: 0px" align="center" cellpadding="3">
-        <tr>
-            <td colspan="5">&nbsp;</td>
-        </tr>
-        <tr>
-            <td><b>Event</b></td>
-            <td><b>Format</b></td>
-            <td><b>K-Value</b></td>
-            <td align="center"><b>Players</b></td>
-            <td><b>Host(s)</b></td>
-            <td align="center"><b>Finalized</b></td>
-        </tr>
-        {{#results}}
-            <tr>
-                <td><a href="{{url}}">{{name}}</a></td>
-                <td>{{format}}</td>
-                <td>{{kvalueDisplay}}</td>
-                <td align=\"center\">{{players}}</td>
-                <td>{{host}}{{#cohost}}/{{cohost}}{{/cohost}}</td>
-                <td align="center">{{#finalized}}&#x2714;{{/finalized}}</td>
-            </tr>
-        {{/results}}
-        {{#hasMore}}
-            <tr>
-                <td colspan="5" width="500">&nbsp;</td>
-            </tr>
-            <tr>
-                <td colspan="5" align="center">
-                    <i>This list only shows the 100 most recent results.
-                    Please use the filters at the top of this page to find older
-                    results.</i>
-                </td>
-            </tr>
-        {{/hasMore}}
-        <tr>
-            <td colspan="5" width="500">&nbsp;</td>
-        </tr>
-    </table>
-</form>
+<div class="grid_10 suffix_1 prefix_1">
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle">Host Control Panel</div>
+        {{> controlPanel }}
+        <form action="event.php" method="get">
+            <table class="form" style="border-width: 0">
+                <tr>
+                    <td colspan="2" class="c"><b>Filters</b></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <th>Format</th>
+                    <td>
+                        {{#formatDropMenu}}
+                            {{> dropMenu}}
+                        {{/formatDropMenu}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Series</th>
+                    <td>
+                        {{#seriesDropMenu}}
+                            {{> dropMenu}}
+                        {{/seriesDropMenu}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Season</th>
+                    <td>
+                        {{#seasonDropMenu}}
+                            {{> dropMenu}}
+                        {{/seasonDropMenu}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="buttons">
+                        {{#hasPlayerSeries}}
+                            <input class="inputbutton" type="submit" name="mode" value="Create A New Event" />
+                        {{/hasPlayerSeries}}
+                        <input class="inputbutton" type="submit" name="mode" value="Filter Events" />
+                    </td>
+                </tr>
+            </table>
+            <table style="border-width: 0px" align="center" cellpadding="3">
+                <tr>
+                    <td colspan="5">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td><b>Event</b></td>
+                    <td><b>Format</b></td>
+                    <td><b>K-Value</b></td>
+                    <td align="center"><b>Players</b></td>
+                    <td><b>Host(s)</b></td>
+                    <td align="center"><b>Finalized</b></td>
+                </tr>
+                {{#results}}
+                    <tr>
+                        <td><a href="{{url}}">{{name}}</a></td>
+                        <td>{{format}}</td>
+                        <td>{{kvalueDisplay}}</td>
+                        <td align=\"center\">{{players}}</td>
+                        <td>{{host}}{{#cohost}}/{{cohost}}{{/cohost}}</td>
+                        <td align="center">{{#finalized}}&#x2714;{{/finalized}}</td>
+                    </tr>
+                {{/results}}
+                {{#hasMore}}
+                    <tr>
+                        <td colspan="5" width="500">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" align="center">
+                            <i>This list only shows the 100 most recent results.
+                            Please use the filters at the top of this page to find older
+                            results.</i>
+                        </td>
+                    </tr>
+                {{/hasMore}}
+                <tr>
+                    <td colspan="5" width="500">&nbsp;</td>
+                </tr>
+            </table>
+        </form>
+        <div class="clear"></div>
+    </div>
+</div>

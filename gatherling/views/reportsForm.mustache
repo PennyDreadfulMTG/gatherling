@@ -1,39 +1,46 @@
-<table style="border-width: 0px" align="center">
-    <center>
-        <h2><b>Player Information</b></h2>
-    </center>
-    <tr>
-        <td>&nbsp;</td>
-    </tr>
-    {{^hasEntries}}
-        <tr>
-            <td align="center" colspan="5"><i>No players are currently registered for this event.</i></td>
-        </tr>
-    {{/hasEntries}}
-    {{#hasEntries}}
-        <tr>
-            <th>Players by final placing</th>
-            <th>Player</th>
-            <th>Email</th>
-        </tr>
-        {{#standings}}
+<div class="grid_10 suffix_1 prefix_1">
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle">Host Control Panel</div>
+        {{> controlPanel}}
+        <table style="border-width: 0px" align="center">
+            <center>
+                <h2><b>Player Information</b></h2>
+            </center>
             <tr>
-                <td align="center">{{n}}</td>
-                <td>{{entryName}}</td>
-                <td align="center">{{emailAd}}</td>
+                <td>&nbsp;</td>
             </tr>
-        {{/standings}}
-        <tr>
-            <th>Registration Order</th>
-            <th>Player</th>
-            <th>Email</th>
-        </tr>
-        {{#registrants}}
-            <tr>
-                <td align="center">{{n}}</td>
-                <td>{{entryName}}</td>
-                <td align="center">{{emailAd}}</td>
-            </tr>
-        {{/registrants}}
-    {{/hasEntries}}
-</table>
+            {{^hasEntries}}
+                <tr>
+                    <td align="center" colspan="5"><i>No players are currently registered for this event.</i></td>
+                </tr>
+            {{/hasEntries}}
+            {{#hasEntries}}
+                <tr>
+                    <th>Players by final placing</th>
+                    <th>Player</th>
+                    <th>Email</th>
+                </tr>
+                {{#standings}}
+                    <tr>
+                        <td align="center">{{n}}</td>
+                        <td>{{entryName}}</td>
+                        <td align="center">{{emailAd}}</td>
+                    </tr>
+                {{/standings}}
+                <tr>
+                    <th>Registration Order</th>
+                    <th>Player</th>
+                    <th>Email</th>
+                </tr>
+                {{#registrants}}
+                    <tr>
+                        <td align="center">{{n}}</td>
+                        <td>{{entryName}}</td>
+                        <td align="center">{{emailAd}}</td>
+                    </tr>
+                {{/registrants}}
+            {{/hasEntries}}
+        </table>
+        <div class="clear"></div>
+    </div>
+</div>

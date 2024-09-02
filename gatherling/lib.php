@@ -2,6 +2,7 @@
 
 use Gatherling\Database;
 use Gatherling\Format;
+use Gatherling\Page;
 use Gatherling\Player;
 
 require_once 'bootstrap.php';
@@ -40,7 +41,7 @@ function page($title, $contents): string
     return ob_get_clean();
 }
 
-function renderTemplate(string $template_name, array $context = []): string
+function renderTemplate(string $template_name, array|object $context = []): string
 {
     $m = new Mustache_Engine([
         'cache'            => '/tmp/gatherling/mustache/templates',

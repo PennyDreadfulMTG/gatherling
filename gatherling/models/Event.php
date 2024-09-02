@@ -1849,7 +1849,7 @@ class Event
         $this->save();
     }
 
-    public function structureSummary()
+    public function structureSummary(): string
     {
         function to_english($structure, $rounds, $isfinals)
         {
