@@ -22,7 +22,7 @@ print_header('Event Host Control Panel', true);
 ?>
 <div class="grid_10 suffix_1 prefix_1">
     <div id="gatherling_main" class="box">
-        <div class="uppertitle"> Host Control Panel </div>
+        <div class="uppertitle">Host Control Panel</div>
             <?php content(); ?>
         <div class="clear"></div>
     </div>
