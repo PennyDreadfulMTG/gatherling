@@ -1897,4 +1897,24 @@ class Event
 
         return $ret;
     }
+
+    public function isFinished(): bool
+    {
+        return $this->finalized && !$this->active;
+    }
+
+    public function isSwiss(): bool
+    {
+        return $this->mainstruct == 'Swiss';
+    }
+
+    public function isSingleElim(): bool
+    {
+        return $this->mainstruct == 'Single Elimination';
+    }
+
+    public function hasStarted(): bool
+    {
+        return $this->active == 1 || $this->finalized;
+    }
 }

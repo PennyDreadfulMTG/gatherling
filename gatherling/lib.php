@@ -334,14 +334,15 @@ function json_headers(): void
     header('HTTP_X_USERNAME: '.Player::loginName());
 }
 
-function not_allowed($reason): void
+function notAllowed(string $reason): string
 {
-    echo "<span class=\"notallowed inputbutton\" title=\"{$reason}\">&#x26A0;</span>";
+    $args = notAllowedArgs($reason);
+    return render_name('partials/notAllowed', $args);
 }
 
-function displayPlayerEmailPopUp($player, $email): void
+function notAllowedArgs(string $reason): array
 {
-    echo "<a class=\"emailPop\" style=\"color: green\" title=\"{$email}\">{$player}</a>";
+    return ['reason' => $reason];
 }
 
 function tribeBanDropMenu($format): void
