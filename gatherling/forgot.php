@@ -73,7 +73,7 @@ function printForgotForm(): void
             <input type="hidden" name="view" value="send_login_link" />
             <table class="form">
                 <?php
-                    print_text_input('Email or Username', 'identifier');
+                    echo textInput('Email or Username', 'identifier');
                     print_submit('Send Login Link');
                 ?>
             </table>

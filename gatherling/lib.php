@@ -281,6 +281,12 @@ function numDropMenuArgs(string $field, string $title, int $max, string|int|null
 
 function timeDropMenu(int|string $hour, int|string $minutes = 0): string
 {
+    $args = timeDropMenuArgs($hour, $minutes);
+    return render_name('partials/dropMenu', $args);
+}
+
+function timeDropMenuArgs(int|string $hour, int|string $minutes = 0): array
+{
     if (strcmp($hour, '') == 0) {
         $hour = -1;
     }
@@ -317,12 +323,11 @@ function timeDropMenu(int|string $hour, int|string $minutes = 0): string
             ];
         }
     }
-
-    return render_name('partials/dropMenu', [
+    return [
         'name'    => 'hour',
         'default' => '- Hour -',
         'options' => $options,
-    ]);
+    ];
 }
 
 function json_headers(): void

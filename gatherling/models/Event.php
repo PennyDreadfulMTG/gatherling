@@ -1038,14 +1038,12 @@ class Event
         }
     }
 
-    public function makeLink($text)
+    public function makeLinkArgs($text): array
     {
-        return '<a href="event.php?name='.urlencode($this->name)."\">{$text}</a>";
-    }
-
-    public function linkTo()
-    {
-        return $this->makeLink($this->name);
+        return [
+            'href' => 'event.php?name=' . urlencode($this->name),
+            'text' => $text,
+        ];
     }
 
     public function linkReport()

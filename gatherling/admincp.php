@@ -184,7 +184,7 @@ function printAddCardSet()
     echo '<input type="hidden" name="ret_args" value="view=add_cardset" />';
     // print_text_input("Cardset code", "cardsetcode");
     $missing = SetScraper::getSetList();
-    print_select_input('Missing Sets', 'cardsetcode', $missing);
+    echo selectInput('Missing Sets', 'cardsetcode', $missing);
     print_submit('Install New Cardset');
     echo '</table></form>';
 }
@@ -195,8 +195,8 @@ function printChangePasswordForm()
     echo '<input type="hidden" name="view" value="change_password" />';
     echo '<h3><center>Change User Password</center></h3>';
     echo '<table class="form" style="border-width: 0px" align="center">';
-    print_text_input('Username', 'username');
-    print_text_input('New Password', 'new_password');
+    echo textInput('Username', 'username');
+    echo textInput('New Password', 'new_password');
     print_submit('Change Password');
     echo '</table> </form>';
 }
@@ -207,7 +207,7 @@ function printManualVerificationForm()
     echo '<input type="hidden" name="view" value="verify_player" />';
     echo '<h3><center>Manual Player Verification</center></h3>';
     echo '<table class="form" style="border-width: 0px" align="center">';
-    print_text_input('Username', 'username');
+    echo textInput('Username', 'username');
     print_submit('Verify Player');
     echo '</table> </form>';
 }

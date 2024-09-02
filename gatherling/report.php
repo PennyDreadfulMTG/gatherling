@@ -202,7 +202,7 @@ function print_submit_resultForm($match_id, $drop = false)
     }
     echo '<tr><td></td></tr>';
     if ($match->type !== 'Single Elimination') {
-        print_checkbox_input('I want to drop from this event', 'drop', $drop);
+        echo checkboxInput('I want to drop from this event', 'drop', $drop);
     }
     echo '<tr><td></td></tr>';
     echo '<tr><td class="buttons">';

@@ -51,13 +51,13 @@ function content(): void
     if (mode_is('Create New Event')) {
         echo createNewEvent($getSeriesName, $season);
     } elseif (mode_is('Create A New Event')) {
-        eventForm(null, true);
+        echo eventFrame(null, true);
     } elseif (mode_is('Create Next Event')) {
         $newEvent = newEventFromEventName($requestEventName);
-        eventForm($newEvent, true);
+        echo eventFrame($newEvent, true);
     } elseif (mode_is('Create Next Season')) {
         $newEvent = newEventFromEventName($requestEventName, true);
-        eventForm($newEvent, true);
+        echo eventFrame($newEvent, true);
     } elseif (isset($getEventName)) {
         getEvent($getEventName, $action, $eventId, $player);
     } elseif (isset($postEventName)) {
@@ -129,7 +129,7 @@ function getEvent(string $eventName, ?string $action, ?string $eventId, ?string 
             $event->undropPlayer($player);
         }
     }
-    eventForm($event);
+    echo eventFrame($event);
 }
 
 // This is a helper function that handles all the (many) requests that have a name={eventName} in the request body
@@ -184,7 +184,7 @@ function postEvent(string $eventName): void
         $event = updateEvent();
         $_GET['view'] = 'settings';
     }
-    eventForm($event);
+    echo eventFrame($event);
 }
 
 function eventList(string $seriesName, string $season): string
@@ -271,198 +271,182 @@ function queryEvents(Player $player, array $playerSeries, string $seriesName): m
     return $db->query($query);
 }
 
-function eventForm(Event $event = null, bool $forceNew = false): void
+function eventFrame(Event $event = null, bool $forceNew = false): string
 {
-    if ($forceNew) {
-        $edit = 0;
-    } elseif ($event != null && $event->name == '') {
-        $edit = 0;
-    } else {
-        $edit = ($event != null);
-    }
+    $edit = !$forceNew && $event !== null && $event->name !== '';
     if (is_null($event)) {
         $event = new Event('');
     }
-
-    echo '<table style="border-width: 0">';
     if ($edit) {
-        if (!isset($view)) {
-            if ($event->active) {
-                $view = 'match';
-            } else {
-                $view = 'reg';
-            }
-        }
-        $view = $_GET['view'] ?? $view;
-        $view = $_POST['view'] ?? $view;
+        $view = $_POST['view'] ?? $_GET['view'] ?? ($event->active ? 'match' : 'reg');
     } else {
         $view = 'edit';
     }
 
-    echo '<tr><td>&nbsp;</td></tr>';
-    echo controlPanel($event);
-    echo '<tr><td>&nbsp;</td></tr>';
-    echo '</table>';
-
     if (strcmp($view, 'reg') == 0) {
-        echo playerList($event);
+        $contentSafe = playerList($event);
     } elseif (strcmp($view, 'match') == 0) {
         // Prevent warnings in php output.  TODO: make this not needed.
         if (!isset($_POST['newmatchround'])) {
             $_POST['newmatchround'] = '';
         }
-        echo matchList($event, $_POST['newmatchround']);
+        $contentSafe = matchList($event, $_POST['newmatchround']);
     } elseif (strcmp($view, 'standings') == 0) {
-        standingsList($event);
+        $contentSafe = standingsList($event);
     } elseif (strcmp($view, 'medal') == 0) {
-        echo medalList($event);
+        $contentSafe = medalList($event);
     } elseif (strcmp($view, 'points_adj') == 0) {
-        echo pointsAdjustmentForm($event);
+        $contentSafe = pointsAdjustmentForm($event);
     } elseif (strcmp($view, 'reports') == 0) {
-        echo reportsForm($event);
+        $contentSafe = reportsForm($event);
     } else {
-        echo '<form action="event.php" method="post" ';
-        echo 'enctype="multipart/form-data">';
-        echo '<table class="form" style="border-width: 0px" align="center">';
-        if ($event->start != null) {
-            $date = $event->start;
-            preg_match('/([0-9]+)-([0-9]+)-([0-9]+) ([0-9]+):([0-9]+):.*/', $date, $datearr);
-            $year = $datearr[1];
-            $month = $datearr[2];
-            $day = $datearr[3];
-            $hour = $datearr[4];
-            $minutes = $datearr[5];
-        } else {
-            $year = date('Y', time());
-            $month = date('n', time());
-            $day = date('j', time());
-            $hour = date('H', time());
-            $minutes = date('i', time());
-        }
-
-        if ($edit) {
-            echo '<tr><th>Currently Editing</th>';
-            echo "<td><i>{$event->name}</i>";
-            echo "<input type=\"hidden\" name=\"name\" value=\"{$event->name}\">";
-            echo '</td>';
-            echo '</tr><tr><td>&nbsp;</td><td>';
-            $prevevent = $event->findPrev();
-            if ($prevevent) {
-                echo $prevevent->makeLink('&laquo; Previous');
-            }
-            $nextevent = $event->findNext();
-            if ($nextevent) {
-                if ($prevevent) {
-                    echo ' | ';
-                }
-                echo $nextevent->makeLink('Next &raquo;');
-            }
-            echo '</td></tr>';
-        } else {
-            echo '<tr><th>Event Name</th>';
-            echo '<td><input type="radio" name="naming" value="auto" checked>';
-            echo 'Automatically name this event based on Series, Season, and Number.';
-            echo '<br /><input type="radio" name="naming" value="custom">';
-            echo 'Use a custom name: ';
-            echo "<input class=\"inputbox\" type=\"text\" name=\"name\" value=\"{$event->name}\" ";
-            echo 'size="40">';
-            echo '</td></tr>';
-        }
-
-        echo '<tr><th>Date & Time</th><td>';
-        echo numDropMenu('year', '- Year -', date('Y') + 1, $year, 2011);
-        echo monthDropMenu($month);
-        echo numDropMenu('day', '- Day- ', 31, $day, 1);
-        echo timeDropMenu($hour, $minutes);
-        echo '</td></tr>';
-        echo '<tr><th>Series</th><td>';
-        $seriesList = Player::getSessionPlayer()->organizersSeries();
-        if ($event->series) {
-            $seriesList[] = $event->series;
-        }
-        $seriesList = array_unique($seriesList);
-        echo Series::dropMenu($event->series, false, $seriesList);
-        echo '</td></tr>';
-        echo '<tr><th>Season</th><td>';
-        echo seasonDropMenu($event->season);
-        echo '</td></tr>';
-        echo '<tr><th>Number</th><td>';
-        echo numDropMenu('number', '- Event Number -', Event::largestEventNum() + 5, $event->number, 0, 'Custom');
-        echo '</td><tr>';
-        echo '<tr><th>Format</th><td>';
-        echo formatDropMenu($event->format);
-        echo '</td></tr>';
-        if (is_null($event->kvalue)) {
-            $event->kvalue = 16;
-        }
-        kValueDropMenu($event->kvalue);
-        echo '<tr><th>Host/Cohost</th><td>';
-        echo stringField('host', $event->host, 20);
-        echo '&nbsp;/&nbsp;';
-        echo stringField('cohost', $event->cohost, 20);
-        echo '</td></tr>';
-        print_text_input('Event Thread URL', 'threadurl', $event->threadurl, 60, null, null, true);
-        print_text_input('Metagame URL', 'metaurl', $event->metaurl, 60, null, null, true);
-        print_text_input('Report URL', 'reporturl', $event->reporturl, 60, null, null, true);
-        echo '<tr><th>Main Event Structure</th><td>';
-        echo numDropMenu('mainrounds', '- No. of Rounds -', 10, $event->mainrounds, 1);
-        echo ' rounds of ';
-        echo structDropMenu('mainstruct', $event->mainstruct);
-        echo '</td></tr>';
-        echo '<tr><th>Finals Structure</th><td>';
-        echo numDropMenu('finalrounds', '- No. of Rounds -', 10, $event->finalrounds, 0);
-        echo ' rounds of ';
-        echo structDropMenu('finalstruct', $event->finalstruct);
-        echo '</td></tr>';
-        print_checkbox_input('Allow Pre-Registration', 'prereg_allowed', $event->prereg_allowed, null, true);
-        print_text_input('Late Entry Limit', 'late_entry_limit', $event->late_entry_limit, 4, 'The event host may still add players after this round.');
-
-        print_checkbox_input('Allow Players to Report Results', 'player_reportable', $event->player_reportable);
-
-        print_text_input('Player initiatied registration cap', 'prereg_cap', $event->prereg_cap, 4, 'The event host may still add players beyond this limit. 0 is disabled.', null, true);
-
-        print_checkbox_input('Deck List Privacy', 'private_decks', $event->private_decks);
-        print_checkbox_input('Finals List Privacy', 'private_finals', $event->private_finals);
-        print_checkbox_input('Allow Player Reported Draws', 'player_reported_draws', $event->player_reported_draws, 'This allows players to report a draw result for matches.');
-        print_checkbox_input('Private Event', 'private', $event->private, 'This event is invisible to non-participants');
-        echo '<tr><th><label for="client">Game Client</label></th>';
-        echo "<td>";
-        echo clientDropMenu('client', $event->client);
-        echo '</td></tr>';
-
-        if ($edit == 0) {
-            echo '<tr><td>&nbsp;</td></tr>';
-            echo '<tr><td colspan="2" class="buttons">';
-            echo '<input class="inputbutton" type="submit" name="mode" value="Create New Event">';
-            echo '<input type="hidden" name="insert" value="1">';
-            echo '</td></tr>';
-        } else {
-            print_checkbox_input('Finalize Event', 'finalized', $event->finalized);
-            print_checkbox_input('Event Active', 'active', $event->active);
-
-            echo '<tr><th>Current Round</th>';
-            echo '<td>';
-            echo roundDropMenu($event, $event->current_round);
-            echo '</td></tr>';
-            echo trophyField($event);
-            echo '<tr><td>&nbsp;</td></tr>';
-            echo '<tr><td colspan="2" class="buttons">';
-            echo ' <input class="inputbutton" type="submit" name="mode" value="Update Event Info" />';
-            $nexteventname = sprintf('%s %d.%02d', $event->series, $event->season, $event->number + 1);
-            $nextseasonname = sprintf('%s %d.%02d', $event->series, $event->season + 1, 1);
-            if (!Event::exists($nexteventname)) {
-                echo ' <input class="inputbutton" type="submit" name="mode" value="Create Next Event" />';
-            }
-            if (!Event::exists($nextseasonname)) {
-                echo ' <input class="inputbutton" type="submit" name="mode" value="Create Next Season" />';
-            }
-            echo '<input type="hidden" name="update" value="1" />';
-            echo '</td></tr>';
-            echo '</table>';
-            echo '</form>';
-        }
-        echo '</table>';
+        $contentSafe = render_name('partials/editEventForm', editEventFormArgs($event, $edit));
     }
+
+    return render_name('partials/eventForm', [
+        'controlPanelLinks' => controlPanelLinks($event->name),
+        'contentSafe' => $contentSafe,
+    ]);
+}
+
+function controlPanelLinks(string $eventName): array
+{
+    $views = [
+        'settings' => 'Event Settings',
+        'reg' => 'Registration',
+        'match' => 'Match Listing',
+        'standings' => 'Standings',
+        'medal' => 'Medals',
+        'points_adj' => 'Season Points Adj.',
+        'reports' => 'Reports',
+    ];
+    $links = [];
+    foreach ($views as $view => $text) {
+        $links[] = [
+            'href' => 'event.php?name=' . rawurlencode($eventName) . '&view=' . $view,
+            'text' => $text,
+        ];
+    }
+    return $links;
+}
+
+function editEventFormArgs(Event $event, bool $edit): array
+{
+    if ($event->start != null) {
+        $date = $event->start;
+        preg_match('/([0-9]+)-([0-9]+)-([0-9]+) ([0-9]+):([0-9]+):.*/', $date, $datearr);
+        $year = $datearr[1];
+        $month = $datearr[2];
+        $day = $datearr[3];
+        $hour = $datearr[4];
+        $minutes = $datearr[5];
+    } else {
+        $year = date('Y', time());
+        $month = date('n', time());
+        $day = date('j', time());
+        $hour = date('H', time());
+        $minutes = date('i', time());
+    }
+
+    $navLinks = [];
+    $prevEvent = $event->findPrev();
+    if ($prevEvent) {
+        $navLinks[] = $prevEvent->makeLinkArgs('« Previous');
+    }
+    $nextEvent = $event->findNext();
+    if ($nextEvent) {
+        $navLinks[] = $nextEvent->makeLinkArgs('Next »');
+    }
+    $yearDropMenu = numDropMenuArgs('year', '- Year -', (int)date('Y') + 1, $year, 2011);
+    $monthDropMenu = monthDropMenuArgs($month);
+    $dayDropMenu = numDropMenuArgs('day', '- Day- ', 31, $day, 1);
+    $timeDropMenu = timeDropMenuArgs($hour, $minutes);
+
+    $seriesList = Player::getSessionPlayer()->organizersSeries();
+    if ($event->series) {
+        $seriesList[] = $event->series;
+    }
+    $seriesList = array_unique($seriesList);
+    $seriesDropMenu = Series::dropMenuArgs($event->series, false, $seriesList);
+
+    $seasonDropMenu = seasonDropMenuArgs($event->season);
+    $numberDropMenu = numDropMenuArgs('number', '- Event Number -', Event::largestEventNum() + 5, $event->number, 0, 'Custom');
+    $formatDropMenu = formatDropMenuArgs($event->format);
+
+    if (is_null($event->kvalue)) {
+        $event->kvalue = 16;
+    }
+    $kValueDropMenu = kValueSelectInput($event->kvalue);
+    $hostField = stringFieldArgs('host', $event-> host, 20);
+    $cohostField = stringFieldArgs('cohost', $event-> host, 20);
+    $eventThreadUrlField = textInputArgs('Event Thread URL', 'threadurl', $event->threadurl, 60);
+    $metagameUrlField = textInputArgs('Metagame URL', 'metaurl', $event->metaurl, 60);
+    $reportUrlField = textInputArgs('Report URL', 'reporturl', $event->reporturl, 60);
+    $mainRoundsNumDropMenu = numDropMenuArgs('mainrounds', '- No. of Rounds -', 10, $event->mainrounds, 1);
+    $mainRoundsStructDropMenu = structDropMenuArgs('mainstruct', $event->mainstruct);
+    $finalRoundsNumDropMenu = numDropMenuArgs('finalrounds', '- No. of Rounds -', 10, $event->finalrounds, 0);
+    $finalRoundsStructDropMenu = structDropMenuArgs('finalstruct', $event->finalstruct);
+    $preregistrationAllowedCheckbox = checkboxInputArgs('Allow Pre-Registration', 'prereg_allowed', $event->prereg_allowed, null, true);
+    $lateEntryLimitField = textInputArgs('Late Entry Limit', 'late_entry_limit', $event->late_entry_limit, 4, 'The event host may still add players after this round.');
+    $playerReportedResultsCheckbox = checkboxInputArgs('Allow Players to Report Results', 'player_reportable', $event->player_reportable);
+    $registrationCapField = textInputArgs('Player initiatied registration cap', 'prereg_cap', $event->prereg_cap, 4, 'The event host may still add players beyond this limit. 0 is disabled.', null);
+    $deckPrivacyCheckbox = checkboxInputArgs('Deck List Privacy', 'private_decks', $event->private_decks);
+    $finalsListPrivacyCheckbox = checkboxInputArgs('Finals List Privacy', 'private_finals', $event->private_finals);
+    $playerReportedDrawsCheckbox = checkboxInputArgs('Allow Player Reported Draws', 'player_reported_draws', $event->player_reported_draws, 'This allows players to report a draw result for matches.');
+    $privateEventCheckbox = checkboxInputArgs('Private Event', 'private', $event->private, 'This event is invisible to non-participants');
+    $clientDropMenu = clientDropMenuArgs('client', $event->client);
+
+    $finalizeEventCheckbox = $eventActiveCheckbox = $currentRoundDropMenu = $trophyField = null;
+    $showCreateNextEvent = $showCreateNextSeason = false;
+    if ($edit) {
+        $finalizeEventCheckbox = checkboxInputArgs('Finalize Event', 'finalized', $event->finalized);
+        $eventActiveCheckbox = checkboxInputArgs('Event Active', 'active', $event->active);
+        $currentRoundDropMenu = roundDropMenuArgs($event, $event->current_round);
+        $trophyField = trophyFieldArgs($event);
+        $nextEventName = sprintf('%s %d.%02d', $event->series, $event->season, $event->number + 1);
+        $nextSeasonName = sprintf('%s %d.%02d', $event->series, $event->season + 1, 1);
+        $showCreateNextEvent = !Event::exists($nextEventName);
+        $showCreateNextSeason = !Event::exists($nextSeasonName);
+    }
+
+    return [
+        'currentlyEditing' => $edit,
+        'event' => getObjectVarsCamelCase($event),
+        'navLinks' => $navLinks,
+        'yearDropMenu' => $yearDropMenu,
+        'monthDropMenu' => $monthDropMenu,
+        'dayDropMenu' => $dayDropMenu,
+        'timeDropMenu' => $timeDropMenu,
+        'seriesDropMenu' => $seriesDropMenu,
+        'seasonDropMenu' => $seasonDropMenu,
+        'numberDropMenu' => $numberDropMenu,
+        'formatDropMenu' => $formatDropMenu,
+        'kValueDropMenu' => $kValueDropMenu,
+        'hostField' => $hostField,
+        'cohostField' => $cohostField,
+        'eventThreadUrlField' => $eventThreadUrlField,
+        'metagameUrlField' => $metagameUrlField,
+        'reportUrlField' => $reportUrlField,
+        'mainRoundsNumDropMenu' => $mainRoundsNumDropMenu,
+        'mainRoundsStructDropMenu' => $mainRoundsStructDropMenu,
+        'finalRoundsNumDropMenu' => $finalRoundsNumDropMenu,
+        'finalRoundsStructDropMenu' => $finalRoundsStructDropMenu,
+        'preregistrationAllowedCheckbox' => $preregistrationAllowedCheckbox,
+        'lateEntryLimitField' => $lateEntryLimitField,
+        'playerReportedResultsCheckbox' => $playerReportedResultsCheckbox,
+        'registrationCapField' => $registrationCapField,
+        'deckPrivacyCheckbox' => $deckPrivacyCheckbox,
+        'finalsListPrivacyCheckbox' => $finalsListPrivacyCheckbox,
+        'playerReportedDrawsCheckbox' => $playerReportedDrawsCheckbox,
+        'privateEventCheckbox' => $privateEventCheckbox,
+        'clientDropMenu' => $clientDropMenu,
+        'finalizeEventCheckbox' => $finalizeEventCheckbox,
+        'eventActiveCheckbox' => $eventActiveCheckbox,
+        'currentRoundDropMenu' => $currentRoundDropMenu,
+        'trophyField' => $trophyField,
+        'showCreateNextEvent' => $showCreateNextEvent,
+        'showCreateNextSeason' => $showCreateNextSeason,
+    ];
 }
 
 function reportsForm(Event $event): string
@@ -723,9 +707,9 @@ function matchList(Event $event, string|int|null $newMatchRound): string
     ]);
 }
 
-function standingsList(Event $event): void
+function standingsList(Event $event): string
 {
-    Standings::printEventStandings($event->name, Player::loginName());
+    return Standings::eventStandings($event->name, Player::loginName());
 }
 
 function medalList(Event $event): string
@@ -743,16 +727,16 @@ function medalList(Event $event): string
     ]);
 }
 
-function kValueDropMenu(int $kvalue): void
+function kValueSelectInput(int $kvalue): array
 {
     $names = [
         ''            => '- K-Value -', 8 => 'Casual (Alt Event)', 16 => 'Regular (less than 24 players)',
         24            => 'Large (24 or more players)', 32 => 'Championship',
     ];
-    print_select_input('K-Value', 'kvalue', $names, $kvalue);
+    return selectInputArgs('K-Value', 'kvalue', $names, $kvalue);
 }
 
-function monthDropMenu($month): string
+function monthDropMenuArgs(string|int $month): array
 {
     if (strcmp($month, '') == 0) {
         $month = -1;
@@ -769,14 +753,14 @@ function monthDropMenu($month): string
             'text' => $names[$m - 1],
         ];
     }
-    return render_name('partials/dropMenu', [
+    return [
        'name' => 'month',
        'default' => '- Month -',
        'options' => $options,
-    ]);
+    ];
 }
 
-function structDropMenu(string $field, string $def): string
+function structDropMenuArgs(string $field, string $def): array
 {
     $names = ['Swiss', 'Single Elimination', 'League', 'League Match'];
     if ($def == 'Swiss (Blossom)') {
@@ -793,14 +777,14 @@ function structDropMenu(string $field, string $def): string
             'isSelected' => strcmp($def, $name) == 0,
         ];
     }
-    return render_name('partials/dropMenu', [
+    return [
         'name' => $field,
         'default' => '- Structure -',
         'options' => $options,
-    ]);
+    ];
 }
 
-function clientDropMenu(string $field, int $def): string
+function clientDropMenuArgs(string $field, int $def): array
 {
     $clients = [
         1 => 'MTGO',
@@ -815,12 +799,12 @@ function clientDropMenu(string $field, int $def): string
             'text' => $text,
         ];
     }
-    return render_name('partials/dropMenu', [
+    return [
         'id' => $field,
         'name' => $field,
         'default' => '- Client -',
         'options' => $options,
-    ]);
+    ];
 }
 
 function insertEvent(): Event
@@ -963,12 +947,12 @@ function updateEvent(): Event
     return $event;
 }
 
-function trophyField(Event $event): string
+function trophyFieldArgs(Event $event): array
 {
-    return render_name('partials/trophyField', [
+    return [
         'hasTrophy' => $event->hastrophy,
         'eventName' => $event->name,
-    ]);
+    ];
 }
 
 function insertTrophy(): bool
@@ -1120,14 +1104,6 @@ function initialSeedDropMenuArgs(string $name, string $playerName, int $currentS
        'name' => $name,
        'options' => $options,
     ];
-}
-
-function controlPanel(Event $event): string
-{
-    $panel = render_name('partials/controlPanel', [
-        'name' => rawurlencode($event->name),
-    ]);
-    return '<tr><td class="c">' . $panel . '</td></tr>';
 }
 
 function updateReg(): void

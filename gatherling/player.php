@@ -141,7 +141,7 @@ print_editTimeZoneForm($player, $result);
 break;
 
 case 'standings':
-Standings::printEventStandings($_GET['event'], Player::loginName());
+echo Standings::eventStandings($_GET['event'], Player::loginName());
 break;
 
 case 'verifymtgo':
@@ -246,8 +246,8 @@ function print_editAccountsForm($player, $result)
     echo "<form action=\"player.php\" method=\"post\">\n";
     echo "<input name=\"action\" type=\"hidden\" value=\"editAccounts\" />\n";
     echo '<table class="form">';
-    print_text_input('Magic Online', 'mtgo_username', $player->mtgo_username);
-    print_text_input('Magic Arena', 'mtga_username', $player->mtga_username, 0, "Don't forget the 5-digit number!");
+    echo textInput('Magic Online', 'mtgo_username', $player->mtgo_username);
+    echo textInput('Magic Arena', 'mtga_username', $player->mtga_username, 0, "Don't forget the 5-digit number!");
     echo "<tr><td colspan=\"2\" class=\"buttons\">\n";
     echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Update Accounts\" />\n";
     echo "</td></tr></table>\n";

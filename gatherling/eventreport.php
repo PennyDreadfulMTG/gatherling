@@ -365,9 +365,9 @@ function fullmetagame($event)
     }
     if ($event->active || $event->finalized) {
         if (isset($_SESSION['username'])) {
-            Standings::printEventStandings($event->name, $_SESSION['username']);
+            echo Standings::eventStandings($event->name, $_SESSION['username']);
         } else {
-            Standings::printEventStandings($event->name, null);
+            echo Standings::eventStandings($event->name, null);
         }
     }
     $result->close();
