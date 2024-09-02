@@ -140,10 +140,8 @@ function linkToLogin($pagename = null, $redirect = null, $message = null, $usern
     }
     redirect("login.php?target=$redirect&message=$message&username=$username");
 
-    echo "<center>\n";
-    echo "<div class=\"error\">$message</div>";
+    echo "<div class=\"c error\">$message</div>";
     echo "Please <a href=\"login.php?target={$_SERVER['REQUEST_URI']}\">Click Here</a> to log in.\n";
-    echo "</center>\n";
 }
 
 function printCardLink($card)
