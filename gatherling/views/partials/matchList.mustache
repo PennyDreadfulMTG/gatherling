@@ -1,0 +1,168 @@
+<p class="c">
+    <b>Match List</b><br />
+    <i>* denotes a playoff/finals match.</i><br />
+    <i>To drop a player while entering match results, select the check box next to the players name.</i>
+</p>
+<p class="c">
+    {{#roundLinks}}
+        <a href="{{href}}">{{text}}</a>
+    {{/roundLinks}}
+</p>
+<form action="event.php" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="name" value="{{event.name}}">
+    <input type="hidden" name="eventname" value="{{event.name}}">
+    <input type="hidden" name="view" value="match">
+    <table style="border-width: 0">
+        {{#hasMatches}}
+            <tr class="lefted">
+                <th class="c" style="padding-right: 10px;">Round</th>
+                <th>Player A</th>
+                <th>Result</th>
+                <th>Player B</th>
+                <th class="c">Delete</th>
+            </tr>
+        {{/hasMatches}}
+        {{^hasMatches}}
+            <tr>
+                <td class="c" colspan="5">
+                    <i>There are no matches listed for this event.</i>
+                </td>
+            </tr>
+        {{/hasMatches}}
+        {{#rounds}}
+            <tr>
+                <td class="box" class="center" colspan="7" style="background-color: Grey;color: Black">
+                    <a id="round-{{round}}"></a>
+                    ROUND {{round}} {{extraRoundTitle}}
+                </td>
+            </tr>
+            {{#matches}}
+                <tr>
+                    <td class="c">{{printRnd}}{{#showStar}}*{{/showStar}}</td>
+                    {{#isActiveUnverified}}
+                        {{#unverifiedPlayerCellA}}
+                            {{> unverifiedPlayerCell}}
+                        {{/unverifiedPlayerCellA}}
+                        <td>
+                            <input type="hidden" name="hostupdatesmatches[]" value="{{id}}">
+                            {{#resultDropMenu}}{{> dropMenu}}{{/resultDropMenu}}
+                        </td>
+                        {{#unverifiedPlayerCellB}}
+                            {{> unverifiedPlayerCell}}
+                        {{/unverifiedPlayerCellB}}
+                    {{/isActiveUnverified}}
+                    {{^isActiveUnverified}}
+                        <td class="match_{{verification}}">
+                            {{#gameNameA}}{{> gameName}}{{/gameNameA}}
+                        </td>
+                        {{#isBye}}
+                            <td>BYE</td>
+                            <td></td>
+                        {{/isBye}}
+                        {{#isDraw}}
+                            <td>{{#hasPlayerADropped}}&#x2690;{{/hasPlayerADropped}} Draw {{#hasPlayerBDropped}}&#x2690;{{/hasPlayerBDropped}}</td>
+                            <td class="match_{{verification}}">{{#gameNameB}}{{> gameName}}{{/gameNameB}}</td>
+                        {{/isDraw}}
+                        {{#hasResult}}
+                            <td>{{#hasPlayerADropped}}&#x2690;{{/hasPlayerADropped}} {{playerAWins}}-{{playerBWins}} {{#hasPlayerBDropped}}&#x2690;{{/hasPlayerBDropped}}</td>
+                            <td class="match_{{verification}}">{{#gameNameB}}{{> gameName}}{{/gameNameB}}</td>
+                        {{/hasResult}}
+                    {{/isActiveUnverified}}
+                    <td class="c">
+                        <input type="checkbox" name="matchdelete[]" title='Delete this pairing' value="{{id}}">
+                    </td>
+                </tr>
+            {{/matches}}
+        {{/rounds}}
+        <tr>
+            <td colspan="7">&nbsp;</td>
+        </tr>
+        {{#event.active}}
+            <tr>
+                <td class="c" colspan="7"><b>Add Pairing</b></td>
+            </tr>
+            <input type="hidden" name="newmatchround" value="{{event.currentRound}}">
+            <input type="hidden" name="newmatchresult" value="P">
+            <tr>
+                <td class="c" colspan="7">
+                    {{#playerADropMenu}}{{> dropMenu}}{{/playerADropMenu}}
+                     vs
+                    {{#playerBDropMenu}}{{> dropMenu}}{{/playerBDropMenu}}
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="c" colspan="7"><b>Award Bye</b></td>
+            </tr>
+            <tr>
+                <td class="c" colspan="7">
+                    {{#playerByeMenu}}{{> dropMenu}}{{/playerByeMenu}}
+                </td>
+            </tr>
+        {{/event.active}}
+        {{^event.active}}
+            <tr>
+                <td class="c" colspan="7"><b>Add a Match</b></td>
+            </tr>
+            <tr>
+                <td class="c" colspan="7">
+                    {{#roundDropMenu}}{{> dropMenu}}{{/roundDropMenu}}
+                    {{#playerADropMenu}}{{> dropMenu}}{{/playerADropMenu}}
+                    {{#resultDropMenu}}{{> dropMenu}}{{/resultDropMenu}}
+                    {{#playerBDropMenu}}{{> dropMenu}}{{/playerBDropMenu}}
+                </td>
+            </tr>
+        {{/event.active}}
+        <tr>
+            <td colspan="7">&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="c" colspan="7">
+                <input class="inputbutton" type="submit" name="mode" value="Update Match Listing">
+            </td>
+        </tr>
+    </table>
+</form>
+{{^event.finalized}}
+    <p>
+        <code>
+            Paste stuff:<br>
+            {{#isBeforeRoundTwo}}
+                This event will be {{structureSummary}}<br><br>
+            {{/isBeforeRoundTwo}}
+            {{#lastRound}}
+                Pairings for Round {{round}} {{extraRoundTitle}}<br />
+                {{#matches}}
+                    {{#isActiveUnverified}}
+                        {{#gameNameA}}{{> gameName}}{{/gameNameA}} vs. {{#gameNameB}}{{> gameName}}{{/gameNameB}}
+                    {{/isActiveUnverified}}
+                    {{#isBye}}
+                        {{#gameNameA}}{{> gameName}}{{/gameNameA}} has the BYE<br />
+                    {{/isBye}}
+                    {{#isDraw}}
+                        {{#gameNameA}}{{> gameName}}{{/gameNameA}} {{playerAWins}}-{{playerBWins}} {{#gameNameB}}{{> gameName}}{{/gameNameB}}<br />
+                    {{/isDraw}}
+                    {{#hasResult}}
+                        {{#gameNameA}}{{> gameName}}{{/gameNameA}} {{playerAWins}}-{{playerBWins}} {{#gameNameB}}{{> gameName}}{{/gameNameB}}<br />
+                    {{/hasResult}}
+                {{/matches}}
+                Good luck everyone!<br />
+            {{/lastRound}}
+        </code>
+    </p>
+{{/event.finalized}}
+{{#isLeague}}
+    <table style="border-width: 0">
+        <tr>
+            <td colspan="2" class="c">
+                <form action="event.php" method="post">
+                    <input type="hidden" name="name" value="{{event.name}}">
+                    <input type="hidden" name="view" value="reg">
+                    <input class="inputbutton" type="submit" name="mode" value="End Current League Round">
+                </form>
+            </td>
+        </tr>
+    </table>
+{{/isLeague}}
