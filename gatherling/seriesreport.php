@@ -37,6 +37,6 @@ function selectSeason()
     echo '</td></tr>';
     echo '<tr><td>&nbsp;</td></tr>';
     echo '<tr><td colspan="2" class="buttons">';
-    echo "<input type=\"submit\" value=\"Get Season Scoreboard\" />\n";
+    echo "<input class=\"inputbutton\" type=\"submit\" value=\"Get Season Scoreboard\" />\n";
     echo '</td></tr></table></form>';
 }
