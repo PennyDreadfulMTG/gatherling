@@ -3,32 +3,31 @@
 use Gatherling\Player;
 
 include 'lib.php';
-$in = testLogin();
+testLogin();
 print_header('Login');
 
 ?>
 <div class="grid_10 suffix_1 prefix_1">
     <div id="gatherling_main" class="box">
         <div class="uppertitle"> Login to Gatherling </div>
-<?php if (isset($_POST['mode'])) {
-    printLoginFailed();
-} ?>
-<?php if (isset($_GET['ipaddresschanged'])) {
-    printIPAddressChanged();
-}?>
-<?php
-if (isset($_REQUEST['message'])) {
-    $message = htmlspecialchars($_REQUEST['message'], ENT_QUOTES, 'UTF-8');
-    echo "<div align=\"center\" class=\"error\">$message</div>";
-}
-
-  $username = '';
-if (isset($_REQUEST['username'])) {
-    $username = $_REQUEST['username'];
-}
-?>
+        <?php
+        if (isset($_POST['mode'])) {
+            printLoginFailed();
+        }
+        if (isset($_GET['ipaddresschanged'])) {
+            printIPAddressChanged();
+        }
+        if (isset($_REQUEST['message'])) {
+            $message = htmlspecialchars($_REQUEST['message'], ENT_QUOTES, 'UTF-8');
+            echo "<div  class=\"c error\">$message</div>";
+        }
+        $username = '';
+        if (isset($_REQUEST['username'])) {
+            $username = $_REQUEST['username'];
+        }
+        ?>
         <form action="login.php" method="post">
-            <table class="form" align="center" style="border-width: 0px" cellpadding="3">
+            <table class="form" style="border-width: 0" cellpadding="3">
                 <tr>
                     <th>Gatherling Username</th>
                     <td><input id="username" class="inputbox" type="text" name="username" value="<?=$username?>" tabindex="1"></td>
@@ -63,27 +62,26 @@ if (isset($_REQUEST['username'])) {
     </div> <!-- gatherling_main -->
 </div> <!-- grid 10 pre 1 suff 1 -->
 
-<?php print_footer(); ?>
-
 <?php
-function printLoginFailed()
-{
-                            echo "<span class=\"error\"><center>Incorrect username or password. Please try again.</center></span>\n";
-                            echo '<br />';
-}
+print_footer();
 
-function printIPAddressChanged()
+function printLoginFailed(): void
 {
-    echo "<span class=\"error\"><center>Your IP Address has changed. Please login again.</center></span>\n";
+    echo "<span class=\"c error\">Incorrect username or password. Please try again.</span>\n";
     echo '<br />';
 }
 
-function testLogin()
+function printIPAddressChanged(): void
+{
+    echo "<span class=\"c error\">Your IP Address has changed. Please login again.</span>\n";
+    echo '<br />';
+}
+
+function testLogin(): void
 {
     if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'Log In with Discord') {
         redirect('auth.php');
     }
-    $success = 0;
 
     if (isset($_POST['username']) && isset($_POST['password'])) {
         $auth = Player::checkPassword($_POST['username'], $_POST['password']);
@@ -100,10 +98,6 @@ function testLogin()
                 $target = 'player.php?mode=changepass&tooshort=true';
             }
             header("location: $target");
-            $success = 1;
         }
-
-        return $success;
     }
 }
-?>
