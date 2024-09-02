@@ -21,7 +21,7 @@ print_header('Event Host Control Panel', true);
 <div class="grid_10 suffix_1 prefix_1">
     <div id="gatherling_main" class="box">
         <div class="uppertitle">Host Control Panel</div>
-            <?php content(); ?>
+            <?= content() ?>
         <div class="clear"></div>
     </div>
 </div>
@@ -37,7 +37,7 @@ function mode_is(string $str): bool
     return strcmp($mode, $str) == 0;
 }
 
-function content(): void
+function content(): string
 {
     $getSeriesName = $_GET['series'] ?? '';
     $season = $_GET['season'] ?? '';
@@ -49,21 +49,21 @@ function content(): void
     $player = $_GET['player'] ?? null;
 
     if (mode_is('Create New Event')) {
-        echo createNewEvent($getSeriesName, $season);
+        return createNewEvent($getSeriesName, $season);
     } elseif (mode_is('Create A New Event')) {
-        echo eventFrame(null, true);
+        return eventFrame(null, true);
     } elseif (mode_is('Create Next Event')) {
         $newEvent = newEventFromEventName($requestEventName);
-        echo eventFrame($newEvent, true);
+        return eventFrame($newEvent, true);
     } elseif (mode_is('Create Next Season')) {
         $newEvent = newEventFromEventName($requestEventName, true);
-        echo eventFrame($newEvent, true);
+        return eventFrame($newEvent, true);
     } elseif (isset($getEventName)) {
-        getEvent($getEventName, $action, $eventId, $player);
+        return getEvent($getEventName, $action, $eventId, $player);
     } elseif (isset($postEventName)) {
-        postEvent($postEventName);
+        return postEvent($postEventName);
     } else {
-        echo eventList($getSeriesName, $season);
+        return eventList($getSeriesName, $season);
     }
 }
 
@@ -116,12 +116,11 @@ function newEventFromEventName(string $eventName, bool $newSeason = false): Even
 
 // This is a helper function that handles all requests that have a name={eventName} in the querystring
 // In some future happier time maybe it will be teased apart usefully.
-function getEvent(string $eventName, ?string $action, ?string $eventId, ?string $player): void
+function getEvent(string $eventName, ?string $action, ?string $eventId, ?string $player): string
 {
     $event = new Event($eventName);
     if (!$event->authCheck(Player::loginName())) {
-        echo authFailed();
-        return;
+        return authFailed();
     }
     if ($action && strcmp($action, 'undrop') == 0) {
         $entry = new Entry($eventId, $player);
@@ -129,18 +128,17 @@ function getEvent(string $eventName, ?string $action, ?string $eventId, ?string 
             $event->undropPlayer($player);
         }
     }
-    echo eventFrame($event);
+    return eventFrame($event);
 }
 
 // This is a helper function that handles all the (many) requests that have a name={eventName} in the request body
 // In some future happier time maybe it will be teased apart usefully.
-function postEvent(string $eventName): void
+function postEvent(string $eventName): string
 {
     $event = new Event($eventName);
 
     if (!$event->authCheck(Player::loginName())) {
-        echo authFailed();
-        return;
+        return authFailed();
     }
 
     if (mode_is('Start Event')) {
@@ -184,7 +182,7 @@ function postEvent(string $eventName): void
         $event = updateEvent();
         $_GET['view'] = 'settings';
     }
-    echo eventFrame($event);
+    return eventFrame($event);
 }
 
 function eventList(string $seriesName, string $season): string
