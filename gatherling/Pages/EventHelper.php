@@ -18,13 +18,13 @@ class EventHelper
         foreach ($playerNames as $player) {
             $options[] = [
                 'isSelected' => strcmp($player, $def) == 0,
-                'value' => $player,
-                'text' => $player,
+                'value'      => $player,
+                'text'       => $player,
             ];
         }
 
         return [
-            'name' => "newmatchplayer$letter",
+            'name'    => "newmatchplayer$letter",
             'default' => $default,
             'options' => $options,
         ];
@@ -33,17 +33,17 @@ class EventHelper
     public static function roundDropMenuArgs(Event $event, int|string $selected): array
     {
         $options = [];
-        for ($r = 1; $r <= ((int)$event->mainrounds + (int)$event->finalrounds); $r++) {
+        for ($r = 1; $r <= ((int) $event->mainrounds + (int) $event->finalrounds); $r++) {
             $star = $r > $event->mainrounds ? '*' : '';
             $options[] = [
                 'isSelected' => $selected == $r,
-                'value' => $r,
-                'text' => "$r$star",
+                'value'      => $r,
+                'text'       => "$r$star",
             ];
         }
 
         return [
-            'name' => 'newmatchround',
+            'name'    => 'newmatchround',
             'default' => '- Round -',
             'options' => $options,
         ];

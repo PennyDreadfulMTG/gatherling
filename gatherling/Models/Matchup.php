@@ -217,6 +217,7 @@ class Matchup
     public function playerDropped(string $player): bool
     {
         $entry = new Entry($this->event_id, $player);
+
         return $entry->drop_round == $this->round;
     }
 
