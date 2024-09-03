@@ -1167,7 +1167,7 @@ function printCardSets($active_format, $seriesName)
         echo '</tr>';
     }
     echo '<tr><td>';
-    cardsetDropMenu('Core', $active_format, false);
+    echo cardsetDropMenu('Core', $active_format);
     echo '</td>';
     echo '<td colspan="2" class="buttons">';
     echo '<input type="hidden" name="view" value="cardsets" />';
@@ -1196,7 +1196,7 @@ function printCardSets($active_format, $seriesName)
     }
 
     echo '<tr><td>';
-    cardsetDropMenu('Block', $active_format, false);
+    echo cardsetDropMenu('Block', $active_format);
     echo '</td>';
     echo '<td colspan="2" class="buttons">';
     echo '<input type="hidden" name="view" value="cardsets" />';
@@ -1224,7 +1224,7 @@ function printCardSets($active_format, $seriesName)
         echo '</tr>';
     }
     echo '<tr><td>';
-    cardsetDropMenu('Extra', $active_format, false);
+    echo cardsetDropMenu('Extra', $active_format);
     echo '</td>';
     echo '<td colspan="2" class="buttons">';
     echo '<input type="hidden" name="view" value="cardsets" />';
@@ -1300,47 +1300,27 @@ function printMetaFormatSettings($active_format, $seriesName)
     echo '</table></form>';
 }
 
-function cardsetDropMenu($cardsetType, $format, $disabled)
+function cardsetDropMenu(string $cardsetType, Format $format): string
 {
-    if ($disabled) {
-        echo '<select disabled="disabled" class="inputbox" name="cardsetname" STYLE="width: 250px">';
-        echo "<option value=\"Unclassified\">- {$cardsetType} Cardset Name -</option>";
-        echo "</select>\n";
-
-        return;
+    $cardsets = getMissingSets($cardsetType, $format);
+    $options = [];
+    $defaultText = $cardsets ? "- {$cardsetType} Cardset Name -" : "- All {$cardsetType} sets have been added -";
+    $options[] = ['value' => 'Unclassified', 'text' => $defaultText];
+    foreach ($cardsets as $cardset) {
+        $options[] = ['value' => $cardset, 'text' => $cardset];
     }
-    $finalList = getMissingSets($cardsetType, $format);
-    if ($finalList) {
-        echo "<select class=\"inputbox\" name=\"cardsetname\" STYLE=\"width: 250px\">\n";
-        echo "<option value=\"Unclassified\">- {$cardsetType} Cardset Name -</option>\n";
-        foreach ($finalList as $setName) {
-            echo "<option value=\"$setName\">$setName</option>\n";
-        }
-    } else {
-        echo '<select disabled="disabled" class="inputbox" name="cardsetname" STYLE="width: 250px">';
-        echo "<option value=\"Unclassified\">- All {$cardsetType} sets have been added -</option>";
-        echo "</select>\n";
-    }
-    echo "</select>\n";
-    if (count($finalList) > 2) {
-        echo "<input class=\"inputbutton\" type=\"submit\" value=\"Add All {$cardsetType}\" name =\"action\" />";
-    }
+    return renderTemplate('partials/cardsetDropMenu', [
+        'cardsets' => $cardsets,
+        'cardsetType' => $cardsetType,
+        'hasMany' => count($cardsets) > 2,
+        'isDisabled' => count($cardsets) == 0,
+        'options' => $options,
+    ]);
 }
 
-function getMissingSets($cardsetType, $format)
+function getMissingSets(string $cardsetType, Format $format): array
 {
     $cardsets = Database::list_result_single_param('SELECT name FROM cardsets WHERE type = ?', 's', $cardsetType);
-
-    $legalsets = [];
-    if (strcmp($cardsetType, 'Core') == 0) {
-        $legalsets = $format->getCoreCardsets();
-    }
-    if (strcmp($cardsetType, 'Block') == 0) {
-        $legalsets = $format->getBlockCardsets();
-    }
-    if (strcmp($cardsetType, 'Extra') == 0) {
-        $legalsets = $format->getExtraCardsets();
-    }
 
     $finalList = [];
     foreach ($cardsets as $cardsetName) {
