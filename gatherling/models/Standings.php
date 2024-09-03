@@ -126,54 +126,33 @@ class Standings
         return $event_standings;
     }
 
-    public static function printEventStandings($eventname, $playername = null)
+    public static function eventStandings(?string $eventName, ?string $playerName = null): string
     {
-        $event = new Event($eventname);
-        $standings = self::getEventStandings($eventname, 0);
-        echo '<p />';
-        echo '<table style="text-align:center;">';
-        echo '<th colspan="8"><center><h3>Current Standings</h3></th>';
-        echo "<tr><td colspan=\"8\"><h6> {$eventname}</h6></td></tr>";
-        $rank = 1;
-        echo '<tr>
-              <td>Rank</td>
-              <td>Player</td>
-              <td>Match Points</td>
-              <td>OMW %</td>
-              <td>PGW %</td>
-              <td>OGW %</td>
-              <td>Matches Played</td>
-              <td>Byes</td>
-              </tr>';
+        $args = self::eventStandingsArgs($eventName, $playerName);
 
-        foreach ($standings as $player_standing) {
-            $color_code = '';
-            if ($player_standing->player == $playername) {
-                $color_code = ' style="color:green" ';
-            }
-            $match_score = $player_standing->score;
-            $sp = new Player($player_standing->player);
-            $name = $sp->gameName($event->client);
-            echo "<tr>
-                  <td{$color_code}>{$rank}</td>
-                  <td{$color_code}>{$name}</td>
-                  <td{$color_code}>{$match_score}</td>
-                  <td{$color_code}>{$player_standing->OP_Match}</td>
-                  <td{$color_code}>{$player_standing->PL_Game}</td>
-                  <td{$color_code}>{$player_standing->OP_Game}</td>
-                  <td{$color_code}>{$player_standing->matches_played}</td>
-                  <td{$color_code}>{$player_standing->byes}</td>
-                  </tr>";
+        return renderTemplate('partials/eventStandings', $args);
+    }
+
+    public static function eventStandingsArgs(?string $eventName, ?string $playerName = null): array
+    {
+        $event = new Event($eventName);
+        $standings = self::getEventStandings($eventName, 0);
+        $rank = 1;
+        $standingInfoList = [];
+        foreach ($standings as $standing) {
+            $standingInfo = getObjectVarsCamelCase($standing);
+            $standingInfo['rank'] = $rank;
+            $standingInfo['shouldHighlight'] = $standing->player == $playerName;
+            $standingInfo['matchScore'] = $standing->score;
+            $sp = new Player($standing->player);
+            $standingInfo['gameName'] = $sp->gameNameArgs($event->client);
             $rank++;
+            $standingInfoList[] = $standingInfo;
         }
-        echo '<tr><td colspan="8"><br/><b> Tiebreakers Explained </b><p/></td></tr>';
-        echo '<tr><td colspan="8"> Players with the same number of match points are ranked based on three tiebreakers scores according to DCI rules. In order, they are: </td></tr>';
-        echo '<tr><td colspan="8"> OMW % is the average percentage of matches your opponents have won. </td></tr>';
-        echo '<tr><td colspan="8"> PGW % is the percentage of games you have won. </td></tr>';
-        echo '<tr><td colspan="8"> OGW % is the average percentage of games your opponents have won. </td></tr>';
-        echo '<tr><td colspan="8"> BYEs are not included when calculating standings. For example, a player with one BYE, one win, and one loss has a match win percentage of .50 rather than .66</td></tr>';
-        echo '<tr><td colspan="8"> When calculating standings, any opponent with less than a .33 win percentage is calculated as .33</td></tr>';
-        echo '</table></center>';
+
+        return [
+            'standings' => $standingInfoList,
+        ];
     }
 
     public static function updateStandings($eventname, $subevent, $round)

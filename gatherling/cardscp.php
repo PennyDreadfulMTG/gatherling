@@ -190,10 +190,10 @@ function printEditSet()
     $stmt->fetch();
     $stmt->close();
 
-    print_text_input('Set Code', 'code', $setcode);
-    print_text_input('Release Date', 'released', $released);
-    print_checkbox_input('Standard Legal', 'standard_legal', $standard_legal);
-    print_checkbox_input('Modern Legal', 'modern_legal', $modern_legal);
+    echo textInput('Set Code', 'code', $setcode);
+    echo textInput('Release Date', 'released', $released);
+    echo checkboxInput('Standard Legal', 'standard_legal', $standard_legal);
+    echo checkboxInput('Modern Legal', 'modern_legal', $modern_legal);
 
     $cards = [];
     $stmt = $db->prepare('SELECT `id`, `name`, `type`, `rarity`, `scryfallId` FROM `cards` WHERE `cardset` = ?');
@@ -252,11 +252,11 @@ function printEditCard()
 
     echo '<table style="border-width: 0px" align="center">';
 
-    print_text_input('Card Name', 'name', $name, 100);
-    print_text_input('Typeline', 'type', $type, 100);
-    print_text_input('Rarity', 'rarity', $rarity);
-    print_text_input('Scryfall ID', 'sfId', $sfId, 36);
-    print_checkbox_input('Changeling', 'is_changeling', $is_changeling);
+    echo textInput('Card Name', 'name', $name, 100);
+    echo textInput('Typeline', 'type', $type, 100);
+    echo textInput('Rarity', 'rarity', $rarity);
+    echo textInput('Scryfall ID', 'sfId', $sfId, 36);
+    echo checkboxInput('Changeling', 'is_changeling', $is_changeling);
 
     echo '</table>';
     echo '<input id="update_reg" class="inputbutton" type="submit" name="mode" value="Update Card" />';

@@ -1040,7 +1040,7 @@ class Deck
     {
         $args = $this->linkToArgs();
 
-        return render_name('partials/linkTo', $args);
+        return renderTemplate('partials/linkTo', $args);
     }
 
     public function linkToArgs(): array

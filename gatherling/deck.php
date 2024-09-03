@@ -175,7 +175,7 @@ function deckForm($deck = null)
     }
     print_file_input('Import File', 'txt');
     echo "<tr><td></td><td><hr width='60%' ALIGN=\"left\"/></td></tr>";
-    print_text_input('Name', 'name', $vals['name'], 40, null, 'deck-name');
+    echo textInput('Name', 'name', $vals['name'], 40, null, 'deck-name');
     if (!$create) {
         echo "<input type=\"hidden\" name=\"id\" value=\"{$deck->id}\">\n";
     }
@@ -263,7 +263,7 @@ function archetypeDropMenu($def = '')
     $archetypes = Deck::getArchetypes();
     $archetypes = array_combine($archetypes, $archetypes);
     $archetypes = ['Unclassified' => '- Archetype -'] + $archetypes;
-    print_select_input('Archetype', 'archetype', $archetypes, $def, 'deck-archetype');
+    echo selectInput('Archetype', 'archetype', $archetypes, $def, 'deck-archetype');
 }
 
 function insertDeck($event)

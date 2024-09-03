@@ -86,6 +86,30 @@ fieldset {
     text-align: center;
 }
 
+/*
+Work around Mustache's trailing comma problem.
+See: https://bluebones.net/2024/09/avoid-trailing-comma-when-emitting-lists-in-mustache-templates/
+ */
+.inline-list, .inline-list li {
+        margin: 0;
+        padding: 0;
+}
+
+.inline-list li {
+    display: inline;
+}
+
+.inline-list.comma li:not(:last-child):after {
+    content: ", ";
+}
+.inline-list.pipe li:not(:last-child):after {
+    content: " | "
+}
+
+.highlight td {
+    color: green;
+}
+
 span.notallowed {
     font-size: larger;
     color: red;

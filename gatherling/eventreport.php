@@ -323,7 +323,6 @@ function fullmetagame($event)
         echo "<td colspan=5 align=\"center\"><b>Metagame Breakdown</td></tr>\n";
         while ($row = $result->fetch_assoc()) {
             if ($row['colors'] != $color) {
-                $bg = rowColor();
                 $color = $row['colors'];
                 echo '<tr><td colspan=1></td><td>';
                 echo image_tag("mana{$color}.png") . "&nbsp;</td>\n";
@@ -365,9 +364,9 @@ function fullmetagame($event)
     }
     if ($event->active || $event->finalized) {
         if (isset($_SESSION['username'])) {
-            Standings::printEventStandings($event->name, $_SESSION['username']);
+            echo Standings::eventStandings($event->name, $_SESSION['username']);
         } else {
-            Standings::printEventStandings($event->name, null);
+            echo Standings::eventStandings($event->name, null);
         }
     }
     $result->close();

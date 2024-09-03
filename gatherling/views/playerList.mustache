@@ -1,0 +1,208 @@
+<div class="grid_10 suffix_1 prefix_1">
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle">Host Control Panel</div>
+
+                {{> controlPanel}}
+        <form action="event.php" method="post">
+            <input type="hidden" name="name" value="{{event.name}}">
+            <input type="hidden" name="view" value="reg">
+            <table style="border-width: 0px;">
+                <tr>
+                    <td colspan="4">
+                        <h2>{{event.name}}</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="c">
+                        <b>{{#hasEntries}}{{numEntries}} {{/hasEntries}}Registered Players</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">&nbsp;</td>
+                </tr>
+                {{#hasEntries}}
+                    <tr>
+                        {{#event.active}}
+                            <th>Drop</th>
+                        {{/event.active}}
+                        {{#isFinished}}
+                            <th>Medal</th>
+                        {{/isFinished}}
+                        <th class="c">Player</th>
+                        <th class="c">Deck</th>
+                        {{#format.tribal}}
+                            <th>Tribe</th>
+                        {{/format.tribal}}
+                        {{#isSwiss}}
+                            <th>Byes</th>
+                        {{/isSwiss}}
+                        {{#isSingleElim}}
+                            <th>Seed</th>
+                        {{/isSingleElim}}
+                        {{#isNeitherSwissNorSingleElim}}
+                            <th></th>
+                        {{/isNeitherSwissNorSingleElim}}
+                        <th>Delete</th>
+                    </tr>
+                {{/hasEntries}}
+                {{^hasEntries}}
+                    <tr>
+                        <td class="c" colspan="5">
+                            <i>No players are currently registered for this event.</i>
+                        </td>
+                    </tr>
+                {{/hasEntries}}
+                {{#entries}}
+                    <tr id="entry_row_{{player.name}}">
+                        {{#entry.canDrop}}
+                            <td class="c">
+                                <input type="checkbox" name="dropplayer[]" value="{{player.name}}">
+                            </td>
+                        {{/entry.canDrop}}
+                        {{#entry.canUndrop}}
+                            <td>
+                                &#x2690; {{dropRound}}
+                                <a href="event.php?view=reg&player={{player.name}}&event={{event.id}}&action=undrop&event_id={{event.id}}">(undrop)</a>
+                            </td>
+                        {{/entry.canUndrop}}
+                        {{#medalImg}}
+                            <td class="c">
+                                <img alt="Medal" src="{{medalImg}}"/>
+                            </td>
+                        {{/medalImg}}
+                        <td>
+                            {{^player.emailAddress}}
+                                {{#gameName}}{{> gameName}}{{/gameName}}
+                            {{/player.emailAddress}}
+                            {{#player.emailAddress}}
+                                <a class="emailPop" style="color: green" title="{{player.emailAddress}}">{{#gameName}}{{> gameName}}{{/gameName}}</a>
+                            {{/player.emailAddress}}
+                        </td>
+                        <td>
+                            {{#linkTo}}{{> linkTo}}{{/linkTo}}
+                            {{#createDeckLink}}{{> createDeckLink}}{{/createDeckLink}}
+                        </td>
+                        {{#format.tribal}}
+                            <td>
+                                {{tribe}}!
+                            </td>
+                        {{/format.tribal}}
+                        <td class="c">
+                            {{#isSwiss}}
+                                {{#hasStarted}}
+                                    {{initialByes}}
+                                {{/hasStarted}}
+                                {{#initialByeDropMenu}}
+                                    {{> dropMenu}}
+                                {{/initialByeDropMenu}}
+                            {{/isSwiss}}
+                            {{#isSingleElim}}
+                                {{#hasStarted}}
+                                    {{initialSeed}}
+                                {{/hasStarted}}
+                                {{#initialSeedDropMenu}}
+                                    {{> dropMenu}}
+                                {{/initialSeedDropMenu}}
+                            {{/isSingleElim}}
+                        </td>
+                        <td class="c">
+                            {{#canDelete}}
+                                <input type="checkbox" name="delentries[]" value="{{player.name}}">
+                            {{/canDelete}}
+                            {{#notAllowed}}
+                                {{> notAllowed}}
+                            {{/notAllowed}}
+                        </td>
+                    </tr>
+                {{/entries}}
+                {{#notYetStarted}}
+                    <tr id="row_new_entry">
+                        <td colspan="2">
+                            Add: {{#newEntry}}{{> stringField}}{{/newEntry}}
+                        </td>
+                        <td colspan="2">
+                            <input id="update_reg" class="inputbutton" type="submit" name="mode" value="Update Registration">
+                        </td>
+                    </tr>
+                {{/notYetStarted}}
+                {{#isOngoing}}
+                     <tr id="row_new_entry">
+                         <td>Add:</td>
+                         <td>{{#newEntry}}{{> stringField}}{{/newEntry}}</td>
+                         <td>&nbsp;</td>
+                         <td colspan="2">
+                            <input id="update_reg" class="inputbutton" type="submit" name="mode" value="Update Registration">
+                        </td>
+                     </tr>
+                {{/isOngoing}}
+            </table>
+        </form>
+        {{#isActive}}
+            <table>
+                <tr>
+                    <td>
+                        <p class="squeeze" style="color: red"><b>Players added after the event has started:</b></p>
+                        <ul>
+                            <li>receive 0 points for any rounds already started</li>
+                            <li>will be paired when the next round begins</li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        {{/isActive}}
+        {{#notYetStarted}}
+            <table>
+                <tr>
+                    <td>
+                        <p class="squeeze" style="color: red"><b>Warning: Players who have not entered deck lists will be dropped automatically!</b></p>
+                        {{#isSingleElim}}
+                            <p>Note: When assigning initial seeds, players will be paired 1v2, 3v4, 5v6, etc.</p>
+                        {{/isSingleElim}}
+                    </td>
+                </tr>
+            </table>
+        {{/notYetStarted}}
+        <div id="event_run_actions">
+            <form action="event.php" method="post">
+                <input type="hidden" name="view" value="reg">
+                <input type="hidden" name="name" value="{{event.name}}">
+                <table>
+                    <tr>
+                        <th>Round Actions</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{#notYetStarted}}
+                                <input class="inputbutton" type="submit" name="mode" value="Start Event">
+                                <input class="inputbutton" type="submit" name="mode" value="Start Event (No Deck Check)">
+                            {{/notYetStarted}}
+                            {{#isActive}}
+                               <input class="inputbutton" type="submit" name="mode" value="Recalculate Standings">
+                               <input class="inputbutton" type="submit" name="mode" value="Reset Event">
+                               <input class="inputbutton" type="submit" name="mode" value="Delete Matches and Re-Pair Round">
+                            {{/isActive}}
+                            {{#isFinished}}
+                                <input class="inputbutton" type="submit" name="mode" value="Reactivate Event">
+                                <input class="inputbutton" type="submit" name="mode" value="Recalculate Standings">
+                                <input class="inputbutton" type="submit" name="mode" value="Assign Medals">
+                                {{^showCreateNextEvent}}
+                                    <input class="inputbutton" type="submit" name="mode" value="Create Next Event">
+                                {{/showCreateNextEvent}}
+                                {{^showCreateNextSeason}}
+                                    <input class="inputbutton" type="submit" name="mode" value="Create Next Season">
+                                {{/showCreateNextSeason}}
+                            {{/isFinished}}
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            {{#notYetStarted}}
+                <p>
+                    Paste stuff:<br>
+                    <code>Need decklists from {{#deckless}}{{> gameName}}, {{/deckless}}</code>
+                </p>
+            {{/notYetStarted}}
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>

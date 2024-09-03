@@ -6,7 +6,14 @@ use Gatherling\Standings;
 
 require_once 'lib.php';
 
-function print_text_input($label, $name, $value = '', $len = 0, $reminder_text = null, $id = null, $advanced = false)
+function textInput(string $label, string $name, mixed $value = '', int $size = 0, ?string $reminderText = null, ?string $id = null): string
+{
+    $args = textInputArgs($label, $name, $value, $size, $reminderText, $id);
+
+    return renderTemplate('partials/textInput', $args);
+}
+
+function textInputArgs(string $label, string $name, mixed $value = '', int $size = 0, ?string $reminderText = null, ?string $id = null): array
 {
     if (is_null($id)) {
         $id = $name;
@@ -14,34 +21,32 @@ function print_text_input($label, $name, $value = '', $len = 0, $reminder_text =
     if (!isset($value)) {
         $value = '';
     }
-    $class = '';
-    if ($advanced) {
-        $class = 'advanced';
-    }
-    echo "<tr class=\"$class\"><th><label for='$id'>{$label}</label></th>";
-    echo "<td><input class=\"inputbox\" type=\"text\" name=\"{$name}\" id='$id' value=\"{$value}\"";
-    if ($len > 0) {
-        echo " size=\"$len\"";
-    }
-    echo ' /> ';
-    if ($reminder_text) {
-        echo $reminder_text;
-    }
-    echo "</td></tr>\n";
+
+    return [
+        'id'           => $id,
+        'name'         => $name,
+        'label'        => $label,
+        'size'         => $size,
+        'reminderText' => $reminderText,
+        'value'        => $value,
+    ];
 }
 
-function print_checkbox_input($label, $name, $checked = false, $reminder_text = null, $advanced = false)
+function checkboxInput(string $label, string $name, bool $isChecked = false, ?string $reminderText = null): string
 {
-    echo "<tr><th><label for='$name'>{$label}</label></th>";
-    echo "<td><input type=\"checkbox\" name=\"{$name}\" id='$name' value=\"1\"";
-    if ($checked) {
-        echo ' checked="yes"';
-    }
-    echo ' /> ';
-    if ($reminder_text) {
-        echo $reminder_text;
-    }
-    echo "</td></tr>\n";
+    $args = checkboxInputArgs($label, $name, $isChecked, $reminderText);
+
+    return renderTemplate('partials/checkboxInput', $args);
+}
+
+function checkboxInputArgs(string $label, string $name, bool $isChecked = false, ?string $reminderText = null): array
+{
+    return [
+        'name'         => $name,
+        'label'        => $label,
+        'isChecked'    => $isChecked,
+        'reminderText' => $reminderText,
+    ];
 }
 
 function print_password_input($label, $name, $value = '')
@@ -61,43 +66,60 @@ function print_submit($label, $name = 'action')
     echo "<tr><td colspan=\"2\" class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" name=\"{$name}\" value=\"{$label}\" /></td></tr>\n";
 }
 
-function print_select($name, $options = [], $selected = null, $id = null)
+function select(string $name, array $options = [], mixed $selected = null, ?string $id = null): string
 {
-    if (is_null($id)) {
-        $id = $name;
-    }
-    echo "<select class='inputbox' name=\"{$name}\" id='$id'>";
-    if (!is_assoc($options)) {
-        $new_options = [];
-        foreach ($options as $option) {
-            $new_options[$option] = $option;
-        }
-    }
-    foreach ($options as $option => $text) {
-        $setxt = '';
-        if (!is_null($selected) && $selected == $option) {
-            $setxt = ' selected';
-        }
-        echo "<option value=\"{$option}\"{$setxt}>{$text}</option>";
-    }
-    echo '</select>';
+    $args = selectArgs($name, $options, $selected, $id);
+
+    return renderTemplate('partials/select', $args);
 }
 
-function print_select_input($label, $name, $options, $selected = null, $id = null)
+function selectArgs(string $name, array $options = [], mixed $selected = null, ?string $id = null): array
 {
     if (is_null($id)) {
         $id = $name;
     }
-    echo "<tr><th><label for='$id'>{$label}</label></th><td>";
-    print_select($name, $options, $selected, $id);
-    echo "</td></tr>\n";
+    $opts = [];
+    foreach ($options as $option => $text) {
+        $opts[] = [
+            'isSelected' => !is_null($selected) && $selected == $option,
+            'value'      => $option,
+            'text'       => $text,
+        ];
+    }
+
+    return [
+        'id'      => $id,
+        'name'    => $name,
+        'options' => $opts,
+    ];
+}
+
+function selectInput(string $label, string $name, ?array $options, mixed $selected = null, ?string $id = null): string
+{
+    $args = selectInputArgs($label, $name, $options, $selected, $id);
+
+    return renderTemplate('partials/selectInput', $args);
+}
+
+function selectInputArgs(string $label, string $name, ?array $options, mixed $selected = null, ?string $id = null): array
+{
+    if (is_null($id)) {
+        $id = $name;
+    }
+
+    return [
+        'id'     => $id,
+        'name'   => $name,
+        'label'  => $label,
+        'select' => selectArgs($name, $options, $selected, $id),
+    ];
 }
 
 function stringField($field, $def, $len): string
 {
     $args = stringFieldArgs($field, $def, $len);
 
-    return render_name('partials/stringField', $args);
+    return renderTemplate('partials/stringField', $args);
 }
 
 function stringFieldArgs(string $field, mixed $def, int $len): array
@@ -152,7 +174,7 @@ function timeZoneDropMenu($selected = null)
     $timezones['12.75'] = '[UTC + 12:45] Chatham Islands Time';
     $timezones['13'] = '[UTC + 13] Tonga Time, Phoenix Islands Time';
     $timezones['14'] = '[UTC + 14] Line Island Time';
-    print_select('timezone', $timezones, $selected);
+    echo select('timezone', $timezones, $selected);
 }
 
 /**

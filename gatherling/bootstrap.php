@@ -1,11 +1,8 @@
 <?php
 
-/**
- * @param string $class_name
- *
- * @return void
- */
-function autoload($class_name)
+require_once __DIR__.'/pages/eventHelpers.php';
+
+function autoload(string $class_name): void
 {
     $names = explode('\\', $class_name);
     if ($names[0] == 'Gatherling') {
@@ -16,6 +13,14 @@ function autoload($class_name)
             require_once '../models/'.$class_name.'.php';
         } elseif (file_exists('gatherling/models/'.$class_name.'.php')) {
             require_once 'gatherling/models/'.$class_name.'.php';
+        } elseif (file_exists($class_name.'.php')) {
+            require_once $class_name.'.php';
+        }
+        if ($class_name == 'Pages') {
+            $class_name = $names[2];
+            if (file_exists('pages/'.$class_name.'.php')) {
+                require_once 'pages/'.$class_name.'.php';
+            }
         }
     }
 }

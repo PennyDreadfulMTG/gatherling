@@ -21,7 +21,7 @@ function populate($array, $src, $keys)
 }
 
 /** @return bool  */
-function is_admin()
+function is_admin(): bool
 {
     if (!isset($_SESSION['infobot'])) {
         $_SESSION['infobot'] = false;

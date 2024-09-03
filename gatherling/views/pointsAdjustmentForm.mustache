@@ -1,0 +1,38 @@
+<div class="grid_10 suffix_1 prefix_1">
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle">Host Control Panel</div>
+        {{> controlPanel}}
+        <form action="event.php" method="post">
+            <input type="hidden" name="name" value="{{event.name}}" />
+            <table style="border-width: 0px" align="center">
+               <input type="hidden" name="view" value="points_adj">
+                <tr class="top">
+                    <th>Player</th
+                    <th></th>
+                    <th>Deck</th>
+                    <th>Points<br />Adj.</th>
+                    <th>Reason</th>
+                </tr>
+                {{#entries}}
+                    <tr>
+                        <td>{{player.name}}</td>
+                        <td>{{#medal}}<img alt="medal" src="{{medalImg}}">{{/medal}}</td>
+                        <td>{{#verifiedImg}}<img alt="Player posted deck" title="Player posted deck" src="{{verifiedImg}}"/>{{/verifiedImg}}</td>
+                        <td style="text-align: center;">
+                            <input class="inputbox" type="text" style="width: 50px;" name="adjustments[{{player.name}}]" value="{{adjustment.adjustment}}" />
+                       </td>
+                       <td>
+                           <input class="inputbox" type="text" style="width: 400px;" name="reasons[{{player.name}}]" value="{{adjustment.reason}}" />
+                       </td>
+                    </tr>
+                {{/entries}}
+                <tr>
+                    <td colspan="3" class="buttons">
+                        <input class="inputbutton" type="submit" name="mode" value="Update Adjustments" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div class="clear"></div>
+    </div>
+</div>

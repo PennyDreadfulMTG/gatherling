@@ -212,7 +212,7 @@ function printSeriesForm($series)
         echo 'checked ';
     }
     echo '/></td></tr>';
-    print_text_input('MTGO Room', 'mtgo_room', $series->mtgo_room);
+    echo textInput('MTGO Room', 'mtgo_room', $series->mtgo_room);
 
     // Submit button
     echo '<tr><td colspan="2" class="buttons">';
