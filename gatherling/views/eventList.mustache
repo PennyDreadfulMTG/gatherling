@@ -54,9 +54,9 @@
                     <td><b>Event</b></td>
                     <td><b>Format</b></td>
                     <td><b>K-Value</b></td>
-                    <td align="center"><b>Players</b></td>
+                    <td class="c"><b>Players</b></td>
                     <td><b>Host(s)</b></td>
-                    <td align="center"><b>Finalized</b></td>
+                    <td class="c"><b>Finalized</b></td>
                 </tr>
                 {{#results}}
                     <tr>
@@ -65,7 +65,7 @@
                         <td>{{kvalueDisplay}}</td>
                         <td align=\"center\">{{players}}</td>
                         <td>{{host}}{{#cohost}}/{{cohost}}{{/cohost}}</td>
-                        <td align="center">{{#finalized}}&#x2714;{{/finalized}}</td>
+                        <td class="c">{{#finalized}}&#x2714;{{/finalized}}</td>
                     </tr>
                 {{/results}}
                 {{#hasMore}}
@@ -73,7 +73,7 @@
                         <td colspan="5" width="500">&nbsp;</td>
                     </tr>
                     <tr>
-                        <td colspan="5" align="center">
+                        <td colspan="5" class="c">
                             <i>This list only shows the 100 most recent results.
                             Please use the filters at the top of this page to find older
                             results.</i>

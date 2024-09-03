@@ -11,7 +11,7 @@
             </tr>
             {{^hasEntries}}
                 <tr>
-                    <td align="center" colspan="5"><i>No players are currently registered for this event.</i></td>
+                    <td class="c" colspan="5"><i>No players are currently registered for this event.</i></td>
                 </tr>
             {{/hasEntries}}
             {{#hasEntries}}
@@ -22,9 +22,9 @@
                 </tr>
                 {{#standings}}
                     <tr>
-                        <td align="center">{{n}}</td>
+                        <td class="c">{{n}}</td>
                         <td>{{entryName}}</td>
-                        <td align="center">{{emailAd}}</td>
+                        <td class="c">{{emailAd}}</td>
                     </tr>
                 {{/standings}}
                 <tr>
@@ -34,9 +34,9 @@
                 </tr>
                 {{#registrants}}
                     <tr>
-                        <td align="center">{{n}}</td>
+                        <td class="c">{{n}}</td>
                         <td>{{entryName}}</td>
-                        <td align="center">{{emailAd}}</td>
+                        <td class="c">{{emailAd}}</td>
                     </tr>
                 {{/registrants}}
             {{/hasEntries}}
