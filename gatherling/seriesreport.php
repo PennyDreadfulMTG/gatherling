@@ -5,27 +5,23 @@ use Gatherling\Series;
 include 'lib.php';
 
 print_header('Season Report');
-
 ?>
-
 <div class="grid_10 prefix_1 suffix_1">
-
-<div id="gatherling_main" class="box">
-<div class="uppertitle"> Season Report </div>
-<?php
-selectSeason();
-if (isset($_GET['series']) && isset($_GET['season'])) {
-    $series = new Series($_GET['series']);
-    $series->seasonStandings($series, $_GET['season']);
-}
-?>
-
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle">Season Report</div>
+        <?php
+            selectSeason();
+            if (isset($_GET['series']) && isset($_GET['season'])) {
+                $series = new Series($_GET['series']);
+                $series->seasonStandings($series, $_GET['season']);
+            }
+        ?>
+    </div>
 </div>
-</div>
-
-<?php print_footer(); ?>
 <?php
-function selectSeason()
+print_footer();
+
+function selectSeason(): void
 {
     echo '<form action="seriesreport.php" method="get">';
     echo '<table class="form" style="border-width: 0px" align="center">';
