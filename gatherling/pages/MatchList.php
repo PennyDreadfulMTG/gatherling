@@ -96,13 +96,13 @@ class MatchList extends EventFrame
 
         $lastRound = $rounds ? $rounds[count($rounds) - 1] : [];
 
-        $playerADropMenu = playerDropMenuArgs($event, 'A');
-        $playerBDropMenu = playerDropMenuArgs($event, 'B');
+        $playerADropMenu = EventHelper::playerDropMenuArgs($event, 'A');
+        $playerBDropMenu = EventHelper::playerDropMenuArgs($event, 'B');
         $playerByeMenu = $roundDropMenu = $resultDropMenu = null;
         if ($event->active) {
             $playerByeMenu = playerByeMenuArgs($event);
         } else {
-            $roundDropMenu = roundDropMenuArgs($event, $newMatchRound);
+            $roundDropMenu = EventHelper::roundDropMenuArgs($event, $newMatchRound);
             $resultDropMenu = resultDropMenuArgs('newmatchresult');
         }
 

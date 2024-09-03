@@ -214,10 +214,14 @@ class Matchup
         throw new Exception("Player $playername is not in match {$this->id}");
     }
 
-    public function playerDropped(string $player)
+    public function playerDropped(string $player): bool
     {
         $entry = new Entry($this->event_id, $player);
 
+        var_export([
+            'drop_round' => $entry->drop_round,
+            'this_round' => $this->round,
+        ]);
         return $entry->drop_round == $this->round;
     }
 
