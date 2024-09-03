@@ -54,17 +54,17 @@
                 {{/hasEntries}}
                 {{#entries}}
                     <tr id="entry_row_{{player.name}}">
-                        {{#entry.canDrop}}
+                        {{#canDrop}}
                             <td class="c">
                                 <input type="checkbox" name="dropplayer[]" value="{{player.name}}">
                             </td>
-                        {{/entry.canDrop}}
-                        {{#entry.canUndrop}}
+                        {{/canDrop}}
+                        {{#canUndrop}}
                             <td>
                                 &#x2690; {{dropRound}}
                                 <a href="event.php?view=reg&player={{player.name}}&event={{event.id}}&action=undrop&event_id={{event.id}}">(undrop)</a>
                             </td>
-                        {{/entry.canUndrop}}
+                        {{/canUndrop}}
                         {{#medalImg}}
                             <td class="c">
                                 <img alt="Medal" src="{{medalImg}}"/>
