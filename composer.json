@@ -22,9 +22,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Gatherling\\Models\\": "gatherling/models/",
-            "Gatherling\\Pages\\": "gatherling/pages/",
-            "": "gatherling/"
+            "Gatherling\\": "gatherling/"
         }
     }
 }
