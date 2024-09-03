@@ -1,12 +1,11 @@
 <div class="grid_10 suffix_1 prefix_1">
     <div id="gatherling_main" class="box">
         <div class="uppertitle">Host Control Panel</div>
-
-                {{> controlPanel}}
+        {{> controlPanel}}
         <form action="event.php" method="post">
             <input type="hidden" name="name" value="{{event.name}}">
             <input type="hidden" name="view" value="reg">
-            <table style="border-width: 0px;">
+            <table class="c" style="border-width: 0">
                 <tr>
                     <td colspan="4">
                         <h2>{{event.name}}</h2>

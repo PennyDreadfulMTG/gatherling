@@ -1,10 +1,10 @@
 <?php
 
-use Gatherling\Deck;
-use Gatherling\Entry;
-use Gatherling\Event;
-use Gatherling\Format;
-use Gatherling\Player;
+use Gatherling\Models\Deck;
+use Gatherling\Models\Entry;
+use Gatherling\Models\Event;
+use Gatherling\Models\Format;
+use Gatherling\Models\Player;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';

@@ -1,7 +1,6 @@
 <div class="grid_10 suffix_1 prefix_1">
     <div id="gatherling_main" class="box">
         <div class="uppertitle">Host Control Panel</div>
-        {{> controlPanel }}
         <form action="event.php" method="get">
             <table class="form" style="border-width: 0">
                 <tr>
@@ -46,7 +45,7 @@
                     </td>
                 </tr>
             </table>
-            <table style="border-width: 0px" align="center" cellpadding="3">
+            <table style="border-width: 0" cellpadding="3">
                 <tr>
                     <td colspan="5">&nbsp;</td>
                 </tr>
@@ -54,18 +53,18 @@
                     <td><b>Event</b></td>
                     <td><b>Format</b></td>
                     <td><b>K-Value</b></td>
-                    <td align="center"><b>Players</b></td>
+                    <td class="c"><b>Players</b></td>
                     <td><b>Host(s)</b></td>
-                    <td align="center"><b>Finalized</b></td>
+                    <td class="c"><b>Finalized</b></td>
                 </tr>
                 {{#results}}
                     <tr>
                         <td><a href="{{url}}">{{name}}</a></td>
                         <td>{{format}}</td>
                         <td>{{kvalueDisplay}}</td>
-                        <td align=\"center\">{{players}}</td>
+                        <td class="c">{{players}}</td>
                         <td>{{host}}{{#cohost}}/{{cohost}}{{/cohost}}</td>
-                        <td align="center">{{#finalized}}&#x2714;{{/finalized}}</td>
+                        <td class="c">{{#finalized}}&#x2714;{{/finalized}}</td>
                     </tr>
                 {{/results}}
                 {{#hasMore}}
@@ -73,7 +72,7 @@
                         <td colspan="5" width="500">&nbsp;</td>
                     </tr>
                     <tr>
-                        <td colspan="5" align="center">
+                        <td colspan="5" class="c">
                             <i>This list only shows the 100 most recent results.
                             Please use the filters at the top of this page to find older
                             results.</i>

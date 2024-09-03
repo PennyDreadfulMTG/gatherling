@@ -1,6 +1,6 @@
 <?php
 
-use Gatherling\Player;
+use Gatherling\Models\Player;
 
 include 'lib.php';
 testLogin();

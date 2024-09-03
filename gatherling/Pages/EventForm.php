@@ -2,9 +2,9 @@
 
 namespace Gatherling\Pages;
 
-use Gatherling\Event;
-use Gatherling\Player;
-use Gatherling\Series;
+use Gatherling\Models\Event;
+use Gatherling\Models\Player;
+use Gatherling\Models\Series;
 
 class EventForm extends EventFrame
 {
@@ -116,7 +116,7 @@ class EventForm extends EventFrame
         if ($edit) {
             $finalizeEventCheckbox = checkboxInputArgs('Finalize Event', 'finalized', $event->finalized);
             $eventActiveCheckbox = checkboxInputArgs('Event Active', 'active', $event->active);
-            $currentRoundDropMenu = roundDropMenuArgs($event, $event->current_round);
+            $currentRoundDropMenu = EventHelper::roundDropMenuArgs($event, $event->current_round);
             $trophyField = trophyFieldArgs($event);
             $nextEventName = sprintf('%s %d.%02d', $event->series, $event->season, $event->number + 1);
             $nextSeasonName = sprintf('%s %d.%02d', $event->series, $event->season + 1, 1);

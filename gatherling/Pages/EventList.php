@@ -2,9 +2,9 @@
 
 namespace Gatherling\Pages;
 
-use Gatherling\Database;
-use Gatherling\Player;
-use Gatherling\Series;
+use Gatherling\Models\Database;
+use Gatherling\Models\Player;
+use Gatherling\Models\Series;
 
 class EventList extends Page
 {

@@ -2,6 +2,10 @@
 
 namespace Gatherling;
 
+use Gatherling\Models\Database;
+use Gatherling\Models\Format;
+use Gatherling\Models\Player;
+
 require_once __DIR__.'/../lib.php';
 
 if (PHP_SAPI != 'cli' && $_SERVER['REQUEST_METHOD'] == 'GET') { // unauthorized POST is okay

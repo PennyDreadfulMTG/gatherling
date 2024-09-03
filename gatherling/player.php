@@ -1,12 +1,12 @@
 <?php
 
-use Gatherling\Database;
-use Gatherling\Entry;
-use Gatherling\Event;
-use Gatherling\Player;
-use Gatherling\Ratings;
-use Gatherling\Series;
-use Gatherling\Standings;
+use Gatherling\Models\Database;
+use Gatherling\Models\Entry;
+use Gatherling\Models\Event;
+use Gatherling\Models\Player;
+use Gatherling\Models\Ratings;
+use Gatherling\Models\Series;
+use Gatherling\Models\Standings;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';

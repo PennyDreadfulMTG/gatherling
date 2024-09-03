@@ -16,6 +16,9 @@
 
 namespace Gatherling;
 
+use Gatherling\Models\Database;
+use Gatherling\Models\Deck;
+
 error_reporting(E_ALL);
 ini_set('max_execution_time', 300);
 

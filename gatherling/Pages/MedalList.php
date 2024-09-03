@@ -2,7 +2,7 @@
 
 namespace Gatherling\Pages;
 
-use Gatherling\Event;
+use Gatherling\Models\Event;
 
 class MedalList extends EventFrame
 {
@@ -14,7 +14,7 @@ class MedalList extends EventFrame
         $finalists = $event->getFinalists();
         $pos = 0;
         foreach ($finalists as &$finalist) {
-            $finalist['playerDropMenu'] = playerDropMenuArgs($event, "$pos", $finalist['player']);
+            $finalist['playerDropMenu'] = EventHelper::playerDropMenuArgs($event, "$pos", $finalist['player']);
             $finalist['img'] = theme_file("images/{$finalist['medal']}.png");
             $pos++;
         }

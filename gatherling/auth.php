@@ -1,6 +1,6 @@
 <?php
 
-use Gatherling\Player;
+use Gatherling\Models\Player;
 use Wohali\OAuth2\Client\Provider\Exception\DiscordIdentityProviderException;
 
 require_once __DIR__ . '/lib.php';

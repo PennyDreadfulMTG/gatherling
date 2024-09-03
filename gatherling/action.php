@@ -3,10 +3,10 @@
 /// Information banner informing user that they have pending actions.
 /// Appears at top of each page
 
-use Gatherling\Entry;
-use Gatherling\Event;
-use Gatherling\Player;
-use Gatherling\Series;
+use Gatherling\Models\Entry;
+use Gatherling\Models\Event;
+use Gatherling\Models\Player;
+use Gatherling\Models\Series;
 
 require_once 'lib.php';
 $player = Player::getSessionPlayer();

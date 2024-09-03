@@ -1,7 +1,7 @@
 <?php
 
-use Gatherling\Deck;
-use Gatherling\Player;
+use Gatherling\Models\Deck;
+use Gatherling\Models\Player;
 
 require_once 'lib.php';
 

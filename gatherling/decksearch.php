@@ -1,8 +1,8 @@
 <?php
 
-use Gatherling\Database;
-use Gatherling\Decksearch;
-use Gatherling\Pagination;
+use Gatherling\Models\Database;
+use Gatherling\Models\Decksearch;
+use Gatherling\Models\Pagination;
 
 require_once 'lib.php';
 

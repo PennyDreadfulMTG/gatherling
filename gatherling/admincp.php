@@ -1,10 +1,10 @@
 <?php
 
-use Gatherling\Format;
-use Gatherling\Player;
-use Gatherling\Ratings;
-use Gatherling\Series;
-use Gatherling\SetScraper;
+use Gatherling\Models\Format;
+use Gatherling\Models\Player;
+use Gatherling\Models\Ratings;
+use Gatherling\Models\Series;
+use Gatherling\Models\SetScraper;
 
 include 'lib.php';
 include 'lib_form_helper.php';

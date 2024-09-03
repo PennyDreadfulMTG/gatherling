@@ -1,6 +1,6 @@
 <?php
 
-namespace Gatherling;
+namespace Gatherling\Models;
 
 use Exception;
 
@@ -214,7 +214,7 @@ class Matchup
         throw new Exception("Player $playername is not in match {$this->id}");
     }
 
-    public function playerDropped(string $player)
+    public function playerDropped(string $player): bool
     {
         $entry = new Entry($this->event_id, $player);
 

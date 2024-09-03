@@ -1,13 +1,13 @@
 <?php
 
-use Gatherling\Database;
-use Gatherling\Deck;
-use Gatherling\Entry;
-use Gatherling\Event;
-use Gatherling\Format;
-use Gatherling\Player;
-use Gatherling\Series;
-use Gatherling\Standings;
+use Gatherling\Models\Database;
+use Gatherling\Models\Deck;
+use Gatherling\Models\Entry;
+use Gatherling\Models\Event;
+use Gatherling\Models\Format;
+use Gatherling\Models\Player;
+use Gatherling\Models\Series;
+use Gatherling\Models\Standings;
 
 include 'lib.php';
 

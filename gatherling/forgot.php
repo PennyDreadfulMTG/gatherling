@@ -2,7 +2,7 @@
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Gatherling\Player;
+use Gatherling\Models\Player;
 
 include 'util/email.php';
 include 'lib.php';

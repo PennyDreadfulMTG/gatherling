@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 require_once 'gatherling/lib.php';
 
-use Gatherling\Deck;
-use Gatherling\Event;
-use Gatherling\Matchup;
-use Gatherling\Series;
+use Gatherling\Models\Deck;
+use Gatherling\Models\Event;
+use Gatherling\Models\Matchup;
+use Gatherling\Models\Series;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
