@@ -1,10 +1,10 @@
 <?php
 
-use Gatherling\Database;
-use Gatherling\Deck;
-use Gatherling\Event;
-use Gatherling\Player;
-use Gatherling\Series;
+use Gatherling\Models\Database;
+use Gatherling\Models\Deck;
+use Gatherling\Models\Event;
+use Gatherling\Models\Player;
+use Gatherling\Models\Series;
 
 require_once 'lib.php';
 require_once 'api_lib.php';

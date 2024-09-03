@@ -1,9 +1,9 @@
 <?php
 
-use Gatherling\Database;
-use Gatherling\Pagination;
-use Gatherling\Player;
-use Gatherling\Ratings;
+use Gatherling\Models\Database;
+use Gatherling\Models\Pagination;
+use Gatherling\Models\Player;
+use Gatherling\Models\Ratings;
 
 include 'lib.php';
 

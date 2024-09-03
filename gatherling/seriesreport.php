@@ -1,6 +1,6 @@
 <?php
 
-use Gatherling\Series;
+use Gatherling\Models\Series;
 
 include 'lib.php';
 

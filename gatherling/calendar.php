@@ -1,6 +1,6 @@
 <?php
 
-use Gatherling\Database;
+use Gatherling\Models\Database;
 
 require_once 'lib.php';
 

@@ -2,6 +2,13 @@
 
 namespace Gatherling;
 
+use Gatherling\Models\Database;
+use Gatherling\Models\Entry;
+use Gatherling\Models\Event;
+use Gatherling\Models\Matchup;
+use Gatherling\Models\Player;
+use Gatherling\Models\Series;
+use Gatherling\Models\Standings;
 use Gatherling\Pages\AuthFailed;
 use Gatherling\Pages\EventForm;
 use Gatherling\Pages\EventFrame;

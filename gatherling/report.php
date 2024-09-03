@@ -1,9 +1,9 @@
 <?php
 
-use Gatherling\Event;
-use Gatherling\Matchup;
-use Gatherling\Player;
-use Gatherling\Standings;
+use Gatherling\Models\Event;
+use Gatherling\Models\Matchup;
+use Gatherling\Models\Player;
+use Gatherling\Models\Standings;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';

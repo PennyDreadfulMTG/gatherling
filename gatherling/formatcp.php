@@ -1,8 +1,8 @@
 <?php
 
-use Gatherling\Database;
-use Gatherling\Format;
-use Gatherling\Player;
+use Gatherling\Models\Database;
+use Gatherling\Models\Format;
+use Gatherling\Models\Player;
 
 include 'lib.php';
 include 'lib_form_helper.php';

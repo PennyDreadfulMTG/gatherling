@@ -2,9 +2,9 @@
 
 namespace Gatherling\Pages;
 
-use Gatherling\Event;
-use Gatherling\Player;
-use Gatherling\Series;
+use Gatherling\Models\Event;
+use Gatherling\Models\Player;
+use Gatherling\Models\Series;
 
 class EventForm extends EventFrame
 {

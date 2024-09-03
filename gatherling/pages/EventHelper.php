@@ -2,7 +2,7 @@
 
 namespace Gatherling\Pages;
 
-use Gatherling\Event;
+use Gatherling\Models\Event;
 
 class EventHelper
 {

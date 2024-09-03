@@ -2,7 +2,7 @@
 
 namespace Gatherling\Pages;
 
-use Gatherling\Player;
+use Gatherling\Models\Player;
 
 abstract class Page
 {

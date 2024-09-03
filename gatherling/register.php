@@ -1,6 +1,6 @@
 <?php
 
-use Gatherling\Player;
+use Gatherling\Models\Player;
 
 include_once 'lib.php';
 require_once 'lib_form_helper.php';

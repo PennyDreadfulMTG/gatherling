@@ -1,6 +1,6 @@
 <?php
 
-namespace Gatherling;
+namespace Gatherling\Models;
 
 $DEBUG = null;
 $CHECK_DELTA = false;

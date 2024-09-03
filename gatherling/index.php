@@ -1,10 +1,10 @@
 <?php
 
-use Gatherling\Database;
-use Gatherling\Deck;
-use Gatherling\Event;
-use Gatherling\Matchup;
-use Gatherling\Player;
+use Gatherling\Models\Database;
+use Gatherling\Models\Deck;
+use Gatherling\Models\Event;
+use Gatherling\Models\Matchup;
+use Gatherling\Models\Player;
 
 include 'lib.php';
 

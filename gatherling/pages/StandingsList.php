@@ -2,8 +2,8 @@
 
 namespace Gatherling\Pages;
 
-use Gatherling\Event;
-use Gatherling\Standings;
+use Gatherling\Models\Event;
+use Gatherling\Models\Standings;
 
 class StandingsList extends EventFrame
 {

@@ -2,9 +2,9 @@
 
 namespace Gatherling\Pages;
 
-use Gatherling\Event;
-use Gatherling\Matchup;
-use Gatherling\Player;
+use Gatherling\Models\Event;
+use Gatherling\Models\Matchup;
+use Gatherling\Models\Player;
 
 class MatchList extends EventFrame
 {

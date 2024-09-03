@@ -1,6 +1,6 @@
 <?php
 
-use Gatherling\Player;
+use Gatherling\Models\Player;
 
 require_once __DIR__.'/../lib.php';
 

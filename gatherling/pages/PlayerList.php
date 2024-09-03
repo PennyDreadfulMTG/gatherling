@@ -2,10 +2,10 @@
 
 namespace Gatherling\Pages;
 
-use Gatherling\Entry;
-use Gatherling\Event;
-use Gatherling\Format;
-use Gatherling\Standings;
+use Gatherling\Models\Entry;
+use Gatherling\Models\Event;
+use Gatherling\Models\Format;
+use Gatherling\Models\Standings;
 
 class PlayerList extends EventFrame
 {

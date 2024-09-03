@@ -1,8 +1,8 @@
 <?php
 
-use Gatherling\Event;
-use Gatherling\Player;
-use Gatherling\Series;
+use Gatherling\Models\Event;
+use Gatherling\Models\Player;
+use Gatherling\Models\Series;
 
 require_once 'lib.php';
 $prevent_registration = 0;

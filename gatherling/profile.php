@@ -1,7 +1,7 @@
 <?php
 
-use Gatherling\Event;
-use Gatherling\Player;
+use Gatherling\Models\Event;
+use Gatherling\Models\Player;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';

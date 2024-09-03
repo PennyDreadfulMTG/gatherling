@@ -2,6 +2,9 @@
 
 namespace Gatherling;
 
+use Gatherling\Models\Database;
+use Gatherling\Models\Player;
+
 include 'lib.php';
 include 'lib_form_helper.php';
 

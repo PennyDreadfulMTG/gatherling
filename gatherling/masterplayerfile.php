@@ -1,6 +1,6 @@
 <?php
 
-use Gatherling\Database;
+use Gatherling\Models\Database;
 
 header('Content-type: text/plain');
 require_once 'lib.php';

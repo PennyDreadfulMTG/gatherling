@@ -1,6 +1,6 @@
 <?php
 
-namespace Gatherling;
+namespace Gatherling\Models;
 
 use Exception;
 use PDO;
