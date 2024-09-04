@@ -113,13 +113,7 @@ function arg($key, $default = null)
     return $_REQUEST[$key];
 }
 
-//## Models
-/**
- * @param Gatherling\Event $event
- *
- * @return mixed
- */
-function repr_json_event($event)
+function repr_json_event(Event $event)
 {
     $series = new Series($event->series);
     $json = [];
@@ -193,12 +187,7 @@ function repr_json_event($event)
     return $json;
 }
 
-/**
- * @param Gatherling\Deck $deck
- *
- * @return mixed
- */
-function repr_json_deck($deck)
+function repr_json_deck(Deck $deck)
 {
     $json = [];
     $json['id'] = $deck->id;
@@ -214,12 +203,7 @@ function repr_json_deck($deck)
     return $json;
 }
 
-/**
- * @param Gatherling\Series $series
- *
- * @return mixed
- */
-function repr_json_series($series)
+function repr_json_series(Series $series)
 {
     $json = populate([], $series, ['name', 'active', 'start_day', 'start_time', 'organizers', 'mtgo_room', 'this_season_format', 'this_season_master_link', 'this_season_season', 'discord_guild_id', 'discord_channel_id', 'discord_channel_name', 'discord_guild_name']);
     $mostRecent = $series->mostRecentEvent();
@@ -230,13 +214,7 @@ function repr_json_series($series)
     return $json;
 }
 
-/**
- * @param Gatherling\Player $player
- * @param int               $client
- *
- * @return mixed
- */
-function repr_json_player($player, $client = null)
+function repr_json_player(Player $player, ?int $client = null): mixed
 {
     $json = populate([], $player, ['name', 'verified', 'discord_id', 'discord_handle', 'mtga_username', 'mtgo_username']);
     $json['display_name'] = $player->gameName($client);
@@ -247,13 +225,9 @@ function repr_json_player($player, $client = null)
 //## Actions
 
 /**
- * @param Gatherling\Event $event
- * @param string           $name
- * @param string           $decklist
- *
  * @return (bool|string|int)[]|false[]|(string|false)[]
  */
-function add_player_to_event($event, $name, $decklist)
+function add_player_to_event(Event $event, ?string $name, ?string $decklist)
 {
     $result = [];
     if ($event->authCheck($_SESSION['username'])) {
@@ -287,13 +261,7 @@ function add_player_to_event($event, $name, $decklist)
     return $result;
 }
 
-/**
- * @param Gatherling\Event $event
- * @param string           $name
- *
- * @return array
- */
-function delete_player_from_event($event, $name)
+function delete_player_from_event(Event $event, ?string $name): array
 {
     if ($event->authCheck($_SESSION['username'])) {
         $result = [];
@@ -307,13 +275,7 @@ function delete_player_from_event($event, $name)
     return $result;
 }
 
-/**
- * @param Gatherling\Event $event
- * @param string           $name
- *
- * @return array
- */
-function drop_player_from_event($event, $name)
+function drop_player_from_event(Event $event, ?string $name): array
 {
     if ($event->authCheck($_SESSION['username'])) {
         $event->dropPlayer($name);
@@ -401,16 +363,7 @@ function create_event()
     return $result;
 }
 
-/**
- * @param Gatherling\Event $event
- * @param mixed            $round
- * @param string           $a
- * @param string           $b
- * @param string           $res
- *
- * @return void
- */
-function create_pairing($event, $round, $a, $b, $res)
+function create_pairing(Event $event, mixed $round, ?string $a, ?string $b, ?string $res): void
 {
     if (!is_admin() && !$event->authCheck(Player::loginName())) {
         error('Unauthorized');
