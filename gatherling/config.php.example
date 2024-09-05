@@ -2,7 +2,9 @@
 
 # CONFIGURATION FILE FOR GATHERLING
 # CHANGE THE FOLLOWING VARIABLES
-#
+
+$CONFIG['env'] = 'dev'; # Should be 'prod' for production.
+
 # === Database ===
 $CONFIG['db_hostname'] = 'localhost';
 $CONFIG['db_username'] = 'gatherli_public';
