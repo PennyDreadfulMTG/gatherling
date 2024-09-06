@@ -21,15 +21,14 @@ class Log
         if (self::$logger === null) {
             self::$logger = new Logger('gatherling');
 
-            $environment = $CONFIG['env'] ?? null;
-            if (!$environment) {
-                throw new ConfigurationException("Environment configuration missing");
-            }
-
             if (PHP_SAPI === 'cli') {
                 self::$logger->pushHandler(new StreamHandler('php://stderr', Level::Debug));
             } else {
                 self::$logger->pushHandler(new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Level::Warning));
+                $environment = $CONFIG['env'] ?? null;
+                if (!$environment) {
+                    throw new ConfigurationException("Environment configuration missing");
+                }
                 if ($environment === 'dev') {
                     self::$logger->pushHandler(new BrowserConsoleHandler(Level::Info));
                 }
