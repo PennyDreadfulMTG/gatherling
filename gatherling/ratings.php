@@ -5,7 +5,7 @@ use Gatherling\Models\Pagination;
 use Gatherling\Models\Player;
 use Gatherling\Models\Ratings;
 
-include 'lib.php';
+require_once 'lib.php';
 
 print_header('Ratings');
 ?>

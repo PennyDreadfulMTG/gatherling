@@ -2,7 +2,7 @@
 
 use Gatherling\Models\Series;
 
-include 'lib.php';
+require_once 'lib.php';
 
 $active_series = Series::activeNames();
 

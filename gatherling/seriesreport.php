@@ -2,7 +2,7 @@
 
 use Gatherling\Models\Series;
 
-include 'lib.php';
+require_once 'lib.php';
 
 print_header('Season Report');
 ?>

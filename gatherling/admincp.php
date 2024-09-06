@@ -6,7 +6,7 @@ use Gatherling\Models\Ratings;
 use Gatherling\Models\Series;
 use Gatherling\Models\SetScraper;
 
-include 'lib.php';
+require_once 'lib.php';
 include 'lib_form_helper.php';
 
 $hasError = false;

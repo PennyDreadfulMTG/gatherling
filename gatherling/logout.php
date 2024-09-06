@@ -2,6 +2,6 @@
 
 use Gatherling\Models\Player;
 
-include 'lib.php';
+require_once 'lib.php';
 Player::Logout();
 header('location: index.php');

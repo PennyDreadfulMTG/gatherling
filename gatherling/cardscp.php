@@ -5,7 +5,7 @@ namespace Gatherling;
 use Gatherling\Models\Database;
 use Gatherling\Models\Player;
 
-include 'lib.php';
+require_once 'lib.php';
 include 'lib_form_helper.php';
 
 $hasError = false;

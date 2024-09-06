@@ -2,8 +2,9 @@
 
 include_once __DIR__.'/../vendor/autoload.php';
 
+global $CONFIG;
 if (file_exists(__DIR__.'/config.php')) {
-    require_once 'config.php';
+    require_once __DIR__.'/config.php';
 } else {
     $CONFIG = $_ENV;
 }

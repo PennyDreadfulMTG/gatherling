@@ -6,7 +6,7 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Matchup;
 use Gatherling\Models\Player;
 
-include 'lib.php';
+require_once 'lib.php';
 
 function main(): void {
     ob_start();

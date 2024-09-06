@@ -5,7 +5,7 @@ use Firebase\JWT\Key;
 use Gatherling\Models\Player;
 
 include 'util/email.php';
-include 'lib.php';
+require_once 'lib.php';
 require_once 'lib_form_helper.php';
 
 print_header('Login');

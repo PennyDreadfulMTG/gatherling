@@ -2,7 +2,7 @@
 
 use Gatherling\Models\Player;
 
-include 'lib.php';
+require_once 'lib.php';
 testLogin();
 print_header('Login');
 

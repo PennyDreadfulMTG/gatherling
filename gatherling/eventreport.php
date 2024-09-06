@@ -9,7 +9,7 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Models\Standings;
 
-include 'lib.php';
+require_once 'lib.php';
 
 function main() {
     $eventName = $_GET['event'] ?? $_GET['name'] ?? null;
