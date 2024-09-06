@@ -1,0 +1,9 @@
+<phpunit>
+    <extensions>
+        <bootstrap class="Gatherling\Tests\DatabaseTestListener" />
+        <bootstrap class="Gatherling\Tests\LogTestListener" />
+    </extensions>
+    <php>
+        <const name="TESTING" value="true"/>
+    </php>
+</phpunit>

@@ -6,10 +6,13 @@
 $CONFIG['env'] = 'dev'; # Should be 'prod' for production.
 
 # === Database ===
-$CONFIG['db_hostname'] = 'localhost';
-$CONFIG['db_username'] = 'gatherli_public';
-$CONFIG['db_password'] = 'Lk33;=a4IZEh';
-$CONFIG['db_database'] = 'gatherli_gatherling';
+
+$CONFIG['db_hostname'] = $CONFIG['db_test_hostname'] = 'localhost';
+$CONFIG['db_username'] = $CONFIG['db_test_username'] = 'gatherling';
+$CONFIG['db_password'] = $CONFIG['db_test_password'] = 'Pa$$w0rD';
+$CONFIG['db_database'] = 'gatherling';
+$CONFIG['db_test_database'] = 'gatherling_test';
+
 
 # === Website ===
 
