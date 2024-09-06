@@ -1,6 +1,11 @@
 <?php
 
-include_once __DIR__.'/../vendor/autoload.php';
+if (file_exists('/var/www/vendor/autoload.php')) {
+    // Docker environment
+    require_once '/var/www/vendor/autoload.php';
+} else {
+    require_once __DIR__.'/../vendor/autoload.php';
+}
 
 global $CONFIG;
 if (file_exists(__DIR__.'/config.php')) {

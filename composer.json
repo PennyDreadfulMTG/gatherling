@@ -29,6 +29,7 @@
     "autoload": {
         "psr-4": {
             "Gatherling\\": "gatherling/",
+            "Gatherling\\Admin\\": "gatherling/",
             "Gatherling\\Tests\\": "tests/"
         }
     }

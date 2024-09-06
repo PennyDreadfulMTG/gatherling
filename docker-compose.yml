@@ -8,16 +8,15 @@ services:
       - db
     env_file: .env
     volumes:
-      - ./gatherling:/var/www/html
-      - /var/www/html/vendor
-      - ./:/var/repo
+      - ./:/var/www
+      - /var/www/vendor  # Don't overwrite this, we want the version we copied over in build
   db:
     image: mariadb
     env_file: .env
     ports:
       - "3307:3306"
     volumes:
-      - ./backups:/docker-entrypoint-initdb.d
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
   adminer:
     image: adminer
     ports:

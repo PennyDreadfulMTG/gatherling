@@ -40,7 +40,7 @@ class DB
             self::execute("SET time_zone = ?", ['America/New_York']);
             return self::$db;
         } catch (PDOException $e) {
-            throw new DatabaseException("Failed to connect to database", $e->getCode(), $e);
+            throw new DatabaseException("Failed to connect to database", 0, $e);
         }
     }
 
@@ -170,7 +170,7 @@ class DB
             }
             $msg = "Failed to execute query: $sql";
             Log::error($msg, $context);
-            throw new DatabaseException($msg, $e->getCode(), $e);
+            throw new DatabaseException($msg, 0, $e);
         }
     }
 
