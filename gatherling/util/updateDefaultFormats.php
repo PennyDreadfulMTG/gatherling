@@ -2,10 +2,12 @@
 
 namespace Gatherling;
 
-use Gatherling\Models\Formats;
+use Gatherling\Log;
 use Gatherling\Models\Player;
+use Gatherling\Models\Formats;
+use Gatherling\Exceptions\SetMissingException;
 
-require_once __DIR__.'/../lib.php';
+require_once __DIR__ . '/../lib.php';
 
 function main(): void
 {
@@ -16,12 +18,14 @@ function main(): void
         }
     }
     set_time_limit(0);
-    Formats::updateDefaultFormats();
-
-    // maybe we want to do these things we get an exception? if so we'll need to throw a more specific exception
-    //             Log::info("Please add $set to the database");
-    //        } else {
-    //            redirect("util/insertcardset.php?cardsetcode={$set}&return=util/updateDefaultFormats.php");
+    try {
+        Formats::updateDefaultFormats();
+        echo "done";
+    } catch (SetMissingException $e) {
+        Log::error($e->getMessage());
+        echo $e->getMessage();
+        exit(0);
+    }
 }
 
 if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {

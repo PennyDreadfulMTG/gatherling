@@ -3,6 +3,7 @@
 namespace Gatherling\Models;
 
 use Gatherling\Log;
+use Gatherling\Exceptions\FileNotFoundException;
 
 class CardSet
 {
@@ -17,7 +18,7 @@ class CardSet
         $file = file_get_contents($filename);
 
         if (!$file) {
-            throw new \Exception("Can't open the file you requested: {$filename}");
+            throw new FileNotFoundException("Can't open the file you requested: {$filename}");
         }
 
         $data = json_decode($file);

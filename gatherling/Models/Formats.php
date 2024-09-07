@@ -2,8 +2,8 @@
 
 namespace Gatherling\Models;
 
-use Exception;
 use Gatherling\Log;
+use Gatherling\Exceptions\SetMissingException;
 
 class Formats
 {
@@ -14,7 +14,7 @@ class Formats
         self::updatePennyDreadful();
     }
 
-    private static function LoadFormat($format): Format
+    private static function loadFormat($format): Format
     {
         if (!Format::doesFormatExist($format)) {
             $active_format = new Format('');
@@ -30,7 +30,7 @@ class Formats
 
     private static function updateStandard(): void
     {
-        $fmt = self::LoadFormat('Standard');
+        $fmt = self::loadFormat('Standard');
         if (!$fmt->standard) {
             $fmt->standard = true;
             $fmt->save();
@@ -61,7 +61,7 @@ class Formats
             $success = $stmt->fetch();
             $stmt->close();
             if (!$success) {
-                throw new Exception("Did not find set with code {$set->code} please add it to the database");
+                throw new SetMissingException("Did not find set with code {$set->code} please add it to the database");
             }
             $expected[] = $setName;
         }
@@ -83,7 +83,7 @@ class Formats
     private static function updateModern(): void
     {
         Log::info('Updating Modern...');
-        $fmt = self::LoadFormat('Modern');
+        $fmt = self::loadFormat('Modern');
         if (!$fmt->modern) {
             $fmt->modern = true;
             $fmt->save();
@@ -116,7 +116,7 @@ class Formats
     private static function updatePennyDreadful(): void
     {
         Log::info('Updating Penny Dreadful...');
-        $fmt = self::LoadFormat('Penny Dreadful');
+        $fmt = self::loadFormat('Penny Dreadful');
 
         $url = 'https://pennydreadfulmtg.github.io/legal_cards.txt';
         $legal_cards = parseCards(file_get_contents($url));
@@ -147,8 +147,7 @@ class Formats
                 if (!$success) {
                     Log::error("Can't add {$card} to Penny Dreadful Legal list, it is not in the database.");
                     $setCode = self::findSetForCard($card);
-
-                    throw new Exception("Did not find set with code {$setCode} please add it to the database");
+                    throw new SetMissingException("Did not find set with code {$setCode} please add it to the database");
                 }
             }
 
