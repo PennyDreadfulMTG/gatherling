@@ -9,6 +9,8 @@ use Gatherling\Tests\DatabaseCase;
 
 final class FormatTest extends DatabaseCase
 {
+    private Format $model;
+
     public function setUp(): void
     {
         parent::setUp();
