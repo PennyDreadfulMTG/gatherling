@@ -205,7 +205,6 @@ class Format
     public static function doesFormatExist($format)
     {
         $success = false;
-        $formatName = [];
         $formatName = Database::single_result_single_param('SELECT name FROM formats WHERE name = ?', 's', $format);
         if ($formatName) {
             $success = true;
