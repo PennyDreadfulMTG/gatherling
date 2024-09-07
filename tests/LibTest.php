@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
+namespace Gatherling\Tests;
+
 require_once 'gatherling/lib.php';
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 final class LibTest extends TestCase
 {
