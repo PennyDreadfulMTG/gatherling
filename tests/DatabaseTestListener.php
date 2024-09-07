@@ -19,7 +19,7 @@ class DatabaseTestListener implements Extension
 {
     public function bootstrap(Configuration $configuration, EventFacade $facade, ParameterCollection $parameters): void
     {
-        $facade->registerSubscriber(new class() implements StartedSubscriber {
+        $facade->registerSubscriber(new class implements StartedSubscriber {
             public function notify(Started $event): void
             {
                 Log::info('Tests started, setting up test database');
@@ -27,7 +27,7 @@ class DatabaseTestListener implements Extension
             }
         });
 
-        $facade->registerSubscriber(new class() implements FinishedSubscriber {
+        $facade->registerSubscriber(new class implements FinishedSubscriber {
             public function notify(Finished $event): void
             {
                 Log::info('Tests ended, dropping test database');
