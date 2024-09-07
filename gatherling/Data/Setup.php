@@ -16,9 +16,6 @@ require_once __DIR__ . '/../lib.php';
 // If you start with nothing it will create the database, load the latest schema checkpoint from schema.sql
 // and then run any migrations that are for version after the version recorded in schema.sql.
 //
-// It can also bootstrap a test database. This is used in the tests. The test database checkpoint contains data
-// as well as the schema, which the tests rely upon. See DatabaseTestListener for more about how this works.
-//
 // There used to be a lot more migrations, but they became unwieldy so the database was checkpointed
 // into schema.sql at version 51. If you ever want to do this again it looks something like this:
 //
@@ -38,6 +35,11 @@ require_once __DIR__ . '/../lib.php';
 // To add a migration create a pure SQL file in gatherling/Data/sql/migrations with the next available version number.
 //
 // See: admin/db-upgrade.php for a script that runs this stuff (web or cli).
+//
+// Setup can also bootstrap a test database. This is used in the tests. The test database checkpoint contains data
+// as well as the schema, which the tests rely upon. See DatabaseTestListener for more about how this works.
+// If you need to ADD something to the test database, then restore test-db.sql as your local, make your changes,
+// and re-dump it and commit the result.
 
 class Setup
 {
