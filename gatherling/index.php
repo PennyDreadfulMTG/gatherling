@@ -8,7 +8,8 @@ use Gatherling\Models\Player;
 
 require_once 'lib.php';
 
-function main(): void {
+function main(): void
+{
     ob_start();
     ?>
         <div id="gatherling_main" class="box grid_12">
