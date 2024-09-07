@@ -19,7 +19,7 @@ class PointsAdjustmentForm extends EventFrame
                 $player['medalImg'] = theme_file("images/{$entry->medal}.png");
             }
             if ($entry->deck != null) {
-                $player['verifiedImg'] = theme_file('images/verified.png');
+                $player['verifiedSrc'] = theme_file('images/verified.png');
             }
             $entries[] = $player;
         }

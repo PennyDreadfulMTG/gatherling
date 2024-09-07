@@ -29,7 +29,7 @@ class MatchList extends EventFrame
         for ($n = 1; $n <= $event->current_round; $n++) {
             $roundLinks[] = [
                 'text' => "Round $n",
-                'href' => 'event.php?view=match&name='.rawurlencode($event->name)."#round-{$n}",
+                'link' => 'event.php?view=match&name='.rawurlencode($event->name)."#round-{$n}",
             ];
         }
         $hasMatches = count($matches) > 0;

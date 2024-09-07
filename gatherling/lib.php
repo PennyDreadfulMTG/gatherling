@@ -90,10 +90,10 @@ function print_header($title, $enable_vue = false): void
     echo renderTemplate('partials/header', [
         'siteName'       => $CONFIG['site_name'],
         'title'          => $title,
-        'css'            => theme_file('css/stylesheet.css'),
+        'cssLink'        => theme_file('css/stylesheet.css') . '?v=' . rawurlencode(git_hash()),
         'enableVue'      => $enable_vue,
         'gitHash'        => git_hash(),
-        'headerLogoImg'  => theme_file('images/header_logo.png'),
+        'headerLogoSrc'  => theme_file('images/header_logo.png'),
         'player'         => $player,
         'isHost'         => $isHost,
         'isOrganizer'    => $isOrganizer,

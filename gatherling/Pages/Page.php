@@ -8,9 +8,9 @@ abstract class Page
 {
     public bool $enableVue = false;
     public string $contentSafe;
-    public string $cssLink;
     public string $gitHash;
-    public string $headerLogoImg;
+    public string $cssLink;
+    public string $headerLogoSrc;
     public bool $includeSorttable;
     public bool $isHost;
     public bool $isOrganizer;
@@ -29,7 +29,7 @@ abstract class Page
         $this->siteName = $CONFIG['site_name'];
         $this->gitHash = git_hash();
         $this->cssLink = theme_file('css/stylesheet.css') . '?v=' . rawurlencode($this->gitHash);
-        $this->headerLogoImg = theme_file('images/header_logo.png');
+        $this->headerLogoSrc = theme_file('images/header_logo.png');
         $this->player = Player::getSessionPlayer();
         $this->isHost = $this->player->isHost();
         $this->isOrganizer = count($this->player->organizersSeries()) > 0;
