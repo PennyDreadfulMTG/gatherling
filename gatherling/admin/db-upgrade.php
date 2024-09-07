@@ -4,6 +4,8 @@ namespace Gatherling\Admin;
 
 use Gatherling\Data\Setup;
 
+set_time_limit(0);
+
 require_once __DIR__.'/../lib.php';
 
 function main(): void

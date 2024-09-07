@@ -177,7 +177,6 @@ function handleActions($seriesName)
         $format = new Format($active_format);
 
         if (isset($_POST['addlegalcard']) && $_POST['addlegalcard'] != '') {
-            ini_set('max_execution_time', 300); // This one might take a bit longer
             $cards = parseCards($_POST['addlegalcard']);
             if (count($cards) > 0) {
                 foreach ($cards as $card) {
