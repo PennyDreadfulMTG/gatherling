@@ -58,7 +58,7 @@ function regForm()
     echo "</td></tr>\n";
     echo "<tr><td><b>Email</td>\n";
     echo "<td><input class=\"inputbox\" type=\"email\" name=\"email\" value=\"\">\n";
-    echo emailStatusDropDown();
+    emailStatusDropDown();
     echo "</td></tr>\n";
     echo "<tr><td><b>Time Zone</td>\n";
     echo '<td>';
