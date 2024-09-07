@@ -875,7 +875,7 @@ function formatCPMenu($active_format, $seriesName)
     echo '<input class="inputbutton" style="width: 75px" type="submit" value="Delete" name ="action" /></tr>';
     echo '</table></form>';
     if ($active_format->name != '' && !$active_format->is_meta_format) {
-        $escaped = urlencode($active_format->name);
+        $escaped = rawurlencode($active_format->name);
         echo '<table><tr><td colspan="2" align="center">';
         echo "<a href=\"formatcp.php?view=settings&format={$escaped}\">Format Settings</a>";
         echo " | <a href=\"formatcp.php?view=bandr&format={$escaped}\">Legal, Banned & Restricted</a>";

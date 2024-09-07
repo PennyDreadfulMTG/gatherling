@@ -159,7 +159,7 @@ class Formats
 
     private static function findSetForCard($card): string
     {
-        $card = urlencode($card);
+        $card = rawurlencode($card);
         $options = ['http' => ['header' => "User-Agent: gatherling.com/1.0\r\n"]];
         $context = stream_context_create($options);
         $data = json_decode(file_get_contents("http://api.scryfall.com/cards/named?exact={$card}", false, $context));

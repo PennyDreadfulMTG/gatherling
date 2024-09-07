@@ -1041,14 +1041,14 @@ class Event
     public function makeLinkArgs($text): array
     {
         return [
-            'link' => 'event.php?name='.urlencode($this->name),
+            'link' => 'event.php?name='.rawurlencode($this->name),
             'text' => $text,
         ];
     }
 
     public function linkReport()
     {
-        return '<a href="eventreport.php?event='.urlencode($this->name)."\">{$this->name}</a>";
+        return '<a href="eventreport.php?event='.rawurlencode($this->name)."\">{$this->name}</a>";
     }
 
     public static function count()
