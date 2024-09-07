@@ -4,4 +4,6 @@ namespace Gatherling\Exceptions;
 
 use Exception;
 
-class GatherlingException extends Exception {}
+class GatherlingException extends Exception
+{
+}

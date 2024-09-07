@@ -16,10 +16,10 @@ class DBTest extends DatabaseCase
 
     public function testInsert()
     {
-        $sql = "INSERT INTO test_table (name) VALUES (:name)";
+        $sql = 'INSERT INTO test_table (name) VALUES (:name)';
         $params = [':name' => 'Test Name'];
         DB::execute($sql, $params);
-        $rows = DB::select("SELECT * FROM test_table WHERE name = :name", [':name' => 'Test Name']);
+        $rows = DB::select('SELECT * FROM test_table WHERE name = :name', [':name' => 'Test Name']);
         $this->assertCount(1, $rows);
         $this->assertEquals('Test Name', $rows[0]['name']);
     }
@@ -29,7 +29,7 @@ class DBTest extends DatabaseCase
         DB::execute("INSERT INTO test_table (name) VALUES ('Test1')");
         DB::execute("INSERT INTO test_table (name) VALUES ('Test2')");
 
-        $rows = DB::select("SELECT * FROM test_table");
+        $rows = DB::select('SELECT * FROM test_table');
         $this->assertCount(2, $rows);
         $this->assertEquals('Test1', $rows[0]['name']);
         $this->assertEquals('Test2', $rows[1]['name']);
@@ -38,9 +38,9 @@ class DBTest extends DatabaseCase
     public function testValue()
     {
         DB::execute("INSERT INTO test_table (name) VALUES ('Test1')");
-        $value = DB::value("SELECT name FROM test_table WHERE id = 1");
+        $value = DB::value('SELECT name FROM test_table WHERE id = 1');
         $this->assertEquals('Test1', $value);
-        $value = DB::value("SELECT id FROM test_table WHERE id = 1");
+        $value = DB::value('SELECT id FROM test_table WHERE id = 1');
         $this->assertEquals(1, $value);
     }
 

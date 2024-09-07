@@ -3,12 +3,12 @@
 namespace Gatherling;
 
 use Gatherling\Exceptions\ConfigurationException;
-use Monolog\Level;
-use Monolog\Logger;
 use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\BufferHandler;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\StreamHandler;
+use Monolog\Level;
+use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
 class Log
@@ -34,20 +34,23 @@ class Log
                 false // Do NOT flush on overflow
             );
             self::$logger->pushHandler($bufferHandler);
+
             return self::$logger;
         }
         if (PHP_SAPI === 'cli') {
             self::$logger->pushHandler(new StreamHandler('php://stderr', Level::Debug));
+
             return self::$logger;
         }
         self::$logger->pushHandler(new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Level::Warning));
         $environment = $CONFIG['env'] ?? null;
         if (!$environment) {
-            throw new ConfigurationException("Environment configuration missing");
+            throw new ConfigurationException('Environment configuration missing');
         }
         if ($environment === 'dev') {
             self::$logger->pushHandler(new BrowserConsoleHandler(Level::Info));
         }
+
         return self::$logger;
     }
 

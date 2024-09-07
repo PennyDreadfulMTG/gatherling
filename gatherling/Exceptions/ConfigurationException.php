@@ -2,4 +2,6 @@
 
 namespace Gatherling\Exceptions;
 
-class ConfigurationException extends GatherlingException {}
+class ConfigurationException extends GatherlingException
+{
+}

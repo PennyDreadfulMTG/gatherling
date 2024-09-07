@@ -2,4 +2,6 @@
 
 namespace Gatherling\Exceptions;
 
-class DatabaseException extends GatherlingException {}
+class DatabaseException extends GatherlingException
+{
+}

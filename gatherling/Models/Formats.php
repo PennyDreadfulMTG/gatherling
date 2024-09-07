@@ -12,7 +12,6 @@ class Formats
         self::updateStandard();
         self::updateModern();
         self::updatePennyDreadful();
-
     }
 
     private static function LoadFormat($format): Format
@@ -39,6 +38,7 @@ class Formats
         $legal = json_decode(file_get_contents('http://whatsinstandard.com/api/v5/sets.json'));
         if (!$legal) {
             Log::info('Unable to load WhatsInStandard API.  Aborting.');
+
             return;
         }
         $expected = [];
@@ -115,13 +115,14 @@ class Formats
 
     private static function updatePennyDreadful(): void
     {
-        Log::info("Updating Penny Dreadful...");
+        Log::info('Updating Penny Dreadful...');
         $fmt = self::LoadFormat('Penny Dreadful');
 
         $url = 'https://pennydreadfulmtg.github.io/legal_cards.txt';
         $legal_cards = parseCards(file_get_contents($url));
         if (!$legal_cards) {
             Log::error('Unable to fetch Penny Dreadful legal cards');
+
             return;
         }
         $i = 0;
@@ -146,6 +147,7 @@ class Formats
                 if (!$success) {
                     Log::error("Can't add {$card} to Penny Dreadful Legal list, it is not in the database.");
                     $setCode = self::findSetForCard($card);
+
                     throw new Exception("Did not find set with code {$setCode} please add it to the database");
                 }
             }
@@ -162,7 +164,7 @@ class Formats
         $options = ['http' => ['header' => "User-Agent: gatherling.com/1.0\r\n"]];
         $context = stream_context_create($options);
         $data = json_decode(file_get_contents("http://api.scryfall.com/cards/named?exact={$card}", false, $context));
+
         return strtoupper($data->set);
     }
-
 }

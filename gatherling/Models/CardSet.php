@@ -31,7 +31,7 @@ class CardSet
         $setType = match ($setType) {
             'core', 'starter' => 'Core',
             'expansion' => 'Block',
-            default => 'Extra',
+            default     => 'Extra',
         };
         $releaseDate = $data->releaseDate;
 
@@ -170,4 +170,3 @@ class CardSet
         }
     }
 }
-

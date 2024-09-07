@@ -5,7 +5,7 @@ use Gatherling\Models\Player;
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-require_once __DIR__ . '/../lib.php';
+require_once __DIR__.'/../lib.php';
 
 function main(): void
 {
@@ -14,7 +14,7 @@ function main(): void
 
     if (PHP_SAPI == 'cli') {
         if (!isset($argv[1])) {
-            throw new \Exception("No set provided");
+            throw new \Exception('No set provided');
         }
         if (strlen($argv[1]) < 4) {
             CardSet::insert($argv[1]);
@@ -32,7 +32,7 @@ function main(): void
         } elseif (isset($_FILES['cardsetfile'])) {
             CardSet::insertFromLocation($_FILES['cardsetfile']['tmp_name']);
         } else {
-            throw new \Exception("No set provided");
+            throw new \Exception('No set provided');
         }
     }
 
