@@ -22,7 +22,7 @@ function main(): void
         Formats::updateDefaultFormats();
         echo "done";
     } catch (SetMissingException $e) {
-        Log::error($e->getMessage());
+        Log::warning($e->getMessage());
         echo $e->getMessage();
         exit(0);
     }
