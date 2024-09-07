@@ -9,7 +9,7 @@ use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\FileNotFoundException;
 use Gatherling\Log;
 
-require_once __DIR__.'/../lib.php';
+require_once __DIR__ . '/../lib.php';
 
 // Handles getting the database into the right state.
 //
@@ -22,13 +22,18 @@ require_once __DIR__.'/../lib.php';
 // There used to be a lot more migrations, but they became unwieldy so the database was checkpointed
 // into schema.sql at version 51. If you ever want to do this again it looks something like this:
 //
-//     $ mysqldump --no-data --routines --triggers --single-transaction gatherli_gatherling > gatherling/Data/sql/schema.sql
-//     $ mysqldump --no-create-info --single-transaction gatherli_gatherling archetypes db_version client >> gatherling/Data/sql/schema.sql
-//     $ mysqldump --no-create-info --single-transaction gatherli_gatherling formats --where="name IN ('Standard', 'Modern', 'Penny Dreadful')" >> gatherling/Data/sql/schema.sql
+// $ export OUTFILE=gatherling/Data/sql/schema.sql
+// $ export DATABASE=gatherling
+// $ export FORMATSWHERE="name IN ('Standard', 'Modern', 'Penny Dreadful')"
+// $ mysqldump --no-data --single-transaction gatherling>$OUTFILE
+// $ mysqldump --no-create-info --single-transaction $DATABASE archetypes db_version client >>$OUTFILE
+// $ mysqldump --no-create-info --single-transaction $DATABASE formats --where=$FORMATSWHERE >>$OUTFILE
 //
-// The first command dumps the schema, the second command makes sure the archetypes, client and db_version table are populated, and the third dumps the data for the most common formats.
+// The first command dumps the schema, the second command makes sure the archetypes, client and
+// db_version table are populated, and the third dumps the data for the most common formats.
 //
-// If you need to see the old migrations for any reason use git to investigate gatherling/admin/db-upgrade.php where they used to live.
+// If you need to see the old migrations for any reason use git to investigate
+// gatherling/admin/db-upgrade.php where they used to live.
 //
 // To add a migration create a pure SQL file in gatherling/Data/sql/migrations with the next available version number.
 //
@@ -41,7 +46,7 @@ class Setup
         Log::info('Initializing database');
         self::create();
         if (self::version() === 0) {
-            self::restoreDump(__DIR__.'/sql/schema.sql');
+            self::restoreDump(__DIR__ . '/sql/schema.sql');
         }
         self::runMigrations();
     }
@@ -54,7 +59,7 @@ class Setup
         self::activateTestDatabase();
         self::dropTestDatabase();
         self::create();
-        self::restoreDump(__DIR__.'/sql/test-db.sql');
+        self::restoreDump(__DIR__ . '/sql/test-db.sql');
         self::runMigrations();
     }
 
@@ -79,7 +84,8 @@ class Setup
         Log::info('Activating test database. Future db calls will be made against the test database.');
         foreach ($toCopy as $from => $to) {
             if (!isset($CONFIG[$from])) {
-                throw new ConfigurationException('Test database is not configured: '.$CONFIG);
+                $msg = 'Test database is not configured. Current config: ' . json_encode($CONFIG);
+                throw new ConfigurationException($msg);
             }
             $CONFIG[$to] = $CONFIG[$from];
         }
@@ -114,7 +120,7 @@ class Setup
 
     private static function findMigrations(int $version): array
     {
-        $migrationDirectory = __DIR__.'/sql/migrations';
+        $migrationDirectory = __DIR__ . '/sql/migrations';
         $migrations = [];
         foreach (scandir($migrationDirectory) as $file) {
             if (!preg_match('/^[1-9]\d*\.sql$/', $file)) {
@@ -125,7 +131,7 @@ class Setup
                 throw new \InvalidArgumentException("Invalid migration filename: $file");
             }
             if ($fileVersion > $version) {
-                $path = $migrationDirectory.DIRECTORY_SEPARATOR.$file;
+                $path = $migrationDirectory . DIRECTORY_SEPARATOR . $file;
                 Log::debug("Loading migration $fileVersion from $path");
                 $sql = file_get_contents($path);
                 if (!$sql) {
@@ -137,7 +143,6 @@ class Setup
         usort($migrations, function ($a, $b) {
             return $a->version <=> $b->version;
         });
-
         return $migrations;
     }
 
@@ -145,11 +150,11 @@ class Setup
     {
         $version = self::version();
         $migrations = self::findMigrations($version);
-        Log::info('Found '.count($migrations).' pending migrations');
+        Log::info('Found ' . count($migrations) . ' pending migrations');
         foreach ($migrations as $migration) {
             Log::info("Migration {$migration->version}: {$migration->sql}");
             DB::execute($migration->sql);
-            DB::execute('UPDATE db_version SET version = ?', [$migration->version]);
+            DB::execute("UPDATE db_version SET version = :version", ['version' => $migration->version]);
         }
     }
 
@@ -157,11 +162,9 @@ class Setup
     {
         try {
             $v = DB::value('SELECT version FROM db_version LIMIT 1');
-
             return is_int($v) ? $v : 0;
         } catch (DatabaseException) {
             Log::debug('No version found in db_version table');
-
             return 0;
         }
     }
