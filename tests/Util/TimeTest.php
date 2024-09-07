@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Gatherling\Tests;
+namespace Gatherling\Tests\Util;
 
 require_once 'gatherling/lib.php';
 
