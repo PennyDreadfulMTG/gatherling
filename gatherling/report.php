@@ -162,11 +162,11 @@ function print_dropConfirm($event_name, $player)
     echo "<input name=\"action\" type=\"hidden\" value=\"drop\" />\n";
     echo "<input name=\"event\" type=\"hidden\" value=\"{$event_name}\" />\n";
     echo "<input name=\"player\" type=\"hidden\" value=\"{$player->name}\" />\n";
-    echo "<input name=\"submit\" type=\"submit\" value=\"Drop from Event\" />\n";
+    echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Drop from Event\" />\n";
     echo '<td> ';
     echo "</form>\n";
     echo "<form action=\"report.php\" method=\"get\">\n";
-    echo "<input name=\"submit\" type=\"submit\" value=\"Cancel\" />\n";
+    echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Cancel\" />\n";
     echo "</td> </tr> \n";
     echo "<tr> <td colspan=\"2\" class=\"buttons\">\n";
     echo "</td> </tr> </table> \n";
