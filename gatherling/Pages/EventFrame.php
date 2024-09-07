@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Gatherling\Pages;
 
 // Abstract class parent for all the pages that need to show the "control panel" set of links.
