@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ruleset name="gatherling">
+    <rule ref="PSR12">
+        <exclude name="Generic.Files.LineLength" />
+        <exclude-pattern>*/vendor/*</exclude-pattern>
+    </rule>
+</ruleset>
