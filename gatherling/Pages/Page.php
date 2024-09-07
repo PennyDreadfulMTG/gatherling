@@ -20,7 +20,7 @@ abstract class Page
     public string $js;
     public Player $player;
     public string $siteName;
-    public string $tabs;
+    public int $tabs;
     public string $title;
     public string $versionTagline;
 
