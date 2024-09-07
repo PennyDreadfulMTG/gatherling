@@ -35,7 +35,7 @@ class Formats
             $fmt->standard = true;
             $fmt->save();
         }
-        $legal = json_decode(file_get_contents('http://whatsinstandard.com/api/v5/sets.json'));
+        $legal = json_decode(file_get_contents('https://whatsinstandard.com/api/v5/sets.json'));
         if (!$legal) {
             Log::info('Unable to load WhatsInStandard API.  Aborting.');
 
