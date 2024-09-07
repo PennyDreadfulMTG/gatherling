@@ -251,6 +251,6 @@ function trophyFieldArgs(Event $event): array
 {
     return [
         'hasTrophy' => $event->hastrophy,
-        'eventName' => $event->name,
+        'trophySrc' => 'displayTrophy.php?event=' . rawurlencode($event->name),
     ];
 }
