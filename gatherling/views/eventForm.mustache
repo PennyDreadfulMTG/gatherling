@@ -111,6 +111,8 @@
                     </tr>
                 {{/currentlyEditing}}
                 {{#currentlyEditing}}
+                    {{#finalizeEventCheckbox}}{{> checkboxInput}}{{/finalizeEventCheckbox}}
+                    {{#eventActiveCheckbox}}{{> checkboxInput}}{{/eventActiveCheckbox}}
                     <tr>
                         <th>Current Round</th>
                         <td>
