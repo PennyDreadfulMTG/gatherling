@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Gatherling\Pages;
 
 use Gatherling\Models\Event;
