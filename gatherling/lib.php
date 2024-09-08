@@ -1,21 +1,17 @@
 <?php
 
+use Gatherling\Auth\Session;
 use Gatherling\Models\Database;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
 
 require_once 'bootstrap.php';
 ob_start();
-if (isset($CONFIG['cookie_lifetime'])) {
-    ini_set('session.gc_maxlifetime', $CONFIG['cookie_lifetime']);
-    ini_set('session.cookie_lifetime', $CONFIG['cookie_lifetime']);
-    session_set_cookie_params($CONFIG['cookie_lifetime']);
-}
 header('Strict-Transport-Security: max-age=63072000; includeSubDomains; preload');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 
 if (php_sapi_name() !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
+    Session::start();
 }
 
 $HC = '#DDDDDD';

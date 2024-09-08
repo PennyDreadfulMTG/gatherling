@@ -11,7 +11,6 @@ require_once __DIR__.'/../lib.php';
 function main(): void
 {
     Setup::setupDatabase();
-    Setup::setupTestDatabase();
     echo 'done';
 }
 

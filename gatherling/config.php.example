@@ -29,9 +29,6 @@ $CONFIG['style'] = "ChandraNeue";
 # A description for the ical calendar which is accessible at calendar.php
 $CONFIG['calendar_description'] = "a description for the events calendar";
 
-# How long to store session cookies in seconds
-$CONFIG['cookie_lifetime'] = 5184000;
-
 # API Key for Brevo email sending (password reset)
 $CONFIG['brevo_api_key'] = 'xkeysib-foobar-baz';
 
