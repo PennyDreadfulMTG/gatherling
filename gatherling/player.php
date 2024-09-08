@@ -206,7 +206,7 @@ function print_editEmailForm($player, $result)
         echo "<td><input class=\"inputbox\" name=\"newEmail2\" type=\"email\" /></td></tr>\n";
         echo "<tr><th>Privacy Status</th>\n";
         echo '<td>';
-        echo emailStatusDropDown($player->emailPrivacy);
+        emailStatusDropDown($player->emailPrivacy);
         echo '</td></tr>';
         echo "<tr><td colspan=\"2\" class=\"buttons\">\n";
         echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Add Email\" />\n";
@@ -229,7 +229,7 @@ function print_editEmailForm($player, $result)
         echo "<td><input class=\"inputbox\" name=\"newEmail2\" type=\"email\" /></td></tr>\n";
         echo "<tr><th>Privacy Status</th>\n";
         echo '<td>';
-        echo emailStatusDropDown($player->emailPrivacy);
+        emailStatusDropDown($player->emailPrivacy);
         echo '</td></tr>';
         echo "<tr><td colspan=\"2\" class=\"buttons\">\n";
         echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Edit Email\" />\n";

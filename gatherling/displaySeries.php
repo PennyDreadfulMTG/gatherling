@@ -2,7 +2,7 @@
 
 use Gatherling\Models\Database;
 
-include 'lib.php';
+require_once 'lib.php';
 
 $series = $_GET['series'];
 $db = Database::getConnection();

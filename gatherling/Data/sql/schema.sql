@@ -804,3 +804,44 @@ UNLOCK TABLES;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
 -- Dump completed on 2024-08-30 15:04:06
+/*M!999999\- enable the sandbox mode */ 
+-- MariaDB dump 10.19-11.5.2-MariaDB, for osx10.19 (arm64)
+--
+-- Host: localhost    Database: gatherli_gatherling
+-- ------------------------------------------------------
+-- Server version	11.5.2-MariaDB
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*M!100616 SET @OLD_NOTE_VERBOSITY=@@NOTE_VERBOSITY, NOTE_VERBOSITY=0 */;
+
+--
+-- Dumping data for table `formats`
+--
+-- WHERE:  name IN ('Standard', 'Modern', 'Penny Dreadful')
+
+LOCK TABLES `formats` WRITE;
+/*!40000 ALTER TABLE `formats` DISABLE KEYS */;
+INSERT INTO `formats` VALUES
+('Modern','Regular DCI-sanctioned Modern format.','Private','Modern Times',0,0,0,0,0,0,0,0,NULL,0,0,1,1,1,1,1,1,1,60,500,0,15,0),
+('Penny Dreadful','','Private','Penny Dreadful Thursdays',0,0,0,0,0,0,0,0,NULL,1,0,0,1,1,1,1,1,1,60,300,0,15,0),
+('Standard','The Standard format is continually one of the most popular formats in the constructed deck tournament scene. It is the format most commonly found at Friday Night Magic tournaments, played weekly at many hobby shops. Standard used to be referred to alternatively as \"Type 2\". While the name, \"Type 2\" has been dropped officially, it is still commonplace that the standard format be referred to this way. This format consists of the most recent \"Core Set\" release and the two most recent \"Block\" releases, with one exception. \"Rotation\" occurs every fall when the first set of the new \"Block\" releases and becomes Standard Legal. From the time the new \"Core Set\" is released in early summer, until rotation occurs, 2 core sets are legal. ','Private','Friday Night Standard',0,0,0,0,0,0,0,0,NULL,0,1,0,1,1,1,1,0,1,60,1500,0,15,0);
+/*!40000 ALTER TABLE `formats` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
+
+-- Dump completed on 2024-09-04 18:26:55

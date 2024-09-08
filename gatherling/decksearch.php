@@ -6,7 +6,8 @@ use Gatherling\Models\Pagination;
 
 require_once 'lib.php';
 
-function main(): void {
+function main(): void
+{
     ob_start();
     ?>
     <script src="/styles/Chandra/js/sorttable.js"></script>

@@ -1,11 +1,14 @@
 <?php
 
+$CONFIG['env'] = 'dev';
+
 # === Database ===
 
-$CONFIG['db_hostname'] = 'db';
-$CONFIG['db_username'] = 'gatherling';
-$CONFIG['db_password'] = 'gath';
+$CONFIG['db_hostname'] = $CONFIG['db_test_hostname'] = 'db';
+$CONFIG['db_username'] = $CONFIG['db_test_username'] = 'gatherling';
+$CONFIG['db_password'] = $CONFIG['db_test_password'] = 'gath';
 $CONFIG['db_database'] = 'gatherling';
+$CONFIG['db_test_database'] = 'gatherling_test';
 
 # === Website ===
 

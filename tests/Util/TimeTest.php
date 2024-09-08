@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Gatherling\Tests\Util;
+
 require_once 'gatherling/lib.php';
 
 use PHPUnit\Framework\TestCase;

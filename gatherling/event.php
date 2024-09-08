@@ -21,7 +21,7 @@ use Gatherling\Pages\PointsAdjustmentForm;
 use Gatherling\Pages\ReportsForm;
 use Gatherling\Pages\StandingsList;
 
-include 'lib.php';
+require_once 'lib.php';
 include 'lib_form_helper.php';
 
 function main(): void

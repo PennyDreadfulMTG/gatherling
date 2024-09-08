@@ -2,205 +2,32 @@
 
 namespace Gatherling;
 
-use Gatherling\Models\Database;
-use Gatherling\Models\Format;
+use Gatherling\Log;
 use Gatherling\Models\Player;
-
-require_once __DIR__.'/../lib.php';
-
-if (PHP_SAPI != 'cli' && $_SERVER['REQUEST_METHOD'] == 'GET') { // unauthorized POST is okay
-    ini_set('max_execution_time', 300);
-    if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
-        redirect('index.php');
-    }
-}
+use Gatherling\Models\Formats;
+use Gatherling\Exceptions\SetMissingException;
 
 set_time_limit(0);
-updateStandard();
-set_time_limit(0);
-updateModern();
-set_time_limit(0);
-updatePennyDreadful('Penny Dreadful', 'https://pennydreadfulmtg.github.io/legal_cards.txt');
 
-function info($text, $newline = true)
+require_once __DIR__ . '/../lib.php';
+
+function main(): void
 {
-    if ($newline) {
-        if (PHP_SAPI == 'cli') {
-            echo "\n";
-        } else {
-            echo '<br/>';
+    if (PHP_SAPI != 'cli' && $_SERVER['REQUEST_METHOD'] == 'GET') { // unauthorized POST is okay
+        if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
+            redirect('index.php');
         }
     }
-    echo $text;
-}
-
-function addSet($set)
-{
-    if (PHP_SAPI == 'cli') {
-        info("Please add {$set} to the database");
-    } else {
-        redirect("util/insertcardset.php?cardsetcode={$set}&return=util/updateDefaultFormats.php");
+    try {
+        Formats::updateDefaultFormats();
+        echo "done";
+    } catch (SetMissingException $e) {
+        Log::warning($e->getMessage());
+        echo $e->getMessage();
+        exit(0);
     }
 }
 
-function LoadFormat($format)
-{
-    if (!Format::doesFormatExist($format)) {
-        $active_format = new Format('');
-        $active_format->name = $format;
-        $active_format->type = 'System';
-        $active_format->series_name = 'System';
-        $active_format->min_main_cards_allowed = 60;
-        $success = $active_format->save();
-    }
-
-    return new Format($format);
-}
-
-function updateStandard()
-{
-    $fmt = LoadFormat('Standard');
-    if (!$fmt->standard) {
-        $fmt->standard = true;
-        $fmt->save();
-    }
-    $legal = json_decode(file_get_contents('http://whatsinstandard.com/api/v5/sets.json'));
-    if (!$legal) {
-        info('Unable to load WhatsInStandard API.  Aborting.');
-
-        return;
-    }
-    $expected = [];
-    foreach ($legal->sets as $set) {
-        $now = time();
-        $enter = strtotime($set->enter_date);
-        $exit = is_null($set->exit_date) ? $now + 1 : strtotime($set->exit_date);
-        if ($exit < $now) {
-            // Set has rotated out.
-        } elseif ($enter == null || $enter > $now) {
-            // Set is yet to be released. (And probably not available in MTGJSON yet)
-            break;
-        }
-        // Found one we care about.
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name, type, standard_legal FROM cardsets WHERE code = ?');
-        $stmt->bind_param('s', $set->code);
-        $stmt->execute();
-        $stmt->bind_result($setName, $setType, $standard_legal);
-        $success = $stmt->fetch();
-        $stmt->close();
-        if (!$success) {
-            addSet($set->code, 0);
-
-            return;
-        }
-        $expected[] = $setName;
-    }
-    foreach ($fmt->getLegalCardsets() as $setName) {
-        if (!in_array($setName, $expected, true)) {
-            info("{$setName} is no longer Standard Legal.");
-            Database::no_result_single_param('UPDATE cardsets SET standard_legal = 0 WHERE `name` = ?', 's', $setName);
-        }
-    }
-
-    foreach ($expected as $setName) {
-        if (!$fmt->isCardSetLegal($setName)) {
-            info("{$setName} is now Standard Legal.");
-            Database::no_result_single_param('UPDATE cardsets SET standard_legal = 1 WHERE `name` = ?', 's', $setName);
-        }
-    }
-}
-
-function updateModern()
-{
-    info('Updating Modern...');
-    $fmt = LoadFormat('Modern');
-    if (!$fmt->modern) {
-        $fmt->modern = true;
-        $fmt->save();
-    }
-
-    $legal = $fmt->getLegalCardsets();
-
-    $db = Database::getConnection();
-    $stmt = $db->prepare("SELECT name, type, released FROM cardsets WHERE `type` != 'extra' ORDER BY `cardsets`.`released` ASC");
-    $stmt->execute();
-    $stmt->bind_result($setName, $setType, $setDate);
-
-    $sets = [];
-    while ($stmt->fetch()) {
-        $sets[] = [$setName, $setType, $setDate];
-    }
-    $stmt->close();
-
-    $cutoff = strtotime('2003-07-27');
-    foreach ($sets as $set) {
-        $setName = $set[0];
-        $release = strtotime($set[2]);
-        if ($release > $cutoff) {
-            if (!$fmt->isCardSetLegal($setName)) {
-                info("{$setName} is Modern Legal.");
-                Database::no_result_single_param('UPDATE cardsets SET modern_legal = 1 WHERE `name` = ?', 's', $setName);
-            }
-        }
-    }
-}
-
-function updatePennyDreadful($name, $url)
-{
-    info("Updating $name...");
-    $fmt = LoadFormat($name);
-
-    $legal_cards = parseCards(file_get_contents($url));
-    if (!$legal_cards) {
-        info('Unable to fetch legal_cards.txt');
-
-        return;
-    }
-    $i = 0;
-    foreach ($fmt->card_legallist as $card) {
-        if (!in_array($card, $legal_cards, true)) {
-            $fmt->deleteCardFromLegallist($card);
-            info("{$card} is no longer $name Legal.");
-        }
-
-        if ($i++ == 200) {
-            set_time_limit(0);
-            $i = 0;
-            info('.', false);
-        }
-    }
-    info(' ', false);
-    foreach ($legal_cards as $card) {
-        if (!in_array($card, $fmt->card_legallist)) {
-            if ($fmt->isCardOnBanList($card)) {
-                info("{$card} is banned");
-                continue;
-            }
-            $success = $fmt->insertCardIntoLegallist($card);
-            if (!$success) {
-                info("Can't add {$card} to $name Legal list, it is not in the database.");
-                $set = findSetForCard($card);
-                addSet($set, 4);
-
-                return 0;
-            }
-        }
-
-        if ($i++ == 200) {
-            set_time_limit(0);
-            info('.', false);
-            $i = 0;
-        }
-    }
-}
-
-function findSetForCard($card)
-{
-    $card = urlencode($card);
-    $options = ['http' => ['header' => "User-Agent: gatherling.com/1.0\r\n"]];
-    $context = stream_context_create($options);
-    $data = json_decode(file_get_contents("http://api.scryfall.com/cards/named?exact={$card}", false, $context));
-
-    return strtoupper($data->set);
+if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+    main();
 }

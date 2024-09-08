@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ siteName }} | {{ title }}</title>
-    <link rel="stylesheet" type="text/css" href="{{ css }}?v={{ gitHash }}">
+    <link rel="stylesheet" type="text/css" href="{{ cssLink }}">
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css">
     <script src="//code.jquery.com/jquery-latest.min.js"></script>
     {{#enableVue}}
@@ -18,7 +18,7 @@
     <div id="maincontainer" class="container_12">
         <div id="header_bar" class="box">
             <div id="header_logo">
-                <img alt="" src="{{headerLogoImg}}">
+                <img alt="" src="{{headerLogoSrc}}">
             </div>
         <div id="action"></div>
     </div>

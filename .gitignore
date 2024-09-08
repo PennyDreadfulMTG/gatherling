@@ -22,6 +22,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# PHPUnit
+.phpunit.cache/
+.phpunit.result.cache
+
 # Editor directories and files
 .idea
 .vscode/*
@@ -35,3 +39,4 @@ yarn-error.log*
 *.sln
 *.sw?
 /.dccache
+.phpactor.json

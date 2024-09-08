@@ -1,0 +1,8 @@
+<select {{#isDisabled}}disabled{{/isDisabled}} class="inputbox" name="cardsetname" style="width: 250px">
+{{#options}}
+    <option value="{{value}}">{{text}}</option>
+{{/options}}
+</select>
+{{#hasMany}}
+    <input class="inputbutton" type="submit" value="Add All {{cardsetType}}" name ="action" />
+{{/hasMany}}

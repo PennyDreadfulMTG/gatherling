@@ -2,17 +2,19 @@
 
 declare(strict_types=1);
 
+namespace Gatherling\Tests;
+
 require_once 'gatherling/lib.php';
 
 use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Matchup;
 use Gatherling\Models\Series;
+use Gatherling\Tests\DatabaseCase;
 use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
-final class EventsTest extends TestCase
+final class EventsTest extends DatabaseCase
 {
     /**
      * @throws InvalidArgumentException

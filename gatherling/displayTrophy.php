@@ -2,7 +2,7 @@
 
 use Gatherling\Models\Database;
 
-include 'lib.php';
+require_once 'lib.php';
 
 $eventName = $_GET['event'];
 $db = Database::getConnection();

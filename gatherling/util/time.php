@@ -26,7 +26,7 @@ function human_date($datetime, $now): string
         'second' => 1,
     ];
     foreach ($INTERVALS as $interval => $duration) {
-        if ($elapsed > $duration) {
+        if ($elapsed >= $duration) {
             return pluralize(intdiv($elapsed, $duration), $interval)." $suffix";
         }
     }

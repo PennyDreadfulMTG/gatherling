@@ -58,7 +58,7 @@ class EventList extends Page
 
         foreach ($results as &$event) {
             $event['kvalueDisplay'] = $kvalueMap[$event['kvalue']] ?? '';
-            $event['url'] = 'event.php?name='.rawurlencode($event['name']);
+            $event['link'] = 'event.php?name='.rawurlencode($event['name']);
         }
 
         $this->formatDropMenu = formatDropMenuArgs($_GET['format'], true);

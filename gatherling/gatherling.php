@@ -1,5 +1,5 @@
 <?php
-include 'lib.php';
+require_once 'lib.php';
 print_header('Home'); ?>
 
 <div id="maincolumn" class="grid_8">

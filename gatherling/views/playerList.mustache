@@ -7,17 +7,17 @@
             <input type="hidden" name="view" value="reg">
             <table class="c" style="border-width: 0">
                 <tr>
-                    <td colspan="4">
+                    <td colspan="5">
                         <h2>{{event.name}}</h2>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="4" class="c">
+                    <td colspan="5" class="c">
                         <b>{{#hasEntries}}{{numEntries}} {{/hasEntries}}Registered Players</b>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="4">&nbsp;</td>
+                    <td colspan="5">&nbsp;</td>
                 </tr>
                 {{#hasEntries}}
                     <tr>
@@ -61,14 +61,14 @@
                         {{#canUndrop}}
                             <td>
                                 &#x2690; {{dropRound}}
-                                <a href="event.php?view=reg&player={{player.name}}&event={{event.id}}&action=undrop&event_id={{event.id}}">(undrop)</a>
+                                <a href="{{ undropLink }}">(undrop)</a>
                             </td>
                         {{/canUndrop}}
-                        {{#medalImg}}
+                        {{#medalSrc}}
                             <td class="c">
-                                <img alt="Medal" src="{{medalImg}}"/>
+                                <img alt="Medal" src="{{medalSrc}}"/>
                             </td>
-                        {{/medalImg}}
+                        {{/medalSrc}}
                         <td>
                             {{^player.emailAddress}}
                                 {{#gameName}}{{> gameName}}{{/gameName}}

@@ -1051,9 +1051,9 @@ class Deck
         if ($this->new) {
             return $args;
         }
-        $args['id'] = $this->id;
         $args['name'] = empty($this->name) ? '** NO NAME **' : $this->name;
-        $args['valid'] = $this->isValid();
+        $args['isValid'] = $this->isValid();
+        $args['deckLink'] = 'deck.php?mode=view&id=' . rawurlencode($this->id);
 
         return $args;
     }

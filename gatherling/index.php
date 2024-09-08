@@ -6,9 +6,10 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Matchup;
 use Gatherling\Models\Player;
 
-include 'lib.php';
+require_once 'lib.php';
 
-function main(): void {
+function main(): void
+{
     ob_start();
     ?>
         <div id="gatherling_main" class="box grid_12">

@@ -4,7 +4,7 @@ use Gatherling\Models\Deck;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 
-include 'lib.php';
+require_once 'lib.php';
 include 'lib_form_helper.php';
 
 if (!Player::isLoggedIn()) {

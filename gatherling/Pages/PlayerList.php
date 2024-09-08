@@ -83,9 +83,17 @@ function entryListArgs(Entry $entry, int $numEntries, bool $isTribal): array
         $playerActive = Standings::playerActive($entry->event->name, $entry->player->name);
         $entryInfo['canDrop'] = $playerActive;
         $entryInfo['canUndrop'] = !$playerActive;
+        $undropParams = [
+            'view' => 'reg',
+            'player' => $entry->player->name,
+            'event' => $entry->event->id,
+            'action' => 'undrop',
+            'event_id' => $entry->event->id,
+        ];
+        $entryInfo['undropLink'] = 'event.php?' . http_build_query($undropParams, '', '&', PHP_QUERY_RFC3986);
     }
     if ($entry->event->isFinished() && strcmp('', $entry->medal) != 0) {
-        $entryInfo['medalImg'] = theme_file("images/{$entry->medal}.png");
+        $entryInfo['medalSrc'] = theme_file("images/{$entry->medal}.png");
     }
     $entryInfo['gameName'] = $entry->player->gameNameArgs($entry->event->client);
     if ($entry->deck) {

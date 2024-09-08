@@ -952,7 +952,7 @@ class Series
 
         foreach ($seasonevents as $evname) {
             $shortname = preg_replace("/^{$series->name} /", '', $evname);
-            $reportlink = 'eventreport.php?event='.urlencode($evname);
+            $reportlink = 'eventreport.php?event='.rawurlencode($evname);
             echo "<th><a href=\"{$reportlink}\">{$shortname}</a></th>";
         }
         echo '</tr>';
