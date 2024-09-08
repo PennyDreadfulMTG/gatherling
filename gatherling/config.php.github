@@ -3,6 +3,8 @@
 # CONFIGURATION FILE FOR UNIT TESTS
 # GO LOOK AT THE OTHER ONE FOR AN EXPLANATION
 
+$CONFIG['env'] = 'ci';
+
 $CONFIG['db_hostname'] = $CONFIG['db_test_hostname'] = '127.0.0.1';
 $CONFIG['db_username'] = $CONFIG['db_test_username'] = 'root';
 $CONFIG['db_password'] = $CONFIG['db_test_password'] = 'gatherling';
