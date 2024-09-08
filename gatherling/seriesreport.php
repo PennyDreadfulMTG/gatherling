@@ -4,22 +4,27 @@ use Gatherling\Models\Series;
 
 require_once 'lib.php';
 
-print_header('Season Report');
-?>
-<div class="grid_10 prefix_1 suffix_1">
-    <div id="gatherling_main" class="box">
-        <div class="uppertitle">Season Report</div>
-        <?php
-            selectSeason();
-            if (isset($_GET['series']) && isset($_GET['season'])) {
-                $series = new Series($_GET['series']);
-                $series->seasonStandings($series, $_GET['season']);
+function main(): void
+{
+    $series = $_GET['series'] ?? null;
+    $season = $_GET['season'] ?? null;
+    print_header('Season Report');
+    ?>
+    <div class="grid_10 prefix_1 suffix_1">
+        <div id="gatherling_main" class="box">
+            <div class="uppertitle">Season Report</div>
+            <?php
+            selectSeason($series, $season);
+            if ($series && $season) {
+                $seriesObj = new Series($series);
+                $seriesObj->seasonStandings($seriesObj, $season);
             }
-        ?>
+            ?>
+        </div>
     </div>
-</div>
-<?php
-print_footer();
+    <?php
+    print_footer();
+}
 
 function selectSeason(): void
 {
@@ -35,4 +40,8 @@ function selectSeason(): void
     echo '<tr><td colspan="2" class="buttons">';
     echo "<input class=\"inputbutton\" type=\"submit\" value=\"Get Season Scoreboard\" />\n";
     echo '</td></tr></table></form>';
+}
+
+if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+    main();
 }
