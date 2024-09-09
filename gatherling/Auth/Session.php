@@ -45,13 +45,15 @@ class Session
 
     private static function save(): void
     {
-        if (isset($_COOKIE['remember_me'])) {
-            $token = $_COOKIE['remember_me'];
-        } else {
+        $token = $_COOKIE['remember_me'] ?? null;
+        if (empty($_SESSION) && $token) {
+            self::clear($token);
+            return;
+        }
+        if (!$token) {
             $token = bin2hex(random_bytes(32));
         }
-        // Force to object so that we get '{}' instead of '[]' when empty
-        $details = json_encode((object) $_SESSION);
+        $details = json_encode($_SESSION);
         $expiry = time() + self::$LIFETIME;
         $sql = '
             INSERT INTO
@@ -68,7 +70,14 @@ class Session
         ];
         DB::execute($sql, $args);
         setcookie('remember_me', $token, $expiry, '/');
-        $sql = 'DELETE FROM sessions WHERE expiry < NOW()';
-        DB::execute($sql);
+    }
+
+    private static function clear(string $token): void
+    {
+        // We take the opportunity to delete expired sessions here, too
+        $sql = 'DELETE FROM sessions WHERE token = :token OR expiry < NOW()';
+        $args = ['token' => $token];
+        DB::execute($sql, $args);
+        setcookie('remember_me', '', time() - 60 * 60, '/');
     }
 }
