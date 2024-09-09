@@ -51,13 +51,13 @@ class Session
             self::clear($token);
             return;
         }
+        if (empty($_SESSION)) {
+            return;
+        }
         if (!$token) {
             $token = bin2hex(random_bytes(32));
         }
         $details = json_encode($_SESSION);
-        if ($details === '[]') {
-            Log::warning('Storing an empty session for some reason', ['token' => $token, 'session' => $_SESSION]);
-        }
         $expiry = time() + self::$LIFETIME;
         $sql = '
             INSERT INTO
