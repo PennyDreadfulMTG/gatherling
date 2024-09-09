@@ -3,6 +3,7 @@
 namespace Gatherling\Auth;
 
 use Gatherling\Data\DB;
+use Gatherling\Log;
 
 class Session
 {
@@ -54,6 +55,9 @@ class Session
             $token = bin2hex(random_bytes(32));
         }
         $details = json_encode($_SESSION);
+        if ($details === '[]') {
+            Log::warning('Storing an empty session for some reason', ['token' => $token, 'session' => $_SESSION]);
+        }
         $expiry = time() + self::$LIFETIME;
         $sql = '
             INSERT INTO
