@@ -24,7 +24,7 @@ class PlayerList extends EventFrame
     public ?array $newEntry;
     public bool $showCreateNextEvent;
     public bool $showCreateNextSeason;
-    public array $deckless;
+    public string $deckless;
 
     public function __construct(Event $event)
     {
@@ -40,7 +40,7 @@ class PlayerList extends EventFrame
         foreach ($entries as $entry) {
             $entryInfoList[] = entryListArgs($entry, $numEntries, (bool) $format->tribal);
             if (!$entry->deck) {
-                $deckless[] = $entry->player->gameNameArgs($entry->event->client);
+                $deckless[] = $entry->player->name;
             }
         }
 
@@ -72,7 +72,7 @@ class PlayerList extends EventFrame
         $this->newEntry = $newEntry;
         $this->showCreateNextEvent = $showCreateNextEvent;
         $this->showCreateNextSeason = $showCreateNextSeason;
-        $this->deckless = $deckless;
+        $this->deckless = implode(', ', $deckless);
     }
 }
 

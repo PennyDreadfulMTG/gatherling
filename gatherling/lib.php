@@ -133,8 +133,8 @@ function printCardLink($card): void
     $gathererName = preg_replace('/ /', ']+[', $card);
     $gathererName = str_replace('/', ']+[', $gathererName);
     echo '<span class="cardHoverImageWrapper">';
-    echo "<a href=\"http://gatherer.wizards.com/Pages/Search/Default.aspx?name=+[{$gathererName}]\" ";
-    echo "class=\"linkedCardName\" target=\"_blank\">{$card}<span class=\"linkCardHoverImage\"><p class=\"crop\" style=\"background-image: url(http://gatherer.wizards.com/Handlers/Image.ashx?name={$card}&type=card\"><img alt=\"{$card}\" src=\"http://gatherer.wizards.com/Handlers/Image.ashx?name={$card}&type=card\"></p></span></a></span>";
+    echo "<a href=\"https://gatherer.wizards.com/Pages/Search/Default.aspx?name=+[{$gathererName}]\" ";
+    echo "class=\"linkedCardName\" target=\"_blank\">{$card}<span class=\"linkCardHoverImage\"><p class=\"crop\" style=\"background-image: url(https://gatherer.wizards.com/Handlers/Image.ashx?name={$card}&type=card\"><img alt=\"{$card}\" src=\"https://gatherer.wizards.com/Handlers/Image.ashx?name={$card}&type=card\"></p></span></a></span>";
 }
 
 function image_tag($filename, $extra_attr = null): string
