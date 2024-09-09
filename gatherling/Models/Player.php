@@ -3,6 +3,7 @@
 namespace Gatherling\Models;
 
 use Exception;
+use Gatherling\Data\DB;
 
 class Player
 {
@@ -106,19 +107,11 @@ class Player
             return false;
         }
         $username = self::sanitizeUsername($username);
-
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT password FROM players WHERE name = ?');
-        $stmt->bind_param('s', $username);
-        $stmt->execute();
-        $stmt->bind_result($srvpass);
-        if (!$stmt->fetch()) {
+        $srvpass = DB::value('SELECT password FROM players WHERE name = :name', ['name' => $username], true);
+        if ($srvpass === null) {
             return false;
         }
-        $stmt->close();
-
         $hashpwd = hash('sha256', $password);
-
         return strcmp($srvpass, $hashpwd) == 0;
     }
 
