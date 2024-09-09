@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Tests\Data;
 
 use Gatherling\Data\DB;
+use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Tests\DatabaseCase;
 
 class DBTest extends DatabaseCase
@@ -44,6 +45,10 @@ class DBTest extends DatabaseCase
         $this->assertEquals('Test1', $value);
         $value = DB::value('SELECT id FROM test_table WHERE id = 1');
         $this->assertEquals(1, $value);
+        $value = DB::value('SELECT id FROM test_table WHERE id = 9999', [], true);
+        $this->assertNull($value);
+        $this->expectException(DatabaseException::class);
+        DB::value('SELECT id FROM test_table WHERE id = 9999');
     }
 
     public function testCommit()

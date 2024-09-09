@@ -90,13 +90,16 @@ class DB
         });
     }
 
-    public static function value(string $sql, array $params = []): mixed
+    public static function value(string $sql, array $params = [], bool $missingOk = false): mixed
     {
-        return self::_execute($sql, $params, function ($sql, $params) {
+        return self::_execute($sql, $params, function ($sql, $params) use ($missingOk) {
             $stmt = self::connect()->pdo->prepare($sql);
             $stmt->execute($params);
-
-            return $stmt->fetchColumn();
+            $result = $stmt->fetch(PDO::FETCH_NUM);
+            if ($result === false && !$missingOk) {
+                throw new DatabaseException("Failed to fetch value for $sql");
+            }
+            return $result[0] ?? null;
         });
     }
 
