@@ -114,26 +114,16 @@
                         </td>
                     </tr>
                 {{/entries}}
-                {{#notYetStarted}}
+                {{#newEntry}}
                     <tr id="row_new_entry">
-                        <td colspan="2">
+                        <td colspan="3">
                             Add: {{#newEntry}}{{> stringField}}{{/newEntry}}
                         </td>
                         <td colspan="2">
                             <input id="update_reg" class="inputbutton" type="submit" name="mode" value="Update Registration">
                         </td>
                     </tr>
-                {{/notYetStarted}}
-                {{#isOngoing}}
-                     <tr id="row_new_entry">
-                         <td>Add:</td>
-                         <td>{{#newEntry}}{{> stringField}}{{/newEntry}}</td>
-                         <td>&nbsp;</td>
-                         <td colspan="2">
-                            <input id="update_reg" class="inputbutton" type="submit" name="mode" value="Update Registration">
-                        </td>
-                     </tr>
-                {{/isOngoing}}
+                {{/newEntry}}
             </table>
         </form>
         {{#isActive}}
