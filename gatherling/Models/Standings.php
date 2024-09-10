@@ -2,6 +2,8 @@
 
 namespace Gatherling\Models;
 
+use Gatherling\Views\TemplateHelper;
+
 class Standings
 {
     public $id;
@@ -130,7 +132,7 @@ class Standings
     {
         $args = self::eventStandingsArgs($eventName, $playerName);
 
-        return renderTemplate('partials/eventStandings', $args);
+        return TemplateHelper::render('partials/eventStandings', $args);
     }
 
     public static function eventStandingsArgs(?string $eventName, ?string $playerName = null): array

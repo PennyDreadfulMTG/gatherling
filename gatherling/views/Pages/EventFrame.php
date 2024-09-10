@@ -1,6 +1,6 @@
 <?php
 
-namespace Gatherling\Pages;
+namespace Gatherling\Views\Pages;
 
 // Abstract class parent for all the pages that need to show the "control panel" set of links.
 // Also handles setting event and title properties.

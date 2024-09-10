@@ -3,6 +3,7 @@
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Standings;
+use Gatherling\Views\TemplateHelper;
 
 require_once 'lib.php';
 
@@ -10,7 +11,7 @@ function textInput(string $label, string $name, mixed $value = '', int $size = 0
 {
     $args = textInputArgs($label, $name, $value, $size, $reminderText, $id);
 
-    return renderTemplate('partials/textInput', $args);
+    return TemplateHelper::render('partials/textInput', $args);
 }
 
 function textInputArgs(string $label, string $name, mixed $value = '', int $size = 0, ?string $reminderText = null, ?string $id = null): array
@@ -36,7 +37,7 @@ function checkboxInput(string $label, string $name, bool $isChecked = false, ?st
 {
     $args = checkboxInputArgs($label, $name, $isChecked, $reminderText);
 
-    return renderTemplate('partials/checkboxInput', $args);
+    return TemplateHelper::render('partials/checkboxInput', $args);
 }
 
 function checkboxInputArgs(string $label, string $name, bool $isChecked = false, ?string $reminderText = null): array
@@ -70,7 +71,7 @@ function select(string $name, array $options = [], mixed $selected = null, ?stri
 {
     $args = selectArgs($name, $options, $selected, $id);
 
-    return renderTemplate('partials/select', $args);
+    return TemplateHelper::render('partials/select', $args);
 }
 
 function selectArgs(string $name, array $options = [], mixed $selected = null, ?string $id = null): array
@@ -98,7 +99,7 @@ function selectInput(string $label, string $name, ?array $options, mixed $select
 {
     $args = selectInputArgs($label, $name, $options, $selected, $id);
 
-    return renderTemplate('partials/selectInput', $args);
+    return TemplateHelper::render('partials/selectInput', $args);
 }
 
 function selectInputArgs(string $label, string $name, ?array $options, mixed $selected = null, ?string $id = null): array
@@ -119,7 +120,7 @@ function stringField($field, $def, $len): string
 {
     $args = stringFieldArgs($field, $def, $len);
 
-    return renderTemplate('partials/stringField', $args);
+    return TemplateHelper::render('partials/stringField', $args);
 }
 
 function stringFieldArgs(string $field, mixed $def, int $len): array

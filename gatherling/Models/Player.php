@@ -4,6 +4,7 @@ namespace Gatherling\Models;
 
 use Exception;
 use Gatherling\Data\DB;
+use Gatherling\Views\TemplateHelper;
 
 class Player
 {
@@ -1386,7 +1387,7 @@ class Player
     {
         $args = $this->gameNameArgs($game, $html);
 
-        return renderTemplate('partials/gameName', $args);
+        return TemplateHelper::render('partials/gameName', $args);
     }
 
     public function linkTo(string $game = 'gatherling'): string

@@ -10,7 +10,7 @@ use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Matchup;
 use Gatherling\Models\Series;
-use Gatherling\Tests\DatabaseCase;
+use Gatherling\Tests\Support\TestCases\DatabaseCase;
 use PHPUnit\Framework\ExpectationFailedException;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 

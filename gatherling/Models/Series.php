@@ -2,8 +2,9 @@
 
 namespace Gatherling\Models;
 
-use Exception;
 use PDO;
+use Exception;
+use Gatherling\Views\TemplateHelper;
 
 class Series
 {
@@ -907,7 +908,7 @@ class Series
 
     public static function dropMenu(?string $series, bool $useall = false, array $limitTo = []): string
     {
-        return renderTemplate('partials/dropMenu', self::dropMenuArgs($series, $useall, $limitTo));
+        return TemplateHelper::render('partials/dropMenu', self::dropMenuArgs($series, $useall, $limitTo));
     }
 
     public static function dropMenuArgs(?string $series, bool $useall = false, array $limitTo = []): array

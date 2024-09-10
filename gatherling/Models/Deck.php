@@ -3,6 +3,7 @@
 namespace Gatherling\Models;
 
 use Exception;
+use Gatherling\Views\TemplateHelper;
 
 class Deck
 {
@@ -1040,7 +1041,7 @@ class Deck
     {
         $args = $this->linkToArgs();
 
-        return renderTemplate('partials/linkTo', $args);
+        return TemplateHelper::render('partials/linkTo', $args);
     }
 
     public function linkToArgs(): array

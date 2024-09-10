@@ -1,6 +1,6 @@
 <?php
 
-namespace Gatherling\Pages;
+namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Event;
 use Gatherling\Models\Matchup;

@@ -6,7 +6,7 @@ namespace Gatherling\Tests\Data;
 
 use Gatherling\Data\DB;
 use Gatherling\Exceptions\DatabaseException;
-use Gatherling\Tests\DatabaseCase;
+use Gatherling\Tests\Support\TestCases\DatabaseCase;
 
 class DBTest extends DatabaseCase
 {

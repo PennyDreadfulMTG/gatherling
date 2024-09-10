@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling;
 
-use Gatherling\Pages\BannedPlayer;
+use Gatherling\Views\Pages\BannedPlayer;
 
 require_once 'lib.php';
 

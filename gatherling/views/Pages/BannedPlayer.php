@@ -1,6 +1,6 @@
 <?php
 
-namespace Gatherling\Pages;
+namespace Gatherling\Views\Pages;
 
 class BannedPlayer extends Page
 {

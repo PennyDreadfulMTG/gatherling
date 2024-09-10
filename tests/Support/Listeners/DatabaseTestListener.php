@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Gatherling\Tests;
+namespace Gatherling\Tests\Support\Listeners;
 
 use Gatherling\Data\Setup;
 use Gatherling\Log;

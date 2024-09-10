@@ -3,6 +3,7 @@
 use Gatherling\Models\Database;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
+use Gatherling\Views\TemplateHelper;
 
 require_once 'lib.php';
 include 'lib_form_helper.php';
@@ -1308,7 +1309,7 @@ function cardsetDropMenu(string $cardsetType, Format $format): string
     foreach ($cardsets as $cardset) {
         $options[] = ['value' => $cardset, 'text' => $cardset];
     }
-    return renderTemplate('partials/cardsetDropMenu', [
+    return TemplateHelper::render('partials/cardsetDropMenu', [
         'cardsets' => $cardsets,
         'cardsetType' => $cardsetType,
         'hasMany' => count($cardsets) > 2,

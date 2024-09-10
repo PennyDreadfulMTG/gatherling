@@ -6,8 +6,10 @@ namespace Gatherling\Tests;
 
 require_once 'gatherling/lib.php';
 
-use PHPUnit\Framework\TestCase;
 use stdClass;
+use PHPUnit\Framework\TestCase;
+use Gatherling\Views\Pages\Page;
+use Gatherling\Views\Components\Component;
 
 final class LibTest extends TestCase
 {

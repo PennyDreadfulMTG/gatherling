@@ -4,6 +4,7 @@ use Gatherling\Auth\Session;
 use Gatherling\Models\Database;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
+use Gatherling\Views\TemplateHelper;
 
 require_once 'bootstrap.php';
 ob_start();
@@ -34,19 +35,6 @@ function page($title, $contents): string
     print_footer();
 
     return ob_get_clean();
-}
-
-function renderTemplate(string $template_name, array|object $context = []): string
-{
-    $m = new Mustache_Engine([
-        'cache'            => '/tmp/gatherling/mustache/templates',
-        'loader'           => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views'),
-        'partials_loader'  => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
-        'entity_flags'     => ENT_QUOTES,
-        'strict_callables' => true,
-    ]);
-
-    return $m->render($template_name, $context);
 }
 
 /** Gets the correct name, relative to the gatherling root dir, for a file in the theme.
@@ -83,26 +71,26 @@ function print_header($title, $enable_vue = false): void
         $isOrganizer = count($player->organizersSeries()) > 0;
     }
 
-    echo renderTemplate('partials/header', [
-        'siteName'       => $CONFIG['site_name'],
-        'title'          => $title,
-        'cssLink'        => theme_file('css/stylesheet.css') . '?v=' . rawurlencode(git_hash()),
-        'enableVue'      => $enable_vue,
-        'gitHash'        => git_hash(),
-        'headerLogoSrc'  => theme_file('images/header_logo.png'),
-        'player'         => $player,
-        'isHost'         => $isHost,
-        'isOrganizer'    => $isOrganizer,
-        'isSuper'        => $isSuper,
+    echo TemplateHelper::render('partials/header', [
+        'siteName' => $CONFIG['site_name'],
+        'title' => $title,
+        'cssLink' => theme_file('css/stylesheet.css') . '?v=' . rawurlencode(git_hash()),
+        'enableVue' => $enable_vue,
+        'gitHash' => git_hash(),
+        'headerLogoSrc' => theme_file('images/header_logo.png'),
+        'player' => $player,
+        'isHost' => $isHost,
+        'isOrganizer' => $isOrganizer,
+        'isSuper' => $isSuper,
         'versionTagline' => version_tagline(),
     ]);
 }
 
 function print_footer(): void
 {
-    echo renderTemplate('partials/footer', [
+    echo TemplateHelper::render('partials/footer', [
         'versionTagline' => version_tagline(),
-        'gitHash'        => git_hash(),
+        'gitHash' => git_hash(),
     ]);
 }
 
@@ -159,7 +147,7 @@ function seasonDropMenu(int|string|null $season, bool $useall = false): string
 {
     $args = seasonDropMenuArgs($season, $useall);
 
-    return renderTemplate('partials/dropMenu', $args);
+    return TemplateHelper::render('partials/dropMenu', $args);
 }
 
 function seasonDropMenuArgs(int|string|null $season, bool $useall = false): array
@@ -179,7 +167,7 @@ function formatDropMenu(?string $format, bool $useAll = false, string $formName 
 {
     $args = formatDropMenuArgs($format, $useAll, $formName, $showMeta);
 
-    return renderTemplate('partials/dropMenu', $args);
+    return TemplateHelper::render('partials/dropMenu', $args);
 }
 
 function formatDropMenuArgs(?string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): array
@@ -255,7 +243,7 @@ function timeDropMenu(int|string $hour, int|string $minutes = 0): string
 {
     $args = timeDropMenuArgs($hour, $minutes);
 
-    return renderTemplate('partials/dropMenu', $args);
+    return TemplateHelper::render('partials/dropMenu', $args);
 }
 
 function timeDropMenuArgs(int|string $hour, int|string $minutes = 0): array
@@ -317,7 +305,7 @@ function notAllowed(string $reason): string
 {
     $args = notAllowedArgs($reason);
 
-    return renderTemplate('partials/notAllowed', $args);
+    return TemplateHelper::render('partials/notAllowed', $args);
 }
 
 function notAllowedArgs(string $reason): array

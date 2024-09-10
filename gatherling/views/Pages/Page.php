@@ -1,8 +1,9 @@
 <?php
 
-namespace Gatherling\Pages;
+namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Player;
+use Gatherling\Views\TemplateHelper;
 
 abstract class Page
 {
@@ -16,7 +17,7 @@ abstract class Page
     public bool $isOrganizer;
     public bool $isSuper;
     public string $js;
-    public Player $player;
+    public ?Player $player;
     public string $siteName;
     public int $tabs;
     public string $title;
@@ -30,10 +31,10 @@ abstract class Page
         $this->gitHash = git_hash();
         $this->cssLink = theme_file('css/stylesheet.css') . '?v=' . rawurlencode($this->gitHash);
         $this->headerLogoSrc = theme_file('images/header_logo.png');
-        $this->player = Player::getSessionPlayer();
-        $this->isHost = $this->player->isHost();
-        $this->isOrganizer = count($this->player->organizersSeries()) > 0;
-        $this->isSuper = $this->player->isSuper();
+        $this->player = Player::getSessionPlayer() ?? null;
+        $this->isHost = $this->player?->isHost() ?? false;
+        $this->isOrganizer = count($this->player?->organizersSeries() ?? []) > 0;
+        $this->isSuper = $this->player?->isSuper() ?? false;
         $this->tabs = 5 + (int) $this->isHost + (int) $this->isOrganizer + (int) $this->isSuper;
         $this->versionTagline = version_tagline();
     }
@@ -48,8 +49,7 @@ abstract class Page
 
     public function render(): string
     {
-        $this->contentSafe = renderTemplate($this->template(), $this);
-
-        return renderTemplate('page', $this);
+        $this->contentSafe = TemplateHelper::render($this->template(), $this);
+        return TemplateHelper::render('page', $this);
     }
 }

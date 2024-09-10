@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Gatherling\Pages;
+namespace Gatherling\Views\Pages;
 
 class AuthFailed extends Page
 {
