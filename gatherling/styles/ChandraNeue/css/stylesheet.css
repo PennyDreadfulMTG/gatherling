@@ -86,6 +86,10 @@ fieldset {
     text-align: center;
 }
 
+.warning {
+    color: red;
+}
+
 #gatherling_main td.box.round-header {
     background-color: grey;
     color: black;
