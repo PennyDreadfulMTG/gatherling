@@ -34,9 +34,8 @@
                     </tr>
                 {{/hasMatches}}
                 {{#rounds}}
-                    <tr>
-                        <td class="box" class="center" colspan="7" style="background-color: Grey;color: Black">
-                            <a id="round-{{round}}"></a>
+                    <tr id="round-{{round}}">
+                        <td class="box round-header" colspan="7">
                             ROUND {{round}} {{extraRoundTitle}}
                         </td>
                     </tr>

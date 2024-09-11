@@ -86,6 +86,12 @@ fieldset {
     text-align: center;
 }
 
+#gatherling_main td.box.round-header {
+    background-color: grey;
+    color: black;
+    padding-left: 8px;
+}
+
 /*
 Work around Mustache's trailing comma problem.
 See: https://bluebones.net/2024/09/avoid-trailing-comma-when-emitting-lists-in-mustache-templates/
