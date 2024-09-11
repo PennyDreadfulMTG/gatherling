@@ -66,11 +66,11 @@ class EventForm extends EventFrame
         $navLinks = [];
         $prevEvent = $event->findPrev();
         if ($prevEvent) {
-            $navLinks[] = $prevEvent->makeLinkArgs('« Previous');
+            $navLinks[] = $prevEvent->makeLinkArgs('Previous');
         }
         $nextEvent = $event->findNext();
         if ($nextEvent) {
-            $navLinks[] = $nextEvent->makeLinkArgs('Next »');
+            $navLinks[] = $nextEvent->makeLinkArgs('Next');
         }
         $yearDropMenu = numDropMenuArgs('year', '- Year -', (int) date('Y') + 1, $year, 2011);
         $monthDropMenu = monthDropMenuArgs($month);
