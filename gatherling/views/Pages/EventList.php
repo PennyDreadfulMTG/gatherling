@@ -59,6 +59,7 @@ class EventList extends Page
         foreach ($results as &$event) {
             $event['kvalueDisplay'] = $kvalueMap[$event['kvalue']] ?? '';
             $event['link'] = 'event.php?name='.rawurlencode($event['name']);
+            $event['isOngoing'] = $event['finalized'] == 0 && $event['active'] == 1;
         }
 
         $this->formatDropMenu = formatDropMenuArgs($_GET['format'], true);
@@ -81,7 +82,7 @@ function queryEvents(Player $player, array $playerSeries, string $seriesName): \
 
     $query = "SELECT e.name AS name, e.format AS format,
         COUNT(DISTINCT n.player) AS players, e.host AS host, e.start AS start,
-        e.finalized, e.cohost, e.series, e.kvalue
+        e.active, e.finalized, e.cohost, e.series, e.kvalue
         FROM events e
         LEFT OUTER JOIN entries AS n ON n.event_id = e.id
         WHERE (e.host = \"{$db->escape_string($player->name)}\"
