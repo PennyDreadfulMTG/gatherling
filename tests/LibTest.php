@@ -23,9 +23,11 @@ final class LibTest extends TestCase
         $parent = new stdClass();
         $parent->child = $child;
         $parent->monkey = 'business';
+        $parent->OP_Match = 1;
         $arr = getObjectVarsCamelCase($parent);
         $this->assertEquals([
             'monkey' => 'business',
+            'opMatch' => 1,
             'child'  => [
                 'baz'   => 'quux',
                 'child' => [
@@ -33,5 +35,14 @@ final class LibTest extends TestCase
                 ],
             ],
         ], $arr);
+    }
+
+    public function testToCamel()
+    {
+        $this->assertEquals('fooBar', toCamel('foo_bar'));
+        $this->assertEquals('opMatch', toCamel('OP_Match'));
+        $this->assertEquals('adWords', toCamel('AdWords'));
+        $this->assertEquals('alreadyCamelCase', toCamel('alreadyCamelCase'));
+        $this->assertEquals('xmlHttpRequest', toCamel('XMLHttpRequest'));
     }
 }

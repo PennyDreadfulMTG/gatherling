@@ -520,13 +520,36 @@ function print_tooltip($text, $tooltip): void
 function getObjectVarsCamelCase(object $obj): array
 {
     $vars = get_object_vars($obj);
-
-    return arrayMapRecursive('snakeToCamel', $vars);
+    return arrayMapRecursive('toCamel', $vars);
 }
 
-function snakeToCamel(string $string): string
+// https://stackoverflow.com/a/45440841/375262
+function toCamel(string $string): string
 {
-    return lcfirst(str_replace('_', '', ucwords($string, '_')));
+    // Convert to ASCII, remove apostrophes, and split into words
+    $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+    $string = str_replace("'", "", $string);
+    $words = preg_split('/[^a-zA-Z0-9]+/', $string);
+
+    // Convert each word to camel case
+    $camelCase = array_map(function ($word) {
+        // Split words that are already in camel case
+        $word = preg_replace('/(?<=\p{Ll})(?=\p{Lu})/u', ' ', $word);
+        $word = preg_replace('/(?<=\p{Lu})(?=\p{Lu}\p{Ll})/u', ' ', $word);
+        $subWords = explode(' ', $word);
+
+        // Lowercase each subword
+        $subWords = array_map('strtolower', $subWords);
+        // Capitalize each subword
+        $subWords = array_map('ucfirst', $subWords);
+
+        return implode('', $subWords);
+    }, $words);
+
+    // Join words and lowercase the first character
+    $result = implode('', $camelCase);
+    $result = lcfirst($result);
+    return $result;
 }
 
 function arrayMapRecursive(callable $func, array $arr): array
