@@ -18,7 +18,7 @@ class Player
     public $emailPrivacy;
     public $timezone;
     public $verified;
-    public $theme;
+    public $theme; // DEPRECATED. Always null.
     public $discord_id;
     public $discord_handle;
     public $api_key;

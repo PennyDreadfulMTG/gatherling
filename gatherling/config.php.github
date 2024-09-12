@@ -13,7 +13,6 @@ $CONFIG['db_test_database'] = 'gatherling_test';
 
 $CONFIG['base_url'] = "http://localhost/gatherling/";
 $CONFIG['site_name'] = "Gatherling on Github Actions";
-$CONFIG['style'] = "Chandra";
 $CONFIG['calendar_description'] = "Gatherling Calendar";
 
 $CONFIG['infobot_passkey'] = "";

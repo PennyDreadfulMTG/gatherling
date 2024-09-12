@@ -42,20 +42,7 @@ function page($title, $contents): string
  */
 function theme_file($name): string
 {
-    global $CONFIG;
-    if (Player::isLoggedIn()) {
-        $user_dir = 'styles/'.Player::getSessionPlayer()->theme.'/';
-        if (file_exists($user_dir.$name)) {
-            return $user_dir.$name;
-        }
-    }
-    $theme_dir = "styles/{$CONFIG['style']}/";
-    $default_dir = 'styles/Chandra/';
-    if (file_exists($theme_dir.$name)) {
-        return $theme_dir.$name;
-    }
-
-    return $default_dir.$name;
+    return 'styles/ChandraNeue/' . $name;
 }
 
 function print_header($title, $enable_vue = false): void
