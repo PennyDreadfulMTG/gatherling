@@ -142,7 +142,7 @@ function deckForm($deck = null)
     }
 
     echo "<form action=\"deck.php\" method=\"post\">\n";
-    echo "<table class=\"c\">\n";
+    echo "<table>\n";
     echo "<tr><th valign=\"top\"><b>Directions:</th>\n";
     echo '<td>To enter your deck, please give it ';
     echo 'a name and select an archetype from the drop-down menu below. If ';
@@ -208,7 +208,7 @@ function deckRegisterForm()
     $vals = ['contents' => '', 'sideboard' => ''];
 
     echo "<form action=\"deck.php?mode=addregdeck\" method=\"post\">\n";
-    echo "<table class=\"c\">\n";
+    echo "<table>\n";
     echo "<tr><td valign=\"top\"><b>Directions:</td>\n";
     echo '<td>To enter your deck, please give it ';
     echo 'a name and select an archetype from the drop-down menu below. If ';
