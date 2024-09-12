@@ -42,7 +42,7 @@ function page($title, $contents): string
  */
 function theme_file($name): string
 {
-    return 'styles/ChandraNeue/' . $name;
+    return 'styles/' . $name;
 }
 
 function print_header($title, $enable_vue = false): void
