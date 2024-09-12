@@ -6,6 +6,7 @@ use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Format;
 use Gatherling\Models\Standings;
+use Gatherling\Views\Components\InitialSeedDropMenu;
 
 class PlayerList extends EventFrame
 {
@@ -106,7 +107,7 @@ function entryListArgs(Entry $entry, int $numEntries, bool $isTribal): array
     if ($entry->event->isSwiss() && !$entry->event->hasStarted()) {
         $entryInfo['initialByeDropMenu'] = initialByeDropMenuArgs('initial_byes[]', $entry->player->name, $entry->initial_byes);
     } elseif ($entry->event->isSingleElim() && !$entry->event->hasStarted()) {
-        $entryInfo['initialSeedDropMenu'] = initialSeedDropMenuArgs('initial_seed[]', $entry->player->name, $entry->initial_seed, $numEntries);
+        $entryInfo['initialSeedDropMenu'] = new InitialSeedDropMenu('initial_seed[]', $entry->player->name, $entry->initial_seed, $numEntries);
     }
     if ($entry->canDelete()) {
         $entryInfo['canDelete'] = $entry->canDelete();
@@ -125,25 +126,6 @@ function initialByeDropMenuArgs(string $name = 'initial_byes', string $playerNam
             'value'      => "$playerName $i",
             'text'       => $i == 0 ? 'None' : "$i",
             'isSelected' => $currentByes == $i,
-        ];
-    }
-
-    return [
-        'name'    => $name,
-        'options' => $options,
-    ];
-}
-
-function initialSeedDropMenuArgs(string $name, string $playerName, int $currentSeed, int $numEntries): array
-{
-    $options = [
-        ['value' => "$playerName 127", 'text' => 'None', 'isSelected' => $currentSeed == 127],
-    ];
-    for ($i = 1; $i <= $numEntries; $i++) {
-        $options[] = [
-            'value'      => "$playerName $i",
-            'text'       => "$i",
-            'isSelected' => $currentSeed == $i,
         ];
     }
 
