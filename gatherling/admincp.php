@@ -109,7 +109,7 @@ function printCreateNewSeriesForm()
     echo '<h4>Create New Series</h4>';
     echo '<form action="admincp.php" method="post">';
     echo '<input type="hidden" name="view" value="create_series" />';
-    echo '<table class="form" style="border-width: 0px" align="center">';
+    echo '<table class="form c">';
     echo '<tr><td colspan="2">New Series Name: <input class="inputbox" type="text" name="seriesname" STYLE="width: 175px"/></td></tr>';
 
     // Active
@@ -149,7 +149,7 @@ function printCalcRatingsForm()
     echo '<h4>Calculate Ratings</h4>';
     echo '<form action="admincp.php" method="post">';
     echo '<input type="hidden" name="view" value="calc_ratings" />';
-    echo '<table class="form" style="border-width: 0px" align="center">';
+    echo '<table class="form c">';
     echo '<tr><td class="buttons">';
     echo '<input class="inputbutton" type="submit" name="action" value="Re-Calculate All Ratings" /></td></tr>';
     echo '<tr><td class="buttons">';
@@ -159,7 +159,7 @@ function printCalcRatingsForm()
     echo '<input class="inputbutton" type="submit" name="action" value="Re-Calcualte By Format" /></td></tr>';
     echo '</table>';
     echo '<h4>Rebuild tribal database</h4>';
-    echo '<table class="form" style="border-width: 0px" align="center">';
+    echo '<table class="form c">';
     echo '<tr><td class="buttons">';
     echo '<input class="inputbutton" type="submit" name="action" value="Rebuild Tribes" /></td></tr>';
     echo '</table></form>';
@@ -169,7 +169,7 @@ function printAddCardSet()
 {
     echo '<h3><center>Install New Cardset</center></h3>';
     echo '<form action="util/insertcardset.php" method="post" enctype="multipart/form-data">';
-    echo '<table class="form" style="border-width: 0px" align="center">';
+    echo '<table class="form c">';
     echo '<input type="hidden" name="return" value="admincp.php" />';
     echo '<input type="hidden" name="ret_args" value="view=add_cardset" />';
     print_file_input('Cardset JSON', 'cardsetfile');
@@ -179,7 +179,7 @@ function printAddCardSet()
     echo '<form action="util/insertcardset.php" method="post" enctype="multipart/form-data">';
     flush();
     echo '<h3><center>Or</center></h3>';
-    echo '<table class="form" style="border-width: 0px" align="center">';
+    echo '<table class="form c">';
     echo '<input type="hidden" name="return" value="admincp.php" />';
     echo '<input type="hidden" name="ret_args" value="view=add_cardset" />';
     // print_text_input("Cardset code", "cardsetcode");
@@ -194,7 +194,7 @@ function printChangePasswordForm()
     echo '<form action="admincp.php" method="post">';
     echo '<input type="hidden" name="view" value="change_password" />';
     echo '<h3><center>Change User Password</center></h3>';
-    echo '<table class="form" style="border-width: 0px" align="center">';
+    echo '<table class="form c">';
     echo textInput('Username', 'username');
     echo textInput('New Password', 'new_password');
     print_submit('Change Password');
@@ -206,7 +206,7 @@ function printManualVerificationForm()
     echo '<form action="admincp.php" method="post">';
     echo '<input type="hidden" name="view" value="verify_player" />';
     echo '<h3><center>Manual Player Verification</center></h3>';
-    echo '<table class="form" style="border-width: 0px" align="center">';
+    echo '<table class="form c">';
     echo textInput('Username', 'username');
     print_submit('Verify Player');
     echo '</table> </form>';
@@ -281,7 +281,7 @@ function printNewFormat()
     echo "<h4>New Format</h4>\n";
     echo '<form action="admincp.php" method="post">';
     echo '<input type="hidden" name="view" value="no_view" />';
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><td colspan="2">New Format Name: <input type="text" name="newformatname" STYLE="width: 175px"/></td></tr>';
     echo '<td colspan="2" class="buttons">';
     echo '<input class="inputbutton" type="submit" value="Create New Format" name ="action" /></td></tr>';

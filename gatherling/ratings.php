@@ -43,7 +43,7 @@ function ratingsForm($format)
 {
     $ratings = new Ratings();
     echo "<form action=\"ratings.php\" method=\"post\">\n";
-    echo '<table align="center" style="border-width: 0px">';
+    echo '<table class="c">';
     echo '<tr><td>Select a rating to display: ';
     $ratings->formatDropMenuR($format);
     echo '&nbsp;';
@@ -89,7 +89,7 @@ function ratingsTable($format, $min = 20)
     $ratings_data = array_slice($ratings_data, (($pagination->get_page() - 1)
                                     * $records_per_page), $records_per_page);
 
-    echo "<table align=\"center\" style=\"border-width: 0px;\" width=\"500px\">\n";
+    echo "<table class=\"c\" width=\"500px\">\n";
     echo '<tr><td colspan=6 align="center">';
     echo "<i>Only players with $min or more matches are included.";
     echo '</td></tr>';

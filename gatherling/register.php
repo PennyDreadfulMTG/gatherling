@@ -44,7 +44,7 @@ if (!isset($_POST['pw1'])) {
 function regForm()
 {
     echo "<form action=\"register.php\" method=\"post\" onsubmit=\"return validate_pw()\">\n";
-    echo "<table align=\"center\" style=\"border-width: 0px\">\n";
+    echo "<table class=\"c\">\n";
     echo "<center id='notice'>Passwords are required to be at least 8 characters long.</center>\n";
     echo "<center id='notice'>Please use your MTGO username if you have one.</center>\n";
     echo "<tr><td><b>Username</td>\n";

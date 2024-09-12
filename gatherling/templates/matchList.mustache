@@ -16,7 +16,7 @@
             <input type="hidden" name="name" value="{{event.name}}">
             <input type="hidden" name="eventname" value="{{event.name}}">
             <input type="hidden" name="view" value="match">
-            <table style="border-width: 0">
+            <table>
                 {{#hasMatches}}
                     <tr class="lefted">
                         <th class="c" style="padding-right: 10px;">Round</th>
@@ -157,7 +157,7 @@
             </p>
         {{/event.finalized}}
         {{#isLeague}}
-            <table class="c" style="border-width: 0">
+            <table class="c">
                 <tr>
                     <td colspan="2" class="c">
                         <form action="event.php" method="post">

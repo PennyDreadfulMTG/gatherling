@@ -253,7 +253,7 @@ function printEditCard()
     echo "<input type=\"hidden\" name=\"id\" value=\"$id\" />";
     echo '<input type="hidden" name="action" value="modify_card" />';
 
-    echo '<table style="border-width: 0px" align="center">';
+    echo '<table class="c">';
 
     echo textInput('Card Name', 'name', $name, 100);
     echo textInput('Typeline', 'type', $type, 100);

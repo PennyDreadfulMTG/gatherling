@@ -192,7 +192,7 @@ function medalTable($player)
 {
     $medalcount = $player->getMedalStats();
 
-    echo "<table style=\"border-width: 0px\" width=260>\n";
+    echo "<table width=260>\n";
     echo "<tr><td align=\"center\" colspan=4><b>MEDALS EARNED</td></tr>\n";
     if (count($medalcount) == 0) {
         echo '<tr><td align="center" colspan="2">';
@@ -209,7 +209,7 @@ function medalTable($player)
 function trophyTable($player)
 {
     $events = $player->getEventsWithTrophies();
-    echo "<table style=\"border-width: 0px;\" width=260>\n";
+    echo "<table width=260>\n";
     echo "<tr><td align=\"center\"><b>TROPHIES EARNED</td></tr>\n";
     if (count($events) == 0) {
         echo "<tr><td align=\"center\"><i>{$player->name} has not earned any trophies.</td></tr>\n";
@@ -226,7 +226,7 @@ function trophyTable($player)
 
 function bestDecksTable($player)
 {
-    echo "<table style=\"border-width: 0px\" width=250>\n";
+    echo "<table width=250>\n";
     echo "<tr><td align=\"left\" colspan=3><b>MEDAL WINNING DECKS</td></tr>\n";
     $printed = 0;
     foreach ($player->getBestDeckStats() as $row) {

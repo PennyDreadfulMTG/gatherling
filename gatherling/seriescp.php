@@ -177,7 +177,7 @@ function printNoSeries()
 function printSeriesForm($series)
 {
     echo '<form action="seriescp.php" method="post">';
-    echo '<table class="form" style="border-width: 0px" align="center">';
+    echo '<table class="form c">';
     echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
     // Active
     echo '<tr><th>Series is Active</th><td> ';
@@ -244,7 +244,7 @@ function printSeriesOrganizersForm($series)
     echo '<h3><center>Series Organizers</center></h3>';
     echo '<p style="width: 75%; text-align: left;">Series organizers can create new series events, manage any event in the series, and modify anything on this page.  Please add them with care as they could screw with anything related to your series including changing the logo and the time.  Only verified members can be series organizers.</p>';
     echo '<p style="width: 75%; text-align: left;"><em>If you just need a guest host, add them as the host to a specific event!</em></p>';
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="text-align: center;">Player</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
     foreach ($series->organizers as $organizer) {
         echo "<tr><td style=\"text-align: center;\">{$organizer}</td>";
@@ -268,7 +268,7 @@ function printPlayerBanForm($series)
     echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
     echo '<h3><center>Banned Players</center></h3>';
     echo '<p style="width: 75%; text-align: left;">Players added to this ban list will not be able to register for any event (including alt events) that are created by this series. You can also suspend a player simply by adding them to this list for a period of time and removing them.</p>';
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="text-align: center;">Player</th>';
     echo '<th style="text-align: center;">Added On</th>';
     echo '<th style="text-align: center;">Reason</th>';
@@ -290,7 +290,7 @@ function printPlayerBanForm($series)
         echo '<tr><td colspan="3" style="text-align: left;">No Banned Players</td></tr>';
     }
     echo '</table>';
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><td>Add new:</td><td><input class="inputbox" type="text" name="addbannedplayer" /></td></tr> ';
     echo '<tr><td>Reason:</td><td><input class="inputbox" type="text" name="reason" /></td></tr> ';
     echo '<tr><td colspan="2" class="buttons">';
@@ -343,7 +343,7 @@ function printPointsForm($series)
     echo '<form action="seriescp.php" method="post">';
     echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
     echo "<input type=\"hidden\" name=\"season\" value=\"{$chosen_season}\" />";
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo "<tr><th class=\"top\" colspan=\"2\">Season {$chosen_season} Settings</th></tr>";
     printPointsRule('First Place', 'first_pts', $seasonrules);
     printPointsRule('Second Place', 'second_pts', $seasonrules);
@@ -368,7 +368,7 @@ function printPointsForm($series)
 function printLogoForm($series)
 {
     echo '<form action="seriescp.php" method="post" enctype="multipart/form-data">';
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
     echo '<tr><th>Current Logo</th>';
     echo '<td>' . Series::image_tag($series->name) . '</td></tr>';
@@ -386,7 +386,7 @@ function printDiscordForm($series)
     echo '<h3><center>Series Organizers</center></h3>';
     echo '<p style="width: 75%; text-align: left;">Series organizers can create new series events, manage any event in the series, and modify anything on this page.  Please add them with care as they could screw with anything related to your series including changing the logo and the time.  Only verified members can be series organizers.</p>';
     echo '<p style="width: 75%; text-align: left;"><em>If you just need a guest host, add them as the host to a specific event!</em></p>';
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="text-align: center;">Player</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
     foreach ($series->organizers as $organizer) {
         echo "<tr><td style=\"text-align: center;\">{$organizer}</td>";

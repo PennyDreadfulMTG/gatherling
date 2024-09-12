@@ -82,7 +82,7 @@ function eventList()
     echo '<tr><td colspan="2" align="center">';
     echo '<input class="inputbutton" type="submit" name="mode" value="Filter Events">';
     echo '</td></tr></table>';
-    echo '<table style="border-width: 0px" align="center" cellpadding="3">';
+    echo '<table class="c" cellpadding="3">';
     echo '<tr><td colspan="5">&nbsp;</td></tr>';
     echo '<tr><td><b>Event</td><td><b>Format</td>';
     echo '<td align="center"><b>No. Players</td>';
@@ -144,7 +144,7 @@ function showReport($event)
     }
 
     echo '</td></tr></table>';
-    echo "<table style=\"border-width: 0px;\" width=600>\n<tr><td>";
+    echo "<table width=600>\n<tr><td>";
     if ($event->finalized) {
         finalists($event);
     } elseif ($can_prereg) {
@@ -232,7 +232,7 @@ function metastats($event)
         }
     }
 
-    echo "<table style=\"border-width: 0px;\" width=200>\n";
+    echo "<table width=200>\n";
     echo "<tr><td colspan=5 align=\"center\"><b>Metagame Stats</td></tr>\n";
     foreach ($archcnt as $arch => $cnt) {
         if ($cnt > 0) {
@@ -316,7 +316,7 @@ function fullmetagame($event)
     $result = $db->query('SELECT player, deckname, archetype, colors, medal, id, srtordr
 		FROM meta ORDER BY srtordr DESC, colors, medal, player');
     $color = 'orange';
-    echo '<table style="border-width: 0px;" align="center">';
+    echo '<table class="c">';
     $hg = headerColor();
     echo '<tr style="">';
     if ($event->decklistsVisible()) {
