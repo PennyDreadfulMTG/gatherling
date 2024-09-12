@@ -37,14 +37,6 @@ function page($title, $contents): string
     return ob_get_clean();
 }
 
-/** Gets the correct name, relative to the gatherling root dir, for a file in the theme.
- *  Allows for overrides, falls back to default/.
- */
-function theme_file($name): string
-{
-    return 'styles/' . $name;
-}
-
 function print_header($title, $enable_vue = false): void
 {
     global $CONFIG;
@@ -61,10 +53,10 @@ function print_header($title, $enable_vue = false): void
     echo TemplateHelper::render('partials/header', [
         'siteName' => $CONFIG['site_name'],
         'title' => $title,
-        'cssLink' => theme_file('css/stylesheet.css') . '?v=' . rawurlencode(git_hash()),
+        'cssLink' => 'styles/css/stylesheet.css?v=' . rawurlencode(git_hash()),
         'enableVue' => $enable_vue,
         'gitHash' => git_hash(),
-        'headerLogoSrc' => theme_file('images/header_logo.png'),
+        'headerLogoSrc' => 'styles/images/header_logo.png',
         'player' => $player,
         'isHost' => $isHost,
         'isOrganizer' => $isOrganizer,
@@ -120,7 +112,7 @@ function image_tag($filename, $extra_attr = null): string
             $tag .= "{$key}=\"{$value}\" ";
         }
     }
-    $tag .= 'src="'.theme_file("images/{$filename}").'" />';
+    $tag .= 'src="styles/images/' . rawurlencode($filename) . '" />';
 
     return $tag;
 }

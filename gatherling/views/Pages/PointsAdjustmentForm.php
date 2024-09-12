@@ -16,10 +16,10 @@ class PointsAdjustmentForm extends EventFrame
             $player['player'] = $entry->player;
             $player['adjustment'] = $event->getSeasonPointAdjustment($entry->player->name);
             if ($entry->medal != '') {
-                $player['medalSrc'] = theme_file("images/{$entry->medal}.png");
+                $player['medalSrc'] = "styles/images/{$entry->medal}.png";
             }
             if ($entry->deck != null) {
-                $player['verifiedSrc'] = theme_file('images/verified.png');
+                $player['verifiedSrc'] = 'styles/images/verified.png';
             }
             $entries[] = $player;
         }

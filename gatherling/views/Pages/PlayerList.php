@@ -95,7 +95,7 @@ function entryListArgs(Entry $entry, int $numEntries, bool $isTribal): array
         $entryInfo['undropLink'] = 'event.php?' . http_build_query($undropParams, '', '&', PHP_QUERY_RFC3986);
     }
     if ($entry->event->isFinished() && strcmp('', $entry->medal) != 0) {
-        $entryInfo['medalSrc'] = theme_file("images/{$entry->medal}.png");
+        $entryInfo['medalSrc'] = "styles/images/{$entry->medal}.png";
     }
     $entryInfo['gameName'] = $entry->player->gameNameArgs($entry->event->client);
     if ($entry->deck) {

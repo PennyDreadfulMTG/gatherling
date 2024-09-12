@@ -29,8 +29,8 @@ abstract class Page
 
         $this->siteName = $CONFIG['site_name'];
         $this->gitHash = git_hash();
-        $this->cssLink = theme_file('css/stylesheet.css') . '?v=' . rawurlencode($this->gitHash);
-        $this->headerLogoSrc = theme_file('images/header_logo.png');
+        $this->cssLink = 'styles/css/stylesheet.css?v=' . rawurlencode($this->gitHash);
+        $this->headerLogoSrc = 'styles/images/header_logo.png';
         $this->player = Player::getSessionPlayer() ?? null;
         $this->isHost = $this->player?->isHost() ?? false;
         $this->isOrganizer = count($this->player?->organizersSeries() ?? []) > 0;

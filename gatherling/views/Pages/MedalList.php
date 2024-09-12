@@ -16,7 +16,7 @@ class MedalList extends EventFrame
         $pos = 0;
         foreach ($finalists as &$finalist) {
             $finalist['playerDropMenu'] = EventHelper::playerDropMenuArgs($event, "$pos", $finalist['player']);
-            $finalist['src'] = theme_file("images/{$finalist['medal']}.png");
+            $finalist['src'] = "styles/images/{$finalist['medal']}.png";
             $pos++;
         }
         $this->finalists = $finalists;
