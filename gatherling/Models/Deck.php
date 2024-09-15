@@ -4,6 +4,7 @@ namespace Gatherling\Models;
 
 use Exception;
 use Gatherling\Views\TemplateHelper;
+use Gatherling\Views\Components\DeckLink;
 
 class Deck
 {
@@ -1039,23 +1040,6 @@ class Deck
 
     public function linkTo(): string
     {
-        $args = $this->linkToArgs();
-
-        return TemplateHelper::render('partials/linkTo', $args);
-    }
-
-    public function linkToArgs(): array
-    {
-        $args = [
-            'new' => $this->new,
-        ];
-        if ($this->new) {
-            return $args;
-        }
-        $args['name'] = empty($this->name) ? '** NO NAME **' : $this->name;
-        $args['isValid'] = $this->isValid();
-        $args['deckLink'] = 'deck.php?mode=view&id=' . rawurlencode($this->id);
-
-        return $args;
+        return (new DeckLink($this))->render();
     }
 }

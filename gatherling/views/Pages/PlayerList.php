@@ -6,6 +6,7 @@ use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Format;
 use Gatherling\Models\Standings;
+use Gatherling\Views\Components\DeckLink;
 use Gatherling\Views\Components\InitialByesDropMenu;
 use Gatherling\Views\Components\InitialSeedDropMenu;
 
@@ -99,7 +100,7 @@ function entryListArgs(Entry $entry, int $numEntries, bool $isTribal): array
     }
     $entryInfo['gameName'] = $entry->player->gameNameArgs($entry->event->client);
     if ($entry->deck) {
-        $entryInfo['linkTo'] = $entry->deck->linkToArgs();
+        $entryInfo['deckLink'] = new DeckLink($entry->deck);
     } else {
         $entryInfo['createDeckLink'] = $entry->createDeckLinkArgs();
     }
