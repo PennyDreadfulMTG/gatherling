@@ -3,6 +3,7 @@
 use Gatherling\Models\Deck;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
+use Gatherling\Views\Components\SeasonStandings;
 
 require_once 'lib.php';
 include 'lib_form_helper.php';
@@ -101,7 +102,7 @@ function do_page()
                 printMissingTrophies($active_series);
                 break;
             case 'season_standings':
-                $active_series->seasonStandings($active_series, $active_series->currentSeason());
+                echo (new SeasonStandings($active_series, $active_series->currentSeason()))->render();
                 break;
             case 'points_adj':
                 seasonPointsAdj();

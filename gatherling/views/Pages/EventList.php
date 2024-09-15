@@ -2,16 +2,17 @@
 
 namespace Gatherling\Views\Pages;
 
-use Gatherling\Models\Database;
 use Gatherling\Models\Player;
-use Gatherling\Models\Series;
+use Gatherling\Models\Database;
+use Gatherling\Views\Components\SeasonDropMenu;
+use Gatherling\Views\Components\SeriesDropMenu;
 
 class EventList extends Page
 {
     public string $title = 'Event Host Control Panel';
     public array $formatDropMenu;
-    public array $seriesDropMenu;
-    public array $seasonDropMenu;
+    public SeriesDropMenu $seriesDropMenu;
+    public SeasonDropMenu $seasonDropMenu;
     public bool $hasPlayerSeries;
     public array $results;
     public bool $hasMore;
@@ -63,8 +64,8 @@ class EventList extends Page
         }
 
         $this->formatDropMenu = formatDropMenuArgs($_GET['format'], true);
-        $this->seriesDropMenu = Series::dropMenuArgs($seriesName, true, $seriesShown);
-        $this->seasonDropMenu = seasonDropMenuArgs($season, true);
+        $this->seriesDropMenu = new SeriesDropMenu($seriesName, true, $seriesShown);
+        $this->seasonDropMenu = new SeasonDropMenu($season, true);
         $this->hasPlayerSeries = count($playerSeries) > 0;
         $this->results = $results;
         $this->hasMore = $hasMore;

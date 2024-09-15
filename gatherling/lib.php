@@ -1,10 +1,11 @@
 <?php
 
 use Gatherling\Auth\Session;
-use Gatherling\Models\Database;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
+use Gatherling\Models\Database;
 use Gatherling\Views\TemplateHelper;
+use Gatherling\Views\Components\SeasonDropMenu;
 
 require_once 'bootstrap.php';
 ob_start();
@@ -124,22 +125,7 @@ function medalImgStr($medal): string
 
 function seasonDropMenu(int|string|null $season, bool $useall = false): string
 {
-    $args = seasonDropMenuArgs($season, $useall);
-
-    return TemplateHelper::render('partials/dropMenu', $args);
-}
-
-function seasonDropMenuArgs(int|string|null $season, bool $useall = false): array
-{
-    $db = Database::getConnection();
-    $query = 'SELECT MAX(season) AS m FROM events';
-    $result = $db->query($query) or exit($db->error);
-    $maxArr = $result->fetch_assoc();
-    $max = $maxArr['m'];
-    $title = ($useall == 0) ? '- Season - ' : 'All';
-    $result->close();
-
-    return numDropMenuArgs('season', $title, max(10, $max + 1), $season);
+    return (new SeasonDropMenu($season, $useall))->render();
 }
 
 function formatDropMenu(?string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): string
@@ -187,35 +173,6 @@ function emailStatusDropDown($currentStatus = 1): void
         echo '<option value="1">Public</option>';
     }
     echo '</select>';
-}
-
-function numDropMenuArgs(string $field, string $title, int $max, string|int|null $def, int $min = 0, ?string $special = null): array
-{
-    if ($def && strcmp($def, '') == 0) {
-        $def = -1;
-    }
-
-    $options = [];
-    if ($special) {
-        $options[] = [
-            'text'       => $special,
-            'value'      => 128,
-            'isSelected' => $def == 128,
-        ];
-    }
-    for ($n = $min; $n <= $max; $n++) {
-        $options[] = [
-            'text'       => $n,
-            'value'      => $n,
-            'isSelected' => $n == $def,
-        ];
-    }
-
-    return [
-        'name'    => $field,
-        'default' => $title,
-        'options' => $options,
-    ];
 }
 
 function timeDropMenu(int|string $hour, int|string $minutes = 0): string

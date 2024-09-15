@@ -5,6 +5,9 @@ namespace Gatherling\Views\Pages;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
+use Gatherling\Views\Components\NumDropMenu;
+use Gatherling\Views\Components\SeasonDropMenu;
+use Gatherling\Views\Components\SeriesDropMenu;
 
 class EventForm extends EventFrame
 {
@@ -72,9 +75,9 @@ class EventForm extends EventFrame
         if ($nextEvent) {
             $navLinks[] = $nextEvent->makeLinkArgs('Next');
         }
-        $yearDropMenu = numDropMenuArgs('year', '- Year -', (int) date('Y') + 1, $year, 2011);
+        $yearDropMenu = new NumDropMenu('year', '- Year -', (int) date('Y') + 1, $year, 2011);
         $monthDropMenu = monthDropMenuArgs($month);
-        $dayDropMenu = numDropMenuArgs('day', '- Day- ', 31, $day, 1);
+        $dayDropMenu = new NumDropMenu('day', '- Day- ', 31, $day, 1);
         $timeDropMenu = timeDropMenuArgs($hour, $minutes);
 
         $seriesList = Player::getSessionPlayer()->organizersSeries();
@@ -82,10 +85,10 @@ class EventForm extends EventFrame
             $seriesList[] = $event->series;
         }
         $seriesList = array_unique($seriesList);
-        $seriesDropMenu = Series::dropMenuArgs($event->series, false, $seriesList);
+        $seriesDropMenu = new SeriesDropMenu($event->series, false, $seriesList);
 
-        $seasonDropMenu = seasonDropMenuArgs($event->season);
-        $numberDropMenu = numDropMenuArgs('number', '- Event Number -', Event::largestEventNum() + 5, $event->number, 0, 'Custom');
+        $seasonDropMenu = new SeasonDropMenu($event->season);
+        $numberDropMenu = new NumDropMenu('number', '- Event Number -', Event::largestEventNum() + 5, $event->number, 0, 'Custom');
         $formatDropMenu = formatDropMenuArgs($event->format);
 
         if (is_null($event->kvalue)) {
@@ -97,9 +100,9 @@ class EventForm extends EventFrame
         $eventThreadUrlField = textInputArgs('Event Thread URL', 'threadurl', $event->threadurl, 60);
         $metagameUrlField = textInputArgs('Metagame URL', 'metaurl', $event->metaurl, 60);
         $reportUrlField = textInputArgs('Report URL', 'reporturl', $event->reporturl, 60);
-        $mainRoundsNumDropMenu = numDropMenuArgs('mainrounds', '- No. of Rounds -', 10, $event->mainrounds, 1);
+        $mainRoundsNumDropMenu = new NumDropMenu('mainrounds', '- No. of Rounds -', 10, $event->mainrounds, 1);
         $mainRoundsStructDropMenu = structDropMenuArgs('mainstruct', $event->mainstruct);
-        $finalRoundsNumDropMenu = numDropMenuArgs('finalrounds', '- No. of Rounds -', 10, $event->finalrounds, 0);
+        $finalRoundsNumDropMenu = new NumDropMenu('finalrounds', '- No. of Rounds -', 10, $event->finalrounds, 0);
         $finalRoundsStructDropMenu = structDropMenuArgs('finalstruct', $event->finalstruct);
         $preregistrationAllowedCheckbox = checkboxInputArgs('Allow Pre-Registration', 'prereg_allowed', $event->prereg_allowed, null, true);
         $lateEntryLimitField = textInputArgs('Late Entry Limit', 'late_entry_limit', $event->late_entry_limit, 4, 'The event host may still add players after this round.');

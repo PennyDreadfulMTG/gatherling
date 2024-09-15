@@ -3,8 +3,9 @@
 namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Event;
-use Gatherling\Models\Matchup;
 use Gatherling\Models\Player;
+use Gatherling\Models\Matchup;
+use Gatherling\Views\Components\GameName;
 
 class MatchList extends EventFrame
 {
@@ -67,8 +68,8 @@ class MatchList extends EventFrame
             }
             $playerA = $playersInMatches[$match->playera];
             $playerB = $playersInMatches[$match->playerb];
-            $matchInfo['gameNameA'] = $playerA->gameNameArgs($event->client);
-            $matchInfo['gameNameB'] = $playerB->gameNameArgs($event->client);
+            $matchInfo['gameNameA'] = (new GameName($playerA, $event->client));
+            $matchInfo['gameNameB'] = (new GameName($playerB, $event->client));
 
             $isActiveUnverified = strcasecmp($match->verification, 'verified') != 0 && $event->finalized == 0;
             if ($isActiveUnverified) {
@@ -172,8 +173,8 @@ function unverifiedPlayerCellArgs(Event $event, Matchup $match, Player $player):
 
     return [
         'playerName'      => $playerName,
-        'displayName'     => $player->gameNameArgs($event->client),
-        'displayNameText' => $player->gameName($event->client, false),
+        'displayName'     => new GameName($player, $event->client),
+        'displayNameText' => new GameName($player, $event->client, false),
         'hasDropped'      => $match->playerDropped($playerName),
         'hasGames'        => ($wins + $losses > 0),
         'matchResult'     => $matchResult,

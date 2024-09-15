@@ -3,6 +3,7 @@
 namespace Gatherling\Models;
 
 use Gatherling\Views\TemplateHelper;
+use Gatherling\Views\Components\GameName;
 
 class Standings
 {
@@ -147,7 +148,7 @@ class Standings
             $standingInfo['shouldHighlight'] = $standing->player == $playerName;
             $standingInfo['matchScore'] = $standing->score;
             $sp = new Player($standing->player);
-            $standingInfo['gameName'] = $sp->gameNameArgs($event->client);
+            $standingInfo['gameName'] = new GameName($sp, $event->client);
             $rank++;
             $standingInfoList[] = $standingInfo;
         }

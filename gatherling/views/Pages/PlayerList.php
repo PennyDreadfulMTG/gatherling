@@ -7,6 +7,7 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Format;
 use Gatherling\Models\Standings;
 use Gatherling\Views\Components\DeckLink;
+use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\InitialByesDropMenu;
 use Gatherling\Views\Components\InitialSeedDropMenu;
 
@@ -98,7 +99,7 @@ function entryListArgs(Entry $entry, int $numEntries, bool $isTribal): array
     if ($entry->event->isFinished() && strcmp('', $entry->medal) != 0) {
         $entryInfo['medalSrc'] = "styles/images/{$entry->medal}.png";
     }
-    $entryInfo['gameName'] = $entry->player->gameNameArgs($entry->event->client);
+    $entryInfo['gameName'] = new GameName($entry->player, $entry->event->client);
     if ($entry->deck) {
         $entryInfo['deckLink'] = new DeckLink($entry->deck);
     } else {
