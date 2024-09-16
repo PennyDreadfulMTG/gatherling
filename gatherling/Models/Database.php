@@ -30,8 +30,7 @@ class Database
                     // so that it can retry connections as needed.
                     return null;
                 } else {
-                    echo mysqli_connect_error();
-                    exit(1);
+                    throw new Exception(mysqli_connect_error());
                 }
             }
             $db_selected = $instance->select_db($CONFIG['db_database']);
