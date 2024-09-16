@@ -3,6 +3,7 @@
 namespace Gatherling\Models;
 
 use Exception;
+use Gatherling\Views\Components\ReportLink;
 
 class Event
 {
@@ -1046,9 +1047,9 @@ class Event
         ];
     }
 
-    public function linkReport()
+    public function linkReport(): string
     {
-        return '<a href="eventreport.php?event='.rawurlencode($this->name)."\">{$this->name}</a>";
+        return (new ReportLink($this->name))->render();
     }
 
     public static function count()

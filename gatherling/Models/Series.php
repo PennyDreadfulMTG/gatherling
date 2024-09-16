@@ -325,10 +325,15 @@ class Series
     // Returns a HTML image tag which displays the logo for this series.
     public static function image_tag($seriesname)
     {
-        return "<img src=\"displaySeries.php?series=$seriesname\" />";
+        return "<img src=\"{self::logoSrc($seriesname)}\" />";
     }
 
-    public function mostRecentEvent()
+    public static function logoSrc(string $seriesName): string
+    {
+        return 'displaySeries.php?series=' . rawurlencode($seriesName);
+    }
+
+    public function mostRecentEvent(): Event
     {
         $result = Database::db_query_single('SELECT events.name
                                          FROM events
@@ -342,7 +347,7 @@ class Series
         return new Event($result);
     }
 
-    public function nextEvent()
+    public function nextEvent(): ?Event
     {
         $result = Database::db_query_single('SELECT events.name
                                          FROM events
@@ -354,9 +359,8 @@ class Series
                                          LIMIT 1', 's', $this->name);
         if ($result) {
             return new Event($result);
-        } else {
-            return;
         }
+        return null;
     }
 
     public function setLogo($content_filename, $type, $size)
