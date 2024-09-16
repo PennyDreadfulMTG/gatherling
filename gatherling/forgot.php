@@ -3,101 +3,46 @@
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Gatherling\Models\Player;
+use Gatherling\Views\Pages\Forgot;
 
 include 'util/email.php';
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
 
-print_header('Login');
-printPageHeader();
-
-if (isset($_POST['view']) && $_POST['view'] === 'new_password') {
-    if (resetPassword($_POST['token'], $_POST['password'])) {
-        echo '<p>Your password has been reset. You can now <a href="login.php">log in</a>.</p>';
-    } else {
-        echo '<p class="error">Unable to reset your password. Please try again.</p>';
-        printForgotForm();
-    }
-} elseif (isset($_GET['token'])) {
-    printNewPasswordForm($_GET['token']);
-} elseif (isset($_POST['view']) && $_POST['view'] === 'send_login_link') {
-    if (isset($_POST['identifier']) && str_contains($_POST['identifier'], '@')) {
-        $player = Player::findByEmail($_POST['identifier']);
-    } else {
-        $player = Player::findByName($_POST['identifier']);
-    }
-    if ($player) {
-        $email = $player->emailPrivacy ? "your registered email" : $player->emailAddress;
-        if (sendLoginLink($player)) {
-            echo '<p>A link has been sent to ' . htmlentities($email) . '</p>';
+function main() {
+    $hasResetPassword = $passwordResetFailed = $showForgotForm = $showNewPasswordForm = $sentLoginLink = $cantSendLoginLink = $cantFindPlayer = false;
+    $token = $email = null;
+    if (isset($_POST['view']) && $_POST['view'] === 'new_password') {
+        if (resetPassword($_POST['token'], $_POST['password'])) {
+            $hasResetPassword = true;
         } else {
-            echo '<p class="error">Unable to send a link to ' . htmlentities($email) . '</p>';
-            printForgotForm();
+            $passwordResetFailed = $showForgotForm = true;
+        }
+    } elseif (isset($_GET['token'])) {
+        $showNewPasswordForm = true;
+        $token = $_GET['token'];
+    } elseif (isset($_POST['view']) && $_POST['view'] === 'send_login_link') {
+        if (isset($_POST['identifier']) && str_contains($_POST['identifier'], '@')) {
+            $player = Player::findByEmail($_POST['identifier']);
+        } else {
+            $player = Player::findByName($_POST['identifier']);
+        }
+        if ($player) {
+            $email = $player->emailPrivacy ? "your registered email" : $player->emailAddress;
+            if (sendLoginLink($player)) {
+                $sentLoginLink = true;
+            } else {
+                $cantSendLoginLink = $showForgotForm = true;
+            }
+        } else {
+            $cantFindPlayer = $showForgotForm = true;
         }
     } else {
-        echo '<p class="error">Unable to find a player with that email or username</p>';
-        printForgotForm();
+        $showForgotForm = true;
     }
-} else {
-    printForgotForm();
-}
 
-printPageFooter();
-print_footer();
-
-function printPageHeader(): void
-{
-    ?>
-    <div class="grid_10 suffix_1 prefix_1">
-        <div id="gatherling_main" class="box">
-            <div class="uppertitle"> Login to Gatherling </div>
-            <center>
-                <h3>Resetting your Gatherling password</h3>
-    <?php
-}
-
-function printPageFooter(): void
-{
-    ?>
-            </center>
-        </div> <!-- gatherling_main -->
-    </div> <!-- grid 10 pre 1 suff 1 -->
-    <?php
-}
-
-function printForgotForm(): void
-{
-    ?>
-        <p>Enter your email or username and we'll send you a link to get back into your account.</p>
-        <form action="forgot.php" method="post">
-            <input type="hidden" name="view" value="send_login_link" />
-            <table class="form">
-                <?php
-                    echo textInput('Email or Username', 'identifier');
-                    print_submit('Send Login Link');
-                ?>
-            </table>
-        </form>
-        <p>If you aren't able to reset your password this way please message a Gatherling Administrator
-            on the <a href="https://discord.gg/2VJ8Fa6">Discord</a></p>
-    <?php
-}
-
-function printNewPasswordForm($token): void
-{
-    ?>
-        <p>Enter your new password.</p>
-        <form action="forgot.php" method="post">
-            <input type="hidden" name="view" value="new_password" />
-            <input type="hidden" name="token" value="<?= htmlentities($token) ?>" />
-            <table class="form">
-                <?php
-                    print_password_input('New Password', 'password');
-                    print_submit('Reset Password');
-                ?>
-            </table>
-        </form>
-    <?php
+    $page = new Forgot($hasResetPassword, $passwordResetFailed, $showForgotForm, $showNewPasswordForm, $token, $email, $sentLoginLink, $cantSendLoginLink, $cantFindPlayer);
+    echo $page->render();
 }
 
 function sendLoginLink($player): bool
@@ -157,4 +102,8 @@ function resetPassword($token, $newPassword): bool
     }
     $player->setPassword($newPassword);
     return true;
+}
+
+if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+    main();
 }

@@ -173,7 +173,7 @@ function printAddCardSet()
     echo '<input type="hidden" name="return" value="admincp.php" />';
     echo '<input type="hidden" name="ret_args" value="view=add_cardset" />';
     print_file_input('Cardset JSON', 'cardsetfile');
-    print_submit('Install New Cardset');
+    echo submit('Install New Cardset');
     echo '</table></form>';
 
     echo '<form action="util/insertcardset.php" method="post" enctype="multipart/form-data">';
@@ -185,7 +185,7 @@ function printAddCardSet()
     // print_text_input("Cardset code", "cardsetcode");
     $missing = SetScraper::getSetList();
     echo selectInput('Missing Sets', 'cardsetcode', $missing);
-    print_submit('Install New Cardset');
+    echo submit('Install New Cardset');
     echo '</table></form>';
 }
 
@@ -197,7 +197,7 @@ function printChangePasswordForm()
     echo '<table class="form c">';
     echo textInput('Username', 'username');
     echo textInput('New Password', 'new_password');
-    print_submit('Change Password');
+    echo submit('Change Password');
     echo '</table> </form>';
 }
 
@@ -208,7 +208,7 @@ function printManualVerificationForm()
     echo '<h3><center>Manual Player Verification</center></h3>';
     echo '<table class="form c">';
     echo textInput('Username', 'username');
-    print_submit('Verify Player');
+    echo submit('Verify Player');
     echo '</table> </form>';
 }
 

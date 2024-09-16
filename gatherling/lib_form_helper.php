@@ -4,34 +4,15 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Standings;
 use Gatherling\Views\TemplateHelper;
+use Gatherling\Views\Components\Submit;
+use Gatherling\Views\Components\TextInput;
 use Gatherling\Views\Components\TimeZoneDropMenu;
 
 require_once 'lib.php';
 
 function textInput(string $label, string $name, mixed $value = '', int $size = 0, ?string $reminderText = null, ?string $id = null): string
 {
-    $args = textInputArgs($label, $name, $value, $size, $reminderText, $id);
-
-    return TemplateHelper::render('partials/textInput', $args);
-}
-
-function textInputArgs(string $label, string $name, mixed $value = '', int $size = 0, ?string $reminderText = null, ?string $id = null): array
-{
-    if (is_null($id)) {
-        $id = $name;
-    }
-    if (!isset($value)) {
-        $value = '';
-    }
-
-    return [
-        'id'           => $id,
-        'name'         => $name,
-        'label'        => $label,
-        'size'         => $size,
-        'reminderText' => $reminderText,
-        'value'        => $value,
-    ];
+    return (new TextInput($label, $name, $value, $size, $reminderText, $id))->render();
 }
 
 function checkboxInput(string $label, string $name, bool $isChecked = false, ?string $reminderText = null): string
@@ -51,21 +32,15 @@ function checkboxInputArgs(string $label, string $name, bool $isChecked = false,
     ];
 }
 
-function print_password_input($label, $name, $value = '')
-{
-    echo "<tr><th><label for='$name'>{$label}</label></th>";
-    echo "<td><input type=\"password\" name=\"{$name}\" id='$name' value=\"{$value}\" /> </td></tr>";
-}
-
 function print_file_input($label, $name)
 {
     echo "<tr><th><label for='$name'>{$label}</label></th>";
     echo "<td><input type=\"file\" name=\"{$name}\" id='$name' /></td></tr>";
 }
 
-function print_submit($label, $name = 'action')
+function submit($label, $name = 'action'): string
 {
-    echo "<tr><td colspan=\"2\" class=\"buttons\"><input class=\"inputbutton\" type=\"submit\" name=\"{$name}\" value=\"{$label}\" /></td></tr>\n";
+    return (new Submit($label, $name))->render();
 }
 
 function selectArgs(string $name, array $options = [], mixed $selected = null, ?string $id = null): array
