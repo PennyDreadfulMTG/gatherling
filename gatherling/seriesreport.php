@@ -9,7 +9,7 @@ function main(): void
     $seriesName = $_GET['series'] ?? null;
     $season = $_GET['season'] ?? null;
     $page = new SeriesReport($seriesName, $season);
-    echo $page->render();
+    $page->send();
 }
 
 if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {

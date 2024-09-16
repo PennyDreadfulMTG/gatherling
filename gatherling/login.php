@@ -40,7 +40,7 @@ function main(): void
         $target ?? '',
         $_SESSION['DISCORD_ID'] ?? '',
     );
-    echo $page->render();
+    $page->send();
 }
 
 if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {

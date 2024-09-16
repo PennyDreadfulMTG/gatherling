@@ -4,8 +4,9 @@ namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Player;
 use Gatherling\Views\TemplateHelper;
+use Gatherling\Views\TemplateResponse;
 
-abstract class Page
+abstract class Page extends TemplateResponse
 {
     public bool $enableVue = false;
     public string $contentSafe;
@@ -39,17 +40,9 @@ abstract class Page
         $this->versionTagline = version_tagline();
     }
 
-    public function template(): string
+    public function body(): string
     {
-        $className = get_called_class();
-        $baseName = ($pos = strrpos($className, '\\')) !== false ? substr($className, $pos + 1) : $className;
-
-        return lcfirst($baseName);
-    }
-
-    public function render(): string
-    {
-        $this->contentSafe = TemplateHelper::render($this->template(), $this);
+        $this->contentSafe = $this->render();
         return TemplateHelper::render('page', $this);
     }
 }

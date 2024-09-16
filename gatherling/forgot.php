@@ -42,7 +42,7 @@ function main() {
     }
 
     $page = new Forgot($hasResetPassword, $passwordResetFailed, $showForgotForm, $showNewPasswordForm, $token, $email, $sentLoginLink, $cantSendLoginLink, $cantFindPlayer);
-    echo $page->render();
+    $page->send();
 }
 
 function sendLoginLink($player): bool

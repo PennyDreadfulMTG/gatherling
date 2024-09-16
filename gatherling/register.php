@@ -31,7 +31,7 @@ function main()
     }
     $showRegForm = !isset($_POST['pw1']);
     $page = new Register($showRegForm, $message);
-    echo $page->render();
+    $page->send();
 }
 
 if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {

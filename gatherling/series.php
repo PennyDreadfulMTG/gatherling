@@ -9,7 +9,7 @@ function main()
 {
     $activeSeriesNames = SeriesModel::activeNames();
     $page = new Series($activeSeriesNames);
-    echo $page->render();
+    $page->send();
 }
 
 if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {

@@ -9,15 +9,19 @@ use Mustache_Loader_FilesystemLoader;
 
 class TemplateHelper
 {
-    public static function render(string $template_name, array|object $context = []): string
+    public static function render(string $template_name, array|object $context = [], bool $isHtml = true): string
     {
-        $m = new Mustache_Engine([
+        $options = [
             'cache'            => '/tmp/gatherling/mustache/templates',
             'loader'           => new Mustache_Loader_FilesystemLoader(dirname(__FILE__) . '/../templates'),
             'partials_loader'  => new Mustache_Loader_FilesystemLoader(dirname(__FILE__) . '/../templates/partials'),
             'entity_flags'     => ENT_QUOTES,
             'strict_callables' => true,
-        ]);
+        ];
+        if (!$isHtml) {
+            $options['escape'] = fn ($value) => $value;
+        }
+        $m = new Mustache_Engine($options);
         return $m->render($template_name, $context);
     }
 }

@@ -56,7 +56,7 @@ function main(): void
     } else {
         $page = new EventList($getSeriesName, $season);
     }
-    echo $page->render();
+    $page->send();
 }
 
 function mode_is(string $str): bool
