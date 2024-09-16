@@ -6,6 +6,7 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Database;
 use Gatherling\Views\TemplateHelper;
 use Gatherling\Views\Components\SeasonDropMenu;
+use Gatherling\Views\Components\EmailStatusDropDown;
 
 require_once 'bootstrap.php';
 ob_start();
@@ -159,20 +160,9 @@ function formatDropMenuArgs(?string $format, bool $useAll = false, string $formN
     ];
 }
 
-function emailStatusDropDown($currentStatus = 1): void
+function emailStatusDropDown($currentStatus = 1): string
 {
-    echo '<select class="inputbox" name="emailstatus">';
-    if ($currentStatus == 0) {
-        echo '<option value="0" selected>Private</option>';
-    } else {
-        echo '<option value="0">Private</option>';
-    }
-    if ($currentStatus == 1) {
-        echo '<option value="1" selected>Public</option>';
-    } else {
-        echo '<option value="1">Public</option>';
-    }
-    echo '</select>';
+    return (new EmailStatusDropDown($currentStatus))->render();
 }
 
 function timeDropMenu(int|string $hour, int|string $minutes = 0): string

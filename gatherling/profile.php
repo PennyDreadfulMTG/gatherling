@@ -322,7 +322,7 @@ function editForm($timezone, $email, $public)
 {
     echo "<form action=\"profile.php\" mode=\"POST\">\n";
     echo '<label for="timezone">Time Zone:</label>';
-    timeZoneDropMenu($timezone);
+    echo timeZoneDropMenu($timezone);
     echo "<br><label for=\"player\">Email Address: </label><input class=\"inputbox\" type=\"text\" name=\"email\" value=\"$email\" />";
     echo '<br><input type="radio" name="email_public" value="1"';
     if ($public == 1) {

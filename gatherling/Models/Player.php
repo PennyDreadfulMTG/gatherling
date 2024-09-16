@@ -306,12 +306,15 @@ class Player
         return self::findByName($playername);
     }
 
-    public static function findOrCreateByName($playername)
+    public static function findOrCreateByName(?string $playerName): ?static
     {
-        $playername = self::sanitizeUsername($playername);
-        $found = self::findByName($playername);
+        if (is_null($playerName)) {
+            return null;
+        }
+        $playerName = self::sanitizeUsername($playerName);
+        $found = self::findByName($playerName);
         if (is_null($found)) {
-            return self::createByName($playername);
+            return self::createByName($playerName);
         }
 
         return $found;

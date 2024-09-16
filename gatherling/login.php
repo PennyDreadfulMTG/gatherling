@@ -1,7 +1,8 @@
 <?php
 
-use Gatherling\Models\Player;
+use Gatherling\Auth\LoginError;
 use Gatherling\Views\Pages\Login;
+use Gatherling\Auth\Login as LoginHelper;
 
 require_once 'lib.php';
 
@@ -14,9 +15,19 @@ function main(): void
     }
 
     $username = $_POST['username'] ?? null;
-    $target = $_REQUEST['target'] ?? null;
+    $password = $_POST['password'] ?? null;
 
-    testLogin($mode, $username, $_POST['password'], $target);
+    $result = LoginHelper::login($username, $password);
+
+    if ($result->success) {
+        header('Cache-control: private');
+        $_SESSION['username'] = $username;
+        $target = $_REQUEST['target'] ?? 'player.php';
+        if ($result->hasError(LoginError::PASSWORD_TOO_SHORT)) {
+            $target = 'player.php?mode=changepass&tooshort=true';
+        }
+        header("location: $target");
+    }
 
     $loginFailed = isset($_POST['mode']);
     $ipAddressChanged = isset($_GET['ipaddresschanged']);
@@ -30,28 +41,6 @@ function main(): void
         $_SESSION['DISCORD_ID'] ?? '',
     );
     echo $page->render();
-}
-
-function testLogin(?string $mode, ?string $username, ?string $password, ?string $target): void
-{
-    if (!isset($username) || !isset($password)) {
-        return;
-    }
-    $auth = Player::checkPassword($username, $password);
-    // The $admin check allows an admin to su into any user without a password.
-    $admin = Player::isLoggedIn() && Player::getSessionPlayer()->isSuper();
-    if (!$auth && !$admin) {
-        return;
-    }
-    header('Cache-control: private');
-    $_SESSION['username'] = $username;
-    if (!isset($target)) {
-        $target = 'player.php';
-    }
-    if (strlen($_POST['password']) < 8 && !$admin) {
-        $target = 'player.php?mode=changepass&tooshort=true';
-    }
-    header("location: $target");
 }
 
 if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
