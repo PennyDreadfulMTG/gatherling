@@ -45,7 +45,7 @@ function ratingsForm($format)
     echo "<form action=\"ratings.php\" method=\"post\">\n";
     echo '<table class="c">';
     echo '<tr><td>Select a rating to display: ';
-    $ratings->formatDropMenuR($format);
+    echo $ratings->formatDropMenuR($format);
     echo '&nbsp;';
     echo '<input class="inputbutton" type="submit" name="mode" value="Display Ratings" />';
     echo "</td></tr>\n";

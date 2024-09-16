@@ -154,7 +154,7 @@ function printCalcRatingsForm()
     echo '<input class="inputbutton" type="submit" name="action" value="Re-Calculate All Ratings" /></td></tr>';
     echo '<tr><td class="buttons">';
     echo '<tr><td>Select a rating to Re-Calculate: ';
-    $ratings->formatDropMenuR();
+    echo $ratings->formatDropMenuR();
     echo '&nbsp;';
     echo '<input class="inputbutton" type="submit" name="action" value="Re-Calcualte By Format" /></td></tr>';
     echo '</table>';

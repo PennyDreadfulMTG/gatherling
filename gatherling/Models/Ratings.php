@@ -3,6 +3,8 @@
 namespace Gatherling\Models;
 
 use Exception;
+use Gatherling\Views\Components\DropMenu;
+use Gatherling\Views\Components\FormatDropMenuR;
 
 class Ratings
 {
@@ -32,17 +34,9 @@ class Ratings
         }
     }
 
-    public function formatDropMenuR($format = '')
+    public function formatDropMenuR($format = ''): string
     {
-        $names = ['Composite', 'Standard', 'Extended', 'Modern',
-            'Classic', 'Legacy', 'Pauper', 'SilverBlack', 'Heirloom',
-            'Commander', 'Tribal Wars', 'Other Formats', ];
-        echo '<select class="inputbox" name="format">';
-        foreach ($names as $name) {
-            $sel = (strcmp($name, $format) == 0) ? 'selected' : '';
-            echo "<option value=\"{$name}\" $sel>{$name}</option>";
-        }
-        echo '</select>';
+        return (new FormatDropMenuR($format))->render();
     }
 
     public function deleteAllRatings()
