@@ -106,7 +106,7 @@ class EventForm extends EventFrame
         $mainRoundsStructDropMenu = structDropMenuArgs('mainstruct', $event->mainstruct);
         $finalRoundsNumDropMenu = new NumDropMenu('finalrounds', '- No. of Rounds -', 10, $event->finalrounds, 0);
         $finalRoundsStructDropMenu = structDropMenuArgs('finalstruct', $event->finalstruct);
-        $preregistrationAllowedCheckbox = checkboxInputArgs('Allow Pre-Registration', 'prereg_allowed', (bool) $event->prereg_allowed, null, true);
+        $preregistrationAllowedCheckbox = checkboxInputArgs('Allow Pre-Registration', 'prereg_allowed', (bool) $event->prereg_allowed, null);
         $lateEntryLimitField = new TextInput('Late Entry Limit', 'late_entry_limit', $event->late_entry_limit, 4, 'The event host may still add players after this round.');
         $playerReportedResultsCheckbox = checkboxInputArgs('Allow Players to Report Results', 'player_reportable', (bool) $event->player_reportable);
         $registrationCapField = new TextInput('Player initiatied registration cap', 'prereg_cap', $event->prereg_cap, 4, 'The event host may still add players beyond this limit. 0 is disabled.', null);
