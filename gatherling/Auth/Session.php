@@ -7,7 +7,7 @@ use Gatherling\Log;
 
 class Session
 {
-    private static $LIFETIME = 60 * 60 * 24 * 60;
+    private static int $LIFETIME = 60 * 60 * 24 * 60;
 
     public static function start(): void
     {
