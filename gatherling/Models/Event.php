@@ -685,7 +685,7 @@ class Event
             $entry = new Entry($this->id, $player);
             if (is_null($entry->deck) || !$entry->deck->isValid()) {
                 if ($deleteinvalid) {
-                    $entry->removeEntry($player);
+                    $entry->removeEntry();
                     continue;
                 }
                 if ($skip_invalid) {
