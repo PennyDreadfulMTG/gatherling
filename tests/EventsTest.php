@@ -130,9 +130,9 @@ final class EventsTest extends DatabaseCase
         $deck = insertDeck('testplayer5', $event, "54 Mountain\n6 Seven Dwarves", '1 Seven Dwarves');
         $this->assertEmpty($deck->errors, json_encode($deck->errors));
         $deck = insertDeck('testplayer6', $event, "50 Mountain\n10 Seven Dwarves", '');
-        $this->assertNotEmpty($deck->errors, json_encode($deck->errors), 'Too Many Dwarves');
+        $this->assertNotEmpty($deck->errors, json_encode($deck->errors));
         $deck = insertDeck('testplayer7', $event, "55 Mountain\n5 Seven Dwarves", '5 Seven Dwarves');
-        $this->assertNotEmpty($deck->errors, json_encode($deck->errors), 'Too Many Dwarves');
+        $this->assertNotEmpty($deck->errors, json_encode($deck->errors));
         // 5 Valid decks (0, 1, 2, and 4, 5), 3 invalid deck (3, 6, 7), and 3 not submitted decks.
         $this->assertEquals(5, count($event->getRegisteredEntries(false, true)));
 
