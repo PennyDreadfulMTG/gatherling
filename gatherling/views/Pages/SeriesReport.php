@@ -14,7 +14,7 @@ class SeriesReport extends Page
 
     public function __construct(string $seriesName, string $season)
     {
-        parent::__construct('seriesReport');
+        parent::__construct();
         $this->title = 'Season Report';
         $this->seasonSelect = new SeasonSelect($seriesName, $season);
         if ($seriesName && $season) {
