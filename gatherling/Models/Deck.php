@@ -491,22 +491,6 @@ class Deck
         return false;
     }
 
-    private function getCard($cardname)
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT id, name FROM cards WHERE name = ?');
-        $stmt->bind_param('s', $cardname);
-        $stmt->execute();
-        $cardar = [];
-        $stmt->bind_result($cardar['id'], $cardar['name']);
-        if (is_null($stmt->fetch())) {
-            $cardar = null;
-        }
-        $stmt->close();
-
-        return $cardar;
-    }
-
     public function isValid()
     {
         return count($this->errors) == 0;
