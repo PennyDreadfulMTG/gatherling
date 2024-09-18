@@ -72,6 +72,7 @@ function print_footer(): void
     echo TemplateHelper::render('partials/footer', [
         'versionTagline' => version_tagline(),
         'gitHash' => git_hash(),
+        'jsLink' => 'gatherling.mjs?v=' . rawurlencode(git_hash()),
     ]);
 }
 
@@ -329,7 +330,6 @@ function git_hash(): string
     if (!is_null($hash = $CONFIG['GIT_HASH'])) {
         return substr($hash, 0, 7);
     }
-
     return '';
 }
 

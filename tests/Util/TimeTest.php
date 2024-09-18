@@ -40,6 +40,8 @@ final class TimeTest extends TestCase
         $now = strtotime('2024-08-29T12:00:00-07:00');
         $elem = time_element($now, $now);
         // New York time is Gatherling's "home" time.
-        $this->assertEquals('<time datetime="2024-08-29T15:00:00-04:00">just now</time>', $elem);
+        $this->assertEquals('<time datetime="2024-08-29T15:00:00-04:00">just now</time>\n', $elem);
+        $elem = time_element($now, $now, true);
+        $this->assertEquals('<time datetime="2024-08-29T15:00:00-04:00" class="long">just now</time>\n', $elem);
     }
 }

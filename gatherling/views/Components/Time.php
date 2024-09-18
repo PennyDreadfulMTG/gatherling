@@ -9,7 +9,7 @@ class Time extends Component
     public string $datetime;
     public string $text;
 
-    public function __construct(int $time, int $now)
+    public function __construct(int $time, int $now, public bool $long = false)
     {
         parent::__construct('partials/time');
         $this->datetime = date('c', $time);

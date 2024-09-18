@@ -170,7 +170,7 @@ function infoTable($player)
     echo "<td align=\"right\">$favS ($pcgS%)</td></tr>\n";
     echo "<tr><td>Last Active:</td>\n";
     if (!is_null($lastevent)) {
-        echo "<td align=\"right\">" . time_element(strtotime($lastevent->start), time()) . "<br>({$lastevent->name})</td></tr>\n";
+        echo "<td align=\"right\">" . time_element(strtotime($lastevent->start), time(), true) . "<br>({$lastevent->name})</td></tr>\n";
     } else {
         echo "<td align=\"right\">Never</td></tr>\n";
     }
