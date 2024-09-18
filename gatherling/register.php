@@ -16,7 +16,7 @@ function main()
         $pw2 = $_POST['pw2'] ?? '';
         $email = $_POST['email'] ?? '';
         $emailStatus = $_POST['emailStatus'] ?? 0;
-        $timezone = (float) $_POST['timezone'] ?? 0.0;
+        $timezone = (float) $_POST['timezone'];
         $discordId = $_POST['discordId'] ?? null;
         $discordName = $_POST['discordName'] ?? null;
         $code = Registration::register($username, $pw1, $pw2, $email, $emailStatus, $timezone, $discordId, $discordName);
