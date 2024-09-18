@@ -8,3 +8,6 @@ trim_trailing_whitespace = true
 indent_style = space
 charset = utf-8
 indent_size = 4
+
+[*.js]
+indent_size = 2

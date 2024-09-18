@@ -1,6 +1,6 @@
 import { test, expect } from 'bun:test';
 import { DateTime } from 'luxon';
-import { formatDate } from '../../gatherling/gatherling.mjs';
+import { formatDate } from '../../gatherling/gatherling';
 
 const now = DateTime.fromISO('2024-06-01T00:00:00Z');
 
