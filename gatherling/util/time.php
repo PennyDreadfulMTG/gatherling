@@ -32,6 +32,7 @@ function human_date($datetime, $now): string
             return pluralize(intdiv($elapsed, $duration), $interval)." $suffix";
         }
     }
+	return 'unknown';
 }
 
 function pluralize($n, $noun): string
