@@ -1735,7 +1735,7 @@ class Event
             $medalCount = 2; // only give 2 medals if there are less than 8 players
         } elseif ($numberOfPlayers < 16) {
             $medalCount = 4; // only give 4 medals if there are less than 16 players
-        } elseif ($numberOfPlayers >= 16) {
+        } else {
             $medalCount = 8;
         }
 
