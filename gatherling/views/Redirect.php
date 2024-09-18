@@ -6,7 +6,7 @@ namespace Gatherling\Views;
 
 class Redirect extends Response
 {
-    public function __construct(private string $url)
+    public function __construct(string $url)
     {
         $this->setHeader('Location', $url);
     }
