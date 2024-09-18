@@ -734,7 +734,6 @@ class Format
                     break;
                 default:
                     exit("Unexpected rarity {$rarity}!");
-                    break;
             }
         }
 

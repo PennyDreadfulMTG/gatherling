@@ -404,7 +404,6 @@ function create_pairing(Event $event, mixed $round, ?string $a, ?string $b, ?str
             break;
         default:
             error('unexpected value for res.  Expected one of [2-0, 2-1, 1-2, 0-2, D, P].');
-            break;
     }
     if ($res == 'P') {
         $event->addPairing($playerA, $playerB, $round, $res);
