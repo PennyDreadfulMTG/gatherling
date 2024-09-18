@@ -94,7 +94,8 @@ class Format
         if ($this->new) {
             $this->new = false;
 
-            return $this->insertNewFormat();
+            $this->insertNewFormat();
+            return;
         } else {
             $db = Database::getConnection();
             $stmt = $db->prepare('SELECT name, description, type, series_name, singleton, commander, planechase, vanguard,
