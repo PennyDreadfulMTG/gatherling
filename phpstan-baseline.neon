@@ -1,0 +1,1106 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Undefined variable\\: \\$result$#"
+			count: 14
+			path: gatherling/Models/Database.php
+
+		-
+			message: "#^Offset 'b' does not exist on array\\{\\}\\.$#"
+			count: 2
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Offset 'cost' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Offset 'g' does not exist on array\\{\\}\\.$#"
+			count: 2
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Offset 'r' does not exist on array\\{\\}\\.$#"
+			count: 2
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Offset 'u' does not exist on array\\{\\}\\.$#"
+			count: 3
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Offset 'w' does not exist on array\\{\\}\\.$#"
+			count: 2
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Undefined variable\\: \\$cardname$#"
+			count: 3
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Undefined variable\\: \\$cardqty$#"
+			count: 5
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Undefined variable\\: \\$error$#"
+			count: 4
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Undefined variable\\: \\$isside$#"
+			count: 1
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Variable \\$isside might not be defined\\.$#"
+			count: 1
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Decksearch\\:\\:getFinalResults\\(\\) should return array but returns false\\.$#"
+			count: 2
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\[\\$color_str_input\\] Array of the input color\\)\\: Unexpected token \"\\$color_str_input\", expected type at offset 251$#"
+			count: 1
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^Part \\$color_str_input \\(array\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Decksearch\\:\\:\\$_eventname is never written, only read\\.$#"
+			count: 1
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Decksearch\\:\\:\\$_playername is never written, only read\\.$#"
+			count: 1
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^Undefined variable\\: \\$archetype$#"
+			count: 2
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^Undefined variable\\: \\$created_date$#"
+			count: 2
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^Undefined variable\\: \\$format$#"
+			count: 2
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^Undefined variable\\: \\$id$#"
+			count: 2
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^Undefined variable\\: \\$matchid$#"
+			count: 2
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^Undefined variable\\: \\$name$#"
+			count: 2
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^Undefined variable\\: \\$playername$#"
+			count: 2
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^Undefined variable\\: \\$deckid$#"
+			count: 2
+			path: gatherling/Models/Entry.php
+
+		-
+			message: "#^Function to_english not found\\.$#"
+			count: 2
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Inner named functions are not supported by PHPStan\\. Consider refactoring to an anonymous function, class method, or a top\\-level\\-defined function\\. See issue \\#165 \\(https\\://github\\.com/phpstan/phpstan/issues/165\\) for more details\\.$#"
+			count: 1
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Parameter \\#1 \\$roundnum of method Gatherling\\\\Models\\\\Event\\:\\:getRoundMatches\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Undefined variable\\: \\$adjustment$#"
+			count: 2
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Undefined variable\\: \\$aname$#"
+			count: 1
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Undefined variable\\: \\$deck$#"
+			count: 2
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Undefined variable\\: \\$deckid$#"
+			count: 2
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Undefined variable\\: \\$event$#"
+			count: 2
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Undefined variable\\: \\$event_name$#"
+			count: 4
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Undefined variable\\: \\$isPlaying$#"
+			count: 2
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Undefined variable\\: \\$matchid$#"
+			count: 6
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Undefined variable\\: \\$medal$#"
+			count: 2
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Undefined variable\\: \\$nextevent$#"
+			count: 6
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Undefined variable\\: \\$player$#"
+			count: 2
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Undefined variable\\: \\$reason$#"
+			count: 2
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Undefined variable\\: \\$subeventid$#"
+			count: 2
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Variable \\$db might not be defined\\.$#"
+			count: 3
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Variable \\$standings might not be defined\\.$#"
+			count: 1
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Variable \\$stmt might not be defined\\.$#"
+			count: 2
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Access to an undefined property Gatherling\\\\Models\\\\Format\\:\\:\\$errors\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Class Gatherling\\\\Models\\\\Database referenced with incorrect case\\: Gatherling\\\\Models\\\\database\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Comparison operation \"\\<\\=\" between \\(array\\|float\\|int\\) and 4 results in an error\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Comparison operation \"\\<\\=\" between \\(array\\|float\\|int\\<5, max\\>\\) and 7 results in an error\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Offset 'Black' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Offset 'Blue' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Offset 'Green' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Offset 'Red' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Offset 'White' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Offset 'id' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Offset 'name' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Undefined variable\\: \\$result$#"
+			count: 2
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Undefined variable\\: \\$setDate$#"
+			count: 2
+			path: gatherling/Models/Formats.php
+
+		-
+			message: "#^Undefined variable\\: \\$setName$#"
+			count: 4
+			path: gatherling/Models/Formats.php
+
+		-
+			message: "#^Undefined variable\\: \\$setType$#"
+			count: 3
+			path: gatherling/Models/Formats.php
+
+		-
+			message: "#^Undefined variable\\: \\$standard_legal$#"
+			count: 1
+			path: gatherling/Models/Formats.php
+
+		-
+			message: "#^Call to function is_null\\(\\) with string will always evaluate to false\\.$#"
+			count: 2
+			path: gatherling/Models/Matchup.php
+
+		-
+			message: "#^Comparison operation \"\\=\\=\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
+			count: 2
+			path: gatherling/Models/Matchup.php
+
+		-
+			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
+			count: 2
+			path: gatherling/Models/Matchup.php
+
+		-
+			message: "#^Undefined variable\\: \\$eventname$#"
+			count: 2
+			path: gatherling/Models/Matchup.php
+
+		-
+			message: "#^Undefined variable\\: \\$name$#"
+			count: 2
+			path: gatherling/Models/Matchup.php
+
+		-
+			message: "#^Undefined variable\\: \\$playera_losses$#"
+			count: 3
+			path: gatherling/Models/Matchup.php
+
+		-
+			message: "#^Undefined variable\\: \\$playera_wins$#"
+			count: 3
+			path: gatherling/Models/Matchup.php
+
+		-
+			message: "#^Undefined variable\\: \\$playerb_losses$#"
+			count: 3
+			path: gatherling/Models/Matchup.php
+
+		-
+			message: "#^Undefined variable\\: \\$playerb_wins$#"
+			count: 3
+			path: gatherling/Models/Matchup.php
+
+		-
+			message: "#^Undefined variable\\: \\$result$#"
+			count: 2
+			path: gatherling/Models/Matchup.php
+
+		-
+			message: "#^Undefined variable\\: \\$subevent$#"
+			count: 3
+			path: gatherling/Models/Matchup.php
+
+		-
+			message: "#^Call to function assert\\(\\) with false will always evaluate to false\\.$#"
+			count: 3
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Elseif condition is always false\\.$#"
+			count: 3
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Elseif condition is always true\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^If condition is always false\\.$#"
+			count: 3
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 2
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Left side of && is always true\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Negated boolean expression is always true\\.$#"
+			count: 2
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Parameter \\#1 \\$assertion of function assert expects bool\\|string, int given\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Result of && is always false\\.$#"
+			count: 2
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Right side of && is always false\\.$#"
+			count: 2
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Right side of && is always true\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Variable \\$kslack might not be defined\\.$#"
+			count: 2
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Variable \\$v might not be defined\\.$#"
+			count: 6
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Pagination\\:\\:_build_uri\\(\\) with return type void returns string but should not return anything\\.$#"
+			count: 2
+			path: gatherling/Models/Pagination.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Pagination\\:\\:get_pages\\(\\) should return int but returns float\\.$#"
+			count: 1
+			path: gatherling/Models/Pagination.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Pagination\\:\\:render\\(\\) with return type void returns string but should not return anything\\.$#"
+			count: 2
+			path: gatherling/Models/Pagination.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function str_pad expects string, \\(float\\|int\\) given\\.$#"
+			count: 1
+			path: gatherling/Models/Pagination.php
+
+		-
+			message: "#^Result of method Gatherling\\\\Models\\\\Pagination\\:\\:_build_uri\\(\\) \\(void\\) is used\\.$#"
+			count: 6
+			path: gatherling/Models/Pagination.php
+
+		-
+			message: "#^If condition is always false\\.$#"
+			count: 1
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Player\\:\\:findOrCreateByName\\(\\) should return static\\(Gatherling\\\\Models\\\\Player\\)\\|null but returns Gatherling\\\\Models\\\\Player\\.$#"
+			count: 1
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$cnt$#"
+			count: 6
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$count$#"
+			count: 6
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$db_challenge$#"
+			count: 3
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$deckid$#"
+			count: 6
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$evcount$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$event_id$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$eventname$#"
+			count: 4
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$evname$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$first$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$format$#"
+			count: 4
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$id$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$matchid$#"
+			count: 8
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$medal$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$mid$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$name$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$noentrycount$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$numtimes$#"
+			count: 1
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$opp$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$rating$#"
+			count: 1
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$resname$#"
+			count: 12
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$rival$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$score$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$season$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$secnd$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$series$#"
+			count: 4
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$seriesname$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$t4$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$t8$#"
+			count: 2
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$verifyplayer$#"
+			count: 3
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Variable \\$rating might not be defined\\.$#"
+			count: 1
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Undefined variable\\: \\$eventname$#"
+			count: 2
+			path: gatherling/Models/Ratings.php
+
+		-
+			message: "#^Undefined variable\\: \\$eventstart$#"
+			count: 2
+			path: gatherling/Models/Ratings.php
+
+		-
+			message: "#^Undefined variable\\: \\$kvalue$#"
+			count: 2
+			path: gatherling/Models/Ratings.php
+
+		-
+			message: "#^Undefined variable\\: \\$losses$#"
+			count: 2
+			path: gatherling/Models/Ratings.php
+
+		-
+			message: "#^Undefined variable\\: \\$player$#"
+			count: 2
+			path: gatherling/Models/Ratings.php
+
+		-
+			message: "#^Undefined variable\\: \\$playera$#"
+			count: 2
+			path: gatherling/Models/Ratings.php
+
+		-
+			message: "#^Undefined variable\\: \\$playerb$#"
+			count: 2
+			path: gatherling/Models/Ratings.php
+
+		-
+			message: "#^Undefined variable\\: \\$qmax$#"
+			count: 1
+			path: gatherling/Models/Ratings.php
+
+		-
+			message: "#^Undefined variable\\: \\$rating$#"
+			count: 2
+			path: gatherling/Models/Ratings.php
+
+		-
+			message: "#^Undefined variable\\: \\$result$#"
+			count: 2
+			path: gatherling/Models/Ratings.php
+
+		-
+			message: "#^Undefined variable\\: \\$wins$#"
+			count: 2
+			path: gatherling/Models/Ratings.php
+
+		-
+			message: "#^Variable \\$qmax might not be defined\\.$#"
+			count: 1
+			path: gatherling/Models/Ratings.php
+
+		-
+			message: "#^Undefined variable\\: \\$adjustment$#"
+			count: 2
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Undefined variable\\: \\$deckcount$#"
+			count: 2
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Undefined variable\\: \\$event$#"
+			count: 8
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Undefined variable\\: \\$event_name$#"
+			count: 10
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Undefined variable\\: \\$eventname$#"
+			count: 22
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Undefined variable\\: \\$matches$#"
+			count: 5
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Undefined variable\\: \\$matcheswon$#"
+			count: 5
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Undefined variable\\: \\$maxround$#"
+			count: 6
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Undefined variable\\: \\$one_player$#"
+			count: 4
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Undefined variable\\: \\$onename$#"
+			count: 4
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Undefined variable\\: \\$player$#"
+			count: 8
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Undefined variable\\: \\$playername$#"
+			count: 46
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Undefined variable\\: \\$reason$#"
+			count: 2
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Undefined variable\\: \\$seriesname$#"
+			count: 1
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Undefined variable\\: \\$name$#"
+			count: 2
+			path: gatherling/Models/Standings.php
+
+		-
+			message: "#^Undefined variable\\: \\$playera$#"
+			count: 2
+			path: gatherling/Models/Standings.php
+
+		-
+			message: "#^Undefined variable\\: \\$playerb$#"
+			count: 4
+			path: gatherling/Models/Standings.php
+
+		-
+			message: "#^Variable \\$playera might not be defined\\.$#"
+			count: 4
+			path: gatherling/Models/Standings.php
+
+		-
+			message: "#^Variable \\$stmt might not be defined\\.$#"
+			count: 1
+			path: gatherling/Models/Standings.php
+
+		-
+			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
+			count: 2
+			path: gatherling/action.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function sha1 expects string, int\\<0, max\\> given\\.$#"
+			count: 1
+			path: gatherling/admin/infobot.php
+
+		-
+			message: "#^Variable \\$CONFIG might not be defined\\.$#"
+			count: 4
+			path: gatherling/admin/infobot.php
+
+		-
+			message: "#^Parameter \\#2 \\$client of function repr_json_player expects int\\|null, string given\\.$#"
+			count: 5
+			path: gatherling/api.php
+
+		-
+			message: "#^Function auth\\(\\) should return string but returns bool\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Undefined variable\\: \\$CONFIG$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Variable \\$pAWins might not be defined\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Variable \\$pBWins might not be defined\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Variable \\$player might not be defined\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Function send_to_discord invoked with 1 parameter, 0 required\\.$#"
+			count: 3
+			path: gatherling/auth.php
+
+		-
+			message: "#^Call to static method removeTypeCrap\\(\\) on an unknown class Gatherling\\\\Format\\.$#"
+			count: 1
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Undefined variable\\: \\$cardset$#"
+			count: 2
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Undefined variable\\: \\$code$#"
+			count: 2
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Undefined variable\\: \\$id$#"
+			count: 2
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Undefined variable\\: \\$is_changeling$#"
+			count: 2
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Undefined variable\\: \\$modern_legal$#"
+			count: 2
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Undefined variable\\: \\$name$#"
+			count: 6
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Undefined variable\\: \\$playername$#"
+			count: 1
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Undefined variable\\: \\$rarity$#"
+			count: 4
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Undefined variable\\: \\$released$#"
+			count: 4
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Undefined variable\\: \\$setcode$#"
+			count: 2
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Undefined variable\\: \\$sfId$#"
+			count: 4
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Undefined variable\\: \\$standard_legal$#"
+			count: 2
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Undefined variable\\: \\$type$#"
+			count: 8
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Undefined variable\\: \\$updated$#"
+			count: 2
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$eventname\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$medal\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:getEvent\\(\\)\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:linkTo\\(\\)\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:recordString\\(\\)\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Offset 'archetype' on array\\{contents\\: '', sideboard\\: '', name\\: ''\\} in isset\\(\\) does not exist\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Offset 'desc' on array\\{contents\\: '', sideboard\\: '', name\\: '', archetype\\: ''\\} in isset\\(\\) does not exist\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Offset 'name' on array\\{contents\\: '', sideboard\\: ''\\} in isset\\(\\) does not exist\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Undefined variable\\: \\$archetype$#"
+			count: 2
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Undefined variable\\: \\$count$#"
+			count: 2
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Undefined variable\\: \\$created$#"
+			count: 2
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Undefined variable\\: \\$deckName$#"
+			count: 2
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Undefined variable\\: \\$deckid$#"
+			count: 2
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Undefined variable\\: \\$format$#"
+			count: 2
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Undefined variable\\: \\$playerName$#"
+			count: 3
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Variable \\$pAWins might not be defined\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Variable \\$pBWins might not be defined\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Call to an undefined method Gatherling\\\\Models\\\\Format\\:\\:deleteSubFormat\\(\\)\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Comparison operation \"\\=\\=\" between 0 and \\(array\\|float\\|int\\) results in an error\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Function handleActions invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Function printNewFormat invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Function printNoAdmin invoked with 1 parameter, 0 required\\.$#"
+			count: 2
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Variable \\$cardarr might not be defined\\.$#"
+			count: 1
+			path: gatherling/lib.php
+
+		-
+			message: "#^Parameter \\#2 \\$round of method Gatherling\\\\Models\\\\Standings\\:\\:League_getAvailable_Opponents\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: gatherling/lib_form_helper.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$discord_handle\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
+			count: 2
+			path: gatherling/player.php
+
+		-
+			message: "#^Undefined variable\\: \\$deckid$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Undefined variable\\: \\$event_id$#"
+			count: 3
+			path: gatherling/player.php
+
+		-
+			message: "#^Undefined variable\\: \\$eventname$#"
+			count: 3
+			path: gatherling/player.php
+
+		-
+			message: "#^Undefined variable\\: \\$medal$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Undefined variable\\: \\$rating$#"
+			count: 4
+			path: gatherling/player.php
+
+		-
+			message: "#^Variable \\$CONFIG might not be defined\\.$#"
+			count: 2
+			path: gatherling/player.php
+
+		-
+			message: "#^Variable \\$max might not be defined\\.$#"
+			count: 2
+			path: gatherling/profile.php
+
+		-
+			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
+			count: 2
+			path: gatherling/report.php
+
+		-
+			message: "#^Variable \\$match might not be defined\\.$#"
+			count: 1
+			path: gatherling/report.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Variable \\$winningPlayer might not be defined\\.$#"
+			count: 2
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
+			count: 1
+			path: gatherling/views/Pages/MatchList.php
+
+		-
+			message: "#^Comparison operation \"\\>\" between array\\|float\\|int and 0 results in an error\\.$#"
+			count: 1
+			path: gatherling/views/Pages/MatchList.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
+			path: gatherling/views/Pages/Series.php
+
+		-
+			message: "#^PHPDoc tag @throws with type Gatherling\\\\Tests\\\\Exception is not subtype of Throwable$#"
+			count: 1
+			path: tests/EventsTest.php
+
+		-
+			message: "#^PHPDoc tag @throws with type Gatherling\\\\Tests\\\\Exception\\|PHPUnit\\\\Framework\\\\ExpectationFailedException\\|SebastianBergmann\\\\RecursionContext\\\\InvalidArgumentException is not subtype of Throwable$#"
+			count: 2
+			path: tests/EventsTest.php
+
+		-
+			message: "#^PHPDoc tag @throws with type PHPUnit\\\\Framework\\\\ExpectationFailedException\\|SebastianBergmann\\\\RecursionContext\\\\InvalidArgumentException is not subtype of Throwable$#"
+			count: 3
+			path: tests/EventsTest.php
