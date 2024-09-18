@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
-use Gatherling\Models\Series;
 use Gatherling\Views\Components\TextInput;
 use Gatherling\Views\Components\NumDropMenu;
 use Gatherling\Views\Components\SeasonDropMenu;
@@ -14,13 +15,13 @@ class EventForm extends EventFrame
 {
     public bool $currentlyEditing;
     public array $navLinks;
-    public array $yearDropMenu;
+    public NumDropMenu $yearDropMenu;
     public array $monthDropMenu;
-    public array $dayDropMenu;
+    public NumDropMenu $dayDropMenu;
     public array $timeDropMenu;
-    public array $seriesDropMenu;
-    public array $seasonDropMenu;
-    public array $numberDropMenu;
+    public SeriesDropMenu $seriesDropMenu;
+    public SeasonDropMenu $seasonDropMenu;
+    public NumDropMenu $numberDropMenu;
     public array $formatDropMenu;
     public array $kValueDropMenu;
     public array $hostField;
@@ -28,9 +29,9 @@ class EventForm extends EventFrame
     public TextInput $eventThreadUrlField;
     public TextInput $metagameUrlField;
     public TextInput $reportUrlField;
-    public array $mainRoundsNumDropMenu;
+    public NumDropMenu $mainRoundsNumDropMenu;
     public array $mainRoundsStructDropMenu;
-    public array $finalRoundsNumDropMenu;
+    public NumDropMenu $finalRoundsNumDropMenu;
     public array $finalRoundsStructDropMenu;
     public array $preregistrationAllowedCheckbox;
     public TextInput $lateEntryLimitField;
@@ -105,21 +106,21 @@ class EventForm extends EventFrame
         $mainRoundsStructDropMenu = structDropMenuArgs('mainstruct', $event->mainstruct);
         $finalRoundsNumDropMenu = new NumDropMenu('finalrounds', '- No. of Rounds -', 10, $event->finalrounds, 0);
         $finalRoundsStructDropMenu = structDropMenuArgs('finalstruct', $event->finalstruct);
-        $preregistrationAllowedCheckbox = checkboxInputArgs('Allow Pre-Registration', 'prereg_allowed', $event->prereg_allowed, null, true);
+        $preregistrationAllowedCheckbox = checkboxInputArgs('Allow Pre-Registration', 'prereg_allowed', (bool) $event->prereg_allowed, null, true);
         $lateEntryLimitField = new TextInput('Late Entry Limit', 'late_entry_limit', $event->late_entry_limit, 4, 'The event host may still add players after this round.');
-        $playerReportedResultsCheckbox = checkboxInputArgs('Allow Players to Report Results', 'player_reportable', $event->player_reportable);
+        $playerReportedResultsCheckbox = checkboxInputArgs('Allow Players to Report Results', 'player_reportable', (bool) $event->player_reportable);
         $registrationCapField = new TextInput('Player initiatied registration cap', 'prereg_cap', $event->prereg_cap, 4, 'The event host may still add players beyond this limit. 0 is disabled.', null);
-        $deckPrivacyCheckbox = checkboxInputArgs('Deck List Privacy', 'private_decks', $event->private_decks);
-        $finalsListPrivacyCheckbox = checkboxInputArgs('Finals List Privacy', 'private_finals', $event->private_finals);
-        $playerReportedDrawsCheckbox = checkboxInputArgs('Allow Player Reported Draws', 'player_reported_draws', $event->player_reported_draws, 'This allows players to report a draw result for matches.');
-        $privateEventCheckbox = checkboxInputArgs('Private Event', 'private', $event->private, 'This event is invisible to non-participants');
+        $deckPrivacyCheckbox = checkboxInputArgs('Deck List Privacy', 'private_decks', (bool) $event->private_decks);
+        $finalsListPrivacyCheckbox = checkboxInputArgs('Finals List Privacy', 'private_finals', (bool) $event->private_finals);
+        $playerReportedDrawsCheckbox = checkboxInputArgs('Allow Player Reported Draws', 'player_reported_draws', (bool) $event->player_reported_draws, 'This allows players to report a draw result for matches.');
+        $privateEventCheckbox = checkboxInputArgs('Private Event', 'private', (bool) $event->private, 'This event is invisible to non-participants');
         $clientDropMenu = clientDropMenuArgs('client', $event->client);
 
         $finalizeEventCheckbox = $eventActiveCheckbox = $currentRoundDropMenu = $trophyField = null;
         $showCreateNextEvent = $showCreateNextSeason = false;
         if ($edit) {
-            $finalizeEventCheckbox = checkboxInputArgs('Finalize Event', 'finalized', $event->finalized);
-            $eventActiveCheckbox = checkboxInputArgs('Event Active', 'active', $event->active);
+            $finalizeEventCheckbox = checkboxInputArgs('Finalize Event', 'finalized', (bool) $event->finalized);
+            $eventActiveCheckbox = checkboxInputArgs('Event Active', 'active', (bool) $event->active);
             $currentRoundDropMenu = EventHelper::roundDropMenuArgs($event, $event->current_round);
             $trophyField = trophyFieldArgs($event);
             $nextEventName = sprintf('%s %d.%02d', $event->series, $event->season, $event->number + 1);
