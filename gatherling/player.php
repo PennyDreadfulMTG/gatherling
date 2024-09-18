@@ -107,7 +107,7 @@ case 'allratings':
     if (isset($_GET['format'])) {
         $format = $_GET['format'];
     }
-    print_ratingsTable(Player::loginName());
+    print_ratingsTable();
     echo '<br /><br />';
     print_ratingHistoryForm($format);
     echo '<br />';
