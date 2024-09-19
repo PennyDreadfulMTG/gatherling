@@ -21,7 +21,7 @@ class Series extends Page
             $series = new SeriesModel($seriesName);
             $mostRecentEvent = $series->mostRecentEvent();
             $nextEvent = $series->nextEvent();
-            $mostRecentEventDoesntCount = !$mostRecentEvent || !$mostRecentEvent->start || strtotime($mostRecentEvent->start) + (86400 * 7 * 4) < time();
+            $mostRecentEventDoesntCount = !$mostRecentEvent->start || strtotime($mostRecentEvent->start) + (86400 * 7 * 4) < time();
             if ($mostRecentEventDoesntCount && !$nextEvent) {
                 continue;
             }
