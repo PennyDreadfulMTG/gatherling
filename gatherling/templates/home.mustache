@@ -1,0 +1,128 @@
+<div id="gatherling_main" class="box grid_12">
+    <div class="uppertitle">Gatherling</div>
+    <p>
+        Welcome to Gatherling! The place for player-run Magic Online tournaments.
+        Report bugs or give feedback on the <a href="https://discord.gg/F9SrMwV">Discord</a>.
+    </p>
+</div>
+<div id="maincolumn" class="grid_8">
+    <div class="box">
+        <div class="uppertitle">Active Events</div>
+        {{#hasActiveEvents}}
+            <table class="events">
+                {{#activeEvents}}
+                    <tr>
+                        <td>
+                            <a href="{{reportLink}}">{{name}}</a><br>
+                            {{format}}
+                        </td>
+                        <td style="text-align: right">Round {{currentRound}}</td>
+                    </tr>
+                {{/activeEvents}}
+            </table>
+        {{/hasActiveEvents}}
+    </div>
+    <div class="box">
+        <div class="uppertitle">Upcoming Events</div>
+        {{#hasUpcomingEvents}}
+            <table class="events">
+                {{#upcomingEvents}}
+                    <tr>
+                        <td>
+                            <a href="{{reportLink}}">{{name}}</a><br>
+                            {{format}}
+                        </td>
+                        <td style="text-align: right">
+                            {{#time}}{{> time}}{{/time}}
+                        </td>
+                    </tr>
+                {{/upcomingEvents}}
+            </table>
+        {{/hasUpcomingEvents}}
+    </div>
+    <div class="box">
+        <div class="uppertitle">Gatherling Statistics</div>
+        {{#stats}}
+            <ul>
+                <li>There are {{decks}} unique decks.</li>
+                <li>We have recorded {{matches}} matches from {{events}} events.</li>
+                <li>There are {{activePlayers}} active players in Gatherling. ({{verifiedPlayers}} verified.)</li>
+            </ul>
+        {{/stats}}
+    </div>
+</div>
+<div class="grid_4">
+    <div class="box pad">
+        {{#playerInfo}}
+            <div>
+                <p><b>Welcome back {{name}}</b></p>
+                <ul>
+                    <li> <a href="profile.php">Check out your profile</a> </li>
+                    <li> <a href="player.php?mode=alldecks">Enter your own decklists</a> </li>
+                    {{#mostRecentHostedEvent}}
+                        <li><a href="{{link}}">Manage {{name}}</a></li>
+                    {{/mostRecentHostedEvent}}
+                    {{#isHost}}
+                        <li> <a href="event.php">Host Control Panel</a></li>
+                    {{/isHost}}
+                    {{#mostRecentHostedEvent}}
+                        <li> <a href="{{link}}">Manage {{name}}</a> </li>
+                    {{/mostRecentHostedEvent}}
+                </ul>
+            </div>
+        {{/playerInfo}}
+        {{^player}}
+            <div class="uppertitle">Login to Gatherling</div>
+            <form action="login.php" method="post">
+                <table class="form">
+                    <tr>
+                        <th><label for="username">Username</label></th>
+                        <td><input class="inputbox" type="text" name="username" value="" /></td>
+                    </tr>
+                    <tr>
+                        <th><label for="password">Password</label></th>
+                        <td><input class="inputbox" type="password" name="password" value="" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="buttons">
+                            <input class="inputbutton" type="submit" name="mode" value="Log In" />
+                            <input class="inputbutton discordlogin fa-discord" type="submit" name="mode" value="Log In with Discord" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <p>
+                <a href="register.php">Need to register?</a><br />
+                <a href="forgot.php">Forgot your password?</a>
+            </p>
+        {{/player}}
+    </div>
+    <div class="box">
+        <div class="uppertitle">Recent Winners</div>
+            {{#hasRecentWinners}}
+                <table class="winners">
+                    {{#recentWinners}}
+                        <tr>
+                            <td colspan="2">{{eventName}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <a class="borderless" href="{{reportLink}}">
+                                    {{{manaSymbolSafe}}}
+                                </a>
+                            </td>
+                        </tr>
+                        <tr class="player-deck">
+                            <td>
+                                <b><a href="{{playerLink}}">{{playerName}}</a></b>
+                            </td>
+                            <td>
+                                <i><a href="{{deckLink}}">{{deckName}}</a></i>
+                            </td>
+                        </tr>
+                    {{/recentWinners}}
+                </table>
+            {{/hasRecentWinners}}
+    </div>
+</div>
+<div class="clear"></div>
