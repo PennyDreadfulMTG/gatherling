@@ -164,17 +164,6 @@ class Database
         return $list;
     }
 
-    public static function no_result_single_param($sql, $paramType, $param)
-    {
-        $db = self::getConnection();
-        $stmt = $db->prepare($sql);
-        $stmt->bind_param($paramType, $param);
-        $result = $stmt->execute();
-        $stmt->close();
-
-        return $result;
-    }
-
     public static function db_query()
     {
         $params = func_get_args();
