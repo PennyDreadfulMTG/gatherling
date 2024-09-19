@@ -23,10 +23,14 @@ This brings up the website on ports 80 and 81, mysql on port 3307, and adminer o
 You can change the ports in docker-composer.yml.
 
 Tests:
-$ vendor/bin/phpunit -v tests/
+- $ vendor/bin/phpunit -v tests/
 or with a dockerized setup:
-$ docker exec -it gatherling-web-1 sh -c "cd /var/www && vendor/bin/phpunit tests"
+- $ docker exec -it gatherling-web-1 sh -c "cd /var/www && vendor/bin/phpunit tests"
 
 Lint:
 $ vendor/bin/phpcs --standard=PSR12 --runtime-set testVersion 8.1 --ignore=vendor .
 $ vendor/bin/phpcbf --standard=PSR12 --runtime-set testVersion 8.1 --ignore=vendor . # autofix
+
+JavaScript Tests:
+- Install bun and run `bun install`.
+- $ bun test

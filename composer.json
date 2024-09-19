@@ -6,7 +6,8 @@
         "test": "vendor/bin/phpunit tests",
         "lint": "vendor/bin/phpcs .",
         "autofix": "vendor/bin/phpcbf .",
-		"types": "vendor/bin/phpstan --memory-limit=2G"
+		"types": "vendor/bin/phpstan --memory-limit=2G",
+		"jstest": "bun test"
     },
     "require": {
         "php": "8.1.*",
