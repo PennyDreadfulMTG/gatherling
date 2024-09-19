@@ -2,7 +2,7 @@ parameters:
 	ignoreErrors:
 		-
 			message: "#^Undefined variable\\: \\$result$#"
-			count: 14
+			count: 12
 			path: gatherling/Models/Database.php
 
 		-
@@ -63,16 +63,6 @@ parameters:
 		-
 			message: "#^Method Gatherling\\\\Models\\\\Decksearch\\:\\:getFinalResults\\(\\) should return array but returns false\\.$#"
 			count: 2
-			path: gatherling/Models/Decksearch.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\[\\$color_str_input\\] Array of the input color\\)\\: Unexpected token \"\\$color_str_input\", expected type at offset 251$#"
-			count: 1
-			path: gatherling/Models/Decksearch.php
-
-		-
-			message: "#^Part \\$color_str_input \\(array\\) of encapsed string cannot be cast to string\\.$#"
-			count: 1
 			path: gatherling/Models/Decksearch.php
 
 		-
@@ -1074,21 +1064,6 @@ parameters:
 			message: "#^Variable \\$winningPlayer might not be defined\\.$#"
 			count: 2
 			path: gatherling/seriescp.php
-
-		-
-			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
-			count: 1
-			path: gatherling/views/Pages/MatchList.php
-
-		-
-			message: "#^Comparison operation \"\\>\" between array\\|float\\|int and 0 results in an error\\.$#"
-			count: 1
-			path: gatherling/views/Pages/MatchList.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: gatherling/views/Pages/Series.php
 
 		-
 			message: "#^PHPDoc tag @throws with type Gatherling\\\\Tests\\\\Exception is not subtype of Throwable$#"
