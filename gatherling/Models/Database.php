@@ -111,19 +111,6 @@ class Database
         return $result;
     }
 
-    public static function single_result_double_param($sql, $paramTypes, $param1, $param2)
-    {
-        $db = self::getConnection();
-        $stmt = $db->prepare($sql);
-        $stmt->bind_param($paramTypes, $param1, $param2);
-        $stmt->execute();
-        $stmt->bind_result($result);
-        $stmt->fetch();
-        $stmt->close();
-
-        return $result;
-    }
-
     public static function list_result($sql)
     {
         $db = self::getConnection();
