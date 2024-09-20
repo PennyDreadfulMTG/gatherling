@@ -9,8 +9,8 @@ jobs:
 
     runs-on: ubuntu-latest
     services:
-      mysql:
-        image: mysql:5.7
+      mariadb:
+        image: mariadb:10.6
         env:
           MYSQL_ROOT_PASSWORD: gatherling
         ports:
@@ -45,11 +45,6 @@ jobs:
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress
-    - name: Wait for MySQL server to be ready
-      run: |
-        while ! mysqladmin ping -h"127.0.0.1" --silent; do
-          sleep 1
-        done
     - run: cp gatherling/config.php.github gatherling/config.php
     - run: php gatherling/admin/db-upgrade.php
     - run: php gatherling/util/insertcardset.php M10
