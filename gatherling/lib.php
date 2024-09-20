@@ -5,6 +5,7 @@ use Gatherling\Models\Format;
 use Gatherling\Models\Player;
 use Gatherling\Models\Database;
 use Gatherling\Views\TemplateHelper;
+use Gatherling\Views\Components\FormatDropMenu;
 use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\EmailStatusDropDown;
 
@@ -132,33 +133,7 @@ function seasonDropMenu(int|string|null $season, bool $useall = false): string
 
 function formatDropMenu(?string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): string
 {
-    $args = formatDropMenuArgs($format, $useAll, $formName, $showMeta);
-
-    return TemplateHelper::render('partials/dropMenu', $args);
-}
-
-function formatDropMenuArgs(?string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): array
-{
-    $db = Database::getConnection();
-    $query = 'SELECT name FROM formats';
-    if (!$showMeta) {
-        $query .= ' WHERE NOT is_meta_format ';
-    }
-    $query .= ' ORDER BY priority desc, name';
-    $result = $db->query($query) or exit($db->error);
-    $formats = $result->fetch_all(MYSQLI_ASSOC);
-    $result->close();
-    $default = $useAll == 0 ? '- Format -' : 'All';
-    foreach ($formats as &$f) {
-        $f['text'] = $f['value'] = $f['name'];
-        $f['isSelected'] = $f['name'] === $format;
-    }
-
-    return [
-        'name'    => $formName,
-        'default' => $default,
-        'options' => $formats,
-    ];
+    return (new FormatDropMenu($format, $useAll, $formName, $showMeta))->render();
 }
 
 function emailStatusDropDown($currentStatus = 1): string

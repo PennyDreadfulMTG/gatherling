@@ -8,6 +8,7 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Views\Components\TextInput;
 use Gatherling\Views\Components\NumDropMenu;
+use Gatherling\Views\Components\FormatDropMenu;
 use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\SeriesDropMenu;
 
@@ -22,7 +23,7 @@ class EventForm extends EventFrame
     public SeriesDropMenu $seriesDropMenu;
     public SeasonDropMenu $seasonDropMenu;
     public NumDropMenu $numberDropMenu;
-    public array $formatDropMenu;
+    public FormatDropMenu $formatDropMenu;
     public array $kValueDropMenu;
     public array $hostField;
     public array $cohostField;
@@ -91,7 +92,7 @@ class EventForm extends EventFrame
 
         $seasonDropMenu = new SeasonDropMenu($event->season);
         $numberDropMenu = new NumDropMenu('number', '- Event Number -', Event::largestEventNum() + 5, $event->number, 0, 'Custom');
-        $formatDropMenu = formatDropMenuArgs($event->format);
+        $formatDropMenu = new FormatDropMenu($event->format);
 
         if (is_null($event->kvalue)) {
             $event->kvalue = 16;

@@ -8,7 +8,7 @@ use Gatherling\Models\Database;
 
 class SeasonDropMenu extends NumDropMenu
 {
-    public function __construct(int|string $season, bool $useAll = false)
+    public function __construct(int|string|null $season, bool $useAll = false)
     {
         $db = Database::getConnection();
         $query = 'SELECT MAX(season) AS m FROM events';

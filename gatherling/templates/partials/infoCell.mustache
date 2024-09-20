@@ -1,0 +1,23 @@
+{{#threadLink}}
+    <a href="{{threadLink}}">{{eventName}}</a>
+{{/threadLink}}
+{{^threadLink}}
+    {{eventName}}
+{{/threadLink}}
+<br>
+{{eventDate}}
+<br>
+{{eventFormat}} &middot; {{playerCount}} Players
+<br>
+{{deckCount}} Decks {{#isActive}}&middot; {{percentReported}}% Reported{{/isActive}}
+<br>
+{{#subEvents}}
+    {{.}}
+    <br>
+{{/subEvents}}
+Hosted by {{#hostLink}}{{> playerLink}}{{/hostLink}}
+<br>
+{{#reportLink}}
+    <a href="{{reportLink}}">Event Report</a><br>
+{{/reportLink}}
+<a href="{{seriesReportLink}}">Season Leaderboard</a>

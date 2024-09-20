@@ -1159,7 +1159,12 @@ class Event
 
     public static function trophy_image_tag($eventname)
     {
-        return "<img style=\"border-width: 0px; max-width: 260px\" src=\"displayTrophy.php?event={$eventname}\" />";
+        return "<img style=\"border-width: 0px; max-width: 260px\" src=\"{self::trophySrc($eventname)}\" />";
+    }
+
+    public static function trophySrc($eventname)
+    {
+        return 'displayTrophy.php?event=' . rawurlencode($eventname);
     }
 
     public function isLeague()

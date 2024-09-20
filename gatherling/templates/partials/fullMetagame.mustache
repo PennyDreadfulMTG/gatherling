@@ -1,0 +1,48 @@
+<table>
+    {{#decklistsAreVisible }}
+        <tr>
+            <td colspan="5" class="c"><b>Metagame Breakdown</b></td>
+        </tr>
+        {{#meta}}
+            <tr>
+                <td colspan="1"></td>
+                <td align="left">
+                    <img src="{{manaSrc}}">&nbsp;
+                </td>
+                <td colspan="3" align="left">
+                    <span>{{numPlayers}} Players</span>
+                </td>
+            </tr>
+            {{#entries}}
+                <tr>
+                    <td></td>
+                    <td align="left">{{#playerLink}}{{> playerLink}}{{/playerLink}}</td>
+                    <td align="left">{{record}}</td>
+                    <td align="left"><a href="{{deckLink}}">{{deckName}}</a></td>
+                    <td align="right">{{archetype}}</td>
+                </tr>
+            {{/entries}}
+        {{/meta}}
+    {{/decklistsAreVisible}}
+    {{^decklistsAreVisible}}
+        <tr>
+            <td colspan="5" class="c"><b><h3>Registered Players</h3></b></td>
+        </tr>
+        <tr>
+            <td colspan="5" class="c">
+                <center>
+                    <h2><em>Deck lists are not shown for privacy until event is finalized.</em></h2>
+                </center>
+            </td>
+        {{#players}}
+            <tr>
+                <td></td>
+                <td>{{#showTribes}}{{tribe}}{{/showTribes}}</td>
+                <td>{{#playerLink}}{{> playerLink}}{{/playerLink}}</td>
+                <td align=left">{{record}}</td>
+                <td></td>
+            </tr>
+        {{/players}}
+    {{/decklistsAreVisible}}
+    {{#eventStandings}}{{> eventStandings}}{{/eventStandings}}
+</table>

@@ -4,13 +4,14 @@ namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Player;
 use Gatherling\Models\Database;
+use Gatherling\Views\Components\FormatDropMenu;
 use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\SeriesDropMenu;
 
 class EventList extends Page
 {
     public string $title = 'Event Host Control Panel';
-    public array $formatDropMenu;
+    public FormatDropMenu $formatDropMenu;
     public SeriesDropMenu $seriesDropMenu;
     public SeasonDropMenu $seasonDropMenu;
     public bool $hasPlayerSeries;
@@ -63,7 +64,7 @@ class EventList extends Page
             $event['isOngoing'] = $event['finalized'] == 0 && $event['active'] == 1;
         }
 
-        $this->formatDropMenu = formatDropMenuArgs($_GET['format'], true);
+        $this->formatDropMenu = new FormatDropMenu($_GET['format'], true);
         $this->seriesDropMenu = new SeriesDropMenu($seriesName, true, $seriesShown);
         $this->seasonDropMenu = new SeasonDropMenu($season, true);
         $this->hasPlayerSeries = count($playerSeries) > 0;

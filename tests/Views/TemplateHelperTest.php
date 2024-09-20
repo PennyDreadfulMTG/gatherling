@@ -30,7 +30,6 @@ class TemplateHelperTest extends TestCase
             };
         };
         $items = [$itemConstructor('Stick', $icon1), $itemConstructor('Bat & Ball', $icon2), $itemConstructor('Crossbow')];
-
         $component = new class ('Fun & Games', $items) extends Component
         {
             public function __construct(public string $name, public array $items)

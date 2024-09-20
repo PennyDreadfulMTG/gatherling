@@ -1024,4 +1024,23 @@ class Deck
     {
         return (new DeckLink($this))->render();
     }
+
+    public function colorStr(): string
+    {
+        $row = $this->getColorCounts();
+        $colors = ['w', 'g', 'u', 'r', 'b'];
+        $s = implode('', array_filter($colors, fn($color) => $row[$color] > 0));
+
+        $s = $s ?: 'blackout';
+        return $s;
+    }
+
+    public function manaSrc(): string
+    {
+        if ($this->new) {
+            return 'styles/images/manablackout.png';
+        }
+
+        return 'styles/images/mana' . rawurlencode($this->colorStr()) . '.png';
+    }
 }

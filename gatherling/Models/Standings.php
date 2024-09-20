@@ -4,6 +4,7 @@ namespace Gatherling\Models;
 
 use Gatherling\Views\TemplateHelper;
 use Gatherling\Views\Components\GameName;
+use Gatherling\Views\Components\EventStandings;
 
 class Standings
 {
@@ -131,31 +132,7 @@ class Standings
 
     public static function eventStandings(?string $eventName, ?string $playerName = null): string
     {
-        $args = self::eventStandingsArgs($eventName, $playerName);
-
-        return TemplateHelper::render('partials/eventStandings', $args);
-    }
-
-    public static function eventStandingsArgs(?string $eventName, ?string $playerName = null): array
-    {
-        $event = new Event($eventName);
-        $standings = self::getEventStandings($eventName, 0);
-        $rank = 1;
-        $standingInfoList = [];
-        foreach ($standings as $standing) {
-            $standingInfo = getObjectVarsCamelCase($standing);
-            $standingInfo['rank'] = $rank;
-            $standingInfo['shouldHighlight'] = $standing->player == $playerName;
-            $standingInfo['matchScore'] = $standing->score;
-            $sp = new Player($standing->player);
-            $standingInfo['gameName'] = new GameName($sp, $event->client);
-            $rank++;
-            $standingInfoList[] = $standingInfo;
-        }
-
-        return [
-            'standings' => $standingInfoList,
-        ];
+        return (new EventStandings($eventName, $playerName))->render();
     }
 
     public static function updateStandings($eventname, $subevent, $round)

@@ -1,0 +1,47 @@
+<div class="grid_10 prefix_1 suffix_1">
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle">Event Report</div>
+        <div id="EventReport">
+
+            <table width="900">
+                <tr>
+                    <td width="300" valign="top">
+                        <div class="series-logo">
+                            <img src="{{seriesLogoSrc}}" alt="Series Logo" style="max-width: 300px;"/>
+                        </div>
+                    </td>
+                    <td width="300" valign="top">
+                        {{#infoCell}}{{> infoCell}}{{/infoCell}}
+                    </td>
+                    <td width="300" valign="top">
+                        {{#isFinalized}}
+                            {{#trophyCell}}{{> trophyCell}}{{/trophyCell}}
+                        {{/isFinalized}}
+                    </td>
+                </tr>
+            </table>
+
+            <table width="600">
+                <tr>
+                    <td>
+                        {{#isFinalized}}
+                            {{#finalists}}{{> finalists}}{{/finalists}}
+                        {{/isFinalized}}
+                        {{#isRegistrationOpen}}
+                            {{#prereg}}{{> prereg}}{{/prereg}}
+                        {{/isRegistrationOpen}}
+                    </td>
+                    <td align="right">
+                        {{#hasStarted}}
+                            {{#metaStats}}{{> metaStats}}{{/metaStats}}
+                        {{/hasStarted}}
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+        <br>
+        <br>
+        {{#fullMetagame}}{{> fullMetagame}}{{/fullMetagame}}
+    </div>
+</div>
