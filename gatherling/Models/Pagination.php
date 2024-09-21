@@ -700,9 +700,6 @@ class Pagination
 
     /**
      *  Generate the link for the page given as argument.
-     *
-     *
-     * @return void
      */
     private function _build_uri($page): string
     {

@@ -13,7 +13,7 @@ define('SLOW_QUERY_MS', 1000);
 
 class Database
 {
-    public static function getConnection()
+    public static function getConnection(): mysqli
     {
         static $instance;
 
@@ -25,13 +25,7 @@ class Database
                 $CONFIG['db_password']
             );
             if (mysqli_connect_errno()) {
-                if (PHP_SAPI == 'cli') {
-                    // When running the db-upgrade script, we want to return null
-                    // so that it can retry connections as needed.
-                    return null;
-                } else {
-                    throw new Exception(mysqli_connect_error());
-                }
+                throw new Exception(mysqli_connect_error());
             }
             $db_selected = $instance->select_db($CONFIG['db_database']);
             if (!$db_selected) {
