@@ -2,6 +2,7 @@
 
 namespace Gatherling\Models;
 
+use InvalidArgumentException;
 use Gatherling\Views\TemplateHelper;
 use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\EventStandings;
@@ -112,6 +113,8 @@ class Standings
             $stmt = $db->prepare('SELECT player FROM standings WHERE event = ? AND active = 1 ORDER BY seed');
         } elseif ($isactive == 3) {
             $stmt = $db->prepare('SELECT player FROM standings WHERE event = ? AND active = 1 ORDER BY score desc, OP_Match desc, PL_Game desc, OP_Game desc');
+        } else {
+            throw new InvalidArgumentException("Invalid argument for isactive {$isactive}");
         }
         $stmt or exit($db->error);
         $stmt->bind_param('s', $eventname);
