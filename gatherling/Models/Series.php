@@ -79,7 +79,6 @@ class Series
         $stmt = $db->prepare('SELECT player FROM series_organizers WHERE series = ?');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $one_player = null;
         $stmt->bind_result($one_player);
         $this->organizers = [];
         while ($stmt->fetch()) {
@@ -235,7 +234,6 @@ class Series
         $stmt = $db->prepare('SELECT name FROM events WHERE series = ?');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $eventname = null;
         $stmt->bind_result($eventname);
 
         $events = [];
@@ -253,7 +251,6 @@ class Series
         $stmt = $db->prepare('SELECT name FROM events WHERE series = ? ORDER BY start DESC LIMIT ?');
         $stmt->bind_param('sd', $this->name, $number);
         $stmt->execute();
-        $eventname = null;
         $stmt->bind_result($eventname);
 
         $eventnames = [];
@@ -293,7 +290,6 @@ class Series
                           GROUP BY series.name
                           ORDER BY series.name');
         $stmt->execute();
-        $onename = null;
         $stmt->bind_result($onename);
         $names = [];
         while ($stmt->fetch()) {
@@ -316,7 +312,6 @@ class Series
                           ORDER BY count(events.name)
                           DESC, name');
         $stmt->execute();
-        $onename = null;
         $stmt->bind_result($onename);
         $names = [];
         while ($stmt->fetch()) {
@@ -423,7 +418,6 @@ class Series
                           LIMIT 1');
         $stmt->bind_param('ss', $this->name, $season_number);
         $stmt->execute();
-        $seriesname = null;
         $stmt->bind_result(
             $seriesname,
             $season_rules['first_pts'],
@@ -522,7 +516,6 @@ class Series
         $stmt or exit($db->error);
         $stmt->bind_param('sds', $this->name, $season_number, $place);
         $stmt->execute();
-        $playername = $eventname = null;
         $stmt->bind_result($playername, $eventname);
         $result = [];
         while ($stmt->fetch()) {
@@ -547,7 +540,6 @@ class Series
                           AND events.number != 128');
         $stmt->bind_param('sd', $this->name, $season_number);
         $stmt->execute();
-        $playername = $eventname = null;
         $stmt->bind_result($playername, $eventname);
         $result = [];
         while ($stmt->fetch()) {
@@ -586,7 +578,6 @@ class Series
         $stmt or exit($db->error);
         $stmt->bind_param('sd', $this->name, $season_number);
         $stmt->execute();
-        $event_name = $playername = $maxround = null;
         $stmt->bind_result($event_name, $playername, $maxround);
 
         while ($stmt->fetch()) {
@@ -615,7 +606,6 @@ class Series
                           ORDER BY events.name, matches.round');
         $stmt->bind_param('sd', $this->name, $season_number);
         $stmt->execute();
-        $event_name = $playername = $maxround = null;
         $stmt->bind_result($event_name, $playername, $maxround);
 
         while ($stmt->fetch()) {
@@ -647,7 +637,6 @@ class Series
                           GROUP BY entries.player, events.name');
         $stmt->bind_param('sd', $this->name, $season_number);
         $stmt->execute();
-        $playername = $eventname = $deckcount = null;
         $stmt->bind_result($playername, $eventname, $deckcount);
 
         $result = [];
@@ -682,7 +671,6 @@ class Series
                           GROUP BY matches.playera, events.name");
         $stmt->bind_param('sd', $this->name, $season_number);
         $stmt->execute();
-        $playername = $eventname = $matcheswon = null;
         $stmt->bind_result($playername, $eventname, $matcheswon);
         while ($stmt->fetch()) {
             if (!isset($result[$playername])) {
@@ -707,7 +695,6 @@ class Series
                           GROUP BY matches.playerb, events.name");
         $stmt->bind_param('sd', $this->name, $season_number);
         $stmt->execute();
-        $playername = $eventname = $matcheswon = null;
         $stmt->bind_result($playername, $eventname, $matcheswon);
         while ($stmt->fetch()) {
             if (!isset($result[$playername])) {
@@ -745,7 +732,6 @@ class Series
                           GROUP BY matches.playera, events.name");
         $stmt->bind_param('sd', $this->name, $season_number);
         $stmt->execute();
-        $playername = $eventname = $matches = null;
         $stmt->bind_result($playername, $eventname, $matches);
         while ($stmt->fetch()) {
             if (!isset($result[$playername])) {
@@ -770,7 +756,6 @@ class Series
                           GROUP BY matches.playerb, events.name");
         $stmt->bind_param('sd', $this->name, $season_number);
         $stmt->execute();
-        $playername = $eventname = $matches = null;
         $stmt->bind_result($playername, $eventname, $matches);
         while ($stmt->fetch()) {
             if (!isset($result[$playername])) {
@@ -864,7 +849,6 @@ class Series
         $stmt or exit($db->error);
         $stmt->bind_param('sd', $this->name, $season_number);
         $stmt->execute();
-        $player = $event = $adjustment = $reason = null;
         $stmt->bind_result($player, $event, $adjustment, $reason);
         while ($stmt->fetch()) {
             if (!isset($total_pointarray[$player])) {
@@ -902,7 +886,6 @@ class Series
         $stmt or exit($db->error);
         $stmt->bind_param('sd', $this->name, $season_number);
         $stmt->execute();
-        $event = null;
         $stmt->bind_result($event);
         $eventnames = [];
         while ($stmt->fetch()) {

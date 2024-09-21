@@ -91,7 +91,6 @@ class Entry
         $stmt->bind_param('ds', $event_id, $playername);
         $stmt->execute();
         $this->ignored = 0;
-        $deckid = null;
         $stmt->bind_result($deckid, $this->medal, $this->ignored, $this->drop_round, $this->initial_byes, $this->initial_seed);
 
         if ($stmt->fetch() == null) {

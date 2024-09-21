@@ -116,7 +116,6 @@ class Standings
         $stmt or exit($db->error);
         $stmt->bind_param('s', $eventname);
         $stmt->execute();
-        $name = null;
         $stmt->bind_result($name);
         $playernames = [];
         while ($stmt->fetch()) {
@@ -210,7 +209,6 @@ class Standings
         $stmt->bind_param('dss', $subevent, $this->player, $this->player);
 
         $stmt->execute();
-        $playera = $playerb = null;
         $stmt->bind_result($playera, $playerb);
         $playernames = [];
         while ($stmt->fetch()) {
@@ -254,7 +252,6 @@ class Standings
 
             //Find existing opponents
             $stmt->execute();
-            $playera = $playerb = null;
             $stmt->bind_result($playera, $playerb);
 
             while ($stmt->fetch()) {

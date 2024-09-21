@@ -80,7 +80,6 @@ class Database
         $stmt->execute();
 
         if (stripos(trim($sql), 'SELECT') === 0) {
-            $result = null;
             $stmt->bind_result($result);
             $stmt->fetch();
             $stmt->close();
@@ -105,7 +104,6 @@ class Database
         }
         $stmt->bind_param($paramType, $param);
         $stmt->execute();
-        $result = null;
         $stmt->bind_result($result);
         $stmt->fetch();
         $stmt->close();
@@ -118,7 +116,6 @@ class Database
         $db = self::getConnection();
         $stmt = $db->prepare($sql);
         $stmt->execute();
-        $result = null;
         $stmt->bind_result($result);
 
         $list = [];
@@ -139,7 +136,6 @@ class Database
         }
         $stmt->bind_param($paramType, $param);
         $stmt->execute();
-        $result = null;
         $stmt->bind_result($result);
 
         $list = [];
@@ -153,7 +149,6 @@ class Database
 
     public static function list_result_double_param($sql, $paramTypes, $param1, $param2)
     {
-        $result= null;
         $db = self::getConnection();
         $stmt = $db->prepare($sql);
         $stmt->bind_param($paramTypes, $param1, $param2);
@@ -270,7 +265,6 @@ class Database
             $display_duration = round($duration / 1000, 1);
             error_log("Slow query ({$display_duration}s) – $query");
         }
-        $result = null;
         $stmt->bind_result($result);
         $stmt->fetch();
         $stmt->close();

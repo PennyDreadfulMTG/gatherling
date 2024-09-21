@@ -676,7 +676,6 @@ class Format
         foreach ($this->legal_sets as $setName) {
             $stmt->bind_param('ss', $cardName, $setName);
             $stmt->execute();
-            $result = null;
             $stmt->bind_result($result);
             if ($stmt->fetch()) {
                 $cardRarities[] = $result;

@@ -117,7 +117,6 @@ class Deck
                                 ORDER BY c.name');
         $stmt->bind_param('d', $id);
         $stmt->execute();
-        $cardname = $cardqty = $isside = null;
         $stmt->bind_result($cardname, $cardqty, $isside);
 
         $this->maindeck_cardcount = 0;
@@ -177,7 +176,6 @@ class Deck
         }
 
         // Retrieve errors
-        $error = null;
         $stmt = $database->prepare('Select error
                                 FROM deckerrors
                                 WHERE deck = ?');
@@ -399,7 +397,6 @@ class Deck
 
     public function getErrors()
     {
-        $error = null;
         $db = Database::getConnection();
         $stmt = $db->prepare('Select error FROM deckerrors WHERE deck = ?');
         $stmt->bind_param('d', $this->id);

@@ -157,7 +157,6 @@ class Player
         $stmt = $database->prepare('SELECT name FROM players WHERE name = ?');
         $stmt->bind_param('s', $playername);
         $stmt->execute();
-        $resname = null;
         $stmt->bind_result($resname);
         $good = false;
         if ($stmt->fetch()) {
@@ -183,7 +182,6 @@ class Player
         $stmt = $database->prepare('SELECT name FROM players WHERE discord_id = ?');
         $stmt->bind_param('s', $playername);
         $stmt->execute();
-        $resname = null;
         $stmt->bind_result($resname);
         $good = false;
         if ($stmt->fetch()) {
@@ -209,7 +207,6 @@ class Player
         $stmt = $database->prepare('SELECT name FROM players WHERE discord_handle = ?');
         $stmt->bind_param('s', $playername);
         $stmt->execute();
-        $resname = null;
         $stmt->bind_result($resname);
         $good = false;
         if ($stmt->fetch()) {
@@ -235,7 +232,6 @@ class Player
         $stmt = $database->prepare('SELECT name FROM players WHERE email = ?');
         $stmt->bind_param('s', $emailAddress);
         $stmt->execute();
-        $resname = null;
         $stmt->bind_result($resname);
         $good = false;
         if ($stmt->fetch()) {
@@ -257,7 +253,6 @@ class Player
         $stmt = $database->prepare('SELECT name FROM players WHERE mtgo_username = ?');
         $stmt->bind_param('s', $playername);
         $stmt->execute();
-        $resname = null;
         $stmt->bind_result($resname);
         $good = false;
         if ($stmt->fetch()) {
@@ -279,7 +274,6 @@ class Player
         $stmt = $database->prepare('SELECT name FROM players WHERE mtga_username = ?');
         $stmt->bind_param('s', $playername);
         $stmt->execute();
-        $resname = null;
         $stmt->bind_result($resname);
         $good = false;
         if ($stmt->fetch()) {
@@ -455,7 +449,6 @@ class Player
         $stmt = $db->prepare('SELECT name FROM events WHERE host = ? OR cohost = ?');
         $stmt->bind_param('ss', $this->name, $this->name);
         $stmt->execute();
-        $evname = null;
         $stmt->bind_result($evname);
 
         $evnames = [];
@@ -478,7 +471,6 @@ class Player
         $stmt = $db->prepare('SELECT count(name) FROM events WHERE host = ? OR cohost = ?');
         $stmt->bind_param('ss', $this->name, $this->name);
         $stmt->execute();
-        $evcount = null;
         $stmt->bind_result($evcount);
 
         $stmt->fetch();
@@ -521,7 +513,6 @@ class Player
       ORDER BY s.timing, m.round');
         $stmt->bind_param('sss', $eventname, $this->name, $this->name);
         $stmt->execute();
-        $matchid = null;
         $stmt->bind_result($matchid);
 
         $matchids = [];
@@ -546,7 +537,6 @@ class Player
       WHERE n.event_id = ? AND n.player = ?');
         $stmt->bind_param('ds', $event_id, $this->name);
         $stmt->execute();
-        $deckid = null;
         $stmt->bind_result($deckid);
         $stmt->fetch();
 
@@ -567,7 +557,6 @@ class Player
       ORDER BY e.start DESC');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $deckid = null;
         $stmt->bind_result($deckid);
 
         $deckids = [];
@@ -592,7 +581,6 @@ class Player
       ORDER BY e.start DESC LIMIT $number");
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $deckid = null;
         $stmt->bind_result($deckid);
 
         $deckids = [];
@@ -620,7 +608,6 @@ class Player
       ORDER BY e.start DESC, s.timing DESC, m.round DESC LIMIT $number");
         $stmt->bind_param('ss', $this->name, $this->name);
         $stmt->execute();
-        $matchid = null;
         $stmt->bind_result($matchid);
 
         $matchids = [];
@@ -648,7 +635,6 @@ class Player
       ORDER BY e.start DESC, s.timing DESC, m.round DESC ");
         $stmt->bind_param('ss', $this->name, $this->name);
         $stmt->execute();
-        $matchid = null;
         $stmt->bind_result($matchid);
 
         $matchids = [];
@@ -675,7 +661,6 @@ class Player
       ORDER BY e.start ASC, s.timing ASC, m.round ASC');
         $stmt->bind_param('ss', $this->name, $this->name);
         $stmt->execute();
-        $matchid = null;
         $stmt->bind_result($matchid);
 
         $matchids = [];
@@ -747,7 +732,6 @@ class Player
        AND (m.playera = ? OR m.playerb = ?)');
         $stmt->bind_param('ssss', $deckname, $this->name, $this->name, $this->name);
         $stmt->execute();
-        $mid = null;
         $stmt->bind_result($mid);
 
         $mids = [];
@@ -774,7 +758,6 @@ class Player
       GROUP BY opp ORDER BY cnt DESC');
         $stmt->bind_param('ss', $this->name, $this->name);
         $stmt->execute();
-        $opp = $cnt = null;
         $stmt->bind_result($opp, $cnt);
 
         $opponents = [];
@@ -794,7 +777,6 @@ class Player
       ORDER BY e.start DESC');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $event_id = null;
         $stmt->bind_result($event_id);
 
         $event_ids = [];
@@ -820,7 +802,6 @@ class Player
       AND n.ignored = false');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $noentrycount = null;
         $stmt->bind_result($noentrycount);
         $stmt->fetch();
         $stmt->close();
@@ -840,7 +821,6 @@ class Player
                           DESC LIMIT 1');
         $stmt->bind_param('sss', $this->name, $date, $format);
         $stmt->execute();
-        $rating = null;
         $stmt->bind_result($rating);
 
         if ($stmt->fetch() == null) {
@@ -1012,7 +992,6 @@ class Player
         }
         $stmt->bind_param('ss', $this->name, $this->name);
         $stmt->execute();
-        $rival = $numtimes = null;
         $stmt->bind_result($rival, $numtimes);
         $stmt->fetch();
         $stmt->close();
@@ -1080,7 +1059,6 @@ class Player
             $stmt->bind_param('ss', $this->name, $type);
         }
         $stmt->execute();
-        $count = null;
         $stmt->bind_result($count);
         $stmt->fetch();
         $stmt->close();
@@ -1102,7 +1080,6 @@ class Player
 
         $res = null;
         if ($stmt->num_rows > 0) {
-            $eventname = null;
             $stmt->bind_result($eventname);
             $stmt->fetch();
             $res = $eventname;
@@ -1122,7 +1099,6 @@ class Player
        ORDER BY e.start DESC');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $eventname = null;
         $stmt->bind_result($eventname);
         $stmt->store_result();
 
@@ -1143,7 +1119,6 @@ class Player
       GROUP BY e.format ORDER BY f.priority DESC, f.name');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $format = null;
         $stmt->bind_result($format);
 
         $formats = [];
@@ -1165,7 +1140,6 @@ class Player
         $stmt || exit($db->error);
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $format = $count = null;
         $stmt->bind_result($format, $count);
 
         $formats = [];
@@ -1185,7 +1159,6 @@ class Player
       GROUP BY n.medal ORDER BY n.medal");
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $cnt = $medal = null;
         $stmt->bind_result($cnt, $medal);
 
         $medals = ['1st' => 0, '2nd' => 0, 't4' => 0, 't8' => 0];
@@ -1211,7 +1184,6 @@ class Player
       ORDER BY score DESC, 1st DESC, 2nd DESC, t4 DESC, t8 DESC, cnt ASC");
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $name = $cnt = $id = $t8 = $t4 = $secnd = $first = $score = null;
         $stmt->bind_result($name, $cnt, $id, $t8, $t4, $secnd, $first, $score);
 
         $res = [];
@@ -1241,7 +1213,6 @@ class Player
       GROUP BY e.series ORDER BY cnt DESC');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $series = $count = null;
         $stmt->bind_result($series, $count);
 
         $res = [];
@@ -1261,7 +1232,6 @@ class Player
       GROUP BY e.series ORDER BY s.isactive DESC, s.name');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $series = null;
         $stmt->bind_result($series);
 
         $result = [];
@@ -1283,7 +1253,6 @@ class Player
       GROUP BY e.season ORDER BY e.season ASC');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $season = null;
         $stmt->bind_result($season);
 
         $seasons = [];
@@ -1362,7 +1331,6 @@ class Player
         $stmt = $db->prepare('SELECT name, mtgo_challenge FROM players WHERE name = ?');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $verifyplayer = $db_challenge = null;
         $stmt->bind_result($verifyplayer, $db_challenge);
         $stmt->fetch();
         $stmt->close();
@@ -1386,7 +1354,6 @@ class Player
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
         $series = [];
-        $seriesname = null;
         $stmt->bind_result($seriesname);
         while ($stmt->fetch()) {
             $series[] = $seriesname;
