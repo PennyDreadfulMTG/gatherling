@@ -142,7 +142,7 @@ function deckForm($deck = null)
     }
 
     echo "<form action=\"deck.php\" method=\"post\">\n";
-    echo "<table align=\"center\" style=\"border-width: 0px;\">\n";
+    echo "<table>\n";
     echo "<tr><th valign=\"top\"><b>Directions:</th>\n";
     echo '<td>To enter your deck, please give it ';
     echo 'a name and select an archetype from the drop-down menu below. If ';
@@ -208,7 +208,7 @@ function deckRegisterForm()
     $vals = ['contents' => '', 'sideboard' => ''];
 
     echo "<form action=\"deck.php?mode=addregdeck\" method=\"post\">\n";
-    echo "<table align=\"center\" style=\"border-width: 0px;\">\n";
+    echo "<table>\n";
     echo "<tr><td valign=\"top\"><b>Directions:</td>\n";
     echo '<td>To enter your deck, please give it ';
     echo 'a name and select an archetype from the drop-down menu below. If ';
@@ -375,7 +375,7 @@ function commentsTable($deck)
         $notes = preg_replace("/\[i\]/", '<i>', $notes);
         $notes = preg_replace("/\[\/i\]/", '</i>', $notes);
     }
-    echo '<table style="border-width: 0px; width: 100%; " cellpadding=1>';
+    echo '<table style="width: 100%" cellpadding=1>';
     echo '<tr><td><b>COMMENTS</td></tr>';
     echo "<tr><td>{$notes}</td></tr>";
     echo '</table>';
@@ -432,7 +432,7 @@ function deckInfoCell($deck)
         $line2 .= $deck->archetype . "</td></tr>\n ";
     }
 
-    echo "<table style=\"border-width: 0px\">\n";
+    echo "<table>\n";
     echo "<tr><td style=\"font-size: 10pt;\">$line1 (deck id: $deck->id)</td></tr>\n";
     if ($format->tribal > 0) {
         echo '<tr><td>Tribe: ' . $deck->tribe . '</td></tr>';
@@ -462,7 +462,7 @@ function sideboardTable($deck)
 
     ksort($sideboardcards);
     arsort($sideboardcards, SORT_NUMERIC);
-    echo "<table style=\"border-width: 0px\" cellpadding=1>\n";
+    echo "<table cellpadding=1>\n";
     echo "<tr><td colspan=1><b>SIDEBOARD ({$deck->getCardCount($deck->sideboard_cards)} Cards)</td></tr>\n";
     foreach ($sideboardcards as $card => $amt) {
         echo "<tr><td>{$amt} ";
@@ -481,7 +481,7 @@ function exactMatchTable($deck)
     if (count($decks) == 0) {
         return false;
     }
-    echo "<table style=\"border-width: 0px\" cellpadding=1 align=\"right\">\n";
+    echo "<table cellpadding=1 align=\"right\">\n";
     echo "<tr><th colspan=5 align=\"left\"><b>THIS DECK ALSO PLAYED AS</td></tr>\n";
     foreach ($decks as $deck) {
         if (!isset($deck->playername)) {
@@ -500,7 +500,7 @@ function exactMatchTable($deck)
 
 function matchupTable($deck)
 {
-    echo "<table style=\"border-width: 0px\" cellpadding=1 align=\"right\">\n";
+    echo "<table cellpadding=1 align=\"right\">\n";
     $event = new Event($deck->eventname);
 
     if ($deck->canView(Player::loginName())) {
@@ -564,7 +564,7 @@ function matchupTable($deck)
 
 function deckErrorTable($deckErrors)
 {
-    echo "<table style=\"border-width: 0px; width: 100%; \" cellpadding=1>\n";
+    echo "<table style=\"width: 100%\" cellpadding=1>\n";
     echo '<tr><td><span class="error"><b>ERRORS</spa></td></tr>';
     foreach ($deckErrors as $error) {
         echo "<tr><td><span class=\"error\">{$error}</span></td></tr>";
@@ -583,7 +583,7 @@ function maindeckTable($deck)
     $other = $deck->getOtherCardS();
     $otherSpellsCount = $deck->getCardCount($other);
 
-    echo "<table style=\"border-width: 0px\" cellpadding=1>\n";
+    echo "<table cellpadding=1>\n";
     echo "<tr><td colspan=1><b>MAINDECK ({$deck->getCardCount($deck->maindeck_cards)} Cards)</td></tr>\n";
     echo "<tr><td colspan=2><i>{$creaturesCount} Creatures</td></tr>\n";
     foreach ($creatures as $card => $amt) {
@@ -610,7 +610,7 @@ function ccTable($deck)
 {
     $convertedcosts = $deck->getCastingCosts();
 
-    echo "<table style=\"border-width: 0px;\">\n";
+    echo "<table>\n";
     echo '<tr><td colspan=2 align="center" width=150><b>CASTING COSTS</td></tr>';
     $total = 0;
     $cards = 0;
@@ -634,7 +634,7 @@ function ccTable($deck)
 
 function symbolTable($deck)
 {
-    echo "<table style=\"border-width: 0px\">\n";
+    echo "<table>\n";
     echo '<tr><td align="center" colspan=2 width=150><b>MANA SYMBOLS';
     echo "</td></tr>\n";
     $cnts = $deck->getColorCounts();

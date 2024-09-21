@@ -2,8 +2,9 @@
 
 namespace Gatherling;
 
-use Gatherling\Models\Database;
+use Gatherling\Models\Format;
 use Gatherling\Models\Player;
+use Gatherling\Models\Database;
 
 require_once 'lib.php';
 include 'lib_form_helper.php';
@@ -105,6 +106,7 @@ function handleActions()
         if (isset($_POST['delentries'])) {
             $db = Database::getConnection();
             $stmt = $db->prepare('DELETE FROM `cards` WHERE `id` = ?');
+            $playername = null;
             $stmt->bind_param('d', $playername);
             foreach ($_POST['delentries'] as $playername) {
                 if (!$stmt->execute()) {
@@ -253,7 +255,7 @@ function printEditCard()
     echo "<input type=\"hidden\" name=\"id\" value=\"$id\" />";
     echo '<input type="hidden" name="action" value="modify_card" />';
 
-    echo '<table style="border-width: 0px" align="center">';
+    echo '<table class="c">';
 
     echo textInput('Card Name', 'name', $name, 100);
     echo textInput('Typeline', 'type', $type, 100);

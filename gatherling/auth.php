@@ -147,7 +147,7 @@ function prompt_link_account($user)
             <div class="uppertitle"> Link Discord Account </div>
 
             <form action="register.php" method="post">
-                <table class="form" align="center" style="border-width: 0px" cellpadding="3">
+                <table class="form c" cellpadding="3">
                     <tr>
                         <td colspan="2">If you already have a Gatherling account, please <a href="login.php?target=auth.php">Log In</a> in with your password, and link via Player Settings.</td>
                     </tr>

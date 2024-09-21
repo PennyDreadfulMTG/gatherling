@@ -1,205 +1,74 @@
 <?php
 
-use Gatherling\Models\Database;
+use Gatherling\Data\DB;
 use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
-use Gatherling\Models\Matchup;
 use Gatherling\Models\Player;
+use Gatherling\Models\Matchup;
+use Gatherling\Models\Database;
+use Gatherling\Views\Pages\Home;
 
 require_once 'lib.php';
 
 function main(): void
 {
-    ob_start();
-    ?>
-        <div id="gatherling_main" class="box grid_12">
-            <div class="uppertitle">Gatherling</div>
-            <p>Welcome to Gatherling! The place for player-run Magic Online tournaments. Report bugs or give feedback on the <a href="https://discord.gg/F9SrMwV">Discord</a>.</a></p>
-        </div>
-        <div id="maincolumn" class="grid_8">
-            <div class="box">
-                <div class="uppertitle">Active Events</div>
-                <?php activeEvents(); ?>
-            </div>
-            <div class="box">
-                <div class="uppertitle">Upcoming Events</div>
-                <?php upcomingEvents(); ?>
-            </div>
-            <div class="box">
-                <div class="uppertitle">Gatherling Statistics</div>
-                <?php stats(); ?>
-            </div>
-        </div>
-        <div class="grid_4">
-            <div class="box pad">
-                <?php
-                $player = Player::getSessionPlayer();
-                if ($player != null) {
-                    playerBox($player);
-                } else {
-                    loginBox();
-                } ?>
-            </div>
-            <div class="box">
-                <div class="uppertitle">Recent Winners</div>
-                <?php recentWinners(); ?>
-            </div>
-        </div>
-        <div class="clear"></div>
-    <?php
-    echo page('Home', ob_get_clean());
-}
-
-function activeEvents()
-{
-    $events = Event::getActiveEvents(false);
-    if ($events) {
-        echo "<table class=\"events\">\n";
-        foreach ($events as $event) {
-            $name = $event->name;
-            $format = $event->format;
-            $round = $event->current_round;
-            $col2 = '<a href="eventreport.php?event=' . rawurlencode($name) . "\">{$name}</a>";
-            ?>
-                <tr>
-                    <td>
-                        <?= $col2 ?><br>
-                        <?= $format ?>
-                    </td>
-                    <td style="text-align: right">Round <?= $round ?></td>
-                </tr>
-            <?php
-        }
-        echo "</table>\n";
+    $activeEvents = Event::getActiveEvents(false);
+    $upcomingEvents = upcomingEvents();
+    $stats = stats();
+    $player = Player::getSessionPlayer();
+    if (!$player instanceof Player) {
+        $player = null;
     }
+    $mostRecentHostedEvent = $player ? Event::findMostRecentByHost($player->name) : null;
+    $recentWinners = recentWinners();
+    $page = new Home($activeEvents, $upcomingEvents, $stats, $player, $mostRecentHostedEvent, $recentWinners);
+    $page->send();
 }
 
 function upcomingEvents()
 {
-    $db = Database::getConnection();
-    $result = $db->query('SELECT UNIX_TIMESTAMP(start) AS d,
-    format, series, name, threadurl FROM events
-    WHERE DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() AND private = 0 ORDER BY start ASC LIMIT 20');
-    // interval in DATE_SUB was used to select eastern standard time, but since the server is now in Washington DC it is not needed
-    $result or exit($db->error);
-    echo "<table class=\"events\">\n";
-    while ($row = $result->fetch_assoc()) {
-        $name = $row['name'];
-        $format = $row['format'];
-        $col2 = '<a href="eventreport.php?event=' . rawurlencode($name) . "\">$name</a>";
-        ?>
-            <tr>
-                <td><?= $col2 ?><br><?= $format ?></td>
-                <td style="text-align: right"><?= time_element($row['d'], time()) ?></td>
-            </tr>
-        <?php
-    }
-    echo "</table>\n";
-
-    $result->close();
+    $sql = '
+        SELECT
+            UNIX_TIMESTAMP(start) AS d, format, series, name, threadurl
+        FROM
+            events
+        WHERE
+            start > NOW() AND private = 0
+        ORDER BY
+            start ASC
+        LIMIT 20';
+    return DB::select($sql);
 }
 
 function stats()
 {
-    ?>
-        <ul>
-            <li>There are <?php echo Deck::uniqueCount() ?> unique decks.</li>
-            <li>We have recorded <?php echo Matchup::count() ?> matches from <?php echo Event::count() ?> events.</li>
-            <li>There are <?php echo Player::activeCount() ?> active players in gatherling. (<?php echo Player::verifiedCount() ?> verified.)</li>
-        </ul>
-    <?php
-}
-
-function playerBox($player)
-{
-    ?>
-        <div>
-            <p><b> Welcome back <?php echo $player->name ?> </b></p>
-            <ul>
-                <li> <a href="profile.php">Check out your profile</a> </li>
-                <li> <a href="player.php?mode=alldecks">Enter your own decklists</a> </li>
-                <?php
-                $event = Event::findMostRecentByHost($player->name);
-                if (!is_null($event)) { ?>
-                    <li> <a href="event.php?name=<?php echo $event->name ?>">Manage <?php echo $event->name ?></a> </li>
-                    <?php
-                }
-                if ($player->isHost()) { ?>
-                    <li> <a href="event.php">Host Control Panel</a></li>
-                    <?php
-                } ?>
-            </ul>
-        </div>
-    <?php
-}
-
-function loginBox()
-{
-    ?>
-        <div class="uppertitle">Login to Gatherling</div>
-        <form action="login.php" method="post">
-            <table class="form">
-                <tr>
-                    <th><label for="username">Username</label></th>
-                    <td><input class="inputbox" type="text" name="username" value="" /></td>
-                </tr>
-                <tr>
-                    <th><label for="password">Password</label></th>
-                    <td><input class="inputbox" type="password" name="password" value="" /></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="buttons">
-                        <input class="inputbutton" type="submit" name="mode" value="Log In" />
-                        <input class="inputbutton discordlogin fa-discord" type="submit" name="mode" value="Log In with Discord" />
-                    </td>
-                </tr>
-            </table>
-        </form>
-        <p>
-            <a href="register.php">Need to register?</a><br />
-            <a href="forgot.php">Forgot your password?</a>
-        </p>
-    <?php
+    return [
+        'decks' => Deck::uniqueCount(),
+        'matches' => Matchup::count(),
+        'events' => Event::count(),
+        'activePlayers' => Player::activeCount(),
+        'verifiedPlayers' => Player::verifiedCount(),
+    ];
 }
 
 function recentWinners()
 {
-    $db = Database::getConnection();
-    $result = $db->query("SELECT e.name as `event`, n.player, d.name, d.id
-                        FROM entries n, decks d, events e
-                        WHERE n.medal='1st'
-                        AND d.id=n.deck
-                        AND e.id=n.event_id
-                        ORDER BY e.start
-                        DESC LIMIT 10");
-    $result or exit($db->error);
-    echo "<table class=\"winners\">\n";
-    while ($row = $result->fetch_assoc()) {
-        $deck = new Deck($row['id']);
-        $manaSymbol = $deck->getColorImages();
-        ?>
-        <tr>
-            <td colspan="2"><?= $row['event'] ?></td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <a class="borderless" href="./eventreport.php?event=<?= $row['event'] ?>">
-                    <?= $manaSymbol ?>
-                </a>
-            </td>
-        </tr>
-        <tr class="player-deck">
-            <td>
-                <b><a href="./profile.php?player=<?= $row['player'] ?>"><?= $row['player'] ?></a></b>
-            </td>
-            <td>
-                <i><a href="./deck.php?mode=view&event=<?= $row['event'] ?>"><?= $row['name'] ?></a></i>
-            </td>
-        </tr>
-        <?php
+    $sql = "
+        SELECT
+            e.name as `event`, n.player, d.name, d.id
+        FROM
+            entries n, decks d, events e
+        WHERE
+            n.medal = '1st' AND d.id = n.deck AND e.id = n.event_id
+        ORDER BY
+            e.start DESC
+        LIMIT 10";
+    $winners = DB::select($sql);
+    foreach ($winners as &$winner) {
+        $deck = new Deck($winner['id']);
+        $winner['manaSymbolSafe'] = $deck->getColorImages();
     }
-    echo '</table>';
-    $result->close();
+    return $winners;
 }
 
 if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {

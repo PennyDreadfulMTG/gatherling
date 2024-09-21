@@ -1,0 +1,26 @@
+<table>
+    <tr>
+        <td colspan="5" align="center">
+            <h3>Registration Open</h3>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{#showSignIn}}
+                <a href="login.php">Sign in</a> or <a href="register.php">make an account</a> to Register
+            {{/showSignIn}}
+            {{#showRegistered}}
+                You are registered for this event! <a href="{{unregisterLink}}">(Unreg)</a>
+            {{/showRegistered}}
+            {{#showFull}}
+                This event is currently at capacity.
+            {{/showFull}}
+            {{#showRegister}}
+                <a href="{{registerLink}}">Register for {{eventName}}</a>
+            {{/showRegister}}
+        </td>
+    </tr>
+    <tr>
+        <td>{{#start}}{{> time}}{{/start}}</td>
+    </tr>
+</table>

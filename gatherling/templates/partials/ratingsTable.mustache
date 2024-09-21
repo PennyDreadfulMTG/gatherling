@@ -1,0 +1,41 @@
+<table class="c" width="500px">
+    <tr>
+        <td colspan="6" align="center">
+            <i>Only players with {{minMatches}} or more matches are included.</i>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">&nbsp;</td>
+    </tr>
+    <tr>
+        <td align="center">
+            <b>Rank</b>
+        </td>
+        <td>
+            <b>Player</b>
+        </td>
+        <td align="center">
+            <b>Rating</b>
+        </td>
+        <td align="center" colspan="3">
+            <b>Record</b>
+        </td>
+    </tr>
+
+    {{#ratingsData}}
+        <tr>
+            <td align="center">{{rank}}</td>
+            <td>
+                {{#playerLink}}{{> playerLink}}{{/playerLink}}
+            </td>
+            <td align="center">{{rating}}</td>
+            <td align="right" width="35">{{wins}}&nbsp;</td>
+            <td align="center">-</td>
+            <td width="35" align="left">&nbsp;{{losses}}</td>
+        </tr>
+    {{/ratingsData}}
+
+</table>
+{{{paginationSafe}}}
+<br>
+<br>

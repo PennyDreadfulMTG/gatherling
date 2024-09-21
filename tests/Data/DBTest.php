@@ -6,7 +6,7 @@ namespace Gatherling\Tests\Data;
 
 use Gatherling\Data\DB;
 use Gatherling\Exceptions\DatabaseException;
-use Gatherling\Tests\DatabaseCase;
+use Gatherling\Tests\Support\TestCases\DatabaseCase;
 
 class DBTest extends DatabaseCase
 {
@@ -22,7 +22,7 @@ class DBTest extends DatabaseCase
         $sql = 'INSERT INTO test_table (name) VALUES (:name)';
         $params = [':name' => 'Test Name'];
         DB::execute($sql, $params);
-        $rows = DB::select('SELECT * FROM test_table WHERE name = :name', [':name' => 'Test Name']);
+        $rows = DB::select('SELECT name FROM test_table WHERE name = :name', ['name' => 'Test Name']);
         $this->assertCount(1, $rows);
         $this->assertEquals('Test Name', $rows[0]['name']);
     }
@@ -32,10 +32,38 @@ class DBTest extends DatabaseCase
         DB::execute("INSERT INTO test_table (name) VALUES ('Test1')");
         DB::execute("INSERT INTO test_table (name) VALUES ('Test2')");
 
-        $rows = DB::select('SELECT * FROM test_table');
+        $rows = DB::select('SELECT name FROM test_table');
         $this->assertCount(2, $rows);
         $this->assertEquals('Test1', $rows[0]['name']);
         $this->assertEquals('Test2', $rows[1]['name']);
+    }
+
+    public function testSelectOnlyNoData()
+    {
+        $this->expectException(DatabaseException::class);
+        DB::selectOnly('SELECT * FROM test_table WHERE id = 1');
+    }
+
+    public function testSelectOnly()
+    {
+        DB::execute("INSERT INTO test_table (name) VALUES ('Test1')");
+        DB::execute("INSERT INTO test_table (name) VALUES ('Test2')");
+        $row = DB::selectOnly('SELECT name FROM test_table WHERE id = 1');
+        $this->assertEquals('Test1', $row['name']);
+        $this->expectException(DatabaseException::class);
+        $row = DB::selectOnly('SELECT * FROM test_table');
+    }
+
+    public function testSelectOnlyOrNull()
+    {
+        $row = DB::selectOnlyOrNull('SELECT * FROM test_table WHERE id = 1');
+        $this->assertNull($row);
+        DB::execute("INSERT INTO test_table (name) VALUES ('Test1')");
+        DB::execute("INSERT INTO test_table (name) VALUES ('Test2')");
+        $row = DB::selectOnlyOrNull('SELECT name FROM test_table WHERE id = 1');
+        $this->assertEquals('Test1', $row['name']);
+        $this->expectException(DatabaseException::class);
+        $row = DB::selectOnlyOrNull('SELECT * FROM test_table');
     }
 
     public function testValue()

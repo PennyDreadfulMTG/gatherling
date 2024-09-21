@@ -1,9 +1,13 @@
 <?php
 
 use Gatherling\Auth\Session;
-use Gatherling\Models\Database;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
+use Gatherling\Models\Database;
+use Gatherling\Views\TemplateHelper;
+use Gatherling\Views\Components\FormatDropMenu;
+use Gatherling\Views\Components\SeasonDropMenu;
+use Gatherling\Views\Components\EmailStatusDropDown;
 
 require_once 'bootstrap.php';
 ob_start();
@@ -36,40 +40,6 @@ function page($title, $contents): string
     return ob_get_clean();
 }
 
-function renderTemplate(string $template_name, array|object $context = []): string
-{
-    $m = new Mustache_Engine([
-        'cache'            => '/tmp/gatherling/mustache/templates',
-        'loader'           => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views'),
-        'partials_loader'  => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
-        'entity_flags'     => ENT_QUOTES,
-        'strict_callables' => true,
-    ]);
-
-    return $m->render($template_name, $context);
-}
-
-/** Gets the correct name, relative to the gatherling root dir, for a file in the theme.
- *  Allows for overrides, falls back to default/.
- */
-function theme_file($name): string
-{
-    global $CONFIG;
-    if (Player::isLoggedIn()) {
-        $user_dir = 'styles/'.Player::getSessionPlayer()->theme.'/';
-        if (file_exists($user_dir.$name)) {
-            return $user_dir.$name;
-        }
-    }
-    $theme_dir = "styles/{$CONFIG['style']}/";
-    $default_dir = 'styles/Chandra/';
-    if (file_exists($theme_dir.$name)) {
-        return $theme_dir.$name;
-    }
-
-    return $default_dir.$name;
-}
-
 function print_header($title, $enable_vue = false): void
 {
     global $CONFIG;
@@ -83,26 +53,27 @@ function print_header($title, $enable_vue = false): void
         $isOrganizer = count($player->organizersSeries()) > 0;
     }
 
-    echo renderTemplate('partials/header', [
-        'siteName'       => $CONFIG['site_name'],
-        'title'          => $title,
-        'cssLink'        => theme_file('css/stylesheet.css') . '?v=' . rawurlencode(git_hash()),
-        'enableVue'      => $enable_vue,
-        'gitHash'        => git_hash(),
-        'headerLogoSrc'  => theme_file('images/header_logo.png'),
-        'player'         => $player,
-        'isHost'         => $isHost,
-        'isOrganizer'    => $isOrganizer,
-        'isSuper'        => $isSuper,
+    echo TemplateHelper::render('partials/header', [
+        'siteName' => $CONFIG['site_name'],
+        'title' => $title,
+        'cssLink' => 'styles/css/stylesheet.css?v=' . rawurlencode(git_hash()),
+        'enableVue' => $enable_vue,
+        'gitHash' => git_hash(),
+        'headerLogoSrc' => 'styles/images/header_logo.png',
+        'player' => $player,
+        'isHost' => $isHost,
+        'isOrganizer' => $isOrganizer,
+        'isSuper' => $isSuper,
         'versionTagline' => version_tagline(),
     ]);
 }
 
 function print_footer(): void
 {
-    echo renderTemplate('partials/footer', [
+    echo TemplateHelper::render('partials/footer', [
         'versionTagline' => version_tagline(),
-        'gitHash'        => git_hash(),
+        'gitHash' => git_hash(),
+        'jsLink' => 'gatherling.js?v=' . rawurlencode(git_hash()),
     ]);
 }
 
@@ -145,7 +116,7 @@ function image_tag($filename, $extra_attr = null): string
             $tag .= "{$key}=\"{$value}\" ";
         }
     }
-    $tag .= 'src="'.theme_file("images/{$filename}").'" />';
+    $tag .= 'src="styles/images/' . rawurlencode($filename) . '" />';
 
     return $tag;
 }
@@ -157,105 +128,24 @@ function medalImgStr($medal): string
 
 function seasonDropMenu(int|string|null $season, bool $useall = false): string
 {
-    $args = seasonDropMenuArgs($season, $useall);
-
-    return renderTemplate('partials/dropMenu', $args);
-}
-
-function seasonDropMenuArgs(int|string|null $season, bool $useall = false): array
-{
-    $db = Database::getConnection();
-    $query = 'SELECT MAX(season) AS m FROM events';
-    $result = $db->query($query) or exit($db->error);
-    $maxArr = $result->fetch_assoc();
-    $max = $maxArr['m'];
-    $title = ($useall == 0) ? '- Season - ' : 'All';
-    $result->close();
-
-    return numDropMenuArgs('season', $title, max(10, $max + 1), $season);
+    return (new SeasonDropMenu($season, $useall))->render();
 }
 
 function formatDropMenu(?string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): string
 {
-    $args = formatDropMenuArgs($format, $useAll, $formName, $showMeta);
-
-    return renderTemplate('partials/dropMenu', $args);
+    return (new FormatDropMenu($format, $useAll, $formName, $showMeta))->render();
 }
 
-function formatDropMenuArgs(?string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): array
+function emailStatusDropDown($currentStatus = 1): string
 {
-    $db = Database::getConnection();
-    $query = 'SELECT name FROM formats';
-    if (!$showMeta) {
-        $query .= ' WHERE NOT is_meta_format ';
-    }
-    $query .= ' ORDER BY priority desc, name';
-    $result = $db->query($query) or exit($db->error);
-    $formats = $result->fetch_all(MYSQLI_ASSOC);
-    $result->close();
-    $default = $useAll == 0 ? '- Format -' : 'All';
-    foreach ($formats as &$f) {
-        $f['text'] = $f['value'] = $f['name'];
-        $f['isSelected'] = $f['name'] === $format;
-    }
-
-    return [
-        'name'    => $formName,
-        'default' => $default,
-        'options' => $formats,
-    ];
-}
-
-function emailStatusDropDown($currentStatus = 1): void
-{
-    echo '<select class="inputbox" name="emailstatus">';
-    if ($currentStatus == 0) {
-        echo '<option value="0" selected>Private</option>';
-    } else {
-        echo '<option value="0">Private</option>';
-    }
-    if ($currentStatus == 1) {
-        echo '<option value="1" selected>Public</option>';
-    } else {
-        echo '<option value="1">Public</option>';
-    }
-    echo '</select>';
-}
-
-function numDropMenuArgs(string $field, string $title, int $max, string|int|null $def, int $min = 0, ?string $special = null): array
-{
-    if ($def && strcmp($def, '') == 0) {
-        $def = -1;
-    }
-
-    $options = [];
-    if ($special) {
-        $options[] = [
-            'text'       => $special,
-            'value'      => 128,
-            'isSelected' => $def == 128,
-        ];
-    }
-    for ($n = $min; $n <= $max; $n++) {
-        $options[] = [
-            'text'       => $n,
-            'value'      => $n,
-            'isSelected' => $n == $def,
-        ];
-    }
-
-    return [
-        'name'    => $field,
-        'default' => $title,
-        'options' => $options,
-    ];
+    return (new EmailStatusDropDown($currentStatus))->render();
 }
 
 function timeDropMenu(int|string $hour, int|string $minutes = 0): string
 {
     $args = timeDropMenuArgs($hour, $minutes);
 
-    return renderTemplate('partials/dropMenu', $args);
+    return TemplateHelper::render('partials/dropMenu', $args);
 }
 
 function timeDropMenuArgs(int|string $hour, int|string $minutes = 0): array
@@ -317,7 +207,7 @@ function notAllowed(string $reason): string
 {
     $args = notAllowedArgs($reason);
 
-    return renderTemplate('partials/notAllowed', $args);
+    return TemplateHelper::render('partials/notAllowed', $args);
 }
 
 function notAllowedArgs(string $reason): array
@@ -415,13 +305,13 @@ function git_hash(): string
     if (!is_null($hash = $CONFIG['GIT_HASH'])) {
         return substr($hash, 0, 7);
     }
-
     return '';
 }
 
 function version_tagline(): string
 {
-    return 'Gatherling version 5.1.0 ("Have no fear of perfection – you’ll never reach it.")';
+    return 'Gatherling version 5.2.0 ("I mustache you a question...")';
+    // return 'Gatherling version 5.1.0 ("Have no fear of perfection – you’ll never reach it.")';
     // echo 'Gatherling version 5.0.1 ("No rest. No mercy. No matter what.")';
     // echo 'Gatherling version 5.0.0 ("Hulk, no! Just for once in your life, don\'t smash!")';
     // echo 'Gatherling version 4.9.0 ("Where we’re going, we don’t need roads")';
@@ -469,8 +359,8 @@ function redirect($page): void
 
 function parseCards($cards): array
 {
+    $cardarr = [];
     if (!is_array($cards)) {
-        $cardarr = [];
         $cards = explode("\n", $cards);
     }
     foreach ($cards as $card) {
@@ -532,13 +422,36 @@ function print_tooltip($text, $tooltip): void
 function getObjectVarsCamelCase(object $obj): array
 {
     $vars = get_object_vars($obj);
-
-    return arrayMapRecursive('snakeToCamel', $vars);
+    return arrayMapRecursive('toCamel', $vars);
 }
 
-function snakeToCamel(string $string): string
+// https://stackoverflow.com/a/45440841/375262
+function toCamel(string $string): string
 {
-    return lcfirst(str_replace('_', '', ucwords($string, '_')));
+    // Convert to ASCII, remove apostrophes, and split into words
+    $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+    $string = str_replace("'", "", $string);
+    $words = preg_split('/[^a-zA-Z0-9]+/', $string);
+
+    // Convert each word to camel case
+    $camelCase = array_map(function ($word) {
+        // Split words that are already in camel case
+        $word = preg_replace('/(?<=\p{Ll})(?=\p{Lu})/u', ' ', $word);
+        $word = preg_replace('/(?<=\p{Lu})(?=\p{Lu}\p{Ll})/u', ' ', $word);
+        $subWords = explode(' ', $word);
+
+        // Lowercase each subword
+        $subWords = array_map('strtolower', $subWords);
+        // Capitalize each subword
+        $subWords = array_map('ucfirst', $subWords);
+
+        return implode('', $subWords);
+    }, $words);
+
+    // Join words and lowercase the first character
+    $result = implode('', $camelCase);
+    $result = lcfirst($result);
+    return $result;
 }
 
 function arrayMapRecursive(callable $func, array $arr): array

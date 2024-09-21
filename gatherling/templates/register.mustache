@@ -1,0 +1,51 @@
+<script src="https://hcaptcha.com/1/api.js" async defer></script>
+<div class="grid_10 suffix_1 prefix_1">
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle">Register for Gatherling</div>
+        {{#showRegForm}}
+            <form action="register.php" method="post" onsubmit="return validate_pw()">
+                <table>
+                    <p class="c">Passwords are required to be at least 8 characters long.</center>
+                    <p class="c">Please use your MTGO username if you have one.</center>
+                    <tr>
+                        <td><b>Username</b></td>
+                        <td><input class="inputbox" type="text" name="username" value=""></td>
+                    </tr>
+                    <tr>
+                        <td><b>Password</b></td>
+                        <td><input class="inputbox" type="password" name="pw1" id="pw" value=""></td>
+                    </tr>
+                    <tr>
+                        <td><b>Confirm Password</b></td>
+                        <td><input class="inputbox" type="password" name="pw2" id="pw2" value=""></td>
+                    </tr>
+                    <tr>
+                        <td><b>Email</b></td>
+                        <td>
+                            <input class="inputbox" type="email" name="email" value="">
+                            {{#emailStatusDropDown}}{{> dropMenu}}{{/emailStatusDropDown}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Time Zone</b></td>
+                        <td>
+                            {{#timeZoneDropMenu}}{{> dropMenu}}{{/timeZoneDropMenu}}
+                        </td>
+                    </tr>
+                    <tr>
+                            <td colspan="2">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="center" colspan="2">
+                            <div class="h-captcha" data-sitekey="6593a7b2-48b0-4a15-bb0f-c6d47c4ac0e6"></div>
+                            <input class="inputbutton" type="submit" name="mode" value="Register Account">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        {{/showRegForm}}
+
+        <p class="error">{{message}}</p>
+
+    </div>
+</div>

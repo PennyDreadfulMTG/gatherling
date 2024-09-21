@@ -3,6 +3,7 @@
 namespace Gatherling\Models;
 
 use Exception;
+use Gatherling\Views\TemplateHelper;
 
 class Entry
 {
@@ -206,7 +207,7 @@ class Entry
         // creates a link to enter a deck list once a player is registered for the event
         $args = $this->createDeckLinkArgs();
 
-        return renderTemplate('partials/createDeckLink', $args);
+        return TemplateHelper::render('partials/createDeckLink', $args);
     }
 
     public function createDeckLinkArgs(): array

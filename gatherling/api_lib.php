@@ -23,6 +23,8 @@ function populate($array, $src, $keys)
 /** @return bool  */
 function is_admin(): bool
 {
+    global $CONFIG;
+
     if (!isset($_SESSION['infobot'])) {
         $_SESSION['infobot'] = false;
     }
@@ -404,7 +406,6 @@ function create_pairing(Event $event, mixed $round, ?string $a, ?string $b, ?str
             break;
         default:
             error('unexpected value for res.  Expected one of [2-0, 2-1, 1-2, 0-2, D, P].');
-            break;
     }
     if ($res == 'P') {
         $event->addPairing($playerA, $playerB, $round, $res);

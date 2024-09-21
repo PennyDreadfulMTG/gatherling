@@ -1,0 +1,22 @@
+<table>
+    <tr>
+        <td colspan="5" class="c"><b>TOP {{numFinalists}}</b></td>
+    </tr>
+    {{#finalists}}
+        <tr>
+            <td width="40">
+                <img style="border-width: 0" src="{{medalSrc}}" />
+                {{medalText}}
+            </td>
+            <td>
+                <img src="{{manaSrc}}" alt="Deck Colors" />
+            </td>
+            <td width="250">
+                {{#deckLink}}{{> deckLink}}{{/deckLink}}{{^deckIsValid}}<span class="warning">*</span>{{/deckIsValid}}
+            </td>
+            <td align="right" width="250">
+                by {{#playerLink}}{{> playerLink}}{{/playerLink}}
+            </td>
+        </tr>
+    {{/finalists}}
+</table>

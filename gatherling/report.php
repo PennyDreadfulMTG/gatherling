@@ -165,7 +165,7 @@ function print_dropConfirm($event_name, $player)
     echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Drop from Event\" />\n";
     echo '<td> ';
     echo "</form>\n";
-    echo "<form action=\"report.php\" method=\"get\">\n";
+    echo "<form action=\"player.php\" method=\"get\">\n";
     echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Cancel\" />\n";
     echo "</td> </tr> \n";
     echo "<tr> <td colspan=\"2\" class=\"buttons\">\n";

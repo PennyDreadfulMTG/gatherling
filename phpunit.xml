@@ -1,7 +1,7 @@
-<phpunit>
+<phpunit stopOnFailure="true">
     <extensions>
-        <bootstrap class="Gatherling\Tests\DatabaseTestListener" />
-        <bootstrap class="Gatherling\Tests\LogTestListener" />
+        <bootstrap class="Gatherling\Tests\Support\Listeners\DatabaseTestListener" />
+        <bootstrap class="Gatherling\Tests\Support\Listeners\LogTestListener" />
     </extensions>
     <php>
         <const name="TESTING" value="true"/>

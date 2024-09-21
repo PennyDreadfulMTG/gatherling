@@ -10,7 +10,7 @@ function main(): void
 {
     ob_start();
     ?>
-    <script src="/styles/Chandra/js/sorttable.js"></script>
+    <script src="/styles/js/sorttable.js"></script>
     <div class="grid_10 suffix_1 prefix_1">
         <div id="gatherling_main" class="box">
             <div class="uppertitle group">Deck Search</div>

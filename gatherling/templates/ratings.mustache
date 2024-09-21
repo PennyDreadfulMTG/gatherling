@@ -1,0 +1,28 @@
+<div class="grid_10 suffix_1 prefix_1">
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle"> Ratings </div>
+        <form action="ratings.php" method="post">
+            <table class="c">
+                <tr>
+                    <td>
+                        Select a rating to display:
+                        {{#formatDropMenuR}}{{> dropMenu}}{{/formatDropMenuR}}
+                        &nbsp;
+                        <input class="inputbutton" type="submit" name="mode" value="Display Ratings" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <br>
+        <center>
+            <b>Ratings current through {{lastTournamentDate}} - <span style="color: #D45E28">{{lastTournamentName}}</span></b>
+        </center>
+        <br>
+        <center>
+            The highest {{format}} rating ever achieved is <b>{{highestRating}}</b>, obtained by <b>{{highestRatedPlayer}}</b> on {{highestRatingDate}}
+        </center>
+        <br>
+        {{#ratingsTable}}{{> ratingsTable}}{{/ratingsTable}}
+        <br>
+    </div>
+</div>

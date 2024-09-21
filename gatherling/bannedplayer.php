@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Gatherling;
 
-use Gatherling\Pages\BannedPlayer;
+use Gatherling\Views\Pages\BannedPlayer;
 
 require_once 'lib.php';
 
 function main(): void
 {
     $page = new BannedPlayer();
-    echo $page->render();
+    $page->send();
 }
 
 if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {

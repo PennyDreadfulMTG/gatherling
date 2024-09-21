@@ -1,0 +1,1102 @@
+/*
+    Gatherling Style Sheet
+    --------------------------------------------------------------
+    Style name: ChandraNeue
+    Original Author:  Daniel K. Billett Jr.
+    Updates: Thomas David Baker <bakert@gmail.com>
+    --------------------------------------------------------------
+*/
+
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
+
+/* Text */
+
+table,
+tr,
+th,
+td,
+ul {
+    color: #ccc;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+body {
+    font: 14px/1.45 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
+}
+hr {
+    border: 0 white solid;
+    border-top-width: 1px;
+    clear: both;
+    height: 0;
+}
+h1 {
+    font-size: 28px;
+}
+h2 {
+    font-size: 26px;
+}
+h3 {
+    font-size: 24px;
+}
+h4 {
+    font-size: 22px;
+}
+h5 {
+    font-size: 20px;
+}
+h6 {
+    font-size: 18px;
+}
+ol {
+    list-style: decimal;
+}
+ul {
+    list-style: disc;
+}
+li {
+    margin-left: 30px;
+}
+p,
+dl,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ol,
+ul,
+pre,
+table,
+address,
+fieldset {
+    margin: 0;
+}
+
+/* 960 grid system */
+.container_12,.container_16{margin-left:auto;margin-right:auto;width:960px}.grid_1,.grid_2,.grid_3,.grid_4,.grid_5,.grid_6,.grid_7,.grid_8,.grid_9,.grid_10,.grid_11,.grid_12,.grid_13,.grid_14,.grid_15,.grid_16{display:inline;float:left;position:relative;margin-left:10px;margin-right:10px}.container_12 .grid_3,.container_16 .grid_4{width:220px}.container_12 .grid_6,.container_16 .grid_8{width:460px}.container_12 .grid_9,.container_16 .grid_12{width:700px}.container_12 .grid_12,.container_16 .grid_16{width:940px}.alpha{margin-left:0}.omega{margin-right:0}.container_12 .grid_1{width:60px}.container_12 .grid_2{width:140px}.container_12 .grid_4{width:298px;}.cardinsert {     display:inline;    position:relative;    margin-left:10px;    margin-right:10px;    width:270px;}.container_12 .grid_5{width:45%;padding: 15px;}.container_12 .grid_7{width:540px}.container_12 .grid_8{width:620px}.container_12 .grid_10{width:98%;margin-bottom: 15px;}.container_12 .grid_11{width:860px}.container_16 .grid_1{width:40px}.container_16 .grid_2{width:100px}.container_16 .grid_3{width:160px}.container_16 .grid_5{width:280px}.container_16 .grid_6{width:340px}.container_16 .grid_7{width:400px}.container_16 .grid_9{width:520px}.container_16 .grid_10{width:580px}.container_16 .grid_11{width:640px}.container_16 .grid_13{width:760px}.container_16 .grid_14{width:820px}.container_16 .grid_15{width:880px}.container_12 .prefix_3,.container_16 .prefix_4{padding-left:240px}.container_12 .prefix_6,.container_16 .prefix_8{padding-left:480px}.container_12 .prefix_9,.container_16 .prefix_12{padding-left:720px}.container_12 .prefix_1{padding-left:0px}.container_12 .prefix_2{padding-left:160px}.container_12 .prefix_4{padding-left:320px}.container_12 .prefix_5{padding-left:400px}.container_12 .prefix_7{padding-left:560px}.container_12 .prefix_8{padding-left:640px}.container_12 .prefix_10{padding-left:800px}.container_12 .prefix_11{padding-left:880px}.container_16 .prefix_1{padding-left:60px}.container_16 .prefix_2{padding-left:120px}.container_16 .prefix_3{padding-left:180px}.container_16 .prefix_5{padding-left:300px}.container_16 .prefix_6{padding-left:360px}.container_16 .prefix_7{padding-left:420px}.container_16 .prefix_9{padding-left:540px}.container_16 .prefix_10{padding-left:600px}.container_16 .prefix_11{padding-left:660px}.container_16 .prefix_13{padding-left:780px}.container_16 .prefix_14{padding-left:840px}.container_16 .prefix_15{padding-left:900px}.container_12 .suffix_3,.container_16 .suffix_4{padding-right:240px}.container_12 .suffix_6,.container_16 .suffix_8{padding-right:480px}.container_12 .suffix_9,.container_16 .suffix_12{padding-right:720px}.container_12 .suffix_1{padding-right:0px}.container_12 .suffix_2{padding-right:160px}.container_12 .suffix_4{padding-right:320px}.container_12 .suffix_5{padding-right:400px}.container_12 .suffix_7{padding-right:560px}.container_12 .suffix_8{padding-right:640px}.container_12 .suffix_10{padding-right:800px}.container_12 .suffix_11{padding-right:880px}.container_16 .suffix_1{padding-right:60px}.container_16 .suffix_2{padding-right:120px}.container_16 .suffix_3{padding-right:180px}.container_16 .suffix_5{padding-right:300px}.container_16 .suffix_6{padding-right:360px}.container_16 .suffix_7{padding-right:420px}.container_16 .suffix_9{padding-right:540px}.container_16 .suffix_10{padding-right:600px}.container_16 .suffix_11{padding-right:660px}.container_16 .suffix_13{padding-right:780px}.container_16 .suffix_14{padding-right:840px}.container_16 .suffix_15{padding-right:900px}.container_12 .push_3,.container_16 .push_4{left:240px}.container_12 .push_6,.container_16 .push_8{left:480px}.container_12 .push_9,.container_16 .push_12{left:720px}.container_12 .push_1{left:80px}.container_12 .push_2{left:160px}.container_12 .push_4{left:320px}.container_12 .push_5{left:400px}.container_12 .push_7{left:560px}.container_12 .push_8{left:640px}.container_12 .push_10{left:800px}.container_12 .push_11{left:880px}.container_16 .push_1{left:60px}.container_16 .push_2{left:120px}.container_16 .push_3{left:180px}.container_16 .push_5{left:300px}.container_16 .push_6{left:360px}.container_16 .push_7{left:420px}.container_16 .push_9{left:540px}.container_16 .push_10{left:600px}.container_16 .push_11{left:660px}.container_16 .push_13{left:780px}.container_16 .push_14{left:840px}.container_16 .push_15{left:900px}.container_12 .pull_3,.container_16 .pull_4{left:-240px}.container_12 .pull_6,.container_16 .pull_8{left:-480px}.container_12 .pull_9,.container_16 .pull_12{left:-720px}.container_12 .pull_1{left:-80px}.container_12 .pull_2{left:-160px}.container_12 .pull_4{left:-320px}.container_12 .pull_5{left:-400px}.container_12 .pull_7{left:-560px}.container_12 .pull_8{left:-640px}.container_12 .pull_10{left:-800px}.container_12 .pull_11{left:-880px}.container_16 .pull_1{left:-60px}.container_16 .pull_2{left:-120px}.container_16 .pull_3{left:-180px}.container_16 .pull_5{left:-300px}.container_16 .pull_6{left:-360px}.container_16 .pull_7{left:-420px}.container_16 .pull_9{left:-540px}.container_16 .pull_10{left:-600px}.container_16 .pull_11{left:-660px}.container_16 .pull_13{left:-780px}.container_16 .pull_14{left:-840px}.container_16 .pull_15{left:-900px}.clear{clear:both;display:block;overflow:hidden;visibility:hidden;width:0;height:0}.clearfix:after{clear:both;content:' ';display:block;font-size:0;line-height:0;visibility:hidden;width:0;height:0}.clearfix{display:inline-block}* html .clearfix{height:1%}.clearfix{display:block}
+
+.c {
+    text-align: center;
+}
+
+.warning {
+    color: red;
+}
+
+#gatherling_main td.box.round-header {
+    background-color: grey;
+    color: black;
+    padding-left: 8px;
+}
+
+/*
+Work around Mustache's trailing comma problem.
+See: https://bluebones.net/2024/09/avoid-trailing-comma-when-emitting-lists-in-mustache-templates/
+ */
+.inline-list, .inline-list li {
+        margin: 0;
+        padding: 0;
+}
+
+.inline-list li {
+    display: inline;
+}
+
+.inline-list.comma li:not(:last-child):after {
+    content: ", ";
+}
+.inline-list.pipe li:not(:last-child):after {
+    content: " | "
+}
+
+.highlight td {
+    color: green;
+}
+
+span.notallowed {
+    font-size: larger;
+    color: red;
+}
+table.scoreboard span {
+    border-bottom: 1px dotted #E25912;
+}
+table.scoreboard tr.odd {
+    background-color: #353535;
+}
+table.scoreboard tr.even {
+    background-color: #262626;
+}
+table.scoreboard tr.cutoff {
+    border-bottom: 3px double #E25912;
+}
+table.scoreboard td, table.scoreboard th {
+    text-align: center;
+    padding-right: 5px;
+}
+table.scoreboard .playername {
+    text-align: left;
+}
+table.bracket {
+    border: 1px solid Black;
+    color: #CCCCCC;
+    background-color: #353535;
+    text-align: center;
+    border-radius: 5px;
+    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
+    -moz-border-radius: 5px;
+    /* border radius is specified different ways for different legacy browsers. */
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+table.bracket td.brackettext {
+    border: 1px solid Black;
+    background-color: #D45E28;
+    color: Black;
+}
+table.bracket td.odd {
+    background-color: #262626;
+    vertical-align: middle;
+}
+table.bracket td.even {
+    background-color: #353535;
+    vertical-align: middle;
+}
+.series {
+    background: #262626;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    border-bottom: 1px solid #4F4F4F;
+    min-height: 200px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+}
+.series .series-content {
+    display: flex;
+}
+.series .series-name {
+    width: 400px;
+    font-size: 22px;
+    font-weight: bold;
+    right: 0px;
+}
+.series .series-logo {
+    width: 360px;
+    margin-right: 40px;
+}
+.series .series-logo img {
+    max-width: 280px;
+    max-height: 200px;
+}
+.series-organizers ul {
+    display: inline-block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.series-organizers ul li {
+    display: inline-block;
+    font-weight: bold;
+    width: 100px;
+    height: 20px;
+    margin-left: 0;
+}
+.series .series-info table {
+    margin: 0;
+    padding: 0;
+    border-collapse: collapse;
+}
+.series .series-info table th {
+    text-align: right;
+    vertical-align: baseline;
+    padding-right: 5px;
+}
+#gatherling_main .series .series-info table td {
+    vertical-align: baseline;
+}
+a.create_deck_link {
+    font-size: 13px;
+    color: #D28950;
+}
+/* autocard */
+.cardHoverImageWrapper {
+    position: relative;
+    display: inline-block;
+}
+.linkCardHoverImage {
+    position: absolute;
+    left: 150px;
+    top: -155px;
+    z-index: 20;
+}
+.cardHoverImageWrapper .linkCardHoverImage {
+    display: none;
+}
+.cardHoverImageWrapper a:hover .linkCardHoverImage {
+    display: block;
+}
+.crop {
+    float:left;
+    overflow:hidden;
+    /* this is important */
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: #D45E28 0 2px 30px;
+    -moz-box-shadow: #D45E28 0 2px 30px;
+    box-shadow: #D45E28 0 2px 30px;
+}
+/* input values to crop the image: top, right, bottom, left */
+.crop img {
+    margin:-2px -6px -6px -6px;
+}
+#birthday {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    opacity:0.75;
+    filter:alpha(opacity=75);
+    /* For IE8 and earlier */
+}
+.inputbox {
+    border: 1px solid Black;
+    color: #CCCCCC;
+    background-color: #353535;
+    padding: 3px;
+    border-radius: 5px;
+    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
+    -moz-border-radius: 5px;
+    /* border radius is specified different ways for different legacy browsers. */
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+.inputbox:hover {
+    border-color: #D45E28;
+}
+.inputbox:focus {
+    border: 1px solid rgb(234, 234, 234);
+    border-color: #D45E28;
+}
+.inputbox:disabled {
+    border: 1px solid Black;
+    background-color: #161616;
+    color: black;
+    padding: 3px;
+    border-radius: 5px;
+    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
+    -moz-border-radius: 5px;
+    /* border radius is specified different ways for different legacy browsers. */
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+.inputbutton {
+    border: 1px solid Black;
+    color: #CCCCCC;
+    background-color: #262626;
+    padding: 3px;
+    margin: 5px;
+    border-radius: 5px;
+    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
+    -moz-border-radius: 5px;
+    /* border radius is specified different ways for different legacy browsers. */
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+    -webkit-box-shadow: #000 0 2px 5px;
+    -moz-box-shadow: #000 0 2px 5px;
+    box-shadow: #000 0 2px 5px;
+}
+.inputbutton:not(.discordlogin):hover {
+    border-color: #D45E28;
+    background-color: #353535;
+    color: #D45E28;
+    -webkit-box-shadow: #D45E28 0 2px 5px;
+    -moz-box-shadow: #D45E28 0 2px 5px;
+    box-shadow: #D45E28 0 2px 5px;
+}
+.inputbutton:focus {
+    border: 1px solid #000;
+    background-color: #161616;
+    color: #000;
+    -webkit-box-shadow: #000 0 0px 0px;
+    -moz-box-shadow: #000 0 0px 0px;
+    box-shadow: #000 0 0px 0px;
+}
+.inputbutton:disabled {
+    border: 1px solid #000;
+    background-color: #161616;
+    color: #000;
+    -webkit-box-shadow: #000 0 0px 0px;
+    -moz-box-shadow: #000 0 0px 0px;
+    box-shadow: #000 0 0px 0px;
+}
+/* Some formating stuff for the search form and results table */
+#table-decksearch {
+    color: #CCCCCC;
+    background-color: #353535;
+    padding: 3px;
+    border-radius: 5px;
+    width: 100%;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    font-family: Arial,"Bitstream Vera Sans",Helvetica,Verdana,sans-serif;
+    color: #333;
+}
+#table-decksearch td, #table-decksearch th {
+    border-top-color: #454545;
+    border-bottom: 1px solid #454545;
+    color: #CCCCCC;
+}
+#table-decksearch th {
+    color: white;
+    font-weight: normal;
+    padding: 7px 7px 8px;
+    text-align: left;
+    line-height: 1.3em;
+    font-size: 14px;
+}
+#table-decksearch decksearch {
+    font-size: 12px;
+    padding: 4px 7px 2px;
+    vertical-align: top;
+}
+.ds_inputbox {
+    margin: auto;
+    width: 750px;
+    border: 1px solid Black;
+    color: #CCCCCC;
+    background-color: #353535;
+    padding: 3px;
+    border-radius: 5px;
+    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
+    -moz-border-radius: 5px;
+    /* border radius is specified different ways for different legacy browsers. */
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+.ds_left {
+    width: 605px;
+    background-color: #353535;
+    float: left;
+    padding: 3px;
+}
+.ds_right {
+    width: 125px;
+    background-color: #353535;
+    padding: 3px;
+    float: left;
+}
+.ds_label {
+    margin: 8px;
+    display: block;
+    font-size: 13px;
+    padding: 5px;
+}
+.ds_select {
+    margin-top: 15px;
+    display: block;
+    font-size: 13px;
+}
+.ds_input {
+    border: 1px solid Black;
+    color: #CCCCCC;
+    background-color: #353535;
+    border-radius: 5px;
+    width: 450px;
+    padding: 5px;
+    margin: 0;
+    float:right;
+}
+.ds_input:hover {
+    border-color: #D45E28;
+}
+.ds_input:focus {
+    border: 1px solid rgb(234, 234, 234);
+    border-color: #D45E28;
+}
+.ds_input:disabled {
+    border: 1px solid Black;
+    background-color: #161616;
+    color: black;
+    padding: 3px;
+    border-radius: 5px;
+    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
+    -moz-border-radius: 5px;
+    /* border radius is specified different ways for different legacy browsers. */
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+.ds_submit {
+    border-radius: 5px;
+    color: #CCCCCC;
+    background-color: #262626;
+    margin: auto;
+    margin-top: 13px;
+    font-size: 13px;
+    width: 110px;
+    text-align: center;
+    display: block;
+    clear: both;
+    padding: 6px 28px;
+    border: 1px solid Black;
+    border-radius: 5px;
+    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
+    -moz-border-radius: 5px;
+    /* border radius is specified different ways for different legacy browsers. */
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+    -webkit-box-shadow: #000 0 2px 5px;
+    -moz-box-shadow: #000 0 2px 5px;
+    box-shadow: #000 0 2px 5px;
+}
+.ds_submit:hover {
+    border-color: #D45E28;
+    background-color: #353535;
+    color: #D45E28;
+    -webkit-box-shadow: #D45E28 0 2px 5px;
+    -moz-box-shadow: #D45E28 0 2px 5px;
+    box-shadow: #D45E28 0 2px 5px;
+}
+.ds_submit:focus {
+    border: 1px solid #000;
+    background-color: #161616;
+    color: #000;
+    -webkit-box-shadow: #000 0 0px 0px;
+    -moz-box-shadow: #000 0 0px 0px;
+    box-shadow: #000 0 0px 0px;
+}
+.ds_submit:disabled {
+    border: 1px solid #000;
+    background-color: #161616;
+    color: #000;
+    -webkit-box-shadow: #000 0 0px 0px;
+    -moz-box-shadow: #000 0 0px 0px;
+    box-shadow: #000 0 0px 0px;
+}
+.ds_results {
+    color: #fff;
+    margin: auto;
+    margin-top: 10px;
+    font-size: 13px;
+    text-align: center;
+    display: block;
+    clear: both;
+    border: none;
+}
+.ds_color {
+    -webkit-appearence: none;
+    -moz-appearannce: none;
+    font-size: 15px;
+    border: none;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    padding: 5px;
+    margin-left: 85px;
+    margin-top: 5px;
+}
+.ds_checkbox {
+    padding:10px;
+    margin: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
+    -moz-border-radius: 5px;
+    /* border radius is specified different ways for different legacy browsers. */
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+    background: #262626;
+}
+.ds_checkbox:hover {
+    border-color: #D45E28;
+}
+.ds_mana_image {
+    vertical-align: middle;
+    padding-bottom: 4px;
+    padding-left: 3px;
+}
+#ds_select {
+    margin: 5px;
+    margin-top: 0px;
+    width: 140px;
+    height: 27px;
+    outline: solid transparent;
+    border: 1px solid Black;
+    color: #CCCCCC;
+    background-color: #353535;
+    padding: 3px;
+    border-radius: 5px;
+    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
+    -moz-border-radius: 5px;
+    /* border radius is specified different ways for different legacy browsers. */
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+#ds_select:hover {
+    border-color: #D45E28;
+}
+.group:before, .group:after {
+    content: "\0020";
+    display: block;
+    height: 0;
+    overflow: hidden;
+}
+.group:after {
+    clear:both;
+}
+.group {
+    zoom: 1;
+}
+.banner_alert {
+    background: black;
+    border: red dotted;
+    padding: 10px;
+}
+
+.discordlogin {
+    background: #7289DA;
+    color: #fff;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    text-decoration: none;
+}
+
+.discordlogin::before {
+    display: inline-block;
+    margin-right: .5em;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: translate(0, 0);
+}
+
+/* Style tab links */
+.tablink {
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: #000 0 2px 10px;
+    -moz-box-shadow: #000 0 2px 10px;
+    box-shadow: #000 0 2px 10px;
+    background: #262626;
+    border: 1px solid black;
+    /*margin-top: 1px;*/
+    /*margin-bottom: 1px;*/
+    background-color: #262626;
+    color: #D88F6D;
+    float: left;
+    /*border: none;*/
+    /*outline: none;*/
+    /*cursor: pointer;*/
+    padding: 8px 8px;
+    margin: 1px 0px;
+    /*font-size: 15px;*/
+    width: 25%;
+}
+
+.tablink:hover {
+    color: #D45E28;
+    /*text color of selected and active item*/
+    background: #353535;
+    border: 1px solid #D45E28;
+}
+
+.tabcontent {
+    color: white;
+    display: none;
+    padding: 50px 20px;
+    height: 100%;
+}
+
+.box table td {
+    padding: 8px 12px;
+}
+table.events {
+    width: 100%;
+}
+table.events td {
+    padding: 8px 12px;
+}
+table.events td:first-child {
+    padding-left: 0;
+}
+table.events  td:last-child {
+    padding-right: 0;
+}
+.winners {
+    border-collapse: collapse;
+}
+.winners tr.player-deck td {
+    border-bottom: 1px solid white;
+    padding-bottom: 24px;
+}
+.score, .player {
+    white-space: nowrap;
+}
+
+.mtgodeck {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    border-right: black 1px solid;
+    border-top: black 1px solid;
+    border-left: black 1px solid;
+    width: 600px;
+    border-bottom: black 1px solid;
+    position: relative;
+    background-color: rgb(204,204,204);
+}
+.deckheader {
+    padding-bottom: 10px;
+    background-repeat: no-repeat;
+    position: relative;
+    height: 40px
+}
+.deckname {
+    font-size: 25px;
+    left: 3px;
+    position: absolute;
+    top: 3px
+}
+.deckformat {
+    font-size: 14px;
+    left: 5px;
+    position: absolute;
+    top: 28px
+}
+.deckssideboard {
+    background-color: rgb(170,170,170)
+}
+body {
+    vertical-align:baseline;
+    background:transparent;
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    background: #161616;
+    padding: 20px 0px 0px 0px;
+    color: rgb(204,204,204);
+}
+td {
+    vertical-align:baseline;
+}
+a {
+    border-bottom: 1px dotted #D88F6D;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 1px;
+}
+a.emailPop {
+    color: green;
+    border: none;
+}
+.borderless {
+    border: none;
+    /* removes borders from img anchors */
+}
+.borderless:hover {
+    border: 1px solid #262626;
+    /* colors border on img anchors so border matches background and is unseen */
+}
+a:link {
+    color: #D88F6D;
+}
+a:visited {
+    color: #D88F6D;
+}
+a:active {
+    color: #D45E28;
+}
+a:hover {
+    color: #D45E28;
+    border: 1px solid #D45E28;
+    padding: 0px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+a.emailPop:hover {
+    color: green;
+    border: 1px solid green;
+    padding: 0px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+.match_verified {
+    color: green;
+    border: none;
+    padding: 0;
+    font-weight: normal;
+}
+.match_unverified {
+    color: yellow;
+    border: none;
+    padding: 0;
+    font-weight: normal;
+}
+.match_failed {
+    color: red;
+    border: none;
+    padding: 0;
+    font-weight: normal;
+}
+a.deckverified {
+    color: green;
+    border-bottom: 1px dotted green;
+}
+a.deckverified:hover {
+    color: green;
+    border: 1px solid green;
+    padding: 0px;
+}
+a.createlink {
+    color: yellow;
+    border-bottom: 1px dotted yellow;
+}
+a.createlink:hover {
+    color: yellow;
+    border: 1px solid yellow;
+    padding: 0px;
+}
+a.deckunverified {
+    color: red;
+    border-bottom: 1px dotted red;
+}
+a.deckunverified:hover {
+    color: red;
+    border: 1px solid red;
+    padding: 0px;
+}
+em {
+    color: #D45E28;
+}
+del {
+    text-decoration:line-through
+}
+#header_bar {
+    width: 940px;
+    height: 135px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+    background-image: url(../images/header_background.jpg);
+    background-repeat: repeat-x;
+}
+#header_logo {
+    float: left;
+    padding-top: 5px;
+    padding-left: 10px;
+}
+#header_gatherling {
+    float: right;
+    margin-right: 312px;
+    padding-top: 26px;
+}
+#header_text {
+    color: white;
+    text-align: center;
+    padding-top: 25px;
+}
+#sub_text {
+    font-weight: normal;
+    font-size: medium;
+}
+.roundedbox, .toprowbox {
+    background: #454545;
+    padding: 10px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    background: #eeeeee;
+}
+.toprowbox {
+    height: 90px;
+    border: 1px solid gray;
+}
+.box {
+    border-radius: 5px;
+    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
+    -moz-border-radius: 5px;
+    /* border radius is specified different ways for different legacy browsers. */
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+    -webkit-box-shadow: #000 0 2px 5px;
+    -moz-box-shadow: #000 0 2px 5px;
+    box-shadow: #000 0 2px 5px;
+    margin-top: 15px;
+    background: #262626;
+    border: 1px solid black;
+    padding-bottom: 10px;
+}
+.box p, .box ul, .box .uppertitle, .box table, .box form,
+.box h1, .box h2, .box h3, .box h4, .box h5, .box h6,
+.box .series-logo img {
+    padding: 5px 10px;
+}
+.uppertitle {
+    -moz-border-radius-topright: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -webkit-border-top-left-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background: #353535;
+    font-size: 15px;
+    font-weight: bold;
+    border-bottom: 2px solid #D45E28;
+    margin-bottom: 10px;
+}
+.uppertitle h2 {
+    margin-bottom: 0;
+}
+.menubar {
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: #000 0 2px 10px;
+    -moz-box-shadow: #000 0 2px 10px;
+    box-shadow: #000 0 2px 10px;
+    background: #262626;
+    border: 1px solid black;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+.menubar:hover {
+    border-color: #D45E28;
+}
+#mainmenu, #mainmenu_submenu, #submenu {
+    font-weight: bold;
+}
+#mainmenu ul, #submenu ul, #mainmenu_submenu ul {
+    color: #D88F6D;
+    /* menu font color */
+    margin: 0px;
+    margin-top: 1px;
+    float: left;
+    background: #262626;
+    padding: 0px;
+    padding-top: 5px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+#mainmenu ul li, #mainmenu_submenu ul li, #submenu ul li {
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: #000 0 2px 5px;
+    -moz-box-shadow: #000 0 2px 5px;
+    box-shadow: #000 0 2px 5px;
+}
+#mainmenu ul li a, #mainmenu_submenu ul li a, #submenu ul li a {
+    float: left;
+    text-decoration: none;
+    text-align: center;
+    border-bottom: none;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+#submenu ul li a {
+    width: 145px;
+}
+#mainmenu ul li a, #mainmenu_submenu ul li a {
+    width: 115px;
+}
+#mainmenu ul li.last a, #mainmenu_submenu ul li.last a {
+    width: 115px;
+}
+#mainmenu ul li a:visited, #mainmenu_submenu ul li a:visited, #submenu ul li a:visited {
+    color: #D87D49;
+}
+#mainmenu ul li a:hover, #mainmenu ul li .current, #mainmenu_submenu ul li a:hover, #submenu ul li a:hover, #submenu ul li .current, #mainmenu_submenu ul li.open a:hover, #mainmenu_submenu ul li.current a {
+    color: #D45E28;
+    /*text color of selected and active item*/
+    background: #353535;
+    border: 1px solid #D45E28;
+}
+#faq, #joinpdc {
+    text-align: center;
+}
+#upcomingevents hr {
+    margin-bottom: 10px;
+}
+.uptourneylogo, .uptourneystuff {
+    margin-top: 0;
+    text-align: center;
+}
+.uptourneylogo img {
+    height: 50px;
+    width: 75px;
+}
+.newsarticle, #readmorearticles {
+    border-bottom: 1px dashed black;
+    padding: 10px;
+}
+#readmorearticles {
+    border-bottom: none;
+}
+.newsarticle:last-child {
+    border-bottom: none;
+}
+.newstitle {
+    font-size: 20px;
+    font-weight: bold;
+    float: left;
+}
+.newsauthor {
+    float: right;
+    font-size: 12px;
+    padding-top: 8px;
+    height: 20px;
+}
+.newslinks {
+    text-align: right;
+}
+#bottom div {
+    text-align: center;
+    background: #87cbff;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    padding: 5px;
+    font-weight: bold;
+}
+#bottom div a {
+    color: black;
+}
+#maincontainer {
+    background: #161616;
+}
+.deck {
+    width: 100%;
+}
+.deck span {
+    display: block;
+    overflow: hidden;
+    float: left;
+    margin-right: 5px;
+    text-align: center;
+}
+.deck .deck_player {
+    width: 95px;
+}
+.deck .deck_name {
+    width: 150px;
+    height: 1.5em;
+    text-align: left;
+}
+.deck .deck_colors {
+    width: 75px;
+    padding: 2px;
+    text-align: left;
+}
+.deck .deck_place {
+    width: 15px;
+    padding: 2px;
+}
+.recent_tourneyname {
+    text-align: center;
+    padding-top: 0.5em;
+}
+table.center {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+.pad10 {
+    height: 10px;
+}
+/* Gatherling Entries */
+#gatherling_main table {
+    margin-left: auto;
+    margin-right: auto;
+}
+#gatherling_main table td {
+    padding: 3px;
+}
+#gatherling_main table.form th {
+    vertical-align: middle;
+    text-align: right;
+}
+#gatherling_main table.form td.buttons {
+    text-align: center;
+}
+#gatherling_main .error {
+    color: red;
+    font-weight: bolder;
+}
+#gatherling_full table {
+    margin-left: inherit;
+    table-layout: auto;
+}
+#gatherling_lefthalf table {
+    width: 100%;
+    margin-left: inherit;
+}
+#gatherling_righthalf table {
+    width: 100%;
+    margin-left: inherit;
+}
+#gatherling_footer {
+    background-color: #262626;
+    color: #666;
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
+    clear: both;
+    font-size: 14px;
+}
+#gatherling_main .eventname {
+    border-bottom: 1px dotted black;
+}
+#gatherling_main table th.top {
+    text-align: center;
+}
+.spacer {
+    margin-top: 15px;
+}
+.innertube {
+    background-color: #262626;
+    padding-bottom: 1px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin-bottom: 15px;
+}
+.cardinsert_news {
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-bottom: 1em;
+    clear: left;
+    margin-bottom: 10px;
+}
+.gatherling_news {
+    clear: both;
+    margin-bottom: 10px;
+}
+.extra_margin {
+    margin: 10px;
+}
+#EventReport table td {
+    border-width: 0px;
+    vertical-align: top;
+}
+
+/* Pagination */
+/* ATTRIBUTES FOR THE CONTAINER (THIS HOW WE CENTER EVERYTHING)----------------------------------------------------------------------------------------------------------------------*/.Zebra_Pagination                       { clear: both; width: 100%; }.Zebra_Pagination ul                    { position: relative; left: 50%; list-style-type: none; margin: 0; padding: 0; float: left }.Zebra_Pagination li                    { position: relative; float: left; right: 50%; margin: 6px; }/* COMMON ATTRIBUTES FOR ALL THE LINKS----------------------------------------------------------------------------------------------------------------------*/.Zebra_Pagination a                     { padding: 4px; border: 1px solid Black; color: #CCCCCC; background-color: #262626; text-decoration: none; margin: 0 2px; display: block; float: left; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: #000 0 2px 5px; -moz-box-shadow: #000 0 2px 5px; box-shadow: #000 0 2px 5px }.Zebra_Pagination a:hover               { border-color: #D45E28; background-color: #353535; color: #D45E28; -webkit-box-shadow: #D45E28 0 2px 5px; -moz-box-shadow: #D45E28 0 2px 5px; box-shadow: #D45E28 0 2px 5px; }/* "NEXT PAGE" AND "PREVIOUS PAGE" LINKS----------------------------------------------------------------------------------------------------------------------*/.Zebra_Pagination a.navigation          { border: 1px solid Black; background-repeat: no-repeat }.Zebra_Pagination a.navigation:hover    { border-color: #D45E28; }.Zebra_Pagination a.previous            { background-image: url(../images/larrow.png); background-position: left center; padding-left: 45px }.Zebra_Pagination a.next                { background-image: url(../images/rarrow.png); background-position: right center; padding-right: 45px }.Zebra_Pagination a.disabled            { filter: alpha(opacity=20); -khtml-opacity: 0.2; -moz-opacity: 0.2; opacity: 0.2; -webkit-box-shadow: #000 0 0px 0px; -moz-box-shadow: #000 0 0px 0px; box-shadow: #000 0 0px 0px; }.Zebra_Pagination a.disabled:hover      { background-color: #262626; border: 1px solid Black; color: inherit }/* hack for transparent borders in IE6 */*html .Zebra_Pagination a.navigation    { border-color: #000001; filter: chroma(color=#000001) }/* CURRENT PAGE----------------------------------------------------------------------------------------------------------------------*/.Zebra_Pagination a.current,.Zebra_Pagination a.current:hover       { background: #D45E28; border-color: Black; color: Black }/* THE "..." SEPARATOR----------------------------------------------------------------------------------------------------------------------*/.Zebra_Pagination span                  { color: #667; margin-right: 2px; display: block; float: left; padding: 8px 4px }

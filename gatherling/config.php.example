@@ -18,13 +18,10 @@ $CONFIG['db_test_database'] = 'gatherling_test';
 
 # The base url where gatherling is installed.  This should be an absolute URL, with HTTPS.
 // $CONFIG['base_url'] = "https://gatherling.com";
-$CONFIG['base_url'] = "http://localhost/gatherling/";
+$CONFIG['base_url'] = "http://localhost:8080/gatherling/";
 
 # The name of your site.  This is used in a lot of places.
 $CONFIG['site_name'] = "Gatherling";
-
-# The Style of the site.
-$CONFIG['style'] = "ChandraNeue";
 
 # A description for the ical calendar which is accessible at calendar.php
 $CONFIG['calendar_description'] = "a description for the events calendar";

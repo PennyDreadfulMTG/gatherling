@@ -1,0 +1,43 @@
+<div class="grid_10 suffix_1 prefix_1">
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle">Login to Gatherling</div>
+        {{#loginFailed}}
+            <p class="c error">Incorrect username or password. Please try again.</p>
+        {{/loginFailed}}
+        {{#ipAddressChanged}}
+            <p class="c error">Your IP Address has changed. Please login again.</p>
+        {{/ipAddressChanged}}
+        {{#message}}
+            <div class="c error">{{message}}</div>
+        {{/message}}
+        <form action="login.php" method="post">
+            <table class="form" cellpadding="3">
+                <tr>
+                    <th>Gatherling Username</th>
+                    <td><input id="username" class="inputbox" type="text" name="username" value="{{username}}" tabindex="1"></td>
+                </tr>
+                <tr>
+                    <th>Gatherling Password</th>
+                    <td><input id="password" class="inputbox" type="password" name="password" tabindex="2"></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="buttons">
+                        {{#target}}
+                            <input type="hidden" name="target" value="{{target}}">
+                        {{/target}}
+                        <input class="inputbutton" type="submit" name="mode" value="Log In">
+                        {{#discordId}}
+                            <input class="inputbutton discordlogin fa-discord" type="submit" name="mode" value="Log In with Discord" />
+                        {{/discordId}}
+                        <br>
+                        Please <a href="register.php">Click Here</a> if you need to register.<br>
+                        <a href="forgot.php">Forgot your password?</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div> <!-- gatherling_main -->
+</div> <!-- grid 10 pre 1 suff 1 -->

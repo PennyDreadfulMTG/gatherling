@@ -86,7 +86,7 @@ class Setup
         Log::info('Activating test database. Future db calls will be made against the test database.');
         foreach ($toCopy as $from => $to) {
             if (!isset($CONFIG[$from])) {
-                $msg = 'Test database is not configured. Current config: ' . json_encode($CONFIG);
+                $msg = 'Test database is not configured. See config.php.example';
                 throw new ConfigurationException($msg);
             }
             $CONFIG[$to] = $CONFIG[$from];

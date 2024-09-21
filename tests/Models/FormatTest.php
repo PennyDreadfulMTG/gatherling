@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Tests\Models;
 
 use Gatherling\Models\Format;
-use Gatherling\Tests\DatabaseCase;
+use Gatherling\Tests\Support\TestCases\DatabaseCase;
 
 final class FormatTest extends DatabaseCase
 {

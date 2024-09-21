@@ -147,13 +147,8 @@ class Decksearch
      *
      *  bcgruw u=Blue w=White b=Black r=Red g=Green c=Colorless
      *  e.g. array(u => 'u') order does not matter.
-     *
-     *
-     *  @param [$color_str_input] Array of the input color
-     *
-     * @return mixed true if success/false otherwise
      */
-    public function searchByColor($color_str_input)
+    public function searchByColor(array $color_str_input)
     {
         // alphebetizes then sets the search string
         $final_color_str = null;
@@ -167,7 +162,7 @@ class Decksearch
         if (count($results) > 0) {
             $this->_results['color'] = $results;
         } else {
-            $this->errors[] = "<center><br>No decks found matching the colors: <font color=red>$color_str_input</font></center>";
+            $this->errors[] = "<center><br>No decks found matching the colors: <font color=red>$final_color_str</font></center>";
         }
     }
 

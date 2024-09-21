@@ -3,6 +3,7 @@
 namespace Gatherling\Models;
 
 use Exception;
+use Gatherling\Views\Components\ReportLink;
 
 class Event
 {
@@ -87,8 +88,9 @@ class Event
             return;
         }
 
+        $db = Database::getConnection();
+
         if (!$this->new) {
-            $db = Database::getConnection();
             $sql = 'SELECT id, name, format, host, cohost, series, season, number,
                            start, kvalue, finalized, prereg_allowed, threadurl,
                            metaurl, reporturl, active, current_round, player_reportable, player_editdecks,
@@ -137,9 +139,8 @@ class Event
             if ($stmt->fetch() == null) {
                 throw new Exception('Event '.$name.' not found in DB');
             }
+            $stmt->close();
         }
-
-        $stmt->close();
 
         $this->standing = new Standings($this->name, '0');
 
@@ -684,7 +685,7 @@ class Event
             $entry = new Entry($this->id, $player);
             if (is_null($entry->deck) || !$entry->deck->isValid()) {
                 if ($deleteinvalid) {
-                    $entry->removeEntry($player);
+                    $entry->removeEntry();
                     continue;
                 }
                 if ($skip_invalid) {
@@ -1046,9 +1047,9 @@ class Event
         ];
     }
 
-    public function linkReport()
+    public function linkReport(): string
     {
-        return '<a href="eventreport.php?event='.rawurlencode($this->name)."\">{$this->name}</a>";
+        return (new ReportLink($this->name))->render();
     }
 
     public static function count()
@@ -1158,7 +1159,12 @@ class Event
 
     public static function trophy_image_tag($eventname)
     {
-        return "<img style=\"border-width: 0px; max-width: 260px\" src=\"displayTrophy.php?event={$eventname}\" />";
+        return "<img style=\"border-width: 0px; max-width: 260px\" src=\"{self::trophySrc($eventname)}\" />";
+    }
+
+    public static function trophySrc($eventname)
+    {
+        return 'displayTrophy.php?event=' . rawurlencode($eventname);
     }
 
     public function isLeague()
@@ -1734,7 +1740,7 @@ class Event
             $medalCount = 2; // only give 2 medals if there are less than 8 players
         } elseif ($numberOfPlayers < 16) {
             $medalCount = 4; // only give 4 medals if there are less than 16 players
-        } elseif ($numberOfPlayers >= 16) {
+        } else {
             $medalCount = 8;
         }
 
@@ -1834,8 +1840,8 @@ class Event
                 $stmt = $db->prepare('UPDATE decks SET format = ? WHERE id = ?');
                 $stmt->bind_param('ss', $format, $deckID);
                 $stmt->execute();
+                $stmt->close();
             }
-            $stmt->close();
         }
     }
 
@@ -1851,42 +1857,43 @@ class Event
 
     public function structureSummary(): string
     {
-        function to_english($structure, $rounds, $isfinals)
-        {
-            if ($structure == 'Single Elimination' && $isfinals) {
-                if ($rounds == 3) {
-                    return 'Top 8 cut';
-                }
-                if ($rounds == 2) {
-                    return 'Top 4 cut';
-                }
-                if ($rounds == 1) {
-                    return 'Top 2 cut';
-                }
-            } elseif ($structure == 'League') {
-                $str = '';
-                if ($rounds > 1) {
-                    $str = "{$rounds} runs of ";
-                }
-                $str .= ' 5 open matches';
 
-                return $str;
-            } elseif ($structure == 'League Match') {
-                return "{$rounds} open matches";
-            }
-            if ($rounds == 1) {
-                return "{$rounds} round of {$structure}";
-            } else {
-                return "{$rounds} rounds of {$structure}";
-            }
-        }
-
-        $ret = to_english($this->mainstruct, $this->mainrounds, false);
+        $ret = $this->toEnglish($this->mainstruct, $this->mainrounds, false);
         if ($this->finalrounds > 0) {
-            $ret = $ret.' followed by '.to_english($this->finalstruct, $this->finalrounds, true);
+            $ret = $ret.' followed by ' . $this->toEnglish($this->finalstruct, $this->finalrounds, true);
         }
 
         return $ret;
+    }
+
+    private function toEnglish($structure, $rounds, $isfinals)
+    {
+        if ($structure == 'Single Elimination' && $isfinals) {
+            if ($rounds == 3) {
+                return 'Top 8 cut';
+            }
+            if ($rounds == 2) {
+                return 'Top 4 cut';
+            }
+            if ($rounds == 1) {
+                return 'Top 2 cut';
+            }
+        } elseif ($structure == 'League') {
+            $str = '';
+            if ($rounds > 1) {
+                $str = "{$rounds} runs of ";
+            }
+            $str .= ' 5 open matches';
+
+            return $str;
+        } elseif ($structure == 'League Match') {
+            return "{$rounds} open matches";
+        }
+        if ($rounds == 1) {
+            return "{$rounds} round of {$structure}";
+        } else {
+            return "{$rounds} rounds of {$structure}";
+        }
     }
 
     public function isFinished(): bool

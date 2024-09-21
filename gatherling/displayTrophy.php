@@ -1,18 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
+use Gatherling\Data\DB;
+use Gatherling\Models\Image;
 use Gatherling\Models\Database;
+use Gatherling\Views\ImageResponse;
 
 require_once 'lib.php';
 
-$eventName = $_GET['event'];
-$db = Database::getConnection();
-$stmt = $db->prepare('SELECT image, type, size FROM trophies WHERE event = ?');
-$stmt->bind_param('s', $eventName);
-$stmt->execute();
-$stmt->bind_result($content, $type, $size);
-$stmt->fetch();
-$stmt->close();
+function main(): void
+{
+    $sql = 'SELECT image, type, size FROM trophies WHERE event = :event';
+    $args = ['event' => $_GET['event']];
+    $values = DB::selectOnlyOrNull($sql, $args);
+    $image = Image::fromValues($values);
+    $response = new ImageResponse($image);
+    $response->send();
+}
 
-header("Content-length: $size");
-header("Content-type: $type");
-echo $content;
+if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+    main();
+}
