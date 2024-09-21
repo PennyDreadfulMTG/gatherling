@@ -1840,8 +1840,8 @@ class Event
                 $stmt = $db->prepare('UPDATE decks SET format = ? WHERE id = ?');
                 $stmt->bind_param('ss', $format, $deckID);
                 $stmt->execute();
+                $stmt->close();
             }
-            $stmt->close();
         }
     }
 
