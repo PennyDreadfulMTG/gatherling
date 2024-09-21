@@ -88,8 +88,9 @@ class Event
             return;
         }
 
+        $db = Database::getConnection();
+
         if (!$this->new) {
-            $db = Database::getConnection();
             $sql = 'SELECT id, name, format, host, cohost, series, season, number,
                            start, kvalue, finalized, prereg_allowed, threadurl,
                            metaurl, reporturl, active, current_round, player_reportable, player_editdecks,
@@ -138,9 +139,8 @@ class Event
             if ($stmt->fetch() == null) {
                 throw new Exception('Event '.$name.' not found in DB');
             }
+            $stmt->close();
         }
-
-        $stmt->close();
 
         $this->standing = new Standings($this->name, '0');
 
