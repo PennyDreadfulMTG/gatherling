@@ -99,7 +99,7 @@ class EventForm extends EventFrame
         }
         $kValueDropMenu = kValueSelectInput($event->kvalue);
         $hostField = stringFieldArgs('host', $event->host, 20);
-        $cohostField = stringFieldArgs('cohost', $event->host, 20);
+        $cohostField = stringFieldArgs('cohost', $event->cohost, 20);
         $eventThreadUrlField = new TextInput('Event Thread URL', 'threadurl', $event->threadurl, 60);
         $metagameUrlField = new TextInput('Metagame URL', 'metaurl', $event->metaurl, 60);
         $reportUrlField = new TextInput('Report URL', 'reporturl', $event->reporturl, 60);

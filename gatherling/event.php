@@ -328,7 +328,7 @@ function updateEvent(): Event
 
     $event->host = $_POST['host'];
     $event->cohost = $_POST['cohost'];
-    $event->kvalue = $_POST['kvalue'];
+    $event->kvalue = (int) $_POST['kvalue'];
     $event->series = $_POST['series'];
     $event->season = $_POST['season'];
     $event->number = $_POST['number'];
