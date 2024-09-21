@@ -356,7 +356,7 @@ function updateEvent(): Event
     $event->finalrounds = $_POST['finalrounds'];
     $event->finalstruct = $_POST['finalstruct'];
     $event->private = $_POST['private'];
-    $event->client = $_POST['client'];
+    $event->client = (int) $_POST['client'];
 
     $event->save();
 
