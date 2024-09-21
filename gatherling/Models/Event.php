@@ -398,6 +398,7 @@ class Event
       WHERE n.event_id = e.id AND n.medal = ? AND e.name = ?');
         $stmt->bind_param('ss', $placing, $this->name);
         $stmt->execute();
+        $deckid = null;
         $stmt->bind_result($deckid);
         $result = $stmt->fetch();
         $stmt->close();
@@ -444,6 +445,7 @@ class Event
       WHERE event_id = ? AND medal != 'dot' ORDER BY medal, player");
         $stmt->bind_param('s', $this->id);
         $stmt->execute();
+        $medal = $player = $deck = null;
         $stmt->bind_result($medal, $player, $deck);
 
         $finalists = [];
@@ -529,6 +531,7 @@ class Event
         $stmt = $db->prepare('SELECT player FROM series_organizers WHERE series = ? and player = ?');
         $stmt->bind_param('ss', $this->series, $name);
         $stmt->execute();
+        $aname = null;
         $stmt->bind_result($aname);
         while ($stmt->fetch()) {
             $isOrganizer = true;
@@ -603,6 +606,7 @@ class Event
         $stmt = $db->prepare('SELECT count(player) FROM entries WHERE event_id = ? AND player = ?');
         $stmt->bind_param('ds', $this->id, $playername);
         $stmt->execute();
+        $isPlaying = null;
         $stmt->bind_result($isPlaying);
         $stmt->fetch();
         $stmt->close();
@@ -616,6 +620,7 @@ class Event
         $stmt = $db->prepare('SELECT id FROM subevents WHERE parent = ? ORDER BY timing');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
+        $subeventid = null;
         $stmt->bind_result($subeventid);
 
         $subids = [];
@@ -777,6 +782,7 @@ class Event
       ORDER BY s.timing, m.round, m.id');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
+        $matchid = null;
         $stmt->bind_result($matchid);
 
         $mids = [];
@@ -823,6 +829,7 @@ class Event
         }
 
         $stmt->execute();
+        $matchid = null;
         $stmt->bind_result($matchid);
 
         $mids = [];
@@ -1016,6 +1023,7 @@ class Event
         $num = $this->number - 1;
         $stmt->bind_param('sdd', $this->series, $this->season, $num);
         $stmt->execute();
+        $event_name = null;
         $stmt->bind_result($event_name);
         $exists = $stmt->fetch();
         $stmt->close();
@@ -1031,6 +1039,7 @@ class Event
         $num = $this->number + 1;
         $stmt->bind_param('sdd', $this->series, $this->season, $num);
         $stmt->execute();
+        $event_name = null;
         $stmt->bind_result($event_name);
         $exists = $stmt->fetch();
         $stmt->close();
@@ -1083,6 +1092,7 @@ class Event
         // 180 minute interal in Date_Sub is to compensate for time zone difference from Server and Eastern Standard Time which is what all events are quoted in
         $stmt->bind_param('d', $num);
         $stmt->execute();
+        $nextevent = null;
         $stmt->bind_result($nextevent);
         $event_names = [];
         while ($stmt->fetch()) {
@@ -1103,6 +1113,7 @@ class Event
         $stmt = $db->prepare('SELECT e.name FROM events e, entries n WHERE n.event_id = e.id AND n.player = ? AND active = 0 AND finalized = 0 ORDER BY start');
         $stmt->bind_param('s', $playername);
         $stmt->execute();
+        $nextevent = null;
         $stmt->bind_result($nextevent);
         $event_names = [];
         while ($stmt->fetch()) {
@@ -1124,6 +1135,7 @@ class Event
         $stmt or exit($db->error);
         $stmt->bind_param('ss', $this->name, $player);
         $stmt->execute();
+        $adjustment = $reason = null;
         $stmt->bind_result($adjustment, $reason);
         $exists = $stmt->fetch() != null;
         $stmt->close();
@@ -1527,6 +1539,7 @@ class Event
         }
 
         $stmt->execute();
+        $nextevent = null;
         $stmt->bind_result($nextevent);
         $event_names = [];
         while ($stmt->fetch()) {
@@ -1595,6 +1608,7 @@ class Event
         WHERE s.parent = e.name AND s.id = ? LIMIT 1');
         $stmt->bind_param('s', $subevent);
         $stmt->execute();
+        $event = null;
         $stmt->bind_result($event);
         $stmt->fetch();
         $stmt->close();
@@ -1804,6 +1818,7 @@ class Event
         }
         $stmt->bind_param('ssdd', $this->name, $verification, $current_round, $timing);
         $stmt->execute();
+        $matchid = null;
         $stmt->bind_result($matchid);
 
         $mids = [];

@@ -965,6 +965,7 @@ function print_ratingsHistory($format)
     ORDER BY e.start DESC');
     $stmt->bind_param('ss', $format, $player->name);
     $stmt->execute();
+    $eventname = $event_id = $rating = $medal = $deckid = null;
     $stmt->bind_result($eventname, $event_id, $rating, $medal, $deckid);
 
     $stmt->store_result();
@@ -1190,5 +1191,3 @@ function print_conditionalAllDecks()
         echo 'Click here to enter them.</a>';
     }
 }
-
-?>

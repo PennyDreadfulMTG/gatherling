@@ -93,6 +93,7 @@ class Ratings
         $stmt = $db->prepare("SELECT name, start FROM events WHERE finalized = '1' AND format LIKE ? ORDER BY start");
         $stmt->bind_param('s', $searchString);
         $stmt->execute();
+        $eventname = $eventstart = null;
         $stmt->bind_result($eventname, $eventstart);
 
         $eventar = [];
@@ -245,6 +246,7 @@ class Ratings
                               ORDER BY s.timing, m.round');
         $stmt->bind_param('s', $event);
         $stmt->execute();
+        $playera = $playerb = $result = $kvalue = null;
         $stmt->bind_result($playera, $playerb, $result, $kvalue);
 
         $data = [];
@@ -282,6 +284,7 @@ class Ratings
         $stmt or exit($db->error);
         $stmt->bind_param('ssds', $event, $format, $event_id, $format);
         $stmt->execute();
+        $player = $rating = $qmax = $wins = $losses = null;
         $stmt->bind_result($player, $rating, $qmax, $wins, $losses);
 
         $data = [];

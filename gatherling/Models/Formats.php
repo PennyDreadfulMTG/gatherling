@@ -58,6 +58,7 @@ class Formats
             $stmt = $db->prepare('SELECT name, type, standard_legal FROM cardsets WHERE code = ?');
             $stmt->bind_param('s', $set->code);
             $stmt->execute();
+            $setName = $setType = $standard_legal = null;
             $stmt->bind_result($setName, $setType, $standard_legal);
             $success = $stmt->fetch();
             $stmt->close();
@@ -92,6 +93,7 @@ class Formats
         $db = Database::getConnection();
         $stmt = $db->prepare("SELECT name, type, released FROM cardsets WHERE `type` != 'extra' ORDER BY `cardsets`.`released`");
         $stmt->execute();
+        $setName = $setType = $setDate = null;
         $stmt->bind_result($setName, $setType, $setDate);
 
         $sets = [];

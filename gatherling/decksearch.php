@@ -148,6 +148,7 @@ function showMostPlayedDecks()
                           LIMIT 20');
     $stmt || exit($db->error);
     $stmt->execute();
+    $count = $playerName = $deckName = $archetype = $format = $created = $deckid = null;
     $stmt->bind_result($count, $playerName, $deckName, $archetype, $format, $created, $deckid);
 
     while ($stmt->fetch()) {

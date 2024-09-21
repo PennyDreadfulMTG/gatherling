@@ -73,6 +73,7 @@ class Matchup
                           WHERE m.id = ? AND m.subevent = s.id');
         $stmt->bind_param('d', $this->id);
         $stmt->execute();
+        $eventname = null;
         $stmt->bind_result($eventname);
         $stmt->fetch();
         $stmt->close();
@@ -378,7 +379,8 @@ class Matchup
                             WHERE id = ? ');
         $stmt->bind_param('d', $match_id);
         $stmt->execute();
-        $stmt->bind_result($subevent, $playera_wins, $playerb_wins, $playera_losses, $playerb_losses);
+        $subevent = $playera_wins = $playerb_wins = $playera_losses = $playerb_losses = null;
+        $stmt->bind_result($subevent, $playera_wins, $playerb_wins, $plakyera_losses, $playerb_losses);
         $stmt->fetch();
         $stmt->close();
 
@@ -423,6 +425,7 @@ class Matchup
         $stmt = $db->prepare("SELECT count(id) FROM matches where subevent = ? AND verification != 'verified' AND round = ?");
         $stmt->bind_param('sd', $subevent_name, $current_round);
         $stmt->execute();
+        $result = null;
         $stmt->bind_result($result);
         $stmt->fetch();
         $stmt->close();
@@ -596,6 +599,7 @@ class Matchup
 
         $stmt->bind_param('d', $this->id);
         $stmt->execute();
+        $name = null;
         $stmt->bind_result($name);
         $stmt->fetch();
         $stmt->close();

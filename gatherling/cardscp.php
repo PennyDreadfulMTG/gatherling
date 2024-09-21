@@ -2,8 +2,9 @@
 
 namespace Gatherling;
 
-use Gatherling\Models\Database;
+use Gatherling\Models\Format;
 use Gatherling\Models\Player;
+use Gatherling\Models\Database;
 
 require_once 'lib.php';
 include 'lib_form_helper.php';
@@ -105,6 +106,7 @@ function handleActions()
         if (isset($_POST['delentries'])) {
             $db = Database::getConnection();
             $stmt = $db->prepare('DELETE FROM `cards` WHERE `id` = ?');
+            $playername = null;
             $stmt->bind_param('d', $playername);
             foreach ($_POST['delentries'] as $playername) {
                 if (!$stmt->execute()) {
@@ -156,6 +158,7 @@ function printSetList()
     $db = Database::getConnection();
     $stmt = $db->prepare('SELECT `name`, `code`, `released`, `type`, `last_updated` FROM `cardsets`');
     $stmt->execute();
+    $name = $code = $released = $type = $updated = null;
     $stmt->bind_result($name, $code, $released, $type, $updated);
     while ($stmt->fetch()) {
         $sets[] = ['name' => $name, 'code' => $code, 'released' => $released, 'type' => $type, 'last_updated' => $updated];
@@ -189,6 +192,7 @@ function printEditSet()
     $stmt = $db->prepare('SELECT `code`, `released`, `standard_legal`, `modern_legal` FROM `cardsets` WHERE `name` = ?');
     $stmt->bind_param('s', $set);
     $stmt->execute();
+    $setcode = $released = $standard_legal = $modern_legal = null;
     $stmt->bind_result($setcode, $released, $standard_legal, $modern_legal);
     $stmt->fetch();
     $stmt->close();
@@ -203,6 +207,7 @@ function printEditSet()
 
     $stmt->bind_param('s', $set);
     $stmt->execute();
+    $id = $name = $type = $rarity = $sfId = null;
     $stmt->bind_result($id, $name, $type, $rarity, $sfId);
     while ($stmt->fetch()) {
         $cards[] = ['name' => $name, 'type' => $type, 'rarity' => $rarity, 'id' => $id, 'sfId' => $sfId];
@@ -242,6 +247,7 @@ function printEditCard()
 
     $stmt->bind_param('s', $id);
     $stmt->execute();
+    $id = $name = $type = $rarity = $sfId = $is_changeling = $cardset = null;
     $stmt->bind_result($id, $name, $type, $rarity, $sfId, $is_changeling, $cardset);
     $stmt->fetch();
     $stmt->close();
