@@ -358,8 +358,8 @@ function redirect($page): void
 
 function parseCards($cards): array
 {
+    $cardarr = [];
     if (!is_array($cards)) {
-        $cardarr = [];
         $cards = explode("\n", $cards);
     }
     foreach ($cards as $card) {
