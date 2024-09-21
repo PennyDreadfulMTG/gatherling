@@ -23,6 +23,8 @@ function populate($array, $src, $keys)
 /** @return bool  */
 function is_admin(): bool
 {
+    global $CONFIG;
+
     if (!isset($_SESSION['infobot'])) {
         $_SESSION['infobot'] = false;
     }

@@ -380,7 +380,7 @@ class Matchup
         $stmt->bind_param('d', $match_id);
         $stmt->execute();
         $subevent = $playera_wins = $playerb_wins = $playera_losses = $playerb_losses = null;
-        $stmt->bind_result($subevent, $playera_wins, $playerb_wins, $plakyera_losses, $playerb_losses);
+        $stmt->bind_result($subevent, $playera_wins, $playerb_wins, $playera_losses, $playerb_losses);
         $stmt->fetch();
         $stmt->close();
 

@@ -704,7 +704,7 @@ class Pagination
      *
      * @return void
      */
-    private function _build_uri($page)
+    private function _build_uri($page): string
     {
         // if page propagation method is through SEO friendly URLs
         if ($this->_properties['method'] == 'url') {
