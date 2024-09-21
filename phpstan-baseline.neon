@@ -51,18 +51,13 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Variable \\$db might not be defined\\.$#"
-			count: 3
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Variable \\$standings might not be defined\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
 
 		-
 			message: "#^Variable \\$stmt might not be defined\\.$#"
-			count: 2
+			count: 1
 			path: gatherling/Models/Event.php
 
 		-
@@ -264,16 +259,6 @@ parameters:
 			message: "#^Function send_to_discord invoked with 1 parameter, 0 required\\.$#"
 			count: 3
 			path: gatherling/auth.php
-
-		-
-			message: "#^Call to static method removeTypeCrap\\(\\) on an unknown class Gatherling\\\\Format\\.$#"
-			count: 1
-			path: gatherling/cardscp.php
-
-		-
-			message: "#^Undefined variable\\: \\$playername$#"
-			count: 1
-			path: gatherling/cardscp.php
 
 		-
 			message: "#^Access to an undefined property object\\:\\:\\$eventname\\.$#"
