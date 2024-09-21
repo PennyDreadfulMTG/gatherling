@@ -310,7 +310,8 @@ function git_hash(): string
 
 function version_tagline(): string
 {
-    return 'Gatherling version 5.1.0 ("Have no fear of perfection – you’ll never reach it.")';
+    return 'Gatherling version 5.2.0 ("I mustache you a question...")';
+    // return 'Gatherling version 5.1.0 ("Have no fear of perfection – you’ll never reach it.")';
     // echo 'Gatherling version 5.0.1 ("No rest. No mercy. No matter what.")';
     // echo 'Gatherling version 5.0.0 ("Hulk, no! Just for once in your life, don\'t smash!")';
     // echo 'Gatherling version 4.9.0 ("Where we’re going, we don’t need roads")';
