@@ -105,6 +105,7 @@ function handleActions()
         if (isset($_POST['delentries'])) {
             $db = Database::getConnection();
             $stmt = $db->prepare('DELETE FROM `cards` WHERE `id` = ?');
+            $playername = null;
             $stmt->bind_param('d', $playername);
             foreach ($_POST['delentries'] as $playername) {
                 if (!$stmt->execute()) {
