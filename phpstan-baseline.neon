@@ -56,11 +56,6 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Variable \\$stmt might not be defined\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Comparison operation \"\\<\\=\" between \\(array\\|float\\|int\\) and 4 results in an error\\.$#"
 			count: 1
 			path: gatherling/Models/Format.php
@@ -211,11 +206,6 @@ parameters:
 			path: gatherling/Models/Player.php
 
 		-
-			message: "#^Variable \\$stmt might not be defined\\.$#"
-			count: 1
-			path: gatherling/Models/Standings.php
-
-		-
 			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
 			count: 2
 			path: gatherling/action.php
@@ -336,11 +326,6 @@ parameters:
 			path: gatherling/formatcp.php
 
 		-
-			message: "#^Variable \\$cardarr might not be defined\\.$#"
-			count: 1
-			path: gatherling/lib.php
-
-		-
 			message: "#^Parameter \\#2 \\$round of method Gatherling\\\\Models\\\\Standings\\:\\:League_getAvailable_Opponents\\(\\) expects int, string given\\.$#"
 			count: 1
 			path: gatherling/lib_form_helper.php
@@ -378,11 +363,6 @@ parameters:
 		-
 			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Variable \\$winningPlayer might not be defined\\.$#"
-			count: 2
 			path: gatherling/seriescp.php
 
 		-
