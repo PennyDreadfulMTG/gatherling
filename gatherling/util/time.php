@@ -1,8 +1,10 @@
 <?php
 
-function time_element($datetime, $now): string
+use Gatherling\Views\Components\Time;
+
+function time_element($datetime, $now, $long = false): string
 {
-    return '<time datetime="'.date('c', $datetime).'">'.human_date($datetime, $now).'</time>';
+    return (new Time($datetime, $now, $long))->render();
 }
 
 function human_date($datetime, $now): string
@@ -30,6 +32,7 @@ function human_date($datetime, $now): string
             return pluralize(intdiv($elapsed, $duration), $interval)." $suffix";
         }
     }
+	return 'unknown';
 }
 
 function pluralize($n, $noun): string

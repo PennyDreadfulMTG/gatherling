@@ -1,0 +1,1 @@
+ALTER TABLE sessions MODIFY details LONGTEXT

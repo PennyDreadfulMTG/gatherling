@@ -170,7 +170,7 @@ function infoTable($player)
     echo "<td align=\"right\">$favS ($pcgS%)</td></tr>\n";
     echo "<tr><td>Last Active:</td>\n";
     if (!is_null($lastevent)) {
-        echo "<td align=\"right\">" . time_element(strtotime($lastevent->start), time()) . "<br>({$lastevent->name})</td></tr>\n";
+        echo "<td align=\"right\">" . time_element(strtotime($lastevent->start), time(), true) . "<br>({$lastevent->name})</td></tr>\n";
     } else {
         echo "<td align=\"right\">Never</td></tr>\n";
     }
@@ -192,7 +192,7 @@ function medalTable($player)
 {
     $medalcount = $player->getMedalStats();
 
-    echo "<table style=\"border-width: 0px\" width=260>\n";
+    echo "<table width=260>\n";
     echo "<tr><td align=\"center\" colspan=4><b>MEDALS EARNED</td></tr>\n";
     if (count($medalcount) == 0) {
         echo '<tr><td align="center" colspan="2">';
@@ -209,7 +209,7 @@ function medalTable($player)
 function trophyTable($player)
 {
     $events = $player->getEventsWithTrophies();
-    echo "<table style=\"border-width: 0px;\" width=260>\n";
+    echo "<table width=260>\n";
     echo "<tr><td align=\"center\"><b>TROPHIES EARNED</td></tr>\n";
     if (count($events) == 0) {
         echo "<tr><td align=\"center\"><i>{$player->name} has not earned any trophies.</td></tr>\n";
@@ -226,7 +226,7 @@ function trophyTable($player)
 
 function bestDecksTable($player)
 {
-    echo "<table style=\"border-width: 0px\" width=250>\n";
+    echo "<table width=250>\n";
     echo "<tr><td align=\"left\" colspan=3><b>MEDAL WINNING DECKS</td></tr>\n";
     $printed = 0;
     foreach ($player->getBestDeckStats() as $row) {
@@ -322,7 +322,7 @@ function editForm($timezone, $email, $public)
 {
     echo "<form action=\"profile.php\" mode=\"POST\">\n";
     echo '<label for="timezone">Time Zone:</label>';
-    timeZoneDropMenu($timezone);
+    echo timeZoneDropMenu($timezone);
     echo "<br><label for=\"player\">Email Address: </label><input class=\"inputbox\" type=\"text\" name=\"email\" value=\"$email\" />";
     echo '<br><input type="radio" name="email_public" value="1"';
     if ($public == 1) {

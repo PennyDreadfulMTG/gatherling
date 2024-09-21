@@ -1,0 +1,381 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Offset 'b' does not exist on array\\{\\}\\.$#"
+			count: 2
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Offset 'cost' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Offset 'g' does not exist on array\\{\\}\\.$#"
+			count: 2
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Offset 'r' does not exist on array\\{\\}\\.$#"
+			count: 2
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Offset 'u' does not exist on array\\{\\}\\.$#"
+			count: 3
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Offset 'w' does not exist on array\\{\\}\\.$#"
+			count: 2
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Decksearch\\:\\:getFinalResults\\(\\) should return array but returns false\\.$#"
+			count: 2
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Decksearch\\:\\:\\$_eventname is never written, only read\\.$#"
+			count: 1
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Decksearch\\:\\:\\$_playername is never written, only read\\.$#"
+			count: 1
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\$roundnum of method Gatherling\\\\Models\\\\Event\\:\\:getRoundMatches\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Variable \\$standings might not be defined\\.$#"
+			count: 1
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Comparison operation \"\\<\\=\" between \\(array\\|float\\|int\\) and 4 results in an error\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Comparison operation \"\\<\\=\" between \\(array\\|float\\|int\\<5, max\\>\\) and 7 results in an error\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Offset 'Black' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Offset 'Blue' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Offset 'Green' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Offset 'Red' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Offset 'White' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Offset 'id' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Offset 'name' does not exist on array\\{\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Call to function is_null\\(\\) with string will always evaluate to false\\.$#"
+			count: 2
+			path: gatherling/Models/Matchup.php
+
+		-
+			message: "#^Comparison operation \"\\=\\=\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
+			count: 2
+			path: gatherling/Models/Matchup.php
+
+		-
+			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
+			count: 2
+			path: gatherling/Models/Matchup.php
+
+		-
+			message: "#^Call to function assert\\(\\) with false will always evaluate to false\\.$#"
+			count: 3
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Elseif condition is always false\\.$#"
+			count: 3
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Elseif condition is always true\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^If condition is always false\\.$#"
+			count: 3
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 2
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Left side of && is always true\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Negated boolean expression is always true\\.$#"
+			count: 2
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Parameter \\#1 \\$assertion of function assert expects bool\\|string, int given\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Result of && is always false\\.$#"
+			count: 2
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Right side of && is always false\\.$#"
+			count: 2
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Right side of && is always true\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Variable \\$kslack might not be defined\\.$#"
+			count: 2
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Variable \\$v might not be defined\\.$#"
+			count: 6
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Pagination\\:\\:get_pages\\(\\) should return int but returns float\\.$#"
+			count: 1
+			path: gatherling/Models/Pagination.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Pagination\\:\\:render\\(\\) with return type void returns string but should not return anything\\.$#"
+			count: 2
+			path: gatherling/Models/Pagination.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function str_pad expects string, \\(float\\|int\\) given\\.$#"
+			count: 1
+			path: gatherling/Models/Pagination.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Player\\:\\:findOrCreateByName\\(\\) should return static\\(Gatherling\\\\Models\\\\Player\\)\\|null but returns Gatherling\\\\Models\\\\Player\\.$#"
+			count: 1
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
+			count: 2
+			path: gatherling/action.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function sha1 expects string, int\\<0, max\\> given\\.$#"
+			count: 1
+			path: gatherling/admin/infobot.php
+
+		-
+			message: "#^Variable \\$CONFIG might not be defined\\.$#"
+			count: 4
+			path: gatherling/admin/infobot.php
+
+		-
+			message: "#^Parameter \\#2 \\$client of function repr_json_player expects int\\|null, string given\\.$#"
+			count: 5
+			path: gatherling/api.php
+
+		-
+			message: "#^Function auth\\(\\) should return string but returns bool\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Variable \\$pAWins might not be defined\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Variable \\$pBWins might not be defined\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Variable \\$player might not be defined\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Function send_to_discord invoked with 1 parameter, 0 required\\.$#"
+			count: 3
+			path: gatherling/auth.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$eventname\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$medal\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:getEvent\\(\\)\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:linkTo\\(\\)\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:recordString\\(\\)\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Offset 'archetype' on array\\{contents\\: '', sideboard\\: '', name\\: ''\\} in isset\\(\\) does not exist\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Offset 'desc' on array\\{contents\\: '', sideboard\\: '', name\\: '', archetype\\: ''\\} in isset\\(\\) does not exist\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Offset 'name' on array\\{contents\\: '', sideboard\\: ''\\} in isset\\(\\) does not exist\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Variable \\$pAWins might not be defined\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Variable \\$pBWins might not be defined\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Call to an undefined method Gatherling\\\\Models\\\\Format\\:\\:deleteSubFormat\\(\\)\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Comparison operation \"\\=\\=\" between 0 and \\(array\\|float\\|int\\) results in an error\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Function handleActions invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Function printNewFormat invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Function printNoAdmin invoked with 1 parameter, 0 required\\.$#"
+			count: 2
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#2 \\$round of method Gatherling\\\\Models\\\\Standings\\:\\:League_getAvailable_Opponents\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: gatherling/lib_form_helper.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$discord_handle\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
+			count: 2
+			path: gatherling/player.php
+
+		-
+			message: "#^Variable \\$CONFIG might not be defined\\.$#"
+			count: 2
+			path: gatherling/player.php
+
+		-
+			message: "#^Variable \\$max might not be defined\\.$#"
+			count: 2
+			path: gatherling/profile.php
+
+		-
+			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
+			count: 2
+			path: gatherling/report.php
+
+		-
+			message: "#^Variable \\$match might not be defined\\.$#"
+			count: 1
+			path: gatherling/report.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^PHPDoc tag @throws with type Gatherling\\\\Tests\\\\Exception is not subtype of Throwable$#"
+			count: 1
+			path: tests/EventsTest.php
+
+		-
+			message: "#^PHPDoc tag @throws with type Gatherling\\\\Tests\\\\Exception\\|PHPUnit\\\\Framework\\\\ExpectationFailedException\\|SebastianBergmann\\\\RecursionContext\\\\InvalidArgumentException is not subtype of Throwable$#"
+			count: 2
+			path: tests/EventsTest.php
+
+		-
+			message: "#^PHPDoc tag @throws with type PHPUnit\\\\Framework\\\\ExpectationFailedException\\|SebastianBergmann\\\\RecursionContext\\\\InvalidArgumentException is not subtype of Throwable$#"
+			count: 3
+			path: tests/EventsTest.php

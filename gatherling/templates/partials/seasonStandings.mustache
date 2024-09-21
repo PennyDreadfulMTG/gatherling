@@ -1,0 +1,27 @@
+<h3><center>Scoreboard for {{seriesName}} season {{season}}</center></h3>
+<table class="scoreboard">
+    <tr class="top">
+        <th>Place</th>
+        <th>Player</th>
+        <th>Total</th>
+        {{#seasonEvents}}
+            <th>
+                <a href="{{reportLink}}">{{shortName}}</a>
+            </th>
+        {{/seasonEvents}}
+    </tr>
+    {{#players}}
+        <tr class="{{classes}}">
+            <td>{{count}}</td>
+            <td class="playername">{{#playerLink}}{{> playerLink}}{{/playerLink}}</td>
+            <td>{{totalPoints}}</td>
+            {{#events}}
+                <td>
+                    {{#why}}<span title="{{why}}">{{/why}}
+                        {{points}}
+                    {{#why}}</span>{{/why}}
+                </td>
+            {{/events}}
+        </tr>
+    {{/players}}
+</table>

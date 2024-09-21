@@ -1,0 +1,24 @@
+<form action="seriesreport.php" method="get">
+    <table class="form">
+        <tr>
+            <th>Series</th>
+            <td>
+                {{#seriesDropMenu}}{{> seriesDropMenu}}{{/seriesDropMenu}}
+            </td>
+        </tr>
+        <tr>
+            <th>Season</th>
+            <td>
+                {{#seasonDropMenu}}{{> dropMenu}}{{/seasonDropMenu}}
+            </td>
+        </tr>
+        <tr>
+           <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="buttons">
+                 <input class="inputbutton" type="submit" value="Get Season Scoreboard" />
+            </td>
+        </tr>
+    </table>
+</form>

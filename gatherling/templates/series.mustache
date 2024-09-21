@@ -1,0 +1,46 @@
+<div id="gatherling_main" class="box grid_12">
+    <div class="uppertitle">Series Events</div>
+    {{#activeSeries}}
+        <div class="series">
+            <h2 class="series-name">{{seriesName}}</h2>
+            <div class="series-content">
+                <div class="series-logo">
+                   <img src="{{logoSrc}}" alt="{{seriesName}} Logo" />
+                </div>
+                <div class="series-info">
+                    <table>
+                        <tr>
+                            <th>Hosted by</th>
+                            <td>{{hosts}}</td>
+                        </tr>
+                        <tr>
+                            <th>Format</th>
+                            <td>{{formatName}}</td>
+                        </tr>
+                        <tr>
+                            <th>Regular Time</th>
+                            <td>{{regularTime}}</td>
+                        </tr>
+                        <tr>
+                            <th>Rules </th>
+                            <td>
+                                <a href="{{masterDocumentLink}}">Season {{season}} Master Document</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Most Recent Event</th>
+                            <td>{{#reportLink}}{{> reportLink}}{{/reportLink}}</td>
+                        </tr>
+                        <tr>
+                            <th>Next Event</th>
+                            <td>
+                                {{#nextEventStart}}{{> time}}{{/nextEventStart}}
+                                {{^nextEventStart}}Not scheduled yet{{/nextEventStart}}
+                            </td>
+                        </tr>
+                    </table>
+                </div> <!-- .series-content -->
+            </div> <!-- .series-info -->
+        </div> <!-- .series -->
+    {{/activeSeries}}
+</div>

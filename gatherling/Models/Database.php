@@ -13,7 +13,7 @@ define('SLOW_QUERY_MS', 1000);
 
 class Database
 {
-    public static function getConnection()
+    public static function getConnection(): mysqli
     {
         static $instance;
 
@@ -25,14 +25,7 @@ class Database
                 $CONFIG['db_password']
             );
             if (mysqli_connect_errno()) {
-                if (PHP_SAPI == 'cli') {
-                    // When running the db-upgrade script, we want to return null
-                    // so that it can retry connections as needed.
-                    return null;
-                } else {
-                    echo mysqli_connect_error();
-                    exit(1);
-                }
+                throw new Exception(mysqli_connect_error());
             }
             $db_selected = $instance->select_db($CONFIG['db_database']);
             if (!$db_selected) {
@@ -112,19 +105,6 @@ class Database
         return $result;
     }
 
-    public static function single_result_double_param($sql, $paramTypes, $param1, $param2)
-    {
-        $db = self::getConnection();
-        $stmt = $db->prepare($sql);
-        $stmt->bind_param($paramTypes, $param1, $param2);
-        $stmt->execute();
-        $stmt->bind_result($result);
-        $stmt->fetch();
-        $stmt->close();
-
-        return $result;
-    }
-
     public static function list_result($sql)
     {
         $db = self::getConnection();
@@ -176,17 +156,6 @@ class Database
         $stmt->close();
 
         return $list;
-    }
-
-    public static function no_result_single_param($sql, $paramType, $param)
-    {
-        $db = self::getConnection();
-        $stmt = $db->prepare($sql);
-        $stmt->bind_param($paramType, $param);
-        $result = $stmt->execute();
-        $stmt->close();
-
-        return $result;
     }
 
     public static function db_query()

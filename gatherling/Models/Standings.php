@@ -2,6 +2,11 @@
 
 namespace Gatherling\Models;
 
+use InvalidArgumentException;
+use Gatherling\Views\TemplateHelper;
+use Gatherling\Views\Components\GameName;
+use Gatherling\Views\Components\EventStandings;
+
 class Standings
 {
     public $id;
@@ -108,6 +113,8 @@ class Standings
             $stmt = $db->prepare('SELECT player FROM standings WHERE event = ? AND active = 1 ORDER BY seed');
         } elseif ($isactive == 3) {
             $stmt = $db->prepare('SELECT player FROM standings WHERE event = ? AND active = 1 ORDER BY score desc, OP_Match desc, PL_Game desc, OP_Game desc');
+        } else {
+            throw new InvalidArgumentException("Invalid argument for isactive {$isactive}");
         }
         $stmt or exit($db->error);
         $stmt->bind_param('s', $eventname);
@@ -128,31 +135,7 @@ class Standings
 
     public static function eventStandings(?string $eventName, ?string $playerName = null): string
     {
-        $args = self::eventStandingsArgs($eventName, $playerName);
-
-        return renderTemplate('partials/eventStandings', $args);
-    }
-
-    public static function eventStandingsArgs(?string $eventName, ?string $playerName = null): array
-    {
-        $event = new Event($eventName);
-        $standings = self::getEventStandings($eventName, 0);
-        $rank = 1;
-        $standingInfoList = [];
-        foreach ($standings as $standing) {
-            $standingInfo = getObjectVarsCamelCase($standing);
-            $standingInfo['rank'] = $rank;
-            $standingInfo['shouldHighlight'] = $standing->player == $playerName;
-            $standingInfo['matchScore'] = $standing->score;
-            $sp = new Player($standing->player);
-            $standingInfo['gameName'] = $sp->gameNameArgs($event->client);
-            $rank++;
-            $standingInfoList[] = $standingInfo;
-        }
-
-        return [
-            'standings' => $standingInfoList,
-        ];
+        return (new EventStandings($eventName, $playerName))->render();
     }
 
     public static function updateStandings($eventname, $subevent, $round)

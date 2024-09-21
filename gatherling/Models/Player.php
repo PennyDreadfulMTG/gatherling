@@ -4,6 +4,9 @@ namespace Gatherling\Models;
 
 use Exception;
 use Gatherling\Data\DB;
+use Gatherling\Views\TemplateHelper;
+use Gatherling\Views\Components\GameName;
+use Gatherling\Views\Components\PlayerLink;
 
 class Player
 {
@@ -17,7 +20,7 @@ class Player
     public $emailPrivacy;
     public $timezone;
     public $verified;
-    public $theme;
+    public $theme; // DEPRECATED. Always null.
     public $discord_id;
     public $discord_handle;
     public $api_key;
@@ -303,12 +306,15 @@ class Player
         return self::findByName($playername);
     }
 
-    public static function findOrCreateByName($playername)
+    public static function findOrCreateByName(?string $playerName): ?static
     {
-        $playername = self::sanitizeUsername($playername);
-        $found = self::findByName($playername);
+        if (is_null($playerName)) {
+            return null;
+        }
+        $playerName = self::sanitizeUsername($playerName);
+        $found = self::findByName($playerName);
         if (is_null($found)) {
-            return self::createByName($playername);
+            return self::createByName($playerName);
         }
 
         return $found;
@@ -1357,43 +1363,14 @@ class Player
         return $series;
     }
 
-    public function gameNameArgs($game = null, $html = true): array
-    {
-        $iconClass = null;
-        $name = $this->name;
-        if ($html) {
-            if ($game == MTGO && !empty($this->mtgo_username)) {
-                $iconClass = 'ss ss-pmodo';
-                $name = $this->mtgo_username;
-            } elseif ($game == MTGA && !empty($this->mtga_username)) {
-                $iconClass = 'ss ss-parl3';
-                $name = $this->mtga_username;
-            } elseif (($game == PAPER || $game == 'discord') && !empty($this->discord_handle)) {
-                $iconClass = 'fab fa-discord';
-                $name = $this->discord_handle;
-            } elseif ($game == 'gatherling') {
-                $iconClass = 'ss ss-dd2';
-            }
-        }
-
-        return [
-            'iconClass' => $iconClass,
-            'name'      => $name,
-        ];
-    }
-
     public function gameName($game = null, $html = true): string
     {
-        $args = $this->gameNameArgs($game, $html);
-
-        return renderTemplate('partials/gameName', $args);
+        return (new GameName($this, $game, $html))->render();
     }
 
     public function linkTo(string $game = 'gatherling'): string
     {
-        $name = $this->gameName($game);
-
-        return "<a href=\"profile.php?player={$this->name}\">{$name}</a>";
+        return (new PlayerLink($this))->render();
     }
 
     public static function activeCount()

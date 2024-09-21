@@ -1,0 +1,12 @@
+{{#trophySrc}}
+    <img src="{{trophySrc}}" style="border-width: 0px; max-width: 260px" alt="Trophy" />
+{{/trophySrc}}
+{{^winner}}
+    <br>No winner yet!
+{{/winner}}
+{{#winner}}
+    {{#playerLink}}{{> playerLink}}{{/playerLink}}
+    <img src="{{manaSrc}}" />
+    {{#deckLink}}{{> deckLink}}{{/deckLink}}
+    <br>
+{{/winner}}

@@ -107,7 +107,7 @@ case 'allratings':
     if (isset($_GET['format'])) {
         $format = $_GET['format'];
     }
-    print_ratingsTable(Player::loginName());
+    print_ratingsTable();
     echo '<br /><br />';
     print_ratingHistoryForm($format);
     echo '<br />';
@@ -206,7 +206,7 @@ function print_editEmailForm($player, $result)
         echo "<td><input class=\"inputbox\" name=\"newEmail2\" type=\"email\" /></td></tr>\n";
         echo "<tr><th>Privacy Status</th>\n";
         echo '<td>';
-        emailStatusDropDown($player->emailPrivacy);
+        echo emailStatusDropDown($player->emailPrivacy);
         echo '</td></tr>';
         echo "<tr><td colspan=\"2\" class=\"buttons\">\n";
         echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Add Email\" />\n";
@@ -229,7 +229,7 @@ function print_editEmailForm($player, $result)
         echo "<td><input class=\"inputbox\" name=\"newEmail2\" type=\"email\" /></td></tr>\n";
         echo "<tr><th>Privacy Status</th>\n";
         echo '<td>';
-        emailStatusDropDown($player->emailPrivacy);
+        echo emailStatusDropDown($player->emailPrivacy);
         echo '</td></tr>';
         echo "<tr><td colspan=\"2\" class=\"buttons\">\n";
         echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Edit Email\" />\n";
@@ -646,7 +646,7 @@ function print_noDeckTable($allDecks)
         echo '<form action="player.php" method="post">';
         // TODO: Remove deck ignore functionality
         echo '<input type="hidden" name="action" value="setIgnores" />';
-        echo "<table style=\"border-width: 0px;\" width=275>\n";
+        echo "<table width=275>\n";
         if (!$allDecks) {
             // print this on the player cp
             echo '<tr><td colspan=2 style="font-size: 14px; color: red;">';
@@ -681,7 +681,7 @@ function print_allDeckTable()
     $rstar = '<font color="#FF0000">*</font>';
     $upPlayer = strtoupper($player->name);
 
-    echo "<table style=\"border-width: 0px;\" width=275>\n";
+    echo "<table width=275>\n";
     echo "<tr><td colspan=3><b>$upPlayer'S DECKS</td></tr>\n";
     foreach ($decks as $deck) {
         $imgcell = medalImgStr($deck->medal);
@@ -709,7 +709,7 @@ function print_recentMatchTable()
     global $player;
     $matches = $player->getRecentMatches();
 
-    echo "<table style=\"border-width: 0px\" width=300>\n";
+    echo "<table width=300>\n";
     echo "<tr><td colspan=\"4\"><b>RECENT MATCHES</td><td align=\"right\">\n";
     echo "<a href=\"player.php?mode=allmatches\">(see all)</a></td></tr>\n";
     foreach ($matches as $match) {
@@ -897,7 +897,7 @@ function print_ratingsTableSmall()
     }
     $names[] = 'Other Formats';
 
-    echo '<table style="border-width: 0px;" width=300>';
+    echo '<table width=300>';
     echo "<tr><td colspan=1><b>MY RATINGS</td>\n";
     echo '<td colspan=1 align="right">';
     echo "<a href=\"player.php?mode=allratings\">(see all)</a></td></tr>\n";
@@ -918,7 +918,7 @@ function print_ratingsTableSmall()
 
 function print_ratingsTable()
 {
-    echo "<table style=\"border-width: 0px;\" width=400 align=\"center\">\n";
+    echo "<table class=\"c\" width=400>\n";
     echo "<tr><td><b>Format</td>\n";
     echo "<td align=\"center\"><b>Rating</td>\n";
     echo "<td align=\"center\"><b>Record</td>\n";
@@ -969,7 +969,7 @@ function print_ratingsHistory($format)
 
     $stmt->store_result();
 
-    echo "<table style=\"border-width: 0px;\" align=\"center\">\n";
+    echo "<table class=\"c\">\n";
     echo "<tr><td align=\"center\"><b>Pre-Event</td>\n";
     echo "<td><b>Event</td>\n";
     echo "<td><b>Deck</td>\n";
@@ -1051,7 +1051,7 @@ function print_allMatchForm($player)
         $_POST['opp'] = '%';
     }
     echo "<form action=\"player.php\" method=\"post\">\n";
-    echo "<table style=\"border-width: 0px;\" align=\"center\">\n";
+    echo "<table class=\"c\">\n";
     echo "<tr><td align=\"center\" colspan=2><b>Filters</td></tr>\n";
     echo "<tr><td>&nbsp;</td>\n";
     echo '<tr><td>Format&nbsp</td><td>';
@@ -1128,7 +1128,7 @@ function oppDropMenu($player, $def)
 function print_statsTable()
 {
     global $player;
-    echo '<table style="border-width: 0px">';
+    echo '<table>';
     echo "<tr><td colspan=2><b>STATISTICS</td></tr>\n";
     echo "<tr><td>Record</td><td align=\"right\"> {$player->getRecord()}";
     echo "</td></tr>\n";

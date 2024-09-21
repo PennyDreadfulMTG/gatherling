@@ -2,8 +2,10 @@
 
 namespace Gatherling\Models;
 
-use Exception;
 use PDO;
+use Exception;
+use Gatherling\Views\TemplateHelper;
+use Gatherling\Views\Components\SeriesDropMenu;
 
 class Series
 {
@@ -323,10 +325,15 @@ class Series
     // Returns a HTML image tag which displays the logo for this series.
     public static function image_tag($seriesname)
     {
-        return "<img src=\"displaySeries.php?series=$seriesname\" />";
+        return "<img src=\"{self::logoSrc($seriesname)}\" />";
     }
 
-    public function mostRecentEvent()
+    public static function logoSrc(string $seriesName): string
+    {
+        return 'displaySeries.php?series=' . rawurlencode($seriesName);
+    }
+
+    public function mostRecentEvent(): Event
     {
         $result = Database::db_query_single('SELECT events.name
                                          FROM events
@@ -340,7 +347,7 @@ class Series
         return new Event($result);
     }
 
-    public function nextEvent()
+    public function nextEvent(): ?Event
     {
         $result = Database::db_query_single('SELECT events.name
                                          FROM events
@@ -352,9 +359,8 @@ class Series
                                          LIMIT 1', 's', $this->name);
         if ($result) {
             return new Event($result);
-        } else {
-            return;
         }
+        return null;
     }
 
     public function setLogo($content_filename, $type, $size)
@@ -907,83 +913,6 @@ class Series
 
     public static function dropMenu(?string $series, bool $useall = false, array $limitTo = []): string
     {
-        return renderTemplate('partials/dropMenu', self::dropMenuArgs($series, $useall, $limitTo));
-    }
-
-    public static function dropMenuArgs(?string $series, bool $useall = false, array $limitTo = []): array
-    {
-        $allseries = empty($limitTo) ? self::allNames() : $limitTo;
-        $default = $useall ? 'All' : '- Series -';
-        $options = [];
-        foreach ($allseries as $name) {
-            $options[] = [
-                'text'       => $name,
-                'value'      => $name,
-                'isSelected' => $series && strcmp($series, $name) == 0,
-            ];
-        }
-
-        return [
-            'name'    => 'series',
-            'default' => $default,
-            'options' => $options,
-        ];
-    }
-
-    private static function reverse_total_sort($a, $b)
-    {
-        if ($a['.total'] == $b['.total']) {
-            return 0;
-        }
-
-        return ($a['.total'] < $b['.total']) ? 1 : -1;
-    }
-
-    public static function seasonStandings($series, $season)
-    {
-        $seasonevents = $series->getSeasonEventNames($season);
-        $points = $series->seasonPointsTable($season);
-        $cutoff = $series->getSeasonCutoff($season);
-        uasort($points, 'Gatherling\Models\Series::reverse_total_sort');
-
-        echo "<h3><center>Scoreboard for {$series->name} season {$season}</center></h3>";
-        echo '<table class="scoreboard">';
-        echo '<tr class="top"><th>Place</th><th>Player</th><th>Total</th>';
-
-        foreach ($seasonevents as $evname) {
-            $shortname = preg_replace("/^{$series->name} /", '', $evname);
-            $reportlink = 'eventreport.php?event='.rawurlencode($evname);
-            echo "<th><a href=\"{$reportlink}\">{$shortname}</a></th>";
-        }
-        echo '</tr>';
-
-        $count = 0;
-        foreach ($points as $playername => $pointar) {
-            $player = new Player($playername);
-            $count++;
-            $classes = '';
-            if ($count % 2 != 0) {
-                $classes = 'odd';
-            }
-            if ($count == $cutoff) {
-                $classes .= ' cutoff';
-            }
-            echo "<tr class=\"{$classes}\"> ";
-            echo "<td>{$count}</td><td class=\"playername\">{$player->linkTo()}</td><td>{$pointar['.total']}</td> ";
-
-            foreach ($seasonevents as $evname) {
-                if (isset($pointar[$evname])) {
-                    if (is_array($pointar[$evname])) {
-                        echo "<td><span title=\"{$pointar[$evname]['why']}\">{$pointar[$evname]['points']}</span></td>";
-                    } else {
-                        echo "<td>{$pointar[$evname]}</td>";
-                    }
-                } else {
-                    echo '<td></td> ';
-                }
-            }
-            echo '</tr>';
-        }
-        echo '</table>';
+        return (new SeriesDropMenu($series, $useall, $limitTo))->render();
     }
 }

@@ -1,0 +1,50 @@
+<div class="grid_10 suffix_1 prefix_1">
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle"> Login to Gatherling </div>
+        <center>
+            <h3>Resetting your Gatherling password</h3>
+
+            {{#hasResetPassword}}
+                <p>Your password has been reset. You can now <a href="login.php">log in</a>.</p>
+            {{/hasResetPassword}}
+            {{#passwordResetFailed}}
+                <p class="error">Unable to reset your password. Please try again.</p>
+            {{/passwordResetFailed}}
+            {{#sentLoginLink}}
+                <p>A link has been sent to {{email}}.</p>
+            {{/sentLoginLink}}
+            {{#cantSendLoginLink}}
+                <p class="error">Unable to send a link to {{email}}</p>
+            {{/cantSendLoginLink}}
+            {{#cantFindPlayer}}
+                <p class="error">Unable to find a player with that email or username</p>
+            {{/cantFindPlayer}}
+
+            {{#showNewPasswordForm}}
+                <p>Enter your new password.</p>
+                <form action="forgot.php" method="post">
+                    <input type="hidden" name="view" value="new_password" />
+                    <input type="hidden" name="token" value="{{token}}" />
+                    <table class="form">
+                        {{#newPasswordInput}}{{> passwordInput}}{{/newPasswordInput}}
+                        {{#resetPassword}}{{> submit}}{{/resetPassword}}
+                    </table>
+                </form>
+            {{/showNewPasswordForm}}
+
+            {{#showForgotForm}}
+                <p>Enter your email or username and we'll send you a link to get back into your account.</p>
+                <form action="forgot.php" method="post">
+                    <input type="hidden" name="view" value="send_login_link" />
+                    <table class="form">
+                        {{#identifierInput}}{{> textInput}}{{/identifierInput}}
+                        {{#sendLoginLink}}{{> submit}}{{/sendLoginLink}}
+                    </table>
+                </form>
+                <p>If you aren't able to reset your password this way please message a Gatherling Administrator
+                    on the <a href="https://discord.gg/2VJ8Fa6">Discord</a></p>
+            {{/showForgotForm}}
+        </center>
+    </div> <!-- gatherling_main -->
+</div> <!-- grid 10 pre 1 suff 1 -->
+

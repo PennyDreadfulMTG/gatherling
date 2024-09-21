@@ -84,10 +84,34 @@ class DB
     {
         return self::_execute($sql, $params, function ($sql, $params) {
             $stmt = self::connect()->pdo->prepare($sql);
-            $stmt->execute($params);
-
+            foreach ($params as $key => $value) {
+                if (is_int($value)) {
+                    $stmt->bindValue(':' . $key, $value, PDO::PARAM_INT);
+                } else {
+                    $stmt->bindValue(':' . $key, $value);
+                }
+            }
+            $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         });
+    }
+
+    public static function selectOnly(string $sql, array $params = []): array
+    {
+        $result = self::select($sql, $params);
+        if (count($result) !== 1) {
+            throw new DatabaseException('Expected 1 row, got ' . count($result) . " for query: $sql");
+        }
+        return $result[0];
+    }
+
+    public static function selectOnlyOrNull(string $sql, array $params = []): ?array
+    {
+        $result = self::select($sql, $params);
+        if (count($result) > 1) {
+            throw new DatabaseException('Expected 1 row, got ' . count($result) . " for query: $sql");
+        }
+        return $result[0] ?? null;
     }
 
     public static function value(string $sql, array $params = [], bool $missingOk = false): mixed
@@ -182,7 +206,6 @@ class DB
             if ($e->getCode() === '3D000') {
                 Log::warning('Database connection lost, attempting to reconnect...');
                 $stmt = self::connect($connectToDatabase)->pdo->prepare($sql);
-
                 return $stmt->execute($params);
             }
             $msg = "Failed to execute query: $sql";

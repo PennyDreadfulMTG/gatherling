@@ -3,6 +3,7 @@
 use Gatherling\Models\Database;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
+use Gatherling\Views\TemplateHelper;
 
 require_once 'lib.php';
 include 'lib_form_helper.php';
@@ -427,7 +428,7 @@ function handleActions($seriesName)
         echo '<form action="formatcp.php" method="post">';
         echo '<input type="hidden" name="view" value="no_view" />';
         echo "<input type=\"hidden\" name=\"oldformat\" value=\"$oldformatname\" />";
-        echo '<table class="form" style="border-width: 0px;" align="center">';
+        echo '<table class="form c">';
         echo '<tr><td colspan="2">Save Format As... <input type="text" class="inputbox" name="newformat" STYLE="width: 175px"/></td></tr>';
         echo '<td colspan="2" class="buttons">';
         echo '<input class="inputbutton" type="submit" value="Save" name ="action" /></td></tr>';
@@ -461,7 +462,7 @@ function handleActions($seriesName)
         echo "<h4>Rename Format</h4>\n";
         echo '<form action="formatcp.php" method="post">';
         echo '<input type="hidden" name="view" value="no_view" />';
-        echo '<table class="form" style="border-width: 0px;" align="center">';
+        echo '<table class="form c">';
         echo '<tr><td>';
         if ($seriesName == 'System') {
             formatsDropMenu('All');
@@ -501,7 +502,7 @@ function handleActions($seriesName)
         echo "<h4>Delete Format</h4>\n";
         echo '<form action="formatcp.php" method="post">';
         echo '<input type="hidden" name="view" value="no_view" />';
-        echo '<table class="form" style="border-width: 0px;" align="center">';
+        echo '<table class="form c">';
         echo '<tr><td>';
         if ($seriesName == 'System') {
             formatsDropMenu('All');
@@ -643,7 +644,7 @@ function printNewFormat($seriesName = '')
     echo '<form action="formatcp.php" method="post">';
     echo '<input type="hidden" name="view" value="no_view" />';
     echo '<input type="hidden" name="series" value="' . $seriesName . '" />';
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><td colspan="2">New Format Name: <input type="text" name="newformatname" STYLE="width: 175px"/></td></tr>';
     echo '<td colspan="2" class="buttons">';
     echo '<input class="inputbutton" type="submit" value="Create New Format" name ="action" /></td></tr>';
@@ -655,7 +656,7 @@ function printLoadFormat($seriesName)
     echo "<h4>Load Format</h4>\n";
     echo '<form action="formatcp.php" method="post">';
     echo '<input type="hidden" name="view" value="settings" />';
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><td>';
     if ($seriesName == 'System') {
         formatsDropMenu('All');
@@ -688,7 +689,7 @@ function printFormatSettings($active_format, $seriesName)
     echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
 
     echo '<h4>Format Description</h4>';
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
 
     echo '<tr><td>';
     echo '<textarea class="inputbox" rows="10" cols="60" name="formatdescription">';
@@ -697,7 +698,7 @@ function printFormatSettings($active_format, $seriesName)
     echo "</td></tr>\n";
     echo '</table>';
     echo '<h4>Card Modifiers</h4>';
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th>Minimum Mainboard Cards</th>';
     echo '<td style="width: 50px; text-align: center;">';
     echo stringField('minmain', $active_format->min_main_cards_allowed, 5);
@@ -719,7 +720,7 @@ function printFormatSettings($active_format, $seriesName)
     echo '</tr></table>';
 
     echo '<h4>Deck Modifiers</h4>';
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="width: 100px; text-align: center;">Singleton</th><th style="width: 100px; text-align: center;">Commander</th>';
     echo '<th style="width: 100px; text-align: center;">Vanguard</th><th style="width: 100px; text-align: center;">Planechase</th>';
     echo '<th style="width: 100px; text-align: center;">Prismatic</th><th style="width: 100px; text-align: center;">Tribal</th></tr>';
@@ -757,7 +758,7 @@ function printFormatSettings($active_format, $seriesName)
 
     echo '<h4>Allow Rarity Selection</h4>';
     print_warning_if(0 == $active_format->allow_commons + $active_format->allow_uncommons + $active_format->allow_rares + $active_format->allow_mythics + $active_format->allow_timeshifted);
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="width: 100px; text-align: center;">Commons</th><th style="width: 100px; text-align: center;">Uncommons</th>';
     echo '<th style="width: 100px; text-align: center;">Rares</th><th style="width: 100px; text-align: center;">Mythics</th>';
     echo '<th style="width: 100px; text-align: center;">Timeshifted</th></tr>';
@@ -791,7 +792,7 @@ function printFormatSettings($active_format, $seriesName)
 
     if ($active_format->tribal) {
         echo '<h4>Tribal Modifiers</h4>';
-        echo '<table class="form" style="border-width: 0px;" align="center">';
+        echo '<table class="form c">';
         echo '<tr><th style="width: 100px; text-align: center;">';
         print_tooltip('Underdog', 'Restrict usage of Changelings to 4 cards (8 for tribes with only 3 members).');
         echo '</th>';
@@ -814,7 +815,7 @@ function printFormatSettings($active_format, $seriesName)
     }
 
     echo '<h4>Format Modifiers</h4>';
-    echo '<table class="form" style="border-width: 0px;" align="center"><tr>';
+    echo '<table class="form c"><tr>';
     echo '<th style="width: 100px; text-align: center;">';
     print_tooltip('Eternal Format', 'Eternal Formats treat all cardsets as legal.');
     echo '</th>';
@@ -867,7 +868,7 @@ function formatCPMenu($active_format, $seriesName)
     echo '<input type="hidden" name="view" value="no_view" />';
     echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
     echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><td class="buttons"><input class="inputbutton" style="width: 75px" type="submit" value="New" name ="action" />';
     echo '<input class="inputbutton" style="width: 75px" type="submit" value="Load" name ="action" />';
     echo '<input class="inputbutton" style="width: 75px" type="submit" value="Save As" name ="action" />';
@@ -911,7 +912,7 @@ function printBandR($active_format, $seriesName)
     echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
     echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
     echo "<h4>Card Restricted List: $cardCount Cards</h4>\n";
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="text-align: center;">Card Name</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
     if (count($restrictedCards)) {
         foreach ($restrictedCards as $card) {
@@ -951,7 +952,7 @@ function printBandR($active_format, $seriesName)
     echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
     echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
     echo "<h4>Card Banlist: $cardCount Cards</h4>\n";
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="text-align: center;">Card Name</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
     if (count($bandCards)) {
         foreach ($bandCards as $card) {
@@ -991,7 +992,7 @@ function printBandR($active_format, $seriesName)
     echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
     echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
     echo "<h4>Legal Card List: $cardCount Cards</h4>\n";
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="text-align: center;">Card Name</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
     if (count($legalCards)) {
         foreach ($legalCards as $card) {
@@ -1045,7 +1046,7 @@ function printTribalBandR($active_format, $seriesName)
     echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
     echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
     echo "<h4>Restricted To Tribe List: $cardCount Cards</h4>\n";
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="text-align: center;">Card Name</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
     if (count($restrictedToTribe)) {
         foreach ($restrictedToTribe as $card) {
@@ -1083,7 +1084,7 @@ function printTribalBandR($active_format, $seriesName)
     echo '<input type="hidden" name="view" value="tribal" />';
     echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
     echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="text-align: center;">Tribe Name</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
     if (count($tribesBanned)) {
         foreach ($tribesBanned as $bannedTribe) {
@@ -1116,7 +1117,7 @@ function printTribalBandR($active_format, $seriesName)
     echo '<input type="hidden" name="view" value="tribal" />';
     echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
     echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="text-align: center;">Tribe Name</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
     if (count($subTypesBanned)) {
         foreach ($subTypesBanned as $bannedSubType) {
@@ -1150,7 +1151,7 @@ function printCardSets($active_format, $seriesName)
     echo '<input type="hidden" name="view" value="cardsets" />';
     echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
     echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="text-align: center;">Cardset Name</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
     if (count($coreCardSets)) {
         foreach ($coreCardSets as $setName) {
@@ -1178,7 +1179,7 @@ function printCardSets($active_format, $seriesName)
     echo '<input type="hidden" name="view" value="cardsets" />';
     echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
     echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="text-align: center;">Cardset Name</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
     if (count($blockCardSets)) {
         foreach ($blockCardSets as $setName) {
@@ -1207,7 +1208,7 @@ function printCardSets($active_format, $seriesName)
     echo '<input type="hidden" name="view" value="cardsets" />';
     echo "<input type=\"hidden\" name=\"format\" value=\"{$active_format->name}\" />";
     echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="text-align: center;">Cardset Name</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
     if (count($extraCardSets)) {
         foreach ($extraCardSets as $setName) {
@@ -1247,7 +1248,7 @@ function printMetaFormatSettings($active_format, $seriesName)
     echo "<input type=\"hidden\" name=\"series\" value=\"{$seriesName}\" />";
 
     echo '<h4>Format Description</h4>';
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
 
     echo '<tr><td>';
     echo '<textarea class="inputbox" rows="10" cols="60" name="formatdescription">';
@@ -1258,7 +1259,7 @@ function printMetaFormatSettings($active_format, $seriesName)
 
     $subFormats = $active_format->sub_formats;
     echo "<h4>Allowed Formats</h4>\n";
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="text-align: center;">Format Name</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
     if (count($subFormats)) {
         foreach ($subFormats as $childName) {
@@ -1281,7 +1282,7 @@ function printMetaFormatSettings($active_format, $seriesName)
     echo'</td></tr></table>';
 
     echo '<h4>Format Modifiers</h4>';
-    echo '<table class="form" style="border-width: 0px;" align="center">';
+    echo '<table class="form c">';
     echo '<tr><th style="width: 100px; text-align: center;">';
     print_tooltip('Meta Format', 'A meta-format allows players to submit a deck legal under one of several possible legal lists.');
     echo '</th>';
@@ -1308,7 +1309,7 @@ function cardsetDropMenu(string $cardsetType, Format $format): string
     foreach ($cardsets as $cardset) {
         $options[] = ['value' => $cardset, 'text' => $cardset];
     }
-    return renderTemplate('partials/cardsetDropMenu', [
+    return TemplateHelper::render('partials/cardsetDropMenu', [
         'cardsets' => $cardsets,
         'cardsetType' => $cardsetType,
         'hasMany' => count($cardsets) > 2,

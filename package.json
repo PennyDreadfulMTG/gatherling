@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "dependencies": {
+    "luxon": "^3.5.0"
+  }
+}

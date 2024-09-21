@@ -170,7 +170,7 @@ class Matchup
 
     // returns the number of wins for the current match for $player
     // returns false if the player is not in this match.
-    public function getPlayerWins($player)
+    public function getPlayerWins($player): int|false
     {
         $playername = $this->toName($player);
 

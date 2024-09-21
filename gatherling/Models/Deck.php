@@ -3,6 +3,8 @@
 namespace Gatherling\Models;
 
 use Exception;
+use Gatherling\Views\TemplateHelper;
+use Gatherling\Views\Components\DeckLink;
 
 class Deck
 {
@@ -489,22 +491,6 @@ class Deck
         return false;
     }
 
-    private function getCard($cardname)
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT id, name FROM cards WHERE name = ?');
-        $stmt->bind_param('s', $cardname);
-        $stmt->execute();
-        $cardar = [];
-        $stmt->bind_result($cardar['id'], $cardar['name']);
-        if (is_null($stmt->fetch())) {
-            $cardar = null;
-        }
-        $stmt->close();
-
-        return $cardar;
-    }
-
     public function isValid()
     {
         return count($this->errors) == 0;
@@ -525,8 +511,6 @@ class Deck
             $db->autocommit(true);
 
             throw new Exception("Cannot flush the deckerror content {$this->id}");
-
-            return false;
         } else {
             return true;
         }
@@ -1038,23 +1022,25 @@ class Deck
 
     public function linkTo(): string
     {
-        $args = $this->linkToArgs();
-
-        return renderTemplate('partials/linkTo', $args);
+        return (new DeckLink($this))->render();
     }
 
-    public function linkToArgs(): array
+    public function colorStr(): string
     {
-        $args = [
-            'new' => $this->new,
-        ];
-        if ($this->new) {
-            return $args;
-        }
-        $args['name'] = empty($this->name) ? '** NO NAME **' : $this->name;
-        $args['isValid'] = $this->isValid();
-        $args['deckLink'] = 'deck.php?mode=view&id=' . rawurlencode($this->id);
+        $row = $this->getColorCounts();
+        $colors = ['w', 'g', 'u', 'r', 'b'];
+        $s = implode('', array_filter($colors, fn($color) => $row[$color] > 0));
 
-        return $args;
+        $s = $s ?: 'blackout';
+        return $s;
+    }
+
+    public function manaSrc(): string
+    {
+        if ($this->new) {
+            return 'styles/images/manablackout.png';
+        }
+
+        return 'styles/images/mana' . rawurlencode($this->colorStr()) . '.png';
     }
 }

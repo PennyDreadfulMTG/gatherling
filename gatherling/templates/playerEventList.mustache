@@ -1,0 +1,79 @@
+<div class="grid_10 prefix_1 suffix_1">
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle">Event Report</div>
+        <form action="eventreport.php" method="get">
+
+            <table id="EventReport">
+                <tr>
+                    <td colspan="2" align="center"><b>Filters</b></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>Format</td>
+                    <td>
+                        {{#formatDropMenu}}{{> dropMenu}}{{/formatDropMenu}}</td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Series</td>
+                    <td>
+                        {{#seriesDropMenu}}{{> dropMenu}}{{/seriesDropMenu}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Season</td>
+                    <td>
+                        {{#seasonDropMenu}}{{> dropMenu}}{{/seasonDropMenu}}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center">
+                        <input class="inputbutton" type="submit" name="mode" value="Filter Events">
+                    </td>
+                </tr>
+
+            </table>
+
+            <table cellpadding="3">
+                <tr>
+                    <td colspan="5">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td><b>Event</b></td>
+                    <td><b>Format</b></td>
+                    <td class="c"><b>No. Players</b></td>
+                    <td><b>Host(s)</b></td>
+                </tr>
+                {{#events}}
+                    <tr>
+                        <td>
+                            <a href="{{eventReportLink}}">{{name}}</a>
+                        </td>
+                        <td>{{format}}</dt>
+                        <td class="c">{{numPlayers}}</td>
+                        <td>{{host}}{{#cohost}}/{{cohost}}{{/cohost}}</td>
+                    </tr>
+                {{/events}}
+                {{#hasMore}}
+                    <tr>
+                        <td colspan="5" width="500">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" align="center">
+                            <i>This list only shows the 100 most recent results.
+                            Please use the filters at the top of this page to find older
+                            results.</i>
+                        </td>
+                    </tr>
+                {{/hasMore}}
+                <tr><td colspan="5" width="500">&nbsp;</td></tr>
+            </table>
+
+        </form>
+    </div>
+</div>
