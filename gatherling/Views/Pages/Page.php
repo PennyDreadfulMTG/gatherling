@@ -23,6 +23,7 @@ abstract class Page extends TemplateResponse
     public int $tabs;
     public string $title;
     public string $versionTagline;
+    public string $jsLink;
 
     public function __construct()
     {
@@ -38,6 +39,7 @@ abstract class Page extends TemplateResponse
         $this->isSuper = $this->player?->isSuper() ?? false;
         $this->tabs = 5 + (int) $this->isHost + (int) $this->isOrganizer + (int) $this->isSuper;
         $this->versionTagline = version_tagline();
+        $this->jsLink = 'gatherling.js?v=' . rawurlencode(git_hash());
     }
 
     public function body(): string
