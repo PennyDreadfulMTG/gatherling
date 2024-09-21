@@ -3,7 +3,7 @@
         &#x2690;
     {{/hasDropped}}
     {{^hasDropped}}
-        <input type="checkbox" name="dropplayer[]" value="{{#playerName}}{{> gameName}}{{/playerName}}" title="Drop {{#displayNameText}}{{> gameName}}{{/displayNameText}} from the event">
+        <input type="checkbox" name="dropplayer[]" value="{{playerName}}" title="Drop {{#displayNameText}}{{> gameName}}{{/displayNameText}} from the event">
     {{/hasDropped}}
     {{^hasGames}}
         {{#displayName}}{{> gameName}}{{/displayName}}
