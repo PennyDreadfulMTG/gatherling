@@ -649,11 +649,6 @@ class Format
         );
     }
 
-    public function isError()
-    {
-        return count($this->errors) > 0;
-    }
-
     public function getErrors()
     {
         $currentErrors = $this->error;
