@@ -471,7 +471,7 @@ class Format
             return Database::list_result('SELECT name FROM cardsets WHERE standard_legal = 1');
         }
 
-        return database::list_result_single_param('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
+        return Database::list_result_single_param('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
     }
 
     public function getSubFormats()
