@@ -132,6 +132,7 @@ function printMissingTrophies($series)
             echo "<tr><td style=\"text-align: center;\"><a href=\"event.php?name={$event->name}\">{$event->name}</a></td> ";
             echo "<td style=\"text-align: center;\">" . time_element(strtotime($event->start), $now) . "</td>";
             $finalists = $event->getFinalists();
+            $winningPlayer = $winningDeck = null;
             foreach ($finalists as $finalist) {
                 if ($finalist['medal'] == '1st') {
                     $winningPlayer = $finalist['player'];
