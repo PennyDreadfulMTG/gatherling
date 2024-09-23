@@ -1,0 +1,13 @@
+<div class="grid_10 suffix_1 prefix_1">
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle"> Format Control Panel </div>
+        <center>
+            {{#organizerSelect}}{{> organizerSelect}}{{/organizerSelect}}
+            {{^organizerSelect}}<center>Managing {{seriesName}}</center>{{/organizerSelect}}
+            {{{actionResultSafe}}}
+            {{#formatCPMenu}}{{> formatCPMenu}}{{/formatCPMenu}}
+            {{{viewSafe}}}
+        </center>
+    </div>
+    <div class="clear"></div>
+</div>

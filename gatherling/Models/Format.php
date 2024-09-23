@@ -144,7 +144,7 @@ class Format
             $this->card_legallist = $this->getLegalList();
             $this->card_restrictedlist = $this->getRestrictedList();
             $this->legal_sets = $this->getLegalCardsets();
-            $this->sub_formats = $this->getSubFormats();
+            $this->sub_formats = [];
         }
     }
 
@@ -472,15 +472,6 @@ class Format
         }
 
         return Database::list_result_single_param('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
-    }
-
-    public function getSubFormats()
-    {
-        if (!$this->is_meta_format) {
-            return [];
-        }
-
-        return Database::list_result_single_param('SELECT childformat FROM subformats WHERE parentformat = ?', 's', $this->name);
     }
 
     public function getLegalCard($cardName)

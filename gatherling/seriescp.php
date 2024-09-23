@@ -61,7 +61,7 @@ function do_page()
 
     if ($view != 'no_view') {
         if (count($player_series) > 1) {
-            printOrganizerSelect($player_series, $active_series_name);
+            echo printOrganizerSelect($player_series, $active_series_name);
         } else {
             echo "<center> Managing {$active_series_name} </center>";
         }

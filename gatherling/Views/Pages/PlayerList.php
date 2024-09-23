@@ -8,6 +8,8 @@ use Gatherling\Models\Format;
 use Gatherling\Models\Standings;
 use Gatherling\Views\Components\DeckLink;
 use Gatherling\Views\Components\GameName;
+use Gatherling\Views\Components\NotAllowed;
+use Gatherling\Views\Components\StringField;
 use Gatherling\Views\Components\InitialByesDropMenu;
 use Gatherling\Views\Components\InitialSeedDropMenu;
 
@@ -25,7 +27,7 @@ class PlayerList extends EventFrame
     public bool $isSingleElim;
     public bool $isNeitherSwissNorSingleElim;
     public Format $format;
-    public ?array $newEntry;
+    public ?StringField $newEntry;
     public bool $showCreateNextEvent;
     public bool $showCreateNextSeason;
     public string $deckless;
@@ -50,7 +52,7 @@ class PlayerList extends EventFrame
 
         $newEntry = null;
         if ($notYetStarted || $isOngoing) {
-            $newEntry = stringFieldArgs('newentry', '', 40);
+            $newEntry = new StringField('newentry', '', 40);
         }
 
         $showCreateNextEvent = $showCreateNextSeason = false;
@@ -115,7 +117,7 @@ function entryListArgs(Entry $entry, int $numEntries, bool $isTribal): array
     if ($entry->canDelete()) {
         $entryInfo['canDelete'] = $entry->canDelete();
     } else {
-        $entryInfo['notAllowed'] = notAllowedArgs("Can't delete player, they have matches recorded.");
+        $entryInfo['notAllowed'] = new NotAllowed("Can't delete player, they have matches recorded.");
     }
 
     return $entryInfo;

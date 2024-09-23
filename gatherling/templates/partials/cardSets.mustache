@@ -1,0 +1,115 @@
+<h4>Core Cardsets Allowed</h4>
+<form action="formatcp.php" method="post">
+    <input type="hidden" name="view" value="cardsets" />
+    <input type="hidden" name="format" value="{{activeFormatName}}" />
+    <input type="hidden" name="series" value="{{seriesName}}" />
+    <table class="form c">
+        <tr>
+            <th class="c">Cardset Name</th>
+            <th class="c" style="width: 50px">Delete</th>
+        </tr>
+        {{#coreCardSets}}
+            <tr>
+                <td class="c">{{.}}</td>
+                <td class="c" style="width: 50px; ">
+                    <input type="checkbox" name="delcardsetname[]" value="{{.}}" />
+                </td>
+            </tr>
+        {{/coreCardSets}}
+        {{^coreCardSets}}
+            <tr>
+                <td>
+                    <span class="warning">No Core Sets are Allowed</span>
+                </td>
+                <td class="c" style="width: 100px">
+                    {{#noCoreCardSets}}{{> notAllowed}}{{/noCoreCardSets}}
+                </td>
+            </tr>
+        {{/coreCardSets}}
+        <tr>
+            <td>
+                {{#coreCardSetsDropMenu}}{{> cardsetDropMenu}}{{/coreCardSetsDropMenu}}
+            </td>
+            <td colspan="2" class="buttons">
+                <input type="hidden" name="view" value="cardsets" />
+                <input class="inputbutton" type="submit" value="Update Cardsets" name ="action" />
+            </td>
+        </tr>
+    </table>
+</form>
+
+<h4>Block Cardsets Allowed</h4>
+<form action="formatcp.php" method="post">
+    <input type="hidden" name="view" value="cardsets" />
+    <input type="hidden" name="format" value="{{activeFormatName}}" />
+    <input type="hidden" name="series" value="{{seriesName}}" />
+    <table class="form c">
+        <tr>
+            <th class="c">Cardset Name</th>
+            <th class="c" style="width: 50px">Delete</th>
+        </tr>
+        {{#blockCardSets}}
+            <tr>
+                <td class="c">{{.}}</td>
+                <td class="c" style="width: 50px">
+                    <input type="checkbox" name="delcardsetname[]" value="{{.}}" />
+                </td>
+            </tr>
+        {{/blockCardSets}}
+        {{^blockCardSets}}
+            <tr>
+                <td><span class="warning">No Block Sets are Allowed</span></td>
+                <td class="c" style="width: 100px">
+                    {{#noBlockCardSets}}{{> notAllowed}}{{/noBlockCardSets}}
+                </td>
+            </tr>
+        {{/blockCardSets}}
+        <tr>
+            <td>
+                {{#blockCardSetsDropMenu}}{{> cardsetDropMenu}}{{/blockCardSetsDropMenu}}
+            </td>
+            <td colspan="2" class="buttons">
+                <input type="hidden" name="view" value="cardsets" />
+                <input class="inputbutton" type="submit" value="Update Cardsets" name ="action" />
+            </tr>
+        </tr>
+    </table>
+</form>
+
+<h4>Extra Cardsets Allowed</h4>
+<form action="formatcp.php" method="post">
+    <input type="hidden" name="view" value="cardsets" />
+    <input type="hidden" name="format" value="{{activeFormatName}}" />
+    <input type="hidden" name="series" value="{{seriesName}}" />
+    <table class="form c">
+        <tr>
+            <th class="c">Cardset Name</th>
+            <th class="c" style="width: 50px">Delete</th>
+        </tr>
+        {{#extraCardSets}}
+            <tr>
+                <td class="c">{{.}}</td>
+                <td class="c" style="width: 50px">
+                    <input type="checkbox" name="delcardsetname[]" value="{{.}}" />
+                </td>
+            </tr>
+        {{/extraCardSets}}
+        {{^extraCardSets}}
+            <tr>
+                <td><span class="warning">No Extra Sets are Allowed</span></td>
+                <td style="width: 100px; text-align: center;">
+                    {{#noExtraCardSets}}{{> notAllowed}}{{/noExtraCardSets}}
+                </td>
+            </tr>
+        {{/extraCardSets}}
+        <tr>
+            <td>
+                {{#extraCardSetsDropMenu}}{{> cardsetDropMenu}}{{/extraCardSetsDropMenu}}
+            </td>
+            <td colspan="2" class="buttons">
+                <input type="hidden" name="view" value="cardsets" />
+                <input class="inputbutton" type="submit" value="Update Cardsets" name ="action" />
+            </td>
+        </tr>
+    </table>
+</form>

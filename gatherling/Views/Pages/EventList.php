@@ -65,7 +65,7 @@ class EventList extends Page
         }
 
         $this->formatDropMenu = new FormatDropMenu($_GET['format'], true);
-        $this->seriesDropMenu = new SeriesDropMenu($seriesName, true, $seriesShown);
+        $this->seriesDropMenu = new SeriesDropMenu($seriesName, 'All', $seriesShown);
         $this->seasonDropMenu = new SeasonDropMenu($season, true);
         $this->hasPlayerSeries = count($playerSeries) > 0;
         $this->results = $results;

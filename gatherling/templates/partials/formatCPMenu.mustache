@@ -1,0 +1,40 @@
+<h3>Format Editor</h3>
+{{#activeFormatName}}
+    <h4>Currently Editing: {{activeFormatName}}</h4>
+{{/activeFormatName}}
+<form action="formatcp.php" method="post">
+    <input type="hidden" name="view" value="no_view" />
+    <input type="hidden" name="format" value="{{activeFormatName}}" />
+    <input type="hidden" name="series" value="{{seriesName}}" />
+    <table class="form c">
+        <tr>
+            <td class="buttons">
+                <input class="inputbutton" style="width: 75px" type="submit" value="New" name ="action" />
+                <input class="inputbutton" style="width: 75px" type="submit" value="Load" name ="action" />
+                <input class="inputbutton" style="width: 75px" type="submit" value="Save As" name ="action" />
+                <input class="inputbutton" style="width: 75px" type="submit" value="Rename" name ="action" />
+                <input class="inputbutton" style="width: 75px" type="submit" value="Delete" name ="action" />
+            </td>
+        </tr>
+    </table>
+</form>
+{{#activeFormatName}}
+    <table>
+        <tr>
+            <td colspan="2" align="center">
+                <a href="{{formatSettingsLink}}">Format Settings</a>
+                |
+                <a href="{{bAndRLink}}">Legal, Banned & Restricted</a>
+                {{#tribalLink}}
+                    |
+                    <a href="{{tribalLink}}">Tribes</a>
+                {{/tribalLink}}
+                |
+                {{#restrictedTooltip}}{{> tooltip}}{{/restrictedTooltip}}
+                {{^restrictedTooltip}}
+                    <a href="{{cardsetsLink}}">Legal Sets</a>
+                {{/restrictedTooltip}}
+            </td>
+        </tr>
+    </table>
+{{/activeFormatName}}

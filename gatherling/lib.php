@@ -3,10 +3,14 @@
 use Gatherling\Auth\Session;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
-use Gatherling\Models\Database;
+use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\TemplateHelper;
+use Gatherling\Views\Components\CardLink;
+use Gatherling\Views\Components\NotAllowed;
 use Gatherling\Views\Components\FormatDropMenu;
 use Gatherling\Views\Components\SeasonDropMenu;
+use Gatherling\Views\Components\FormatsDropMenu;
+use Gatherling\Views\Components\OrganizerSelect;
 use Gatherling\Views\Components\EmailStatusDropDown;
 
 require_once 'bootstrap.php';
@@ -85,27 +89,14 @@ function headerColor(): string
     return $HC;
 }
 
-function linkToLogin($pagename = null, $redirect = null, $message = null, $username = null): void
+function linkToLogin($_pagename = null, $redirect = null, $message = null, $username = null): void
 {
-    if (is_null($redirect)) {
-        $redirect = $_SERVER['REQUEST_URI'];
-    }
-    if (is_null($message)) {
-        $message = "You must log in to access $pagename.";
-    }
-    redirect("login.php?target=$redirect&message=$message&username=$username");
-
-    echo "<div class=\"c error\">$message</div>";
-    echo "Please <a href=\"login.php?target={$_SERVER['REQUEST_URI']}\">Click Here</a> to log in.\n";
+    (new LoginRedirect($redirect ?? '', $message ?? '', $username ?? ''))->send();
 }
 
-function printCardLink($card): void
+function printCardLink($card): string
 {
-    $gathererName = preg_replace('/ /', ']+[', $card);
-    $gathererName = str_replace('/', ']+[', $gathererName);
-    echo '<span class="cardHoverImageWrapper">';
-    echo "<a href=\"https://gatherer.wizards.com/Pages/Search/Default.aspx?name=+[{$gathererName}]\" ";
-    echo "class=\"linkedCardName\" target=\"_blank\">{$card}<span class=\"linkCardHoverImage\"><p class=\"crop\" style=\"background-image: url(https://gatherer.wizards.com/Handlers/Image.ashx?name={$card}&type=card\"><img alt=\"{$card}\" src=\"https://gatherer.wizards.com/Handlers/Image.ashx?name={$card}&type=card\"></p></span></a></span>";
+    return (new CardLink($card))->render();
 }
 
 function image_tag($filename, $extra_attr = null): string
@@ -131,9 +122,9 @@ function seasonDropMenu(int|string|null $season, bool $useall = false): string
     return (new SeasonDropMenu($season, $useall))->render();
 }
 
-function formatDropMenu(?string $format, bool $useAll = false, string $formName = 'format', bool $showMeta = true): string
+function formatDropMenu(?string $format, bool $useAll = false, string $formName = 'format'): string
 {
-    return (new FormatDropMenu($format, $useAll, $formName, $showMeta))->render();
+    return (new FormatDropMenu($format, $useAll, $formName))->render();
 }
 
 function emailStatusDropDown($currentStatus = 1): string
@@ -203,100 +194,9 @@ function json_headers(): void
     header('HTTP_X_USERNAME: '.Player::loginName());
 }
 
-function notAllowed(string $reason): string
+function printOrganizerSelect($player_series, $selected): string
 {
-    $args = notAllowedArgs($reason);
-
-    return TemplateHelper::render('partials/notAllowed', $args);
-}
-
-function notAllowedArgs(string $reason): array
-{
-    return ['reason' => $reason];
-}
-
-function tribeBanDropMenu($format): void
-{
-    $allTribes = Format::getTribesList();
-    $bannedTribes = $format->getTribesBanned();
-    $tribes = array_diff($allTribes, $bannedTribes); // remove tribes banned from drop menu
-
-    echo '<select class="inputbox" name="tribeban">';
-    echo '<option value="Unclassified">- Tribe to Ban - </option>';
-    foreach ($tribes as $tribe) {
-        echo "<option value=\"$tribe\">$tribe</option>";
-    }
-    echo '</select>';
-}
-
-function subTypeBanDropMenu($format): void
-{
-    $allSubTypes = Format::getTribesList();
-    $bannedSubTypes = $format->getSubTypesBanned();
-    $subTypes = array_diff($allSubTypes, $bannedSubTypes); // remove sub types banned from drop menu
-
-    echo '<select class="inputbox" name="subtypeban">';
-    echo '<option value="Unclassified">- Subtype to Ban - </option>';
-    foreach ($subTypes as $subType) {
-        echo "<option value=\"$subType\">$subType</option>";
-    }
-    echo '</select>';
-}
-
-function formatsDropMenu($formatType = '', $seriesName = 'System'): void
-{
-    $formatNames = [];
-
-    if ($formatType == 'System') {
-        $formatNames = Format::getSystemFormats();
-    }
-    if ($formatType == 'Public') {
-        $formatNames = Format::getPublicFormats();
-    }
-    if ($formatType == 'Private') {
-        $formatNames = Format::getPrivateFormats($seriesName);
-    }
-    if ($formatType == 'Private+') {
-        $formatNames = array_merge(
-            Format::getSystemFormats(),
-            Format::getPublicFormats(),
-            Format::getPrivateFormats($seriesName)
-        );
-    }
-    if ($formatType == 'All') {
-        $formatNames = Format::getAllFormats();
-    }
-
-    echo "<select class=\"inputbox\" name=\"format\" STYLE=\"width: 250px\">\n";
-    echo "<option value=\"Unclassified\">- {$formatType} Format Name -</option>\n";
-    foreach ($formatNames as $formatName) {
-        echo "<option value=\"$formatName\">$formatName</option>\n";
-    }
-}
-
-function printOrganizerSelect($player_series, $selected): void
-{
-    $page = $_SERVER['PHP_SELF'];
-    echo '<center>';
-    echo "<form action=\"$page\" method=\"get\">";
-    echo '<select class="inputbox" name="series">';
-    foreach ($player_series as $series) {
-        echo "<option value=\"{$series}\"";
-        if ($series == $selected) {
-            echo ' selected';
-        }
-        echo ">{$series}</option>";
-    }
-    echo '</select>';
-    echo '<input class="inputbutton" type="submit" value="Select Series">';
-    echo '</form>';
-}
-
-function print_warning_if($conditional): void
-{
-    if ($conditional) {
-        echo '<span style="color: red;">⚠</span>';
-    }
+    return (new OrganizerSelect($_SERVER['PHP_SELF'], $player_series, $selected))->render();
 }
 
 function git_hash(): string
@@ -357,7 +257,7 @@ function redirect($page): void
     exit(0);
 }
 
-function parseCards($cards): array
+function parseCards(string|array $cards): array
 {
     $cardarr = [];
     if (!is_array($cards)) {
@@ -370,7 +270,6 @@ function parseCards($cards): array
             $cardarr[] = $card;
         }
     }
-
     return $cardarr;
 }
 
@@ -407,11 +306,6 @@ function parseCardsWithQuantity($cards): array
     }
 
     return $cardarr;
-}
-
-function print_tooltip($text, $tooltip): void
-{
-    echo "<span class=\"tooltip\" title=\"$tooltip\">$text</span>";
 }
 
 // Our standard template variable naming is camelCase.

@@ -466,7 +466,7 @@ function sideboardTable($deck)
     echo "<tr><td colspan=1><b>SIDEBOARD ({$deck->getCardCount($deck->sideboard_cards)} Cards)</td></tr>\n";
     foreach ($sideboardcards as $card => $amt) {
         echo "<tr><td>{$amt} ";
-        printCardLink($card);
+        echo printCardLink($card);
         echo '</td></tr>';
     }
     echo "</table>\n";
@@ -588,19 +588,19 @@ function maindeckTable($deck)
     echo "<tr><td colspan=2><i>{$creaturesCount} Creatures</td></tr>\n";
     foreach ($creatures as $card => $amt) {
         echo "<tr><td>{$amt} ";
-        printCardLink($card);
+        echo printCardLink($card);
         echo "</td></tr>\n";
     }
     echo "<tr><td colspan=2><i>{$otherSpellsCount} Spells</td></tr>\n";
     foreach ($other as $card => $amt) {
         echo "<tr><td>{$amt} ";
-        printCardLink($card);
+        echo printCardLink($card);
         echo "</td></tr>\n";
     }
     echo "<tr><td colspan=2><i>{$landsCount} Lands</td></tr>\n";
     foreach ($lands as $card => $amt) {
         echo "<tr><td>{$amt} ";
-        printCardLink($card);
+        echo printCardLink($card);
         echo "</td></tr>\n";
     }
     echo "</table>\n";
