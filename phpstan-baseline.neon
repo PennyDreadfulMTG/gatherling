@@ -306,23 +306,8 @@ parameters:
 			path: gatherling/formatcp.php
 
 		-
-			message: "#^Comparison operation \"\\=\\=\" between 0 and \\(array\\|float\\|int\\) results in an error\\.$#"
-			count: 1
-			path: gatherling/formatcp.php
-
-		-
 			message: "#^Function handleActions invoked with 1 parameter, 0 required\\.$#"
 			count: 1
-			path: gatherling/formatcp.php
-
-		-
-			message: "#^Function printNewFormat invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: gatherling/formatcp.php
-
-		-
-			message: "#^Function printNoAdmin invoked with 1 parameter, 0 required\\.$#"
-			count: 2
 			path: gatherling/formatcp.php
 
 		-

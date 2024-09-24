@@ -20,7 +20,7 @@ class PlayerEventList extends Page
         parent::__construct();
 
         $this->formatDropMenu = new FormatDropMenu($format, true);
-        $this->seriesDropMenu = new SeriesDropMenu($series, true);
+        $this->seriesDropMenu = new SeriesDropMenu($series, 'All');
         $this->seasonDropMenu = new SeasonDropMenu($season, true);
 
         $this->events = [];

@@ -1,0 +1,163 @@
+<form action="formatcp.php" method="post">
+    <input type="hidden" name="view" value="bandr" />
+    <input type="hidden" name="format" value="{{activeFormatName}}" />
+    <input type="hidden" name="series" value="{{seriesName}}" />
+    <h4>Card Restricted List: {{restrictedCardCount}} Cards</h4>
+    <table class="form c">
+        <tr>
+            <th class="c">Card Name</th>
+            <th style="width: 50px; text-align: center;">Delete</th>
+        </tr>
+        {{#restrictedCards}}
+            <tr>
+                <td class="c">
+                    {{#cardLink}}{{> cardLink}}{{/cardLink}}
+                    {{^cardLink}}{{cardName}}{{/cardLink}}
+                </td>
+                <td class="c">
+                    <input type="checkbox" name="delrestrictedcards[]" value="{{cardName}}" />
+                </td>
+            </tr>
+        {{/restrictedCards}}
+        {{^restrictedCards}}
+            <tr>
+                <td class="warning">No cards have been restricted</td>
+                <td class="c" style="width: 100px">
+                    {{#noRestrictedCards}}{{> notAllowed}}{{/noRestrictedCards}}
+                </td>
+            </tr>
+        {{/restrictedCards}}
+        <tr>
+            <td colspan="2">
+                Add new: <textarea class="inputbox" rows="5" cols="40" name="addrestrictedcard"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <label>Load txt</label>
+                <input class="inputbutton" type="file" value="Upload Restricted List" link="addrestrictedcard" accept=".txt"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="buttons">
+                <input class="inputbutton" type="submit" value="Update Restricted List" name ="action" />
+            </td>
+            <td class="buttons">
+                <input class="inputbutton" type="submit" value="Delete Entire Restricted List" name ="action" />
+            </td>
+        </tr>
+    </table>
+</form>
+
+
+<form action="formatcp.php" method="post">
+    <input type="hidden" name="view" value="bandr" />
+    <input type="hidden" name="format" value="{{activeFormatName}}" />
+    <input type="hidden" name="series" value="{{seriesName}}" />
+    <h4>Card Banlist: {{bannedCardCount}} Cards</h4>
+    <table class="form c">
+        <tr>
+            <th class="c">Card Name</th>
+            <th class="c" style="width: 50px">Delete</th>
+        </tr>
+        {{#bannedCards}}
+            <tr>
+                <td class="c">
+                    {{#cardLink}}{{> cardLink}}{{/cardLink}}
+                    {{^cardLink}}{{cardName}}{{/cardLink}}
+                </td>
+                <td class="c">
+                    <input type="checkbox" name="delbancards[]" value="{{cardName}}" />
+                </td>
+            </tr>
+        {{/bannedCards}}
+        {{^bannedCards}}
+            <tr>
+                <td class="warning">No cards have been banned</td>
+                <td class="c" style="width: 100px">
+                    {{#noBannedCards}}{{> notAllowed}}{{/noBannedCards}}
+                </td>
+            </tr>
+        {{/bannedCards}}
+        <tr>
+            <td colspan="2">
+                Add new: <textarea class="inputbox" rows="5" cols="40" name="addbancard"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <label>Load txt</label>
+                <input class="inputbutton" type="file">
+            </td>
+        </tr>
+        <tr>
+            <td class="buttons">
+                <input class="inputbutton" type="submit" value="Update Banlist" name ="action" />
+            </td>
+            <td class="buttons">
+                <input class="inputbutton" type="submit" value="Delete Entire Banlist" name ="action" />
+            </td>
+        </tr>
+    </table>
+</form>
+
+<form action="formatcp.php" method="post">
+    <input type="hidden" name="view" value="bandr" />
+    <input type="hidden" name="format" value="{{activeFormatName}}" />
+    <input type="hidden" name="series" value="{{seriesName}}" />
+    <h4>Legal Card List: {{legalCardCount}} Cards</h4>
+    <table class="form c">
+        <tr>
+            <th class="c">Card Name</th>
+            <th class="c" style="width: 50px">Delete</th>
+        </tr>
+        {{#legalCards}}
+            <tr>
+                <td class="c">
+                    {{#cardLink}}{{> cardLink}}{{/cardLink}}
+                    {{^cardLink}}{{cardName}}{{/cardLink}}
+                </td>
+                <td class="c">
+                    <input type="checkbox" name="dellegalcards[]" value="{{cardName}}" />
+                </td>
+            </tr>
+        {{/legalCards}}
+        {{^legalCards}}
+            <tr>
+                <td class="warning">No cards have been allowed</td>
+                <td class="c" style="width: 100px">
+                    {{#noLegalCards}}{{> notAllowed}}{{/noLegalCards}}
+                </td>
+            </tr>
+        {{/legalCards}}
+        <tr>
+            <td colspan="2">
+                Add new: <textarea class="inputbox" rows="5" cols="40" name="addlegalcard"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <label>Load txt</label>
+                <input class="inputbutton" type="file">
+            </td>
+        </tr>
+        <tr>
+            <td class="buttons">
+                <input class="inputbutton" type="submit" value="Update Legal List" name ="action" />
+            </td>
+            <td class="buttons">
+                <input class="inputbutton" type="submit" value="Delete Entire Legal List" name ="action" />
+            </td>
+        </tr>
+    </table>
+</form>
+<script>
+    $('input[type=file]').on("change", function(e) {
+        var file = e.target.files[0];
+        reader = new FileReader();
+        reader.onload = function (e1) {
+            $("textarea[name="+e.target.attributes.link.nodeValue+"]").val(e1.target.result);
+        };
+        reader.readAsText(file);
+    });
+</script>

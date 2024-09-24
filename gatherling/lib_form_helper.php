@@ -85,22 +85,6 @@ function selectInputArgs(string $label, string $name, ?array $options, mixed $se
     ];
 }
 
-function stringField($field, $def, $len): string
-{
-    $args = stringFieldArgs($field, $def, $len);
-
-    return TemplateHelper::render('partials/stringField', $args);
-}
-
-function stringFieldArgs(string $field, mixed $def, int $len): array
-{
-    return [
-        'field' => $field,
-        'def'   => $def,
-        'len'   => $len,
-    ];
-}
-
 function timeZoneDropMenu(?float $selected = null): string
 {
     return (new TimeZoneDropMenu($selected))->render();

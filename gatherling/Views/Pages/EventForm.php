@@ -8,6 +8,7 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Views\Components\TextInput;
 use Gatherling\Views\Components\NumDropMenu;
+use Gatherling\Views\Components\StringField;
 use Gatherling\Views\Components\FormatDropMenu;
 use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\SeriesDropMenu;
@@ -25,8 +26,8 @@ class EventForm extends EventFrame
     public NumDropMenu $numberDropMenu;
     public FormatDropMenu $formatDropMenu;
     public array $kValueDropMenu;
-    public array $hostField;
-    public array $cohostField;
+    public StringField $hostField;
+    public StringField $cohostField;
     public TextInput $eventThreadUrlField;
     public TextInput $metagameUrlField;
     public TextInput $reportUrlField;
@@ -88,7 +89,7 @@ class EventForm extends EventFrame
             $seriesList[] = $event->series;
         }
         $seriesList = array_unique($seriesList);
-        $seriesDropMenu = new SeriesDropMenu($event->series, false, $seriesList);
+        $seriesDropMenu = new SeriesDropMenu($event->series, '- Series -', $seriesList);
 
         $seasonDropMenu = new SeasonDropMenu($event->season);
         $numberDropMenu = new NumDropMenu('number', '- Event Number -', Event::largestEventNum() + 5, $event->number, 0, 'Custom');
@@ -98,8 +99,8 @@ class EventForm extends EventFrame
             $event->kvalue = 16;
         }
         $kValueDropMenu = kValueSelectInput($event->kvalue);
-        $hostField = stringFieldArgs('host', $event->host, 20);
-        $cohostField = stringFieldArgs('cohost', $event->cohost, 20);
+        $hostField = new StringField('host', $event->host, 20);
+        $cohostField = new StringField('cohost', $event->cohost, 20);
         $eventThreadUrlField = new TextInput('Event Thread URL', 'threadurl', $event->threadurl, 60);
         $metagameUrlField = new TextInput('Metagame URL', 'metaurl', $event->metaurl, 60);
         $reportUrlField = new TextInput('Report URL', 'reporturl', $event->reporturl, 60);

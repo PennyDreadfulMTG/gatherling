@@ -1,0 +1,14 @@
+<h4>Delete Format</h4>
+<form action="formatcp.php" method="post">
+    <input type="hidden" name="view" value="no_view" />
+    <table class="form c">
+        <tr>
+            <td>
+                {{#formatsDropMenu}}{{> formatsDropMenu}}{{/formatsDropMenu}}
+            </td>
+            <td colspan="2" class="buttons">
+                <input class="inputbutton" type="submit" value="Delete Format" name="action" />
+            </td>
+        </tr>
+    </table>
+</form>

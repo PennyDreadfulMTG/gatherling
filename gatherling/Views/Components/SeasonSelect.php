@@ -11,7 +11,7 @@ class SeasonSelect extends Component
 
     public function __construct(string $seriesName, string $season)
     {
-        $this->seriesDropMenu = new SeriesDropMenu($seriesName, true);
+        $this->seriesDropMenu = new SeriesDropMenu($seriesName, 'All');
         $this->seasonDropMenu = new SeasonDropMenu($season);
         parent::__construct('partials/seasonSelect');
     }

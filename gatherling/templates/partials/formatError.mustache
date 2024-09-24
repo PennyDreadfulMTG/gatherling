@@ -1,0 +1,10 @@
+<h4>{{message}}</h4>
+<form action="formatcp.php" method="post">
+    {{#view}}
+        <input type="hidden" name="view" value="{{view}}" />
+    {{/view}}
+    {{#formatName}}
+        <input type="hidden" name="format" value="{{formatName}}" />
+    {{/formatName}}
+    <input class="inputbutton" type="submit" value="Continue" name="action" />
+</form>

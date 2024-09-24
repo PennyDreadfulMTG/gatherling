@@ -1,0 +1,14 @@
+<h4>Load Format</h4>
+<form action="formatcp.php" method="post">
+    <input type="hidden" name="view" value="settings" />
+        <table class="form c">
+        <tr>
+            <td>
+                {{#formatsDropMenu}}{{> formatsDropMenu}}{{/formatsDropMenu}}
+            </td>
+            <td class="buttons">
+                <input class="inputbutton" type="submit" value="Load Format" name="action" />
+            </td>
+        </tr>
+    </table>
+</form>

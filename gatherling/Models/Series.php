@@ -910,9 +910,4 @@ class Series
 
         return $cutoff;
     }
-
-    public static function dropMenu(?string $series, bool $useall = false, array $limitTo = []): string
-    {
-        return (new SeriesDropMenu($series, $useall, $limitTo))->render();
-    }
 }

@@ -1,0 +1,168 @@
+<p style="width: 75%; text-align: left;">This is where you define the format for your series. Step one is to
+add the card sets that you want to allow players to use to build decks. Once you do that, any cards in those
+sets you don't want players to use, add to the ban list. You don't need to ban cards that aren't in the allowed
+card sets. Finally make sure that the appropriate rarities that you want to allow are checked. For example
+a pauper event would leave only the commons box checked.</p>
+
+<p style="width: 75%; text-align: left;">The name of this filter will default to the name of the series.
+To use this filter, go to the Season Points Management->Season Format and select this filter. This sets the
+filter to be used for the entire season. You can also set this filter by going to Host CP->Format. This only
+sets the filter to be used for that single event.</p>
+
+<p style="width: 75%; text-align: left;">Coming in a future update will be the ability for you to create
+and manage your own custom filters. That way you can have Alt Events that have special filters.</p>
+
+<form action="formatcp.php" method="post">
+    <input type="hidden" name="view" value="settings" />
+    <input type="hidden" name="format" value="{{activeFormatName}}" />
+    <input type="hidden" name="series" value="{{seriesName}}" />
+
+    <h4>Format Description</h4>
+    <table class="form c">
+        <tr>
+            <td>
+                <textarea class="inputbox" rows="10" cols="60" name="formatdescription">{{activeFormat.description}}</textarea>
+            </td>
+        </tr>
+    </table>
+
+    <h4>Card Modifiers</h4>
+    <table class="form c">
+        <tr>
+            <th>Minimum Mainboard Cards</th>
+            <td style="width: 50px; text-align: center;">
+                {{#minMainStringField}}{{> stringField}}{{/minMainStringField}}
+                {{#showMinMainWarning}}<span class="warning">⚠</span>{{/showMinMainWarning}}
+            </td>
+            <th>&nbsp;Maximum Mainboard Cards&nbsp;</th>
+            <td style="width: 50px; text-align: center;">
+                {{#maxMainStringField}}{{> stringField}}{{/maxMainStringField}}
+                {{#showMaxMainWarning}}<span class="warning">⚠</span>{{/showMaxMainWarning}}
+            </td>
+        </tr>
+        <tr>
+            <th>Minimum Sideboard Cards</th>
+            <td style="width: 50px; text-align: center;">
+                {{#minSideStringField}}{{> stringField}}{{/minSideStringField}}
+            </td>
+            <th>&nbsp;Maximum Sideboard Cards&nbsp;</th>
+            <td style="width: 50px; text-align: center;">
+                {{#maxSideStringField}}{{> stringField}}{{/maxSideStringField}}
+            </td>
+        </tr>
+    </table>
+
+    <h4>Deck Modifiers</h4>
+    <table class="form c">
+        <tr>
+            <th style="width: 100px; text-align: center;">Singleton</th>
+            <th style="width: 100px; text-align: center;">Commander</th>
+            <th style="width: 100px; text-align: center;">Vanguard</th>
+            <th style="width: 100px; text-align: center;">Planechase</th>
+            <th style="width: 100px; text-align: center;">Prismatic</th>
+            <th style="width: 100px; text-align: center;">Tribal</th>
+        </tr>
+        <tr>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="singleton" value="1" {{#activeFormat.singleton}}checked{{/activeFormat.singleton}} />
+            </td>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="commander" value="1" {{#activeFormat.commander}}checked{{/activeFormat.commander}} />
+            </td>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="vanguard" value="1" {{#activeFormat.vanguard}}checked{{/activeFormat.vanguard}} />
+            </td>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="planechase" value="1" {{#activeFormat.planechase}}checked{{/activeFormat.planechase}} />
+            </td>
+            </td>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="prismatic" value="1" {{#activeFormat.prismatic}}checked{{/activeFormat.prismatic}} />
+            </td>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="tribal" value="1" {{#activeFormat.tribal}}checked{{/activeFormat.tribal}} />
+            </td>
+        </tr>
+    </table>
+
+    <h4>Allow Rarity Selection</h4>
+    {{#showRarityWarning}}<span class="warning">⚠</span>{{/showRarityWarning}}
+    <table class="form c">
+        <tr>
+            <th style="width: 100px; text-align: center;">Commons</th>
+            <th style="width: 100px; text-align: center;">Uncommons</th>
+            <th style="width: 100px; text-align: center;">Rares</th>
+            <th style="width: 100px; text-align: center;">Mythics</th>
+            <th style="width: 100px; text-align: center;">Timeshifted</th>
+        </tr>
+        <tr>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="allowcommons" value="1" {{#activeFormat.allowCommons}}checked{{/activeFormat.allowCommons}} />
+            </td>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="allowuncommons" value="1" {{#activeFormat.allowUncommons}}checked{{/activeFormat.allowUncommons}} />
+            </td>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="allowrares" value="1" {{#activeFormat.allowRares}}checked{{/activeFormat.allowRares}} />
+            </td>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="allowmythics" value="1" {{#activeFormat.allowMythics}}checked{{/activeFormat.allowMythics}} />
+            </td>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="allowtimeshifted" value="1" {{#activeFormat.allowTimeshifted}}checked{{/activeFormat.allowTimeshifted}} />
+            </td>
+        </tr>
+    </table>
+
+    {{#activeFormat.tribal}}
+        <h4>Tribal Modifiers</h4>
+        <table class="form c">
+            <tr>
+                <th style="width: 100px; text-align: center;">
+                    {{#underdogTooltip}}{{> tooltip}}{{/underdogTooltip}}
+                </th>
+                <th style="width: 100px; text-align: center;">
+                    {{#pureTooltip}}{{> tooltip}}{{/pureTooltip}}
+                </th>
+            </tr>
+        <tr>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="underdog" value="1" {{#activeFormat.underdog}}checked{{/activeFormat.underdog}} />
+            </td>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="pure" value="1" {{#activeFormat.pure}}checked{{/activeFormat.pure}} />
+            </td>
+        </table>
+    {{/activeFormat.tribal}}
+
+    <h4>Format Modifiers</h4>
+    <table class="form c">
+        <tr>
+            <th style="width: 100px; text-align: center;">
+                {{#eternalTooltip}}{{> tooltip}}{{/eternalTooltip}}
+            </th>
+            <th style="width: 100px; text-align: center;">
+                {{#modernTooltip}}{{> tooltip}}{{/modernTooltip}}
+            </th>
+            <th style="width: 100px; text-align: center;">
+                {{#standardTooltip}}{{> tooltip}}{{/standardTooltip}}
+            </th>
+        </tr>
+        <tr>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="eternal" value="1" {{#activeFormat.eternal}}checked{{/activeFormat.eternal}} />
+            </td>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="modern" value="1" {{#activeFormat.modern}}checked{{/activeFormat.modern}} />
+            </td>
+            <td style="width: 100px; text-align: center;">
+                <input type="checkbox" name="standard" value="1" {{#activeFormat.standard}}checked{{/activeFormat.standard}} />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5" class="buttons">
+                <input class="inputbutton" type="submit" value="Update Format" name ="action" />
+            </td>
+        </tr>
+    </table>
+</form>

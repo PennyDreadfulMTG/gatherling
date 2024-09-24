@@ -29,6 +29,7 @@ class Response
             header("$header: $value");
         }
         echo $this->body();
+        exit;
     }
 
     private function normalize(string $header): string
