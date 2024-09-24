@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Database;
 
 header('Content-type: text/plain');

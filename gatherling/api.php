@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Database;
 use Gatherling\Models\Deck;
 use Gatherling\Models\Event;

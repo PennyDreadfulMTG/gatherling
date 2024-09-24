@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Player;
 use Gatherling\Auth\Registration;
 use Gatherling\Views\Pages\Register;

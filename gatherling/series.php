@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Series as SeriesModel;
 use Gatherling\Views\Pages\Series;
 

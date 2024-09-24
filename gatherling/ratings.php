@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Data\DB;
 use Gatherling\Models\Player;
 use Gatherling\Models\Pagination;

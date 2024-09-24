@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Deck;
 use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
@@ -16,6 +18,8 @@ print_header('Deck Database');
 <div id="gatherling_main" class="box">
 
 <?php
+
+declare(strict_types=1);
 $event = null;
 
 if (isset($_GET['event'])) {

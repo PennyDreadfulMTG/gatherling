@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 if (!isset($_REQUEST['action'])) {
     // The below is for backwards compat
     if (isset($_GET['deck'])) {

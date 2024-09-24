@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling;
 
 use Gatherling\Models\Format;
@@ -23,7 +25,9 @@ print_header('Admin Control Panel');
   <div id="gatherling_main" class="box">
     <div class="uppertitle"> Admin Control Panel </div>
     <center>
-      <?php do_page(); ?>
+      <?php
+
+declare(strict_types=1); do_page(); ?>
     </center>
     <div class="clear"></div>
   </div>

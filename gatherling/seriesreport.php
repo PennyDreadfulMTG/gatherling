@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Views\Pages\SeriesReport;
 
 require_once 'lib.php';

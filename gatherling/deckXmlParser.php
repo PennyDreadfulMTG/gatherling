@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 $data = filter_input(INPUT_POST, 'data');
 $xml = simplexml_load_string($data) or exit('Error: Cannot create object');
 $maindeck = [];

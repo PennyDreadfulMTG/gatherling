@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Auth\LoginError;
 use Gatherling\Views\Pages\Login;
 use Gatherling\Auth\Login as LoginHelper;

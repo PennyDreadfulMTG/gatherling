@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Auth\Session;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;

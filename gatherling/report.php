@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Event;
 use Gatherling\Models\Matchup;
 use Gatherling\Models\Player;
@@ -73,6 +75,8 @@ print_header('Player Control Panel');
 <div id="gatherling_main" class="box">
 <div class="uppertitle"> Player Control Panel </div>
 <?php
+
+declare(strict_types=1);
     // Handle modes
     $dispmode = 'playercp';
     if (isset($_REQUEST['mode'])) {

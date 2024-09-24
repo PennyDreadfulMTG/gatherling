@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Admin;
 
 use Gatherling\Data\Setup;

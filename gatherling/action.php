@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /// Information banner informing user that they have pending actions.
 /// Appears at top of each page
 

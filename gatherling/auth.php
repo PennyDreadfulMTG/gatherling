@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Player;
 use Wohali\OAuth2\Client\Provider\Exception\DiscordIdentityProviderException;
 
@@ -178,5 +180,6 @@ function prompt_link_account($user)
     </div> <!-- grid 10 pre 1 suff 1 -->
 
     <?php
+
     print_footer();
 }

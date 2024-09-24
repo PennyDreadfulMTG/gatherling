@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Tests\Auth;
 
 use Gatherling\Auth\Registration;

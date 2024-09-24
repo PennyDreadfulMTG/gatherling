@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Views\Components\Time;
 
 function time_element($datetime, $now, $long = false): string

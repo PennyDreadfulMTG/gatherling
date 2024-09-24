@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
 use Gatherling\Models\Ratings;

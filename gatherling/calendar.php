@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Data\DB;
 use Gatherling\Views\ICal;
 use Gatherling\Models\Database;
