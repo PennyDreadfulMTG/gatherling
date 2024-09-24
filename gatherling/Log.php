@@ -27,9 +27,9 @@ class Log
 
         if (defined('TESTING') && TESTING) {
             $bufferHandler = new BufferHandler(
-                new StreamHandler('php://stderr', Logger::DEBUG),
+                new StreamHandler('php://stderr', Level::Debug),
                 0, // No buffer limit
-                Logger::DEBUG, // Minimum log level to buffer
+                Level::Debug, // Minimum log level to buffer
                 false, // Don't flush when script ends (flush manually)
                 false // Do NOT flush on overflow
             );
