@@ -60,49 +60,68 @@ class Log
         self::$logger = $logger;
     }
 
-    public static function emergency($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function emergency(string $message, array $context = []): void
     {
         self::getLogger()->emergency($message, $context);
     }
 
-    public static function alert($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function alert(string $message, array $context = []): void
     {
         self::getLogger()->alert($message, $context);
     }
 
-    public static function critical($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function critical(string $message, array $context = []): void
     {
         self::getLogger()->critical($message, $context);
     }
 
-    public static function error($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function error(string $message, array $context = []): void
     {
         self::getLogger()->error($message, $context);
     }
 
-    public static function warning($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function warning(string $message, array $context = []): void
     {
         self::getLogger()->warning($message, $context);
     }
 
-    public static function notice($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function notice(string $message, array $context = []): void
     {
         self::getLogger()->notice($message, $context);
     }
 
-    public static function info($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function info(string $message, array $context = []): void
     {
         self::getLogger()->info($message, $context);
     }
 
-    public static function debug($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function debug(string $message, array $context = []): void
     {
         self::getLogger()->debug($message, $context);
-    }
-
-    public static function log($level, $message, array $context = []): void
-    {
-        self::getLogger()->log($level, $message, $context);
     }
 
     public static function clear(): void

@@ -4,6 +4,9 @@ namespace Gatherling\Auth;
 
 class LoginResult
 {
+    /**
+     * @param LoginError[] $errors
+     */
     public function __construct(
         public readonly bool $success,
         public readonly array $errors = [],

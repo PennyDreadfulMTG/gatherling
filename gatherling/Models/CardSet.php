@@ -2,6 +2,8 @@
 
 namespace Gatherling\Models;
 
+use mysqli_stmt;
+use stdClass;
 use Gatherling\Log;
 use Gatherling\Exceptions\FileNotFoundException;
 
@@ -100,7 +102,7 @@ class CardSet
         Format::constructTribes($set);
     }
 
-    public static function insertCard($card, $set, $rarity, $stmt): void
+    public static function insertCard(stdClass $card, string $set, string $rarity, mysqli_stmt $stmt): void
     {
         $typeline = implode(' ', $card->types);
         if (isset($card->subtypes) && count($card->subtypes) > 0) {

@@ -14,6 +14,9 @@ class DB
 {
     private static ?DB $db = null;
 
+    /**
+     * @param list<string> $transactions
+     */
     public function __construct(private PDO $pdo, private array $transactions = [])
     {
     }
@@ -80,6 +83,10 @@ class DB
         });
     }
 
+    /**
+     * @param array<string, mixed> $params
+     * @return list<array<string, mixed>>
+     */
     public static function select(string $sql, array $params = []): array
     {
         return self::_execute($sql, $params, function ($sql, $params) {
@@ -96,6 +103,10 @@ class DB
         });
     }
 
+    /**
+     * @param array<string, mixed> $params
+     * @return array<string, mixed>
+     */
     public static function selectOnly(string $sql, array $params = []): array
     {
         $result = self::select($sql, $params);
@@ -105,6 +116,10 @@ class DB
         return $result[0];
     }
 
+    /**
+     * @param array<string, mixed> $params
+     * @return array<string, mixed>|null
+     */
     public static function selectOnlyOrNull(string $sql, array $params = []): ?array
     {
         $result = self::select($sql, $params);
@@ -114,6 +129,9 @@ class DB
         return $result[0] ?? null;
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     public static function value(string $sql, array $params = [], bool $missingOk = false): mixed
     {
         return self::_execute($sql, $params, function ($sql, $params) use ($missingOk) {
@@ -185,6 +203,9 @@ class DB
         array_pop(self::connect()->transactions);
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     private static function _execute(string $sql, array $params, callable $operation, bool $connectToDatabase = true): mixed
     {
         $context = [];

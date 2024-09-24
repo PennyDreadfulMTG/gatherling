@@ -28,6 +28,9 @@ class Session
         $_SESSION = self::load($token);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private static function load(string $token): array
     {
         $sql = '

@@ -120,6 +120,9 @@ class Setup
         Log::info('Database restored from dump.');
     }
 
+    /**
+     * @return list<Migration>
+     */
     private static function findMigrations(int $version): array
     {
         $migrationDirectory = __DIR__ . '/sql/migrations';
