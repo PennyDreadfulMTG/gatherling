@@ -33,10 +33,10 @@ class Deck
     public ?string $deck_hash;
     public ?string $sideboard_hash;
     public ?string $whole_hash;
-    // BAKERT this is not a string
-    public ?string $unparsed_cards;
-    // BAKERT this is not a string
-    public ?string $unparsed_side;
+    /** @var array<string, int> */
+    public array $unparsed_cards;
+    /** @var array<string, int> */
+    public array $unparsed_side;
     // BAKERT is this also not a string?
     public ?string $deck_contents_cache;
     /** @var ?list<self> */
