@@ -672,7 +672,6 @@ class Deck
             if (is_null($cardar)) {
                 $this->errors[] = "Could not find maindeck card: {$amt} {$card} in legal sets";
 
-                throw new Exception("Could not find maindeck card: {$amt} {$card} in legal sets");
                 if (!isset($this->unparsed_cards[$card])) {
                     $this->unparsed_cards[$card] = 0;
                 }
