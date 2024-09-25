@@ -12,8 +12,13 @@ use Gatherling\Tests\Support\TestCases\DatabaseCase;
 
 class DeckTest extends DatabaseCase
 {
-    public function testSave(): void
+    protected Event $event;
+    protected Player $player;
+
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $event = new Event('');
         $event->name = 'Test Event';
         $event->start = '2024-01-01';
@@ -21,25 +26,27 @@ class DeckTest extends DatabaseCase
         $event->format = 'Standard';
         $event->save();
 
-        $event = new Event($event->name);
+        $this->event = new Event($event->name);
 
-        $player = new Player('');
-        $player->name = 'testplayer';
-        $player->save();
+        $this->player = new Player('');
+        $this->player->name = 'testplayer';
+        $this->player->save();
 
-        $this->assertTrue($event->addPlayer($player->name));
+        $this->assertTrue($this->event->addPlayer($this->player->name));
+    }
 
+    public function testSaveWithInvalidDecklist(): void
+    {
         $deck = new Deck(0);
         $deck->name = 'Name';
         $deck->archetype = 'Aggro';
         $deck->notes = '';
-        $deck->playername = $player->name;
-        $deck->eventname = $event->name;
-        $deck->event_id = $event->id;
-        $deck->maindeck_cards = parseCardsWithQuantity('60 Island');
-        $deck->sideboard_cards = parseCardsWithQuantity('15 Swamp');
-        $deck->save();
+        $deck->playername = $this->player->name;
+        $deck->eventname = $this->event->name;
+        $deck->event_id = $this->event->id;
 
-        // BAKERT assert something
+        $deck->maindeck_cards = parseCardsWithQuantity("4 Torbran, Thane of Red Fell\n56 Mountain");
+        $deck->sideboard_cards = parseCardsWithQuantity("4 Yarus, Roar of the Old Gods\n11 Forest");
+        $deck->save();
     }
 }
