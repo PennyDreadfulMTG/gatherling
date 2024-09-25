@@ -10,47 +10,47 @@ use Gatherling\Views\Components\DeckLink;
 
 class Deck
 {
-    public $id;
-    public $name;
-    public $archetype;
-    public $notes;
+    public ?int $id;
+    public ?string $name = null;
+    public ?string $archetype = null;
+    public ?string $notes;
+    /** @var array<string, int> */
+    public array $maindeck_cards = []; // Has many maindeck_cards through deckcontents (issideboard = 0)
+    /** @var array<string, int> */
+    public array $sideboard_cards = []; // Has many sideboard_cards through deckcontents (issideboard = 1)
+    public int $maindeck_cardcount = 0;
+    public int $sideboard_cardcount = 0;
+    /** @var array<?string> */
+    public array $errors = [];
+    public ?string $playername = null; // Belongs to player through entries, now held in decks table
+    public ?string $eventname; // Belongs to event through entries
+    public ?int $event_id; // Belongs to event through entries
+    public ?int $subeventid; // Belongs to event
+    public ?string $format = null; // Belongs to event..  now held in decks table
+    public ?string $tribe; // used only for tribal events
+    public ?string $deck_color_str;  // Holds the final string color string
+    public ?string $created_date; // Date deck was created
+    public ?string $deck_hash;
+    public ?string $sideboard_hash;
+    public ?string $whole_hash;
+    // BAKERT this is not a string
+    public ?string $unparsed_cards;
+    // BAKERT this is not a string
+    public ?string $unparsed_side;
+    // BAKERT is this also not a string?
+    public ?string $deck_contents_cache;
+    /** @var ?list<self> */
+    public ?array $identical_decks;
+    // BAKERT "has a"? is this a bool? no.
+    public ?string $medal; // has a medal
+    public bool $new; // is new
 
-    public $sideboard_cards = []; // Has many sideboard_cards through deckcontents (issideboard = 1)
-    public $maindeck_cards = []; // Has many maindeck_cards through deckcontents (issideboard = 0)
-
-    public $maindeck_cardcount = 0;
-    public $sideboard_cardcount = 0;
-
-    public $errors = [];
-
-    public $playername; // Belongs to player through entries, now held in decks table
-    public $eventname; // Belongs to event through entries
-    public $event_id; // Belongs to event through entries
-    public $subeventid; // Belongs to event
-    public $format; // Belongs to event..  now held in decks table
-    public $tribe; // used only for tribal events
-    public $deck_color_str;  // Holds the final string color string
-    public $created_date; // Date deck was created
-
-    public $deck_hash;
-    public $sideboard_hash;
-    public $whole_hash;
-
-    public $unparsed_cards;
-    public $unparsed_side;
-    public $deck_contents_cache;
-    public $identical_decks;
-
-    public $medal; // has a medal
-
-    public $new; // is new
-
-    public function __construct($id)
+    public function __construct(mixed $id)
     {
+        // BAKERT name and other not-nullalbles are not set here so they ARE nullabel.
         if ($id == 0) {
             $this->id = 0;
             $this->new = true;
-
             return;
         }
         $database = Database::getConnection();
@@ -197,17 +197,20 @@ class Deck
         }
     }
 
-    public static function getArchetypes()
+    /**
+     * @return array<string>
+     */
+    public static function getArchetypes(): array
     {
         return Database::list_result('SELECT name FROM archetypes WHERE priority > 0 ORDER BY priority DESC, name');
     }
 
-    public function getEntry()
+    public function getEntry(): Entry
     {
         return new Entry($this->event_id, $this->playername);
     }
 
-    public function recordString()
+    public function recordString(): string
     {
         if ($this->playername == null) {
             return '?-?';
@@ -216,7 +219,7 @@ class Deck
         return $this->getEntry()->recordString();
     }
 
-    public function getColorImages()
+    public function getColorImages(): string
     {
         $count = $this->getColorCounts();
         $str = '';
@@ -229,7 +232,7 @@ class Deck
         return $str;
     }
 
-    public function getDeckColors()
+    public function getDeckColors(): void
     {
         // First, get a list of casting costs, CC is used so we can determine
         // if its an artifact
@@ -290,7 +293,10 @@ class Deck
         $stmt->close();
     }
 
-    public function getColorCounts()
+    /**
+     * @return array<string, int>
+     */
+    public function getColorCounts(): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT sum(isw*d.qty)
@@ -314,8 +320,10 @@ class Deck
         return $count;
     }
 
-    // TODO: Find a way to list the inline id as a param
-    public function getCastingCosts()
+    /**
+     * @return array<int, int>
+     */
+    public function getCastingCosts(): array
     {
         $db = Database::getConnection();
         $result = $db->query("SELECT convertedcost
@@ -336,12 +344,15 @@ class Deck
         return $convertedcosts;
     }
 
-    public function getEvent()
+    public function getEvent(): Event
     {
         return new Event($this->event_id);
     }
 
-    public function getCardCount($cards)
+    /**
+     * @param array<string, int> $cards
+     */
+    public function getCardCount(array $cards): int
     {
         $cardCount = 0;
 
@@ -352,7 +363,10 @@ class Deck
         return $cardCount;
     }
 
-    public function getCreatureCards()
+    /**
+     * @return array<string, int>
+     */
+    public function getCreatureCards(): array
     {
         $db = Database::getConnection();
         $result = $db->query("SELECT dc.qty, c.name
@@ -376,7 +390,10 @@ class Deck
     }
 
     // find a way to list the id as a param
-    public function getLandCards()
+    /**
+     * @return array<string, int>
+     */
+    public function getLandCards(): array
     {
         $db = Database::getConnection();
         $result = $db->query("SELECT dc.qty, c.name
@@ -397,7 +414,10 @@ class Deck
         return $cards;
     }
 
-    public function getErrors()
+    /**
+     * @return list<string>
+     */
+    public function getErrors(): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('Select error FROM deckerrors WHERE deck = ?');
@@ -415,7 +435,10 @@ class Deck
     }
 
     // find a way to list the id as a param
-    public function getOtherCards()
+    /**
+     * @return array<string, int>
+     */
+    public function getOtherCards(): array
     {
         $db = Database::getConnection();
         $result = $db->query("SELECT dc.qty, c.name
@@ -438,7 +461,10 @@ class Deck
         return $cards;
     }
 
-    public function getMatches()
+    /**
+     * @return list<Matchup>
+     */
+    public function getMatches(): array
     {
         if ($this->playername == null) {
             return [];
@@ -447,12 +473,12 @@ class Deck
         return $this->getEntry()->getMatches();
     }
 
-    public function getPlayer()
+    public function getPlayer(): Player
     {
         return new Player($this->playername);
     }
 
-    public function canEdit($username)
+    public function canEdit(string|bool $username): bool
     {
         $event = $this->getEvent();
         $player = new Player($username);
@@ -460,7 +486,7 @@ class Deck
         if (
             $player->isSuper() ||
             $event->isHost($username) ||
-            $event->isOrganizer($username) ||
+            $event->isOrganizer($username) |
             (!$event->finalized && !$this->isValid() && strcasecmp($username, $this->playername) == 0) ||
             (!$event->finalized && !$event->active && strcasecmp($username, $this->playername) == 0)
         ) {
@@ -470,7 +496,7 @@ class Deck
         return false;
     }
 
-    public function canView($username)
+    public function canView(string|bool $username): bool
     {
         $event = $this->getEvent();
         $player = new Player($username);
@@ -493,32 +519,12 @@ class Deck
         return false;
     }
 
-    public function isValid()
+    public function isValid(): bool
     {
         return count($this->errors) == 0;
     }
 
-    // functions to remove deck errors, otherwise when you try to delete a deck that cannot be deleted the error
-    // will stay until you try to update the deck again
-    public function flushDeckErrors()
-    {
-        $db = Database::getConnection();
-        $db->autocommit(false);
-        $this->errors = [];
-
-        $succ = $db->query("DELETE FROM deckerrors WHERE deck = {$this->id}");
-
-        if (!$succ) {
-            $db->rollback();
-            $db->autocommit(true);
-
-            throw new Exception("Cannot flush the deckerror content {$this->id}");
-        } else {
-            return true;
-        }
-    }
-
-    public function delete()
+    public function delete(): void
     {
         $db = Database::getConnection();
         $db->autocommit(false);
@@ -560,12 +566,10 @@ class Deck
 
             $db->commit();
             $db->autocommit(true);
-
-            return true;
         }
     }
 
-    public function save()
+    public function save(): bool
     {
         $db = Database::getConnection();
         $db->autocommit(false);
@@ -668,6 +672,7 @@ class Deck
             if (is_null($cardar)) {
                 $this->errors[] = "Could not find maindeck card: {$amt} {$card} in legal sets";
 
+                throw new Exception("Could not find maindeck card: {$amt} {$card} in legal sets");
                 if (!isset($this->unparsed_cards[$card])) {
                     $this->unparsed_cards[$card] = 0;
                 }
@@ -930,12 +935,15 @@ class Deck
         return true;
     }
 
-    public function getTribe()
+    public function getTribe(): ?string
     {
         return Database::single_result_single_param('SELECT tribe FROM decks WHERE id = ?', 'd', $this->id);
     }
 
-    public function findIdenticalDecks()
+    /**
+     * @return list<self>
+     */
+    public function findIdenticalDecks(): array
     {
         if (!isset($this->identical_decks)) {
             $db = Database::getConnection();
@@ -972,7 +980,7 @@ class Deck
         return $this->identical_decks;
     }
 
-    public function calculateHashes()
+    public function calculateHashes(): void
     {
         // Deck HASHES are an easy way to compare two decks for EQUALITY.
         // They are computed as follows:
@@ -1009,7 +1017,7 @@ class Deck
         $stmt->close();
     }
 
-    public static function uniqueCount()
+    public static function uniqueCount(): int
     {
         $db = @Database::getConnection();
         $stmt = $db->prepare('SELECT count(deck_hash) FROM decks GROUP BY deck_hash');

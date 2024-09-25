@@ -10,7 +10,8 @@ use PHPUnit\Framework\TestCase;
 
 class TimeTest extends TestCase
 {
-    public function testRender() {
+    public function testRender(): void
+    {
         $tz = new \DateTimeZone('UTC');
 
         $now = (new \DateTimeImmutable('now', $tz))->getTimestamp();

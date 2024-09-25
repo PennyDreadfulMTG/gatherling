@@ -9,16 +9,16 @@ use Gatherling\Views\TemplateHelper;
 
 class Entry
 {
-    public $event;
-    public $player;
-    public $deck;
-    public $medal;
-    public $drop_round;
-    public $initial_byes;
-    public $initial_seed;
-    public $ignored;
+    public Event $event;
+    public Player $player;
+    public ?Deck $deck;
+    public ?string $medal;
+    public ?int $drop_round;
+    public ?int $initial_byes;
+    public ?int $initial_seed;
+    public ?int $ignored;
 
-    public static function findByEventAndPlayer($event_id, $playername)
+    public static function findByEventAndPlayer(int $event_id, string $playername): ?self
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT deck, medal FROM entries WHERE event_id = ? AND player = ?');
@@ -34,11 +34,14 @@ class Entry
         if ($found) {
             return new self($event_id, $playername);
         } else {
-            return;
+            return null;
         }
     }
 
-    public static function getActivePlayers($eventid)
+    /**
+     * @return list<self>
+     */
+    public static function getActivePlayers(int $eventid): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT e.player
@@ -66,7 +69,7 @@ class Entry
         return $entries;
     }
 
-    public static function playerRegistered($eventid, $playername)
+    public static function playerRegistered(int $eventid, string $playername): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT n.player
@@ -85,7 +88,7 @@ class Entry
     }
 
     // TODO: remove ignore functionality
-    public function __construct($event_id, $playername)
+    public function __construct(int $event_id, string $playername)
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT deck, medal, ignored, drop_round, initial_byes, initial_seed FROM entries WHERE event_id = ? AND player = ?');
@@ -110,7 +113,7 @@ class Entry
         }
     }
 
-    public function recordString()
+    public function recordString(): string
     {
         $matches = $this->getMatches();
         $wins = 0;
@@ -137,24 +140,27 @@ class Entry
         }
     }
 
-    public function getMatches()
+    /**
+     * @return list<Matchup>
+     */
+    public function getMatches(): array
     {
         return $this->player->getMatchesEvent($this->event->name);
     }
 
-    public function canDelete()
+    public function canDelete(): bool
     {
         $matches = $this->getMatches();
 
         return count($matches) == 0;
     }
 
-    public function dropped()
+    public function dropped(): bool
     {
         return $this->drop_round > 0;
     }
 
-    public function canCreateDeck($username)
+    public function canCreateDeck(string $username): bool
     {
         $player = new Player($username);
 
@@ -171,7 +177,7 @@ class Entry
     }
 
     // TODO: Remove ignore functionality
-    public function setIgnored($new_ignored)
+    public function setIgnored(int $new_ignored): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('UPDATE entries SET ignored = ? WHERE player = ? and event_id = ?');
@@ -182,7 +188,7 @@ class Entry
         $stmt->close();
     }
 
-    public function removeEntry()
+    public function removeEntry(): bool
     {
         $db = Database::getConnection();
         if ($this->deck) {
@@ -247,7 +253,7 @@ class Entry
         $db->autocommit(true);
     }
 
-    public function setInitialSeed($byeqty)
+    public function setInitialSeed(int $byeqty): void
     {
         $db = Database::getConnection();
         $db->autocommit(false);

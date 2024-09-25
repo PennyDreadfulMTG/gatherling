@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class EventTest extends TestCase
 {
-    public function testStructureSummary()
+    public function testStructureSummary(): void
     {
         $event = new Event('');
         $event->mainstruct = 'Single Elimination';

@@ -10,7 +10,7 @@ use Psr\Log\LoggerInterface;
 
 class LogTest extends TestCase
 {
-    public function testLogsErrorWhenExceptionThrown()
+    public function testLogsErrorWhenExceptionThrown(): void
     {
         $loggerMock = $this->createMock(LoggerInterface::class);
         $loggerMock->expects($this->once())

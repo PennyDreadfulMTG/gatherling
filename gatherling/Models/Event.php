@@ -9,30 +9,30 @@ use Gatherling\Views\Components\ReportLink;
 
 class Event
 {
-    public $name;
-    public $id;
+    public ?string $name;
+    public ?int $id;
 
-    public $season;
+    public ?int $season;
     public $number;
     public $format;
 
-    public $start;
-    public $kvalue;
-    public $active;
-    public $finalized;
-    public $prereg_allowed;
-    public $threadurl;
-    public $reporturl;
-    public $metaurl;
-    public $private;
-    public $client;
+    public ?string $start;
+    public ?int $kvalue;
+    public ?int $active;
+    public ?int $finalized;
+    public ?int $prereg_allowed;
+    public ?string $threadurl;
+    public ?string $reporturl;
+    public ?string $metaurl;
+    public ?int $private;
+    public ?int $client;
 
-    public $player_editdecks;
+    public ?int $player_editdecks;
 
     // Class associations
-    public $series; // belongs to Series
-    public $host; // has one Player - host
-    public $cohost; // has one Player - cohost
+    public ?string $series; // belongs to Series
+    public ?string $host; // has one Player - host
+    public ?string $cohost; // has one Player - cohost
 
     // Subevents
     public $mainrounds;

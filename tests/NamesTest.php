@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 final class NamesTest extends TestCase
 {
-    public function testNames()
+    public function testNames(): void
     {
         $this->assertEquals(normaliseCardName('Æther'), 'Aether');
         $this->assertEquals(normaliseCardName('Jötun Grunt'), 'Jotun Grunt');
