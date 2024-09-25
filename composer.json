@@ -3,11 +3,11 @@
     "description": "Magic the Gathering tournament software",
 	"version": "5.1.0",
     "scripts": {
-        "test": "vendor/bin/phpunit tests",
+        "tests": "vendor/bin/phpunit tests",
         "lint": "vendor/bin/phpcs .",
         "autofix": "vendor/bin/phpcbf .",
 		"types": "vendor/bin/phpstan --memory-limit=2G",
-		"jstest": "bun test"
+		"jstests": "bun test"
     },
     "require": {
         "php": "8.1.*",
