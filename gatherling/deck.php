@@ -278,8 +278,8 @@ function insertDeck($event)
     $deck->eventname = $event->name;
     $deck->event_id = $event->id;
 
-    $deck->maindeck_cards = parseCardsWithQuantity($_POST['contents']);
-    $deck->sideboard_cards = parseCardsWithQuantity($_POST['sideboard']);
+    $deck->maindeck_cards = parseCardsWithQuantity($_POST['contents'] ?? []);
+    $deck->sideboard_cards = parseCardsWithQuantity($_POST['sideboard'] ?? []);
 
     if (!$deck->save()) {
         deckForm($deck);
@@ -294,8 +294,8 @@ function updateDeck($deck)
     $deck->name = $_POST['name'];
     $deck->notes = $_POST['notes'];
 
-    $deck->maindeck_cards = parseCardsWithQuantity($_POST['contents']);
-    $deck->sideboard_cards = parseCardsWithQuantity($_POST['sideboard']);
+    $deck->maindeck_cards = parseCardsWithQuantity($_POST['contents'] ?? []);
+    $deck->sideboard_cards = parseCardsWithQuantity($_POST['sideboard'] ?? []);
 
     if (!$deck->save()) {
         deckForm($deck);

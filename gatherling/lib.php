@@ -287,7 +287,7 @@ function normaliseCardName($card, $toLower = false): string
     return trim($card);
 }
 
-function parseCardsWithQuantity($cards): array
+function parseCardsWithQuantity(string|array $cards): array
 {
     $cards = parseCards($cards);
     $badcards = [];
