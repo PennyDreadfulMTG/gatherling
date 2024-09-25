@@ -590,7 +590,7 @@ class Deck
         //Extra check to make sure a duplicate deck won't be created
         if ($this->id == 0) {
             $check_entry = Entry::findByEventAndPlayer($this->event_id, $this->playername);
-            if ($check_entry->deck != null) { //The player already registered a deck
+            if ($check_entry && $check_entry->deck != null) { //The player already registered a deck
                 $this->id = $check_entry->deck->id;
             }
         }
