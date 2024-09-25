@@ -226,7 +226,7 @@ class Entry
         if (!$args['canCreateDeck']) {
             return $args;
         }
-        $args['createDeckLink'] = 'deck.php?player='.rawurlencode($this->player->name).'&event='.rawurlencode($this->event->id).'&mode=create';
+        $args['createDeckLink'] = 'deck.php?player=' . rawurlencode($this->player->name) . '&event=' . rawurlencode((string) $this->event->id) . '&mode=create';
 
         return $args;
     }

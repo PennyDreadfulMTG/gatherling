@@ -127,7 +127,7 @@ function getEvent(string $eventName, ?string $action, ?string $eventId, ?string 
         return new AuthFailed();
     }
     if ($action && strcmp($action, 'undrop') == 0) {
-        $entry = new Entry($eventId, $player);
+        $entry = new Entry((int) $eventId, $player);
         if ($entry->deck && $entry->deck->isValid()) {
             $event->undropPlayer($player);
         }

@@ -1370,7 +1370,7 @@ class Player
         return (new GameName($this, $game, $html))->render();
     }
 
-    public function linkTo(string $game = 'gatherling'): string
+    public function linkTo(int|string $game = 'gatherling'): string
     {
         return (new PlayerLink($this))->render();
     }
