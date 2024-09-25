@@ -148,7 +148,7 @@ class DB
     public static function begin(string $rawName): void
     {
         $name = self::safeName($rawName);
-        Log::debug("[DB] COMMIT $rawName ($name)");
+        Log::debug("[DB] BEGIN $rawName ($name)");
         $isOuterTransaction = !self::connect()->transactions;
         self::connect()->transactions[] = $name;
         if ($isOuterTransaction) {
