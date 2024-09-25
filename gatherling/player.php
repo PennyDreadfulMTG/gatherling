@@ -23,8 +23,6 @@ print_header('Player Control Panel');
 <div id="gatherling_main" class="box">
 <div class="uppertitle"> Player Control Panel </div>
 <?php
-
-declare(strict_types=1);
 $result = '';
 // Handle actions
 if (isset($_POST['action'])) {

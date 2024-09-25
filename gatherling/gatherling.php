@@ -252,4 +252,4 @@ print_header('Home'); ?>
 
 <?php
 
-declare(strict_types=1); print_footer();
+print_footer();

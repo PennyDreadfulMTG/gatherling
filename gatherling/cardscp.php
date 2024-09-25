@@ -25,9 +25,7 @@ print_header('Admin Control Panel');
   <div id="gatherling_main" class="box">
     <div class="uppertitle"> Admin Control Panel </div>
     <center>
-      <?php
-
-declare(strict_types=1); do_page(); ?>
+      <?php do_page(); ?>
     </center>
     <div class="clear"></div>
   </div>

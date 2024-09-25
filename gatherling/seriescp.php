@@ -25,8 +25,6 @@ print_header('Series Control Panel');
 <div class="uppertitle"> Series Control Panel </div>
 
 <?php
-
-declare(strict_types=1);
 do_page();
 ?>
 <div class="clear"></div>

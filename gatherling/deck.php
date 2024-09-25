@@ -19,7 +19,6 @@ print_header('Deck Database');
 
 <?php
 
-declare(strict_types=1);
 $event = null;
 
 if (isset($_GET['event'])) {

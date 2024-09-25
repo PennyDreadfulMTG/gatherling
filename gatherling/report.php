@@ -76,7 +76,6 @@ print_header('Player Control Panel');
 <div class="uppertitle"> Player Control Panel </div>
 <?php
 
-declare(strict_types=1);
     // Handle modes
     $dispmode = 'playercp';
     if (isset($_REQUEST['mode'])) {
