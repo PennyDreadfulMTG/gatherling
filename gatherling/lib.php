@@ -292,7 +292,6 @@ function normaliseCardName($card, $toLower = false): string
 function parseCardsWithQuantity(string|array $cards): array
 {
     $cards = parseCards($cards);
-    $badcards = [];
     $cardarr = [];
     foreach ($cards as $line) {
         $chopped = rtrim($line);
