@@ -1211,7 +1211,7 @@ class Event
                     $round = 'main';
                 }
 
-                $lock_db = Database::get_lock($subevent_id);
+                $lock_db = Database::get_lock((string) $subevent_id);
                 if ($lock_db !== 1) {
                     return false;
                 }
@@ -1234,7 +1234,7 @@ class Event
                         break;
                 }
 
-                Database::release_lock($subevent_id);
+                Database::release_lock((string) $subevent_id);
             } else {
                 $this->active = 0;
                 $this->finalized = 1;
