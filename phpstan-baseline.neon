@@ -31,11 +31,6 @@ parameters:
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Decksearch\\:\\:getFinalResults\\(\\) should return array but returns false\\.$#"
-			count: 2
-			path: gatherling/Models/Decksearch.php
-
-		-
 			message: "#^Property Gatherling\\\\Models\\\\Decksearch\\:\\:\\$_eventname is never written, only read\\.$#"
 			count: 1
 			path: gatherling/Models/Decksearch.php
