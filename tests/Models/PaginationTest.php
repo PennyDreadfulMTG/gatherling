@@ -26,7 +26,7 @@ class PaginationTest extends TestCase
         ob_start();
         $pagination->render();
         $html = ob_get_clean();
-        $this->assertStringContainsString('<a href="/test?foo=1&amp;bar=2&amp;page=2" class="current">02</a>', $html); // BAKERT very thin test
+        $this->assertStringContainsString('<a href="/test?foo=1&amp;bar=2&amp;page=2" class="current">02</a>', $html);
     }
 
     public function testGetPages(): void
