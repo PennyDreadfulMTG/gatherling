@@ -37,17 +37,14 @@ class Deck
     public array $unparsed_cards;
     /** @var array<string, int> */
     public array $unparsed_side;
-    // BAKERT is this also not a string?
     public ?string $deck_contents_cache;
     /** @var ?list<self> */
     public ?array $identical_decks;
-    // BAKERT "has a"? is this a bool? no.
     public ?string $medal; // has a medal
     public bool $new; // is new
 
     public function __construct(mixed $id)
     {
-        // BAKERT name and other not-nullalbles are not set here so they ARE nullabel.
         if ($id == 0) {
             $this->id = 0;
             $this->new = true;

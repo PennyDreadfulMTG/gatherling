@@ -10,7 +10,7 @@ function main(): void
 {
     $seriesName = $_GET['series'] ?? null;
     $season = $_GET['season'] ?? null;
-    $page = new SeriesReport($seriesName, $season);
+    $page = new SeriesReport($seriesName, (int) $season);
     $page->send();
 }
 

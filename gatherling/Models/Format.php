@@ -959,7 +959,6 @@ class Format
         }
 
         foreach ($subTypeCount as $type => $amt) {
-            // BAKERt I'm sorry, what?
             echo "$type: $amt<br />";
         }
 

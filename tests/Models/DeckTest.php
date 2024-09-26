@@ -27,7 +27,7 @@ class DeckTest extends DatabaseCase
 
         $event = new Event('');
         $event->name = 'Test Event';
-        $event->start = '2024-01-01'; // BAKERT what is the right format here?
+        $event->start = '2024-01-01';
         $event->kvalue = 16;
         $event->format = 'Standard';
         $event->series = 'Test Series';

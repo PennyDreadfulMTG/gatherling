@@ -14,7 +14,6 @@ class SeriesReport extends Page
     public SeasonSelect $seasonSelect;
     public ?SeasonStandings $seasonStandings;
 
-    // BAKERT change all callers
     public function __construct(?string $seriesName, ?int $season)
     {
         parent::__construct();

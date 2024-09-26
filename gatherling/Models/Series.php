@@ -354,7 +354,6 @@ class Series
                                          AND events.start < NOW()
                                          ORDER BY events.start
                                          DESC LIMIT 1', 's', $this->name);
-
         return new Event($result);
     }
 
