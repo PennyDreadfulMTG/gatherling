@@ -1,0 +1,27 @@
+<table width="250">
+    <tr>
+        <td align="left" colspan="3">
+            <b>MEDAL WINNING DECKS</b>
+        </td>
+    </tr>
+    {{^decks}}
+        <tr>
+            <td colspan="3">
+                <i>{{playerName}} has no medal winning decks.</i>
+            </td>
+        </tr>
+    {{/decks}}
+    {{#decks}}
+        <tr>
+            <td>
+                <a href="{{link}}">{{name}}</a>
+            </td>
+            <td>
+                {{record}}
+            </td>
+            <td align="right">
+                {{#medals}}<img src="{{src}}" alt="{{alt}}">&nbsp;{{/medals}}
+            </td>
+        </tr>
+    {{/decks}}
+</table>

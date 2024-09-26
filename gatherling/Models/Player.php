@@ -304,9 +304,9 @@ class Player
         return $this->ipAddress;
     }
 
-    public function emailIsPublic(): int
+    public function emailIsPublic(): bool
     {
-        return $this->emailPrivacy;
+        return (bool) $this->emailPrivacy;
     }
 
     public function time_zone(): ?string

@@ -1,0 +1,20 @@
+<table width="260">
+    <tr>
+        <td align="center" colspan="4"><b>MEDALS EARNED</b></td>
+    </tr>
+    {{^medalStats}}
+        <tr>
+            <td align="center" colspan="2">
+                <i>{{playerName}} has not earned any medals.</i>
+            </td>
+        </tr>
+    {{/medalStats}}
+    {{#medalStats}}
+        <tr>
+            <td align="right" width="130">
+                <img alt="{{medal}}" src="{{medalSrc}}" style="border-width: 0px">
+            </td>
+            <td>{{numMedals}}</td>
+        </tr>
+    {{/medalStats}}
+</table>
