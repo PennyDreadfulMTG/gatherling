@@ -62,11 +62,13 @@ function do_page(): void
     }
 
     if ($view != 'no_view') {
+        echo "<center>";
         if (count($player_series) > 1) {
             echo printOrganizerSelect($player_series, $active_series_name);
         } else {
-            echo "<center> Managing {$active_series_name} </center>";
+            echo "Managing {$active_series_name}";
         }
+        echo '</center>';
     }
     $active_series = new Series($active_series_name);
     printError();
@@ -181,7 +183,7 @@ function printNoSeries(): void
 function printSeriesForm(Series $series): void
 {
     echo '<form action="seriescp.php" method="post">';
-    echo '<table class="form c">';
+    echo '<table class="form">';
     echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
     // Active
     echo '<tr><th>Series is Active</th><td> ';
