@@ -324,10 +324,10 @@ class Pagination
      * @return int Returns the total number of pages, based on the total number of records and the number of
      *             records to be shown per page.
      */
-    public function get_pages()
+    public function get_pages(): int
     {
         // return the total number of pages based on the total number of records and number of records to be shown per page
-        return @ceil($this->_properties['records'] / $this->_properties['records_per_page']);
+        return @(int) ceil($this->_properties['records'] / $this->_properties['records_per_page']);
     }
 
     /**
@@ -829,7 +829,7 @@ class Pagination
                     ($this->_properties['page'] == $i ? 'class="current"' : '').'>'.
 
                     // apply padding if required
-                    ($this->_properties['padding'] ? str_pad($i, strlen($this->_properties['total_pages']), '0', STR_PAD_LEFT) : $i).
+                    ($this->_properties['padding'] ? str_pad((string) $i, strlen((string) $this->_properties['total_pages']), '0', STR_PAD_LEFT) : $i).
 
                     '</a></li>';
             }
@@ -846,7 +846,7 @@ class Pagination
                 ($this->_properties['padding'] ?
 
                     // apply padding
-                    str_pad($this->_properties['reverse'] ? $this->_properties['total_pages'] : 1, strlen($this->_properties['total_pages']), '0', STR_PAD_LEFT) :
+                    str_pad($this->_properties['reverse'] ? (string) $this->_properties['total_pages'] : '1', strlen((string) $this->_properties['total_pages']), '0', STR_PAD_LEFT) :
 
                     // show the page number
                     ($this->_properties['reverse'] ? $this->_properties['total_pages'] : 1)).
@@ -935,7 +935,7 @@ class Pagination
                     ($this->_properties['page'] == $i ? 'class="current"' : '').'>'.
 
                     // apply padding if required
-                    ($this->_properties['padding'] ? str_pad($i, strlen($this->_properties['total_pages']), '0', STR_PAD_LEFT) : $i).
+                    ($this->_properties['padding'] ? str_pad((string) $i, strlen((string) $this->_properties['total_pages']), '0', STR_PAD_LEFT) : $i).
 
                     '</a></li>';
             }
@@ -958,7 +958,7 @@ class Pagination
                 ($this->_properties['page'] == $i ? 'class="current"' : '').'>'.
 
                 // also, apply padding if necessary
-                ($this->_properties['padding'] ? str_pad($this->_properties['reverse'] ? 1 : $this->_properties['total_pages'], strlen($this->_properties['total_pages']), '0', STR_PAD_LEFT) : ($this->_properties['reverse'] ? 1 : $this->_properties['total_pages'])).
+                ($this->_properties['padding'] ? str_pad($this->_properties['reverse'] ? '1' : (string) $this->_properties['total_pages'], strlen((string) $this->_properties['total_pages']), '0', STR_PAD_LEFT) : ($this->_properties['reverse'] ? 1 : $this->_properties['total_pages'])).
 
                 '</a></li>';
         }
