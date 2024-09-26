@@ -8,9 +8,11 @@ use Gatherling\Models\Format;
 
 class CardsetDropMenu extends Component
 {
+    /** @var list<string> */
     public array $cardsets;
     public bool $hasMany;
     public bool $isDisabled;
+    /** @var list<array{value: string, text: string}> */
     public array $options;
 
     public function __construct(public string $cardsetType, Format $format)

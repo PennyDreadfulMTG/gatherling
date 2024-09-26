@@ -9,7 +9,9 @@ use Gatherling\Views\TextFileDownload;
 
 class DeckDownload extends TextFileDownload
 {
+    /** @var list<array{qty: int, card: string}> */
     public array $maindeckCards;
+    /** @var list<array{qty: int, card: string}> */
     public array $sideboardCards;
 
     public function __construct(Deck $deck)
@@ -20,6 +22,10 @@ class DeckDownload extends TextFileDownload
         $this->sideboardCards = $this->prepare($deck->sideboard_cards);
     }
 
+    /**
+     * @param array<string, int> $cards
+     * @return list<array{qty: int, card: string}>
+     */
     private function prepare(array $cards): array
     {
         $entries = [];

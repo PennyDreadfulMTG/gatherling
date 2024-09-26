@@ -10,7 +10,9 @@ use Gatherling\Models\Player;
 class ReportsForm extends EventFrame
 {
     public bool $hasEntries;
+    /** @var list<array<string, int|string>> */
     public array $standings;
+    /** @var list<array<string, int|string>> */
     public array $registrants;
 
     public function __construct(Event $event)

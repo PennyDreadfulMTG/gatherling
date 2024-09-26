@@ -153,7 +153,7 @@ print_header('Player Control Panel');
 
 <?php
 //Drop confirmation form
-function print_dropConfirm($event_name, $player)
+function print_dropConfirm(string $event_name, ?Player $player): void
 {
     echo '<center><h3>Drop Form</h3>';
     echo "<center style=\"color: red; font-weight: bold;\">
@@ -176,7 +176,7 @@ function print_dropConfirm($event_name, $player)
     echo "</form>\n";
 }
 
-function print_submit_resultForm($match_id, $drop = false)
+function print_submit_resultForm(int $match_id, bool $drop = false): void
 {
     $match = new Matchup($match_id);
     $event = new Event($match->getEventNamebyMatchid());
@@ -215,16 +215,7 @@ function print_submit_resultForm($match_id, $drop = false)
     echo '<div class="clear"></div>';
 }
 
-// *form to report League results
-/**
- * @param string $event
- * @param string $round
- * @param mixed  $player
- * @param int    $subevent
- *
- * @return void
- */
-function League_print_submit_resultForm($event, $round, $player, $subevent)
+function League_print_submit_resultForm(string $event, int $round, ?Player $player, string $subevent): void
 {
     echo "<center><h3>Report League Game Results</h3>
     Enter results</center>\n";
@@ -237,7 +228,7 @@ function League_print_submit_resultForm($event, $round, $player, $subevent)
     echo '<table class="form">';
 
     echo '<tr><th>';
-    leagueOpponentDropMenu($event, $round, $player, $subevent);
+    leagueOpponentDropMenu($event, $round, $player, (int) $subevent);
 
     echo "<br /></th>\n";
     echo "<td></td></tr>\n";
@@ -259,7 +250,7 @@ function League_print_submit_resultForm($event, $round, $player, $subevent)
 
 /** form to confirm submission.
  */
-function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, $event)
+function print_verify_resultForm(string $report, int $match_id, string $player, string|int $drop, string $opponent, string $event): void
 {
     echo "<center><h3><br>Confirm Game Results</p></h3></center>\n";
     echo "<center style=\"color: red; font-weight: bold;\">Please confirm your entry.</center></p>\n";
@@ -321,4 +312,3 @@ function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, 
     echo "</form>\n";
     echo "<div class=\"clear\"> </div>\n";
 }
-?>

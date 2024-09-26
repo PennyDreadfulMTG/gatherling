@@ -24,6 +24,7 @@ function checkboxInput(string $label, string $name, bool $isChecked = false, ?st
     return TemplateHelper::render('partials/checkboxInput', $args);
 }
 
+/** @return array<string, string|bool|null> */
 function checkboxInputArgs(string $label, string $name, bool $isChecked = false, ?string $reminderText = null): array
 {
     return [
@@ -34,17 +35,21 @@ function checkboxInputArgs(string $label, string $name, bool $isChecked = false,
     ];
 }
 
-function print_file_input($label, $name)
+function print_file_input(string $label, string $name): void
 {
     echo "<tr><th><label for='$name'>{$label}</label></th>";
     echo "<td><input type=\"file\" name=\"{$name}\" id='$name' /></td></tr>";
 }
 
-function submit($label, $name = 'action'): string
+function submit(string $label, string $name = 'action'): string
 {
     return (new Submit($label, $name))->render();
 }
 
+/**
+ * @param array<string, string> $options
+ * @return array<string, string|bool|null>
+ */
 function selectArgs(string $name, array $options = [], mixed $selected = null, ?string $id = null): array
 {
     if (is_null($id)) {
@@ -66,6 +71,7 @@ function selectArgs(string $name, array $options = [], mixed $selected = null, ?
     ];
 }
 
+/** @param array<string, string> $options */
 function selectInput(string $label, string $name, ?array $options, mixed $selected = null, ?string $id = null): string
 {
     $args = selectInputArgs($label, $name, $options, $selected, $id);
@@ -73,6 +79,10 @@ function selectInput(string $label, string $name, ?array $options, mixed $select
     return TemplateHelper::render('partials/selectInput', $args);
 }
 
+/**
+ * @param array<string, string> $options
+ * @return array<string, string|array<string, string|bool|null>>
+ */
 function selectInputArgs(string $label, string $name, ?array $options, mixed $selected = null, ?string $id = null): array
 {
     if (is_null($id)) {
@@ -92,15 +102,7 @@ function timeZoneDropMenu(?float $selected = null): string
     return (new TimeZoneDropMenu($selected))->render();
 }
 
-/**
- * @param string $eventname
- * @param string $round
- * @param mixed  $player
- * @param int    $subevent
- *
- * @return void
- */
-function leagueOpponentDropMenu($eventname, $round, $player, $subevent)
+function leagueOpponentDropMenu(string $eventname, int $round, Player $player, int $subevent): void
 {
     $event = new Event($eventname);
     $player_standings = new Standings($eventname, $player->name);

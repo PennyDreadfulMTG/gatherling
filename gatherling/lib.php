@@ -3,15 +3,13 @@
 declare(strict_types=1);
 
 use Gatherling\Auth\Session;
-use Gatherling\Models\Format;
 use Gatherling\Models\Player;
+use Gatherling\Models\Series;
 use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\TemplateHelper;
 use Gatherling\Views\Components\CardLink;
-use Gatherling\Views\Components\NotAllowed;
 use Gatherling\Views\Components\FormatDropMenu;
 use Gatherling\Views\Components\SeasonDropMenu;
-use Gatherling\Views\Components\FormatsDropMenu;
 use Gatherling\Views\Components\OrganizerSelect;
 use Gatherling\Views\Components\EmailStatusDropDown;
 
@@ -36,7 +34,7 @@ const MTGO = 1;
 const MTGA = 2;
 const PAPER = 3;
 
-function page($title, $contents): string
+function page(string $title, string $contents): string
 {
     ob_start();
     print_header($title);
@@ -46,7 +44,7 @@ function page($title, $contents): string
     return ob_get_clean();
 }
 
-function print_header($title, $enable_vue = false): void
+function print_header(string $title, bool $enable_vue = false): void
 {
     global $CONFIG;
 
@@ -91,17 +89,18 @@ function headerColor(): string
     return $HC;
 }
 
-function linkToLogin($_pagename = null, $redirect = null, $message = null, $username = null): void
+function linkToLogin(string $_pagename = null, ?string $redirect = null, ?string $message = null, ?string $username = null): void
 {
     (new LoginRedirect($redirect ?? '', $message ?? '', $username ?? ''))->send();
 }
 
-function printCardLink($card): string
+function printCardLink(string $card): string
 {
     return (new CardLink($card))->render();
 }
 
-function image_tag($filename, $extra_attr = null): string
+/** @param array<string, string|int> $extra_attr */
+function image_tag(string $filename, ?array $extra_attr = null): string
 {
     $tag = '<img ';
     if (is_array($extra_attr)) {
@@ -114,7 +113,7 @@ function image_tag($filename, $extra_attr = null): string
     return $tag;
 }
 
-function medalImgStr($medal): string
+function medalImgStr(string $medal): string
 {
     return image_tag("$medal.png", ['style' => 'border-width: 0px']);
 }
@@ -129,7 +128,7 @@ function formatDropMenu(?string $format, bool $useAll = false, string $formName 
     return (new FormatDropMenu($format, $useAll, $formName))->render();
 }
 
-function emailStatusDropDown($currentStatus = 1): string
+function emailStatusDropDown(int $currentStatus = 1): string
 {
     return (new EmailStatusDropDown($currentStatus))->render();
 }
@@ -141,6 +140,7 @@ function timeDropMenu(int|string $hour, int|string $minutes = 0): string
     return TemplateHelper::render('partials/dropMenu', $args);
 }
 
+/** @return array<string, string|array<string, string|bool|null>> */
 function timeDropMenuArgs(int|string $hour, int|string $minutes = 0): array
 {
     if (strcmp($hour, '') == 0) {
@@ -196,7 +196,8 @@ function json_headers(): void
     header('HTTP_X_USERNAME: '.Player::loginName());
 }
 
-function printOrganizerSelect($player_series, $selected): string
+/** @param array<string> $player_series */
+function printOrganizerSelect(array $player_series, string $selected): string
 {
     return (new OrganizerSelect($_SERVER['PHP_SELF'], $player_series, $selected))->render();
 }
@@ -252,13 +253,17 @@ function version_tagline(): string
     // print "Gatherling version 1.9 (\"It's funny 'cause the squirrel got dead\")";
 }
 
-function redirect($page): void
+function redirect(string $page): void
 {
     global $CONFIG;
     header("Location: {$CONFIG['base_url']}{$page}");
     exit(0);
 }
 
+/**
+ * @param string|array<string> $cards
+ * @return array<string>
+ */
 function parseCards(string|array $cards): array
 {
     $cardarr = [];
@@ -275,7 +280,7 @@ function parseCards(string|array $cards): array
     return $cardarr;
 }
 
-function normaliseCardName($card, $toLower = false): string
+function normaliseCardName(string $card, bool $toLower = false): string
 {
     $pattern = ['/é/', '/è/', '/ë/', '/ê/', '/É/', '/È/', '/Ë/', '/Ê/', '/á/', '/à/', '/ä/', '/â/', '/å/', '/Á/', '/À/', '/Ä/', '/Â/', '/Å/', '/ó/', '/ò/', '/ö/', '/ô/', '/Ó/', '/Ò/', '/Ö/', '/Ô/', '/í/', '/ì/', '/ï/', '/î/', '/Í/', '/Ì/', '/Ï/', '/Î/', '/ú/', '/ù/', '/ü/', '/û/', '/Ú/', '/Ù/', '/Ü/', '/Û/', '/ý/', '/ÿ/', '/Ý/', '/ø/', '/Ø/', '/œ/', '/Œ/', '/Æ/', '/AE/', '/ç/', '/Ç/', '/—/', '/−/', '/â€”/', '/’/', '/½/'];
     $replace = ['e', 'e', 'e', 'e', 'E', 'E', 'E', 'E', 'a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A', 'A', 'o', 'o', 'o', 'o', 'O', 'O', 'O', 'O', 'i', 'i', 'i', 'I', 'I', 'I', 'I', 'I', 'u', 'u', 'u', 'u', 'U', 'U', 'U', 'U', 'y', 'y', 'Y', 'o', 'O', 'ae', 'ae', 'Ae', 'Ae', 'c', 'C', '-', '-', '-', "'", '{1/2}'];
@@ -289,6 +294,10 @@ function normaliseCardName($card, $toLower = false): string
     return trim($card);
 }
 
+/**
+ * @param string|array<string> $cards
+ * @return array<string, int>
+ */
 function parseCardsWithQuantity(string|array $cards): array
 {
     $cards = parseCards($cards);
@@ -314,6 +323,7 @@ function parseCardsWithQuantity(string|array $cards): array
 // So when we grab the values from an object to pass into
 // a template with get_object_vars let's also preserve the
 // naming standard by transforming the case.
+/** @return array<string, mixed> */
 function getObjectVarsCamelCase(object $obj): array
 {
     $vars = get_object_vars($obj);
@@ -349,6 +359,10 @@ function toCamel(string $string): string
     return $result;
 }
 
+/**
+ * @param array<string, mixed> $arr
+ * @return array<string, mixed>
+ */
 function arrayMapRecursive(callable $func, array $arr): array
 {
     $result = [];

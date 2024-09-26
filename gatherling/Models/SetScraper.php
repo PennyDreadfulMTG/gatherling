@@ -6,7 +6,8 @@ namespace Gatherling\Models;
 
 class SetScraper
 {
-    public static function getSetList()
+    /** @return array<string, string> */
+    public static function getSetList(): array
     {
         // gets a list of sets from magicthegathering.io
         $url = 'https://mtgjson.com/api/v5/SetList.json';

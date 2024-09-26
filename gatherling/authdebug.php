@@ -38,7 +38,7 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     debug_info($token);
 }
 
-function send_to_discord()
+function send_to_discord(): void
 {
     // Step 1. Get authorization code
     global $provider;
@@ -48,7 +48,7 @@ function send_to_discord()
     header('Location: '.$authUrl);
 }
 
-function store_token($token)
+function store_token(\League\OAuth2\Client\Token\AccessToken $token): void
 {
     $_SESSION['DISCORD_TOKEN'] = $token->getToken();
     $_SESSION['DISCORD_REFRESH_TOKEN'] = $token->getRefreshToken();

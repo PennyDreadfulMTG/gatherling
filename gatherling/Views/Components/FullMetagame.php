@@ -13,7 +13,9 @@ use Gatherling\Models\Player;
 class FullMetagame extends Component
 {
     public bool $decklistsAreVisible;
+    /** @var array<int, array{numPlayers: int, manaSrc: string, entries: array<int, array{playerLink: PlayerLink, record: string, tribe: string|null, medal: string|null, deckName: string, archetype: string}>}> */
     public array $meta;
+    /** @var array<int, array{playerLink: PlayerLink, record: string, tribe: string|null}> */
     public array $players;
     public bool $showTribes = false;
     public EventStandings $eventStandings;

@@ -548,7 +548,7 @@ function updateMatches(): void
         if ($res == 'P') {
             $event->addPairing($playerA, $playerB, $rnd, $res);
         } else {
-            $event->addMatch($playerA, $playerB, $rnd, $res, $pAWins, $pBWins);
+            $event->addMatch($playerA, $playerB, $rnd, $res, (string) $pAWins, (string) $pBWins);
         }
     }
 
@@ -565,7 +565,7 @@ function updateMedals(): void
     $winner = $_POST['newmatchplayer1'];
     $second = $_POST['newmatchplayer2'];
     $t4 = [$_POST['newmatchplayer3'], $_POST['newmatchplayer4']];
-    $t8 = [$_POST['newmatchplayer5'],  $_POST['newmatchplayer6'],  $_POST['newmatchplayer7'],  $_POST['newmatchplayer8']];
+    $t8 = [$_POST['newmatchplayer5'], $_POST['newmatchplayer6'], $_POST['newmatchplayer7'], $_POST['newmatchplayer8']];
 
     $event->setFinalists($winner, $second, $t4, $t8);
 }

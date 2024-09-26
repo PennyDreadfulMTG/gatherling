@@ -166,7 +166,7 @@ break;
 
 <?php
 
-function print_changePassForm($player, $result)
+function print_changePassForm(Player $player, string $result): void
 {
     if (isset($_REQUEST['tooshort'])) {
         echo "<center><h3>You must change your password to continue</h3></center>\n";
@@ -192,7 +192,7 @@ function print_changePassForm($player, $result)
     echo "<div class=\"clear\"> </div>\n";
 }
 
-function print_editEmailForm($player, $result)
+function print_editEmailForm(Player $player, string $result): void
 {
     if ($player->emailAddress == '') {
         // add email form
@@ -241,7 +241,7 @@ function print_editEmailForm($player, $result)
     }
 }
 
-function print_editAccountsForm($player, $result)
+function print_editAccountsForm(Player $player, string $result): void
 {
     echo "<center><h3>Set your accounts</h3></center>\n";
     echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
@@ -257,7 +257,7 @@ function print_editAccountsForm($player, $result)
     echo "<div class=\"clear\"></div>\n";
 }
 
-function print_editTimeZoneForm($player, $result)
+function print_editTimeZoneForm(Player $player, string $result): void
 {
     echo "<center><h3>Changing Your Time Zone</h3></center>\n";
     echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
@@ -280,7 +280,7 @@ function print_editTimeZoneForm($player, $result)
     echo "<div class=\"clear\"></div>\n";
 }
 
-function print_manualverifyMtgoForm()
+function print_manualverifyMtgoForm(): void
 {
     $player = Player::getSessionPlayer();
     if ($player->verified == 1) {
@@ -293,7 +293,7 @@ function print_manualverifyMtgoForm()
     }
 }
 
-function print_verifyMtgoForm($player, $result)
+function print_verifyMtgoForm(Player $player, string $result): void
 {
     global $CONFIG;
     echo "<center><h3>Verifying your MTGO account</h3>
@@ -322,7 +322,7 @@ function print_verifyMtgoForm($player, $result)
 }
 
 // TODO: Remove deck ignore functionality
-function setPlayerIgnores()
+function setPlayerIgnores(): void
 {
     global $player;
     $noDeckEntries = $player->getNoDeckEntries();
@@ -335,7 +335,7 @@ function setPlayerIgnores()
     }
 }
 
-function print_mainPlayerCP($player, $result)
+function print_mainPlayerCP(Player $player, string $result): void
 {
     echo '<script defer src="tab_view.js"></script>';
     echo '<button class="tablink" id="defaultOpen" onclick="openPage(\'future\', this)">Events</button>';
@@ -431,7 +431,7 @@ function print_mainPlayerCP($player, $result)
     echo "<div class=\"clear\"></div>\n";
 }
 
-function print_allContainer()
+function print_allContainer(): void
 {
     $rstar = '<font color="#FF0000">*</font>';
     echo "<p> Decks marked with a $rstar are not legal under current format.<p>\n";
@@ -446,7 +446,7 @@ function print_allContainer()
     echo '<div class="clear"> </div> ';
 }
 
-function print_recentDeckTable()
+function print_recentDeckTable(): void
 {
     global $player;
 
@@ -480,7 +480,7 @@ function print_recentDeckTable()
     echo "</table>\n";
 }
 
-function print_preRegistration()
+function print_preRegistration(): void
 {
     global $player;
     $upcoming_events = Event::getUpcomingEvents($player->name);
@@ -568,7 +568,8 @@ function print_preRegistration()
 
 //* Modified above function to display active events and a link to current standings
 // Undecided about showing all active events, or only those the player is enrolled in.
-function print_ActiveEvents()
+/** @return array<string> */
+function print_ActiveEvents(): array
 {
     global $player;
     $events = Event::getActiveEvents();
@@ -637,7 +638,7 @@ function print_ActiveEvents()
     return $Leagues;
 }
 
-function print_noDeckTable($allDecks)
+function print_noDeckTable(bool $allDecks): void
 {
     global $player;
     $entriesNoDecks = $player->getNoDeckEntries();
@@ -676,7 +677,7 @@ function print_noDeckTable($allDecks)
     }
 }
 
-function print_allDeckTable()
+function print_allDeckTable(): void
 {
     global $player;
     $decks = $player->getAllDecks();
@@ -706,7 +707,7 @@ function print_allDeckTable()
     echo "</table>\n";
 }
 
-function print_recentMatchTable()
+function print_recentMatchTable(): void
 {
     global $player;
     $matches = $player->getRecentMatches();
@@ -741,7 +742,8 @@ function print_recentMatchTable()
 }
 
 //copied above function and altered to show matches in progress
-function print_currentMatchTable($Leagues)
+/** @param array<string> $Leagues */
+function print_currentMatchTable(array $Leagues): void
 {
     global $player;
     $matches = $player->getCurrentMatches();
@@ -803,7 +805,7 @@ function print_currentMatchTable($Leagues)
     echo "</table>\n";
 }
 
-function leagueResultDropMenu()
+function leagueResultDropMenu(): void
 {
     echo '<select name="result">';
     echo '<option value="">- Match Result -</option>';
@@ -814,7 +816,7 @@ function leagueResultDropMenu()
     echo '</select>';
 }
 
-function print_matchTable($player, $limit = 0)
+function print_matchTable(Player $player, int $limit = 0): void
 {
     if (!isset($_POST['format'])) {
         $_POST['format'] = '%';
@@ -888,7 +890,7 @@ function print_matchTable($player, $limit = 0)
     echo '</table>';
 }
 
-function print_ratingsTableSmall()
+function print_ratingsTableSmall(): void
 {
     global $player;
     $ratings = new Ratings();
@@ -918,7 +920,7 @@ function print_ratingsTableSmall()
     echo '</table>';
 }
 
-function print_ratingsTable()
+function print_ratingsTable(): void
 {
     echo "<table class=\"c\" width=400>\n";
     echo "<tr><td><b>Format</td>\n";
@@ -935,7 +937,7 @@ function print_ratingsTable()
     echo "</table>\n";
 }
 
-function print_ratingLine($format)
+function print_ratingLine(string $format): void
 {
     global $player;
     $rating = $player->getRating($format);
@@ -956,7 +958,7 @@ function print_ratingLine($format)
     echo "</tr>\n";
 }
 
-function print_ratingsHistory($format)
+function print_ratingsHistory(string $format): void
 {
     global $player;
     $db = Database::getConnection();
@@ -1016,7 +1018,7 @@ function print_ratingsHistory($format)
     echo "</table>\n";
 }
 
-function print_ratingHistoryForm($format)
+function print_ratingHistoryForm(string $format): void
 {
     $formats = ['Composite'];
     $ratings = new Ratings();
@@ -1038,7 +1040,7 @@ function print_ratingHistoryForm($format)
     echo "</form></center>\n";
 }
 
-function print_allMatchForm($player)
+function print_allMatchForm(Player $player): void
 {
     if (!isset($_POST['format'])) {
         $_POST['format'] = '%';
@@ -1073,7 +1075,7 @@ function print_allMatchForm($player)
     echo "</td></tr><tr><td>&nbsp;</td></tr></table></form>\n";
 }
 
-function formatDropMenuP($player, $def)
+function formatDropMenuP(Player $player, string $def): void
 {
     $formats = $player->getFormatsPlayed();
 
@@ -1086,7 +1088,7 @@ function formatDropMenuP($player, $def)
     echo "</select>\n";
 }
 
-function seriesDropMenuP($player, $def)
+function seriesDropMenuP(Player $player, string $def): void
 {
     $series = $player->getSeriesPlayed();
 
@@ -1099,7 +1101,7 @@ function seriesDropMenuP($player, $def)
     echo "</select>\n";
 }
 
-function seasonDropMenuP($player, $def)
+function seasonDropMenuP(Player $player, string $def): void
 {
     $seasons = $player->getSeasonsPlayed();
 
@@ -1112,7 +1114,7 @@ function seasonDropMenuP($player, $def)
     echo "</select>\n";
 }
 
-function oppDropMenu($player, $def)
+function oppDropMenu(Player $player, string $def): void
 {
     $opponents = $player->getOpponents();
 
@@ -1127,7 +1129,7 @@ function oppDropMenu($player, $def)
     echo '</select>';
 }
 
-function print_statsTable()
+function print_statsTable(): void
 {
     global $player;
     echo '<table>';
@@ -1170,7 +1172,7 @@ function print_statsTable()
 //creativity
 }
 
-function statTrophy()
+function statTrophy(): void
 {
     global $player;
     $trophyevent = $player->getLastEventWithTrophy();
@@ -1182,7 +1184,7 @@ function statTrophy()
     }
 }
 
-function print_conditionalAllDecks()
+function print_conditionalAllDecks(): void
 {
     global $player;
     $noentrycount = $player->getUnenteredCount();
@@ -1192,5 +1194,3 @@ function print_conditionalAllDecks()
         echo 'Click here to enter them.</a>';
     }
 }
-
-?>

@@ -6,12 +6,17 @@ namespace Gatherling\Models;
 
 class Pairings
 {
-    private $lowestScoreWithoutBye = -1;
-    private $highest_points = 0;
-    private $byeName = '';
-    public $pairing = [];
+    private int $lowestScoreWithoutBye = -1;
+    private int $highest_points = 0;
+    private string $byeName = '';
+    /** @var array<int, int> */
+    public array $pairing = [];
 
-    public function __construct($players, $bye_data)
+    /**
+     * @param array<int, array<string, int|string|array<int, string>>> $players
+     * @param array<string, int|string|array<int, string>> $bye_data
+     */
+    public function __construct(array $players, array $bye_data)
     {
         // $highest_points = 0;
         $byeExist = (count($bye_data) > 0);
@@ -42,7 +47,11 @@ class Pairings
         $this->pairing = $mweight->main();
     }
 
-    public function weights($players)
+    /**
+     * @param array<int, array<string, int|string|array<int, string>>> $players
+     * @return list<array{int, int, int}>
+     */
+    public function weights(array $players): array
     {
         $weights = [];
         for ($i = 0; $i < count($players); $i++) {
@@ -58,7 +67,11 @@ class Pairings
         return $weights;
     }
 
-    public function weight($highest_points, $player1, $player2)
+    /**
+     * @param array{score: int, player: string, opponents: array<int, string>} $player1
+     * @param array{score: int, player: string, opponents: array<int, string>} $player2
+     */
+    public function weight(int $highest_points, array $player1, array $player2): int
     {
         $weight = 0;
 
@@ -87,7 +100,7 @@ class Pairings
         return $weight;
     }
 
-    public function quality($importance, $closeness)
+    public function quality(int $importance, int $closeness): int
     {
         // We add one to these values to avoid sometimes multiplying by zero and losing information.
         return pow($importance + 1, 2) * pow($closeness + 1, 2);

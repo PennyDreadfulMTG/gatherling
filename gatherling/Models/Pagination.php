@@ -38,7 +38,8 @@ namespace Gatherling\Models;
 class Pagination
 {
     // set defaults and initialize some private variables
-    private $_properties = [
+    /** @var array<string, int|string|bool> */
+    private array $_properties = [
 
         // should the "previous page" and "next page" links be always visible
         'always_show_navigation'    => true,
@@ -388,7 +389,7 @@ class Pagination
      *
      *  @returns void
      */
-    public function method($method = 'get')
+    public function method(string $method = 'get'): void
     {
         // set the page propagation method
         $this->_properties['method'] = (strtolower($method) == 'url' ? 'url' : 'get');
@@ -703,7 +704,7 @@ class Pagination
     /**
      *  Generate the link for the page given as argument.
      */
-    private function _build_uri($page): string
+    private function _build_uri(int $page): string
     {
         // if page propagation method is through SEO friendly URLs
         if ($this->_properties['method'] == 'url') {
@@ -732,7 +733,7 @@ class Pagination
             // if values in the query string - other than those set through base_url() - are not to be preserved
             // preserve only those set initially
             if (!$this->_properties['preserve_query_string']) {
-                $query = implode('&', $this->_properties['base_url_query']);
+                $query = $this->_properties['base_url_query'];
             }
 
             // otherwise, get the current query string
@@ -775,7 +776,7 @@ class Pagination
     /**
      *  Generates the "next page" link, depending on whether the pagination links are shown in natural or reversed order.
      */
-    private function _show_next()
+    private function _show_next(): string
     {
         $output = '';
 
@@ -807,7 +808,7 @@ class Pagination
      *  Generates the pagination links (minus "next" and "previous"), depending on whether the pagination links are shown
      *  in natural or reversed order.
      */
-    private function _show_pages()
+    private function _show_pages(): string
     {
         $output = '';
 
@@ -969,7 +970,7 @@ class Pagination
     /**
      *  Generates the "previous page" link, depending on whether the pagination links are shown in natural or reversed order.
      */
-    private function _show_previous()
+    private function _show_previous(): string
     {
         $output = '';
 

@@ -17,6 +17,7 @@ class InfoCell extends Component
     public int $deckCount;
     public bool $isActive;
     public float $percentReported;
+    /** @var list<string> */
     public array $subEvents;
     public PlayerLink $hostLink;
     public string $reportLink;

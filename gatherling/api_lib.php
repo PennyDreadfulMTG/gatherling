@@ -13,7 +13,14 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Models\Standings;
 
-function populate($array, $src, $keys)
+/**
+ * @param array<string, mixed> $array
+ * @param object $src
+ * @param array<string> $keys
+ *
+ * @return array<string, mixed>
+ */
+function populate(array $array, object $src, array $keys): array
 {
     foreach ($keys as $key) {
         $array[$key] = $src->{$key};
@@ -117,7 +124,9 @@ function arg($key, $default = null)
     return $_REQUEST[$key];
 }
 
-function repr_json_event(Event $event)
+
+/** @return array<string, mixed> */
+function repr_json_event(Event $event): array
 {
     $series = new Series($event->series);
     $json = [];
@@ -191,7 +200,8 @@ function repr_json_event(Event $event)
     return $json;
 }
 
-function repr_json_deck(Deck $deck)
+/** @return array<string, mixed> */
+function repr_json_deck(Deck $deck): array
 {
     $json = [];
     $json['id'] = $deck->id;
@@ -207,7 +217,8 @@ function repr_json_deck(Deck $deck)
     return $json;
 }
 
-function repr_json_series(Series $series)
+/** @return array<string, mixed> */
+function repr_json_series(Series $series): array
 {
     $json = populate([], $series, ['name', 'active', 'start_day', 'start_time', 'organizers', 'mtgo_room', 'this_season_format', 'this_season_master_link', 'this_season_season', 'discord_guild_id', 'discord_channel_id', 'discord_channel_name', 'discord_guild_name']);
     $mostRecent = $series->mostRecentEvent();
@@ -218,7 +229,8 @@ function repr_json_series(Series $series)
     return $json;
 }
 
-function repr_json_player(Player $player, ?int $client = null): mixed
+/** @return array<string, mixed> */
+function repr_json_player(Player $player, ?int $client = null): array
 {
     $json = populate([], $player, ['name', 'verified', 'discord_id', 'discord_handle', 'mtga_username', 'mtgo_username']);
     $json['display_name'] = $player->gameName($client);
@@ -265,6 +277,7 @@ function add_player_to_event(Event $event, ?string $name, ?string $decklist)
     return $result;
 }
 
+/** @return array<string, mixed> */
 function delete_player_from_event(Event $event, ?string $name): array
 {
     if ($event->authCheck($_SESSION['username'])) {
@@ -279,6 +292,7 @@ function delete_player_from_event(Event $event, ?string $name): array
     return $result;
 }
 
+/** @return array<string, mixed> */
 function drop_player_from_event(Event $event, ?string $name): array
 {
     if ($event->authCheck($_SESSION['username'])) {
@@ -295,14 +309,8 @@ function drop_player_from_event(Event $event, ?string $name): array
     return $result;
 }
 
-/**
- * @param string $newseries
- * @param bool   $active
- * @param string $day
- *
- * @return array
- */
-function create_series($newseries, $active, $day)
+/** @return array<string, mixed> */
+function create_series(string $newseries, bool $active, string $day): array
 {
     $result = [];
     if (!is_admin()) {
@@ -324,7 +332,8 @@ function create_series($newseries, $active, $day)
     return $result;
 }
 
-function create_event()
+/** @return array<string, mixed> */
+function create_event(): array
 {
     $name = arg('name', '');
     $naming = '';
@@ -366,6 +375,7 @@ function create_event()
 
     return $result;
 }
+
 
 function create_pairing(Event $event, mixed $round, ?string $a, ?string $b, ?string $res): void
 {
@@ -412,12 +422,12 @@ function create_pairing(Event $event, mixed $round, ?string $a, ?string $b, ?str
     if ($res == 'P') {
         $event->addPairing($playerA, $playerB, $round, $res);
     } else {
-        $event->addMatch($playerA, $playerB, $round, $res, $pAWins, $pBWins);
+        $event->addMatch($playerA, $playerB, $round, $res, (string) $pAWins, (string) $pBWins);
     }
 }
 
-/** @return string[]  */
-function card_catalog()
+/** @return list<string> */
+function card_catalog(): array
 {
     $result = [];
     $db = Database::getConnection();
@@ -432,14 +442,7 @@ function card_catalog()
     return $result;
 }
 
-/**
- * @param string $id
- *
- * @throws Exception
- *
- * @return string
- */
-function cardname_from_id($id)
+function cardname_from_id(string $id): string
 {
     $sql = 'SELECT c.name as name FROM cards c WHERE c.scryfallId = ?';
     $name = Database::single_result_single_param($sql, 's', $id);

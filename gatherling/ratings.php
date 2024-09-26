@@ -20,7 +20,8 @@ function main(): void
     $page->send();
 }
 
-function ratingsData($format, $minMatches)
+/** @return array{ratings_data: array<int, array{qplayer: string, qmax: int, player: string, rank: int, playerName: string, player: Player}>, pagination: Pagination} */
+function ratingsData(string $format, int $minMatches): array
 {
     $subquery = '
         SELECT
@@ -63,7 +64,8 @@ function ratingsData($format, $minMatches)
     return ['ratings_data' => $ratings_data, 'pagination' => $pagination];
 }
 
-function bestEver($format): array
+/** @return array{player: string, rating: int, t: int} */
+function bestEver(string $format): array
 {
     $sql = '
         SELECT
@@ -84,7 +86,8 @@ function bestEver($format): array
     return DB::select($sql, ['format' => $format])[0];
 }
 
-function currentThrough($format): array
+/** @return array{date: DateTime, name: string} */
+function currentThrough(string $format): array
 {
     $start = DB::value('SELECT MAX(updated) FROM ratings WHERE format = :format', ['format' => $format]);
     $name = DB::value('SELECT name FROM events WHERE start = :start', ['start' => $start]);

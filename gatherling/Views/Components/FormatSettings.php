@@ -9,6 +9,7 @@ use Gatherling\Models\Format;
 class FormatSettings extends Component
 {
     public string $activeFormatName;
+    /** @var array<string, mixed> */
     public array $activeFormat;
     public StringField $minMainStringField;
     public bool $showMinMainWarning;

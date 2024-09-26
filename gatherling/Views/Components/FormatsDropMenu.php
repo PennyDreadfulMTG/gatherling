@@ -8,6 +8,7 @@ use Gatherling\Models\Format;
 
 class FormatsDropMenu extends Component
 {
+    /** @var list<string> */
     public array $formatNames;
 
     public function __construct(public string $formatType, string $seriesName)

@@ -11,25 +11,25 @@ use Gatherling\Views\Components\EventStandings;
 
 class Standings
 {
-    public $id;
-    public $event;  // belongs_to event
-    public $player; // belongs_to player
-    public $active;
-    public $score;
-    public $matches_played;
-    public $matches_won;
-    public $draws;
-    public $games_won;
-    public $games_played;
-    public $byes;
-    public $OP_Match;
-    public $PL_Game;
-    public $OP_Game;
-    public $seed;
-    public $matched;
-    public $new;
+    public int $id;
+    public ?string $event;  // belongs_to event
+    public ?string $player; // belongs_to player
+    public ?int $active;
+    public ?int $score;
+    public ?int $matches_played;
+    public ?int $matches_won;
+    public ?int $draws;
+    public ?int $games_won;
+    public ?int $games_played;
+    public ?int $byes;
+    public ?float $OP_Match;
+    public ?float $PL_Game;
+    public ?float $OP_Game;
+    public ?int $seed;
+    public ?int $matched;
+    public ?bool $new = null;
 
-    public function __construct($eventname, $playername, $initial_seed = 127)
+    public function __construct(string $eventname, string $playername, int $initial_seed = 127)
     {
         // Check to see if we are doing event standings of player standings
         if ($playername == '0') {
@@ -54,7 +54,7 @@ class Standings
         }
     }
 
-    public function save()
+    public function save(): void
     {
         $db = Database::getConnection();
         if (
@@ -95,13 +95,8 @@ class Standings
         }
     }
 
-    /**
-     * @param string $eventname
-     * @param int    $isactive
-     *
-     * @return Standings[]
-     */
-    public static function getEventStandings($eventname, $isactive)
+    /** @return list<Standings> */
+    public static function getEventStandings(string $eventname, int $isactive): array
     {
         $db = Database::getConnection();
 
@@ -140,7 +135,7 @@ class Standings
         return (new EventStandings($eventName, $playerName))->render();
     }
 
-    public static function updateStandings($eventname, $subevent, $round)
+    public static function updateStandings(string $eventname, int $subevent, int $round): void
     {
         $players = self::getEventStandings($eventname, 0);
         foreach ($players as $player) {
@@ -148,7 +143,7 @@ class Standings
         }
     }
 
-    public function calculateStandings($eventname, $subevent, $round)
+    public function calculateStandings(string $eventname, int $subevent, int $round): void
     {
         $opponents = $this->getOpponents($eventname, $subevent, $round);
         $OMW = 0;
@@ -204,7 +199,8 @@ class Standings
         $this->save();
     }
 
-    public function getOpponents($eventname, $subevent, $round)
+    /** @return list<Standings> */
+    public function getOpponents(string $eventname, int $subevent, int $round): array
     {
         if ($round == '0') {
             return [];
@@ -236,20 +232,15 @@ class Standings
         return $opponents;
     }
 
-    /**
-     * @param int $subevent
-     * @param int $round
-     *
-     * @return void|array
-     */
-    public function League_getAvailable_Opponents($subevent, $round, $league_length)
+    /** @return list<string> */
+    public function League_getAvailable_Opponents(int $subevent, int $round, int $league_length): array
     {
         $opponentsAlreadyFaced = [];
         $allPlayers = [];
         $opponent_names = [];
 
         if ($round == '0') {
-            return;
+            return [];
         } else {
             $db = Database::getConnection();
             $stmt = $db->prepare('SELECT playera, playerb FROM matches where subevent = ? AND (playera = ? OR playerb = ?) AND round = ?');
@@ -292,13 +283,8 @@ class Standings
         return $opponent_names;
     }
 
-    /**
-     * @param Entry[] $entries
-     * @param string  $event_name
-     *
-     * @return void
-     */
-    public static function startEvent($entries, $event_name)
+    /** @param list<Entry> $entries */
+    public static function startEvent(array $entries, string $event_name): void
     {
         foreach ($entries as $entry) {
             $standing = new self($event_name, $entry->player->name, $entry->initial_seed);
@@ -306,34 +292,34 @@ class Standings
         }
     }
 
-    public static function addPlayerToEvent($event_name, $entry)
+    public static function addPlayerToEvent(string $event_name, string $entry): void
     {
         $standing = new self($event_name, $entry);
         $standing->save();
     }
 
-    public static function dropPlayer($eventname, $playername)
+    public static function dropPlayer(string $eventname, string $playername): void
     {
         $standing = new self($eventname, $playername);
         $standing->active = 0;
         $standing->save();
     }
 
-    public static function playerActive($eventname, $playername)
+    public static function playerActive(string $eventname, string $playername): bool
     {
         $standing = new self($eventname, $playername);
 
         return $standing->active == 1;
     }
 
-    public static function writeSeed($eventname, $playername, $seed)
+    public static function writeSeed(string $eventname, string $playername, int $seed): void
     {
         $standing = new self($eventname, $playername);
         $standing->seed = $seed;
         $standing->save();
     }
 
-    public static function resetMatched($eventname)
+    public static function resetMatched(string $eventname): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('UPDATE standings SET matched = 0 WHERE event = ?');

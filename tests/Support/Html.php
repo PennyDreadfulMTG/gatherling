@@ -9,14 +9,14 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class Html
 {
-    private $crawler;
+    private Crawler $crawler;
 
     public function __construct(string|Crawler $input)
     {
         $this->crawler = $input instanceof Crawler ? $input : new Crawler($input);
     }
 
-    public function __get($element): Html
+    public function __get(string $element): Html
     {
         $node = $this->crawler->filter($element);
         if ($node->count() === 0) {
@@ -30,7 +30,7 @@ class Html
         return $this->crawler->text();
     }
 
-    public function attr($attribute): ?string
+    public function attr(string $attribute): ?string
     {
         return $this->crawler->attr($attribute);
     }

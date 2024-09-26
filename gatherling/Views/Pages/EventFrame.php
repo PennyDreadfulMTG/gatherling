@@ -11,7 +11,9 @@ use Gatherling\Models\Event;
 abstract class EventFrame extends Page
 {
     public string $title = 'Event Host Control Panel';
+    /** @var array<string, mixed> */
     public array $event;
+    /** @var list<array{link: string, text: string}> */
     public array $controlPanelLinks;
 
     public function __construct(Event $event)
@@ -21,6 +23,7 @@ abstract class EventFrame extends Page
         $this->controlPanelLinks = $this->controlPanelLinks();
     }
 
+    /** @return list<array{link: string, text: string}> */
     public function controlPanelLinks(): array
     {
         $views = [

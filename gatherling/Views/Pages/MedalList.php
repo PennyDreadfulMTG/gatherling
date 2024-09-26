@@ -9,6 +9,7 @@ use Gatherling\Models\Event;
 
 class MedalList extends EventFrame
 {
+    /** @var list<array<string, mixed>> */
     public array $finalists;
 
     public function __construct(Event $event)

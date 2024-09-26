@@ -10,16 +10,16 @@ use Gatherling\Views\Components\FormatDropMenuR;
 
 class Ratings
 {
-    public $player;
-    public $rating;
-    public $format;
-    public $updated;
-    public $wins;
-    public $losses;
+    public string $player;
+    public int $rating;
+    public string $format;
+    public ?string $updated;
+    public int $wins;
+    public int $losses;
+    /** @var list<string> */
+    public array $ratingNames;
 
-    public $ratingNames;
-
-    public function __construct($format = '')
+    public function __construct(string $format = '')
     {
         if ($format == '') {
             $this->player = '';
@@ -36,18 +36,18 @@ class Ratings
         }
     }
 
-    public function formatDropMenuR($format = ''): string
+    public function formatDropMenuR(string $format = ''): string
     {
         return (new FormatDropMenuR($format))->render();
     }
 
-    public function deleteAllRatings()
+    public function deleteAllRatings(): void
     {
         $db = Database::getConnection();
         $db->query('DELETE FROM ratings') or exit($db->error);
     }
 
-    public function deleteRatingByFormat($format)
+    public function deleteRatingByFormat(string $format): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('Delete FROM ratings WHERE format = ?');
@@ -62,7 +62,7 @@ class Ratings
         return $removed;
     }
 
-    public function calcAllRatings()
+    public function calcAllRatings(): void
     {
         $this->calcCompositeRating();
         foreach ($this->ratingNames as $format) {
@@ -71,7 +71,7 @@ class Ratings
         $this->calcOtherRating();
     }
 
-    public function calcCompositeRating()
+    public function calcCompositeRating(): void
     {
         $db = Database::getConnection();
 
@@ -87,7 +87,7 @@ class Ratings
         $result->close();
     }
 
-    public function calcRatingByFormat($format)
+    public function calcRatingByFormat(string $format): void
     {
         $db = Database::getConnection();
         $searchString = '%'.$format.'%';
@@ -118,7 +118,7 @@ class Ratings
         }
     }
 
-    public function calcOtherRating()
+    public function calcOtherRating(): void
     {
         $db = Database::getConnection();
 
@@ -143,7 +143,7 @@ class Ratings
         $result->close();
     }
 
-    public function calcFinalizedEventRatings($event, $format, $start)
+    public function calcFinalizedEventRatings(string $event, string $format, string $start): void
     {
         $players = $this->calcPostEventRatings($event, 'Composite');
         $this->insertRatings($event, $players, 'Composite', $start);
@@ -163,7 +163,8 @@ class Ratings
         }
     }
 
-    public function calcPostEventRatings($event, $format)
+    /** @return array<string, array<string, int>> */
+    public function calcPostEventRatings(string $event, string $format): array
     {
         $players = $this->getEntryRatings($event, $format);
         $matches = $this->getMatches($event);
@@ -201,7 +202,8 @@ class Ratings
         return $players;
     }
 
-    public function insertRatings($event, $players, $format, $date)
+    /** @param array<string, array<string, int>> $players */
+    public function insertRatings(string $event, array $players, string $format, string $date): void
     {
         $db = Database::getConnection();
 
@@ -218,7 +220,7 @@ class Ratings
         }
     }
 
-    public function newRating($old, $opp, $pts, $k)
+    public function newRating(int $old, int $opp, float $pts, int $k): int
     {
         $new = $old + ($k * ($pts - $this->winProb($old, $opp)));
         if ($old < $new) {
@@ -227,15 +229,16 @@ class Ratings
             $new = floor($new);
         }
 
-        return $new;
+        return intval($new);
     }
 
-    public function winProb($rating, $oppRating)
+    public function winProb(int $rating, int $oppRating): float
     {
         return 1 / (pow(10, ($oppRating - $rating) / 400) + 1);
     }
 
-    public function getMatches($event)
+    /** @return list<array{playera: string, playerb: string, result: string, kvalue: int}> */
+    public function getMatches(string $event): array
     {
         $db = Database::getConnection();
 
@@ -261,7 +264,8 @@ class Ratings
         return $data;
     }
 
-    public function getEntryRatings($event, $format)
+    /** @return array<string, array<string, int>> */
+    public function getEntryRatings(string $event, string $format): array
     {
         $event_id = Database::single_result_single_param('SELECT id
                                                           FROM events

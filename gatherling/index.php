@@ -7,7 +7,6 @@ use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Matchup;
-use Gatherling\Models\Database;
 use Gatherling\Views\Pages\Home;
 
 require_once 'lib.php';
@@ -15,7 +14,7 @@ require_once 'lib.php';
 function main(): void
 {
     $activeEvents = Event::getActiveEvents(false);
-    $upcomingEvents = upcomingEvents();
+    $upcomingEvents = getUpcomingEvents();
     $stats = stats();
     $player = Player::getSessionPlayer();
     if (!$player instanceof Player) {
@@ -27,7 +26,8 @@ function main(): void
     $page->send();
 }
 
-function upcomingEvents()
+/** @return list<array{d: int, format: string, series: string, name: string, threadurl: string}> */
+function getUpcomingEvents(): array
 {
     $sql = '
         SELECT
@@ -42,7 +42,8 @@ function upcomingEvents()
     return DB::select($sql);
 }
 
-function stats()
+/** @return array<string, int> */
+function stats(): array
 {
     return [
         'decks' => Deck::uniqueCount(),
@@ -53,7 +54,8 @@ function stats()
     ];
 }
 
-function recentWinners()
+/** @return list<array<string, int|string>> */
+function recentWinners(): array
 {
     $sql = "
         SELECT

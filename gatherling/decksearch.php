@@ -23,7 +23,7 @@ function main(): void
     echo page('Deck Search', ob_get_clean());
 }
 
-function handleRequest()
+function handleRequest(): void
 {
     if (count($_POST) > 0) {
         unset($_SESSION['search_results']);
@@ -121,7 +121,7 @@ function handleRequest()
     }
 }
 
-function showMostPlayedDecks()
+function showMostPlayedDecks(): void
 {
     echo '<br />';
     echo '<div class="ds_inputbox group">';
@@ -169,7 +169,7 @@ function showMostPlayedDecks()
     echo '<br />';
 }
 
-function showSearchForm($res_num = null)
+function showSearchForm(?int $res_num = null): void
 {
     echo '<br />';
     echo '<div class="ds_inputbox group">';
@@ -238,7 +238,8 @@ function showSearchForm($res_num = null)
     echo '</div>';
 }
 
-function checkboxMenu($colors = null)
+/** @param ?array<string, string> $colors */
+function checkboxMenu(?array $colors = null): void
 {
 
     //check it see if the colors were set and check any boxes that were
@@ -275,7 +276,7 @@ function checkboxMenu($colors = null)
     echo "<label class=\"ds_checkbox\" for=\"color[r]\"><input type=\"checkbox\" name=\"color[r]\" value=\"r\" $r/>" . image_tag('manar.png', ['class' => 'ds_mana_image']) . '</label>';
 }
 
-function archetypeDropMenu($archetype = null, $useAll = 0, $form_name = 'archetype')
+function archetypeDropMenu(?string $archetype = null, int $useAll = 0, string $form_name = 'archetype'): void
 {
     $db = Database::getConnection();
     $query = 'SELECT name FROM archetypes WHERE priority > 0 ORDER BY  name';
@@ -294,7 +295,7 @@ function archetypeDropMenu($archetype = null, $useAll = 0, $form_name = 'archety
     $result->close();
 }
 
-function seriesDropMenu($series = null, $useAll = 0, $form_name = 'series')
+function seriesDropMenu(?string $series = null, int $useAll = 0, string $form_name = 'series'): void
 {
     $db = Database::getConnection();
     $query = 'SELECT name FROM series ORDER BY name';
@@ -311,7 +312,9 @@ function seriesDropMenu($series = null, $useAll = 0, $form_name = 'series')
     $result->close();
 }
 
-function medalsDropMenu($name, $options, $selected = null)
+
+/** @param list<string> $options */
+function medalsDropMenu(string $name, array $options, ?string $selected = null): void
 {
     echo "<select id=\"ds_select\" name=\"{$name}\">";
     echo '<option value="">- Medals -</option>';
@@ -325,7 +328,7 @@ function medalsDropMenu($name, $options, $selected = null)
     echo '</select>';
 }
 
-function formatDropMenuDS($format, $useAll = 0, $form_name = 'format')
+function formatDropMenuDS(?string $format, int $useAll = 0, string $form_name = 'format'): void
 {
     if (is_null($format)) {
         $format = '';
@@ -346,7 +349,8 @@ function formatDropMenuDS($format, $useAll = 0, $form_name = 'format')
     $result->close();
 }
 
-function displayDecksFromID($id_arr)
+/** @param list<int> $id_arr */
+function displayDecksFromID(array $id_arr): void
 {
     // grab an array of the values of the decks with matching id's
     $decksearch = new Decksearch();

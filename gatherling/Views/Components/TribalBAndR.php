@@ -11,11 +11,14 @@ class TribalBAndR extends Component
 {
     public string $activeFormatName;
     public int $cardCount;
+    /** @var list<array{cardName: string, cardLink: CardLink|null}> */
     public array $restrictedToTribe;
     public ?NotAllowed $noRestrictedToTribeCreatures;
+    /** @var list<string> */
     public array $tribesBanned;
     public TribeBanDropMenu $tribeBanDropMenu;
     public ?NotAllowed $noTribesBanned;
+    /** @var list<string> */
     public array $subTypesBanned;
     public TribeBanDropMenu $subTypeBanDropMenu;
     public ?NotAllowed $noSubTypesBanned;

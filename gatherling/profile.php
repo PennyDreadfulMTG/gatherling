@@ -49,7 +49,7 @@ if (isset($_REQUEST['time_zone'])) {
 <?php print_footer(); ?>
 
 <?php
-function content($profile_edit)
+function content(int $profile_edit): void
 {
     global $playername;
     if (rtrim($playername) === '') {
@@ -78,7 +78,7 @@ function content($profile_edit)
     }
 }
 
-function profileTable($player)
+function profileTable(Player $player): void
 {
     echo "<div class=\"grid_5 alpha\"> <div id=\"gatherling_lefthalf\">\n";
     infoTable($player);
@@ -91,7 +91,7 @@ function profileTable($player)
     echo '<div class="clear"></div>';
 }
 
-function infoTable($player)
+function infoTable(Player $player): void
 {
     $ndx = 0;
     $sum = 0;
@@ -190,7 +190,7 @@ function infoTable($player)
     echo '</table>';
 }
 
-function medalTable($player)
+function medalTable(Player $player): void
 {
     $medalcount = $player->getMedalStats();
 
@@ -208,7 +208,7 @@ function medalTable($player)
     echo "</table>\n";
 }
 
-function trophyTable($player)
+function trophyTable(Player $player): void
 {
     $events = $player->getEventsWithTrophies();
     echo "<table width=260>\n";
@@ -226,7 +226,7 @@ function trophyTable($player)
     echo "</table>\n";
 }
 
-function bestDecksTable($player)
+function bestDecksTable(Player $player): void
 {
     echo "<table width=250>\n";
     echo "<tr><td align=\"left\" colspan=3><b>MEDAL WINNING DECKS</td></tr>\n";
@@ -265,7 +265,7 @@ function bestDecksTable($player)
     echo "</table>\n";
 }
 
-function medalCell($medal, $count)
+function medalCell(string $medal, ?int $count): void
 {
     if (is_null($count)) {
         $count = 0;
@@ -275,12 +275,12 @@ function medalCell($medal, $count)
     echo  "<td>$count</td></tr>\n";
 }
 
-function inlineMedal($medal)
+function inlineMedal(string $medal): void
 {
     echo medalImgStr($medal) . '&nbsp;';
 }
 
-function deckRecordString($deckname, $player)
+function deckRecordString(string $deckname, Player $player): string
 {
     $matches = $player->getMatchesByDeckName($deckname);
     $wins = 0;
@@ -308,7 +308,7 @@ function deckRecordString($deckname, $player)
     return $recordString;
 }
 
-function searchForm($name)
+function searchForm(string $name): void
 {
     echo "<div class=\"grid_10 prefix_1 suffix_1\"> <div class=\"box\" id=\"gatherling_simpleform\">\n";
     echo "<div class=\"uppertitle\">Player Lookup</div>\n";
@@ -320,7 +320,7 @@ function searchForm($name)
     echo "</div> </div>\n";
 }
 
-function editForm($timezone, $email, $public)
+function editForm(float $timezone, string $email, int $public): void
 {
     echo "<form action=\"profile.php\" mode=\"POST\">\n";
     echo '<label for="timezone">Time Zone:</label>';

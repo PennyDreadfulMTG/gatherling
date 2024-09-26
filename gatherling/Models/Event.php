@@ -13,8 +13,8 @@ class Event
     public ?int $id;
 
     public ?int $season;
-    public $number;
-    public $format;
+    public ?int $number;
+    public ?string $format;
 
     public ?string $start;
     public ?int $kvalue;
@@ -35,28 +35,28 @@ class Event
     public ?string $cohost; // has one Player - cohost
 
     // Subevents
-    public $mainrounds;
-    public $mainstruct;
-    public $mainid; // Has one main subevent
-    public $finalrounds;
-    public $finalstruct;
-    public $finalid; // Has one final subevent
+    public string|int $mainrounds;
+    public string $mainstruct;
+    public ?int $mainid; // Has one main subevent
+    public string|int $finalrounds;
+    public string $finalstruct;
+    public ?int $finalid; // Has one final subevent
 
     // Pairing/event related
-    public $current_round;
-    public $standing;
-    public $player_reportable;
-    public $player_reported_draws;
-    public $prereg_cap; // Cap on player initiated registration
-    public $late_entry_limit; // How many rounds we let people perform late entries
+    public ?int $current_round;
+    public Standings $standing;
+    public ?int $player_reportable;
+    public ?int $player_reported_draws;
+    public ?int $prereg_cap; // Cap on player initiated registration
+    public ?int $late_entry_limit; // How many rounds we let people perform late entries
 
-    public $private_decks; // Toggle to disable deck privacy for active events. Allows the metagame page to display during an active event and lets deck lists be viewed if disabled.
-    public $private_finals; // As above, but for finals
+    public ?int $private_decks; // Toggle to disable deck privacy for active events. Allows the metagame page to display during an active event and lets deck lists be viewed if disabled.
+    public ?int $private_finals; // As above, but for finals
 
-    public $hastrophy;
-    private $new;
+    public ?int $hastrophy;
+    private ?bool $new = null;
 
-    public function __construct($name)
+    public function __construct(int|string $name)
     {
         if ($name == '') {
             $this->id = 0;
@@ -181,38 +181,38 @@ class Event
         $this->new = false;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return "Gatherling/Event($this->name)";
     }
 
     public static function CreateEvent(
-        $year,
-        $month,
-        $day,
-        $hour,
-        $naming,
-        $name,
-        $format,
-        $host,
-        $cohost,
-        $kvalue,
-        $series,
-        $season,
-        $number,
-        $threadurl,
-        $metaurl,
-        $reporturl,
-        $prereg_allowed,
-        $player_reportable,
-        $late_entry_limit,
-        $private,
-        $mainrounds,
-        $mainstruct,
-        $finalrounds,
-        $finalstruct,
-        $client
-    ) {
+        string $year,
+        string $month,
+        string $day,
+        string $hour,
+        string $naming,
+        string $name,
+        string $format,
+        string $host,
+        string $cohost,
+        string $kvalue,
+        string $series,
+        string $season,
+        string $number,
+        string $threadurl,
+        string $metaurl,
+        string $reporturl,
+        string $prereg_allowed,
+        string $player_reportable,
+        string $late_entry_limit,
+        string $private,
+        string $mainrounds,
+        string $mainstruct,
+        string $finalrounds,
+        string $finalstruct,
+        string $client
+    ): Event {
         $event = new self('');
         $event->start = "{$year}-{$month}-{$day} {$hour}:00";
 
@@ -231,21 +231,21 @@ class Event
         $event->format = $format;
         $event->host = $host;
         $event->cohost = $cohost;
-        $event->kvalue = $kvalue;
+        $event->kvalue = (int) $kvalue;
         $event->series = $series;
         $event->season = $season;
         $event->number = $number;
         $event->threadurl = $threadurl;
         $event->metaurl = $metaurl;
         $event->reporturl = $reporturl;
-        $event->private = $private;
-        $event->client = $client;
+        $event->private = (int) $private;
+        $event->client = (int) $client;
 
-        $event->prereg_allowed = $prereg_allowed;
+        $event->prereg_allowed = (int) $prereg_allowed;
 
-        $event->player_reportable = $player_reportable;
+        $event->player_reportable = (int) $player_reportable;
 
-        $event->late_entry_limit = $late_entry_limit;
+        $event->late_entry_limit = (int) $late_entry_limit;
 
         if ($mainrounds == '') {
             $mainrounds = 3;
@@ -268,7 +268,7 @@ class Event
         return $event;
     }
 
-    public function save()
+    public function save(): void
     {
         $db = Database::getConnection();
 
@@ -318,8 +318,8 @@ class Event
             }
             $stmt->close();
 
-            $this->newSubevent($this->mainrounds, 1, $this->mainstruct);
-            $this->newSubevent($this->finalrounds, 2, $this->finalstruct);
+            $this->newSubevent((int) $this->mainrounds, 1, $this->mainstruct);
+            $this->newSubevent((int) $this->finalrounds, 2, $this->finalstruct);
         } else {
             $stmt = $db->prepare('UPDATE events SET
       start = ?, format = ?, host = ?, cohost = ?, kvalue = ?,
@@ -383,7 +383,7 @@ class Event
         }
     }
 
-    private function newSubevent($rounds, $timing, $type)
+    private function newSubevent(int $rounds, int $timing, string $type): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO subevents(parent, rounds, timing, type)
@@ -393,7 +393,7 @@ class Event
         $stmt->close();
     }
 
-    public function getPlaceDeck($placing = '1st')
+    public function getPlaceDeck(string $placing = '1st'): ?Deck
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT n.deck from entries n, events e
@@ -412,7 +412,7 @@ class Event
         return $deck;
     }
 
-    public function getPlacePlayer($placing = '1st')
+    public function getPlacePlayer(string $placing = '1st'): ?string
     {
         $playername = Database::db_query_single('SELECT n.player from entries n, events e
                                              WHERE n.event_id = e.id
@@ -422,12 +422,13 @@ class Event
         return $playername;
     }
 
-    public function decklistsVisible()
+    public function decklistsVisible(): bool
     {
         return ($this->finalized && !$this->active) || $this->private_decks == 0 || ($this->current_round > $this->mainrounds && !$this->private_finals);
     }
 
-    public function getDecks()
+    /** @return list<Deck> */
+    public function getDecks(): array
     {
         $decks = [];
         $deckids = Database::list_result_single_param('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
@@ -439,7 +440,8 @@ class Event
         return $decks;
     }
 
-    public function getFinalists()
+    /** @return array<array{medal: string, player: string, deck: Deck}> */
+    public function getFinalists(): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare("SELECT medal, player, deck FROM entries
@@ -459,7 +461,11 @@ class Event
         return $finalists;
     }
 
-    public function setFinalists($win, $sec, $t4 = null, $t8 = null)
+    /**
+     * @param ?list<string> $t4
+     * @param ?list<string> $t8
+     */
+    public function setFinalists(string $win, string $sec, ?array $t4 = null, ?array $t8 = null): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare("UPDATE entries SET medal = 'dot' WHERE event_id = ?");
@@ -494,18 +500,13 @@ class Event
         $stmt->close();
     }
 
-    public function getTrophyImageLink()
+    public function getTrophyImageLink(): string
     {
         return "<a href=\"deck.php?mode=view&event={$this->id}\" class=\"borderless\">\n"
            .self::trophy_image_tag($this->name)."\n</a>\n";
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function isHost($name)
+    public function isHost(string $name): bool
     {
         $ishost = !is_null($this->host) && strcasecmp($name, $this->host) == 0;
         $iscohost = !is_null($this->cohost) && strcasecmp($name, $this->cohost) == 0;
@@ -513,18 +514,12 @@ class Event
         return $ishost || $iscohost;
     }
 
-    /** @return bool  */
-    public function isFinalized()
+    public function isFinalized(): bool
     {
         return $this->finalized != 0;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function isOrganizer($name)
+    public function isOrganizer(string $name): bool
     {
         $isOrganizer = false;
         $db = Database::getConnection();
@@ -540,12 +535,7 @@ class Event
         return $isOrganizer;
     }
 
-    /**
-     * @param string $playername
-     *
-     * @return bool
-     */
-    public function authCheck($playername)
+    public function authCheck(string $playername): bool
     {
         $player = new Player($playername);
 
@@ -560,22 +550,19 @@ class Event
         return false;
     }
 
-    /**
-     * @throws Exception
-     *
-     * @return int
-     */
-    public function getPlayerCount()
+    public function getPlayerCount(): int
     {
         return Database::single_result_single_param('SELECT count(*) FROM entries WHERE event_id = ?', 'd', $this->id);
     }
 
-    public function getPlayers()
+    /** @return list<string> */
+    public function getPlayers(): array
     {
         return Database::list_result_single_param('SELECT player FROM entries WHERE event_id = ? ORDER BY medal, player', 'd', $this->id);
     }
 
-    public function getRegisteredPlayers($checkActive = false)
+    /** @return list<string> */
+    public function getRegisteredPlayers(bool $checkActive = false): array
     {
         $players = $this->getPlayers();
         $registeredPlayers = [];
@@ -599,7 +586,7 @@ class Event
         return $registeredPlayers;
     }
 
-    public function hasRegistrant($playername)
+    public function hasRegistrant(string $playername): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT count(player) FROM entries WHERE event_id = ? AND player = ?');
@@ -612,7 +599,8 @@ class Event
         return $isPlaying > 0;
     }
 
-    public function getSubevents()
+    /** @return list<Subevent> */
+    public function getSubevents(): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT id FROM subevents WHERE parent = ? ORDER BY timing');
@@ -634,7 +622,8 @@ class Event
         return $subs;
     }
 
-    public function getEntriesByDateTime()
+    /** @return list<string> */
+    public function getEntriesByDateTime(): array
     {
         return Database::list_result_single_param(
             'SELECT player
@@ -646,7 +635,8 @@ class Event
         );
     }
 
-    public function getEntriesByMedal()
+    /** @return list<string> */
+    public function getEntriesByMedal(): array
     {
         return Database::list_result_single_param(
             'SELECT player
@@ -658,10 +648,8 @@ class Event
         );
     }
 
-    /**
-     * @return Entry[]
-     */
-    public function getEntries()
+    /** @return list<Entry> */
+    public function getEntries(): array
     {
         $players = $this->getPlayers();
 
@@ -673,12 +661,8 @@ class Event
         return $entries;
     }
 
-    /**
-     * @param bool $deleteinvalid
-     *
-     * @return Entry[]
-     */
-    public function getRegisteredEntries($deleteinvalid = false, $skip_invalid = false)
+    /** @return list<Entry> */
+    public function getRegisteredEntries(bool $deleteinvalid = false, bool $skip_invalid = false): array
     {
         $players = $this->getPlayers();
 
@@ -701,7 +685,7 @@ class Event
     }
 
     //Players that doesn't play a single game and doesn't get a bye as well
-    public function dropBlankEntries()
+    public function dropBlankEntries(): void
     {
         $players = $this->getPlayers();
         $entries = [];
@@ -713,14 +697,14 @@ class Event
         }
     }
 
-    public function removeEntry($playername)
+    public function removeEntry(string $playername): bool
     {
         $entry = new Entry($this->id, $playername);
 
         return $entry->removeEntry();
     }
 
-    public function addPlayer($playername)
+    public function addPlayer(string $playername): bool
     {
         $playername = trim($playername);
         if (strcmp($playername, '') == 0) {
@@ -755,7 +739,7 @@ class Event
         return $added;
     }
 
-    public function dropPlayer($playername, $round = -1)
+    public function dropPlayer(string $playername, int $round = -1): void
     {
         if ($round == -1) {
             $round = $this->current_round;
@@ -764,14 +748,14 @@ class Event
         Database::db_query('UPDATE standings SET active = 0 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
     }
 
-    public function undropPlayer($playername)
+    public function undropPlayer(string $playername): void
     {
         Database::db_query('UPDATE entries SET drop_round = 0 WHERE event_id = ? AND player = ?', 'ds', $this->id, $playername);
         Database::db_query('UPDATE standings SET active = 1 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
     }
 
-    /** @return Matchup[] Returns a list Matches */
-    public function getMatches()
+    /** @return list<Matchup> */
+    public function getMatches(): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT m.id FROM matches m, subevents s, events e
@@ -795,12 +779,8 @@ class Event
         return $matches;
     }
 
-    /**
-     * @param int $roundnum
-     *
-     * @return Matchup[]
-     */
-    public function getRoundMatches($roundnum)
+    /** @return list<Matchup> */
+    public function getRoundMatches(string|int $roundnum): array
     {
         $all_rounds = $roundnum == 'ALL';
         $roundnum = intval($roundnum);
@@ -844,10 +824,8 @@ class Event
     /**
      * This is a really specific method, used to show how many matches someone has played in a specific league round.
      * Used on Player CP and nowhere else.
-     *
-     * @return int
      */
-    public function getPlayerLeagueMatchCount($player_name)
+    public function getPlayerLeagueMatchCount(string $player_name): int
     {
         if ($this->current_round > $this->mainrounds) {
             $subevnum = 2;
@@ -865,7 +843,7 @@ class Event
 
     // In preparation for automating the pairings this function will add match the next pairing
     // results should be equal to 'P' for match in progress
-    public function addPairing($playera, $playerb, $round, $result)
+    public function addPairing(Standings $playera, Standings $playerb, int $round, string $result): int
     {
         $id = $this->mainid;
         if ($result == 'BYE') {
@@ -888,14 +866,14 @@ class Event
         return $newmatch;
     }
 
-    public function addMatch($playera, $playerb, $round = '99', $result = 'P', $playera_wins = '0', $playerb_wins = '0')
+    public function addMatch(Standings $playera, Standings $playerb, string $round = '99', string $result = 'P', string $playera_wins = '0', string $playerb_wins = '0'): void
     {
         $draws = 0;
         $id = $this->mainid;
 
         if ($round > $this->mainrounds) {
             $id = $this->finalid;
-            $round = $round - $this->mainrounds;
+            $round = (int) $round - (int) $this->mainrounds;
         }
 
         if ($round == 99) {
@@ -916,7 +894,7 @@ class Event
     }
 
     // Assigns trophies based on the finals matches which are entered.
-    public function assignTropiesFromMatches()
+    public function assignTropiesFromMatches(): void
     {
         $t8 = [];
         $t4 = [];
@@ -970,7 +948,7 @@ class Event
         $this->setFinalists($win, $sec, $t4, $t8);
     }
 
-    public static function exists($name)
+    public static function exists(string $name): bool
     {
         $db = Database::getConnection();
         $sql = 'SELECT name FROM events WHERE ';
@@ -992,7 +970,7 @@ class Event
         return $event_exists;
     }
 
-    public static function findMostRecentByHost($host_name)
+    public static function findMostRecentByHost(string $host_name): ?self
     {
         // TODO: This should show the closest non-finalized event.
         $db = Database::getConnection();
@@ -1006,12 +984,13 @@ class Event
         if ($event_exists) {
             return new self($event_name);
         }
+        return null;
     }
 
-    public function findPrev()
+    public function findPrev(): ?self
     {
         if ($this->number == 0) {
-            return;
+            return null;
         }
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT name FROM events WHERE series = ? AND season = ? AND number = ? LIMIT 1');
@@ -1024,9 +1003,10 @@ class Event
         if ($exists) {
             return new self($event_name);
         }
+        return null;
     }
 
-    public function findNext()
+    public function findNext(): ?self
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT name FROM events WHERE series = ? AND season = ? AND number = ? LIMIT 1');
@@ -1039,9 +1019,11 @@ class Event
         if ($exists) {
             return new self($event_name);
         }
+        return null;
     }
 
-    public function makeLinkArgs($text): array
+    /** @return array{link: string, text: string} */
+    public function makeLinkArgs(string $text): array
     {
         return [
             'link' => 'event.php?name='.rawurlencode($this->name),
@@ -1054,31 +1036,32 @@ class Event
         return (new ReportLink($this->name))->render();
     }
 
-    public static function count()
+    public static function count(): int
     {
         return Database::single_result('SELECT count(name) FROM events');
     }
 
-    public static function largestEventNum()
+    public static function largestEventNum(): int
     {
         return Database::single_result('SELECT max(number) FROM events where number != 128'); // 128 is "special"
     }
 
-    public static function getOldest()
+    public static function getOldest(): self
     {
         $eventname = Database::single_result('SELECT name FROM events ORDER BY start LIMIT 1');
 
         return new self($eventname);
     }
 
-    public static function getNewest()
+    public static function getNewest(): self
     {
         $eventname = Database::single_result('SELECT name FROM events ORDER BY start DESC LIMIT 1');
 
         return new self($eventname);
     }
 
-    public static function getNextPreRegister($num = 20)
+    /** @return list<self> */
+    public static function getNextPreRegister(int $num = 20): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT name FROM events WHERE prereg_allowed = 1 AND active = 0 AND finalized = 0 AND private = 0 AND DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() ORDER BY start LIMIT ?');
@@ -1099,7 +1082,8 @@ class Event
         return $events;
     }
 
-    public static function getUpcomingEvents($playername)
+    /** @return list<self> */
+    public static function getUpcomingEvents(string $playername): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT e.name FROM events e, entries n WHERE n.event_id = e.id AND n.player = ? AND active = 0 AND finalized = 0 ORDER BY start');
@@ -1119,7 +1103,8 @@ class Event
         return $events;
     }
 
-    public function getSeasonPointAdjustment($player)
+    /** @return array{adjustment: int, reason: string} */
+    public function getSeasonPointAdjustment(string $player): ?array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT adjustment, reason FROM season_points WHERE event = ? AND player = ?');
@@ -1131,13 +1116,12 @@ class Event
         $stmt->close();
         if ($exists) {
             return ['adjustment' => $adjustment, 'reason' => $reason];
-        } else {
-            return;
         }
+        return null;
     }
 
     // Adjusts the season points for $player for this event by $points, with the reason $reason
-    public function setSeasonPointAdjustment($player, $points, $reason)
+    public function setSeasonPointAdjustment(string $player, int $points, string $reason): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT player FROM season_points WHERE event = ? AND player = ?');
@@ -1159,17 +1143,17 @@ class Event
         return true;
     }
 
-    public static function trophy_image_tag($eventname)
+    public static function trophy_image_tag(string $eventname): string
     {
         return "<img style=\"border-width: 0px; max-width: 260px\" src=\"{self::trophySrc($eventname)}\" />";
     }
 
-    public static function trophySrc($eventname)
+    public static function trophySrc(string $eventname): string
     {
         return 'displayTrophy.php?event=' . rawurlencode($eventname);
     }
 
-    public function isLeague()
+    public function isLeague(): bool
     {
         $test = $this->current_round;
         if ($test <= ($this->finalrounds + $this->mainrounds)) {
@@ -1185,7 +1169,7 @@ class Event
         return false;
     }
 
-    public function leagueLength()
+    public function leagueLength(): int
     {
         return 6; // TODO: This should be customizable.
     }
@@ -1193,7 +1177,7 @@ class Event
     // All this should probably go somewhere else
     // Pairs the round which is currently running.
     // This should probably be in Standings?
-    public function pairCurrentRound($skip_invalid = false)
+    public function pairCurrentRound(bool $skip_invalid = false): bool
     {
         //Check if all matches in the current round are finished
         if (count($this->unfinishedMatches()) === 0) {
@@ -1251,7 +1235,7 @@ class Event
     }
 
     // Pairs the current swiss round by using the Blossom method
-    public function swissPairingBlossom($subevent_id, $skip_invalid)
+    public function swissPairingBlossom(int $subevent_id, bool $skip_invalid): void
     {
         Standings::resetMatched($this->name);
         $active_entries = Entry::getActivePlayers($this->id);
@@ -1324,7 +1308,8 @@ class Event
         }
     }
 
-    private function skipInvalidDecks($entries)
+    /** @param list<Entry> $entries */
+    private function skipInvalidDecks(array $entries): void
     {
         // Invalid entries get a fake
         foreach ($entries as $entry) {
@@ -1337,7 +1322,8 @@ class Event
         }
     }
 
-    private function assignInitialByes($entries, $current_round)
+    /** @param list<Entry> $entries */
+    private function assignInitialByes(array $entries, int $current_round): void
     {
         foreach ($entries as $entry) {
             if ($entry->initial_byes < $current_round) {
@@ -1350,18 +1336,19 @@ class Event
         }
     }
 
-    private function getByeProxyName()
+    private function getByeProxyName(): string
     {
         $byeNum = 0;
         while (true) {
-            if (is_null(Player::findByName('BYE'.$byeNum))) {
-                return 'BYE'.$byeNum;
+            if (is_null(Player::findByName('BYE' . $byeNum))) {
+                return 'BYE' . $byeNum;
             }
             $byeNum++;
         }
     }
 
-    private function getActiveOpponents($playername, $subevent)
+    /** @return list<string> */
+    private function getActiveOpponents(string $playername, int $subevent): array
     {
         $list_opponents = [];
 
@@ -1380,7 +1367,7 @@ class Event
 
     // I'm sure there is a proper algorithm to single or double elim with an arbitrary number of players
     // will look for one later, no need to reinvent the wheel. This works for now
-    public function singleElimination($round)
+    public function singleElimination(string $round): void
     {
         if ($round == 'final') {
             if ($this->current_round == $this->mainrounds) {
@@ -1404,7 +1391,7 @@ class Event
         }
     }
 
-    public function singleEliminationPairing($top_cut)
+    public function singleEliminationPairing(int $top_cut): void
     {
         $players = $this->standing->getEventStandings($this->name, 2);
         $players = array_slice($players, 0, $top_cut);
@@ -1424,7 +1411,7 @@ class Event
         }
     }
 
-    public function singleEliminationByeCheck($check, $rounds)
+    public function singleEliminationByeCheck(int $check, int $rounds): void
     {
         $seedcounter = 1;
         $players = $this->standing->getEventStandings($this->name, 2);
@@ -1467,7 +1454,7 @@ class Event
 
     // These functions need a serious DRYING out.  They are really obviously the same.
     // But we would need something in order to "order" the middle matches first.
-    public function top2Seeding()
+    public function top2Seeding(): void
     {
         $players = $this->standing->getEventStandings($this->name, 3);
         $this->addPairing($players[0], $players[1], $this->current_round + 1, 'P');
@@ -1475,7 +1462,7 @@ class Event
         Standings::writeSeed($this->name, $players[1]->player, 2);
     }
 
-    public function top4Seeding()
+    public function top4Seeding(): void
     {
         $players = $this->standing->getEventStandings($this->name, 3);
         if (count($players) < 4) {
@@ -1490,7 +1477,7 @@ class Event
         }
     }
 
-    public function top8Seeding()
+    public function top8Seeding(): void
     {
         $players = $this->standing->getEventStandings($this->name, 3);
         if (count($players) < 8) {
@@ -1511,15 +1498,13 @@ class Event
         }
     }
 
-    public function award_bye($player)
+    public function award_bye(Standings $player): void
     {
         $this->addPairing($player, $player, $this->current_round + 1, 'BYE');
     }
 
-    /**
-     * @return Event[] Active Events
-     */
-    public static function getActiveEvents($include_private = true)
+    /** @return list<Event> */
+    public static function getActiveEvents(bool $include_private = true): array
     {
         $db = Database::getConnection();
         if ($include_private) {
@@ -1544,7 +1529,7 @@ class Event
         return $events;
     }
 
-    public function resolveRound($subevent, $current_round)
+    public function resolveRound(int $subevent, int $current_round): void
     {
         if ($this->current_round <= $this->mainrounds) {
             $round = $this->current_round;
@@ -1556,7 +1541,7 @@ class Event
         if ($matches_remaining > 0) {
             // Nothing to do yet
             //echo "There are still {$matches_remaining} unresolved matches";
-            return 0;
+            return;
         } else {
             if ($this->current_round > $this->mainrounds) {
                 $structure = $this->finalstruct;
@@ -1590,7 +1575,7 @@ class Event
         }
     }
 
-    public static function getEventBySubevent($subevent)
+    public static function getEventBySubevent(int $subevent): self
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT e.name FROM events e, subevents s
@@ -1605,12 +1590,7 @@ class Event
         return $event;
     }
 
-    /**
-     * @param string $structure
-     *
-     * @return void
-     */
-    public function recalculateScores($structure)
+    public function recalculateScores(string $structure): void
     {
         $this->resetScores();
         $matches2 = $this->getRoundMatches('ALL');
@@ -1620,7 +1600,7 @@ class Event
         }
     }
 
-    public function resetScores()
+    public function resetScores(): void
     {
         $standings = Standings::getEventStandings($this->name, 0);
         foreach ($standings as $standing) {
@@ -1639,7 +1619,7 @@ class Event
         }
     }
 
-    public function resetEvent()
+    public function resetEvent(): void
     {
         $db = Database::getConnection();
 
@@ -1679,7 +1659,7 @@ class Event
 
     // This doesn't "repair" the round, it "re-pairs" the round by removing the pairings for the round.
     // It will always restart the top N if it is after the end rounds.
-    public function repairRound()
+    public function repairRound(): void
     {
         if ($this->current_round <= $this->mainrounds) {
             $round = $this->current_round;
@@ -1703,7 +1683,7 @@ class Event
         $this->pairCurrentRound(true);
     }
 
-    public function assignMedals()
+    public function assignMedals(): void
     {
         if ($this->current_round > $this->mainrounds) {
             $structure = $this->finalstruct;
@@ -1733,7 +1713,7 @@ class Event
         }
     }
 
-    public function AssignMedalsbyStandings()
+    public function assignMedalsByStandings(): void
     {
         $players = $this->standing->getEventStandings($this->name, 0);
         $numberOfPlayers = count($players);
@@ -1772,20 +1752,18 @@ class Event
         $this->setFinalists($win, $sec, $t4, $t8);
     }
 
-    public function is_full()
+    public function is_full(): bool
     {
         $entries = $this->getEntries();
         $players = count($entries);
         if ($this->prereg_cap == 0) {
             return false;
-        } elseif ($this->prereg_cap > $players) {
-            return false;
-        } else {
-            return true;
         }
+        return $players >= $this->prereg_cap;
     }
 
-    public function matchesOfType($type)
+    /** @return list<Matchup> */
+    public function matchesOfType(string $type): array
     {
         $verification = '';
         if ($type == 'unfinished') {
@@ -1822,17 +1800,19 @@ class Event
         return $matches;
     }
 
-    public function unfinishedMatches()
+    /** @return list<Matchup> */
+    public function unfinishedMatches(): array
     {
         return $this->matchesOfType('unfinished');
     }
 
-    public function finishedMatches()
+    /** @return list<Matchup> */
+    public function finishedMatches(): array
     {
         return $this->matchesOfType('finished');
     }
 
-    public function updateDecksFormat($format)
+    public function updateDecksFormat(string $format): void
     {
         $deckIDs = Database::list_result_single_param('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
 
@@ -1847,7 +1827,7 @@ class Event
         }
     }
 
-    public function startEvent($precheck)
+    public function startEvent(bool $precheck): void
     {
         $entries = $this->getRegisteredEntries($precheck);
         Standings::startEvent($entries, $this->name);
@@ -1868,7 +1848,7 @@ class Event
         return $ret;
     }
 
-    private function toEnglish($structure, $rounds, $isfinals)
+    private function toEnglish(string $structure, int $rounds, bool $isfinals): string
     {
         if ($structure == 'Single Elimination' && $isfinals) {
             if ($rounds == 3) {

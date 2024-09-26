@@ -14,9 +14,11 @@ class PlayerEventList extends Page
     public FormatDropMenu $formatDropMenu;
     public SeriesDropMenu $seriesDropMenu;
     public SeasonDropMenu $seasonDropMenu;
+    /** @var list<array<string, int|string>> */
     public array $events;
     public bool $hasMore;
 
+    /** @param list<array<string, int|string>> $events */
     public function __construct(string $format, string $series, string $season, array $events)
     {
         parent::__construct();

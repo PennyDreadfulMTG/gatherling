@@ -9,6 +9,7 @@ use Mustache_Loader_FilesystemLoader;
 
 class TemplateHelper
 {
+    /** @param array<string, mixed>|object $context */
     public static function render(string $template_name, array|object $context = [], bool $isHtml = true): string
     {
         $options = [

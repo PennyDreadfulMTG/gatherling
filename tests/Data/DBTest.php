@@ -17,7 +17,7 @@ class DBTest extends DatabaseCase
         DB::execute('CREATE TABLE IF NOT EXISTS test_table (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255))');
     }
 
-    public function testInsert()
+    public function testInsert(): void
     {
         $sql = 'INSERT INTO test_table (name) VALUES (:name)';
         $params = [':name' => 'Test Name'];
@@ -27,7 +27,7 @@ class DBTest extends DatabaseCase
         $this->assertEquals('Test Name', $rows[0]['name']);
     }
 
-    public function testSelect()
+    public function testSelect(): void
     {
         DB::execute("INSERT INTO test_table (name) VALUES ('Test1')");
         DB::execute("INSERT INTO test_table (name) VALUES ('Test2')");
@@ -38,13 +38,13 @@ class DBTest extends DatabaseCase
         $this->assertEquals('Test2', $rows[1]['name']);
     }
 
-    public function testSelectOnlyNoData()
+    public function testSelectOnlyNoData(): void
     {
         $this->expectException(DatabaseException::class);
         DB::selectOnly('SELECT * FROM test_table WHERE id = 1');
     }
 
-    public function testSelectOnly()
+    public function testSelectOnly(): void
     {
         DB::execute("INSERT INTO test_table (name) VALUES ('Test1')");
         DB::execute("INSERT INTO test_table (name) VALUES ('Test2')");
@@ -54,7 +54,7 @@ class DBTest extends DatabaseCase
         $row = DB::selectOnly('SELECT * FROM test_table');
     }
 
-    public function testSelectOnlyOrNull()
+    public function testSelectOnlyOrNull(): void
     {
         $row = DB::selectOnlyOrNull('SELECT * FROM test_table WHERE id = 1');
         $this->assertNull($row);
@@ -66,7 +66,7 @@ class DBTest extends DatabaseCase
         $row = DB::selectOnlyOrNull('SELECT * FROM test_table');
     }
 
-    public function testValue()
+    public function testValue(): void
     {
         DB::execute("INSERT INTO test_table (name) VALUES ('Test1')");
         $value = DB::value('SELECT name FROM test_table WHERE id = 1');
@@ -79,7 +79,7 @@ class DBTest extends DatabaseCase
         DB::value('SELECT id FROM test_table WHERE id = 9999');
     }
 
-    public function testCommit()
+    public function testCommit(): void
     {
         DB::begin('my_transaction');
         DB::execute("INSERT INTO test_table (name) VALUES ('Test for Commit')");
@@ -89,7 +89,7 @@ class DBTest extends DatabaseCase
         $this->assertCount(1, $rows);
     }
 
-    public function testRollback()
+    public function testRollback(): void
     {
         DB::begin('test_rollback');
         DB::execute("INSERT INTO test_table (name) VALUES ('Test for Rollback')");
@@ -99,7 +99,7 @@ class DBTest extends DatabaseCase
         $this->assertCount(0, $rows);
     }
 
-    public function testNestedTransaction()
+    public function testNestedTransaction(): void
     {
         DB::begin('test_nested_transaction');
         DB::execute("INSERT INTO test_table (name) VALUES ('Test for Nested Transaction')");

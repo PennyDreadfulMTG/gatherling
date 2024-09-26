@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Pages;
 
+use Gatherling\Models\Event;
+
 class PointsAdjustmentForm extends EventFrame
 {
+    /** @var list<array<string, mixed>> */
     public array $entries;
 
-    public function __construct($event)
+    public function __construct(Event $event)
     {
         parent::__construct($event);
         $eventEntries = $event->getEntries();

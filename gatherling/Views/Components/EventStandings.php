@@ -11,6 +11,7 @@ use Gatherling\Models\Standings;
 
 class EventStandings extends Component
 {
+    /** @var array<int, array{rank: int, shouldHighlight: bool, matchScore: int, gameName: GameName}> */
     public array $standings;
 
     public function __construct(

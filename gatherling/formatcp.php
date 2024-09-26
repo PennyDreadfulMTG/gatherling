@@ -49,7 +49,7 @@ function main(): void
         (new InsufficientPermissions($player->isOrganizer()))->send();
     }
 
-    $actionResultComponent = handleActions($seriesName);
+    $actionResultComponent = handleAction($seriesName);
 
     if (!isset($_REQUEST['format']) || empty($_REQUEST['format'])) {
         if (!($actionResultComponent instanceof LoadFormatForm)) {
@@ -87,7 +87,7 @@ function main(): void
     $page->send();
 }
 
-function handleActions(string $seriesName): Component
+function handleAction(string $seriesName): Component
 {
     if (!isset($_POST['action']) ||$_POST['action'] == 'Continue' || $_POST['action'] == 'Load Format') {
         return new NullComponent();
@@ -178,6 +178,10 @@ function handleActions(string $seriesName): Component
     return new ErrorMessage(["Unknown action '{$_POST['action']}'"]);
 }
 
+/**
+ * @param string|array<string> $addBanCards
+ * @param array<string> $delBanCards
+ */
 function updateBanlist(string $activeFormat, string|array $addBanCards, array $delBanCards): Component
 {
     $format = new Format($activeFormat);
@@ -199,6 +203,10 @@ function updateBanlist(string $activeFormat, string|array $addBanCards, array $d
     return $errors ? new ErrorMessage($errors) : new NullComponent();
 }
 
+/**
+ * @param string|array<string> $addLegalCards
+ * @param array<string> $delLegalCards
+ */
 function updateLegalList(string $formatName, array|string $addLegalCards, array $delLegalCards): Component
 {
     $errors = [];
@@ -228,6 +236,10 @@ function updateLegalList(string $formatName, array|string $addLegalCards, array 
     return $errors ? new ErrorMessage($errors) : new NullComponent();
 }
 
+/**
+ * @param string $cardSetName
+ * @param array<string> $delCardSets
+ */
 function updateCardSets(string $formatName, string $cardSetName, array $delCardSets): Component
 {
     $format = new Format($formatName);
@@ -246,6 +258,10 @@ function updateCardSets(string $formatName, string $cardSetName, array $delCardS
     return $errors ? new ErrorMessage($errors) : new NullComponent();
 }
 
+/**
+ * @param string $addChild
+ * @param array<string> $delChildren
+ */
 function updateChildren(string $formatName, string $addChild, array $delChildren): Component
 {
     $errors = [];
@@ -274,6 +290,10 @@ function addAll(string $formatName, string $cardsetType): Component
     return new NullComponent();
 }
 
+/**
+ * @param string|array<string> $addRestrictedCards
+ * @param array<string> $delRestrictedCards
+ */
 function updateRestrictedList(string $formatName, string|array $addRestrictedCards, array $delRestrictedCards): Component
 {
     $format = new Format($formatName);
@@ -301,6 +321,7 @@ function updateRestrictedList(string $formatName, string|array $addRestrictedCar
     return $errors ? new ErrorMessage($errors) : new NullComponent();
 }
 
+/** @param array<string, string> $values */
 function updateFormat(array $values): Component
 {
     $format = new Format($values['format']);
@@ -310,16 +331,16 @@ function updateFormat(array $values): Component
     }
 
     if (isset($values['minmain'])) {
-        $format->min_main_cards_allowed = $values['minmain'];
+        $format->min_main_cards_allowed = (int) $values['minmain'];
     }
     if (isset($values['maxmain'])) {
-        $format->max_main_cards_allowed = $values['maxmain'];
+        $format->max_main_cards_allowed = (int) $values['maxmain'];
     }
     if (isset($values['minside'])) {
-        $format->min_side_cards_allowed = $values['minside'];
+        $format->min_side_cards_allowed = (int) $values['minside'];
     }
     if (isset($values['maxside'])) {
-        $format->max_side_cards_allowed = $values['maxside'];
+        $format->max_side_cards_allowed = (int) $values['maxside'];
     }
 
     if (isset($values['singleton'])) {
@@ -417,7 +438,7 @@ function updateFormat(array $values): Component
     return new NullComponent();
 }
 
-function createNewFormat($seriesName, $newFormatName): Component
+function createNewFormat(string $seriesName, string $newFormatName): Component
 {
     $format = new Format('');
     $format->name = $newFormatName;
@@ -480,12 +501,12 @@ function renameFormat(string $seriesName, string $newFormatName, string $formatN
     return new FormatError("Format {$formatName} Could Not Be Renamed :-(", $formatName);
 }
 
-function deleteForm($seriesName, $formatName): Component
+function deleteForm(string $seriesName, string $formatName): Component
 {
     return new FormatDeleteForm($seriesName);
 }
 
-function deleteFormat($formatName): Component
+function deleteFormat(string $formatName): Component
 {
     $format = new Format($formatName);
 
@@ -496,6 +517,10 @@ function deleteFormat($formatName): Component
     return new FormatError("Could Not Delete {$formatName}!", $formatName);
 }
 
+/**
+ * @param string|array<string> $addRestrictedToTribeCreature
+ * @param array<string> $delRestrictedToTribe
+ */
 function updateRestrictedToTribeList(string $formatName, string|array $addRestrictedToTribeCreature, array $delRestrictedToTribe): Component
 {
     $format = new Format($formatName);
@@ -517,6 +542,10 @@ function updateRestrictedToTribeList(string $formatName, string|array $addRestri
     return new NullComponent();
 }
 
+/**
+ * @param string $subTypeBan
+ * @param array<string> $delBannedSubType
+ */
 function updateSubtypeBan(string $formatName, string $subTypeBan, array $delBannedSubType): Component
 {
     $format = new Format($formatName);
@@ -533,6 +562,10 @@ function updateSubtypeBan(string $formatName, string $subTypeBan, array $delBann
     return new NullComponent();
 }
 
+/**
+ * @param string $tribeBan
+ * @param array<string> $delBannedTribe
+ */
 function updateTribeBan(string $formatName, string $tribeBan, array $delBannedTribe): Component
 {
     $format = new Format($formatName);
@@ -550,6 +583,9 @@ function updateTribeBan(string $formatName, string $tribeBan, array $delBannedTr
     return new NullComponent();
 }
 
+/**
+ * @return list<string>
+ */
 function getMissingSets(string $cardsetType, Format $format): array
 {
     $cardsets = Database::list_result_single_param('SELECT name FROM cardsets WHERE type = ?', 's', $cardsetType);

@@ -31,7 +31,7 @@ print_header('Admin Control Panel');
 
 <?php
 
-function do_page()
+function do_page(): void
 {
     $player = Player::getSessionPlayer();
     if (!$player->isSuper()) {
@@ -71,12 +71,12 @@ function do_page()
     echo '</center><div class="clear"></div></div>';
 }
 
-function printAdminCPIntroduction()
+function printAdminCPIntroduction(): void
 {
     echo 'Welcome to the Admin CP! <br />';
 }
 
-function printNoAdmin()
+function printNoAdmin(): void
 {
     global $hasError;
     global $errormsg;
@@ -86,7 +86,7 @@ function printNoAdmin()
     echo '<a href="player.php">Back to the Player Control Panel</a></center>';
 }
 
-function printError()
+function printError(): void
 {
     global $hasError;
     global $errormsg;
@@ -95,7 +95,7 @@ function printError()
     }
 }
 
-function adminCPMenu()
+function adminCPMenu(): void
 {
     echo '<table><tr><td colspan="2" align="center">';
     echo '<a href="admincp.php?view=change_password">Change Player Password</a>';
@@ -106,7 +106,7 @@ function adminCPMenu()
     echo '</td></tr></table>';
 }
 
-function printCreateNewSeriesForm()
+function printCreateNewSeriesForm(): void
 {
     echo '<h4>Create New Series</h4>';
     echo '<form action="admincp.php" method="post">';
@@ -145,7 +145,7 @@ function printCreateNewSeriesForm()
     echo '</table></form>';
 }
 
-function printCalcRatingsForm()
+function printCalcRatingsForm(): void
 {
     $ratings = new Ratings();
     echo '<h4>Calculate Ratings</h4>';
@@ -167,7 +167,7 @@ function printCalcRatingsForm()
     echo '</table></form>';
 }
 
-function printAddCardSet()
+function printAddCardSet(): void
 {
     echo '<h3><center>Install New Cardset</center></h3>';
     echo '<form action="util/insertcardset.php" method="post" enctype="multipart/form-data">';
@@ -191,7 +191,7 @@ function printAddCardSet()
     echo '</table></form>';
 }
 
-function printChangePasswordForm()
+function printChangePasswordForm(): void
 {
     echo '<form action="admincp.php" method="post">';
     echo '<input type="hidden" name="view" value="change_password" />';
@@ -203,7 +203,7 @@ function printChangePasswordForm()
     echo '</table> </form>';
 }
 
-function printManualVerificationForm()
+function printManualVerificationForm(): void
 {
     echo '<form action="admincp.php" method="post">';
     echo '<input type="hidden" name="view" value="verify_player" />';
@@ -214,7 +214,7 @@ function printManualVerificationForm()
     echo '</table> </form>';
 }
 
-function handleActions()
+function handleActions(): void
 {
     if (!isset($_POST['action'])) {
         return;
@@ -278,7 +278,7 @@ function handleActions()
     }
 }
 
-function printNewFormat()
+function printNewFormat(): void
 {
     echo "<h4>New Format</h4>\n";
     echo '<form action="admincp.php" method="post">';

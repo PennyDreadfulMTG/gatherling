@@ -8,11 +8,12 @@ use Gatherling\Models\Event;
 
 class EventHelper
 {
-    public static function playerDropMenuArgs(Event $event, string|int $letter, $def = "\n"): array
+    /** @return array<string, string|array<string, bool|int|string>> */
+    public static function playerDropMenuArgs(Event $event, string|int $letter, string $def = "\n"): array
     {
         // If the event is active, only list players who haven't already dropped.
         // Otherwise, list all registered players.
-        $playerNames = $event->getRegisteredPlayers($event->active);
+        $playerNames = $event->getRegisteredPlayers((bool) $event->active);
         sort($playerNames, SORT_STRING | SORT_NATURAL | SORT_FLAG_CASE);
 
         $default = strcmp("\n", $def) == 0 ? "- Player $letter -" : '- None -';
@@ -32,6 +33,7 @@ class EventHelper
         ];
     }
 
+    /** @return array<string, string|array<string, bool|int|string>> */
     public static function roundDropMenuArgs(Event $event, int|string $selected): array
     {
         $options = [];

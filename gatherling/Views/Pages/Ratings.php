@@ -6,6 +6,7 @@ namespace Gatherling\Views\Pages;
 
 use DateTime;
 use Gatherling\Models\Pagination;
+use Gatherling\Models\Player;
 use Gatherling\Views\Components\PlayerLink;
 use Gatherling\Views\Components\RatingsTable;
 use Gatherling\Views\Components\FormatDropMenuR;
@@ -18,6 +19,7 @@ class Ratings extends Page
     public RatingsTable $ratingsTable;
     public string $paginationSafe;
 
+    /** @param list<array{qplayer: string, qmax: int, player: string, rank: int, playerName: string, player: Player}> $ratingsData */
     public function __construct(
         string $format,
         DateTime $lastTournamentDate,

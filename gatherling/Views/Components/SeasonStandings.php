@@ -11,11 +11,13 @@ use Gatherling\Views\Components\Component;
 class SeasonStandings extends Component
 {
     public string $seriesName;
-    public string $season;
+    public int $season;
+    /** @var list<array{shortName: string, reportLink: string}> */
     public array $seasonEvents;
+    /** @var list<array{classes: string, count: int, playerLink: PlayerLink, totalPoints: int, events: list<array{points: int|null, why: string|null}>}> */
     public array $players;
 
-    public function __construct(Series $series, string $season)
+    public function __construct(Series $series, int $season)
     {
         $seasonEventNames = $series->getSeasonEventNames($season);
         $points = $series->seasonPointsTable($season);
@@ -77,7 +79,12 @@ class SeasonStandings extends Component
         parent::__construct('partials/seasonStandings');
     }
 
-    private static function reverseTotalSort($a, $b)
+
+    /**
+     * @param array<string, mixed> $a
+     * @param array<string, mixed> $b
+     */
+    private static function reverseTotalSort(array $a, array $b): int
     {
         if ($a['.total'] == $b['.total']) {
             return 0;

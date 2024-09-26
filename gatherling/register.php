@@ -9,7 +9,7 @@ use Gatherling\Views\Pages\Register;
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
 
-function main()
+function main(): void
 {
     $message = '';
     if (isset($_POST['pw1'])) {

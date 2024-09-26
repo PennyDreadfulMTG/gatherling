@@ -9,12 +9,15 @@ use Gatherling\Models\Format;
 class CardSets extends Component
 {
     public string $activeFormatName;
+    /** @var list<string> */
     public array $coreCardSets;
     public ?NotAllowed $noCoreCardSets;
     public CardsetDropMenu $coreCardSetsDropMenu;
+    /** @var list<string> */
     public array $blockCardSets;
     public ?NotAllowed $noBlockCardSets;
     public CardsetDropMenu $blockCardSetsDropMenu;
+    /** @var list<string> */
     public array $extraCardSets;
     public ?NotAllowed $noExtraCardSets;
     public CardsetDropMenu $extraCardSetsDropMenu;

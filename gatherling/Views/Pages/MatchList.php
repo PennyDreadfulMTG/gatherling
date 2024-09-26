@@ -11,14 +11,22 @@ use Gatherling\Views\Components\GameName;
 
 class MatchList extends EventFrame
 {
+    /** @var list<array<string, string>> */
     public array $roundLinks;
     public bool $hasMatches;
+    /** @var array<int, array<string, mixed>> */
     public array $rounds;
+    /** @var array<string, mixed> */
     public array $lastRound;
+    /** @var array<string, string|array<string, bool|int|string>> */
     public array $playerADropMenu;
+    /** @var array<string, string|array<string, bool|int|string>> */
     public array $playerBDropMenu;
+    /** @var array<string, string|array<string, bool|int|string>> */
     public ?array $playerByeMenu;
+    /** @var array<string, string|array<string, bool|int|string>> */
     public ?array $roundDropMenu;
+    /** @var array<string, string|array<string, bool|int|string>> */
     public ?array $resultDropMenu;
     public bool $isBeforeRoundTwo;
     public string $structureSummary;
@@ -127,6 +135,7 @@ class MatchList extends EventFrame
     }
 }
 
+/** @return array<string, string|array<string, bool|int|string>> */
 function playerByeMenuArgs(Event $event): array
 {
     $playerNames = $event->getRegisteredPlayers(true);
@@ -145,6 +154,10 @@ function playerByeMenuArgs(Event $event): array
     ];
 }
 
+/**
+ * @param array<string, string> $extraOptions
+ * @return array<string, string|array<string, bool|int|string>>
+ */
 function resultDropMenuArgs(string $name, array $extraOptions = []): array
 {
     $options = [
@@ -166,6 +179,7 @@ function resultDropMenuArgs(string $name, array $extraOptions = []): array
     ];
 }
 
+/** @return array<string, mixed> */
 function unverifiedPlayerCellArgs(Event $event, Matchup $match, Player $player): array
 {
     $playerName = $player->name;

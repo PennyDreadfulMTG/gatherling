@@ -34,7 +34,7 @@ do_page();
 
 <?php
 
-function do_page()
+function do_page(): void
 {
     $player_series = Player::getSessionPlayer()->organizersSeries();
     if (count($player_series) == 0) {
@@ -116,7 +116,7 @@ function do_page()
     }
 }
 
-function printMissingTrophies($series)
+function printMissingTrophies(Series $series): void
 {
     $recentEvents = $series->getRecentEvents(1000);
     $winningDeck = null;
@@ -153,7 +153,7 @@ function printMissingTrophies($series)
     echo '</table>';
 }
 
-function seasonPointsAdj()
+function seasonPointsAdj(): void
 {
     global $hasError;
     global $errormsg;
@@ -163,7 +163,7 @@ function seasonPointsAdj()
     printError();
 }
 
-function printError()
+function printError(): void
 {
     global $hasError;
     global $errormsg;
@@ -172,13 +172,13 @@ function printError()
     }
 }
 
-function printNoSeries()
+function printNoSeries(): void
 {
     echo "<center>You're not a organizer of any series, so you can't use this page.<br />";
     echo '<a href="player.php">Back to the Player Control Panel</a></center>';
 }
 
-function printSeriesForm($series)
+function printSeriesForm(Series $series): void
 {
     echo '<form action="seriescp.php" method="post">';
     echo '<table class="form c">';
@@ -224,7 +224,7 @@ function printSeriesForm($series)
     echo '</table></form>';
 }
 
-function seriesCPMenu($series, $cur = '')
+function seriesCPMenu(Series $series, string $cur = ''): void
 {
     $name = $series->name;
     echo '<table><tr><td colspan="2" align="center">';
@@ -240,7 +240,7 @@ function seriesCPMenu($series, $cur = '')
     echo '</td></tr></table>';
 }
 
-function printSeriesOrganizersForm($series)
+function printSeriesOrganizersForm(Series $series): void
 {
     $player = new Player(Player::loginName());
     echo '<form action="seriescp.php" method="post">';
@@ -265,7 +265,7 @@ function printSeriesOrganizersForm($series)
     echo '</table> ';
 }
 
-function printPlayerBanForm($series)
+function printPlayerBanForm(Series $series): void
 {
     $player = new Player(Player::loginName());
     echo '<form action="seriescp.php" method="post">';
@@ -303,7 +303,8 @@ function printPlayerBanForm($series)
     echo '</table> ';
 }
 
-function printPointsRule($rule, $key, $rules, $formtype = 'text', $size = 4)
+/** @param array<string, int|string> $rules */
+function printPointsRule(string $rule, string $key, array $rules, string $formtype = 'text', int $size = 4): void
 {
     echo "<tr><th>{$rule}</th>";
     if ($formtype == 'text') {
@@ -321,7 +322,7 @@ function printPointsRule($rule, $key, $rules, $formtype = 'text', $size = 4)
     }
 }
 
-function printPointsForm($series)
+function printPointsForm(Series $series): void
 {
     $chosen_season = $series->currentSeason();
     if (isset($_GET['season'])) {
@@ -369,7 +370,7 @@ function printPointsForm($series)
     echo '</td></table></form>';
 }
 
-function printLogoForm($series)
+function printLogoForm(Series $series): void
 {
     echo '<form action="seriescp.php" method="post" enctype="multipart/form-data">';
     echo '<table class="form c">';
@@ -382,7 +383,7 @@ function printLogoForm($series)
     echo '</table></form> ';
 }
 
-function printDiscordForm($series)
+function printDiscordForm(Series $series): void
 {
     $player = new Player(Player::loginName());
     echo '<form action="seriescp.php" method="post">';
@@ -407,7 +408,7 @@ function printDiscordForm($series)
     echo '</table> ';
 }
 
-function printRecentEventsTable($series)
+function printRecentEventsTable(Series $series): void
 {
     $recentEvents = $series->getRecentEvents();
     echo '<center> <h3> Recent Events </h3> </center>';
@@ -429,7 +430,7 @@ function printRecentEventsTable($series)
     echo '</table>';
 }
 
-function handleActions()
+function handleActions(): void
 {
     global $hasError;
     global $errormsg;

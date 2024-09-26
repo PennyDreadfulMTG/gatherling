@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Gatherling\Models\Player;
+use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use Wohali\OAuth2\Client\Provider\Exception\DiscordIdentityProviderException;
 
 require_once __DIR__ . '/lib.php';
@@ -73,7 +74,7 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     do_login($token);
 }
 
-function send_to_discord($scope = null)
+function send_to_discord(?string $scope = null): void
 {
     // Step 1. Get authorization code
     global $provider;
@@ -86,10 +87,7 @@ function send_to_discord($scope = null)
     header('Location: ' . $authUrl);
 }
 
-/**
- * @param \League\OAuth2\Client\Token\AccessTokenInterface $token
- */
-function store_token($token)
+function store_token(\League\OAuth2\Client\Token\AccessTokenInterface $token): void
 {
     $_SESSION['DISCORD_TOKEN'] = $token->getToken();
     $_SESSION['DISCORD_REFRESH_TOKEN'] = $token->getRefreshToken();
@@ -97,7 +95,7 @@ function store_token($token)
     $_SESSION['DISCORD_SCOPES'] = $token->getValues()['scope'];
 }
 
-function do_login($token)
+function do_login(\League\OAuth2\Client\Token\AccessTokenInterface $token): void
 {
     try {
         global $provider;
@@ -141,7 +139,7 @@ function do_login($token)
     }
 }
 
-function prompt_link_account($user)
+function prompt_link_account(mixed $user): void
 {
     print_header('Login'); ?>
     <div class="grid_10 suffix_1 prefix_1">

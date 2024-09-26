@@ -15,7 +15,7 @@ use Gatherling\Views\Pages\EventReport;
 
 require_once 'lib.php';
 
-function main()
+function main(): void
 {
     $eventName = $_GET['event'] ?? $_GET['name'] ?? null;
     if ($eventName && Event::exists($eventName)) {
@@ -33,6 +33,7 @@ function main()
     $page->send();
 }
 
+/** @return list<array{name: string, format: string, players: int, host: string, start: string, finalized: int, cohost: string, series: string, season: string}> */
 function eventList(string $format, string $series, string $season): array
 {
     $sql = '

@@ -25,7 +25,7 @@ class Registration
             return self::ERROR_PASSWORD_MISMATCH;
         }
         $player->password = hash('sha256', $pw1);
-        $player->super = Player::activeCount() == 0;
+        $player->super = Player::activeCount() == 0 ? 1 : 0;
         $player->emailAddress = $email;
         $player->emailPrivacy = $emailStatus;
         $player->timezone = $timezone;

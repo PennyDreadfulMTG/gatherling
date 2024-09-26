@@ -41,24 +41,9 @@ parameters:
 			path: gatherling/Models/Decksearch.php
 
 		-
-			message: "#^Parameter \\#1 \\$roundnum of method Gatherling\\\\Models\\\\Event\\:\\:getRoundMatches\\(\\) expects int, string given\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Variable \\$standings might not be defined\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Comparison operation \"\\<\\=\" between \\(array\\|float\\|int\\) and 4 results in an error\\.$#"
-			count: 1
-			path: gatherling/Models/Format.php
-
-		-
-			message: "#^Comparison operation \"\\<\\=\" between \\(array\\|float\\|int\\<5, max\\>\\) and 7 results in an error\\.$#"
-			count: 1
-			path: gatherling/Models/Format.php
 
 		-
 			message: "#^Offset 'Black' does not exist on array\\{\\}\\.$#"
@@ -106,11 +91,6 @@ parameters:
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
-			count: 2
-			path: gatherling/Models/Matchup.php
-
-		-
 			message: "#^Call to function assert\\(\\) with false will always evaluate to false\\.$#"
 			count: 3
 			path: gatherling/Models/MaxWeightMatching.php
@@ -141,12 +121,332 @@ parameters:
 			path: gatherling/Models/MaxWeightMatching.php
 
 		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:__construct\\(\\) has parameter \\$edges with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:__construct\\(\\) has parameter \\$maxcardinality with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:addBlossom\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:addBlossom\\(\\) has parameter \\$base with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:addBlossom\\(\\) has parameter \\$k with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:arr_repr\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:arr_repr\\(\\) has parameter \\$arr with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:assignLabel\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:assignLabel\\(\\) has parameter \\$p with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:assignLabel\\(\\) has parameter \\$t with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:assignLabel\\(\\) has parameter \\$w with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:augmentBlossom\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:augmentBlossom\\(\\) has parameter \\$b with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:augmentBlossom\\(\\) has parameter \\$v with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:augmentMatching\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:augmentMatching\\(\\) has parameter \\$k with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:blossomLeaves\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:blossomLeaves\\(\\) has parameter \\$b with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:checkDelta2\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:checkDelta3\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:expandBlossom\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:expandBlossom\\(\\) has parameter \\$b with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:expandBlossom\\(\\) has parameter \\$endstage with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:floorintdiv\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:floorintdiv\\(\\) has parameter \\$x with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:floorintdiv\\(\\) has parameter \\$y with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:last_elem\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:last_elem\\(\\) has parameter \\$arr with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:main\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:print_arr\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:print_arr\\(\\) has parameter \\$arr with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:safe_access\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:safe_access\\(\\) has parameter \\$arr with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:safe_access\\(\\) has parameter \\$requested_index with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:safe_index\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:safe_index\\(\\) has parameter \\$arr with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:safe_index\\(\\) has parameter \\$requested_index with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:scanBlossom\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:scanBlossom\\(\\) has parameter \\$v with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:scanBlossom\\(\\) has parameter \\$w with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:slack\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:slack\\(\\) has parameter \\$k_edge with no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:verifyOptimum\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
 			message: "#^Negated boolean expression is always true\\.$#"
 			count: 2
 			path: gatherling/Models/MaxWeightMatching.php
 
 		-
 			message: "#^Parameter \\#1 \\$assertion of function assert expects bool\\|string, int given\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$allowedge has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$bestedge has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$bestedgeto has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$blossombase has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$blossombestedges has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$blossomchilds has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$blossomendps has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$blossomparent has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$dualvar has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$edges has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$endpoint has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$inblossom has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$label has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$labelend has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$mate has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$maxcardinality has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$nedge has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$neighbend has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$nvertex has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$queue has no type specified\\.$#"
+			count: 1
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\MaxWeightMatching\\:\\:\\$unusedblossoms has no type specified\\.$#"
 			count: 1
 			path: gatherling/Models/MaxWeightMatching.php
 
@@ -191,21 +491,6 @@ parameters:
 			path: gatherling/Models/Pagination.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function str_pad expects string, \\(float\\|int\\) given\\.$#"
-			count: 1
-			path: gatherling/Models/Pagination.php
-
-		-
-			message: "#^Method Gatherling\\\\Models\\\\Player\\:\\:findOrCreateByName\\(\\) should return static\\(Gatherling\\\\Models\\\\Player\\)\\|null but returns Gatherling\\\\Models\\\\Player\\.$#"
-			count: 1
-			path: gatherling/Models/Player.php
-
-		-
-			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
-			count: 2
-			path: gatherling/action.php
-
-		-
 			message: "#^Parameter \\#1 \\$string of function sha1 expects string, int\\<0, max\\> given\\.$#"
 			count: 1
 			path: gatherling/admin/infobot.php
@@ -246,31 +531,6 @@ parameters:
 			path: gatherling/auth.php
 
 		-
-			message: "#^Access to an undefined property object\\:\\:\\$eventname\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Access to an undefined property object\\:\\:\\$medal\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getEvent\\(\\)\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:linkTo\\(\\)\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:recordString\\(\\)\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
 			message: "#^Offset 'archetype' on array\\{contents\\: '', sideboard\\: '', name\\: ''\\} in isset\\(\\) does not exist\\.$#"
 			count: 1
 			path: gatherling/deck.php
@@ -301,21 +561,6 @@ parameters:
 			path: gatherling/formatcp.php
 
 		-
-			message: "#^Function handleActions invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: gatherling/formatcp.php
-
-		-
-			message: "#^Parameter \\#2 \\$round of method Gatherling\\\\Models\\\\Standings\\:\\:League_getAvailable_Opponents\\(\\) expects int, string given\\.$#"
-			count: 1
-			path: gatherling/lib_form_helper.php
-
-		-
-			message: "#^Access to an undefined property object\\:\\:\\$discord_handle\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
 			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
 			count: 2
 			path: gatherling/player.php
@@ -329,11 +574,6 @@ parameters:
 			message: "#^Variable \\$max might not be defined\\.$#"
 			count: 2
 			path: gatherling/profile.php
-
-		-
-			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
-			count: 2
-			path: gatherling/report.php
 
 		-
 			message: "#^Variable \\$match might not be defined\\.$#"

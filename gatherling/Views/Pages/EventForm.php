@@ -16,15 +16,19 @@ use Gatherling\Views\Components\SeriesDropMenu;
 class EventForm extends EventFrame
 {
     public bool $currentlyEditing;
+    /** @var list<array{text: string, link: string}> */
     public array $navLinks;
     public NumDropMenu $yearDropMenu;
+    /** @var array<string, mixed> */
     public array $monthDropMenu;
     public NumDropMenu $dayDropMenu;
+    /** @var array<string, mixed> */
     public array $timeDropMenu;
     public SeriesDropMenu $seriesDropMenu;
     public SeasonDropMenu $seasonDropMenu;
     public NumDropMenu $numberDropMenu;
     public FormatDropMenu $formatDropMenu;
+    /** @var array<string, mixed> */
     public array $kValueDropMenu;
     public StringField $hostField;
     public StringField $cohostField;
@@ -32,21 +36,34 @@ class EventForm extends EventFrame
     public TextInput $metagameUrlField;
     public TextInput $reportUrlField;
     public NumDropMenu $mainRoundsNumDropMenu;
+    /** @var array<string, mixed> */
     public array $mainRoundsStructDropMenu;
     public NumDropMenu $finalRoundsNumDropMenu;
+    /** @var array<string, mixed> */
     public array $finalRoundsStructDropMenu;
+    /** @var array<string, mixed> */
     public array $preregistrationAllowedCheckbox;
     public TextInput $lateEntryLimitField;
+    /** @var array<string, mixed> */
     public array $playerReportedResultsCheckbox;
     public TextInput $registrationCapField;
+    /** @var array<string, mixed> */
     public array $deckPrivacyCheckbox;
+    /** @var array<string, mixed> */
     public array $finalsListPrivacyCheckbox;
+    /** @var array<string, mixed> */
     public array $playerReportedDrawsCheckbox;
+    /** @var array<string, mixed> */
     public array $privateEventCheckbox;
+    /** @var array<string, mixed> */
     public array $clientDropMenu;
-    public ?array $finalizeEventCheckbox;
-    public ?array $eventActiveCheckbox;
-    public ?array $currentRoundDropMenu;
+    /** @var array<string, mixed> */
+    public array $finalizeEventCheckbox;
+    /** @var array<string, mixed> */
+    public array $eventActiveCheckbox;
+    /** @var array<string, mixed> */
+    public array $currentRoundDropMenu;
+    /** @var ?array<string, mixed> */
     public ?array $trophyField;
     public bool $showCreateNextEvent;
     public bool $showCreateNextSeason;
@@ -170,6 +187,7 @@ class EventForm extends EventFrame
     }
 }
 
+/** @return array{id: string, name: string, default: string, options: array<int, array{isSelected: bool, value: int, text: string}>} */
 function clientDropMenuArgs(string $field, int $def): array
 {
     $clients = [
@@ -194,6 +212,7 @@ function clientDropMenuArgs(string $field, int $def): array
     ];
 }
 
+/** @return array<string, mixed> */
 function kValueSelectInput(int $kvalue): array
 {
     $names = [
@@ -204,6 +223,7 @@ function kValueSelectInput(int $kvalue): array
     return selectInputArgs('K-Value', 'kvalue', $names, $kvalue);
 }
 
+/** @return array{name: string, default: string, options: array<int, array{isSelected: bool, value: int, text: string}>} */
 function monthDropMenuArgs(string|int $month): array
 {
     if (strcmp($month, '') == 0) {
@@ -229,6 +249,7 @@ function monthDropMenuArgs(string|int $month): array
     ];
 }
 
+/** @return array{name: string, default: string, options: list<array{isSelected: bool, value: string, text: string}>} */
 function structDropMenuArgs(string $field, string $def): array
 {
     $names = ['Swiss', 'Single Elimination', 'League', 'League Match'];
@@ -254,10 +275,11 @@ function structDropMenuArgs(string $field, string $def): array
     ];
 }
 
+/** @return array{hasTrophy: bool, trophySrc: string} */
 function trophyFieldArgs(Event $event): array
 {
     return [
-        'hasTrophy' => $event->hastrophy,
+        'hasTrophy' => (bool) $event->hastrophy,
         'trophySrc' => 'displayTrophy.php?event=' . rawurlencode($event->name),
     ];
 }

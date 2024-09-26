@@ -11,7 +11,8 @@ include 'util/email.php';
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
 
-function main() {
+function main(): void
+{
     $hasResetPassword = $passwordResetFailed = $showForgotForm = $showNewPasswordForm = $sentLoginLink = $cantSendLoginLink = $cantFindPlayer = false;
     $token = $email = null;
     if (isset($_POST['view']) && $_POST['view'] === 'new_password') {
@@ -47,7 +48,7 @@ function main() {
     $page->send();
 }
 
-function sendLoginLink($player): bool
+function sendLoginLink(Player $player): bool
 {
     $link = generateSecureResetLink($player->name);
     $body = <<<END
@@ -65,7 +66,7 @@ function sendLoginLink($player): bool
     return sendEmail($player->emailAddress, 'Gatherling Login Link', $body);
 }
 
-function generateSecureResetLink($name): string
+function generateSecureResetLink(string $name): string
 {
     global $CONFIG;
 
@@ -83,7 +84,7 @@ function generateSecureResetLink($name): string
     return $CONFIG['base_url'] . "/forgot.php?token=$token";
 }
 
-function resetPassword($token, $newPassword): bool
+function resetPassword(string $token, string $newPassword): bool
 {
     global $CONFIG;
 

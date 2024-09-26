@@ -8,39 +8,39 @@ use Exception;
 
 class Matchup
 {
-    public $id;
-    public $subevent;
-    public $round;
-    public $playera;
-    public $playerb;
-    public $result;
+    public int $id;
+    public ?int $subevent = null;
+    public ?int $round;
+    public ?string $playera;
+    public ?string $playerb;
+    public ?string $result;
     // We keep both players wins and losses, so that they can independently report their scores.
-    public $playera_wins;
-    public $playera_losses;
-    public $playera_draws;
-    public $playerb_wins;
-    public $playerb_losses;
-    public $playerb_draws;
+    public ?int $playera_wins;
+    public ?int $playera_losses;
+    public ?int $playera_draws;
+    public ?int $playerb_wins;
+    public ?int $playerb_losses;
+    public ?int $playerb_draws;
 
     // Inherited from subevent
 
-    public $timing;
-    public $type;
-    public $rounds;
+    public ?int $timing;
+    public ?string $type;
+    public ?int $rounds;
 
     // Inherited from event
 
-    public $format;
-    public $series;
-    public $season;
-    public $eventname;
-    public $event_id;
+    public ?string $format;
+    public ?string $series;
+    public ?int $season;
+    public ?string $eventname;
+    public ?int $event_id;
 
     // added for matching
 
-    public $verification;
+    public ?string $verification;
 
-    public static function destroy($matchid)
+    public static function destroy(int $matchid): int
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM matches WHERE id = ?');
@@ -52,7 +52,7 @@ class Matchup
         return $rows;
     }
 
-    public function __construct($id)
+    public function __construct(int $id)
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT m.subevent, m.round, m.playera, m.playerb, m.result, m.playera_wins, m.playera_losses, m.playera_draws, m.playerb_wins, m.playerb_losses, m.playerb_draws, s.timing, s.type, s.rounds, e.format, e.series, e.season, m.verification, e.name, e.id
@@ -67,7 +67,7 @@ class Matchup
     }
 
     // Retuns the event that this Match is a part of.
-    public function getEvent()
+    public function getEvent(): Event
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT s.parent
@@ -82,12 +82,7 @@ class Matchup
         return new Event($eventname);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    private function playerA($name)
+    private function playerA(string $name): bool
     {
         if (is_null($name)) {
             return false;
@@ -96,12 +91,7 @@ class Matchup
         return strcasecmp($this->playera, $name) == 0;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    private function playerB($name)
+    private function playerB(string $name): bool
     {
         if (is_null($name)) {
             return false;
@@ -112,7 +102,7 @@ class Matchup
         return strcasecmp($this->playerb, $name) == 0;
     }
 
-    private function toName($player_or_name)
+    private function toName(string|Player $player_or_name): string
     {
         if (is_object($player_or_name)) {
             return $player_or_name->name;
@@ -121,19 +111,19 @@ class Matchup
         return $player_or_name;
     }
 
-    public function playerLetter($player)
+    public function playerLetter(string|Player $player): ?string
     {
         if ($this->playerA($player)) {
             return 'a';
         } elseif ($this->playerB($player)) {
             return 'b';
         } else {
-            return;
+            return null;
         }
     }
 
     // Returns true if $player has a bye in this match
-    public function playerBye($player)
+    public function playerBye(string|Player $player): bool
     {
         if ($this->result != 'BYE') {
             return false;
@@ -144,7 +134,7 @@ class Matchup
     }
 
     // Returns true if $player is playing this match right now.
-    public function playerMatchInProgress($player)
+    public function playerMatchInProgress(string|Player $player): bool
     {
         if ($this->result != 'P') {
             return false;
@@ -154,7 +144,7 @@ class Matchup
         return $this->playerA($playername) || $this->playerB($playername);
     }
 
-    public function playerWon($player)
+    public function playerWon(string|Player $player): bool
     {
         $playername = $this->toName($player);
 
@@ -162,7 +152,7 @@ class Matchup
              || ($this->playerB($playername) && ($this->result == 'B'));
     }
 
-    public function playerLost($player)
+    public function playerLost(string|Player $player): bool
     {
         $playername = $this->toName($player);
 
@@ -172,7 +162,7 @@ class Matchup
 
     // returns the number of wins for the current match for $player
     // returns false if the player is not in this match.
-    public function getPlayerWins($player): int|false
+    public function getPlayerWins(string|Player $player): int|false
     {
         $playername = $this->toName($player);
 
@@ -186,7 +176,7 @@ class Matchup
         return false;
     }
 
-    public function getPlayerResult($player)
+    public function getPlayerResult(string|Player $player): string
     {
         $playername = $this->toName($player);
         if ($this->playerA($playername)) {
@@ -225,7 +215,7 @@ class Matchup
 
     // returns the number of wins for the current match for $player
     // Returns false if the player is not in this match.
-    public function getPlayerLosses($player)
+    public function getPlayerLosses(string|Player $player): int|false
     {
         $playername = $this->toName($player);
 
@@ -239,7 +229,7 @@ class Matchup
         return false;
     }
 
-    public function getWinner()
+    public function getWinner(): ?string
     {
         if ($this->playerWon($this->playera)) {
             return $this->playera;
@@ -260,27 +250,21 @@ class Matchup
         if ($this->isDraw()) {
             return 'Draw';
         }
+
+        return null;
     }
 
-    public function isBYE()
+    public function isBYE(): bool
     {
-        if ($this->result == 'BYE') {
-            return true;
-        }
-
-        return false;
+        return $this->result == 'BYE';
     }
 
-    public function matchInProgress()
+    public function matchInProgress(): bool
     {
-        if ($this->result == 'P') {
-            return true;
-        }
-
-        return false;
+        return $this->result == 'P';
     }
 
-    public function getLoser()
+    public function getLoser(): ?string
     {
         if ($this->playerLost($this->playera)) {
             return $this->playera;
@@ -288,75 +272,74 @@ class Matchup
         if ($this->playerLost($this->playerb)) {
             return $this->playerb;
         }
+        return null;
     }
 
-    public function otherPlayer($oneplayer)
+    public function otherPlayer(string $oneplayer): ?string
     {
         if (strcasecmp($oneplayer, $this->playera) == 0) {
             return $this->playerb;
         } elseif (strcasecmp($oneplayer, $this->playerb) == 0) {
             return $this->playera;
         }
+        return null;
     }
 
     // Returns a count of how many matches there are total.
-    public static function count()
+    public static function count(): int
     {
         return Database::single_result('SELECT count(id) FROM matches');
     }
 
     // Saves a report from a player on their match results.
-    public static function saveReport($result, $match_id, $player)
+    public static function saveReport(string $result, int $match_id, string $player): void
     {
-        if ($match_id == 0) {
-        }
         $savedMatch = new self($match_id);
-        if ($savedMatch->result == 'P') {
-            $db = Database::getConnection();
-            // Which player is reporting?
-            if ($player == 'a') {
-                $stmt = $db->prepare('UPDATE matches SET playera_wins = ?, playera_losses = ? WHERE id = ?');
-            } else {
-                $stmt = $db->prepare('UPDATE matches SET playerb_wins = ?, playerb_losses = ? WHERE id = ?');
-            }
-            $stmt or exit($db->error);
-            // this is dumb, fix later
-            // I agree it's dumb, but you can't because PDO sucks.
-            $two = 2;
-            $one = 1;
-            $zero = 0;
-
-            switch ($result) {
-                case 'W20':
-                    //echo "writing a 2-0 win";
-                    $stmt->bind_param('ddd', $two, $zero, $match_id);
-                    break;
-                case 'W21':
-                    //echo "writing a 2-1 win";
-                    $stmt->bind_param('ddd', $two, $one, $match_id);
-                    break;
-                case 'L20':
-                    //echo "writing a 2-0 loss";
-                    $stmt->bind_param('ddd', $zero, $two, $match_id);
-                    break;
-                case 'L21':
-                    //echo "writing a 2-1 loss";
-                    $stmt->bind_param('ddd', $one, $two, $match_id);
-                    break;
-                case 'D':
-                    //writing a draw
-                    $stmt->bind_param('ddd', $one, $one, $match_id);
-                    break;
-            }
-
-            $stmt->execute();
-            self::validateReport($match_id);
-
+        if ($savedMatch->result != 'P') {
             return;
         }
+        $db = Database::getConnection();
+        // Which player is reporting?
+        if ($player == 'a') {
+            $stmt = $db->prepare('UPDATE matches SET playera_wins = ?, playera_losses = ? WHERE id = ?');
+        } else {
+            $stmt = $db->prepare('UPDATE matches SET playerb_wins = ?, playerb_losses = ? WHERE id = ?');
+        }
+        $stmt or exit($db->error);
+        // this is dumb, fix later
+        // I agree it's dumb, but you can't because PDO sucks.
+        $two = 2;
+        $one = 1;
+        $zero = 0;
+
+        switch ($result) {
+            case 'W20':
+                //echo "writing a 2-0 win";
+                $stmt->bind_param('ddd', $two, $zero, $match_id);
+                break;
+            case 'W21':
+                //echo "writing a 2-1 win";
+                $stmt->bind_param('ddd', $two, $one, $match_id);
+                break;
+            case 'L20':
+                //echo "writing a 2-0 loss";
+                $stmt->bind_param('ddd', $zero, $two, $match_id);
+                break;
+            case 'L21':
+                //echo "writing a 2-1 loss";
+                $stmt->bind_param('ddd', $one, $two, $match_id);
+                break;
+            case 'D':
+                //writing a draw
+                $stmt->bind_param('ddd', $one, $one, $match_id);
+                break;
+        }
+
+        $stmt->execute();
+        self::validateReport($match_id);
     }
 
-    public function reportSubmitted($name)
+    public function reportSubmitted(string $name): bool
     {
         if ($this->playerA($name) && (($this->playera_wins + $this->playera_losses) > 0)) {
             return true;
@@ -370,7 +353,7 @@ class Matchup
 
     // Checks both reports against each other to see if they match.
     // Marks ones where they don't match as 'failed'
-    public static function validateReport($match_id)
+    public static function validateReport(int $match_id): void
     {
         // get and compare reports
         //echo "in validate report".$match_id;
@@ -401,7 +384,7 @@ class Matchup
         }
     }
 
-    public static function flagVerified($match_id)
+    public static function flagVerified(int $match_id): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare("UPDATE matches SET verification = 'verified' WHERE id = ?");
@@ -410,7 +393,7 @@ class Matchup
         $stmt->close();
     }
 
-    public static function flagFailed($match_id)
+    public static function flagFailed(int $match_id): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare("UPDATE matches SET verification = 'failed' WHERE id = ?");
@@ -419,11 +402,11 @@ class Matchup
         $stmt->close();
     }
 
-    public static function unresolvedMatchesCheck($subevent_name, $current_round)
+    public static function unresolvedMatchesCheck(int $subevent, int $current_round): int
     {
         $db = @Database::getConnection();
         $stmt = $db->prepare("SELECT count(id) FROM matches where subevent = ? AND verification != 'verified' AND round = ?");
-        $stmt->bind_param('sd', $subevent_name, $current_round);
+        $stmt->bind_param('sd', $subevent, $current_round);
         $stmt->execute();
         $stmt->bind_result($result);
         $stmt->fetch();
@@ -433,7 +416,7 @@ class Matchup
     }
 
     // Goes through all matches in this round and updates the "Standing" objects with new scores.
-    public function updateScores($structure)
+    public function updateScores(string $structure): void
     {
         // Goes through all matches in this round and updates scores
         // TODO remove scoring from here, as it's now calculated elsewhere so much of this is redundant
@@ -496,7 +479,7 @@ class Matchup
 
     // temp, will fix later
     // Don't know what this does, but it looks a lot like the above.
-    public function fixScores($structure)
+    public function fixScores(string $structure): void
     {
         // Goes through all matches in this round and updates scores
 
@@ -568,7 +551,7 @@ class Matchup
         $playerb_standing->save();
     }
 
-    public function finalize_match($winner, $match_id)
+    public function finalize_match(string $winner, int $match_id): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('UPDATE matches SET result = ? WHERE id = ?');
@@ -577,17 +560,13 @@ class Matchup
         $stmt->close();
     }
 
-    public function player_reportable_check()
+    public function player_reportable_check(): bool
     {
         $event = new Event($this->getEventNamebyMatchid());
-        if ($event->player_reportable == 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return $event->player_reportable == 1;
     }
 
-    public function getEventNamebyMatchid()
+    public function getEventNamebyMatchid(): string
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT e.name
@@ -605,19 +584,19 @@ class Matchup
         return $name;
     }
 
-    public function isDraw()
+    public function isDraw(): bool
     {
         return $this->playera_wins == $this->playerb_wins;
     }
 
-    public function isReportable()
+    public function isReportable(): bool
     {
         $event = $this->getEvent();
 
         return $event->player_reportable == 1;
     }
 
-    public function allowsPlayerReportedDraws()
+    public function allowsPlayerReportedDraws(): int
     {
         $event = new Event($this->eventname);
         if ($event->player_reported_draws == 1) {

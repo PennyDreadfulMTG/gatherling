@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 // Use Brevo to send an email from us to a single recipient. Brevo supports multiple recipients, attachments, etc. but we don't need that yet.
-function sendEmail($to, $subj, $msg): bool
+function sendEmail(string $to, string $subj, string $msg): bool
 {
     global $CONFIG;
 

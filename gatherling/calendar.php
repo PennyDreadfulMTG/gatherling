@@ -28,16 +28,19 @@ function main(): void
     $page->send();
 }
 
+/** @return list<array{d: int, name: string, threadurl: string}> */
 function lastNEvents(int $n): array
 {
     return events('start < NOW()', $n);
 }
 
+/** @return list<array{d: int, name: string, threadurl: string}> */
 function upcomingEvents(): array
 {
     return events('start > NOW()');
 }
 
+/** @return list<array{d: int, name: string, threadurl: string}> */
 function events(string $where, int $limit = 0): array
 {
     $sql = "

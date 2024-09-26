@@ -7,7 +7,7 @@ use Gatherling\Views\Pages\Series;
 
 require_once 'lib.php';
 
-function main()
+function main(): void
 {
     $activeSeriesNames = SeriesModel::activeNames();
     $page = new Series($activeSeriesNames);

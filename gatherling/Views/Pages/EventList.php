@@ -17,6 +17,7 @@ class EventList extends Page
     public SeriesDropMenu $seriesDropMenu;
     public SeasonDropMenu $seasonDropMenu;
     public bool $hasPlayerSeries;
+    /** @var list<array{name: string, format: string, players: int, host: string, start: string, active: int, finalized: int, cohost: string, series: string, kvalue: int}> */
     public array $results;
     public bool $hasMore;
 
@@ -75,6 +76,7 @@ class EventList extends Page
     }
 }
 
+/** @param list<string> $playerSeries */
 function queryEvents(Player $player, array $playerSeries, string $seriesName): \mysqli_result|bool
 {
     $db = Database::getConnection();

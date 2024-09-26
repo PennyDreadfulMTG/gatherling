@@ -10,12 +10,15 @@ class BAndR extends Component
 {
     public string $activeFormatName;
     public int $restrictedCardCount;
+    /** @var array<int, array{cardName: string, cardLink: ?CardLink}> */
     public array $restrictedCards;
     public NotAllowed $noRestrictedCards;
     public int $bannedCardCount;
+    /** @var array<int, array{cardName: string, cardLink: ?CardLink}> */
     public array $bannedCards;
     public NotAllowed $noBannedCards;
     public int $legalCardCount;
+    /** @var array<int, array{cardName: string, cardLink: ?CardLink}> */
     public array $legalCards;
     public NotAllowed $noLegalCards;
 

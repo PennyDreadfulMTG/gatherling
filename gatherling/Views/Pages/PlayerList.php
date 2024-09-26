@@ -24,6 +24,7 @@ class PlayerList extends EventFrame
     public bool $hasStarted;
     public bool $hasEntries;
     public int $numEntries;
+    /** @var list<array<string, mixed>> */
     public array $entries;
     public bool $isSwiss;
     public bool $isSingleElim;
@@ -84,6 +85,7 @@ class PlayerList extends EventFrame
     }
 }
 
+/** @return array<string, mixed> */
 function entryListArgs(Entry $entry, int $numEntries, bool $isTribal): array
 {
     $entryInfo = getObjectVarsCamelCase($entry);

@@ -9,7 +9,7 @@ use Gatherling\Tests\Support\TestCases\DatabaseCase;
 
 final class PlayerTest extends DatabaseCase
 {
-    public function testFindOrCreateByName()
+    public function testFindOrCreateByName(): void
     {
         $player = Player::findOrCreateByName('test');
         $this->assertNotNull($player);

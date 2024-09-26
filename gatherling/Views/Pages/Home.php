@@ -6,18 +6,29 @@ namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
+use Gatherling\Views\Components\Component;
 use Gatherling\Views\Components\Time;
 
 class Home extends Page
 {
+    /** @var list<array<string, string|int|Component>> */
     public array $activeEvents;
     public bool $hasActiveEvents;
     public bool $hasUpcomingEvents;
+    /** @var array<string, string> */
     public array $playerInfo = [];
+    /** @var array<string, string> */
     public array $mostRecentHostedEvent = [];
+    /** @var list<array<string, string>> */
     public array $recentWinners;
     public bool $hasRecentWinners;
 
+    /**
+     * @param list<Event> $activeEvents
+     * @param list<array{d: int, format: string, series: string, name: string, threadurl: string}> $upcomingEvents
+     * @param array<string, int> $stats
+     * @param list<array<string, int|string>> $recentWinners
+     */
     public function __construct(array $activeEvents, public array $upcomingEvents, public array $stats, ?Player $player, ?Event $mostRecentHostedEvent, array $recentWinners)
     {
         parent::__construct();

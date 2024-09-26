@@ -24,8 +24,8 @@ class NumDropMenu extends DropMenu
         }
         for ($n = $min; $n <= $max; $n++) {
             $options[] = [
-                'text'       => $n,
-                'value'      => $n,
+                'text'       => (string) $n,
+                'value'      => (string) $n,
                 'isSelected' => $n == $def,
             ];
         }

@@ -218,6 +218,7 @@ class Entry
         return TemplateHelper::render('partials/createDeckLink', $args);
     }
 
+    /** @return array<string, mixed> */
     public function createDeckLinkArgs(): array
     {
         $args = [

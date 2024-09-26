@@ -10,7 +10,9 @@ use Gatherling\Models\Database;
 
 class MetaStats extends Component
 {
+    /** @var list<array{name: string, pcg: int}> */
     public array $archetypes;
+    /** @var list<array{pcg: int}> */
     public array $colors;
 
     public function __construct(Event $event)
@@ -22,10 +24,6 @@ class MetaStats extends Component
         $decks = $event->getDecks();
         $ndecks = count($decks);
         foreach ($decks as $deck) {
-            if (is_null($deck)) {
-                $ndecks--;
-                continue;
-            }
             foreach ($deck->getColorCounts() as $color => $count) {
                 $colorcnt[$color] += $count > 0 ? 1 : 0;
             }
@@ -58,7 +56,8 @@ class MetaStats extends Component
         }
     }
 
-    private function initArchetypeCount()
+    /** @return array<string, int> */
+    private function initArchetypeCount(): array
     {
         $archetypes = DB::select('SELECT name FROM archetypes ORDER BY priority DESC');
         return array_fill_keys(array_column($archetypes, 'name'), 0);

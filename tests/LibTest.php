@@ -13,7 +13,7 @@ use Gatherling\Views\Components\Component;
 
 final class LibTest extends TestCase
 {
-    public function testObjectVarsCamelCase()
+    public function testObjectVarsCamelCase(): void
     {
         $grandchild = new stdClass();
         $grandchild->foo = 'bar';
@@ -37,7 +37,7 @@ final class LibTest extends TestCase
         ], $arr);
     }
 
-    public function testToCamel()
+    public function testToCamel(): void
     {
         $this->assertEquals('fooBar', toCamel('foo_bar'));
         $this->assertEquals('opMatch', toCamel('OP_Match'));

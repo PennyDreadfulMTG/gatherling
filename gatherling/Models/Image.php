@@ -10,6 +10,7 @@ class Image
     {
     }
 
+    /** @param ?array<string, string|int> $values */
     public static function fromValues(?array $values): self
     {
         if (!$values || !isset($values['image'], $values['type'], $values['size'])) {

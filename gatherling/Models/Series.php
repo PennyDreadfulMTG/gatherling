@@ -6,36 +6,41 @@ namespace Gatherling\Models;
 
 use PDO;
 use Exception;
-use Gatherling\Views\TemplateHelper;
-use Gatherling\Views\Components\SeriesDropMenu;
+use InvalidArgumentException;
 
 class Series
 {
-    public $name;
-    public $active;
-    public $start_day;
-    public $start_time;
-    public $organizers; // has many :organizers, :through => series_organizers, :class_name => Player
-    public $bannedplayers;
-    public $mtgo_room;
+    public string $name;
+    public ?bool $active;
+    public ?string $start_day;
+    public ?string $start_time;
+    /** @var list<string> */
+    public array $organizers; // has many :organizers, :through => series_organizers, :class_name => Player
+    /** @var list<string> */
+    public array $bannedplayers;
+    public ?string $mtgo_room;
 
-    public $this_season_format;
-    public $this_season_master_link;
-    public $this_season_season;
+    public ?string $this_season_format;
+    public ?string $this_season_master_link;
+    public int $this_season_season;
 
-    public $prereg_default;
+    public ?int $prereg_default;
 
-    public $discord_guild_id;
-    public $discord_channel_id;
-    public $discord_channel_name;
-    public $discord_guild_name;
-    public $discord_guild_invite;
-    public $discord_require_membership;
+    public ?string $discord_guild_id;
+    public ?string $discord_channel_id;
+    public ?string $discord_channel_name;
+    public ?string $discord_guild_name;
+    public ?string $discord_guild_invite;
+    public ?int $discord_require_membership;
 
-    public $new;
+    public bool $new;
 
-    public function __construct($name)
+    public function __construct(?string $name)
     {
+        // Defend against "impossible" nulls until such time as we are able to make object properties not-nullable.
+        if ($name === null) {
+            throw new InvalidArgumentException('Series name cannot be null');
+        }
         if ($name == '') {
             $this->name = '';
             $this->start_day = '';
@@ -43,9 +48,9 @@ class Series
             $this->organizers = [];
             $this->bannedplayers = [];
             $this->new = true;
-            $this->prereg_default = true;
+            $this->prereg_default = 1;
             $this->mtgo_room = '';
-            $this->discord_require_membership = false;
+            $this->discord_require_membership = 0;
 
             return;
         }
@@ -114,7 +119,7 @@ class Series
         $this->new = false;
     }
 
-    public function save()
+    public function save(): void
     {
         $db = Database::getConnection();
         if (strncmp($this->mtgo_room, '#', 1) == 0) {
@@ -139,7 +144,7 @@ class Series
     /**
      * @param string $name
      */
-    public function isOrganizer($name)
+    public function isOrganizer(string $name): bool
     {
         return in_array(strtolower($name), array_map('strtolower', $this->organizers));
     }
@@ -147,7 +152,7 @@ class Series
     /**
      * @param string $name
      */
-    public function isPlayerBanned($name)
+    public function isPlayerBanned(string $name): bool
     {
         return in_array(strtolower($name), array_map('strtolower', $this->bannedplayers));
     }
@@ -155,7 +160,7 @@ class Series
     /**
      * @param string $name
      */
-    public function addOrganizer($name)
+    public function addOrganizer(string $name): void
     {
         if (empty($name)) {
             return;
@@ -170,7 +175,7 @@ class Series
     /**
      * @param string $name
      */
-    public function addBannedPlayer($name, $reason)
+    public function addBannedPlayer(string $name, string $reason): void
     {
         if (empty($name)) {
             return;
@@ -185,7 +190,7 @@ class Series
     /**
      * @param string $name
      */
-    public function removeOrganizer($name)
+    public function removeOrganizer(string $name): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM series_organizers WHERE series = ? AND player = ?');
@@ -197,7 +202,7 @@ class Series
     /**
      * @param string $name
      */
-    public function removeBannedPlayer($name)
+    public function removeBannedPlayer(string $name): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM playerbans WHERE series = ? AND player = ?');
@@ -206,17 +211,17 @@ class Series
         $stmt->close();
     }
 
-    public function getBannedPlayerDate($name)
+    public function getBannedPlayerDate(string $name): ?string
     {
         return Database::single_result_single_param('SELECT date FROM playerbans WHERE player = ?', 's', $name);
     }
 
-    public function getBannedPlayerReason($name)
+    public function getBannedPlayerReason(string $name): ?string
     {
         return Database::single_result_single_param('SELECT reason FROM playerbans WHERE player = ?', 's', $name);
     }
 
-    public function authCheck($playername)
+    public function authCheck(string $playername): bool
     {
         $player = new Player($playername);
 
@@ -230,7 +235,8 @@ class Series
         return false;
     }
 
-    public function getEvents()
+    /** @return list<string> */
+    public function getEvents(): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT name FROM events WHERE series = ?');
@@ -247,7 +253,8 @@ class Series
         return $events;
     }
 
-    public function getRecentEvents($number = 10)
+    /** @return list<Event> */
+    public function getRecentEvents(int $number = 10): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT name FROM events WHERE series = ? ORDER BY start DESC LIMIT ?');
@@ -269,7 +276,7 @@ class Series
         return $events;
     }
 
-    public static function exists($name)
+    public static function exists(string $name): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT name FROM series WHERE name = ?');
@@ -282,7 +289,8 @@ class Series
         return $series_exists;
     }
 
-    public static function allNames()
+    /** @return list<string> */
+    public static function allNames(): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT series.name
@@ -302,7 +310,8 @@ class Series
         return $names;
     }
 
-    public static function activeNames()
+    /** @return list<string> */
+    public static function activeNames(): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT series.name
@@ -325,7 +334,7 @@ class Series
     }
 
     // Returns a HTML image tag which displays the logo for this series.
-    public static function image_tag($seriesname)
+    public static function image_tag(string $seriesname): string
     {
         return "<img src=\"{self::logoSrc($seriesname)}\" />";
     }
@@ -365,7 +374,7 @@ class Series
         return null;
     }
 
-    public function setLogo($content_filename, $type, $size)
+    public function setLogo(string $content_filename, string $type, int $size): void
     {
         $db = Database::getPDOConnection();
         $f = fopen($content_filename, 'rb');
@@ -378,7 +387,7 @@ class Series
         fclose($f);
     }
 
-    public function currentSeason()
+    public function currentSeason(): int
     {
         $seasonnum = 0;
         $db = Database::getConnection();
@@ -393,7 +402,8 @@ class Series
     }
 
     // TODO: THESE functions are UGLY.
-    public function getSeasonRules($season_number)
+    /** @return array<string, int|string> */
+    public function getSeasonRules(int $season_number): array
     {
         $season_rules = ['first_pts'       => 0,
             'second_pts'                   => 0,
@@ -418,7 +428,7 @@ class Series
                           AND season <= ?
                           ORDER BY season DESC
                           LIMIT 1');
-        $stmt->bind_param('ss', $this->name, $season_number);
+        $stmt->bind_param('sd', $this->name, $season_number);
         $stmt->execute();
         $stmt->bind_result(
             $seriesname,
@@ -443,7 +453,11 @@ class Series
         return $season_rules;
     }
 
-    public function setSeasonRules($season_number, $new_rules)
+    /**
+     * @param array<string, int|string> $new_rules
+     * @return array<string, int|string>
+     */
+    public function setSeasonRules(int $season_number, array $new_rules): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO series_seasons(series, season, first_pts, second_pts, semi_pts, quarter_pts,
@@ -504,7 +518,8 @@ class Series
     //        'playername2' =>
     //             array( 'eventname' => count, 'eventname2' => count, .. ),
     //        ..).
-    private function getPlacePlayers($season_number, $place)
+    /** @return array<string, array<string, int>> */
+    private function getPlacePlayers(int $season_number, string $place): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT entries.player, events.name
@@ -530,7 +545,8 @@ class Series
         return $result;
     }
 
-    private function getParticipations($season_number)
+    /** @return array<string, array<string, int>> */
+    private function getParticipations(int $season_number): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT entries.player, events.name
@@ -554,7 +570,8 @@ class Series
         return $result;
     }
 
-    private function getRoundsPlayed($season_number)
+    /** @return array<string, array<string, int>> */
+    private function getRoundsPlayed(int $season_number): array
     {
         $db = Database::getConnection();
         $db->query("set session sql_mode='';"); // Disable ONLY_FULL_GROUP_BY
@@ -625,7 +642,8 @@ class Series
         return $player_event_array;
     }
 
-    private function getDecklistPosteds($season_number)
+    /** @return array<string, array<string, int>> */
+    private function getDecklistPosteds(int $season_number): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT entries.player, events.name, count(entries.deck) c
@@ -652,7 +670,8 @@ class Series
         return $result;
     }
 
-    private function getRoundsWon($season_number)
+    /** @return array<string, array<string, int>> */
+    private function getRoundsWon(int $season_number): array
     {
         $db = Database::getConnection();
 
@@ -713,7 +732,8 @@ class Series
         return $result;
     }
 
-    private function getRoundsLost($season_number)
+    /** @return array<string, array<string, int>> */
+    private function getRoundsLost(int $season_number): array
     {
         $db = Database::getConnection();
 
@@ -776,7 +796,13 @@ class Series
 
     // The BYE rounds that we can DETECT are -
     // $rounds_bye = $rounds_played - $rounds_won - $rounds_lost
-    private function getRoundsBye($rounds_played, $rounds_won, $rounds_lost)
+    /**
+     * @param array<string, array<string, int>> $rounds_played
+     * @param array<string, array<string, int>> $rounds_won
+     * @param array<string, array<string, int>> $rounds_lost
+     * @return array<string, array<string, int>>
+     */
+    private function getRoundsBye(array $rounds_played, array $rounds_won, array $rounds_lost): array
     {
         $result = $rounds_played;
         foreach ($rounds_won as $playername => $arrayrounds) {
@@ -793,7 +819,12 @@ class Series
         return $result;
     }
 
-    private function multiply_and_add_points(&$results, $thispoints, $multiplier, $decklists, $reqdeck)
+    /**
+     * @param array<string, array<string, int|array<string, string|int>>> $results
+     * @param array<string, array<string, int>> $thispoints
+     * @param array<string, array<string, int>> $decklists
+     */
+    private function multiply_and_add_points(array &$results, array $thispoints, int $multiplier, array $decklists, bool $reqdeck): void
     {
         if ($multiplier == 0) {
             return;
@@ -816,7 +847,10 @@ class Series
         }
     }
 
-    public function seasonPointsTable($season_number)
+    /**
+     * @return array<string, array<string, int|array<string, string|int>>>
+     */
+    public function seasonPointsTable(int $season_number): array
     {
         $rules = $this->getSeasonRules($season_number);
 
@@ -881,7 +915,10 @@ class Series
         return $total_pointarray;
     }
 
-    public function getSeasonEventNames($season_number)
+    /**
+     * @return list<string>
+     */
+    public function getSeasonEventNames(int $season_number): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT name FROM events WHERE series = ? AND season = ? AND events.number != 128 ORDER BY start');
@@ -898,7 +935,7 @@ class Series
         return $eventnames;
     }
 
-    public function getSeasonCutoff($season_number)
+    public function getSeasonCutoff(int $season_number): int
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT cutoff_ord FROM series_seasons WHERE series = ? AND season = ?');

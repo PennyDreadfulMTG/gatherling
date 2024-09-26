@@ -659,6 +659,7 @@ class Deck
         $this->maindeck_cardcount = 0;
 
         foreach ($this->maindeck_cards as $card => $amt) {
+            $amt = (int) $amt;
             $card = stripslashes($card);
             $testcard = Format::getCardName($card);
             if (is_null($testcard)) {
@@ -744,6 +745,7 @@ class Deck
         $this->sideboard_cardcount = 0;
 
         foreach ($this->sideboard_cards as $card => $amt) {
+            $amt = (int) $amt;
             $card = stripslashes($card);
             $testcard = Format::getCardName($card);
             if (is_null($testcard)) {

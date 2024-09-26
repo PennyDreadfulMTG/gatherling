@@ -10,8 +10,10 @@ use Gatherling\Models\Series as SeriesModel;
 
 class Series extends Page
 {
+    /** @var array<string, mixed> */
     public array $activeSeries;
 
+    /** @param list<string> $activeSeriesNames */
     public function __construct(array $activeSeriesNames)
     {
         parent::__construct();

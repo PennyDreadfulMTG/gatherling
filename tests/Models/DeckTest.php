@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Gatherling\Tests\Models;
 
 use Gatherling\Models\Deck;
-use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
+use Gatherling\Models\Series;
 use Gatherling\Tests\Support\TestCases\DatabaseCase;
 
 class DeckTest extends DatabaseCase
@@ -19,11 +19,19 @@ class DeckTest extends DatabaseCase
     {
         parent::setUp();
 
+        $series = new Series('');
+        $series->name = 'Test Series';
+        $series->start_day = 'Monday';
+        $series->start_time = '12:00:00';
+        $series->save();
+
         $event = new Event('');
         $event->name = 'Test Event';
-        $event->start = '2024-01-01';
+        $event->start = '2024-01-01'; // BAKERT what is the right format here?
         $event->kvalue = 16;
         $event->format = 'Standard';
+        $event->series = 'Test Series';
+        $event->season = 1;
         $event->save();
 
         $this->event = new Event($event->name);
