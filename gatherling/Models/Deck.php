@@ -475,8 +475,11 @@ class Deck
         return new Player($this->playername);
     }
 
-    public function canEdit(string|bool $username): bool
+    public function canEdit(string|false $username): bool
     {
+        if ($username === false) {
+            return false;
+        }
         $event = $this->getEvent();
         $player = new Player($username);
 
@@ -493,8 +496,11 @@ class Deck
         return false;
     }
 
-    public function canView(string|bool $username): bool
+    public function canView(string|false $username): bool
     {
+        if ($username === false) {
+            return false;
+        }
         $event = $this->getEvent();
         $player = new Player($username);
 
