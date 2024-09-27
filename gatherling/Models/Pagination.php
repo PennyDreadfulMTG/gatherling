@@ -855,7 +855,7 @@ class Pagination
 
             // compute the number of adjacent pages to display to the left and right of the currently selected page so
             // that the currently selected page is always centered
-            $adjacent = floor(($this->_properties['selectable_pages'] - 3) / 2);
+            $adjacent = (int) floor(($this->_properties['selectable_pages'] - 3) / 2);
 
             // this number must be at least 1
             if ($adjacent == 0) {
