@@ -117,9 +117,6 @@ function handleAction(string $seriesName): Component
     if ($_POST['action'] == 'Update Cardsets') {
         return updateCardSets($_POST['format'], $_POST['cardsetname'] ?? '', $_POST['delcardsetname'] ?? []);
     }
-    if ($_POST['action'] == 'Update Children') {
-        return updateChildren($_POST['format'], $_POST['addchild'] ?? '', $_POST['delchild'] ?? []);
-    }
     if (strncmp($_POST['action'], 'Add All', 7) == 0) {
         return addAll($_POST['format'], substr($_POST['action'], 8));
     }
@@ -253,28 +250,6 @@ function updateCardSets(string $formatName, string $cardSetName, array $delCardS
         $success = $format->deleteLegalCardSet($cardset);
         if (!$success) {
             $errors[] = "Can't delete {$cardset} from allowed cardsets ";
-        }
-    }
-    return $errors ? new ErrorMessage($errors) : new NullComponent();
-}
-
-/**
- * @param string $addChild
- * @param array<string> $delChildren
- */
-function updateChildren(string $formatName, string $addChild, array $delChildren): Component
-{
-    $errors = [];
-    $format = new Format($formatName);
-
-    if ($addChild) {
-        $format->insertSubFormat($addChild);
-    }
-
-    foreach ($delChildren as $childFormatName) {
-        $success = $format->deleteSubFormat($childFormatName);
-        if (!$success) {
-            $errors[] = "Can't delete {$childFormatName} from child formats";
         }
     }
     return $errors ? new ErrorMessage($errors) : new NullComponent();
