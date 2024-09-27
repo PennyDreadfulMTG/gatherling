@@ -18,8 +18,8 @@ class InfoTable extends Component
     public int $pcgF;
     public string $favS;
     public int $pcgS;
-    public Time $lastEventTime;
-    public string $lastEventName;
+    public ?Time $lastEventTime;
+    public ?string $lastEventName;
     public ?string $email;
     public bool $emailIsPublic;
     public string $timeZone;
@@ -73,8 +73,10 @@ class InfoTable extends Component
         $this->favS = $favS;
         $this->pcgS = $pcgS;
         $this->hosted = $player->getHostedEventsCount();
-        $this->lastEventTime = new Time(strtotime($lastEvent->start), time(), true);
-        $this->lastEventName = $lastEvent->name;
+        if ($lastEvent) {
+            $this->lastEventTime = new Time(strtotime($lastEvent->start), time(), true);
+            $this->lastEventName = $lastEvent->name;
+        }
         $this->numMatches = count($matches);
         $this->email = $player->emailAddress;
         $this->emailIsPublic = $player->emailIsPublic();
