@@ -16,7 +16,7 @@ class Html
         $this->crawler = $input instanceof Crawler ? $input : new Crawler($input);
     }
 
-    public function __get(string $element): Html
+    public function __get(string $element): self
     {
         $node = $this->crawler->filter($element);
         if ($node->count() === 0) {
