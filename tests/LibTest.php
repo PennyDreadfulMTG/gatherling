@@ -24,6 +24,7 @@ final class LibTest extends TestCase
         $parent->child = $child;
         $parent->monkey = 'business';
         $parent->OP_Match = 1;
+        $child->list = [1, 2, 3, 4, 5];
         $arr = getObjectVarsCamelCase($parent);
         $this->assertEquals([
             'monkey' => 'business',
@@ -33,6 +34,7 @@ final class LibTest extends TestCase
                 'child' => [
                     'foo' => 'bar',
                 ],
+                'list' => [1, 2, 3, 4, 5],
             ],
         ], $arr);
     }

@@ -327,7 +327,7 @@ function parseCardsWithQuantity(string|array $cards): array
 function getObjectVarsCamelCase(object $obj): array
 {
     $vars = get_object_vars($obj);
-    return arrayMapRecursive('toCamel', $vars);
+    return arrayMapRecursive(fn($key) => is_string($key) ? toCamel($key) : $key, $vars);
 }
 
 // https://stackoverflow.com/a/45440841/375262
