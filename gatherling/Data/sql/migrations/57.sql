@@ -6,6 +6,6 @@ ALTER TABLE series_organizers ADD FOREIGN KEY (series) REFERENCES series(name);
 -- and another that never had an event (Heirloom Kaleidoscope).
 -- This is necessary because the system currently doesn't handle a series without a most recent event
 DELETE FROM series WHERE name NOT IN (SELECT series FROM events);
--- There's only event in history that has no season so let's make season required
+-- There's only one event in all history that has no season so let's make season required
 UPDATE events SET season = 0 WHERE season IS NULL;
 ALTER TABLE events MODIFY season INT NOT NULL;
