@@ -358,7 +358,7 @@ function deckProfile(?Deck $deck): void
         echo '<span class="error"><center>You do not have permission to view this deck. Decks are anonymous for privacy until event is finalized.</center></span>';
         echo '<br /><br />';
         echo '<ul>People who can see decks while events are active:</ul>';
-        echo "<li>Gatherling Admin's</li>";
+        echo "<li>Gatherling Admins</li>";
         echo '<li>The Series Organizer</li>';
         echo '<li>The Event Host</li>';
         echo '<li>The Player Who Created The Deck</li>';

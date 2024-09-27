@@ -317,9 +317,7 @@ class Deck
         return $count;
     }
 
-    /**
-     * @return array<int, int>
-     */
+    /** @return array<int, int> */
     public function getCastingCosts(): array
     {
         $db = Database::getConnection();
