@@ -481,11 +481,6 @@ parameters:
 			path: gatherling/Models/MaxWeightMatching.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Pagination\\:\\:get_pages\\(\\) should return int but returns float\\.$#"
-			count: 1
-			path: gatherling/Models/Pagination.php
-
-		-
 			message: "#^Method Gatherling\\\\Models\\\\Pagination\\:\\:render\\(\\) with return type void returns string but should not return anything\\.$#"
 			count: 2
 			path: gatherling/Models/Pagination.php
@@ -569,11 +564,6 @@ parameters:
 			message: "#^Variable \\$CONFIG might not be defined\\.$#"
 			count: 2
 			path: gatherling/player.php
-
-		-
-			message: "#^Variable \\$max might not be defined\\.$#"
-			count: 2
-			path: gatherling/profile.php
 
 		-
 			message: "#^Variable \\$match might not be defined\\.$#"
