@@ -20,7 +20,7 @@ class InfoTable extends Component
     public int $pcgS;
     public Time $lastEventTime;
     public string $lastEventName;
-    public string $email;
+    public ?string $email;
     public bool $emailIsPublic;
     public string $timeZone;
 

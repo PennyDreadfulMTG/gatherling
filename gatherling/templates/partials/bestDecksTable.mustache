@@ -16,11 +16,13 @@
             <td>
                 <a href="{{link}}">{{name}}</a>
             </td>
-            <td>
+            <td class="c" width="50">
                 {{record}}
             </td>
             <td align="right">
-                {{#medals}}<img src="{{src}}" alt="{{alt}}">&nbsp;{{/medals}}
+                {{#medals}}
+                    <img src="{{src}}" alt="{{alt}}">
+                {{/medals}}
             </td>
         </tr>
     {{/decks}}
