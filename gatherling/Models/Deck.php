@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
-use Gatherling\Views\TemplateHelper;
 use Gatherling\Views\Components\DeckLink;
 
 class Deck
