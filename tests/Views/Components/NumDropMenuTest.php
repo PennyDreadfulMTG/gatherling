@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Views\Components;
+namespace Gatherling\Tests\Views\Components;
 
 use Gatherling\Views\Components\NumDropMenu;
 use PHPUnit\Framework\TestCase;

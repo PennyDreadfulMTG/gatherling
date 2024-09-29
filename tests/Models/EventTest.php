@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Models;
+namespace Gatherling\Tests\Models;
 
 use Gatherling\Models\Event;
 use PHPUnit\Framework\TestCase;
