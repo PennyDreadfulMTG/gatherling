@@ -816,7 +816,7 @@ function leagueResultDropMenu(): void
     echo '</select>';
 }
 
-function print_matchTable(Player $player, int $limit = 0): void
+function print_matchTable(Player $player): void
 {
     if (!isset($_POST['format'])) {
         $_POST['format'] = '%';
