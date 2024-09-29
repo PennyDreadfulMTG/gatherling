@@ -1052,20 +1052,6 @@ class Event
         return Database::single_result('SELECT max(number) FROM events where number != 128'); // 128 is "special"
     }
 
-    public static function getOldest(): self
-    {
-        $eventname = Database::single_result('SELECT name FROM events ORDER BY start LIMIT 1');
-
-        return new self($eventname);
-    }
-
-    public static function getNewest(): self
-    {
-        $eventname = Database::single_result('SELECT name FROM events ORDER BY start DESC LIMIT 1');
-
-        return new self($eventname);
-    }
-
     /** @return list<self> */
     public static function getNextPreRegister(int $num = 20): array
     {
