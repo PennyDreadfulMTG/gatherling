@@ -1353,7 +1353,7 @@ class Player
 
     public function linkTo(int|string|null $game = 'gatherling'): string
     {
-        return (new PlayerLink($this))->render();
+        return (new PlayerLink($this, $game))->render();
     }
 
     public static function activeCount(): int
