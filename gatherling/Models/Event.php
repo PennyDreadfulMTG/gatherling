@@ -1042,11 +1042,6 @@ class Event
         ];
     }
 
-    public function linkReport(): string
-    {
-        return (new ReportLink($this->name))->render();
-    }
-
     public static function count(): int
     {
         return Database::single_result('SELECT count(name) FROM events');
