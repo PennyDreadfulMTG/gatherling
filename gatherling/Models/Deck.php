@@ -548,7 +548,6 @@ class Deck
         $db = Database::getConnection();
         $db->autocommit(false);
         $this->errors = [];
-        $format = null; // will initialize later after I verify that eventname has been.
 
         if ($this->name == null || $this->name == '') {
             $this->name = 'Temp';
