@@ -859,7 +859,7 @@ class Event
         $stmt = $db->prepare('INSERT INTO matches(playera, playerb, round, subevent, result, verification) VALUES(?, ?, ?, ?, ?, ?)');
         $stmt->bind_param('ssddss', $playera->player, $playerb->player, $round, $id, $result, $verification);
         $stmt->execute();
-        $newmatch = $stmt->insert_id;
+        $newmatch = (int) $stmt->insert_id;
         $stmt->close();
 
         return $newmatch;

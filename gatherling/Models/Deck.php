@@ -312,7 +312,7 @@ class Deck
 
         $convertedcosts = [];
         while ($res = $result->fetch_assoc()) {
-            $convertedcosts[$res['cc']] = $res['s'];
+            $convertedcosts[(int) $res['cc']] = (int) $res['s'];
         }
 
         return $convertedcosts;
@@ -351,7 +351,7 @@ class Deck
         }
         $cards = [];
         while ($res = $result->fetch_assoc()) {
-            $cards[$res['name']] = $res['qty'];
+            $cards[(string) $res['name']] = (int) $res['qty'];
         }
 
         return $cards;
@@ -376,7 +376,7 @@ class Deck
 
         $cards = [];
         while ($res = $result->fetch_assoc()) {
-            $cards[$res['name']] = $res['qty'];
+            $cards[(string) $res['name']] = (int) $res['qty'];
         }
 
         return $cards;
@@ -423,7 +423,7 @@ class Deck
 
         $cards = [];
         while ($res = $result->fetch_assoc()) {
-            $cards[$res['name']] = $res['qty'];
+            $cards[(string) $res['name']] = (int)$res['qty'];
         }
 
         return $cards;
@@ -994,11 +994,10 @@ class Deck
     public static function uniqueCount(): int
     {
         $db = @Database::getConnection();
-        $stmt = $db->prepare('SELECT count(deck_hash) FROM decks GROUP BY deck_hash');
+        $stmt = $db->prepare('SELECT COUNT(deck_hash) FROM decks GROUP BY deck_hash');
         $stmt->execute();
         $stmt->store_result();
-        /// SLIGHTLY different than singular
-        $uniquecount = $stmt->num_rows;
+        $uniquecount = (int) $stmt->num_rows;
         $stmt->close();
 
         return $uniquecount;
