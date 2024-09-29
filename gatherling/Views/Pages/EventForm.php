@@ -216,10 +216,12 @@ function clientDropMenuArgs(string $field, int $def): array
 function kValueSelectInput(int $kvalue): array
 {
     $names = [
-        ''            => '- K-Value -', 8 => 'Casual (Alt Event)', 16 => 'Regular (less than 24 players)',
-        24            => 'Large (24 or more players)', 32 => 'Championship',
+        '' => '- K-Value -',
+        8 => 'Casual (Alt Event)',
+        16 => 'Regular (less than 24 players)',
+        24 => 'Large (24 or more players)',
+        32 => 'Championship',
     ];
-
     return selectInputArgs('K-Value', 'kvalue', $names, $kvalue);
 }
 
