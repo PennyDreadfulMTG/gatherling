@@ -1120,7 +1120,7 @@ class Event
     }
 
     // Adjusts the season points for $player for this event by $points, with the reason $reason
-    public function setSeasonPointAdjustment(string $player, int $points, string $reason): bool
+    public function setSeasonPointAdjustment(string $player, int $points, string $reason): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT player FROM season_points WHERE event = ? AND player = ?');
@@ -1138,8 +1138,6 @@ class Event
         }
         $stmt->execute();
         $stmt->close();
-
-        return true;
     }
 
     public static function trophy_image_tag(string $eventname): string
