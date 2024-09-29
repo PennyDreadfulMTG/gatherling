@@ -905,7 +905,10 @@ class Event
                 $quart_round = $this->mainrounds + $this->finalrounds - 2;
                 $matches = $this->getRoundMatches($quart_round);
                 foreach ($matches as $match) {
-                    $t8[] = $match->getLoser();
+                    $loser = $match->getLoser();
+                    if ($loser !== null) {
+                        $t8[] = $loser;
+                    }
                 }
             }
             $semi_finals = $this->finalrounds >= 2;
@@ -913,7 +916,10 @@ class Event
                 $semi_round = $this->mainrounds + $this->finalrounds - 1;
                 $matches = $this->getRoundMatches($semi_round);
                 foreach ($matches as $match) {
-                    $t4[] = $match->getLoser();
+                    $loser = $match->getLoser();
+                    if ($loser !== null) {
+                        $t4[] = $loser;
+                    }
                 }
             }
 
@@ -927,7 +933,10 @@ class Event
                 $quart_round = $this->mainrounds - 2;
                 $matches = $this->getRoundMatches($quart_round);
                 foreach ($matches as $match) {
-                    $t8[] = $match->getLoser();
+                    $loser = $match->getLoser();
+                    if ($loser !== null) {
+                        $t8[] = $loser;
+                    }
                 }
             }
             $semi_finals = $this->mainrounds >= 2;
@@ -935,7 +944,10 @@ class Event
                 $semi_round = $this->mainrounds - 1;
                 $matches = $this->getRoundMatches($semi_round);
                 foreach ($matches as $match) {
-                    $t4[] = $match->getLoser();
+                    $loser = $match->getLoser();
+                    if ($loser !== null) {
+                        $t4[] = $loser;
+                    }
                 }
             }
 
