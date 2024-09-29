@@ -33,9 +33,8 @@ class Entry
 
         if ($found) {
             return new self($event_id, $playername);
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
