@@ -551,11 +551,6 @@ parameters:
 			path: gatherling/event.php
 
 		-
-			message: "#^Call to an undefined method Gatherling\\\\Models\\\\Format\\:\\:deleteSubFormat\\(\\)\\.$#"
-			count: 1
-			path: gatherling/formatcp.php
-
-		-
 			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
 			count: 2
 			path: gatherling/player.php
