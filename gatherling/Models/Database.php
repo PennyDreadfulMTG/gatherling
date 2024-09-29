@@ -169,7 +169,7 @@ class Database
         return $list;
     }
 
-    public static function db_query(): bool
+    public static function db_query(): void
     {
         $params = func_get_args();
         $query = array_shift($params);
@@ -215,8 +215,6 @@ class Database
             throw new Exception($stmt->error, 1);
         }
         $stmt->close();
-
-        return true;
     }
 
     public static function db_query_single(): mixed
