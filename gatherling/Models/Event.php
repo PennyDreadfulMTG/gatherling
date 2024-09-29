@@ -688,7 +688,6 @@ class Event
     public function dropBlankEntries(): void
     {
         $players = $this->getPlayers();
-        $entries = [];
         foreach ($players as $player) {
             $entry = new Entry($this->id, $player);
             if ($entry->canDelete()) {
