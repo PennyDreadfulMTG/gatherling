@@ -13,6 +13,6 @@ class TextInput extends Component
     {
         parent::__construct('partials/textInput');
         $this->id = $id ?? $this->name;
-        $this->value = $value ?? '';
+        $this->value = (string) $value;
     }
 }
