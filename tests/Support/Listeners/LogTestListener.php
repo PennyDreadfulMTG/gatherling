@@ -19,14 +19,14 @@ class LogTestListener implements Extension
     public function bootstrap(Configuration $configuration, EventFacade $facade, ParameterCollection $parameters): void
     {
         $facade->registerSubscriber(new class implements PassedSubscriber {
-            public function notify(Passed $_event): void
+            public function notify(Passed $event): void
             {
                 // Don't output the log if the test passed
                 Log::clear();
             }
         });
         $facade->registerSubscriber(new class implements FailedSubscriber {
-            public function notify(Failed $_event): void
+            public function notify(Failed $event): void
             {
                 // Output the log if the test failed
                 Log::flush();
