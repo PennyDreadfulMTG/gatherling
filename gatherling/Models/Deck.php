@@ -252,30 +252,10 @@ class Deck
 
         // loop through results
         while ($stmt->fetch()) {
-            $hasColor = null;
-
-            // if statments to capture color of card, sets hasColor
-            // to true as long as any color is found.  Broken into multiple
-            // if's to capture cards with more then one color
-            if ($color['u']) {
-                $str['u'] = 'u';
-                $hasColor = true;
-            }
-            if ($color['g']) {
-                $str['g'] = 'g';
-                $hasColor = true;
-            }
-            if ($color['b']) {
-                $str['b'] = 'b';
-                $hasColor = true;
-            }
-            if ($color['r']) {
-                $str['r'] = 'r';
-                $hasColor = true;
-            }
-            if ($color['w']) {
-                $str['w'] = 'w';
-                $hasColor = true;
+            foreach (['u', 'g', 'b', 'r', 'w'] as $c) {
+                if ($color[$c]) {
+                    $str[$c] = $c;
+                }
             }
         }
 
