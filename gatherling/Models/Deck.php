@@ -328,13 +328,7 @@ class Deck
      */
     public function getCardCount(array $cards): int
     {
-        $cardCount = 0;
-
-        foreach ($cards as $card => $amt) {
-            $cardCount += $amt;
-        }
-
-        return $cardCount;
+        return array_sum($cards);
     }
 
     /**
