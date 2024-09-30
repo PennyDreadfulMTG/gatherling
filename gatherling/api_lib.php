@@ -56,8 +56,7 @@ function is_admin(): bool
     return false;
 }
 
-/** @return string  */
-function auth()
+function auth(): string|bool
 {
     $username = null;
     $apikey = null;

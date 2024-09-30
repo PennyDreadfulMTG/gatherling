@@ -411,11 +411,6 @@ parameters:
 			path: gatherling/admin/infobot.php
 
 		-
-			message: "#^Function auth\\(\\) should return string but returns bool\\.$#"
-			count: 1
-			path: gatherling/api_lib.php
-
-		-
 			message: "#^Variable \\$pAWins might not be defined\\.$#"
 			count: 1
 			path: gatherling/api_lib.php
