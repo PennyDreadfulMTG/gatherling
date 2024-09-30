@@ -457,7 +457,7 @@ class Deck
         if (
             $player->isSuper() ||
             $event->isHost($username) ||
-            $event->isOrganizer($username) |
+            $event->isOrganizer($username) ||
             (!$event->finalized && !$this->isValid() && strcasecmp($username, $this->playername) == 0) ||
             (!$event->finalized && !$event->active && strcasecmp($username, $this->playername) == 0)
         ) {
