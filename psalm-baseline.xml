@@ -8,6 +8,11 @@
       <code><![CDATA[notice]]></code>
     </PossiblyUnusedMethod>
   </file>
+  <file src="gatherling/Models/CardSet.php">
+    <UndefinedFunction>
+      <code><![CDATA[normaliseCardName($card->name)]]></code>
+    </UndefinedFunction>
+  </file>
   <file src="gatherling/Models/Database.php">
     <InvalidGlobal>
       <code><![CDATA[global $CONFIG;]]></code>
@@ -27,6 +32,9 @@
     <PossiblyUnusedProperty>
       <code><![CDATA[$subeventid]]></code>
     </PossiblyUnusedProperty>
+    <UndefinedFunction>
+      <code><![CDATA[image_tag("mana{$color}.png")]]></code>
+    </UndefinedFunction>
     <UnusedForeachValue>
       <code><![CDATA[$mainamt]]></code>
     </UnusedForeachValue>
@@ -44,11 +52,7 @@
   </file>
   <file src="gatherling/Models/Event.php">
     <PossiblyUnusedMethod>
-      <code><![CDATA[finishedMatches]]></code>
-      <code><![CDATA[getNewest]]></code>
-      <code><![CDATA[getOldest]]></code>
       <code><![CDATA[isFinalized]]></code>
-      <code><![CDATA[linkReport]]></code>
     </PossiblyUnusedMethod>
     <PossiblyUnusedReturnValue>
       <code><![CDATA[bool]]></code>
@@ -80,6 +84,11 @@
       <code><![CDATA[bool]]></code>
       <code><![CDATA[bool]]></code>
     </PossiblyUnusedReturnValue>
+    <UndefinedFunction>
+      <code><![CDATA[normaliseCardName($card)]]></code>
+      <code><![CDATA[normaliseCardName($card)]]></code>
+      <code><![CDATA[normaliseCardName($card)]]></code>
+    </UndefinedFunction>
     <UnusedForeachValue>
       <code><![CDATA[$amt]]></code>
       <code><![CDATA[$amt]]></code>
@@ -96,6 +105,11 @@
       <code><![CDATA[$tribeKey]]></code>
       <code><![CDATA[$type]]></code>
     </UnusedVariable>
+  </file>
+  <file src="gatherling/Models/Formats.php">
+    <UndefinedFunction>
+      <code><![CDATA[parseCards(file_get_contents($url))]]></code>
+    </UndefinedFunction>
   </file>
   <file src="gatherling/Models/Matchup.php">
     <PossiblyUnusedMethod>
@@ -141,6 +155,9 @@
       <code><![CDATA[trailing_slash]]></code>
       <code><![CDATA[variable_name]]></code>
     </PossiblyUnusedMethod>
+    <PossiblyUnusedReturnValue>
+      <code><![CDATA[string|null]]></code>
+    </PossiblyUnusedReturnValue>
   </file>
   <file src="gatherling/Models/Player.php">
     <PossiblyUnusedMethod>
@@ -328,6 +345,9 @@
       <code><![CDATA[$standardTooltip]]></code>
       <code><![CDATA[$underdogTooltip]]></code>
     </PossiblyUnusedProperty>
+    <UndefinedFunction>
+      <code><![CDATA[getObjectVarsCamelCase($activeFormat)]]></code>
+    </UndefinedFunction>
   </file>
   <file src="gatherling/Views/Components/FormatSuccess.php">
     <PossiblyUnusedProperty>
@@ -351,6 +371,11 @@
       <code><![CDATA[$iconClass]]></code>
       <code><![CDATA[$name]]></code>
     </PossiblyUnusedProperty>
+    <UndefinedConstant>
+      <code><![CDATA[MTGA]]></code>
+      <code><![CDATA[MTGO]]></code>
+      <code><![CDATA[PAPER]]></code>
+    </UndefinedConstant>
   </file>
   <file src="gatherling/Views/Components/InfoCell.php">
     <PossiblyUnusedProperty>
@@ -484,9 +509,9 @@
       <code><![CDATA[$seasonEvents]]></code>
       <code><![CDATA[$seriesName]]></code>
     </PossiblyUnusedProperty>
-    <UnusedReturnValue>
+    <PossiblyUnusedReturnValue>
       <code><![CDATA[int]]></code>
-    </UnusedReturnValue>
+    </PossiblyUnusedReturnValue>
   </file>
   <file src="gatherling/Views/Components/StringField.php">
     <PossiblyUnusedProperty>
@@ -516,6 +541,9 @@
       <code><![CDATA[$long]]></code>
       <code><![CDATA[$text]]></code>
     </PossiblyUnusedProperty>
+    <UndefinedFunction>
+      <code><![CDATA[human_date($time, $now)]]></code>
+    </UndefinedFunction>
   </file>
   <file src="gatherling/Views/Components/TimeZoneDropMenu.php">
     <PossiblyUnusedProperty>
@@ -563,6 +591,9 @@
       <code><![CDATA[$maindeckCards]]></code>
       <code><![CDATA[$sideboardCards]]></code>
     </PossiblyUnusedProperty>
+    <UndefinedFunction>
+      <code><![CDATA[normaliseCardName($card)]]></code>
+    </UndefinedFunction>
   </file>
   <file src="gatherling/Views/Pages/EventForm.php">
     <PossiblyUnusedProperty>
@@ -611,13 +642,18 @@
       <code><![CDATA[checkboxInputArgs('Finalize Event', 'finalized', (bool) $event->finalized)]]></code>
       <code><![CDATA[checkboxInputArgs('Finals List Privacy', 'private_finals', (bool) $event->private_finals)]]></code>
       <code><![CDATA[checkboxInputArgs('Private Event', 'private', (bool) $event->private, 'This event is invisible to non-participants')]]></code>
+      <code><![CDATA[getObjectVarsCamelCase($event)]]></code>
       <code><![CDATA[selectInputArgs('K-Value', 'kvalue', $names, $kvalue)]]></code>
+      <code><![CDATA[timeDropMenuArgs($hour, $minutes)]]></code>
     </UndefinedFunction>
   </file>
   <file src="gatherling/Views/Pages/EventFrame.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$controlPanelLinks]]></code>
     </PossiblyUnusedProperty>
+    <UndefinedFunction>
+      <code><![CDATA[getObjectVarsCamelCase($event)]]></code>
+    </UndefinedFunction>
   </file>
   <file src="gatherling/Views/Pages/EventList.php">
     <PossiblyUnusedProperty>
@@ -705,6 +741,9 @@
       <code><![CDATA[$rounds]]></code>
       <code><![CDATA[$structureSummary]]></code>
     </PossiblyUnusedProperty>
+    <UndefinedFunction>
+      <code><![CDATA[getObjectVarsCamelCase($match)]]></code>
+    </UndefinedFunction>
   </file>
   <file src="gatherling/Views/Pages/MedalList.php">
     <PossiblyUnusedProperty>
@@ -725,6 +764,11 @@
       <code><![CDATA[$title]]></code>
       <code><![CDATA[$versionTagline]]></code>
     </PossiblyUnusedProperty>
+    <UndefinedFunction>
+      <code><![CDATA[git_hash()]]></code>
+      <code><![CDATA[git_hash()]]></code>
+      <code><![CDATA[version_tagline()]]></code>
+    </UndefinedFunction>
   </file>
   <file src="gatherling/Views/Pages/PlayerEventList.php">
     <PossiblyUnusedProperty>
@@ -753,11 +797,17 @@
       <code><![CDATA[$showCreateNextEvent]]></code>
       <code><![CDATA[$showCreateNextSeason]]></code>
     </PossiblyUnusedProperty>
+    <UndefinedFunction>
+      <code><![CDATA[getObjectVarsCamelCase($entry)]]></code>
+    </UndefinedFunction>
   </file>
   <file src="gatherling/Views/Pages/PointsAdjustmentForm.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$entries]]></code>
     </PossiblyUnusedProperty>
+    <UndefinedFunction>
+      <code><![CDATA[getObjectVarsCamelCase($entry)]]></code>
+    </UndefinedFunction>
   </file>
   <file src="gatherling/Views/Pages/Profile.php">
     <PossiblyUnusedProperty>
@@ -809,14 +859,6 @@
       <code><![CDATA[$eventStandings]]></code>
     </PossiblyUnusedProperty>
   </file>
-  <file src="gatherling/admin/infobot.php">
-    <UndefinedGlobalVariable>
-      <code><![CDATA[$CONFIG]]></code>
-      <code><![CDATA[$CONFIG]]></code>
-      <code><![CDATA[$CONFIG]]></code>
-      <code><![CDATA[$CONFIG]]></code>
-    </UndefinedGlobalVariable>
-  </file>
   <file src="gatherling/admincp.php">
     <UnusedVariable>
       <code><![CDATA[$prereg]]></code>
@@ -833,18 +875,12 @@
       <code><![CDATA[global $provider;]]></code>
       <code><![CDATA[global $provider;]]></code>
     </InvalidGlobal>
-    <UnusedVariable>
-      <code><![CDATA[$CONFIG]]></code>
-    </UnusedVariable>
   </file>
   <file src="gatherling/authdebug.php">
     <InvalidGlobal>
       <code><![CDATA[global $CONFIG;]]></code>
       <code><![CDATA[global $provider;]]></code>
     </InvalidGlobal>
-    <UnusedVariable>
-      <code><![CDATA[$CONFIG]]></code>
-    </UnusedVariable>
   </file>
   <file src="gatherling/authlib.php">
     <InvalidGlobal>
@@ -882,10 +918,6 @@
     </UnusedVariable>
   </file>
   <file src="gatherling/player.php">
-    <UndefinedGlobalVariable>
-      <code><![CDATA[$CONFIG]]></code>
-      <code><![CDATA[$CONFIG]]></code>
-    </UndefinedGlobalVariable>
     <UnusedVariable>
       <code><![CDATA[$success]]></code>
       <code><![CDATA[$success]]></code>
@@ -959,6 +991,10 @@
     </UnusedClass>
   </file>
   <file src="tests/Models/DeckTest.php">
+    <UndefinedFunction>
+      <code><![CDATA[parseCardsWithQuantity("4 Torbran, Thane of Red Fell\n56 Mountain")]]></code>
+      <code><![CDATA[parseCardsWithQuantity("4 Yarus, Roar of the Old Gods\n11 Forest")]]></code>
+    </UndefinedFunction>
     <UnusedClass>
       <code><![CDATA[DeckTest]]></code>
     </UnusedClass>
