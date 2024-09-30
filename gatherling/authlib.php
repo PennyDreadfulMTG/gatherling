@@ -55,7 +55,7 @@ function debug_info(\League\OAuth2\Client\Token\AccessToken $token): void
         var_export($user->toArray());
     } catch (Exception $e) {
         // Failed to get user details
-        exit($e);
+        exit($e->getMessage());
     }
     echo '<h2>Guilds:</h2>';
     $guilds = get_user_guilds($token);
