@@ -1796,12 +1796,6 @@ class Event
         return $this->matchesOfType('unfinished');
     }
 
-    /** @return list<Matchup> */
-    public function finishedMatches(): array
-    {
-        return $this->matchesOfType('finished');
-    }
-
     public function updateDecksFormat(string $format): void
     {
         $deckIDs = Database::list_result_single_param('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
