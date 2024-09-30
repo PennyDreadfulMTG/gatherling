@@ -549,9 +549,7 @@ class Deck
         $db->autocommit(false);
         $this->errors = [];
 
-        if ($this->name == null || $this->name == '') {
-            $this->name = 'Temp';
-        }
+        $this->name = $this->name ?: 'Temp';
         if ($this->archetype != 'Unclassified' && !in_array($this->archetype, self::getArchetypes())) {
             $this->archetype = 'Unclassified';
         }
