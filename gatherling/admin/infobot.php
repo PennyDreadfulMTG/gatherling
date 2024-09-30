@@ -16,7 +16,7 @@ if ($_GET['passkey'] != $CONFIG['infobot_passkey']) {
 
 // generate a user passkey for verification
 $random_num = mt_rand();
-$key = sha1($random_num);
+$key = sha1((string) $random_num);
 $challenge = substr($key, 0, 5);
 $player = Player::findByName($_GET['username']);
 if (!$player) {

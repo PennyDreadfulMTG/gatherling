@@ -406,11 +406,6 @@ parameters:
 			path: gatherling/Models/MaxWeightMatching.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function sha1 expects string, int\\<0, max\\> given\\.$#"
-			count: 1
-			path: gatherling/admin/infobot.php
-
-		-
 			message: "#^Variable \\$CONFIG might not be defined\\.$#"
 			count: 4
 			path: gatherling/admin/infobot.php
