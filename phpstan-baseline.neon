@@ -406,11 +406,6 @@ parameters:
 			path: gatherling/Models/MaxWeightMatching.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Pagination\\:\\:render\\(\\) with return type void returns string but should not return anything\\.$#"
-			count: 2
-			path: gatherling/Models/Pagination.php
-
-		-
 			message: "#^Parameter \\#1 \\$string of function sha1 expects string, int\\<0, max\\> given\\.$#"
 			count: 1
 			path: gatherling/admin/infobot.php
