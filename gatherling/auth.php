@@ -74,7 +74,7 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     do_login($token);
 }
 
-function send_to_discord(?string $scope = null): void
+function send_to_discord(mixed $scope = null): void
 {
     // Step 1. Get authorization code
     global $provider;
