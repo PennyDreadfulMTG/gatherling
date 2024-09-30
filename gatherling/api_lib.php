@@ -230,7 +230,7 @@ function repr_json_series(Series $series): array
 }
 
 /** @return array<string, mixed> */
-function repr_json_player(Player $player, ?int $client = null): array
+function repr_json_player(Player $player, int|string|null $client = null): array
 {
     $json = populate([], $player, ['name', 'verified', 'discord_id', 'discord_handle', 'mtga_username', 'mtgo_username']);
     $json['display_name'] = $player->gameName($client);

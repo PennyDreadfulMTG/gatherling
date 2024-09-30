@@ -411,11 +411,6 @@ parameters:
 			path: gatherling/admin/infobot.php
 
 		-
-			message: "#^Parameter \\#2 \\$client of function repr_json_player expects int\\|null, string given\\.$#"
-			count: 5
-			path: gatherling/api.php
-
-		-
 			message: "#^Function auth\\(\\) should return string but returns bool\\.$#"
 			count: 1
 			path: gatherling/api_lib.php
