@@ -163,10 +163,11 @@ class DB
     {
         $name = self::safeName($rawName);
         Log::debug("[DB] COMMIT $rawName ($name)");
-        if (!self::connect()->transactions) {
+        $numTransactions = count(self::connect()->transactions);
+        if ($numTransactions === 0) {
             throw new DatabaseException("Asked to commit $name, but no transaction is open");
         }
-        $latestTransaction = self::connect()->transactions[count(self::connect()->transactions) - 1];
+        $latestTransaction = self::connect()->transactions[$numTransactions - 1];
         if ($latestTransaction !== $name) {
             self::execute('ROLLBACK');
 
@@ -182,12 +183,12 @@ class DB
     {
         $name = self::safeName($rawName);
         Log::debug("[DB] ROLLBACK $rawName ($name)");
-        if (!self::connect()->transactions) {
+        $numTransactions = count(self::connect()->transactions);
+        if ($numTransactions === 0) {
             DB::execute('ROLLBACK');
-
             throw new DatabaseException("Asked to rollback $name, but no transaction is open. ROLLBACK issued.");
         }
-        $latestTransaction = self::connect()->transactions[count(self::connect()->transactions) - 1];
+        $latestTransaction = self::connect()->transactions[$numTransactions - 1];
         if ($latestTransaction !== $name) {
             DB::execute('ROLLBACK');
 
