@@ -314,7 +314,7 @@ function updateEvent(): Event
     $event->start = "{$_POST['year']}-{$_POST['month']}-{$_POST['day']} {$_POST['hour']}:00";
     $event->finalized = $_POST['finalized'];
     $event->active = $_POST['active'];
-    $event->current_round = $_POST['newmatchround'];
+    $event->current_round = (int) $_POST['newmatchround'];
     $event->prereg_allowed = $_POST['prereg_allowed'];
     $event->player_reportable = $_POST['player_reportable'];
     $event->prereg_cap = $_POST['prereg_cap'];
@@ -332,8 +332,8 @@ function updateEvent(): Event
     $event->cohost = $_POST['cohost'];
     $event->kvalue = (int) $_POST['kvalue'];
     $event->series = $_POST['series'];
-    $event->season = $_POST['season'];
-    $event->number = $_POST['number'];
+    $event->season = (int) $_POST['season'];
+    $event->number = (int) $_POST['number'];
     $event->threadurl = $_POST['threadurl'];
     $event->metaurl = $_POST['metaurl'];
     $event->reporturl = $_POST['reporturl'];

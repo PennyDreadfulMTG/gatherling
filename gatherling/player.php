@@ -51,7 +51,7 @@ if (isset($_POST['action'])) {
         $success = false;
         if ($_POST['newEmail'] == $_POST['newEmail2']) {
             $player->emailAddress = ($_POST['newEmail']);
-            $player->emailPrivacy = ($_POST['emailstatus']);
+            $player->emailPrivacy = (int) $_POST['emailstatus'];
             $result = 'Email changed.';
             $success = true;
             $player->save();
@@ -70,7 +70,7 @@ if (isset($_POST['action'])) {
         $result = 'Accounts updated.';
         $success = true;
     } elseif ($_POST['action'] == 'changeTimeZone') {
-        $player->timezone = ($_POST['timezone']);
+        $player->timezone = (float) $_POST['timezone'];
         $result = 'Time Zone Changed.';
         $player->save();
     } elseif ($_POST['action'] == 'verifyAccount') {
