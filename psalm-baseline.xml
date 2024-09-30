@@ -51,6 +51,18 @@
     </PossiblyUnusedMethod>
   </file>
   <file src="gatherling/Models/Event.php">
+    <InvalidArgument>
+      <code><![CDATA[$active_players]]></code>
+      <code><![CDATA[$active_players[$i]['player']]]></code>
+      <code><![CDATA[$active_players[$pairing[$i]]['player']]]></code>
+      <code><![CDATA[$bye_data]]></code>
+    </InvalidArgument>
+    <InvalidReturnStatement>
+      <code><![CDATA[$list_opponents]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[list<string>]]></code>
+    </InvalidReturnType>
     <PossiblyUnusedMethod>
       <code><![CDATA[isFinalized]]></code>
     </PossiblyUnusedMethod>
@@ -121,6 +133,25 @@
     </PossiblyUnusedReturnValue>
   </file>
   <file src="gatherling/Models/MaxWeightMatching.php">
+    <InvalidFunctionCall>
+      <code><![CDATA[$DEBUG("PAIR(b) $v $w (k=$k)")]]></code>
+      <code><![CDATA[$DEBUG("PAIR(c) $s $t (k=".$this->floorintdiv($p, 2).')')]]></code>
+      <code><![CDATA[$DEBUG("POP v=$v")]]></code>
+      <code><![CDATA[$DEBUG("PUSH $leaf")]]></code>
+      <code><![CDATA[$DEBUG("STAGE $t")]]></code>
+      <code><![CDATA[$DEBUG("addBlossom($base,$k) (v=$v w=$w) -> $b")]]></code>
+      <code><![CDATA[$DEBUG("assignLabel($w,$t,$p)")]]></code>
+      <code><![CDATA[$DEBUG("augmentBlossom($b,$v)")]]></code>
+      <code><![CDATA[$DEBUG("augmentMatching($k) (v=$v w=$w)")]]></code>
+      <code><![CDATA[$DEBUG("bk=$bk tbk=$tbk bd=".$this->arr_repr($bd).' tbd='.$this->arr_repr($tbd))]]></code>
+      <code><![CDATA[$DEBUG("blossomchilds[$b]=".$this->arr_repr($this->blossomchilds[$b]))]]></code>
+      <code><![CDATA[$DEBUG("delta$deltatype=$delta")]]></code>
+      <code><![CDATA[$DEBUG("expandBlossom($b,$endstage) ".$this->arr_repr($this->blossomchilds[$b]))]]></code>
+      <code><![CDATA[$DEBUG("scanBlossom($v,$w)")]]></code>
+      <code><![CDATA[$DEBUG('PAIR(a) '.$this->endpoint[$p].' '.$this->endpoint[$p ^ 1].' (k='.$this->floorintdiv($p, 2).')')]]></code>
+      <code><![CDATA[$DEBUG('SUBSTAGE')]]></code>
+      <code><![CDATA[$DEBUG('v='.$v.' bk='.$bk.' bd='.$bd.' $this->bestedge[$v]='.$this->bestedge[$v].' slack='.$this->slack($this->bestedge[$v]))]]></code>
+    </InvalidFunctionCall>
     <PossiblyUnusedMethod>
       <code><![CDATA[print_arr]]></code>
     </PossiblyUnusedMethod>
@@ -144,6 +175,15 @@
     </UnusedVariable>
   </file>
   <file src="gatherling/Models/Pagination.php">
+    <InvalidArrayOffset>
+      <code><![CDATA[$query[$this->_properties['variable_name']]]]></code>
+    </InvalidArrayOffset>
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->_properties['page']]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[int]]></code>
+    </InvalidReturnType>
     <PossiblyUnusedMethod>
       <code><![CDATA[always_show_navigation]]></code>
       <code><![CDATA[labels]]></code>
@@ -655,7 +695,28 @@
       <code><![CDATA[getObjectVarsCamelCase($event)]]></code>
     </UndefinedFunction>
   </file>
+  <file src="gatherling/Views/Pages/EventHelper.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[[
+            'name'    => "newmatchplayer$letter",
+            'default' => $default,
+            'options' => $options,
+        ]]]></code>
+      <code><![CDATA[[
+            'name'    => 'newmatchround',
+            'default' => '- Round -',
+            'options' => $options,
+        ]]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[array<string, string|array<string, bool|int|string>>]]></code>
+      <code><![CDATA[array<string, string|array<string, bool|int|string>>]]></code>
+    </InvalidReturnType>
+  </file>
   <file src="gatherling/Views/Pages/EventList.php">
+    <InvalidPropertyAssignmentValue>
+      <code><![CDATA[$results]]></code>
+    </InvalidPropertyAssignmentValue>
     <PossiblyUnusedProperty>
       <code><![CDATA[$formatDropMenu]]></code>
       <code><![CDATA[$hasMore]]></code>
@@ -702,6 +763,9 @@
     </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Pages/Home.php">
+    <InvalidPropertyAssignmentValue>
+      <code><![CDATA[$this->recentWinners]]></code>
+    </InvalidPropertyAssignmentValue>
     <PossiblyUnusedProperty>
       <code><![CDATA[$hasActiveEvents]]></code>
       <code><![CDATA[$hasRecentWinners]]></code>
@@ -727,6 +791,22 @@
     </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Pages/MatchList.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[[
+        'name'    => $name,
+        'default' => '- Result -',
+        'options' => $options,
+    ]]]></code>
+      <code><![CDATA[[
+        'name'    => 'newbyeplayer',
+        'default' => '- Bye Player -',
+        'options' => $options,
+    ]]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[array<string, string|array<string, bool|int|string>>]]></code>
+      <code><![CDATA[array<string, string|array<string, bool|int|string>>]]></code>
+    </InvalidReturnType>
     <PossiblyUnusedProperty>
       <code><![CDATA[$hasMatches]]></code>
       <code><![CDATA[$isBeforeRoundTwo]]></code>
@@ -842,11 +922,20 @@
     </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Pages/ReportsForm.php">
+    <InvalidPropertyAssignmentValue>
+      <code><![CDATA[$assembleEntries($entriesByDateTime)]]></code>
+      <code><![CDATA[$assembleEntries($entriesByMedal)]]></code>
+    </InvalidPropertyAssignmentValue>
     <PossiblyUnusedProperty>
       <code><![CDATA[$hasEntries]]></code>
       <code><![CDATA[$registrants]]></code>
       <code><![CDATA[$standings]]></code>
     </PossiblyUnusedProperty>
+  </file>
+  <file src="gatherling/Views/Pages/Series.php">
+    <InvalidPropertyAssignmentValue>
+      <code><![CDATA[$this->activeSeries]]></code>
+    </InvalidPropertyAssignmentValue>
   </file>
   <file src="gatherling/Views/Pages/SeriesReport.php">
     <PossiblyUnusedProperty>
@@ -865,6 +954,12 @@
     </UnusedVariable>
   </file>
   <file src="gatherling/api_lib.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[$result]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[list<string>]]></code>
+    </InvalidReturnType>
     <NoValue>
       <code><![CDATA[return error("Missing argument '$key'");]]></code>
     </NoValue>
@@ -907,15 +1002,67 @@
       <code><![CDATA[$CONFIG]]></code>
     </UnusedVariable>
   </file>
+  <file src="gatherling/deck.php">
+    <InvalidArrayOffset>
+      <code><![CDATA[$vals['archetype']]]></code>
+      <code><![CDATA[$vals['desc']]]></code>
+      <code><![CDATA[$vals['name']]]></code>
+    </InvalidArrayOffset>
+  </file>
+  <file src="gatherling/decksearch.php">
+    <InvalidArgument>
+      <code><![CDATA[$_POST['color']]]></code>
+    </InvalidArgument>
+  </file>
+  <file src="gatherling/event.php">
+    <InvalidArgument>
+      <code><![CDATA[$t4]]></code>
+      <code><![CDATA[$t8]]></code>
+    </InvalidArgument>
+  </file>
   <file src="gatherling/formatcp.php">
+    <InvalidArgument>
+      <code><![CDATA[$_POST]]></code>
+      <code><![CDATA[$_POST['delbancards'] ?? []]]></code>
+      <code><![CDATA[$_POST['delbannedsubtype'] ?? []]]></code>
+      <code><![CDATA[$_POST['delbannedtribe'] ?? []]]></code>
+      <code><![CDATA[$_POST['delcardsetname'] ?? []]]></code>
+      <code><![CDATA[$_POST['dellegalcards'] ?? []]]></code>
+      <code><![CDATA[$_POST['delrestrictedcards'] ?? []]]></code>
+      <code><![CDATA[$_POST['delrestrictedtotribe'] ?? []]]></code>
+    </InvalidArgument>
     <UnusedParam>
       <code><![CDATA[$formatName]]></code>
     </UnusedParam>
   </file>
   <file src="gatherling/lib.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[$cardarr]]></code>
+      <code><![CDATA[[
+        'name'    => 'hour',
+        'default' => '- Hour -',
+        'options' => $options,
+    ]]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[array<string, int>]]></code>
+      <code><![CDATA[array<string, string|array<string, string|bool|null>>]]></code>
+    </InvalidReturnType>
     <UnusedVariable>
       <code><![CDATA[$R1]]></code>
     </UnusedVariable>
+  </file>
+  <file src="gatherling/lib_form_helper.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[[
+        'id'      => $id,
+        'name'    => $name,
+        'options' => $opts,
+    ]]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[array<string, string|bool|null>]]></code>
+    </InvalidReturnType>
   </file>
   <file src="gatherling/player.php">
     <UnusedVariable>
@@ -938,6 +1085,9 @@
     </UnusedVariable>
   </file>
   <file src="gatherling/seriescp.php">
+    <InvalidArgument>
+      <code><![CDATA[$new_rules]]></code>
+    </InvalidArgument>
     <UnusedParam>
       <code><![CDATA[$cur]]></code>
     </UnusedParam>
