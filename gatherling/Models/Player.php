@@ -299,7 +299,7 @@ class Player
         $stmt->close();
     }
 
-    public function getIPAddresss(): string
+    public function getIPAddresss(): ?string
     {
         return $this->ipAddress;
     }

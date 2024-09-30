@@ -102,7 +102,7 @@ class Matchup
         return strcasecmp($this->playerb, $name) == 0;
     }
 
-    private function toName(string|Player $player_or_name): string
+    private function toName(string|Player $player_or_name): ?string
     {
         if (is_object($player_or_name)) {
             return $player_or_name->name;
@@ -162,7 +162,7 @@ class Matchup
 
     // returns the number of wins for the current match for $player
     // returns false if the player is not in this match.
-    public function getPlayerWins(string|Player $player): int|false
+    public function getPlayerWins(string|Player $player): int|null|false
     {
         $playername = $this->toName($player);
 
@@ -215,7 +215,7 @@ class Matchup
 
     // returns the number of wins for the current match for $player
     // Returns false if the player is not in this match.
-    public function getPlayerLosses(string|Player $player): int|false
+    public function getPlayerLosses(string|Player $player): int|null|false
     {
         $playername = $this->toName($player);
 
