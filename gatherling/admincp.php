@@ -239,7 +239,7 @@ function handleActions(): void
         $errormsg = "User {$player->name} is now verified.";
     } elseif ($_POST['action'] == 'Create Series') {
         $hasError = true;
-        $newactive = $_POST['isactive'];
+        $newactive = (int) $_POST['isactive'];
         $newtime = $_POST['hour'];
         $newday = $_POST['start_day'];
         $prereg = 0;
