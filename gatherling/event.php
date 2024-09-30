@@ -490,7 +490,7 @@ function updateMatches(): void
             }
 
             if ((strcasecmp($resultForA, 'notset') != 0) && (strcasecmp($resultForB, 'notset') != 0)) {
-                $matchid = $_POST['hostupdatesmatches'][$ndx];
+                $matchid = (int) $_POST['hostupdatesmatches'][$ndx];
                 Matchup::saveReport($resultForA, $matchid, 'a');
                 Matchup::saveReport($resultForB, $matchid, 'b');
             }
@@ -546,7 +546,7 @@ function updateMatches(): void
         $playerA = new Standings($event->name, $pA);
         $playerB = new Standings($event->name, $pB);
         if ($res == 'P') {
-            $event->addPairing($playerA, $playerB, $rnd, $res);
+            $event->addPairing($playerA, $playerB, (int) $rnd, $res);
         } else {
             $event->addMatch($playerA, $playerB, $rnd, $res, (string) $pAWins, (string) $pBWins);
         }
