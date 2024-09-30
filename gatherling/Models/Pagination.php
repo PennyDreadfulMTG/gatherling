@@ -237,17 +237,8 @@ class Pagination
         $this->_properties['preserve_query_string'] = $preserve_query_string;
     }
 
-    /**
-     *  Returns the current page's number.
-     *
-     *  <code>
-     *  // echoes the current page
-     *  echo $pagination->get_page();
-     *  </code>
-     *
-     * @return int Returns the current page's number
-     */
-    public function get_page()
+    /** Returns the current page's number. */
+    public function get_page(): int
     {
         // unless page was not specifically set through the "set_page" method
         if (!$this->_properties['page_set']) {
@@ -506,9 +497,8 @@ class Pagination
      *
      *                                          Default is FALSE.
      *
-     * @return void
      */
-    public function render($return_output = false)
+    public function render(bool $return_output = false): string|null
     {
         // get some properties of the class
         $this->get_page();
@@ -569,6 +559,7 @@ class Pagination
 
         // if script gets this far, print generated content to the screen
         echo $output;
+        return null;
     }
 
     /**

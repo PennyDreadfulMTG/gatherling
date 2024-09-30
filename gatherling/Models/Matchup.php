@@ -46,7 +46,7 @@ class Matchup
         $stmt = $db->prepare('DELETE FROM matches WHERE id = ?');
         $stmt->bind_param('d', $matchid);
         $stmt->execute();
-        $rows = $stmt->affected_rows;
+        $rows = (int) $stmt->affected_rows;
         $stmt->close();
 
         return $rows;
