@@ -448,7 +448,7 @@ function handleActions(): void
         return;
     }
     if ($_POST['action'] == 'Update Series') {
-        $newactive = $_POST['isactive'];
+        $newactive = (int) $_POST['isactive'];
         $newtime = $_POST['hour'];
         $newday = $_POST['start_day'];
         $room = $_POST['mtgo_room'];
@@ -524,6 +524,6 @@ function handleActions(): void
         $series->addBannedPlayer($addplayer->name, $_POST['reason']);
     } elseif ($_POST['action'] == 'Update Points Rules') {
         $new_rules = $_POST['new_rules'];
-        $series->setSeasonRules($_POST['season'], $new_rules);
+        $series->setSeasonRules((int) $_POST['season'], $new_rules);
     }
 }

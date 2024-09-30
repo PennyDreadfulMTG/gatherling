@@ -16,8 +16,8 @@ function main(): void
     $player = Player::findByName($playerName);
     if ($player && $profileEdit == 2) {
         $player->emailAddress = $_GET['email'];
-        $player->emailPrivacy = $_GET['email_public'];
-        $player->timezone = $_GET['timezone'];
+        $player->emailPrivacy = (int) $_GET['email_public'];
+        $player->timezone = (float) $_GET['timezone'];
         $player->save();
     }
 
