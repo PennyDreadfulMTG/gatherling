@@ -112,7 +112,7 @@ function handleAction(string $seriesName): Component
     if ($_POST['action'] == 'Delete Entire Legal List') {
         $format = new Format($_POST['format']);
         $success = $format->deleteEntireLegallist(); // leave a message of success
-        return $success ? null : new ErrorMessage(['Failed to delete legal list']);
+        return $success ? new NullComponent() : new ErrorMessage(['Failed to delete legal list']);
     }
     if ($_POST['action'] == 'Update Cardsets') {
         return updateCardSets($_POST['format'], $_POST['cardsetname'] ?? '', $_POST['delcardsetname'] ?? []);
