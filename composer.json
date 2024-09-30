@@ -6,7 +6,7 @@
         "tests": "vendor/bin/phpunit --stop-on-defect tests",
         "lint": "vendor/bin/phpcs .",
         "autofix": "vendor/bin/phpcbf .",
-		"static": "vendor/bin/phpstan --memory-limit=2G && vendor/bin/psalm",
+		"static": "vendor/bin/phpstan --memory-limit=2G && vendor/bin/psalm --no-cache",
 		"jstests": "bun test"
     },
     "require": {
