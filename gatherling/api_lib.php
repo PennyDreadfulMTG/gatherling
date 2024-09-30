@@ -319,7 +319,7 @@ function create_series(string $newseries, bool $active, string $day): array
     } else {
         $series = new Series('');
         $series->name = $newseries;
-        $series->active = $active;
+        $series->active = $active ? 1 : 0;
         $series->start_time = '0:00:00';
         $series->start_day = $day;
         $series->save();

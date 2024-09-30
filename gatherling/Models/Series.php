@@ -11,7 +11,7 @@ use InvalidArgumentException;
 class Series
 {
     public string $name;
-    public ?bool $active;
+    public ?int $active;
     public ?string $start_day;
     public ?string $start_time;
     /** @var list<string> */

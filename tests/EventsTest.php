@@ -27,7 +27,7 @@ final class EventsTest extends DatabaseCase
         if (!Series::exists('Test')) {
             $series = new Series('');
             $series->name = 'Test';
-            $series->active = true;
+            $series->active = 1;
             $series->start_time = '00:00'.':00';
             $series->start_day = 'Friday';
             $series->save();
