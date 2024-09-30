@@ -239,10 +239,8 @@ function repr_json_player(Player $player, int|string|null $client = null): array
 
 //## Actions
 
-/**
- * @return (bool|string|int)[]|false[]|(string|false)[]
- */
-function add_player_to_event(Event $event, ?string $name, ?string $decklist)
+/** @return array<string, mixed> */
+function add_player_to_event(Event $event, ?string $name, ?string $decklist): array
 {
     $result = [];
     if ($event->authCheck($_SESSION['username'])) {
