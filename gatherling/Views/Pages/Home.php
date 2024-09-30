@@ -11,14 +11,16 @@ use Gatherling\Views\Components\Time;
 
 class Home extends Page
 {
-    /** @var list<array<string, string|int|Component>> */
-    public array $activeEvents;
+    /** @var list<array{name: string, format: string, currentRound: int, reportLink: string}> */
+    public array $activeEvents = [];
     public bool $hasActiveEvents;
+    /** @var list<array{name: string, format: string, reportLink: string, time: Time}> */
+    public array $upcomingEvents = [];
     public bool $hasUpcomingEvents;
-    /** @var array<string, string> */
-    public array $playerInfo = [];
-    /** @var array<string, string> */
-    public array $mostRecentHostedEvent = [];
+    /** @var ?array{name: string, link: string} */
+    public ?array $playerInfo = null;
+    /** @var ?array{name: string, link: string} */
+    public ?array $mostRecentHostedEvent = null;
     /** @var list<array<string, string>> */
     public array $recentWinners;
     public bool $hasRecentWinners;
@@ -29,10 +31,9 @@ class Home extends Page
      * @param array<string, int> $stats
      * @param list<array<string, int|string>> $recentWinners
      */
-    public function __construct(array $activeEvents, public array $upcomingEvents, public array $stats, ?Player $player, ?Event $mostRecentHostedEvent, array $recentWinners)
+    public function __construct(array $activeEvents, array $upcomingEvents, public array $stats, ?Player $player, ?Event $mostRecentHostedEvent, array $recentWinners)
     {
         parent::__construct();
-        $this->activeEvents = [];
         foreach ($activeEvents as $event) {
             $this->activeEvents[] = [
                 'name' => $event->name,
@@ -42,7 +43,6 @@ class Home extends Page
             ];
         }
         $this->hasActiveEvents = count($this->activeEvents) > 0;
-        $this->upcomingEvents = [];
         foreach ($upcomingEvents as $event) {
             $this->upcomingEvents[] = [
                 'name' => $event['name'],
