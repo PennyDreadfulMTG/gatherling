@@ -84,7 +84,7 @@ class SeasonStandings extends Component
      * @param array<string, mixed> $a
      * @param array<string, mixed> $b
      */
-    private static function reverseTotalSort(array $a, array $b): int
+    public static function reverseTotalSort(array $a, array $b): int
     {
         if ($a['.total'] == $b['.total']) {
             return 0;
