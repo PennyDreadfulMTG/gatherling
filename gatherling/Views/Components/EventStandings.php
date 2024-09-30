@@ -27,7 +27,7 @@ class EventStandings extends Component
             $standingInfo = getObjectVarsCamelCase($standing);
             $standingInfo['rank'] = $rank;
             $standingInfo['shouldHighlight'] = $standing->player == $playerName;
-            $standingInfo['matchScore'] = $standing->score;
+            $standingInfo['matchScore'] = $standing->score ?? 0;
             $sp = new Player($standing->player);
             $standingInfo['gameName'] = new GameName($sp, $event->client);
             $rank++;

@@ -6,7 +6,7 @@ use Gatherling\Models\Player;
 
 class MedalTable extends Component
 {
-    /** @var array<array{medal: string, numMedals: int}> */
+    /** @var array<array{medal: string, medalSrc: string, numMedals: int}> */
     public array $medalStats;
     public string $playerName;
     public function __construct(Player $player)

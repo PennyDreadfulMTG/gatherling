@@ -18,7 +18,7 @@ class NumDropMenu extends DropMenu
         if ($special) {
             $options[] = [
                 'text'       => $special,
-                'value'      => 128,
+                'value'      => '128',
                 'isSelected' => $def == 128,
             ];
         }
