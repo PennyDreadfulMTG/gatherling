@@ -104,13 +104,7 @@ function error($msg, $extra = null)
     exit(json_encode($result));
 }
 
-/**
- * @param string $key
- * @param mixed  $default
- *
- * @return mixed
- */
-function arg($key, $default = null)
+function arg(string $key, mixed $default = null): mixed
 {
     if (!isset($_REQUEST[$key])) {
         if ($default !== null) {

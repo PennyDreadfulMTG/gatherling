@@ -39,7 +39,7 @@ class Deck
     public ?string $deck_contents_cache;
     /** @var ?list<self> */
     public ?array $identical_decks;
-    public ?string $medal; // has a medal
+    public ?string $medal = null; // has a medal
     public bool $new; // is new
 
     public function __construct(mixed $id)

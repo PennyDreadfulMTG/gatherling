@@ -233,8 +233,8 @@ class Event
         $event->cohost = $cohost;
         $event->kvalue = (int) $kvalue;
         $event->series = $series;
-        $event->season = $season;
-        $event->number = $number;
+        $event->season = (int) $season;
+        $event->number = (int) $number;
         $event->threadurl = $threadurl;
         $event->metaurl = $metaurl;
         $event->reporturl = $reporturl;
@@ -465,7 +465,7 @@ class Event
      * @param ?list<string> $t4
      * @param ?list<string> $t8
      */
-    public function setFinalists(string $win, string $sec, ?array $t4 = null, ?array $t8 = null): void
+    public function setFinalists(string $win, ?string $sec, ?array $t4 = null, ?array $t8 = null): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare("UPDATE entries SET medal = 'dot' WHERE event_id = ?");
@@ -535,8 +535,11 @@ class Event
         return $isOrganizer;
     }
 
-    public function authCheck(string $playername): bool
+    public function authCheck(?string $playername): bool
     {
+        if ($playername == null) {
+            return false;
+        }
         $player = new Player($playername);
 
         if (

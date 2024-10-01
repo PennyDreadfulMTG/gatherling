@@ -232,18 +232,18 @@ function insertEvent(): Event
     }
 
     if (!isset($_POST['prereg_allowed'])) {
-        $_POST['prereg_allowed'] = 0;
+        $_POST['prereg_allowed'] = '0';
     }
 
     if (!isset($_POST['player_reportable'])) {
-        $_POST['player_reportable'] = 0;
+        $_POST['player_reportable'] = '0';
     }
 
     if (!isset($_POST['late_entry_limit'])) {
         $_POST['late_entry_limit'] = 0;
     }
     if (!isset($_POST['private'])) {
-        $_POST['private'] = 0;
+        $_POST['private'] = '0';
     }
 
     $event = Event::CreateEvent(
@@ -579,7 +579,7 @@ function updateAdjustments(): void
 
     foreach ($adjustments as $name => $points) {
         if ($points != '') {
-            $event->setSeasonPointAdjustment($name, $points, $reasons[$name]);
+            $event->setSeasonPointAdjustment($name, (int) $points, $reasons[$name]);
         }
     }
 }

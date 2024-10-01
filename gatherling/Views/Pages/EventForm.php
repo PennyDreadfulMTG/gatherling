@@ -58,11 +58,11 @@ class EventForm extends EventFrame
     /** @var array<string, mixed> */
     public array $clientDropMenu;
     /** @var array<string, mixed> */
-    public array $finalizeEventCheckbox;
+    public ?array $finalizeEventCheckbox;
     /** @var array<string, mixed> */
-    public array $eventActiveCheckbox;
+    public ?array $eventActiveCheckbox;
     /** @var array<string, mixed> */
-    public array $currentRoundDropMenu;
+    public ?array $currentRoundDropMenu;
     /** @var ?array<string, mixed> */
     public ?array $trophyField;
     public bool $showCreateNextEvent;
