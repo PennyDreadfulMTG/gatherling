@@ -21,27 +21,27 @@ parameters:
 			path: gatherling/Models/MaxWeightMatching.php
 
 		-
-			message: "#^Elseif condition is always false\\.$#"
-			count: 3
-			path: gatherling/Models/MaxWeightMatching.php
-
-		-
-			message: "#^Elseif condition is always true\\.$#"
+			message: "#^If condition is always false\\.$#"
 			count: 1
 			path: gatherling/Models/MaxWeightMatching.php
 
 		-
-			message: "#^If condition is always false\\.$#"
+			message: "#^Loose comparison using \\=\\= between 0 and 0 will always evaluate to true\\.$#"
+			count: 4
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Loose comparison using \\=\\= between 0 and 1 will always evaluate to false\\.$#"
+			count: 7
+			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Loose comparison using \\=\\= between 0 and 2 will always evaluate to false\\.$#"
 			count: 3
 			path: gatherling/Models/MaxWeightMatching.php
 
 		-
-			message: "#^If condition is always true\\.$#"
-			count: 2
-			path: gatherling/Models/MaxWeightMatching.php
-
-		-
-			message: "#^Left side of && is always true\\.$#"
+			message: "#^Loose comparison using \\=\\= between 2 and 2 will always evaluate to true\\.$#"
 			count: 1
 			path: gatherling/Models/MaxWeightMatching.php
 
@@ -377,17 +377,7 @@ parameters:
 
 		-
 			message: "#^Result of && is always false\\.$#"
-			count: 2
-			path: gatherling/Models/MaxWeightMatching.php
-
-		-
-			message: "#^Right side of && is always false\\.$#"
-			count: 2
-			path: gatherling/Models/MaxWeightMatching.php
-
-		-
-			message: "#^Right side of && is always true\\.$#"
-			count: 1
+			count: 4
 			path: gatherling/Models/MaxWeightMatching.php
 
 		-
@@ -404,6 +394,46 @@ parameters:
 			message: "#^Variable \\$v might not be defined\\.$#"
 			count: 6
 			path: gatherling/Models/MaxWeightMatching.php
+
+		-
+			message: "#^Call to preg_quote\\(\\) is missing delimiter / to be effective\\.$#"
+			count: 1
+			path: gatherling/Models/Pagination.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Pagination\\:\\:\\$_properties \\(array\\<string, bool\\|int\\|string\\>\\) does not accept array\\<string, array\\<int\\|string, array\\|string\\>\\|bool\\|int\\|string\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Pagination.php
+
+		-
+			message: "#^Parameter &\\$results by\\-ref type of method Gatherling\\\\Models\\\\Series\\:\\:multiply_and_add_points\\(\\) expects array\\<string, array\\<string, array\\<string, int\\|string\\>\\|int\\>\\>, array\\<string, array\\<string, mixed\\>\\> given\\.$#"
+			count: 4
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Parameter \\#3 \\$options of function selectInputArgs expects array\\<string, string\\>\\|null, array\\<int\\|string, string\\> given\\.$#"
+			count: 1
+			path: gatherling/Views/Pages/EventForm.php
+
+		-
+			message: "#^Method Gatherling\\\\Views\\\\Pages\\\\EventHelper\\:\\:playerDropMenuArgs\\(\\) should return array\\<string, array\\<string, bool\\|int\\|string\\>\\|string\\> but returns array\\<string, array\\<int, array\\<string, bool\\|string\\>\\>\\|string\\>\\.$#"
+			count: 1
+			path: gatherling/Views/Pages/EventHelper.php
+
+		-
+			message: "#^Method Gatherling\\\\Views\\\\Pages\\\\EventHelper\\:\\:roundDropMenuArgs\\(\\) should return array\\<string, array\\<string, bool\\|int\\|string\\>\\|string\\> but returns array\\<string, array\\<int, array\\<string, bool\\|int\\|string\\>\\>\\|string\\>\\.$#"
+			count: 1
+			path: gatherling/Views/Pages/EventHelper.php
+
+		-
+			message: "#^Function Gatherling\\\\Views\\\\Pages\\\\playerByeMenuArgs\\(\\) should return array\\<string, array\\<string, bool\\|int\\|string\\>\\|string\\> but returns array\\<string, array\\<int, array\\<string, string\\>\\>\\|string\\>\\.$#"
+			count: 1
+			path: gatherling/Views/Pages/MatchList.php
+
+		-
+			message: "#^Function Gatherling\\\\Views\\\\Pages\\\\resultDropMenuArgs\\(\\) should return array\\<string, array\\<string, bool\\|int\\|string\\>\\|string\\> but returns array\\<string, array\\<int, array\\<string, string\\>\\>\\|string\\>\\.$#"
+			count: 1
+			path: gatherling/Views/Pages/MatchList.php
 
 		-
 			message: "#^Variable \\$CONFIG might not be defined\\.$#"
@@ -431,6 +461,11 @@ parameters:
 			path: gatherling/auth.php
 
 		-
+			message: "#^Path in require_once\\(\\) \"/var/www/vendor/autoload\\.php\" is not a file or it does not exist\\.$#"
+			count: 1
+			path: gatherling/bootstrap.php
+
+		-
 			message: "#^Offset 'archetype' on array\\{contents\\: '', sideboard\\: '', name\\: ''\\} in isset\\(\\) does not exist\\.$#"
 			count: 1
 			path: gatherling/deck.php
@@ -454,6 +489,16 @@ parameters:
 			message: "#^Variable \\$pBWins might not be defined\\.$#"
 			count: 1
 			path: gatherling/event.php
+
+		-
+			message: "#^Function timeDropMenuArgs\\(\\) should return array\\<string, array\\<string, bool\\|string\\|null\\>\\|string\\> but returns array\\<string, array\\<int, array\\<string, bool\\|string\\>\\>\\|string\\>\\.$#"
+			count: 1
+			path: gatherling/lib.php
+
+		-
+			message: "#^Function selectArgs\\(\\) should return array\\<string, bool\\|string\\|null\\> but returns array\\<string, array\\<int, array\\<string, bool\\|string\\>\\>\\|string\\>\\.$#"
+			count: 1
+			path: gatherling/lib_form_helper.php
 
 		-
 			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
