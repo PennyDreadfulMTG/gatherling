@@ -17,8 +17,8 @@ function sendEmail(string $to, string $subj, string $msg): bool
     $ch = curl_init();
 
     curl_setopt($ch, CURLOPT_URL, 'https://api.brevo.com/v3/smtp/email');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
 
     $headers = [];
