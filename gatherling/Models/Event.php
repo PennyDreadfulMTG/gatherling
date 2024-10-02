@@ -367,7 +367,7 @@ class Event
                 $this->newSubevent($this->mainrounds, 1, $this->mainstruct);
             } else {
                 $main = new Subevent($this->mainid);
-                $main->rounds = $this->mainrounds;
+                $main->rounds = (int) $this->mainrounds;
                 $main->type = $this->mainstruct;
                 $main->save();
             }
@@ -376,7 +376,7 @@ class Event
                 $this->newSubevent($this->finalrounds, 2, $this->finalstruct);
             } else {
                 $final = new Subevent($this->finalid);
-                $final->rounds = $this->finalrounds;
+                $final->rounds = (int) $this->finalrounds;
                 $final->type = $this->finalstruct;
                 $final->save();
             }

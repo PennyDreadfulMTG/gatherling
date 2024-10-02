@@ -12,7 +12,7 @@ class MedalTable extends Component
     public function __construct(Player $player)
     {
         parent::__construct('partials/medalTable');
-        $this->playerName = $player->name;
+        $this->playerName = $player->name ?? '';
         $medalStats = $player->getMedalStats();
         $this->medalStats = array_map(fn($medal) => [
             'medal' => $medal,

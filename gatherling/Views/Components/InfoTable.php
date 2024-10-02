@@ -41,7 +41,7 @@ class InfoTable extends Component
         }
         $pcgF = 0;
         if ($sum > 0) {
-            $pcgF = round(($max / $sum) * 100);
+            $pcgF = (int) round(($max / $sum) * 100);
         }
         $ndx = 0;
         $sum = 0;
@@ -56,7 +56,7 @@ class InfoTable extends Component
         }
         $pcgS = 0;
         if ($sum > 0) {
-            $pcgS = round(($max / $sum) * 100);
+            $pcgS = (int) round(($max / $sum) * 100);
         }
 
         $matches = $player->getAllMatches();
@@ -80,6 +80,6 @@ class InfoTable extends Component
         $this->numMatches = count($matches);
         $this->email = $player->emailAddress;
         $this->emailIsPublic = $player->emailIsPublic();
-        $this->timeZone = $player->time_zone();
+        $this->timeZone = $player->time_zone() ?? '';
     }
 }

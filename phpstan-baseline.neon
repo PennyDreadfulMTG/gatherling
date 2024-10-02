@@ -376,11 +376,6 @@ parameters:
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Property Gatherling\\\\Models\\\\Deck\\:\\:\\$id \\(int\\|null\\) does not accept int\\|string\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
 			message: "#^Property Gatherling\\\\Models\\\\Deck\\:\\:\\$maindeck_cards \\(array\\<string, int\\>\\) does not accept array\\<int\\|string, mixed\\>\\.$#"
 			count: 1
 			path: gatherling/Models/Deck.php
@@ -788,11 +783,6 @@ parameters:
 		-
 			message: "#^Parameter \\#4 \\$t8 of method Gatherling\\\\Models\\\\Event\\:\\:setFinalists\\(\\) expects list\\<string\\>\\|null, array\\{\\}\\|array\\{3\\?\\: string\\|null, 2\\?\\: string\\|null, 1\\?\\: string\\|null, 0\\: string\\|null\\} given\\.$#"
 			count: 1
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Subevent\\:\\:\\$rounds \\(int\\|null\\) does not accept int\\|string\\.$#"
-			count: 2
 			path: gatherling/Models/Event.php
 
 		-
@@ -1731,16 +1721,6 @@ parameters:
 			path: gatherling/Models/Pairings.php
 
 		-
-			message: "#^Property Gatherling\\\\Models\\\\Pairings\\:\\:\\$highest_points \\(int\\) does not accept array\\<int, string\\>\\|int\\|string\\.$#"
-			count: 1
-			path: gatherling/Models/Pairings.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Pairings\\:\\:\\$lowestScoreWithoutBye \\(int\\) does not accept array\\<int, string\\>\\|int\\|string\\.$#"
-			count: 2
-			path: gatherling/Models/Pairings.php
-
-		-
 			message: "#^Cannot access property \\$num_rows on mysqli_stmt\\|false\\.$#"
 			count: 1
 			path: gatherling/Models/Player.php
@@ -2299,26 +2279,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$time of class Gatherling\\\\Views\\\\Components\\\\Time constructor expects int, int\\|false given\\.$#"
 			count: 1
 			path: gatherling/Views/Components/InfoTable.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\InfoTable\\:\\:\\$pcgF \\(int\\) does not accept float\\|int\\.$#"
-			count: 1
-			path: gatherling/Views/Components/InfoTable.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\InfoTable\\:\\:\\$pcgS \\(int\\) does not accept float\\|int\\.$#"
-			count: 1
-			path: gatherling/Views/Components/InfoTable.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\InfoTable\\:\\:\\$timeZone \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Components/InfoTable.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\MedalTable\\:\\:\\$playerName \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Components/MedalTable.php
 
 		-
 			message: "#^Method Gatherling\\\\Views\\\\Components\\\\MetaStats\\:\\:initArchetypeCount\\(\\) should return array\\<string, int\\> but returns array\\<int\\>\\.$#"

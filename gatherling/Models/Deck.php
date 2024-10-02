@@ -575,7 +575,7 @@ class Deck
             $stmt = $db->prepare('INSERT INTO decks (archetype, name, playername, format, tribe, notes, created_date) values(?, ?, ?, ?, ?, ?, NOW())');
             $stmt->bind_param('ssssss', $this->archetype, $this->name, $this->playername, $this->format, $this->tribe, $this->notes);
             $stmt->execute();
-            $this->id = $stmt->insert_id;
+            $this->id = (int) $stmt->insert_id;
 
             $stmt = $db->prepare('UPDATE entries SET deck = ? WHERE player = ? AND event_id = ?');
             $stmt->bind_param('dsd', $this->id, $this->playername, $this->event_id);
