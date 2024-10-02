@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Gatherling\Auth;
 
 use Gatherling\Data\DB;
-use Gatherling\Log;
 
 class Session
 {
