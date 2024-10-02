@@ -26,13 +26,14 @@ You can change the ports in docker-composer.yml.
 
 ## Tests
 
-- $ vendor/bin/phpunit -v tests/
+- $ composer test
 or with a dockerized setup:
 - $ docker exec -it gatherling-web-1 sh -c "cd /var/www && vendor/bin/phpunit tests"
 
 ## Lint
-$ vendor/bin/phpcs --standard=PSR12 --runtime-set testVersion 8.1 --ignore=vendor .
-$ vendor/bin/phpcbf --standard=PSR12 --runtime-set testVersion 8.1 --ignore=vendor . # autofix
+$ composer lint # phpcs
+$ composer autofix # phpcbf
+$ composer static # phpstan and psalm
 
 ## JavaScript Tests
 

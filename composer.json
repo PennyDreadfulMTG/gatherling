@@ -4,8 +4,8 @@
 	"version": "5.1.0",
     "scripts": {
         "tests": "vendor/bin/phpunit --stop-on-defect tests",
-        "lint": "vendor/bin/phpcs .",
-        "autofix": "vendor/bin/phpcbf .",
+        "lint": "vendor/bin/phpcs -d memory_limit=2G --runtime-set testVersion 8.1 .",
+        "autofix": "vendor/bin/phpcbf -d memory_limit=2G --runtime-set testVersion 8.1 .",
 		"static": "vendor/bin/phpstan --memory-limit=2G && vendor/bin/psalm --no-cache",
 		"jstests": "bun test"
     },
