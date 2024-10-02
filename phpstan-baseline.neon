@@ -61,7 +61,37 @@ parameters:
 			path: gatherling/Auth/Registration.php
 
 		-
+			message: "#^Method Gatherling\\\\Auth\\\\Session\\:\\:load\\(\\) should return array\\<string, mixed\\> but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Auth/Session.php
+
+		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/Auth/Session.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of function setcookie expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/Auth/Session.php
+
+		-
+			message: "#^Cannot access offset 0 on mixed\\.$#"
+			count: 1
+			path: gatherling/Data/DB.php
+
+		-
+			message: "#^Method Gatherling\\\\Data\\\\DB\\:\\:select\\(\\) should return list\\<array\\<string, mixed\\>\\> but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Data/DB.php
+
+		-
 			message: "#^Parameter \\#1 \\$string of function trim expects string, string\\|null given\\.$#"
+			count: 1
+			path: gatherling/Data/DB.php
+
+		-
+			message: "#^Parameter \\#2 \\$params of static method Gatherling\\\\Data\\\\DB\\:\\:_execute\\(\\) expects array\\<string, mixed\\>, mixed given\\.$#"
 			count: 1
 			path: gatherling/Data/DB.php
 
@@ -72,6 +102,11 @@ parameters:
 
 		-
 			message: "#^Cannot access offset 'code' on array\\|false\\|null\\.$#"
+			count: 1
+			path: gatherling/Models/CardSet.php
+
+		-
+			message: "#^Cannot access property \\$data on mixed\\.$#"
 			count: 1
 			path: gatherling/Models/CardSet.php
 
@@ -141,7 +176,32 @@ parameters:
 			path: gatherling/Models/Database.php
 
 		-
+			message: "#^Method Gatherling\\\\Models\\\\Database\\:\\:get_lock\\(\\) should return int but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Database.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Database\\:\\:release_lock\\(\\) should return int but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Database.php
+
+		-
 			message: "#^Parameter \\#1 \\$message of class Exception constructor expects string, string\\|null given\\.$#"
+			count: 1
+			path: gatherling/Models/Database.php
+
+		-
+			message: "#^Parameter \\#1 \\$query of method mysqli\\:\\:prepare\\(\\) expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/Models/Database.php
+
+		-
+			message: "#^Parameter \\#1 \\$types of method mysqli_stmt\\:\\:bind_param\\(\\) expects string, mixed given\\.$#"
+			count: 20
+			path: gatherling/Models/Database.php
+
+		-
+			message: "#^Part \\$query \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
 			count: 1
 			path: gatherling/Models/Database.php
 
@@ -197,6 +257,21 @@ parameters:
 
 		-
 			message: "#^Cannot call method store_result\\(\\) on mysqli_stmt\\|false\\.$#"
+			count: 1
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 1
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Deck\\:\\:getArchetypes\\(\\) should return array\\<string\\> but returns array\\<int, mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Deck.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Deck\\:\\:getTribe\\(\\) should return string\\|null but returns mixed\\.$#"
 			count: 1
 			path: gatherling/Models/Deck.php
 
@@ -296,6 +371,11 @@ parameters:
 			path: gatherling/Models/Deck.php
 
 		-
+			message: "#^Property Gatherling\\\\Models\\\\Deck\\:\\:\\$format \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 2
+			path: gatherling/Models/Deck.php
+
+		-
 			message: "#^Property Gatherling\\\\Models\\\\Deck\\:\\:\\$id \\(int\\|null\\) does not accept int\\|string\\.$#"
 			count: 1
 			path: gatherling/Models/Deck.php
@@ -348,6 +428,11 @@ parameters:
 		-
 			message: "#^Property Gatherling\\\\Models\\\\Decksearch\\:\\:\\$_results \\(array\\<string, list\\<int\\>\\>\\) does not accept non\\-empty\\-array\\<string, array\\<int\\<0, max\\>, mixed\\>\\>\\.$#"
 			count: 1
+			path: gatherling/Models/Decksearch.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Decksearch\\:\\:\\$_results \\(array\\<string, list\\<int\\>\\>\\) does not accept non\\-empty\\-array\\<string, list\\<mixed\\>\\>\\.$#"
+			count: 6
 			path: gatherling/Models/Decksearch.php
 
 		-
@@ -511,7 +596,47 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
+			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:count\\(\\) should return int but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Event.php
+
+		-
 			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getActiveOpponents\\(\\) should return list\\<string\\> but returns list\\<string\\|null\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getEntriesByDateTime\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getEntriesByMedal\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getPlacePlayer\\(\\) should return string\\|null but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getPlayerCount\\(\\) should return int but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getPlayerLeagueMatchCount\\(\\) should return int but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getPlayers\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Event.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:largestEventNum\\(\\) should return int but returns mixed\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
 
@@ -711,7 +836,112 @@ parameters:
 			path: gatherling/Models/Format.php
 
 		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getAllFormats\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getBanList\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getBlockCardsets\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getCardID\\(\\) should return int\\|null but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getCardName\\(\\) should return string\\|null but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getCardNameFromPartialDFC\\(\\) should return string\\|null but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getCardType\\(\\) should return string but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getCoreCardsets\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getExtraCardsets\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getFormats\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getLegalCardsets\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 4
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getLegalList\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getPrivateFormats\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getPublicFormats\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getRestrictedList\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getRestrictedTotribeList\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getSubTypesBanned\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getSystemFormats\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
 			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getTribe\\(\\) should return array\\{name\\: string, count\\: int\\} but returns array\\{name\\: non\\-empty\\-string\\|null, count\\: int\\}\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getTribesAllowed\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getTribesBanned\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getTribesList\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
 			count: 1
 			path: gatherling/Models/Format.php
 
@@ -744,6 +974,36 @@ parameters:
 			message: "#^Parameter \\#1 \\$seriesName of method Gatherling\\\\Models\\\\Player\\:\\:isOrganizer\\(\\) expects string, string\\|null given\\.$#"
 			count: 3
 			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Parameter \\#1 \\$string1 of function strcasecmp expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, mixed given\\.$#"
+			count: 3
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Parameter \\#1 \\$typeString of static method Gatherling\\\\Models\\\\Format\\:\\:removeTypeCrap\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Part \\$cardSet \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: gatherling/Models/Format.php
+
+		-
+			message: "#^Cannot access property \\$set on mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Formats.php
+
+		-
+			message: "#^Cannot access property \\$sets on mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Formats.php
 
 		-
 			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
@@ -838,6 +1098,11 @@ parameters:
 		-
 			message: "#^Comparison operation \"\\=\\=\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
 			count: 2
+			path: gatherling/Models/Matchup.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Matchup\\:\\:count\\(\\) should return int but returns mixed\\.$#"
+			count: 1
 			path: gatherling/Models/Matchup.php
 
 		-
@@ -1351,6 +1616,11 @@ parameters:
 			path: gatherling/Models/Pagination.php
 
 		-
+			message: "#^Binary operation \"\\.\" between '\\?' and mixed results in an error\\.$#"
+			count: 1
+			path: gatherling/Models/Pagination.php
+
+		-
 			message: "#^Binary operation \"/\" between bool\\|int\\|string and bool\\|int\\|string results in an error\\.$#"
 			count: 1
 			path: gatherling/Models/Pagination.php
@@ -1367,6 +1637,11 @@ parameters:
 
 		-
 			message: "#^Cannot access offset bool\\|int\\|string on array\\<int\\|string, array\\|string\\>\\|bool\\|int\\|string\\.$#"
+			count: 1
+			path: gatherling/Models/Pagination.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
 			count: 1
 			path: gatherling/Models/Pagination.php
 
@@ -1396,12 +1671,27 @@ parameters:
 			path: gatherling/Models/Pagination.php
 
 		-
+			message: "#^Parameter \\#1 \\$string of function parse_str expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/Models/Pagination.php
+
+		-
 			message: "#^Parameter \\#1 \\$string of function rtrim expects string, bool\\|int\\|string given\\.$#"
 			count: 1
 			path: gatherling/Models/Pagination.php
 
 		-
+			message: "#^Parameter \\#1 \\$url of function parse_url expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/Models/Pagination.php
+
+		-
 			message: "#^Parameter \\#2 \\$subject of function preg_match expects string, bool\\|int\\|string given\\.$#"
+			count: 1
+			path: gatherling/Models/Pagination.php
+
+		-
+			message: "#^Parameter \\#2 \\$subject of function preg_match expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/Models/Pagination.php
 
@@ -1486,6 +1776,31 @@ parameters:
 			path: gatherling/Models/Player.php
 
 		-
+			message: "#^Method Gatherling\\\\Models\\\\Player\\:\\:activeCount\\(\\) should return int but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Player\\:\\:getClientIPAddress\\(\\) should return string but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Player\\:\\:loginName\\(\\) should return bool\\|string but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Player\\:\\:verifiedCount\\(\\) should return int but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/Models/Player.php
+
+		-
 			message: "#^Parameter \\#1 \\$oneplayer of method Gatherling\\\\Models\\\\Matchup\\:\\:otherPlayer\\(\\) expects string, string\\|null given\\.$#"
 			count: 2
 			path: gatherling/Models/Player.php
@@ -1513,6 +1828,11 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$string1 of function strcasecmp expects string, string\\|null given\\.$#"
 			count: 4
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, mixed given\\.$#"
+			count: 1
 			path: gatherling/Models/Player.php
 
 		-
@@ -1626,6 +1946,16 @@ parameters:
 			path: gatherling/Models/Series.php
 
 		-
+			message: "#^Method Gatherling\\\\Models\\\\Series\\:\\:getBannedPlayerDate\\(\\) should return string\\|null but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Method Gatherling\\\\Models\\\\Series\\:\\:getBannedPlayerReason\\(\\) should return string\\|null but returns mixed\\.$#"
+			count: 1
+			path: gatherling/Models/Series.php
+
+		-
 			message: "#^Method Gatherling\\\\Models\\\\Series\\:\\:getDecklistPosteds\\(\\) should return array\\<string, array\\<string, int\\>\\> but returns array\\<int\\|string, array\\>\\.$#"
 			count: 1
 			path: gatherling/Models/Series.php
@@ -1661,6 +1991,11 @@ parameters:
 			path: gatherling/Models/Series.php
 
 		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, mixed given\\.$#"
+			count: 2
+			path: gatherling/Models/Series.php
+
+		-
 			message: "#^Parameter \\#1 \\$name of method Gatherling\\\\Models\\\\Series\\:\\:isOrganizer\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Series.php
@@ -1689,6 +2024,11 @@ parameters:
 			message: "#^Property Gatherling\\\\Models\\\\Series\\:\\:\\$this_season_season \\(int\\) does not accept int\\|null\\.$#"
 			count: 1
 			path: gatherling/Models/Series.php
+
+		-
+			message: "#^Cannot access property \\$data on mixed\\.$#"
+			count: 1
+			path: gatherling/Models/SetScraper.php
 
 		-
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
@@ -1851,6 +2191,11 @@ parameters:
 			path: gatherling/Views/Components/FormatCPMenu.php
 
 		-
+			message: "#^Parameter \\#2 \\$options of method Gatherling\\\\Views\\\\Components\\\\DropMenu\\:\\:__construct\\(\\) expects list\\<array\\{value\\: string, text\\: string, isSelected\\?\\: bool\\}\\>, list\\<array\\{text\\: mixed, value\\: mixed, isSelected\\: bool\\}\\> given\\.$#"
+			count: 1
+			path: gatherling/Views/Components/FormatDropMenu.php
+
+		-
 			message: "#^Property Gatherling\\\\Views\\\\Components\\\\FormatSettings\\:\\:\\$activeFormatName \\(string\\) does not accept string\\|null\\.$#"
 			count: 1
 			path: gatherling/Views/Components/FormatSettings.php
@@ -1871,7 +2216,27 @@ parameters:
 			path: gatherling/Views/Components/FullMetagame.php
 
 		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/Views/Components/FullMetagame.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/Views/Components/FullMetagame.php
+
+		-
+			message: "#^Parameter \\#2 \\$playerName of class Gatherling\\\\Views\\\\Components\\\\EventStandings constructor expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/Views/Components/FullMetagame.php
+
+		-
 			message: "#^Parameter \\#2 \\$playername of class Gatherling\\\\Models\\\\Entry constructor expects string, string\\|null given\\.$#"
+			count: 1
+			path: gatherling/Views/Components/FullMetagame.php
+
+		-
+			message: "#^Property Gatherling\\\\Views\\\\Components\\\\FullMetagame\\:\\:\\$meta \\(array\\<int, array\\{numPlayers\\: int, manaSrc\\: string, entries\\: array\\<int, array\\{playerLink\\: Gatherling\\\\Views\\\\Components\\\\PlayerLink, record\\: string, tribe\\: string\\|null, medal\\: string\\|null, deckName\\: string, archetype\\: string\\}\\>\\}\\>\\) does not accept non\\-empty\\-array\\<int, array\\{numPlayers\\: mixed, manaSrc\\: string, entries\\: array\\<int, array\\{playerLink\\: Gatherling\\\\Views\\\\Components\\\\PlayerLink, record\\: string, tribe\\: string\\|null, medal\\: string\\|null, deckName\\: string, archetype\\: string\\}\\>\\}\\>\\.$#"
 			count: 1
 			path: gatherling/Views/Components/FullMetagame.php
 
@@ -1956,6 +2321,11 @@ parameters:
 			path: gatherling/Views/Components/MedalTable.php
 
 		-
+			message: "#^Method Gatherling\\\\Views\\\\Components\\\\MetaStats\\:\\:initArchetypeCount\\(\\) should return array\\<string, int\\> but returns array\\<int\\>\\.$#"
+			count: 1
+			path: gatherling/Views/Components/MetaStats.php
+
+		-
 			message: "#^Property Gatherling\\\\Views\\\\Components\\\\MetaStats\\:\\:\\$archetypes \\(list\\<array\\{name\\: string, pcg\\: int\\}\\>\\) does not accept non\\-empty\\-list\\<array\\{name\\: string, pcg\\: float\\|int\\}\\>\\.$#"
 			count: 1
 			path: gatherling/Views/Components/MetaStats.php
@@ -2011,6 +2381,11 @@ parameters:
 			path: gatherling/Views/Components/SeasonStandings.php
 
 		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 1
+			path: gatherling/Views/Components/TextInput.php
+
+		-
 			message: "#^Property Gatherling\\\\Views\\\\Components\\\\TribalBAndR\\:\\:\\$activeFormatName \\(string\\) does not accept string\\|null\\.$#"
 			count: 1
 			path: gatherling/Views/Components/TribalBAndR.php
@@ -2034,6 +2409,11 @@ parameters:
 			message: "#^Property Gatherling\\\\Views\\\\Components\\\\TrophyTable\\:\\:\\$playerName \\(string\\) does not accept string\\|null\\.$#"
 			count: 1
 			path: gatherling/Views/Components/TrophyTable.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/Views/LoginRedirect.php
 
 		-
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
@@ -2101,6 +2481,11 @@ parameters:
 			path: gatherling/Views/Pages/EventForm.php
 
 		-
+			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/Views/Pages/EventFrame.php
+
+		-
 			message: "#^Method Gatherling\\\\Views\\\\Pages\\\\EventHelper\\:\\:playerDropMenuArgs\\(\\) should return array\\<string, array\\<string, bool\\|int\\|string\\>\\|string\\> but returns array\\<string, array\\<int, array\\<string, bool\\|string\\>\\>\\|string\\>\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventHelper.php
@@ -2131,6 +2516,11 @@ parameters:
 			path: gatherling/Views/Pages/EventList.php
 
 		-
+			message: "#^Parameter \\#1 \\$format of class Gatherling\\\\Views\\\\Components\\\\FormatDropMenu constructor expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/Views/Pages/EventList.php
+
+		-
 			message: "#^Parameter \\#1 \\$player of function Gatherling\\\\Views\\\\Pages\\\\queryEvents expects Gatherling\\\\Models\\\\Player, Gatherling\\\\Models\\\\Player\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventList.php
@@ -2141,7 +2531,17 @@ parameters:
 			path: gatherling/Views/Pages/EventList.php
 
 		-
+			message: "#^Parameter \\#1 \\$string of method mysqli\\:\\:escape_string\\(\\) expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/Views/Pages/EventList.php
+
+		-
 			message: "#^Parameter \\#1 \\$string of method mysqli\\:\\:escape_string\\(\\) expects string, string\\|null given\\.$#"
+			count: 2
+			path: gatherling/Views/Pages/EventList.php
+
+		-
+			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, mixed given\\.$#"
 			count: 2
 			path: gatherling/Views/Pages/EventList.php
 
@@ -2396,9 +2796,44 @@ parameters:
 			path: gatherling/action.php
 
 		-
+			message: "#^Part \\$_SESSION\\['DISCORD_NAME'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: gatherling/action.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/admin/db-upgrade.php
+
+		-
+			message: "#^Parameter \\#1 \\$playername of static method Gatherling\\\\Models\\\\Player\\:\\:findByName\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/admin/infobot.php
+
+		-
+			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/admin/infobot.php
+
+		-
+			message: "#^Parameter \\#1 \\$string1 of function strncmp expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/admin/infobot.php
+
+		-
+			message: "#^Part \\$_REQUEST\\['mode'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: gatherling/admin/infobot.php
+
+		-
 			message: "#^Variable \\$CONFIG might not be defined\\.$#"
 			count: 4
 			path: gatherling/admin/infobot.php
+
+		-
+			message: "#^Binary operation \"\\.\" between mixed and '\\:00' results in an error\\.$#"
+			count: 1
+			path: gatherling/admincp.php
 
 		-
 			message: "#^Cannot call method isSuper\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
@@ -2406,7 +2841,52 @@ parameters:
 			path: gatherling/admincp.php
 
 		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 2
+			path: gatherling/admincp.php
+
+		-
+			message: "#^Parameter \\#1 \\$format of method Gatherling\\\\Models\\\\Ratings\\:\\:calcRatingByFormat\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/admincp.php
+
+		-
+			message: "#^Parameter \\#1 \\$format of method Gatherling\\\\Models\\\\Ratings\\:\\:deleteRatingByFormat\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/admincp.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/admincp.php
+
+		-
+			message: "#^Parameter \\#1 \\$new_password of method Gatherling\\\\Models\\\\Player\\:\\:setPassword\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/admincp.php
+
+		-
 			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Series\\:\\:authCheck\\(\\) expects string, bool\\|string given\\.$#"
+			count: 1
+			path: gatherling/admincp.php
+
+		-
+			message: "#^Part \\$_POST\\['new_password'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: gatherling/admincp.php
+
+		-
+			message: "#^Part \\$username \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: gatherling/admincp.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Series\\:\\:\\$name \\(string\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/admincp.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Series\\:\\:\\$start_day \\(string\\|null\\) does not accept mixed\\.$#"
 			count: 1
 			path: gatherling/admincp.php
 
@@ -2431,8 +2911,108 @@ parameters:
 			path: gatherling/api.php
 
 		-
+			message: "#^Parameter \\#1 \\$id of function cardname_from_id expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api.php
+
+		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, float\\|int\\|string\\|null given\\.$#"
 			count: 2
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, mixed given\\.$#"
+			count: 7
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Series constructor expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of static method Gatherling\\\\Models\\\\Event\\:\\:exists\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#1 \\$newseries of function create_series expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#1 \\$playername of static method Gatherling\\\\Models\\\\Player\\:\\:findByDiscordHandle\\(\\) expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#1 \\$playername of static method Gatherling\\\\Models\\\\Player\\:\\:findByDiscordID\\(\\) expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#1 \\$playername of static method Gatherling\\\\Models\\\\Player\\:\\:findByMTGA\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#1 \\$playername of static method Gatherling\\\\Models\\\\Player\\:\\:findByMTGO\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#1 \\$playername of static method Gatherling\\\\Models\\\\Player\\:\\:findByName\\(\\) expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#2 \\$name of function add_player_to_event expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#2 \\$name of function delete_player_from_event expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#2 \\$name of function drop_player_from_event expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#3 \\$a of function create_pairing expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#3 \\$day of function create_series expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#3 \\$decklist of function add_player_to_event expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#4 \\$b of function create_pairing expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/api.php
+
+		-
+			message: "#^Parameter \\#5 \\$res of function create_pairing expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/api.php
+
+		-
+			message: "#^Part \\$action \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: gatherling/api.php
+
+		-
+			message: "#^Part \\$name \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
 			path: gatherling/api.php
 
 		-
@@ -2452,6 +3032,11 @@ parameters:
 
 		-
 			message: "#^Function card_catalog\\(\\) should return list\\<string\\> but returns list\\<float\\|int\\|string\\|null\\>\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Function cardname_from_id\\(\\) should return string but returns mixed\\.$#"
 			count: 1
 			path: gatherling/api_lib.php
 
@@ -2486,6 +3071,11 @@ parameters:
 			path: gatherling/api_lib.php
 
 		-
+			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:authCheck\\(\\) expects string\\|null, mixed given\\.$#"
+			count: 3
+			path: gatherling/api_lib.php
+
+		-
 			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:dropPlayer\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/api_lib.php
@@ -2496,8 +3086,158 @@ parameters:
 			path: gatherling/api_lib.php
 
 		-
+			message: "#^Parameter \\#1 \\$playername of static method Gatherling\\\\Models\\\\Player\\:\\:findByName\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#1 \\$string1 of function strncmp expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#1 \\$year of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#10 \\$kvalue of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#11 \\$series of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#12 \\$season of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#13 \\$number of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#14 \\$threadurl of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#15 \\$metaurl of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#16 \\$reporturl of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#17 \\$prereg_allowed of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#18 \\$player_reportable of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#19 \\$late_entry_limit of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#2 \\$data of function hash expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#2 \\$month of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
 			message: "#^Parameter \\#2 \\$playername of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"
 			count: 2
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#20 \\$private of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#21 \\$mainrounds of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#22 \\$mainstruct of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#23 \\$finalrounds of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#24 \\$finalstruct of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#25 \\$client of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#3 \\$day of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#3 \\$round of method Gatherling\\\\Models\\\\Event\\:\\:addMatch\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#3 \\$round of method Gatherling\\\\Models\\\\Event\\:\\:addPairing\\(\\) expects int, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#4 \\$hour of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#6 \\$name of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#7 \\$format of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#8 \\$host of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Parameter \\#9 \\$cohost of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/api_lib.php
+
+		-
+			message: "#^Part \\$username \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
 			path: gatherling/api_lib.php
 
 		-
@@ -2531,6 +3271,11 @@ parameters:
 			path: gatherling/auth.php
 
 		-
+			message: "#^Cannot call method getEmail\\(\\) on mixed\\.$#"
+			count: 1
+			path: gatherling/auth.php
+
+		-
 			message: "#^Cannot call method save\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
 			count: 1
 			path: gatherling/auth.php
@@ -2539,6 +3284,26 @@ parameters:
 			message: "#^Function send_to_discord invoked with 1 parameter, 0 required\\.$#"
 			count: 3
 			path: gatherling/auth.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of function explode expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/auth.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Player\\:\\:\\$discord_handle \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/auth.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Player\\:\\:\\$discord_id \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/auth.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/bannedplayer.php
 
 		-
 			message: "#^Parameter \\#1 \\$string of function substr expects string, string\\|false given\\.$#"
@@ -2554,6 +3319,16 @@ parameters:
 			message: "#^Function events\\(\\) should return list\\<array\\{d\\: int, name\\: string, threadurl\\: string\\}\\> but returns list\\<array\\<string, mixed\\>\\>\\.$#"
 			count: 1
 			path: gatherling/calendar.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/calendar.php
+
+		-
+			message: "#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: gatherling/cardscp.php
 
 		-
 			message: "#^Cannot access property \\$error on mysqli_stmt\\|false\\.$#"
@@ -2591,6 +3366,16 @@ parameters:
 			path: gatherling/cardscp.php
 
 		-
+			message: "#^Part \\$count \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 2
+			path: gatherling/cardscp.php
+
+		-
+			message: "#^Part \\$set \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 2
+			path: gatherling/cardscp.php
+
+		-
 			message: "#^Cannot access property \\$name on Gatherling\\\\Models\\\\Event\\|null\\.$#"
 			count: 1
 			path: gatherling/deck.php
@@ -2618,6 +3403,11 @@ parameters:
 		-
 			message: "#^Offset 'name' on array\\{contents\\: '', sideboard\\: ''\\} in isset\\(\\) does not exist\\.$#"
 			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Parameter \\#1 \\$cards of function parseCardsWithQuantity expects array\\<string\\>\\|string, mixed given\\.$#"
+			count: 4
 			path: gatherling/deck.php
 
 		-
@@ -2651,6 +3441,11 @@ parameters:
 			path: gatherling/deck.php
 
 		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, mixed given\\.$#"
+			count: 3
+			path: gatherling/deck.php
+
+		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, string\\|null given\\.$#"
 			count: 2
 			path: gatherling/deck.php
@@ -2661,7 +3456,17 @@ parameters:
 			path: gatherling/deck.php
 
 		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/deck.php
+
+		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of static method Gatherling\\\\Models\\\\Event\\:\\:exists\\(\\) expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/deck.php
 
@@ -2711,6 +3516,11 @@ parameters:
 			path: gatherling/deck.php
 
 		-
+			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, mixed given\\.$#"
+			count: 7
+			path: gatherling/deck.php
+
+		-
 			message: "#^Parameter \\#1 \\$username of method Gatherling\\\\Models\\\\Deck\\:\\:canEdit\\(\\) expects string\\|false, bool\\|string given\\.$#"
 			count: 1
 			path: gatherling/deck.php
@@ -2726,6 +3536,11 @@ parameters:
 			path: gatherling/deck.php
 
 		-
+			message: "#^Parameter \\#2 \\$player of function checkDeckAuth expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/deck.php
+
+		-
 			message: "#^Parameter \\#2 \\$timestamp of function date expects int\\|null, int\\|false given\\.$#"
 			count: 1
 			path: gatherling/deck.php
@@ -2736,14 +3551,74 @@ parameters:
 			path: gatherling/deck.php
 
 		-
+			message: "#^Part \\$event \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
+			message: "#^Part \\$player \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 2
+			path: gatherling/deck.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Deck\\:\\:\\$archetype \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 2
+			path: gatherling/deck.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Deck\\:\\:\\$name \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 2
+			path: gatherling/deck.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Deck\\:\\:\\$notes \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 2
+			path: gatherling/deck.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Deck\\:\\:\\$playername \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/deck.php
+
+		-
 			message: "#^Parameter \\#1 \\$data of function simplexml_load_string expects string, string\\|false\\|null given\\.$#"
 			count: 1
 			path: gatherling/deckXmlParser.php
 
 		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/deckdl.php
+
+		-
 			message: "#^Parameter \\#1 \\$username of method Gatherling\\\\Models\\\\Deck\\:\\:canView\\(\\) expects string\\|false, bool\\|string given\\.$#"
 			count: 1
 			path: gatherling/deckdl.php
+
+		-
+			message: "#^Cannot access offset 'b' on mixed\\.$#"
+			count: 2
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Cannot access offset 'g' on mixed\\.$#"
+			count: 2
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Cannot access offset 'r' on mixed\\.$#"
+			count: 2
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Cannot access offset 'u' on mixed\\.$#"
+			count: 2
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Cannot access offset 'w' on mixed\\.$#"
+			count: 2
+			path: gatherling/decksearch.php
 
 		-
 			message: "#^Cannot call method close\\(\\) on mysqli_result\\|true\\.$#"
@@ -2756,7 +3631,47 @@ parameters:
 			path: gatherling/decksearch.php
 
 		-
+			message: "#^Parameter \\#1 \\$archetype of method Gatherling\\\\Models\\\\Decksearch\\:\\:searchByArchetype\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\$cardname of method Gatherling\\\\Models\\\\Decksearch\\:\\:searchByCardName\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\$color_str_input of method Gatherling\\\\Models\\\\Decksearch\\:\\:searchByColor\\(\\) expects array\\<string, string\\>, mixed given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\$colors of function checkboxMenu expects array\\<string, string\\>\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
 			message: "#^Parameter \\#1 \\$datetime of function time_element expects int, int\\|false given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\$def of function archetypeDropMenu expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\$format of function formatDropMenuDS expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\$format of method Gatherling\\\\Models\\\\Decksearch\\:\\:searchByFormat\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\$id_arr of function displayDecksFromID expects list\\<int\\>, mixed given\\.$#"
 			count: 1
 			path: gatherling/decksearch.php
 
@@ -2766,8 +3681,43 @@ parameters:
 			path: gatherling/decksearch.php
 
 		-
+			message: "#^Parameter \\#1 \\$medal of method Gatherling\\\\Models\\\\Decksearch\\:\\:searchByMedals\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Decksearch\\:\\:searchByPlayer\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\$series of function seriesDropMenu expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\$series of method Gatherling\\\\Models\\\\Decksearch\\:\\:searchBySeries\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
 			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, float\\|int\\|string\\|null given\\.$#"
 			count: 3
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, mixed given\\.$#"
+			count: 1
 			path: gatherling/decksearch.php
 
 		-
@@ -2776,12 +3726,97 @@ parameters:
 			path: gatherling/decksearch.php
 
 		-
+			message: "#^Parameter \\#1 \\$value of function count expects array\\|Countable, mixed given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\(mixed\\) of echo cannot be converted to string\\.$#"
+			count: 2
+			path: gatherling/decksearch.php
+
+		-
 			message: "#^Parameter \\#2 \\$contents of function page expects string, string\\|false given\\.$#"
 			count: 1
 			path: gatherling/decksearch.php
 
 		-
+			message: "#^Parameter \\#3 \\$selected of function medalsDropMenu expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/decksearch.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/displaySeries.php
+
+		-
+			message: "#^Parameter \\#1 \\$values of static method Gatherling\\\\Models\\\\Image\\:\\:fromValues\\(\\) expects array\\<string, int\\|string\\>\\|null, array\\<string, mixed\\>\\|null given\\.$#"
+			count: 1
+			path: gatherling/displaySeries.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/displayTrophy.php
+
+		-
+			message: "#^Parameter \\#1 \\$values of static method Gatherling\\\\Models\\\\Image\\:\\:fromValues\\(\\) expects array\\<string, int\\|string\\>\\|null, array\\<string, mixed\\>\\|null given\\.$#"
+			count: 1
+			path: gatherling/displayTrophy.php
+
+		-
+			message: "#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\\.$#"
+			count: 7
+			path: gatherling/event.php
+
+		-
+			message: "#^Cannot access offset 'size' on mixed\\.$#"
+			count: 2
+			path: gatherling/event.php
+
+		-
+			message: "#^Cannot access offset 'tmp_name' on mixed\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Cannot access offset 'type' on mixed\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Cannot access offset int\\<0, max\\> on mixed\\.$#"
+			count: 2
+			path: gatherling/event.php
+
+		-
+			message: "#^Cannot access offset mixed on mixed\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 18
+			path: gatherling/event.php
+
+		-
 			message: "#^Parameter \\#1 \\$datetime of function strtotime expects string, string\\|null given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$eventName of function Gatherling\\\\getEvent expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$eventName of function Gatherling\\\\newEventFromEventName expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$eventName of function Gatherling\\\\postEvent expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/event.php
 
@@ -2801,8 +3836,58 @@ parameters:
 			path: gatherling/event.php
 
 		-
+			message: "#^Parameter \\#1 \\$filename of function fopen expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$format of method Gatherling\\\\Models\\\\Event\\:\\:updateDecksFormat\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$matchid of static method Gatherling\\\\Models\\\\Matchup\\:\\:destroy\\(\\) expects int, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, mixed given\\.$#"
+			count: 5
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Series constructor expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Event\\:\\:setSeasonPointAdjustment\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:addPlayer\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
 			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:authCheck\\(\\) expects string\\|null, bool\\|string given\\.$#"
 			count: 2
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:dropPlayer\\(\\) expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:removeEntry\\(\\) expects string, mixed given\\.$#"
+			count: 1
 			path: gatherling/event.php
 
 		-
@@ -2816,13 +3901,308 @@ parameters:
 			path: gatherling/event.php
 
 		-
+			message: "#^Parameter \\#1 \\$seriesName of class Gatherling\\\\Views\\\\Pages\\\\EventList constructor expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function trim expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, mixed given\\.$#"
+			count: 12
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$value of function count expects array\\|Countable, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$win of method Gatherling\\\\Models\\\\Event\\:\\:setFinalists\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#1 \\$year of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#10 \\$kvalue of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#11 \\$series of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#12 \\$season of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#13 \\$number of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#14 \\$threadurl of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#15 \\$metaurl of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#16 \\$reporturl of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#17 \\$prereg_allowed of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#18 \\$player_reportable of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#19 \\$late_entry_limit of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#2 \\$action of function Gatherling\\\\getEvent expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#2 \\$month of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#2 \\$newMatchRound of class Gatherling\\\\Views\\\\Pages\\\\MatchList constructor expects int\\|string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
 			message: "#^Parameter \\#2 \\$playername of class Gatherling\\\\Models\\\\Entry constructor expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/event.php
 
 		-
+			message: "#^Parameter \\#2 \\$playername of class Gatherling\\\\Models\\\\Standings constructor expects string, mixed given\\.$#"
+			count: 3
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#2 \\$season of class Gatherling\\\\Views\\\\Pages\\\\EventList constructor expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#2 \\$sec of method Gatherling\\\\Models\\\\Event\\:\\:setFinalists\\(\\) expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of function explode expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/event.php
+
+		-
 			message: "#^Parameter \\#2 \\$subevent of static method Gatherling\\\\Models\\\\Standings\\:\\:updateStandings\\(\\) expects int, int\\|null given\\.$#"
 			count: 2
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#20 \\$private of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#21 \\$mainrounds of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#22 \\$mainstruct of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#23 \\$finalrounds of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#24 \\$finalstruct of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#25 \\$client of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#3 \\$day of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#3 \\$eventId of function Gatherling\\\\getEvent expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#3 \\$reason of method Gatherling\\\\Models\\\\Event\\:\\:setSeasonPointAdjustment\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#3 \\$round of method Gatherling\\\\Models\\\\Event\\:\\:addMatch\\(\\) expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#3 \\$t4 of method Gatherling\\\\Models\\\\Event\\:\\:setFinalists\\(\\) expects list\\<string\\>\\|null, array\\{mixed, mixed\\} given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#4 \\$hour of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#4 \\$player of function Gatherling\\\\getEvent expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#4 \\$result of method Gatherling\\\\Models\\\\Event\\:\\:addMatch\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#4 \\$result of method Gatherling\\\\Models\\\\Event\\:\\:addPairing\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#4 \\$t8 of method Gatherling\\\\Models\\\\Event\\:\\:setFinalists\\(\\) expects list\\<string\\>\\|null, array\\{mixed, mixed, mixed, mixed\\} given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#5 \\$naming of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#6 \\$name of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#7 \\$format of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#8 \\$host of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Parameter \\#9 \\$cohost of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Part \\$_POST\\['day'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Part \\$_POST\\['hour'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Part \\$_POST\\['month'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Part \\$_POST\\['year'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$cohost \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$finalrounds \\(int\\|string\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$finalstruct \\(string\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$format \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$host \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$mainrounds \\(int\\|string\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$mainstruct \\(string\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$metaurl \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$reporturl \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$series \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$threadurl \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 1
 			path: gatherling/event.php
 
 		-
@@ -2841,12 +4221,92 @@ parameters:
 			path: gatherling/eventreport.php
 
 		-
+			message: "#^Parameter \\#1 \\$format of class Gatherling\\\\Views\\\\Pages\\\\PlayerEventList constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/eventreport.php
+
+		-
+			message: "#^Parameter \\#1 \\$format of function eventList expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/eventreport.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, mixed given\\.$#"
+			count: 1
+			path: gatherling/eventreport.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of static method Gatherling\\\\Models\\\\Event\\:\\:exists\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/eventreport.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/eventreport.php
+
+		-
+			message: "#^Parameter \\#2 \\$series of class Gatherling\\\\Views\\\\Pages\\\\PlayerEventList constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/eventreport.php
+
+		-
+			message: "#^Parameter \\#2 \\$series of function eventList expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/eventreport.php
+
+		-
+			message: "#^Parameter \\#3 \\$season of class Gatherling\\\\Views\\\\Pages\\\\PlayerEventList constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/eventreport.php
+
+		-
+			message: "#^Parameter \\#3 \\$season of function eventList expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/eventreport.php
+
+		-
+			message: "#^Parameter \\#1 \\$emailAddress of static method Gatherling\\\\Models\\\\Player\\:\\:findByEmail\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/forgot.php
+
+		-
+			message: "#^Parameter \\#1 \\$haystack of function str_contains expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/forgot.php
+
+		-
 			message: "#^Parameter \\#1 \\$name of function generateSecureResetLink expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/forgot.php
 
 		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/forgot.php
+
+		-
+			message: "#^Parameter \\#1 \\$playername of static method Gatherling\\\\Models\\\\Player\\:\\:findByName\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/forgot.php
+
+		-
 			message: "#^Parameter \\#1 \\$to of function sendEmail expects string, string\\|null given\\.$#"
+			count: 1
+			path: gatherling/forgot.php
+
+		-
+			message: "#^Parameter \\#1 \\$token of function resetPassword expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/forgot.php
+
+		-
+			message: "#^Parameter \\#2 \\$newPassword of function resetPassword expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/forgot.php
+
+		-
+			message: "#^Parameter \\#5 \\$token of class Gatherling\\\\Views\\\\Pages\\\\Forgot constructor expects string\\|null, mixed given\\.$#"
 			count: 1
 			path: gatherling/forgot.php
 
@@ -2866,7 +4326,242 @@ parameters:
 			path: gatherling/formatcp.php
 
 		-
+			message: "#^Function getMissingSets\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$action of class Gatherling\\\\Views\\\\Pages\\\\FormatAdmin constructor expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$activeFormat of function updateBanlist expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$format of static method Gatherling\\\\Models\\\\Format\\:\\:doesFormatExist\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$formatName of function addAll expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$formatName of function deleteFormat expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$formatName of function saveAsForm expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$formatName of function updateCardSets expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$formatName of function updateLegalList expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$formatName of function updateRestrictedList expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$formatName of function updateRestrictedToTribeList expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$formatName of function updateSubtypeBan expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$formatName of function updateTribeBan expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Format constructor expects string, mixed given\\.$#"
+			count: 6
+			path: gatherling/formatcp.php
+
+		-
 			message: "#^Parameter \\#1 \\$oldFormatName of class Gatherling\\\\Views\\\\Components\\\\FormatSaveAsForm constructor expects string, string\\|null given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$seriesName of class Gatherling\\\\Views\\\\Components\\\\BAndR constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$seriesName of class Gatherling\\\\Views\\\\Components\\\\CardSets constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$seriesName of class Gatherling\\\\Views\\\\Components\\\\FormatSettings constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$seriesName of class Gatherling\\\\Views\\\\Components\\\\LoadFormatForm constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$seriesName of class Gatherling\\\\Views\\\\Components\\\\TribalBAndR constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$seriesName of function handleAction expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$setName of method Gatherling\\\\Models\\\\Format\\:\\:isCardSetLegal\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function substr expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$string1 of function strncmp expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#1 \\$values of function updateFormat expects array\\<string, string\\>, array given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#2 \\$addBanCards of function updateBanlist expects array\\<string\\>\\|string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#2 \\$addLegalCards of function updateLegalList expects array\\<string\\>\\|string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#2 \\$addRestrictedCards of function updateRestrictedList expects array\\<string\\>\\|string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#2 \\$addRestrictedToTribeCreature of function updateRestrictedToTribeList expects array\\<string\\>\\|string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#2 \\$cardSetName of function updateCardSets expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#2 \\$formatName of function deleteForm expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#2 \\$newFormatName of function createNewFormat expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#2 \\$newFormatName of function renameFormat expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#2 \\$newFormatName of function save expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#2 \\$subTypeBan of function updateSubtypeBan expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#2 \\$tribeBan of function updateTribeBan expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#3 \\$delBanCards of function updateBanlist expects array\\<string\\>, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#3 \\$delBannedSubType of function updateSubtypeBan expects array\\<string\\>, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#3 \\$delBannedTribe of function updateTribeBan expects array\\<string\\>, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#3 \\$delCardSets of function updateCardSets expects array\\<string\\>, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#3 \\$delLegalCards of function updateLegalList expects array\\<string\\>, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#3 \\$delRestrictedCards of function updateRestrictedList expects array\\<string\\>, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#3 \\$delRestrictedToTribe of function updateRestrictedToTribeList expects array\\<string\\>, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#3 \\$formatName of function renameFormat expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#3 \\$oldFormatName of function save expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Parameter \\#3 \\$seriesName of class Gatherling\\\\Views\\\\Pages\\\\FormatAdmin constructor expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/formatcp.php
+
+		-
+			message: "#^Part \\$_POST\\['action'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
 			count: 1
 			path: gatherling/formatcp.php
 
@@ -2876,7 +4571,17 @@ parameters:
 			path: gatherling/index.php
 
 		-
+			message: "#^Function recentWinners\\(\\) should return list\\<array\\<string, int\\|string\\>\\> but returns list\\<array\\<string, mixed\\>\\>\\.$#"
+			count: 1
+			path: gatherling/index.php
+
+		-
 			message: "#^Parameter \\#1 \\$host_name of static method Gatherling\\\\Models\\\\Event\\:\\:findMostRecentByHost\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: gatherling/index.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/index.php
 
@@ -2901,6 +4606,11 @@ parameters:
 			path: gatherling/lib.php
 
 		-
+			message: "#^Parameter \\#1 \\$action of class Gatherling\\\\Views\\\\Components\\\\OrganizerSelect constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/lib.php
+
+		-
 			message: "#^Parameter \\#1 \\$string of function strtolower expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/lib.php
@@ -2912,6 +4622,11 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, int\\|string given\\.$#"
+			count: 1
+			path: gatherling/lib.php
+
+		-
+			message: "#^Parameter \\#2 \\$arr of function arrayMapRecursive expects array\\<string, mixed\\>, array given\\.$#"
 			count: 1
 			path: gatherling/lib.php
 
@@ -2956,6 +4671,46 @@ parameters:
 			path: gatherling/lib_form_helper.php
 
 		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/login.php
+
+		-
+			message: "#^Parameter \\#1 \\$username of static method Gatherling\\\\Auth\\\\Login\\:\\:login\\(\\) expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/login.php
+
+		-
+			message: "#^Parameter \\#2 \\$password of static method Gatherling\\\\Auth\\\\Login\\:\\:login\\(\\) expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/login.php
+
+		-
+			message: "#^Parameter \\#3 \\$message of class Gatherling\\\\Views\\\\Pages\\\\Login constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/login.php
+
+		-
+			message: "#^Parameter \\#4 \\$username of class Gatherling\\\\Views\\\\Pages\\\\Login constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/login.php
+
+		-
+			message: "#^Parameter \\#5 \\$target of class Gatherling\\\\Views\\\\Pages\\\\Login constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/login.php
+
+		-
+			message: "#^Parameter \\#6 \\$discordId of class Gatherling\\\\Views\\\\Pages\\\\Login constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/login.php
+
+		-
+			message: "#^Part \\$target \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: gatherling/login.php
+
+		-
 			message: "#^Cannot call method close\\(\\) on bool\\|mysqli_result\\.$#"
 			count: 1
 			path: gatherling/masterplayerfile.php
@@ -2969,6 +4724,11 @@ parameters:
 			message: "#^Parameter \\#1 \\$string of function rtrim expects string, float\\|int\\|string\\|null given\\.$#"
 			count: 1
 			path: gatherling/masterplayerfile.php
+
+		-
+			message: "#^Cannot access offset mixed on mixed\\.$#"
+			count: 1
+			path: gatherling/player.php
 
 		-
 			message: "#^Cannot access property \\$emailAddress on Gatherling\\\\Models\\\\Player\\|null\\.$#"
@@ -3061,6 +4821,16 @@ parameters:
 			path: gatherling/player.php
 
 		-
+			message: "#^Cannot cast mixed to float\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
 			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
 			count: 2
 			path: gatherling/player.php
@@ -3077,6 +4847,11 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$datetime of function time_element expects int, int\\|false given\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Parameter \\#1 \\$eventName of static method Gatherling\\\\Models\\\\Standings\\:\\:eventStandings\\(\\) expects string\\|null, mixed given\\.$#"
 			count: 1
 			path: gatherling/player.php
 
@@ -3098,6 +4873,21 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Standings\\:\\:playerActive\\(\\) expects string, string\\|null given\\.$#"
 			count: 2
+			path: gatherling/player.php
+
+		-
+			message: "#^Parameter \\#1 \\$format of function print_ratingHistoryForm expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Parameter \\#1 \\$format of function print_ratingsHistory expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Parameter \\#1 \\$format of method Gatherling\\\\Models\\\\Player\\:\\:getFilteredMatches\\(\\) expects string, mixed given\\.$#"
+			count: 1
 			path: gatherling/player.php
 
 		-
@@ -3181,6 +4971,11 @@ parameters:
 			path: gatherling/player.php
 
 		-
+			message: "#^Parameter \\#1 \\$string of function strlen expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
 			message: "#^Parameter \\#1 \\$username of static method Gatherling\\\\Models\\\\Player\\:\\:checkPassword\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/player.php
@@ -3191,7 +4986,57 @@ parameters:
 			path: gatherling/player.php
 
 		-
+			message: "#^Parameter \\#2 \\$def of function formatDropMenuP expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Parameter \\#2 \\$def of function oppDropMenu expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Parameter \\#2 \\$def of function seasonDropMenuP expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Parameter \\#2 \\$def of function seriesDropMenuP expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Parameter \\#2 \\$password of static method Gatherling\\\\Models\\\\Player\\:\\:checkPassword\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
 			message: "#^Parameter \\#2 \\$playerName of static method Gatherling\\\\Models\\\\Standings\\:\\:eventStandings\\(\\) expects string\\|null, bool\\|string given\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Parameter \\#2 \\$series of method Gatherling\\\\Models\\\\Player\\:\\:getFilteredMatches\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Parameter \\#2 \\$subject of function preg_match expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Parameter \\#3 \\$season of method Gatherling\\\\Models\\\\Player\\:\\:getFilteredMatches\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Parameter \\#4 \\$opponent of method Gatherling\\\\Models\\\\Player\\:\\:getFilteredMatches\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/player.php
+
+		-
+			message: "#^Part \\$_SESSION\\['DISCORD_NAME'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
 			count: 1
 			path: gatherling/player.php
 
@@ -3203,6 +5048,11 @@ parameters:
 		-
 			message: "#^Cannot access property \\$name on Gatherling\\\\Models\\\\Player\\|null\\.$#"
 			count: 4
+			path: gatherling/prereg.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, mixed given\\.$#"
+			count: 1
 			path: gatherling/prereg.php
 
 		-
@@ -3221,7 +5071,42 @@ parameters:
 			path: gatherling/prereg.php
 
 		-
+			message: "#^Cannot cast mixed to float\\.$#"
+			count: 1
+			path: gatherling/profile.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 2
+			path: gatherling/profile.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/profile.php
+
+		-
+			message: "#^Parameter \\#1 \\$playerName of class Gatherling\\\\Views\\\\Pages\\\\Profile constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/profile.php
+
+		-
+			message: "#^Parameter \\#1 \\$playername of static method Gatherling\\\\Models\\\\Player\\:\\:findByName\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/profile.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Player\\:\\:\\$emailAddress \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/profile.php
+
+		-
 			message: "#^Function bestEver\\(\\) should return array\\{player\\: string, rating\\: int, t\\: int\\} but returns array\\<string, mixed\\>\\.$#"
+			count: 1
+			path: gatherling/ratings.php
+
+		-
+			message: "#^Function currentThrough\\(\\) should return array\\{date\\: DateTime, name\\: string\\} but returns array\\{date\\: DateTime, name\\: mixed\\}\\.$#"
 			count: 1
 			path: gatherling/ratings.php
 
@@ -3231,9 +5116,94 @@ parameters:
 			path: gatherling/ratings.php
 
 		-
+			message: "#^Parameter \\#1 \\$datetime of class DateTime constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/ratings.php
+
+		-
+			message: "#^Parameter \\#1 \\$format of class Gatherling\\\\Views\\\\Pages\\\\Ratings constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/ratings.php
+
+		-
+			message: "#^Parameter \\#1 \\$format of function bestEver expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/ratings.php
+
+		-
+			message: "#^Parameter \\#1 \\$format of function currentThrough expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/ratings.php
+
+		-
+			message: "#^Parameter \\#1 \\$format of function ratingsData expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/ratings.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/ratings.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/ratings.php
+
+		-
 			message: "#^Parameter \\#8 \\$ratingsData of class Gatherling\\\\Views\\\\Pages\\\\Ratings constructor expects list\\<array\\{qplayer\\: string, qmax\\: int, player\\: Gatherling\\\\Models\\\\Player, rank\\: int, playerName\\: string\\}\\>, array\\<int, array\\{qplayer\\: string, qmax\\: int, player\\: Gatherling\\\\Models\\\\Player, rank\\: int, playerName\\: string\\}\\> given\\.$#"
 			count: 1
 			path: gatherling/ratings.php
+
+		-
+			message: "#^Cannot cast mixed to float\\.$#"
+			count: 1
+			path: gatherling/register.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/register.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function trim expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/register.php
+
+		-
+			message: "#^Parameter \\#1 \\$username of static method Gatherling\\\\Auth\\\\Registration\\:\\:register\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/register.php
+
+		-
+			message: "#^Parameter \\#2 \\$pw1 of static method Gatherling\\\\Auth\\\\Registration\\:\\:register\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/register.php
+
+		-
+			message: "#^Parameter \\#3 \\$pw2 of static method Gatherling\\\\Auth\\\\Registration\\:\\:register\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/register.php
+
+		-
+			message: "#^Parameter \\#4 \\$email of static method Gatherling\\\\Auth\\\\Registration\\:\\:register\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/register.php
+
+		-
+			message: "#^Parameter \\#5 \\$emailStatus of static method Gatherling\\\\Auth\\\\Registration\\:\\:register\\(\\) expects int, mixed given\\.$#"
+			count: 1
+			path: gatherling/register.php
+
+		-
+			message: "#^Parameter \\#7 \\$discordId of static method Gatherling\\\\Auth\\\\Registration\\:\\:register\\(\\) expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/register.php
+
+		-
+			message: "#^Parameter \\#8 \\$discordName of static method Gatherling\\\\Auth\\\\Registration\\:\\:register\\(\\) expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/register.php
 
 		-
 			message: "#^Cannot access property \\$name on Gatherling\\\\Models\\\\Player\\|null\\.$#"
@@ -3246,7 +5216,32 @@ parameters:
 			path: gatherling/report.php
 
 		-
+			message: "#^Parameter \\#1 \\$event of function League_print_submit_resultForm expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/report.php
+
+		-
+			message: "#^Parameter \\#1 \\$event_name of function print_dropConfirm expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/report.php
+
+		-
 			message: "#^Parameter \\#1 \\$eventname of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"
+			count: 2
+			path: gatherling/report.php
+
+		-
+			message: "#^Parameter \\#1 \\$id of class Gatherling\\\\Models\\\\Matchup constructor expects int, mixed given\\.$#"
+			count: 2
+			path: gatherling/report.php
+
+		-
+			message: "#^Parameter \\#1 \\$match_id of function print_submit_resultForm expects int, mixed given\\.$#"
+			count: 2
+			path: gatherling/report.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, mixed given\\.$#"
 			count: 2
 			path: gatherling/report.php
 
@@ -3266,7 +5261,52 @@ parameters:
 			path: gatherling/report.php
 
 		-
+			message: "#^Parameter \\#1 \\$report of function print_verify_resultForm expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/report.php
+
+		-
+			message: "#^Parameter \\#1 \\$result of static method Gatherling\\\\Models\\\\Matchup\\:\\:saveReport\\(\\) expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/report.php
+
+		-
+			message: "#^Parameter \\#1 \\$string1 of function strcasecmp expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/report.php
+
+		-
+			message: "#^Parameter \\#2 \\$match_id of function print_verify_resultForm expects int, mixed given\\.$#"
+			count: 1
+			path: gatherling/report.php
+
+		-
+			message: "#^Parameter \\#2 \\$match_id of static method Gatherling\\\\Models\\\\Matchup\\:\\:saveReport\\(\\) expects int, mixed given\\.$#"
+			count: 1
+			path: gatherling/report.php
+
+		-
+			message: "#^Parameter \\#2 \\$playername of class Gatherling\\\\Models\\\\Standings constructor expects string, mixed given\\.$#"
+			count: 2
+			path: gatherling/report.php
+
+		-
+			message: "#^Parameter \\#2 \\$round of function League_print_submit_resultForm expects int, mixed given\\.$#"
+			count: 1
+			path: gatherling/report.php
+
+		-
 			message: "#^Parameter \\#3 \\$player of function leagueOpponentDropMenu expects Gatherling\\\\Models\\\\Player, Gatherling\\\\Models\\\\Player\\|null given\\.$#"
+			count: 1
+			path: gatherling/report.php
+
+		-
+			message: "#^Parameter \\#3 \\$player of function print_verify_resultForm expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/report.php
+
+		-
+			message: "#^Parameter \\#3 \\$player of static method Gatherling\\\\Models\\\\Matchup\\:\\:saveReport\\(\\) expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/report.php
 
@@ -3276,9 +5316,64 @@ parameters:
 			path: gatherling/report.php
 
 		-
+			message: "#^Parameter \\#4 \\$subevent of function League_print_submit_resultForm expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/report.php
+
+		-
+			message: "#^Parameter \\#5 \\$opponent of function print_verify_resultForm expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/report.php
+
+		-
+			message: "#^Parameter \\#6 \\$event of function print_verify_resultForm expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/report.php
+
+		-
+			message: "#^Part \\$dispmode \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: gatherling/report.php
+
+		-
 			message: "#^Variable \\$match might not be defined\\.$#"
 			count: 1
 			path: gatherling/report.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/series.php
+
+		-
+			message: "#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\\.$#"
+			count: 2
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Binary operation \"\\.\" between mixed and '\\:00' results in an error\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Cannot access offset 'name' on mixed\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Cannot access offset 'size' on mixed\\.$#"
+			count: 2
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Cannot access offset 'tmp_name' on mixed\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Cannot access offset 'type' on mixed\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
 
 		-
 			message: "#^Cannot access property \\$super on Gatherling\\\\Models\\\\Player\\|null\\.$#"
@@ -3291,7 +5386,17 @@ parameters:
 			path: gatherling/seriescp.php
 
 		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 3
+			path: gatherling/seriescp.php
+
+		-
 			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Parameter \\#1 \\$content_filename of method Gatherling\\\\Models\\\\Series\\:\\:setLogo\\(\\) expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/seriescp.php
 
@@ -3316,6 +5421,11 @@ parameters:
 			path: gatherling/seriescp.php
 
 		-
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Series constructor expects string\\|null, mixed given\\.$#"
+			count: 3
+			path: gatherling/seriescp.php
+
+		-
 			message: "#^Parameter \\#1 \\$name of method Gatherling\\\\Models\\\\Series\\:\\:addBannedPlayer\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/seriescp.php
@@ -3326,8 +5436,58 @@ parameters:
 			path: gatherling/seriescp.php
 
 		-
+			message: "#^Parameter \\#1 \\$name of method Gatherling\\\\Models\\\\Series\\:\\:removeBannedPlayer\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of method Gatherling\\\\Models\\\\Series\\:\\:removeOrganizer\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Parameter \\#1 \\$playerName of static method Gatherling\\\\Models\\\\Player\\:\\:findOrCreateByName\\(\\) expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
 			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Series\\:\\:authCheck\\(\\) expects string, bool\\|string given\\.$#"
 			count: 3
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Parameter \\#1 \\$playername of static method Gatherling\\\\Models\\\\Player\\:\\:findByName\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Parameter \\#1 \\$season of function seasonDropMenu expects int\\|string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Parameter \\#1 \\$season_number of method Gatherling\\\\Models\\\\Series\\:\\:getSeasonRules\\(\\) expects int, mixed given\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function urlencode expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Parameter \\#2 \\$new_rules of method Gatherling\\\\Models\\\\Series\\:\\:setSeasonRules\\(\\) expects array\\<string, int\\|string\\>, mixed given\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Parameter \\#2 \\$reason of method Gatherling\\\\Models\\\\Series\\:\\:addBannedPlayer\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Parameter \\#2 \\$selected of function printOrganizerSelect expects string, mixed given\\.$#"
+			count: 1
 			path: gatherling/seriescp.php
 
 		-
@@ -3336,9 +5496,64 @@ parameters:
 			path: gatherling/seriescp.php
 
 		-
+			message: "#^Parameter \\#2 \\$type of method Gatherling\\\\Models\\\\Series\\:\\:setLogo\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Parameter \\#3 \\$size of method Gatherling\\\\Models\\\\Series\\:\\:setLogo\\(\\) expects int, mixed given\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Part \\$active_series_name \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Part \\$addition \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 2
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Part \\$chosen_season \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 2
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Series\\:\\:\\$mtgo_room \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Property Gatherling\\\\Models\\\\Series\\:\\:\\$start_day \\(string\\|null\\) does not accept mixed\\.$#"
+			count: 1
+			path: gatherling/seriescp.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 1
+			path: gatherling/seriesreport.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/seriesreport.php
+
+		-
+			message: "#^Parameter \\#1 \\$seriesName of class Gatherling\\\\Views\\\\Pages\\\\SeriesReport constructor expects string\\|null, mixed given\\.$#"
+			count: 1
+			path: gatherling/seriesreport.php
+
+		-
 			message: "#^Parameter \\#3 \\$value of function curl_setopt expects array\\|string, string\\|false given\\.$#"
 			count: 1
 			path: gatherling/util/email.php
+
+		-
+			message: "#^Cannot access offset 'tmp_name' on mixed\\.$#"
+			count: 1
+			path: gatherling/util/insertcardset.php
 
 		-
 			message: "#^Cannot call method isSuper\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
@@ -3346,7 +5561,37 @@ parameters:
 			path: gatherling/util/insertcardset.php
 
 		-
+			message: "#^Parameter \\#1 \\$code of static method Gatherling\\\\Models\\\\CardSet\\:\\:insert\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/util/insertcardset.php
+
+		-
+			message: "#^Parameter \\#1 \\$filename of static method Gatherling\\\\Models\\\\CardSet\\:\\:insertFromLocation\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/util/insertcardset.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
+			count: 1
+			path: gatherling/util/insertcardset.php
+
+		-
+			message: "#^Part \\$_REQUEST\\['return'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 3
+			path: gatherling/util/insertcardset.php
+
+		-
+			message: "#^Part \\$args \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 2
+			path: gatherling/util/insertcardset.php
+
+		-
 			message: "#^Cannot call method isSuper\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
+			count: 1
+			path: gatherling/util/updateDefaultFormats.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/util/updateDefaultFormats.php
 
