@@ -27,6 +27,9 @@ class Session
             return;
         }
         $token = $_COOKIE['remember_me'];
+        if (!is_string($token)) {
+            return;
+        }
         $_SESSION = self::load($token);
     }
 
@@ -52,7 +55,7 @@ class Session
     public static function save(): void
     {
         $token = $_COOKIE['remember_me'] ?? null;
-        if (empty($_SESSION) && $token) {
+        if (empty($_SESSION) && is_string($token)) {
             self::clear($token);
             return;
         }
