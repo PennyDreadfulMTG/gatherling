@@ -152,7 +152,7 @@ class Deck
                                                                FROM entries INNER JOIN events
                                                                ON entries.event_id = events.id
                                                                WHERE entries.deck = ?', 'd', $this->id);
-            $this->subeventid = Database::single_result_single_param('SELECT id
+            $this->subeventid = (int) Database::single_result_single_param('SELECT id
                                                                    FROM subevents
                                                                    WHERE parent = ?', 's', $this->eventname);
         } else {

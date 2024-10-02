@@ -312,16 +312,16 @@ function updateEvent(): Event
 
     $event = new Event($_POST['name']);
     $event->start = "{$_POST['year']}-{$_POST['month']}-{$_POST['day']} {$_POST['hour']}:00";
-    $event->finalized = $_POST['finalized'];
-    $event->active = $_POST['active'];
+    $event->finalized = (int) $_POST['finalized'];
+    $event->active = (int) $_POST['active'];
     $event->current_round = (int) $_POST['newmatchround'];
-    $event->prereg_allowed = $_POST['prereg_allowed'];
-    $event->player_reportable = $_POST['player_reportable'];
-    $event->prereg_cap = $_POST['prereg_cap'];
-    $event->private_decks = $_POST['private_decks'];
-    $event->private_finals = $_POST['private_finals'];
-    $event->player_reported_draws = $_POST['player_reported_draws'];
-    $event->late_entry_limit = $_POST['late_entry_limit'];
+    $event->prereg_allowed = (int) $_POST['prereg_allowed'];
+    $event->player_reportable = (int) $_POST['player_reportable'];
+    $event->prereg_cap = (int) $_POST['prereg_cap'];
+    $event->private_decks = (int) $_POST['private_decks'];
+    $event->private_finals = (int) $_POST['private_finals'];
+    $event->player_reported_draws = (int) $_POST['player_reported_draws'];
+    $event->late_entry_limit = (int) $_POST['late_entry_limit'];
 
     if ($event->format != $_POST['format']) {
         $event->format = $_POST['format'];
@@ -357,7 +357,7 @@ function updateEvent(): Event
     }
     $event->finalrounds = $_POST['finalrounds'];
     $event->finalstruct = $_POST['finalstruct'];
-    $event->private = $_POST['private'];
+    $event->private = (int) $_POST['private'];
     $event->client = (int) $_POST['client'];
 
     $event->save();

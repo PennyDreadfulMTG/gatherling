@@ -464,7 +464,7 @@ function handleActions(): void
             $series->active = $newactive;
             $series->start_time = $newtime . ':00';
             $series->start_day = $newday;
-            $series->prereg_default = $prereg;
+            $series->prereg_default = (int) $prereg;
             $series->mtgo_room = $room;
             $series->save();
         }
