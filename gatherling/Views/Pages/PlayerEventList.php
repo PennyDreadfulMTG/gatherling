@@ -10,7 +10,6 @@ use Gatherling\Views\Components\SeriesDropMenu;
 
 class PlayerEventList extends Page
 {
-
     public FormatDropMenu $formatDropMenu;
     public SeriesDropMenu $seriesDropMenu;
     public SeasonDropMenu $seasonDropMenu;

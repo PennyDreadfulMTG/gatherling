@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Event;

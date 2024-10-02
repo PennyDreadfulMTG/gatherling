@@ -78,36 +78,36 @@ print_header('Player Control Panel');
 
     // Handle modes
     $dispmode = 'playercp';
-    if (isset($_REQUEST['mode'])) {
-        $dispmode = $_REQUEST['mode'];
-    }
+if (isset($_REQUEST['mode'])) {
+    $dispmode = $_REQUEST['mode'];
+}
 
-    switch ($dispmode) {
+switch ($dispmode) {
     case 'submit_result':
-    if (!isset($_GET['match_id'])) {
-        // print_mainPlayerCP($player, '');
-        redirect('player.php');
+        if (!isset($_GET['match_id'])) {
+            // print_mainPlayerCP($player, '');
+            redirect('player.php');
+            break;
+        }
+        print_submit_resultForm($_GET['match_id']);
         break;
-    }
-    print_submit_resultForm($_GET['match_id']);
-    break;
 
     case 'submit_league_result':
-    League_print_submit_resultForm($_REQUEST['event'], $_REQUEST['round'], $player, $_REQUEST['subevent']);
-    break;
+        League_print_submit_resultForm($_REQUEST['event'], $_REQUEST['round'], $player, $_REQUEST['subevent']);
+        break;
 
     case 'verify_result':
     case 'verify_league_result':
-    if (isset($_POST['report'])) {
-        $drop = (isset($_POST['drop'])) ? 'Y' : 'N';
-        $opponent = isset($_REQUEST['opponent']) ? $_REQUEST['opponent'] : 0;
-        $event = isset($_REQUEST['event']) ? $_REQUEST['event'] : 0;
+        if (isset($_POST['report'])) {
+            $drop = (isset($_POST['drop'])) ? 'Y' : 'N';
+            $opponent = isset($_REQUEST['opponent']) ? $_REQUEST['opponent'] : 0;
+            $event = isset($_REQUEST['event']) ? $_REQUEST['event'] : 0;
 
-        print_verify_resultForm($_POST['report'], $_POST['match_id'], $_POST['player'], $drop, $opponent, $event);
-    } else {
-        print_submit_resultForm($_REQUEST['match_id']);
-    }
-    break;
+            print_verify_resultForm($_POST['report'], $_POST['match_id'], $_POST['player'], $drop, $opponent, $event);
+        } else {
+            print_submit_resultForm($_REQUEST['match_id']);
+        }
+        break;
 
     case 'drop_form':
         $matches = $player->getCurrentMatches();
@@ -138,13 +138,13 @@ print_header('Player Control Panel');
         } else {
             print_submit_resultForm($match->id, true);
         }
-    break;
+        break;
     default:
-    echo "$result<br/>Unknown dispmode: $dispmode";
+        echo "$result<br/>Unknown dispmode: $dispmode";
     // redirect('player.php');
 
-    return;
-    }
+        return;
+}
 ?>
 </div> <!-- gatherling_main box -->
 </div> <!-- grid 10 suff 1 pre 1 -->
@@ -273,7 +273,7 @@ function print_verify_resultForm(string $report, int $match_id, string $player, 
             break;
         case 'D':
             echo 'The match was a draw';
-        break;
+            break;
     }
     if ($drop == 1) {
         $drop = 'Y';

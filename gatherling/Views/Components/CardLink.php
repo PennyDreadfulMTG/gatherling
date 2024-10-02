@@ -9,7 +9,8 @@ class CardLink extends Component
     public string $gathererLink;
     public string $imageSrc;
 
-    public function __construct(public string $cardName) {
+    public function __construct(public string $cardName)
+    {
         parent::__construct('partials/cardLink');
         $gathererName = preg_replace('/ /', ']+[', $cardName);
         $gathererName = str_replace('/', ']+[', $gathererName);

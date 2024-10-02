@@ -244,13 +244,11 @@ class Pagination
         if (!$this->_properties['page_set']) {
             // if
             if (
-
                 // page propagation is SEO friendly
                 $this->_properties['method'] == 'url' &&
 
                 // the current page is set in the URL
                 preg_match('/\b'.preg_quote($this->_properties['variable_name']).'([0-9]+)\b/i', $_SERVER['REQUEST_URI'], $matches) > 0
-
             ) {
                 // set the current page to whatever it is indicated in the URL
                 $this->set_page((int) $matches[1]);
@@ -703,10 +701,8 @@ class Pagination
             if (preg_match('/\b'.$this->_properties['variable_name'].'([0-9]+)\b/i', $this->_properties['base_url'], $matches) > 0) {
                 // build string
                 $url = str_replace('//', '/', preg_replace(
-
                     // replace the currently existing value
                     '/\b'.$this->_properties['variable_name'].'([0-9]+)\b/i',
-
                     // if on the first page, remove it in order to avoid duplicate content
                     $page == 1 ? '' : $this->_properties['variable_name'].$page,
                     $this->_properties['base_url']
@@ -807,11 +803,9 @@ class Pagination
         if ($this->_properties['total_pages'] <= $this->_properties['selectable_pages']) {
             // iterate ascendingly or descendingly depending on whether we're showing links in reverse order or not)
             for (
-
                 $i = ($this->_properties['reverse'] ? $this->_properties['total_pages'] : 1);
                 $this->_properties['reverse'] ? $i >= 1 : $i <= $this->_properties['total_pages'];
                 $this->_properties['reverse'] ? $i-- : $i++
-
             ) {
                 // render the link for each page
                 $output .= '<li><a href="'.$this->_build_uri($i).'" '.
@@ -869,10 +863,8 @@ class Pagination
             // if the currently selected page is past the point from where we need to scroll,
             // we need to adjust the value of $starting_page
             if (
-
                 ($this->_properties['reverse'] && $this->_properties['page'] <= $scroll_from) ||
                 (!$this->_properties['reverse'] && $this->_properties['page'] >= $scroll_from)
-
             ) {
                 // by default, the starting_page should be whatever the current page plus/minus $adjacent
                 // depending on whether we're showing links in reverse order or not
@@ -880,10 +872,8 @@ class Pagination
 
                 // but if that would mean displaying less navigation links than specified in $this->_properties['selectable_pages']
                 if (
-
                     ($this->_properties['reverse'] && $starting_page < ($this->_properties['selectable_pages'] - 1)) ||
                     (!$this->_properties['reverse'] && $this->_properties['total_pages'] - $starting_page < ($this->_properties['selectable_pages'] - 2))
-
                 ) {
                     // adjust the value of $starting_page again
                     if ($this->_properties['reverse']) {
@@ -934,10 +924,8 @@ class Pagination
             // if we have to, place another "..." at the end, before the link to the last/first page (depending on whether
             // we're showing links in reverse order or not)
             if (
-
                 ($this->_properties['reverse'] && $ending_page > 2) ||
                 (!$this->_properties['reverse'] && $this->_properties['total_pages'] - $ending_page > 1)
-
             ) {
                 $output .= '<li><span>&hellip;</span></li>';
             }
