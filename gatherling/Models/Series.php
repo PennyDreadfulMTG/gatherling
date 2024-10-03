@@ -336,7 +336,7 @@ class Series
     // Returns a HTML image tag which displays the logo for this series.
     public static function image_tag(string $seriesname): string
     {
-        return "<img src=\"{self::logoSrc($seriesname)}\" />";
+        return '<img src="'  . self::logoSrc($seriesname) . '" />';
     }
 
     public static function logoSrc(string $seriesName): string
