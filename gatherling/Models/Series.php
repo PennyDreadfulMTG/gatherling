@@ -105,7 +105,8 @@ class Series
         $stmt->close();
 
         // Most recent season
-        $this_season = $this->mostRecentEvent()->season;
+        $mostRecentEvent = $this->mostRecentEvent();
+        $this_season = $mostRecentEvent ? $mostRecentEvent->season : 0;
         $stmt = $db->prepare('SELECT format, master_link FROM series_seasons WHERE series = ? AND season <= ?
                               ORDER BY season DESC
                               LIMIT 1');
@@ -344,7 +345,7 @@ class Series
         return 'displaySeries.php?series=' . rawurlencode($seriesName);
     }
 
-    public function mostRecentEvent(): Event
+    public function mostRecentEvent(): ?Event
     {
         $result = Database::db_query_single('SELECT events.name
                                          FROM events
@@ -354,7 +355,10 @@ class Series
                                          AND events.start < NOW()
                                          ORDER BY events.start
                                          DESC LIMIT 1', 's', $this->name);
-        return new Event($result);
+        if ($result) {
+            return new Event($result);
+        }
+        return null;
     }
 
     public function nextEvent(): ?Event

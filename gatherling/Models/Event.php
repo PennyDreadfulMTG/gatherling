@@ -218,8 +218,9 @@ class Event
 
         if (empty($season) && empty($number)) {
             $_series = new Series($series);
-            $season = $_series->mostRecentEvent()->season;
-            $number = $_series->mostRecentEvent()->number + 1;
+            $mostRecentEvent = $_series->mostRecentEvent();
+            $season = $mostRecentEvent ? $mostRecentEvent->season : 0;
+            $number = $mostRecentEvent ? $mostRecentEvent->number + 1 : 1;
         }
 
         if (strcmp($naming, 'auto') == 0) {

@@ -215,9 +215,9 @@ function repr_json_series(Series $series): array
 {
     $json = populate([], $series, ['name', 'active', 'start_day', 'start_time', 'organizers', 'mtgo_room', 'this_season_format', 'this_season_master_link', 'this_season_season', 'discord_guild_id', 'discord_channel_id', 'discord_channel_name', 'discord_guild_name']);
     $mostRecent = $series->mostRecentEvent();
-    $json['most_recent_season'] = $mostRecent->season;
-    $json['most_recent_number'] = $mostRecent->number;
-    $json['most_recent_id'] = $mostRecent->id;
+    $json['most_recent_season'] = $mostRecent ? $mostRecent->season : null;
+    $json['most_recent_number'] = $mostRecent ? $mostRecent->number : null;
+    $json['most_recent_id'] = $mostRecent ? $mostRecent->id : null;
 
     return $json;
 }
