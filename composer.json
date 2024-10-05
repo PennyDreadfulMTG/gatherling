@@ -37,6 +37,9 @@
             "Gatherling\\": "gatherling/",
             "Gatherling\\Admin\\": "gatherling/",
             "Gatherling\\Tests\\": "tests/"
-        }
+        },
+        "files": [
+            "gatherling/Views/helpers.php"
+        ]
     }
 }

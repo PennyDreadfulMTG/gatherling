@@ -23,6 +23,8 @@ use Gatherling\Views\Pages\PointsAdjustmentForm;
 use Gatherling\Views\Pages\ReportsForm;
 use Gatherling\Views\Pages\StandingsList;
 
+use function Gatherling\Views\request;
+
 require_once 'lib.php';
 include 'lib_form_helper.php';
 
