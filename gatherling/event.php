@@ -535,28 +535,24 @@ function updateMatches(): void
     } else {
         $res = '';
     }
-    if (isset($_POST['newmatchround'])) {
-        $rnd = $_POST['newmatchround'];
-    } else {
-        $rnd = '';
-    }
+    $rnd = request()->post()->int('newmatchround');
 
     if (
         strcmp($pA, '') != 0 && strcmp($pB, '') != 0
-        && strcmp($res, '') != 0 && strcmp($rnd, '') != 0
+        && strcmp($res, '') != 0 && $rnd
     ) {
         $playerA = new Standings($event->name, $pA);
         $playerB = new Standings($event->name, $pB);
         if ($res == 'P') {
             $event->addPairing($playerA, $playerB, (int) $rnd, $res);
         } else {
-            $event->addMatch($playerA, $playerB, $rnd, $res, (string) $pAWins, (string) $pBWins);
+            $event->addMatch($playerA, $playerB, (string) $rnd, $res, (string) $pAWins, (string) $pBWins);
         }
     }
 
     if (isset($_POST['newbyeplayer']) && (strcmp($_POST['newbyeplayer'], '') != 0)) {
         $playerBye = new Standings($event->name, $_POST['newbyeplayer']);
-        $event->addMatch($playerBye, $playerBye, $rnd, 'BYE');
+        $event->addMatch($playerBye, $playerBye, (string) $rnd, 'BYE');
     }
 }
 
