@@ -96,6 +96,7 @@ class FullMetagame extends Component
                     $info['medal'] = $row['medal'];
                 }
                 $info['deckName'] = $row['deckname'];
+                $info['deckLink'] = 'deck.php?mode=view&id=' . rawurlencode((string) $row['id']);
                 $info['archetype'] = $row['archetype'];
                 $this->meta[$idx]['entries'][] = $info;
             } else {
