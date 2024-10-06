@@ -72,22 +72,19 @@ class Player
         $stmt->close();
     }
 
-    /** @return bool  */
-    public static function isLoggedIn()
+    public static function isLoggedIn(): bool
     {
         return isset($_SESSION['username']);
     }
 
-    /** @return void  */
-    public static function logOut()
+    public static function logOut(): void
     {
         unset($_SESSION['sessionname']);
         unset($_SESSION['username']);
         session_destroy();
     }
 
-    /** @return string|bool */
-    public static function loginName()
+    public static function loginName(): string|false
     {
         if (self::isLoggedIn()) {
             return $_SESSION['username'];
@@ -96,11 +93,10 @@ class Player
         }
     }
 
-    /** @return void|Player  */
-    public static function getSessionPlayer()
+    public static function getSessionPlayer(): ?self
     {
         if (!isset($_SESSION['username'])) {
-            return;
+            return null;
         }
 
         return new self($_SESSION['username']);
