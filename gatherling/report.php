@@ -7,6 +7,9 @@ use Gatherling\Models\Matchup;
 use Gatherling\Models\Player;
 use Gatherling\Models\Standings;
 
+use function Gatherling\Views\post;
+use function Gatherling\Views\request;
+
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
 $player = Player::getSessionPlayer();
@@ -93,7 +96,7 @@ switch ($dispmode) {
         break;
 
     case 'submit_league_result':
-        League_print_submit_resultForm($_REQUEST['event'], $_REQUEST['round'], $player, $_REQUEST['subevent']);
+        League_print_submit_resultForm(request()->string('event'), request()->int('round'), $player, request()->string('subevent'));
         break;
 
     case 'verify_result':
@@ -103,7 +106,7 @@ switch ($dispmode) {
             $opponent = isset($_REQUEST['opponent']) ? $_REQUEST['opponent'] : 0;
             $event = isset($_REQUEST['event']) ? $_REQUEST['event'] : 0;
 
-            print_verify_resultForm($_POST['report'], $_POST['match_id'], $_POST['player'], $drop, $opponent, $event);
+            print_verify_resultForm(post()->string('report'), post()->int('match_id'), post()->string('player'), $drop, $opponent, $event);
         } else {
             print_submit_resultForm($_REQUEST['match_id']);
         }
