@@ -8,6 +8,8 @@ use Gatherling\Models\Ratings;
 use Gatherling\Models\Series;
 use Gatherling\Models\SetScraper;
 
+use function Gatherling\Views\post;
+
 require_once 'lib.php';
 include 'lib_form_helper.php';
 
@@ -223,18 +225,19 @@ function handleActions(): void
     global $errormsg;
     if ($_POST['action'] == 'Change Password') {
         $hasError = true;
-        $username = $_POST['username'];
 
         try {
+            $username = post()->string('username');
+            $password = post()->string('new_password');
             $player = new Player($username);
-            $player->setPassword($_POST['new_password']);
-            $errormsg = "Password changed for user {$player->name} to {$_POST['new_password']}";
+            $player->setPassword($password);
+            $errormsg = "Password changed for user {$player->name} to {$password}";
         } catch (Exception $e) {
-            $errormsg = "User $username is not found.";
+            $errormsg = 'User ' . post()->string('username', 'None') . ' is not found.';
         }
     } elseif ($_POST['action'] == 'Verify Player') {
         $hasError = true;
-        $player = new Player($_POST['username']);
+        $player = new Player(post()->string('username'));
         $player->setVerified(true);
         $errormsg = "User {$player->name} is now verified.";
     } elseif ($_POST['action'] == 'Create Series') {
@@ -252,7 +255,8 @@ function handleActions(): void
 
         $series = new Series('');
         $newseries = $_POST['seriesname'];
-        if ($series->authCheck(Player::loginName())) {
+        $playerName = Player::loginName();
+        if ($playerName && $series->authCheck($playerName)) {
             $series->name = $newseries;
             $series->active = $newactive;
             $series->start_time = $newtime . ':00';
@@ -267,11 +271,11 @@ function handleActions(): void
         $ratings->calcAllRatings();
     } elseif ($_POST['action'] == 'Re-Calcualte By Format') {
         $ratings = new Ratings();
-        $ratings->deleteRatingByFormat($_POST['format']);
+        $ratings->deleteRatingByFormat(post()->string('format'));
         if ($_POST['format'] == 'Composite') {
             $ratings->calcCompositeRating();
         } else {
-            $ratings->calcRatingByFormat($_POST['format']);
+            $ratings->calcRatingByFormat(post()->string('format'));
         }
     } elseif ($_POST['action'] == 'Rebuild Tribes') {
         Format::constructTribes('All');
