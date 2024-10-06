@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Gatherling\Models\Player;
 
 use function Gatherling\Views\get;
+use function Gatherling\Views\request;
 use function Gatherling\Views\server;
 
 require_once __DIR__.'/../lib.php';
