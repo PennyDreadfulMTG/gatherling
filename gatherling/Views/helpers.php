@@ -49,11 +49,11 @@ function server(): Request
 
 function config(): Request
 {
-    global $_CONFIG;
+    global $CONFIG;
 
     static $instance = null;
     if ($instance === null) {
-        $instance = new Request($_CONFIG);
+        $instance = new Request($CONFIG);
     }
     return $instance;
 }
