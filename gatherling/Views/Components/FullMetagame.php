@@ -10,6 +10,8 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
 
+use function Gatherling\Views\session;
+
 class FullMetagame extends Component
 {
     public bool $decklistsAreVisible;
@@ -108,7 +110,7 @@ class FullMetagame extends Component
             }
         }
         if ($event->active || $event->finalized) {
-            $this->eventStandings = new EventStandings($event->name, $_SESSION['username'] ?? null);
+            $this->eventStandings = new EventStandings($event->name, session()->optionalString('username'));
         }
     }
 }
