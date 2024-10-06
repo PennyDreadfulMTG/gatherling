@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Gatherling\Data\DB;
 use Gatherling\Views\ICal;
-use Gatherling\Models\Database;
 
+use function Gatherling\Views\server;
 require_once 'lib.php';
 
 function main(): void
@@ -60,6 +60,6 @@ function events(string $where, int $limit = 0): array
     return DB::select($sql, $params);
 }
 
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }
