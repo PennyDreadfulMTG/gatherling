@@ -1096,20 +1096,7 @@
       <code><![CDATA[$winningDeck]]></code>
     </UnusedVariable>
   </file>
-  <file src="tests/Auth/LoginTest.php">
-    <UnusedClass>
-      <code><![CDATA[LoginTest]]></code>
-    </UnusedClass>
-  </file>
-  <file src="tests/Auth/RegistrationTest.php">
-    <UnusedClass>
-      <code><![CDATA[RegistrationTest]]></code>
-    </UnusedClass>
-  </file>
   <file src="tests/Data/DBTest.php">
-    <UnusedClass>
-      <code><![CDATA[DBTest]]></code>
-    </UnusedClass>
     <UnusedVariable>
       <code><![CDATA[$row]]></code>
       <code><![CDATA[$row]]></code>
@@ -1126,53 +1113,12 @@
       <code><![CDATA[InvalidArgumentException]]></code>
       <code><![CDATA[InvalidArgumentException]]></code>
     </UndefinedDocblockClass>
-    <UnusedClass>
-      <code><![CDATA[EventsTest]]></code>
-    </UnusedClass>
-  </file>
-  <file src="tests/LibTest.php">
-    <UnusedClass>
-      <code><![CDATA[LibTest]]></code>
-    </UnusedClass>
-  </file>
-  <file src="tests/LogTest.php">
-    <UnusedClass>
-      <code><![CDATA[LogTest]]></code>
-    </UnusedClass>
   </file>
   <file src="tests/Models/DeckTest.php">
     <UndefinedFunction>
       <code><![CDATA[parseCardsWithQuantity("4 Torbran, Thane of Red Fell\n56 Mountain")]]></code>
       <code><![CDATA[parseCardsWithQuantity("4 Yarus, Roar of the Old Gods\n11 Forest")]]></code>
     </UndefinedFunction>
-    <UnusedClass>
-      <code><![CDATA[DeckTest]]></code>
-    </UnusedClass>
-  </file>
-  <file src="tests/Models/EventTest.php">
-    <UnusedClass>
-      <code><![CDATA[EventTest]]></code>
-    </UnusedClass>
-  </file>
-  <file src="tests/Models/FormatTest.php">
-    <UnusedClass>
-      <code><![CDATA[FormatTest]]></code>
-    </UnusedClass>
-  </file>
-  <file src="tests/Models/PaginationTest.php">
-    <UnusedClass>
-      <code><![CDATA[PaginationTest]]></code>
-    </UnusedClass>
-  </file>
-  <file src="tests/Models/PlayerTest.php">
-    <UnusedClass>
-      <code><![CDATA[PlayerTest]]></code>
-    </UnusedClass>
-  </file>
-  <file src="tests/NamesTest.php">
-    <UnusedClass>
-      <code><![CDATA[NamesTest]]></code>
-    </UnusedClass>
   </file>
   <file src="tests/Support/Listeners/DatabaseTestListener.php">
     <UnusedClass>
@@ -1182,26 +1128,6 @@
   <file src="tests/Support/Listeners/LogTestListener.php">
     <UnusedClass>
       <code><![CDATA[LogTestListener]]></code>
-    </UnusedClass>
-  </file>
-  <file src="tests/Util/TimeTest.php">
-    <UnusedClass>
-      <code><![CDATA[TimeTest]]></code>
-    </UnusedClass>
-  </file>
-  <file src="tests/Views/Components/NumDropMenuTest.php">
-    <UnusedClass>
-      <code><![CDATA[NumDropMenuTest]]></code>
-    </UnusedClass>
-  </file>
-  <file src="tests/Views/Components/TimeTest.php">
-    <UnusedClass>
-      <code><![CDATA[TimeTest]]></code>
-    </UnusedClass>
-  </file>
-  <file src="tests/Views/TemplateHelperTest.php">
-    <UnusedClass>
-      <code><![CDATA[TemplateHelperTest]]></code>
     </UnusedClass>
   </file>
 </files>
