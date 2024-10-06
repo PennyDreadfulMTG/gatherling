@@ -368,7 +368,7 @@ function create_event(): array
 }
 
 
-function create_pairing(Event $event, mixed $round, ?string $a, ?string $b, ?string $res): void
+function create_pairing(Event $event, int $round, ?string $a, ?string $b, ?string $res): void
 {
     if (!is_admin() && !$event->authCheck(Player::loginName())) {
         error('Unauthorized');
@@ -413,7 +413,7 @@ function create_pairing(Event $event, mixed $round, ?string $a, ?string $b, ?str
     if ($res == 'P') {
         $event->addPairing($playerA, $playerB, $round, $res);
     } else {
-        $event->addMatch($playerA, $playerB, $round, $res, (string) $pAWins, (string) $pBWins);
+        $event->addMatch($playerA, $playerB, (string) $round, $res, (string) $pAWins, (string) $pBWins);
     }
 }
 

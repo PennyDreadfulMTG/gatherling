@@ -8,6 +8,8 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 
+use function Gatherling\Views\request;
+
 require_once 'lib.php';
 require_once 'api_lib.php';
 
@@ -144,12 +146,15 @@ switch ($action) {
 
     case 'create_pairing':
         auth();
-        $event = new Event(arg('event'));
-        $round = arg('round');
-        $a = arg('player_a');
-        $b = arg('player_b');
-        $res = arg('res', 'P');
-
+        try {
+            $event = new Event(arg('event'));
+            $round = request()->int('round');
+            $a = arg('player_a');
+            $b = arg('player_b');
+            $res = arg('res', 'P');
+        } catch (\InvalidArgumentException $e) {
+            error($e->getMessage());
+        }
         create_pairing($event, $round, $a, $b, $res);
         break;
 
