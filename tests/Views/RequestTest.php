@@ -15,11 +15,21 @@ class RequestTest extends TestCase
         $request->int('bar');
     }
 
-    public function testOptionalInt(): void
+    public function testString(): void
     {
-        $request = new Request(['foo' => '123']);
-        $this->assertEquals(123, $request->optionalInt('foo'));
-        $this->assertNull($request->optionalInt('bar'));
+        $request = new Request(['foo' => 'hello']);
+        $this->assertEquals('hello', $request->string('foo'));
+        $this->assertEquals('hello', $request->string('foo', 'other'));
+        $this->assertEquals('hello', $request->string('bar', 'hello'));
+        $this->expectException(\InvalidArgumentException::class);
+        $request->string('bar');
+    }
+
+    public function testOptionalString(): void
+    {
+        $request = new Request(['foo' => 'hello']);
+        $this->assertEquals('hello', $request->optionalString('foo'));
+        $this->assertNull($request->optionalString('bar'));
     }
 
     public function testListInt(): void

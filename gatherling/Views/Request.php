@@ -9,33 +9,31 @@ class Request
     {
     }
 
-    public function int(string $key): int
-    {
-        $value = $this->optionalInt($key);
-        if ($value === null) {
-            throw new \InvalidArgumentException("Missing integer value: " . $key);
-        }
-        return $value;
-    }
-
-    public function optionalInt(string $key): ?int
+    public function int(string $key, int|false $default = false): int
     {
         if (!isset($this->vars[$key])) {
-            return null;
+            if ($default !== false) {
+                return $default;
+            }
+            throw new \InvalidArgumentException("Missing integer value: " . $key);
         }
-        if (!is_numeric($this->vars[$key])) {
-            throw new \InvalidArgumentException("Invalid integer value for $key: " . var_export($this->vars[$key], true));
+        $value = $this->vars[$key];
+        if (!is_numeric($value)) {
+            throw new \InvalidArgumentException("Invalid integer value for $key: " . var_export($value, true));
         }
-        return (int) $this->vars[$key];
+        return (int) $value;
     }
 
-    public function string(string $key): string
+    public function string(string $key, string|false $default = false): string
     {
         $value = $this->optionalString($key);
         if ($value === null) {
+            if ($default !== false) {
+                return $default;
+            }
             throw new \InvalidArgumentException("Missing string value: " . $key);
         }
-        return $value;
+        return (string) $value;
     }
 
     public function optionalString(string $key): ?string
@@ -43,10 +41,11 @@ class Request
         if (!isset($this->vars[$key])) {
             return null;
         }
-        if (!is_string($this->vars[$key])) {
-            throw new \InvalidArgumentException("Invalid string value for $key: " . var_export($this->vars[$key], true));
+        $value = $this->vars[$key];
+        if (!is_string($value)) {
+            throw new \InvalidArgumentException("Invalid string value for $key: " . var_export($value, true));
         }
-        return (string) $this->vars[$key];
+        return (string) $value;
     }
 
     /** @return list<int> */
