@@ -32,7 +32,7 @@ if ($player == null) {
                 $drop = $_POST['drop'] == 'Y';
             }
             if ($drop) {
-                $match = new Matchup($_POST['match_id']);
+                $match = new Matchup(post()->int('match_id'));
                 $eventname = $match->getEventNamebyMatchid();
                 $event = new Event($eventname);
                 $event->dropPlayer($player->name);
@@ -52,7 +52,7 @@ if ($player == null) {
                 }
             } else {
                 // Non-league matches
-                $match = new Matchup($_POST['match_id']);
+                $match = new Matchup(post()->int('match_id'));
                 if ($match->playerLetter($player->name) == $_POST['player']) {
                     Matchup::saveReport($_POST['report'], $_POST['match_id'], $_POST['player']);
                     redirect('player.php');
