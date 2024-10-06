@@ -690,6 +690,7 @@
   <file src="gatherling/Views/Pages/EventFrame.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$controlPanelLinks]]></code>
+      <code><![CDATA[$event]]></code>
     </PossiblyUnusedProperty>
     <UndefinedFunction>
       <code><![CDATA[getObjectVarsCamelCase($event)]]></code>
