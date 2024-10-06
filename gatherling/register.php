@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-use Gatherling\Models\Player;
 use Gatherling\Auth\Registration;
 use Gatherling\Views\Pages\Register;
+
+use function Gatherling\Views\post;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
@@ -17,7 +18,7 @@ function main(): void
         $pw1 = $_POST['pw1'] ?? '';
         $pw2 = $_POST['pw2'] ?? '';
         $email = $_POST['email'] ?? '';
-        $emailStatus = $_POST['emailstatus'] ?? 0;
+        $emailStatus = post()->optionalInt('emailstatus') ?? 0;
         $timezone = (float) $_POST['timezone'];
         $discordId = $_SESSION['DISCORD_ID'] ?? null;
         $discordName = $_SESSION['DISCORD_NAME'] ?? null;
