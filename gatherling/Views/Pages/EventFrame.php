@@ -20,11 +20,11 @@ abstract class EventFrame extends Page
     {
         parent::__construct();
         $this->event = getObjectVarsCamelCase($event);
-        $this->controlPanelLinks = $this->controlPanelLinks();
+        $this->controlPanelLinks = $this->controlPanelLinks($event);
     }
 
     /** @return list<array{link: string, text: string}> */
-    public function controlPanelLinks(): array
+    public function controlPanelLinks(Event $event): array
     {
         $views = [
             'settings'   => 'Event Settings',
@@ -38,7 +38,7 @@ abstract class EventFrame extends Page
         $links = [];
         foreach ($views as $view => $text) {
             $links[] = [
-                'link' => 'event.php?name='.rawurlencode($this->event['name']).'&view='.$view,
+                'link' => 'event.php?name=' . rawurlencode($event->name ?? '') . '&view=' . $view,
                 'text' => $text,
             ];
         }
