@@ -16,6 +16,7 @@ use Gatherling\Models\Standings;
 use function Gatherling\Views\config;
 use function Gatherling\Views\request;
 use function Gatherling\Views\server;
+use function Gatherling\Views\session;
 
 /**
  * @param array<string, mixed> $array
@@ -246,7 +247,8 @@ function repr_json_player(Player $player, int|string|null $client = null): array
 function add_player_to_event(Event $event, ?string $name, ?string $decklist): array
 {
     $result = [];
-    if ($event->authCheck($_SESSION['username'])) {
+    $username = session()->string('username', '');
+    if ($username && $event->authCheck($username)) {
         if ($event->addPlayer($name)) {
             $player = new Player($name);
             $result['success'] = true;
@@ -280,7 +282,8 @@ function add_player_to_event(Event $event, ?string $name, ?string $decklist): ar
 /** @return array<string, mixed> */
 function delete_player_from_event(Event $event, ?string $name): array
 {
-    if ($event->authCheck($_SESSION['username'])) {
+    $username = session()->string('username', '');
+    if ($username && $event->authCheck($username)) {
         $result = [];
         $result['success'] = $event->removeEntry($name);
         $result['player'] = $name;
@@ -295,7 +298,8 @@ function delete_player_from_event(Event $event, ?string $name): array
 /** @return array<string, mixed> */
 function drop_player_from_event(Event $event, ?string $name): array
 {
-    if ($event->authCheck($_SESSION['username'])) {
+    $username = session()->string('username', '');
+    if ($username && $event->authCheck($username)) {
         $event->dropPlayer($name);
         $result['success'] = true;
         $result['player'] = $name;
@@ -335,38 +339,38 @@ function create_series(string $newseries, bool $active, string $day): array
 /** @return array<string, mixed> */
 function create_event(): array
 {
-    $name = arg('name', '');
+    $name = argStr('name', '');
     $naming = '';
     if ($name == '') {
         $naming = 'auto';
     }
 
     $event = Event::CreateEvent(
-        arg('year'),
-        arg('month'),
-        arg('day'),
-        arg('hour'),
+        argStr('year'),
+        argStr('month'),
+        argStr('day'),
+        argStr('hour'),
         $naming,
         $name,
-        arg('format'),
-        arg('host', ''),
-        arg('cohost', ''),
-        arg('kvalue', ''),
-        arg('series'),
-        arg('season'),
-        arg('number'),
-        arg('threadurl', ''),
-        arg('metaurl', ''),
-        arg('reporturl', ''),
-        arg('prereg_allowed', ''),
-        arg('player_reportable', ''),
-        arg('late_entry_limit', ''),
-        arg('private', ''),
-        arg('mainrounds', ''),
-        arg('mainstruct', ''),
-        arg('finalrounds', ''),
-        arg('finalstruct', ''),
-        arg('client', 1)
+        argStr('format'),
+        argStr('host', ''),
+        argStr('cohost', ''),
+        argStr('kvalue', ''),
+        argStr('series'),
+        argStr('season'),
+        argStr('number'),
+        argStr('threadurl', ''),
+        argStr('metaurl', ''),
+        argStr('reporturl', ''),
+        argStr('prereg_allowed', ''),
+        argStr('player_reportable', ''),
+        argStr('late_entry_limit', ''),
+        argStr('private', ''),
+        argStr('mainrounds', ''),
+        argStr('mainstruct', ''),
+        argStr('finalrounds', ''),
+        argStr('finalstruct', ''),
+        argStr('client', '1')
     );
 
     $result = [];
@@ -379,8 +383,11 @@ function create_event(): array
 
 function create_pairing(Event $event, int $round, ?string $a, ?string $b, ?string $res): void
 {
-    if (!is_admin() && !$event->authCheck(Player::loginName())) {
-        error('Unauthorized');
+    if (!is_admin()) {
+        $username = Player::loginName();
+        if (!$username || !$event->authCheck($username)) {
+            error('Unauthorized');
+        }
     }
 
     $playerA = new Standings($event->name, $a);
