@@ -5,67 +5,91 @@ namespace Gatherling\Views;
 class Request
 {
     /** @var array<string, mixed> */
-    private array $post;
-    /** @var array<string, mixed> */
-    private array $get;
-    /** @var array<string, mixed> */
-    private array $request;
+    private array $current;
 
-    public function __construct()
+    /**
+     * @param array<string, mixed> $request
+     * @param array<string, mixed> $get
+     * @param array<string, mixed> $post
+     */
+    public function __construct(private array $request, private array $get, private array $post)
     {
-        $this->post = $_POST;
-        $this->get = $_GET;
-        $this->request = $_REQUEST;
+        $this->request = $request;
+        $this->get = $get;
+        $this->post = $post;
+        $this->current = $this->request;
     }
 
     public function post(): self
     {
-        return $this->createDataAccessor($this->post);
+        $this->current = $this->post;
+        return $this;
     }
 
     public function get(): self
     {
-        return $this->createDataAccessor($this->get);
+        $this->current = $this->get;
+        return $this;
     }
 
-    public function request(): self
+    // BAKERT tests
+    // BAKERT reimplmeent string this way too, and list?
+    public function int(string $key): int
     {
-        return $this->createDataAccessor($this->request);
-    }
-
-    /** @param array<string, mixed> $data */
-    private function createDataAccessor(array $data): self
-    {
-        $accessor = new self();
-        $accessor->post = $data;
-        $accessor->get = $data;
-        $accessor->request = $data;
-        return $accessor;
-    }
-
-    public function int(string $key, int $default = 0): int
-    {
-        if (!isset($this->request[$key]) || !is_numeric($this->request[$key])) {
-            return $default;
+        $value = $this->optionalInt($key);
+        if ($value === null) {
+            throw new \InvalidArgumentException("Missing integer value: " . $key);
         }
-        return (int) $this->request[$key];
+        return $value;
     }
 
-    public function intOr(string $key, ?int $default = null): ?int
+    public function optionalInt(string $key): ?int
     {
-        return isset($this->request[$key]) && is_numeric($this->request[$key]) ? (int) $this->request[$key] : $default;
-    }
-
-    public function string(string $key, string $default = ''): string
-    {
-        if (!isset($this->request[$key]) || !is_string($this->request[$key])) {
-            return $default;
+        if (!isset($this->current[$key])) {
+            return null;
         }
-        return (string) $this->request[$key];
+        if (!is_numeric($this->current[$key])) {
+            throw new \InvalidArgumentException("Invalid integer value for $key: " . var_export($this->current[$key], true));
+        }
+        return (int) $this->current[$key];
     }
 
-    public function stringOr(string $key, ?string $default = null): ?string
+    public function string(string $key): string
     {
-        return isset($this->request[$key]) && is_string($this->request[$key]) ? (string) $this->request[$key] : $default;
+        $value = $this->optionalString($key);
+        if ($value === null) {
+            throw new \InvalidArgumentException("Missing string value: " . $key);
+        }
+        return $value;
+    }
+
+    public function optionalString(string $key): ?string
+    {
+        if (!isset($this->current[$key])) {
+            return null;
+        }
+        if (!is_string($this->current[$key])) {
+            throw new \InvalidArgumentException("Invalid string value for $key: " . var_export($this->current[$key], true));
+        }
+        return (string) $this->current[$key];
+    }
+
+    /** @return list<int> */
+    public function listInt(string $key): array
+    {
+        if (!isset($this->current[$key])) {
+            return [];
+        }
+        if (!is_array($this->current[$key])) {
+            throw new \InvalidArgumentException("Invalid list of integers: " . var_export($this->current[$key], true));
+        }
+        $result = [];
+        foreach ($this->current[$key] as $value) {
+            if (!is_numeric($value)) {
+                throw new \InvalidArgumentException("Invalid integer value: " . var_export($value, true));
+            }
+            $result[] = (int) $value;
+        }
+        return $result;
     }
 }
