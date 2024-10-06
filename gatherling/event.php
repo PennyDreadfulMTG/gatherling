@@ -456,10 +456,9 @@ function updateReg(): void
 function updateMatches(): void
 {
     $event = new Event($_POST['name']);
-    if (isset($_POST['matchdelete'])) {
-        foreach ($_POST['matchdelete'] as $matchid) {
-            Matchup::destroy($matchid);
-        }
+    $deleteMatchIds = request()->post()->listInt('matchdelete');
+    foreach ($deleteMatchIds as $matchId) {
+        Matchup::destroy($matchId);
     }
 
     if (isset($_POST['dropplayer'])) {
