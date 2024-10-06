@@ -37,3 +37,12 @@ function session(): Request
     }
     return $instance;
 }
+
+function server(): Request
+{
+    static $instance = null;
+    if ($instance === null) {
+        $instance = new Request($_SERVER);
+    }
+    return $instance;
+}
