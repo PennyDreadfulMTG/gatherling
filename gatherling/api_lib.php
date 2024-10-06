@@ -29,7 +29,6 @@ function populate(array $array, object $src, array $keys): array
     return $array;
 }
 
-/** @return bool  */
 function is_admin(): bool
 {
     global $CONFIG;
@@ -86,13 +85,7 @@ function auth(): string|bool
     return Player::isLoggedIn();
 }
 
-/**
- * @param string $msg
- * @param mixed  $extra
- *
- * @return never
- */
-function error($msg, $extra = null)
+function error(string $msg, mixed $extra = null): never
 {
     $result = [];
     if (is_array($extra)) {

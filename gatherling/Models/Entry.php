@@ -231,12 +231,7 @@ class Entry
         return $args;
     }
 
-    /**
-     * @param int $byeqty
-     *
-     * @return void
-     */
-    public function setInitialByes($byeqty)
+    public function setInitialByes(int $byeqty): void
     {
         $db = Database::getConnection();
         $db->autocommit(false);

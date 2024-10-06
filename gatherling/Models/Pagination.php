@@ -99,8 +99,6 @@ class Pagination
      *  Constructor of the class.
      *
      *  Initializes the class and the default properties.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -126,10 +124,8 @@ class Pagination
      *                              Default is TRUE.
      *
      *  @since  2.0
-     *
-     * @return void
      */
-    public function always_show_navigation($show = true)
+    public function always_show_navigation($show = true): void
     {
         // set property
         $this->_properties['always_show_navigation'] = $show;
@@ -160,11 +156,9 @@ class Pagination
      *
      *                                                  Default is TRUE.
      *
-     * @return void
-     *
      *  @since  2.0
      */
-    public function avoid_duplicate_content($avoid_duplicate_content = true)
+    public function avoid_duplicate_content($avoid_duplicate_content = true): void
     {
         // set property
         $this->_properties['avoid_duplicate_content'] = $avoid_duplicate_content;
@@ -213,10 +207,8 @@ class Pagination
      *                                    those set in $base_url, should be preserved
      *
      *                                                  Default is TRUE
-     *
-     * @return void
      */
-    public function base_url($base_url = '', $preserve_query_string = true)
+    public function base_url($base_url = '', $preserve_query_string = true): void
     {
         // set the base URL
         $base_url = ($base_url == '' ? $_SERVER['REQUEST_URI'] : $base_url);
@@ -334,11 +326,9 @@ class Pagination
      *
      *                              Default is "Next page".
      *
-     * @return void
-     *
      *  @since  2.0
      */
-    public function labels($previous = 'Previous page', $next = 'Next page')
+    public function labels($previous = 'Previous page', $next = 'Next page'): void
     {
         // set the labels
         $this->_properties['previous'] = $previous;
@@ -398,10 +388,8 @@ class Pagination
      *                              Default is "outside".
      *
      *  @since  2.1
-     *
-     * @return void
      */
-    public function navigation_position($position)
+    public function navigation_position($position): void
     {
         // set the positioning of next/previous page links
         $this->_properties['navigation_position'] = (in_array(strtolower($position), ['left', 'right']) ? strtolower($position) : 'outside');
@@ -421,10 +409,8 @@ class Pagination
      *                      enabling it.
      *
      *                                  Default is TRUE.
-     *
-     * @return void
      */
-    public function padding($enabled = true)
+    public function padding($enabled = true): void
     {
         // set padding
         $this->_properties['padding'] = $enabled;
@@ -444,10 +430,8 @@ class Pagination
      *  </code>
      *
      * @param int $records The total number of records that need to be paginated
-     *
-     * @return void
      */
-    public function records($records)
+    public function records($records): void
     {
         // the number of records
         // make sure we save it as an integer
@@ -469,10 +453,8 @@ class Pagination
      * @param int $records_per_page The number of records displayed on one page.
      *
      *                      Default is 10.
-     *
-     * @return void
      */
-    public function records_per_page($records_per_page)
+    public function records_per_page($records_per_page): void
     {
         // the number of records displayed on one page
         // make sure we save it as an integer
@@ -575,11 +557,9 @@ class Pagination
      *
      *                                  Default is FALSE.
      *
-     * @return void
-     *
      *  @since  2.0
      */
-    public function reverse($reverse = false)
+    public function reverse($reverse = false): void
     {
         // set how the pagination links should be generated
         $this->_properties['reverse'] = $reverse;
@@ -600,10 +580,8 @@ class Pagination
      *                                          will be shown to the left and to the right of the current page.</i>
      *
      *                                          Default is 11.
-     *
-     * @return void
      */
-    public function selectable_pages($selectable_pages)
+    public function selectable_pages($selectable_pages): void
     {
         // the number of selectable pages
         // make sure we save it as an integer
@@ -626,10 +604,8 @@ class Pagination
      *                                      The total number of pages is given by the fraction between the total number
      *                                      records (set through {@link records()}) and the number of records that are
      *                                      shown on one page (set through {@link records_per_page()}).
-     *
-     * @return void
      */
-    public function set_page($page)
+    public function set_page($page): void
     {
         // set the current page
         // make sure we save it as an integer
@@ -659,10 +635,8 @@ class Pagination
      *                      URLs when {@link method} is "url".
      *
      *                                  Default is TRUE (trailing slashes are enabled by default).
-     *
-     * @return void
      */
-    public function trailing_slash($enabled)
+    public function trailing_slash($enabled): void
     {
         // set the state of trailing slashes
         $this->_properties['trailing_slash'] = $enabled;
@@ -681,10 +655,8 @@ class Pagination
      * @param string $variable_name A string representing the variable name to be used for page propagation.
      *
      *                                      Default is "page".
-     *
-     * @return void
      */
-    public function variable_name($variable_name)
+    public function variable_name($variable_name): void
     {
         // set the variable name
         $this->_properties['variable_name'] = strtolower($variable_name);
