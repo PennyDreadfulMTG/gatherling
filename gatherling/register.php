@@ -17,10 +17,10 @@ function main(): void
         $pw1 = $_POST['pw1'] ?? '';
         $pw2 = $_POST['pw2'] ?? '';
         $email = $_POST['email'] ?? '';
-        $emailStatus = $_POST['emailStatus'] ?? 0;
+        $emailStatus = $_POST['emailstatus'] ?? 0;
         $timezone = (float) $_POST['timezone'];
-        $discordId = $_POST['discordId'] ?? null;
-        $discordName = $_POST['discordName'] ?? null;
+        $discordId = $_SESSION['DISCORD_ID'] ?? null;
+        $discordName = $_SESSION['DISCORD_NAME'] ?? null;
         $code = Registration::register($username, $pw1, $pw2, $email, $emailStatus, $timezone, $discordId, $discordName);
         if ($code == 0) {
             redirect('player.php');
