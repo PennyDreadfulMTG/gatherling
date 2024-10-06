@@ -4,7 +4,7 @@ namespace Gatherling\Views;
 
 class Request
 {
-    /** @param array<string, mixed> $vars */
+    /** @param array<int|string, mixed> $vars */
     public function __construct(private array $vars)
     {
     }
