@@ -3161,16 +3161,6 @@ parameters:
 			path: gatherling/api_lib.php
 
 		-
-			message: "#^Parameter \\#3 \\$round of method Gatherling\\\\Models\\\\Event\\:\\:addMatch\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/api_lib.php
-
-		-
-			message: "#^Parameter \\#3 \\$round of method Gatherling\\\\Models\\\\Event\\:\\:addPairing\\(\\) expects int, mixed given\\.$#"
-			count: 1
-			path: gatherling/api_lib.php
-
-		-
 			message: "#^Parameter \\#4 \\$hour of static method Gatherling\\\\Models\\\\Event\\:\\:CreateEvent\\(\\) expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/api_lib.php
@@ -5141,11 +5131,6 @@ parameters:
 			path: gatherling/register.php
 
 		-
-			message: "#^Parameter \\#5 \\$emailStatus of static method Gatherling\\\\Auth\\\\Registration\\:\\:register\\(\\) expects int, mixed given\\.$#"
-			count: 1
-			path: gatherling/register.php
-
-		-
 			message: "#^Parameter \\#7 \\$discordId of static method Gatherling\\\\Auth\\\\Registration\\:\\:register\\(\\) expects string\\|null, mixed given\\.$#"
 			count: 1
 			path: gatherling/register.php
@@ -5172,11 +5157,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$eventname of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"
-			count: 2
-			path: gatherling/report.php
-
-		-
-			message: "#^Parameter \\#1 \\$id of class Gatherling\\\\Models\\\\Matchup constructor expects int, mixed given\\.$#"
 			count: 2
 			path: gatherling/report.php
 
