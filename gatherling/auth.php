@@ -6,6 +6,8 @@ use Gatherling\Models\Player;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use Wohali\OAuth2\Client\Provider\Exception\DiscordIdentityProviderException;
 
+use function Gatherling\Views\request;
+
 require_once __DIR__ . '/lib.php';
 require __DIR__ . '/authlib.php';
 
@@ -41,7 +43,7 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     }
     // We might be here to upgrade our requested Discord permissions (Series Organizers setting up Discord Channels, for example)
     if (isset($_REQUEST['scope'])) {
-        $needed = explode(' ', $_REQUEST['scope']);
+        $needed = explode(' ', request()->string('scope', ''));
         $current = explode(' ', $token->getValues()['scope']);
 
         if (!empty(array_diff($needed, $current))) {
