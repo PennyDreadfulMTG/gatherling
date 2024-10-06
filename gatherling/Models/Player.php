@@ -6,9 +6,10 @@ namespace Gatherling\Models;
 
 use Exception;
 use Gatherling\Data\DB;
-use Gatherling\Views\TemplateHelper;
 use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\PlayerLink;
+
+use function Gatherling\Views\session;
 
 class Player
 {
@@ -87,7 +88,7 @@ class Player
     public static function loginName(): string|false
     {
         if (self::isLoggedIn()) {
-            return $_SESSION['username'];
+            return session()->string('username');
         } else {
             return false;
         }
@@ -98,8 +99,7 @@ class Player
         if (!isset($_SESSION['username'])) {
             return null;
         }
-
-        return new self($_SESSION['username']);
+        return new self(session()->string('username'));
     }
 
     public static function checkPassword(string $username, string $password): bool

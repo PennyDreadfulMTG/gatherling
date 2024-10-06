@@ -28,3 +28,12 @@ function post(): Request
     }
     return $instance;
 }
+
+function session(): Request
+{
+    static $instance = null;
+    if ($instance === null) {
+        $instance = new Request($_SESSION);
+    }
+    return $instance;
+}
