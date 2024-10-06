@@ -6,7 +6,25 @@ function request(): Request
 {
     static $instance = null;
     if ($instance === null) {
-        $instance = new Request($_REQUEST, $_GET, $_POST);
+        $instance = new Request($_REQUEST);
+    }
+    return $instance;
+}
+
+function get(): Request
+{
+    static $instance = null;
+    if ($instance === null) {
+        $instance = new Request($_GET);
+    }
+    return $instance;
+}
+
+function post(): Request
+{
+    static $instance = null;
+    if ($instance === null) {
+        $instance = new Request($_POST);
     }
     return $instance;
 }
