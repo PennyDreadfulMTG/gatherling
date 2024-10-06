@@ -23,7 +23,7 @@ use Gatherling\Views\Pages\PointsAdjustmentForm;
 use Gatherling\Views\Pages\ReportsForm;
 use Gatherling\Views\Pages\StandingsList;
 
-use function Gatherling\Views\request;
+use function Gatherling\Views\post;
 
 require_once 'lib.php';
 include 'lib_form_helper.php';
@@ -456,7 +456,7 @@ function updateReg(): void
 function updateMatches(): void
 {
     $event = new Event($_POST['name']);
-    $deleteMatchIds = request()->post()->listInt('matchdelete');
+    $deleteMatchIds = post()->listInt('matchdelete');
     foreach ($deleteMatchIds as $matchId) {
         Matchup::destroy($matchId);
     }
@@ -534,7 +534,7 @@ function updateMatches(): void
     } else {
         $res = '';
     }
-    $rnd = request()->post()->int('newmatchround');
+    $rnd = post()->int('newmatchround');
 
     if (
         strcmp($pA, '') != 0 && strcmp($pB, '') != 0
