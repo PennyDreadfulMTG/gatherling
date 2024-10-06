@@ -18,7 +18,7 @@ function main(): void
         $pw1 = $_POST['pw1'] ?? '';
         $pw2 = $_POST['pw2'] ?? '';
         $email = $_POST['email'] ?? '';
-        $emailStatus = post()->optionalInt('emailstatus') ?? 0;
+        $emailStatus = post()->int('emailstatus', 0);
         $timezone = (float) $_POST['timezone'];
         $discordId = $_SESSION['DISCORD_ID'] ?? null;
         $discordName = $_SESSION['DISCORD_NAME'] ?? null;
