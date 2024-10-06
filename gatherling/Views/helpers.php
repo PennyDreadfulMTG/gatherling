@@ -46,3 +46,14 @@ function server(): Request
     }
     return $instance;
 }
+
+function config(): Request
+{
+    global $_CONFIG;
+
+    static $instance = null;
+    if ($instance === null) {
+        $instance = new Request($_CONFIG);
+    }
+    return $instance;
+}

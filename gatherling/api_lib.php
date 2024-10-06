@@ -13,6 +13,10 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Models\Standings;
 
+use function Gatherling\Views\config;
+use function Gatherling\Views\request;
+use function Gatherling\Views\server;
+
 /**
  * @param array<string, mixed> $array
  * @param object $src
@@ -36,7 +40,10 @@ function is_admin(): bool
     if (!isset($_SESSION['infobot'])) {
         $_SESSION['infobot'] = false;
     }
-    if (strncmp($_SERVER['HTTP_USER_AGENT'], 'infobot', 7) == 0 && $_REQUEST['passkey'] == $CONFIG['infobot_passkey']) {
+    $userAgent = server()->string('HTTP_USER_AGENT', '');
+    $requestPasskey = request()->string('passkey', 'badrequestpasskey');
+    $configPasskey = config()->string('infobot_passkey', 'badconfigpasskey');
+    if (strncmp($userAgent, 'infobot', 7) == 0 && $requestPasskey == $configPasskey) {
         $_SESSION['infobot'] = true;
         header('X-InfoBot: true');
 
@@ -60,12 +67,12 @@ function auth(): string|bool
     $username = null;
     $apikey = null;
     if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
-        $username = $_SERVER['PHP_AUTH_USER'];
-        $apikey = $_SERVER['PHP_AUTH_PW'];
+        $username = server()->string('PHP_AUTH_USER');
+        $apikey = server()->string('PHP_AUTH_PW');
     }
     if (isset($_SERVER['HTTP_X_USERNAME']) && isset($_SERVER['HTTP_X_APIKEY'])) {
-        $username = $_SERVER['HTTP_X_USERNAME'];
-        $apikey = $_SERVER['HTTP_X_APIKEY'];
+        $username = server()->string('HTTP_X_USERNAME');
+        $apikey = server()->string('HTTP_X_APIKEY');
     }
 
     if (is_null($username) || is_null($apikey)) {
@@ -95,6 +102,15 @@ function error(string $msg, mixed $extra = null): never
     $result['success'] = false;
     json_headers();
     exit(json_encode($result));
+}
+
+function argStr(string $key, string|false $default = false): string
+{
+    try {
+        return request()->string($key, $default);
+    } catch (InvalidArgumentException $e) {
+        error("missing argument '$key'");
+    }
 }
 
 function arg(string $key, mixed $default = null): mixed
