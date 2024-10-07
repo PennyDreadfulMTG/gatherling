@@ -3781,26 +3781,6 @@ parameters:
 			path: gatherling/profile.php
 
 		-
-			message: "#^Cannot cast mixed to int\\.$#"
-			count: 2
-			path: gatherling/profile.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/profile.php
-
-		-
-			message: "#^Parameter \\#1 \\$playerName of class Gatherling\\\\Views\\\\Pages\\\\Profile constructor expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/profile.php
-
-		-
-			message: "#^Parameter \\#1 \\$playername of static method Gatherling\\\\Models\\\\Player\\:\\:findByName\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/profile.php
-
-		-
 			message: "#^Property Gatherling\\\\Models\\\\Player\\:\\:\\$emailAddress \\(string\\|null\\) does not accept mixed\\.$#"
 			count: 1
 			path: gatherling/profile.php
