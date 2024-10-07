@@ -7,6 +7,8 @@ use Gatherling\Models\Player;
 use Gatherling\Views\Redirect;
 use Gatherling\Views\Pages\DeckDownload;
 
+use function Gatherling\Views\server;
+
 require_once 'lib.php';
 
 function main(): void
@@ -23,6 +25,6 @@ function main(): void
     $response->send();
 }
 
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }
