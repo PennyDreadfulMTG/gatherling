@@ -23,6 +23,10 @@ use Gatherling\Views\Components\FormatRenameForm;
 use Gatherling\Views\Components\FormatSaveAsForm;
 use Gatherling\Views\Pages\InsufficientPermissions;
 
+use function Gatherling\Views\post;
+use function Gatherling\Views\request;
+use function Gatherling\Views\server;
+
 require_once 'lib.php';
 include 'lib_form_helper.php';
 
@@ -43,7 +47,7 @@ function main(): void
         array_unshift($playerSeries, 'System');
     }
 
-    $seriesName = $_REQUEST['series'] ?? $playerSeries[0];
+    $seriesName = request()->optionalString('series') ?? $playerSeries[0];
 
     if (!in_array($seriesName, $playerSeries)) {
         (new InsufficientPermissions($player->isOrganizer()))->send();
@@ -55,12 +59,12 @@ function main(): void
         if (!($actionResultComponent instanceof LoadFormatForm)) {
             $actionResultComponent = [$actionResultComponent, new LoadFormatForm($seriesName)];
         }
-        $page = new FormatAdmin($_SERVER['PHP_SELF'], $playerSeries, $seriesName, new Format(''), $actionResultComponent);
+        $page = new FormatAdmin(server()->string('PHP_SELF'), $playerSeries, $seriesName, new Format(''), $actionResultComponent);
         $page->send();
     }
 
-    $format = $_REQUEST['format'];
-    if (Format::doesFormatExist($format)) {
+    $format = request()->optionalString('format');
+    if ($format && Format::doesFormatExist($format)) {
         $activeFormat = new Format($format);
     } else {
         $activeFormat = new Format('');
@@ -83,7 +87,7 @@ function main(): void
         default:
             $view = new FormatSettings($seriesName, $activeFormat);
     }
-    $page = new FormatAdmin($_SERVER['PHP_SELF'], $playerSeries, $seriesName, $activeFormat, $actionResultComponent, $view);
+    $page = new FormatAdmin(server()->string('PHP_SELF'), $playerSeries, $seriesName, $activeFormat, $actionResultComponent, $view);
     $page->send();
 }
 
@@ -99,32 +103,32 @@ function handleAction(string $seriesName): Component
         return new LoadFormatForm($seriesName);
     }
     if ($_POST['action'] == 'Update Banlist') {
-        return updateBanlist($_POST['format'], $_POST['addbancard'] ?? [], $_POST['delbancards'] ?? []);
+        return updateBanlist(post()->string('format'), post()->string('addbancard', ''), post()->listString('delbancards'));
     }
     if ($_POST['action'] == 'Delete Entire Banlist') {
-        $format = new Format($_POST['format']);
+        $format = new Format(post()->string('format'));
         $success = $format->deleteEntireBanlist(); // leave a message of success
         return $success ? new NullComponent() : new ErrorMessage(['Failed to delete banlist']);
     }
     if ($_POST['action'] == 'Update Legal List') {
-        return updateLegalList($_POST['format'], $_POST['addlegalcard'] ?? [], $_POST['dellegalcards'] ?? []);
+        return updateLegalList(post()->string('format'), post()->string('addlegalcard'), post()->listString('dellegalcards'));
     }
     if ($_POST['action'] == 'Delete Entire Legal List') {
-        $format = new Format($_POST['format']);
+        $format = new Format(post()->string('format'));
         $success = $format->deleteEntireLegallist(); // leave a message of success
         return $success ? new NullComponent() : new ErrorMessage(['Failed to delete legal list']);
     }
     if ($_POST['action'] == 'Update Cardsets') {
-        return updateCardSets($_POST['format'], $_POST['cardsetname'] ?? '', $_POST['delcardsetname'] ?? []);
+        return updateCardSets(post()->string('format'), post()->string('cardsetname', ''), post()->listString('delcardsetname'));
     }
-    if (strncmp($_POST['action'], 'Add All', 7) == 0) {
-        return addAll($_POST['format'], substr($_POST['action'], 8));
+    if (strncmp(post()->string('action', ''), 'Add All', 7) == 0) {
+        return addAll(post()->string('format'), substr(post()->string('action', ''), 8));
     }
     if ($_POST['action'] == 'Update Restricted List') {
-        return updateRestrictedList($_POST['format'], $_POST['addrestrictedcard'] ?? [], $_POST['delrestrictedcards'] ?? []);
+        return updateRestrictedList(post()->string('format'), post()->string('addrestrictedcard', ''), post()->listString('delrestrictedcards'));
     }
     if ($_POST['action'] == 'Delete Entire Restricted List') {
-        $format = new Format($_POST['format']);
+        $format = new Format(post()->string('format'));
         $success = $format->deleteEntireRestrictedlist(); // leave a message of success
         return $success ? new NullComponent() : new ErrorMessage(['Failed to delete restricted list']);
     }
@@ -132,43 +136,42 @@ function handleAction(string $seriesName): Component
         return updateFormat($_POST);
     }
     if ($_POST['action'] == 'Create New Format') {
-        return createNewFormat($seriesName, $_POST['newformatname']);
+        return createNewFormat($seriesName, post()->string('newformatname'));
     }
     if ($_POST['action'] == 'Save As') {
-        return saveAsForm($_POST['format']);
+        return saveAsForm(post()->string('format'));
     }
     if ($_POST['action'] == 'Save') {
-        return save($seriesName, $_POST['newformat'], $_POST['oldformat']);
+        return save($seriesName, post()->string('newformat'), post()->string('oldformat'));
     }
     if ($_POST['action'] == 'Rename') {
         return renameForm($seriesName);
     }
     if ($_POST['action'] == 'Rename Format') {
-        return renameFormat($seriesName, $_POST['newformat'], $_POST['format']);
+        return renameFormat($seriesName, post()->string('newformat'), post()->string('format'));
     }
     if ($_POST['action'] == 'Delete') {
-        return deleteForm($seriesName, $_POST['format']);
+        return deleteForm($seriesName, post()->string('format'));
     }
     if ($_POST['action'] == 'Delete Format') {
-        return deleteFormat($_POST['format']);
+        return deleteFormat(post()->string('format'));
     }
     if ($_POST['action'] == 'Update Restricted To Tribe List') {
-        // addrestrictedtotribecreature, and these are all going to need to be checked :(
-        return updateRestrictedToTribeList($_POST['format'], $_POST['addrestrictedtotribecreature'] ?? [], $_POST['delrestrictedtotribe'] ?? []);
+        return updateRestrictedToTribeList(post()->string('format'), post()->string('addrestrictedtotribecreature'), post()->listString('delrestrictedtotribe'));
     }
     if ($_POST['action'] == 'Delete Entire Restricted To Tribe List') {
-        $format = new Format($_POST['format']);
+        $format = new Format(post()->string('format'));
         $success = $format->deleteEntireRestrictedToTribeList(); // leave a message of success
         return $success ? new NullComponent() : new ErrorMessage(['Failed to delete restricted to tribe list']);
     }
     if ($_POST['action'] == 'Update Subtype Ban') {
-        return updateSubtypeBan($_POST['format'], $_POST['subtypeban'] ?? '', $_POST['delbannedsubtype'] ?? []);
+        return updateSubtypeBan(post()->string('format'), post()->string('subtypeban'), post()->listString('delbannedsubtype'));
     }
     if ($_POST['action'] == 'Update Tribe Ban') {
-        return updateTribeBan($_POST['format'], $_POST['tribeban'] ?? '', $_POST['delbannedtribe'] ?? []);
+        return updateTribeBan(post()->string('format'), post()->string('tribeban'), post()->listString('delbannedtribe'));
     }
     if ($_POST['action'] == 'Ban All Tribes') {
-        $format = new Format($_POST['format']);
+        $format = new Format(post()->string('format'));
         $format->banAllTribes();
         return new NullComponent();
     }
@@ -575,6 +578,6 @@ function getMissingSets(string $cardsetType, Format $format): array
     return $finalList;
 }
 
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }

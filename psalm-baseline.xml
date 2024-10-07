@@ -1013,13 +1013,6 @@
   <file src="gatherling/formatcp.php">
     <InvalidArgument>
       <code><![CDATA[$_POST]]></code>
-      <code><![CDATA[$_POST['delbancards'] ?? []]]></code>
-      <code><![CDATA[$_POST['delbannedsubtype'] ?? []]]></code>
-      <code><![CDATA[$_POST['delbannedtribe'] ?? []]]></code>
-      <code><![CDATA[$_POST['delcardsetname'] ?? []]]></code>
-      <code><![CDATA[$_POST['dellegalcards'] ?? []]]></code>
-      <code><![CDATA[$_POST['delrestrictedcards'] ?? []]]></code>
-      <code><![CDATA[$_POST['delrestrictedtotribe'] ?? []]]></code>
     </InvalidArgument>
     <UnusedParam>
       <code><![CDATA[$formatName]]></code>
