@@ -36,13 +36,9 @@ if (isset($_GET['event'])) {
 } else {
     echo '<div class="uppertitle">Deck Database</div>';
 }
-if (!isset($_REQUEST['mode'])) {
-    $_REQUEST['mode'] = '';
-}
-if (!isset($_POST['mode'])) {
-    $_POST['mode'] = '';
-}
-if (strcmp($_REQUEST['mode'], 'view') == 0) {
+$requestMode = request()->string('mode', '');
+$postMode = post()->string('mode', '');
+if (strcmp($requestMode, 'view') == 0) {
     $deck = null;
     if (isset($_GET['event'])) {
         $deck = $event->getPlaceDeck('1st');
@@ -71,23 +67,23 @@ if (strcmp($_REQUEST['mode'], 'view') == 0) {
     }
 
     // part of the reg-decklist feature. both "register" and "addregdeck" switches
-    if (strcmp($_REQUEST['mode'], 'register') == 0) {
+    if (strcmp($requestMode, 'register') == 0) {
         deckRegisterForm();
-    } elseif (strcmp($_REQUEST['mode'], 'addregdeck') == 0) {
+    } elseif (strcmp($requestMode, 'addregdeck') == 0) {
         $deck = insertDeck($event);
         deckProfile($deck);
     } elseif (is_null($deck) && $event->name == '') {
         echo 'No deck or event id specifed.<br/>';
         echo "Go back to <a href='player.php'>Player CP</a>";
     } elseif (checkDeckAuth($event, $deck_player, $deck)) {
-        if (strcmp($_POST['mode'], 'Create Deck') == 0) {
+        if (strcmp($postMode, 'Create Deck') == 0) {
             $deck = insertDeck($event);
             if ($deck->isValid()) {
                 deckProfile($deck);
             } else {
                 deckForm($deck);
             }
-        } elseif (strcmp($_POST['mode'], 'Update Deck') == 0) {
+        } elseif (strcmp($postMode, 'Update Deck') == 0) {
             $deck = updateDeck($deck);
             $deck = new Deck($deck->id); // had to do this to get the constructor to run, otherwise errors weren't loading
             if ($deck->isValid()) {
@@ -95,9 +91,9 @@ if (strcmp($_REQUEST['mode'], 'view') == 0) {
             } else {
                 deckForm($deck);
             }
-        } elseif (strcmp($_POST['mode'], 'Edit Deck') == 0) {
+        } elseif (strcmp($postMode, 'Edit Deck') == 0) {
             deckForm($deck);
-        } elseif (strcmp($_REQUEST['mode'], 'create') == 0) {
+        } elseif (strcmp($requestMode, 'create') == 0) {
             deckForm();
         }
     }

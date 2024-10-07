@@ -3086,11 +3086,6 @@ parameters:
 			path: gatherling/deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, mixed given\\.$#"
-			count: 7
-			path: gatherling/deck.php
-
-		-
 			message: "#^Parameter \\#1 \\$username of method Gatherling\\\\Models\\\\Entry\\:\\:canCreateDeck\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: gatherling/deck.php
