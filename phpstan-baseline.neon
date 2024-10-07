@@ -3816,51 +3816,6 @@ parameters:
 			path: gatherling/ratings.php
 
 		-
-			message: "#^Cannot cast mixed to float\\.$#"
-			count: 1
-			path: gatherling/register.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/register.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function trim expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/register.php
-
-		-
-			message: "#^Parameter \\#1 \\$username of static method Gatherling\\\\Auth\\\\Registration\\:\\:register\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/register.php
-
-		-
-			message: "#^Parameter \\#2 \\$pw1 of static method Gatherling\\\\Auth\\\\Registration\\:\\:register\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/register.php
-
-		-
-			message: "#^Parameter \\#3 \\$pw2 of static method Gatherling\\\\Auth\\\\Registration\\:\\:register\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/register.php
-
-		-
-			message: "#^Parameter \\#4 \\$email of static method Gatherling\\\\Auth\\\\Registration\\:\\:register\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/register.php
-
-		-
-			message: "#^Parameter \\#7 \\$discordId of static method Gatherling\\\\Auth\\\\Registration\\:\\:register\\(\\) expects string\\|null, mixed given\\.$#"
-			count: 1
-			path: gatherling/register.php
-
-		-
-			message: "#^Parameter \\#8 \\$discordName of static method Gatherling\\\\Auth\\\\Registration\\:\\:register\\(\\) expects string\\|null, mixed given\\.$#"
-			count: 1
-			path: gatherling/register.php
-
-		-
 			message: "#^Cannot access property \\$name on Gatherling\\\\Models\\\\Player\\|null\\.$#"
 			count: 4
 			path: gatherling/report.php

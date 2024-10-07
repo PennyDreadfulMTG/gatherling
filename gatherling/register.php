@@ -6,6 +6,8 @@ use Gatherling\Auth\Registration;
 use Gatherling\Views\Pages\Register;
 
 use function Gatherling\Views\post;
+use function Gatherling\Views\server;
+use function Gatherling\Views\session;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
@@ -14,14 +16,14 @@ function main(): void
 {
     $message = '';
     if (isset($_POST['pw1'])) {
-        $username = $_POST['username'] ?? '';
-        $pw1 = $_POST['pw1'] ?? '';
-        $pw2 = $_POST['pw2'] ?? '';
-        $email = $_POST['email'] ?? '';
+        $username = post()->string('username', '');
+        $pw1 = post()->string('pw1', '');
+        $pw2 = post()->string('pw2', '');
+        $email = post()->string('email', '');
         $emailStatus = post()->int('emailstatus', 0);
-        $timezone = (float) $_POST['timezone'];
-        $discordId = $_SESSION['DISCORD_ID'] ?? null;
-        $discordName = $_SESSION['DISCORD_NAME'] ?? null;
+        $timezone = (float) post()->string('timezone', '');
+        $discordId = session()->optionalString('DISCORD_ID');
+        $discordName = session()->optionalString('DISCORD_NAME');
         $code = Registration::register($username, $pw1, $pw2, $email, $emailStatus, $timezone, $discordId, $discordName);
         if ($code == 0) {
             redirect('player.php');
@@ -29,7 +31,7 @@ function main(): void
             $message = "Passwords don't match. Please go back and try again.";
         } elseif ($code == -3) {
             $message = 'A password has already been created for this account.';
-            linkToLogin('your Player Control Panel', 'player.php', $message, trim($_POST['username']));
+            linkToLogin('your Player Control Panel', 'player.php', $message, trim($username));
         }
     }
     $showRegForm = !isset($_POST['pw1']);
@@ -37,6 +39,6 @@ function main(): void
     $page->send();
 }
 
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }
