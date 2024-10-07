@@ -7,6 +7,7 @@ use Gatherling\Models\Matchup;
 use Gatherling\Models\Player;
 use Gatherling\Models\Standings;
 
+use function Gatherling\Views\get;
 use function Gatherling\Views\post;
 use function Gatherling\Views\request;
 
@@ -38,12 +39,12 @@ if ($player == null) {
                 $event->dropPlayer($player->name);
             }
             if ($_POST['opponent'] != '0') {
-                $event = new Event($_POST['event']);
+                $event = new Event(post()->string('event'));
                 if ($event->isLeague()) {
-                    $player = new Standings($event->name, $_POST['player']);
-                    $opponent = new Standings($event->name, $_POST['opponent']);
+                    $player = new Standings($event->name, post()->string('player'));
+                    $opponent = new Standings($event->name, post()->string('opponent'));
                     $new_match_id = $event->addPairing($player, $opponent, $event->current_round, 'P');
-                    Matchup::saveReport($_POST['report'], $new_match_id, 'a');
+                    Matchup::saveReport(post()->string('report'), $new_match_id, 'a');
                     redirect('player.php');
 
                     return;
@@ -54,7 +55,7 @@ if ($player == null) {
                 // Non-league matches
                 $match = new Matchup(post()->int('match_id'));
                 if ($match->playerLetter($player->name) == $_POST['player']) {
-                    Matchup::saveReport($_POST['report'], $_POST['match_id'], $_POST['player']);
+                    Matchup::saveReport(post()->string('report'), post()->int('match_id'), post()->string('player'));
                     redirect('player.php');
 
                     return;
@@ -64,7 +65,7 @@ if ($player == null) {
             }
         } elseif ($_POST['action'] == 'drop') {
             // drop player from event
-            $event = new Event($_POST['event']);
+            $event = new Event(post()->string('event'));
             $event->dropPlayer($player->name);
             redirect('player.php');
 
@@ -92,7 +93,7 @@ switch ($dispmode) {
             redirect('player.php');
             break;
         }
-        print_submit_resultForm($_GET['match_id']);
+        print_submit_resultForm(get()->int('match_id'));
         break;
 
     case 'submit_league_result':
@@ -103,18 +104,18 @@ switch ($dispmode) {
     case 'verify_league_result':
         if (isset($_POST['report'])) {
             $drop = (isset($_POST['drop'])) ? 'Y' : 'N';
-            $opponent = isset($_REQUEST['opponent']) ? $_REQUEST['opponent'] : 0;
-            $event = isset($_REQUEST['event']) ? $_REQUEST['event'] : 0;
+            $opponent = request()->string('opponent', '0');
+            $eventName = request()->string('event', '0');
 
-            print_verify_resultForm(post()->string('report'), post()->int('match_id'), post()->string('player'), $drop, $opponent, $event);
+            print_verify_resultForm(post()->string('report'), post()->int('match_id'), post()->string('player'), $drop, $opponent, $eventName);
         } else {
-            print_submit_resultForm($_REQUEST['match_id']);
+            print_submit_resultForm(request()->int('match_id'));
         }
         break;
 
     case 'drop_form':
         $matches = $player->getCurrentMatches();
-        $event_name = $_REQUEST['event'];
+        $event_name = request()->string('event', '');
         $can_drop = true;
         foreach ($matches as $match) {
             if (strcasecmp($event_name, $match->getEventNamebyMatchid()) != 0) {

@@ -3826,22 +3826,7 @@ parameters:
 			path: gatherling/report.php
 
 		-
-			message: "#^Parameter \\#1 \\$event_name of function print_dropConfirm expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/report.php
-
-		-
 			message: "#^Parameter \\#1 \\$eventname of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"
-			count: 2
-			path: gatherling/report.php
-
-		-
-			message: "#^Parameter \\#1 \\$match_id of function print_submit_resultForm expects int, mixed given\\.$#"
-			count: 2
-			path: gatherling/report.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, mixed given\\.$#"
 			count: 2
 			path: gatherling/report.php
 
@@ -3861,47 +3846,12 @@ parameters:
 			path: gatherling/report.php
 
 		-
-			message: "#^Parameter \\#1 \\$result of static method Gatherling\\\\Models\\\\Matchup\\:\\:saveReport\\(\\) expects string, mixed given\\.$#"
-			count: 2
-			path: gatherling/report.php
-
-		-
-			message: "#^Parameter \\#1 \\$string1 of function strcasecmp expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/report.php
-
-		-
-			message: "#^Parameter \\#2 \\$match_id of static method Gatherling\\\\Models\\\\Matchup\\:\\:saveReport\\(\\) expects int, mixed given\\.$#"
-			count: 1
-			path: gatherling/report.php
-
-		-
-			message: "#^Parameter \\#2 \\$playername of class Gatherling\\\\Models\\\\Standings constructor expects string, mixed given\\.$#"
-			count: 2
-			path: gatherling/report.php
-
-		-
 			message: "#^Parameter \\#3 \\$player of function leagueOpponentDropMenu expects Gatherling\\\\Models\\\\Player, Gatherling\\\\Models\\\\Player\\|null given\\.$#"
 			count: 1
 			path: gatherling/report.php
 
 		-
-			message: "#^Parameter \\#3 \\$player of static method Gatherling\\\\Models\\\\Matchup\\:\\:saveReport\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/report.php
-
-		-
 			message: "#^Parameter \\#3 \\$round of method Gatherling\\\\Models\\\\Event\\:\\:addPairing\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: gatherling/report.php
-
-		-
-			message: "#^Parameter \\#5 \\$opponent of function print_verify_resultForm expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/report.php
-
-		-
-			message: "#^Parameter \\#6 \\$event of function print_verify_resultForm expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/report.php
 
