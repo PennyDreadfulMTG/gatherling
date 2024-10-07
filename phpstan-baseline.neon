@@ -3351,32 +3351,7 @@ parameters:
 			path: gatherling/forgot.php
 
 		-
-			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/forgot.php
-
-		-
-			message: "#^Parameter \\#1 \\$playername of static method Gatherling\\\\Models\\\\Player\\:\\:findByName\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/forgot.php
-
-		-
 			message: "#^Parameter \\#1 \\$to of function sendEmail expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/forgot.php
-
-		-
-			message: "#^Parameter \\#1 \\$token of function resetPassword expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/forgot.php
-
-		-
-			message: "#^Parameter \\#2 \\$newPassword of function resetPassword expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/forgot.php
-
-		-
-			message: "#^Parameter \\#5 \\$token of class Gatherling\\\\Views\\\\Pages\\\\Forgot constructor expects string\\|null, mixed given\\.$#"
 			count: 1
 			path: gatherling/forgot.php
 

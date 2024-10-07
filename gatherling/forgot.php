@@ -7,6 +7,10 @@ use Firebase\JWT\Key;
 use Gatherling\Models\Player;
 use Gatherling\Views\Pages\Forgot;
 
+use function Gatherling\Views\get;
+use function Gatherling\Views\post;
+use function Gatherling\Views\server;
+
 include 'util/email.php';
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
@@ -16,19 +20,20 @@ function main(): void
     $hasResetPassword = $passwordResetFailed = $showForgotForm = $showNewPasswordForm = $sentLoginLink = $cantSendLoginLink = $cantFindPlayer = false;
     $token = $email = null;
     if (isset($_POST['view']) && $_POST['view'] === 'new_password') {
-        if (resetPassword($_POST['token'], $_POST['password'])) {
+        if (resetPassword(post()->string('token'), post()->string('password'))) {
             $hasResetPassword = true;
         } else {
             $passwordResetFailed = $showForgotForm = true;
         }
     } elseif (isset($_GET['token'])) {
         $showNewPasswordForm = true;
-        $token = $_GET['token'];
+        $token = get()->string('token');
     } elseif (isset($_POST['view']) && $_POST['view'] === 'send_login_link') {
-        if (isset($_POST['identifier']) && str_contains($_POST['identifier'], '@')) {
-            $player = Player::findByEmail($_POST['identifier']);
+        $identifier = post()->string('identifier', '');
+        if (str_contains($identifier, '@')) {
+            $player = Player::findByEmail($identifier);
         } else {
-            $player = Player::findByName($_POST['identifier']);
+            $player = Player::findByName($identifier);
         }
         if ($player) {
             $email = $player->emailPrivacy ? "your registered email" : $player->emailAddress;
@@ -107,6 +112,6 @@ function resetPassword(string $token, string $newPassword): bool
     return true;
 }
 
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }
