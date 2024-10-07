@@ -3761,11 +3761,6 @@ parameters:
 			path: gatherling/prereg.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, mixed given\\.$#"
-			count: 1
-			path: gatherling/prereg.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of method Gatherling\\\\Models\\\\Series\\:\\:isPlayerBanned\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/prereg.php

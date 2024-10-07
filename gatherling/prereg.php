@@ -6,6 +6,8 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 
+use function Gatherling\Views\get;
+
 require_once 'lib.php';
 $prevent_registration = 0;
 $player = Player::getSessionPlayer();
@@ -19,7 +21,7 @@ if (!isset($_GET['event']) || !isset($_GET['action'])) {
     exit;
 }
 
-$event = new Event($_GET['event']);
+$event = new Event(get()->string('event', ''));
 $series = new Series($event->series);
 
 $playerIsBanned = $series->isPlayerBanned($player->name);
