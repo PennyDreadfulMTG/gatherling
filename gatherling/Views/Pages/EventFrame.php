@@ -20,11 +20,11 @@ abstract class EventFrame extends Page
     {
         parent::__construct();
         $this->event = getObjectVarsCamelCase($event);
-        $this->controlPanelLinks = $this->controlPanelLinks($event);
+        $this->controlPanelLinks = $this->getControlPanelLinks($event);
     }
 
     /** @return list<array{link: string, text: string}> */
-    public function controlPanelLinks(Event $event): array
+    public function getControlPanelLinks(Event $event): array
     {
         $views = [
             'settings'   => 'Event Settings',
