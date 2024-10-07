@@ -3001,11 +3001,6 @@ parameters:
 			path: gatherling/deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$cards of function parseCardsWithQuantity expects array\\<string\\>\\|string, mixed given\\.$#"
-			count: 4
-			path: gatherling/deck.php
-
-		-
 			message: "#^Parameter \\#1 \\$datetime of function strtotime expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/deck.php

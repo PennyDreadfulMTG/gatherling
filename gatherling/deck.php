@@ -8,6 +8,8 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
 
+use function Gatherling\Views\post;
+
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
 
@@ -281,8 +283,8 @@ function insertDeck(Event $event): Deck
     $deck->eventname = $event->name;
     $deck->event_id = $event->id;
 
-    $deck->maindeck_cards = parseCardsWithQuantity($_POST['contents'] ?? []);
-    $deck->sideboard_cards = parseCardsWithQuantity($_POST['sideboard'] ?? []);
+    $deck->maindeck_cards = parseCardsWithQuantity(post()->string('contents', ''));
+    $deck->sideboard_cards = parseCardsWithQuantity(post()->string('sideboard', ''));
 
     if (!$deck->save()) {
         deckForm($deck);
@@ -297,8 +299,8 @@ function updateDeck(Deck $deck): Deck
     $deck->name = $_POST['name'];
     $deck->notes = $_POST['notes'];
 
-    $deck->maindeck_cards = parseCardsWithQuantity($_POST['contents'] ?? []);
-    $deck->sideboard_cards = parseCardsWithQuantity($_POST['sideboard'] ?? []);
+    $deck->maindeck_cards = parseCardsWithQuantity(post()->string('contents', ''));
+    $deck->sideboard_cards = parseCardsWithQuantity(post()->string('sideboard', ''));
 
     if (!$deck->save()) {
         deckForm($deck);
