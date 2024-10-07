@@ -3491,46 +3491,6 @@ parameters:
 			path: gatherling/lib_form_helper.php
 
 		-
-			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/login.php
-
-		-
-			message: "#^Parameter \\#1 \\$username of static method Gatherling\\\\Auth\\\\Login\\:\\:login\\(\\) expects string\\|null, mixed given\\.$#"
-			count: 1
-			path: gatherling/login.php
-
-		-
-			message: "#^Parameter \\#2 \\$password of static method Gatherling\\\\Auth\\\\Login\\:\\:login\\(\\) expects string\\|null, mixed given\\.$#"
-			count: 1
-			path: gatherling/login.php
-
-		-
-			message: "#^Parameter \\#3 \\$message of class Gatherling\\\\Views\\\\Pages\\\\Login constructor expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/login.php
-
-		-
-			message: "#^Parameter \\#4 \\$username of class Gatherling\\\\Views\\\\Pages\\\\Login constructor expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/login.php
-
-		-
-			message: "#^Parameter \\#5 \\$target of class Gatherling\\\\Views\\\\Pages\\\\Login constructor expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/login.php
-
-		-
-			message: "#^Parameter \\#6 \\$discordId of class Gatherling\\\\Views\\\\Pages\\\\Login constructor expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/login.php
-
-		-
-			message: "#^Part \\$target \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 1
-			path: gatherling/login.php
-
-		-
 			message: "#^Cannot call method close\\(\\) on bool\\|mysqli_result\\.$#"
 			count: 1
 			path: gatherling/masterplayerfile.php
