@@ -73,8 +73,8 @@ if (strcmp($requestMode, 'view') == 0) {
         $deck = insertDeck($event);
         deckProfile($deck);
     } elseif (is_null($deck) && $event->name == '') {
-        echo 'No deck or event id specifed.<br/>';
-        echo "Go back to <a href='player.php'>Player CP</a>";
+        echo '<p>No deck or event id specifed.<br/>';
+        echo "Go back to <a href='player.php'>Player CP</a></p>";
     } elseif (checkDeckAuth($event, $deck_player, $deck)) {
         if (strcmp($postMode, 'Create Deck') == 0) {
             $deck = insertDeck($event);
