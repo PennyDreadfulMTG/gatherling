@@ -5,6 +5,8 @@ declare(strict_types=1);
 use Gatherling\Models\Series as SeriesModel;
 use Gatherling\Views\Pages\Series;
 
+use function Gatherling\Views\server;
+
 require_once 'lib.php';
 
 function main(): void
@@ -14,6 +16,6 @@ function main(): void
     $page->send();
 }
 
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }
