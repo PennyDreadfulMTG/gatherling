@@ -3041,11 +3041,6 @@ parameters:
 			path: gatherling/deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, mixed given\\.$#"
-			count: 2
-			path: gatherling/deck.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/deck.php
@@ -3107,7 +3102,7 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$player of function checkDeckAuth expects string, mixed given\\.$#"
-			count: 2
+			count: 1
 			path: gatherling/deck.php
 
 		-
@@ -3118,16 +3113,6 @@ parameters:
 		-
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
 			count: 4
-			path: gatherling/deck.php
-
-		-
-			message: "#^Part \\$event \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Part \\$player \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 2
 			path: gatherling/deck.php
 
 		-

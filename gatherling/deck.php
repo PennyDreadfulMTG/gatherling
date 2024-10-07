@@ -119,11 +119,11 @@ function deckForm(?Deck $deck = null): void
         $player = $deck->playername;
         $event = new Event($deck->eventname);
     } else {
-        $player = (isset($_POST['player'])) ? $_POST['player'] : $_GET['player'];
-        $event = new Event((isset($_POST['player'])) ? request()->string('event') : get()->string('event'));
+        $player = isset($_POST['player']) ? post()->string('player') : get()->string('player');
+        $event = new Event(isset($_POST['player']) ? request()->string('event') : get()->string('event'));
     }
 
-    if (!checkDeckAuth($event, $player, $deck)) {
+    if (!$player || !checkDeckAuth($event, $player, $deck)) {
         return;
     }
 
@@ -210,8 +210,8 @@ function deckForm(?Deck $deck = null): void
 // deckRegisterForm is part of the reg-decklist feature
 function deckRegisterForm(): void
 {
-    $player = (isset($_POST['player'])) ? $_POST['player'] : $_GET['player'];
-    $event = (isset($_POST['player'])) ? $_POST['event'] : $_GET['event'];
+    $player = isset($_POST['player']) ? post()->string('player') : get()->string('player');
+    $event = isset($_POST['player']) ? post()->string('event') : get()->string('event');
     $vals = ['contents' => '', 'sideboard' => ''];
 
     echo "<form action=\"deck.php?mode=addregdeck\" method=\"post\">\n";
