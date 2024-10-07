@@ -38,4 +38,11 @@ class RequestTest extends TestCase
         $this->assertEquals([1, 2, 3], $request->listInt('foo'));
         $this->assertEquals([], $request->listInt('bar'));
     }
+
+    public function testDictString(): void
+    {
+        $request = new Request(['foo' => ['w' => 'w', 'b' => 'b', 'u' => 'u']]);
+        $this->assertEquals(['w' => 'w', 'b' => 'b', 'u' => 'u'], $request->dictString('foo'));
+        $this->assertEquals([], $request->dictString('bar'));
+    }
 }

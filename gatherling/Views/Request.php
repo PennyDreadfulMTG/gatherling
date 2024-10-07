@@ -66,4 +66,23 @@ class Request
         }
         return $result;
     }
+
+    /** @return array<string, string> */
+    public function dictString(string $key): array
+    {
+        if (!isset($this->vars[$key])) {
+            return [];
+        }
+        if (!is_array($this->vars[$key])) {
+            throw new \InvalidArgumentException("Invalid dictionary of strings: " . var_export($this->vars[$key], true));
+        }
+        $result = [];
+        foreach ($this->vars[$key] as $key => $value) {
+            if (!is_string($value)) {
+                throw new \InvalidArgumentException("Invalid string value for $key: " . var_export($value, true));
+            }
+            $result[$key] = (string) $value;
+        }
+        return $result;
+    }
 }
