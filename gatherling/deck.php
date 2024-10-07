@@ -8,7 +8,9 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
 
+use function Gatherling\Views\get;
 use function Gatherling\Views\post;
+use function Gatherling\Views\request;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
@@ -28,7 +30,7 @@ if (isset($_GET['event'])) {
         unset($_GET['event']);
         echo '<div class="uppertitle">Deck Database</div>';
     } else {
-        $event = new Event($_GET['event']);
+        $event = new Event(get()->string('event'));
         echo '<div class="uppertitle">' . $event->name . '</div>';
     }
 } else {
@@ -65,7 +67,7 @@ if (strcmp($_REQUEST['mode'], 'view') == 0) {
     }
 
     if (isset($_REQUEST['event']) && is_null($event)) {
-        $event = new Event($_REQUEST['event']);
+        $event = new Event(request()->string('event'));
     }
 
     // part of the reg-decklist feature. both "register" and "addregdeck" switches
@@ -118,7 +120,7 @@ function deckForm(?Deck $deck = null): void
         $event = new Event($deck->eventname);
     } else {
         $player = (isset($_POST['player'])) ? $_POST['player'] : $_GET['player'];
-        $event = new Event((isset($_POST['player'])) ? $_REQUEST['event'] : $_GET['event']);
+        $event = new Event((isset($_POST['player'])) ? request()->string('event') : get()->string('event'));
     }
 
     if (!checkDeckAuth($event, $player, $deck)) {
