@@ -3191,19 +3191,9 @@ parameters:
 			path: gatherling/decksearch.php
 
 		-
-			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/displaySeries.php
-
-		-
 			message: "#^Parameter \\#1 \\$values of static method Gatherling\\\\Models\\\\Image\\:\\:fromValues\\(\\) expects array\\<string, int\\|string\\>\\|null, array\\<string, mixed\\>\\|null given\\.$#"
 			count: 1
 			path: gatherling/displaySeries.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/displayTrophy.php
 
 		-
 			message: "#^Parameter \\#1 \\$values of static method Gatherling\\\\Models\\\\Image\\:\\:fromValues\\(\\) expects array\\<string, int\\|string\\>\\|null, array\\<string, mixed\\>\\|null given\\.$#"
