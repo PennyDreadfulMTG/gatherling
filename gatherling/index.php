@@ -9,6 +9,8 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Matchup;
 use Gatherling\Views\Pages\Home;
 
+use function Gatherling\Views\server;
+
 require_once 'lib.php';
 
 function main(): void
@@ -75,6 +77,6 @@ function recentWinners(): array
     return $winners;
 }
 
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }

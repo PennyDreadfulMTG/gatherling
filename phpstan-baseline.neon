@@ -3411,11 +3411,6 @@ parameters:
 			path: gatherling/index.php
 
 		-
-			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/index.php
-
-		-
 			message: "#^Function arrayMapRecursive\\(\\) should return array\\<string, mixed\\> but returns array\\<int\\|string, mixed\\>\\.$#"
 			count: 1
 			path: gatherling/lib.php
