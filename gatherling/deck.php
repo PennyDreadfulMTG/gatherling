@@ -53,7 +53,6 @@ if (strcmp($requestMode, 'view') == 0) {
     if (!isset($_POST['player']) and isset($_GET['player'])) {
         $_POST['player'] = $_GET['player'];
     }
-    $deck_player = isset($_POST['player']) ? $_POST['player'] : Player::loginName();
     $deck = isset($_POST['id']) ? new Deck($_POST['id']) : null;
     if (!isset($_POST['event'])) {
         if (!isset($_GET['event'])) {
@@ -66,6 +65,7 @@ if (strcmp($requestMode, 'view') == 0) {
         $event = new Event(request()->string('event'));
     }
 
+    $deck_player = isset($_POST['player']) ? post()->string('player') : Player::loginName();
     // part of the reg-decklist feature. both "register" and "addregdeck" switches
     if (strcmp($requestMode, 'register') == 0) {
         deckRegisterForm();
@@ -112,16 +112,17 @@ function deckForm(?Deck $deck = null): void
     $create = is_null($deck) || $deck->id == 0;
     $mode = $create ? 'Create Deck' : 'Update Deck';
     if (!$create) {
-        $player = $deck->playername;
+        $player = $deck->playername ?? false;
         $event = new Event($deck->eventname);
     } else {
         $player = isset($_POST['player']) ? post()->string('player') : get()->string('player');
         $event = new Event(isset($_POST['player']) ? request()->string('event') : get()->string('event'));
     }
 
-    if (!$player || !checkDeckAuth($event, $player, $deck)) {
+    if (!checkDeckAuth($event, $player, $deck)) {
         return;
     }
+    assert($player !== false); // Otherwise checkDeckAuth would have redirected us.
 
     $vals = ['contents' => '', 'sideboard' => ''];
     if (!$create) {
@@ -677,11 +678,10 @@ function loginRequired(): void
     echo "<center>You can't do that unless you <a href=\"login.php\">log in first</a></center>";
 }
 
-function checkDeckAuth(Event $event, string $player, ?Deck $deck = null): bool
+function checkDeckAuth(Event $event, string|false $player, ?Deck $deck = null): bool
 {
-    if (!Player::isLoggedIn()) {
+    if ($player === false || !Player::isLoggedIn()) {
         loginRequired();
-
         return false;
     }
     if (is_null($deck) && $event->id > 0) {

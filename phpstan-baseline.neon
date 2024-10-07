@@ -3091,11 +3091,6 @@ parameters:
 			path: gatherling/deck.php
 
 		-
-			message: "#^Parameter \\#2 \\$player of function checkDeckAuth expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
 			message: "#^Parameter \\#2 \\$timestamp of function date expects int\\|null, int\\|false given\\.$#"
 			count: 1
 			path: gatherling/deck.php
