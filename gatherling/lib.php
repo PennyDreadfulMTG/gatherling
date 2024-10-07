@@ -13,6 +13,8 @@ use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\OrganizerSelect;
 use Gatherling\Views\Components\EmailStatusDropDown;
 
+use function Gatherling\Views\server;
+
 require_once 'bootstrap.php';
 ob_start();
 header('Strict-Transport-Security: max-age=63072000; includeSubDomains; preload');
@@ -199,7 +201,7 @@ function json_headers(): void
 /** @param array<string> $player_series */
 function printOrganizerSelect(array $player_series, string $selected): string
 {
-    return (new OrganizerSelect($_SERVER['PHP_SELF'], $player_series, $selected))->render();
+    return (new OrganizerSelect(server()->string('PHP_SELF'), $player_series, $selected))->render();
 }
 
 function git_hash(): string

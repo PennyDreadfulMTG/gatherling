@@ -3431,11 +3431,6 @@ parameters:
 			path: gatherling/lib.php
 
 		-
-			message: "#^Parameter \\#1 \\$action of class Gatherling\\\\Views\\\\Components\\\\OrganizerSelect constructor expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/lib.php
-
-		-
 			message: "#^Parameter \\#1 \\$string of function strtolower expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/lib.php
