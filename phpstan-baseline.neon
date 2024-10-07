@@ -3631,11 +3631,6 @@ parameters:
 			path: gatherling/player.php
 
 		-
-			message: "#^Parameter \\#1 \\$eventName of static method Gatherling\\\\Models\\\\Standings\\:\\:eventStandings\\(\\) expects string\\|null, mixed given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
 			message: "#^Parameter \\#1 \\$event_id of class Gatherling\\\\Models\\\\Entry constructor expects int, int\\|null given\\.$#"
 			count: 2
 			path: gatherling/player.php
@@ -3653,21 +3648,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Standings\\:\\:playerActive\\(\\) expects string, string\\|null given\\.$#"
 			count: 2
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$format of function print_ratingHistoryForm expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$format of function print_ratingsHistory expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$format of method Gatherling\\\\Models\\\\Player\\:\\:getFilteredMatches\\(\\) expects string, mixed given\\.$#"
-			count: 1
 			path: gatherling/player.php
 
 		-
@@ -3751,11 +3731,6 @@ parameters:
 			path: gatherling/player.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function strlen expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
 			message: "#^Parameter \\#1 \\$username of static method Gatherling\\\\Models\\\\Player\\:\\:checkPassword\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/player.php
@@ -3766,52 +3741,7 @@ parameters:
 			path: gatherling/player.php
 
 		-
-			message: "#^Parameter \\#2 \\$def of function formatDropMenuP expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#2 \\$def of function oppDropMenu expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#2 \\$def of function seasonDropMenuP expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#2 \\$def of function seriesDropMenuP expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#2 \\$password of static method Gatherling\\\\Models\\\\Player\\:\\:checkPassword\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
 			message: "#^Parameter \\#2 \\$playerName of static method Gatherling\\\\Models\\\\Standings\\:\\:eventStandings\\(\\) expects string\\|null, string\\|false given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#2 \\$series of method Gatherling\\\\Models\\\\Player\\:\\:getFilteredMatches\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#2 \\$subject of function preg_match expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#3 \\$season of method Gatherling\\\\Models\\\\Player\\:\\:getFilteredMatches\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#4 \\$opponent of method Gatherling\\\\Models\\\\Player\\:\\:getFilteredMatches\\(\\) expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/player.php
 

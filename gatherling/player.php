@@ -10,6 +10,9 @@ use Gatherling\Models\Ratings;
 use Gatherling\Models\Series;
 use Gatherling\Models\Standings;
 
+use function Gatherling\Views\get;
+use function Gatherling\Views\post;
+
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
 $player = Player::getSessionPlayer();
@@ -32,8 +35,8 @@ if (isset($_POST['action'])) {
     } elseif ($_POST['action'] == 'changePassword') {
         $success = false;
         if ($_POST['newPassword2'] == $_POST['newPassword']) {
-            if (strlen($_POST['newPassword']) >= 8) {
-                $authenticated = Player::checkPassword($player->name, $_POST['oldPassword']);
+            if (strlen(post()->string('newPassword', '')) >= 8) {
+                $authenticated = Player::checkPassword($player->name, post()->string('oldPassword', ''));
                 if ($authenticated) {
                     $player->setPassword($_POST['newPassword']);
                     $result = 'Password changed.';
@@ -62,7 +65,7 @@ if (isset($_POST['action'])) {
         $success = false;
 
         $player->mtgo_username = empty($_POST['mtgo_username']) ? null : $_POST['mtgo_username'];
-        if (!preg_match('/^.{3,24}#\d{5}$/', $_POST['mtga_username'])) {
+        if (!preg_match('/^.{3,24}#\d{5}$/', post()->string('mtga_username', ''))) {
             $_POST['mtga_username'] = null;
         }
         $player->mtga_username = empty($_POST['mtga_username']) ? null : $_POST['mtga_username'];
@@ -105,15 +108,12 @@ switch ($dispmode) {
         break;
 
     case 'allratings':
-        $format = 'Composite';
-        if (isset($_GET['format'])) {
-            $format = $_GET['format'];
-        }
+        $formatName = post()->string('format', 'Composite');
         print_ratingsTable();
         echo '<br /><br />';
-        print_ratingHistoryForm($format);
+        print_ratingHistoryForm($formatName);
         echo '<br />';
-        print_ratingsHistory($format);
+        print_ratingsHistory($formatName);
         break;
 
     case 'allmatches':
@@ -143,7 +143,7 @@ switch ($dispmode) {
         break;
 
     case 'standings':
-        echo Standings::eventStandings($_GET['event'], Player::loginName());
+        echo Standings::eventStandings(get()->string('event'), Player::loginName());
         break;
 
     case 'verifymtgo':
@@ -831,7 +831,8 @@ function print_matchTable(Player $player): void
         $_POST['opp'] = '%';
     }
 
-    $matches = $player->getFilteredMatches($_POST['format'], $_POST['series'], $_POST['season'], $_POST['opp']);
+    $matches = $player->getFilteredMatches(post()->string('format'), post()->string('series'), post()->string('season'), post()->string('opp'));
+
 
     echo '<table class="scoreboard">';
     echo '<tr class="top"><th>Event</th><th>Round</th><th>Opponent</th><th>Deck</th><th>Rating</th><th>Result</th></tr>';
@@ -1059,16 +1060,16 @@ function print_allMatchForm(Player $player): void
     echo "<tr><td align=\"center\" colspan=2><b>Filters</td></tr>\n";
     echo "<tr><td>&nbsp;</td>\n";
     echo '<tr><td>Format&nbsp</td><td>';
-    formatDropMenuP($player, $_POST['format']);
+    formatDropMenuP($player, post()->string('format'));
     echo "</td></tr>\n";
     echo '<tr><td>Series&nbsp;</td><td>';
-    seriesDropMenuP($player, $_POST['series']);
+    seriesDropMenuP($player, post()->string('series'));
     echo "</td></tr>\n";
     echo '<tr><td>Season&nbsp;</td><td>';
-    seasonDropMenuP($player, $_POST['season']);
+    seasonDropMenuP($player, post()->string('season'));
     echo "</td></tr>\n";
     echo '<tr><td>Opponent&nbsp;</td><td>';
-    oppDropMenu($player, $_POST['opp']);
+    oppDropMenu($player, post()->string('opp'));
     echo "</td></tr><tr><td>&nbsp;</td></tr>\n";
     echo '<tr><td colspan=2 align="center">';
     echo '<input type="submit" name="mode" value="Filter Matches">';
