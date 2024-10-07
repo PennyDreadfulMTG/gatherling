@@ -3161,11 +3161,6 @@ parameters:
 			path: gatherling/decksearch.php
 
 		-
-			message: "#^Parameter \\#1 \\$archetype of method Gatherling\\\\Models\\\\Decksearch\\:\\:searchByArchetype\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
 			message: "#^Parameter \\#1 \\$cardname of method Gatherling\\\\Models\\\\Decksearch\\:\\:searchByCardName\\(\\) expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/decksearch.php

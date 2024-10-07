@@ -6,6 +6,8 @@ use Gatherling\Models\Database;
 use Gatherling\Models\Decksearch;
 use Gatherling\Models\Pagination;
 
+use function Gatherling\Views\post;
+
 require_once 'lib.php';
 
 function main(): void
@@ -54,7 +56,7 @@ function handleRequest(): void
             unset($_SESSION['player']);
         }
         if (!empty($_POST['archetype'])) {
-            $decksearch->searchByArchetype($_POST['archetype']);
+            $decksearch->searchByArchetype(post()->string('archetype'));
             $_SESSION['archetype'] = $_POST['archetype'];
         } else {
             unset($_SESSION['archetype']);
