@@ -4,56 +4,31 @@ namespace Gatherling\Views;
 
 function request(): Request
 {
-    static $instance = null;
-    if ($instance === null) {
-        $instance = new Request($_REQUEST);
-    }
-    return $instance;
+    return new Request($_REQUEST);
 }
 
 function get(): Request
 {
-    static $instance = null;
-    if ($instance === null) {
-        $instance = new Request($_GET);
-    }
-    return $instance;
+    return new Request($_GET);
 }
 
 function post(): Request
 {
-    static $instance = null;
-    if ($instance === null) {
-        $instance = new Request($_POST);
-    }
-    return $instance;
+    return new Request($_POST);
 }
 
 function session(): Request
 {
-    static $instance = null;
-    if ($instance === null) {
-        $instance = new Request($_SESSION);
-    }
-    return $instance;
+    return new Request($_SESSION);
 }
 
 function server(): Request
 {
-    static $instance = null;
-    if ($instance === null) {
-        $instance = new Request($_SERVER);
-    }
-    return $instance;
+    return new Request($_SERVER);
 }
 
 function config(): Request
 {
     global $CONFIG;
-
-    static $instance = null;
-    if ($instance === null) {
-        $instance = new Request($CONFIG);
-    }
-    return $instance;
+    return new Request($CONFIG);
 }
