@@ -3,30 +3,27 @@
 declare(strict_types=1);
 
 use Gatherling\Data\DB;
-use Gatherling\Models\Deck;
-use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
-use Gatherling\Models\Format;
-use Gatherling\Models\Player;
-use Gatherling\Models\Database;
-use Gatherling\Models\Standings;
 use Gatherling\Views\Pages\PlayerEventList;
 use Gatherling\Views\Pages\EventReport;
+
+use function Gatherling\Views\get;
+use function Gatherling\Views\server;
 
 require_once 'lib.php';
 
 function main(): void
 {
-    $eventName = $_GET['event'] ?? $_GET['name'] ?? null;
+    $eventName = get()->optionalString('event') ?? get()->optionalString('name');
     if ($eventName && Event::exists($eventName)) {
         $event = new Event($eventName);
         $notYetStarted = DB::value('SELECT `start` > NOW() AS okay FROM events WHERE `name` = :name', ['name' => $event->name]);
         $canPrereg = $event->prereg_allowed && $notYetStarted;
         $page = new EventReport($event, $canPrereg);
     } else {
-        $format = $_GET['format'] ?? '';
-        $series = $_GET['series'] ?? '';
-        $season = $_GET['season'] ?? '';
+        $format = get()->string('format', '');
+        $series = get()->string('series', '');
+        $season = get()->string('season', '');
         $events = eventList($format, $series, $season);
         $page = new PlayerEventList($format, $series, $season, $events);
     }
@@ -81,6 +78,6 @@ function eventList(string $format, string $series, string $season): array
     return DB::select($sql, $params);
 }
 
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }
