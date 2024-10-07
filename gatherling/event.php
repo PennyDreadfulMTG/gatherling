@@ -23,7 +23,11 @@ use Gatherling\Views\Pages\PointsAdjustmentForm;
 use Gatherling\Views\Pages\ReportsForm;
 use Gatherling\Views\Pages\StandingsList;
 
+use function Gatherling\Views\files;
+use function Gatherling\Views\get;
 use function Gatherling\Views\post;
+use function Gatherling\Views\request;
+use function Gatherling\Views\server;
 
 require_once 'lib.php';
 include 'lib_form_helper.php';
@@ -36,14 +40,14 @@ function main(): void
         return;
     }
 
-    $getSeriesName = $_GET['series'] ?? '';
-    $season = $_GET['season'] ?? '';
-    $requestEventName = $_REQUEST['name'] ?? '';
-    $getEventName = $_GET['name'] ?? $_GET['event'] ?? null;
-    $postEventName = $_POST['name'] ?? null;
-    $action = $_GET['action'] ?? null;
-    $eventId = $_GET['event_id'] ?? null;
-    $player = $_GET['player'] ?? null;
+    $getSeriesName = get()->string('series', '');
+    $season = get()->string('season', '');
+    $requestEventName = request()->string('name', '');
+    $getEventName = get()->optionalString('name') ?? get()->optionalString('event');
+    $postEventName = post()->optionalString('name');
+    $action = get()->optionalString('action');
+    $eventId = get()->optionalString('event_id');
+    $player = get()->optionalString('player');
 
     if (mode_is('Create New Event')) {
         $event = createNewEvent();
@@ -65,17 +69,13 @@ function main(): void
 
 function mode_is(string $str): bool
 {
-    $mode = '';
-    if (isset($_REQUEST['mode']) and $_REQUEST['mode'] != '') {
-        $mode = $_REQUEST['mode'];
-    }
-
+    $mode = request()->string('mode', '');
     return strcmp($mode, $str) == 0;
 }
 
 function createNewEvent(): Event|bool
 {
-    $series = new Series($_POST['series']);
+    $series = new Series(post()->optionalString('series'));
     if ($series->authCheck(Player::loginName()) && isset($_POST['insert'])) {
         return insertEvent();
     }
@@ -200,7 +200,7 @@ function eventFrame(Event $event = null, bool $forceNew = false): EventFrame
         $event = new Event('');
     }
     if ($edit) {
-        $view = $_POST['view'] ?? $_GET['view'] ?? ($event->active ? 'match' : 'reg');
+        $view = post()->optionalString('view') ?? get()->optionalString('view') ?? ($event->active ? 'match' : 'reg');
     } else {
         $view = 'edit';
     }
@@ -212,8 +212,7 @@ function eventFrame(Event $event = null, bool $forceNew = false): EventFrame
         if (!isset($_POST['newmatchround'])) {
             $_POST['newmatchround'] = '';
         }
-
-        return new MatchList($event, $_POST['newmatchround']);
+        return new MatchList($event, post()->optionalString('newmatchround'));
     } elseif (strcmp($view, 'standings') == 0) {
         return new StandingsList($event, Player::loginName());
     } elseif (strcmp($view, 'medal') == 0) {
@@ -249,31 +248,31 @@ function insertEvent(): Event
     }
 
     $event = Event::CreateEvent(
-        $_POST['year'],
-        $_POST['month'],
-        $_POST['day'],
-        $_POST['hour'],
-        $_POST['naming'],
-        $_POST['name'],
-        $_POST['format'],
-        $_POST['host'],
-        $_POST['cohost'],
-        $_POST['kvalue'],
-        $_POST['series'],
-        $_POST['season'],
-        $_POST['number'],
-        $_POST['threadurl'],
-        $_POST['metaurl'],
-        $_POST['reporturl'],
-        $_POST['prereg_allowed'],
-        $_POST['player_reportable'],
-        $_POST['late_entry_limit'],
-        $_POST['private'],
-        $_POST['mainrounds'],
-        $_POST['mainstruct'],
-        $_POST['finalrounds'],
-        $_POST['finalstruct'],
-        $_POST['client']
+        post()->string('year'),
+        post()->string('month'),
+        post()->string('day'),
+        post()->string('hour'),
+        post()->string('naming'),
+        post()->string('name'),
+        post()->string('format'),
+        post()->string('host'),
+        post()->string('cohost'),
+        post()->string('kvalue'),
+        post()->string('series'),
+        post()->string('season'),
+        post()->string('number'),
+        post()->string('threadurl'),
+        post()->string('metaurl'),
+        post()->string('reporturl'),
+        post()->string('prereg_allowed'),
+        post()->string('player_reportable'),
+        post()->string('late_entry_limit'),
+        post()->string('private'),
+        post()->string('mainrounds'),
+        post()->string('mainstruct'),
+        post()->string('finalrounds'),
+        post()->string('finalstruct'),
+        post()->string('client')
     );
 
     return $event;
@@ -312,7 +311,7 @@ function updateEvent(): Event
         $_POST['private'] = 0;
     }
 
-    $event = new Event($_POST['name']);
+    $event = new Event(post()->string('name'));
     $event->start = "{$_POST['year']}-{$_POST['month']}-{$_POST['day']} {$_POST['hour']}:00";
     $event->finalized = (int) $_POST['finalized'];
     $event->active = (int) $_POST['active'];
@@ -327,7 +326,7 @@ function updateEvent(): Event
 
     if ($event->format != $_POST['format']) {
         $event->format = $_POST['format'];
-        $event->updateDecksFormat($_POST['format']);
+        $event->updateDecksFormat(post()->string('format'));
     }
 
     $event->host = $_POST['host'];
@@ -375,7 +374,7 @@ function insertTrophy(): bool
     $file = $_FILES['trophy'];
     $event = $_POST['name'];
 
-    $tmp = $file['tmp_name'];
+    $tmp = files()->string('tmp_name');
     $size = $file['size'];
     $type = $file['type'];
 
@@ -402,17 +401,17 @@ function insertTrophy(): bool
 
 function updateReg(): void
 {
-    $event = new Event($_POST['name']);
+    $event = new Event(post()->string('name'));
 
     $dropped = [];
     if (isset($_POST['delentries'])) {
-        foreach ($_POST['delentries'] as $playername) {
+        foreach (post()->listString('delentries') as $playername) {
             $event->removeEntry($playername);
             $dropped[] = $playername;
         }
     }
     if (isset($_POST['dropplayer'])) {
-        foreach ($_POST['dropplayer'] as $playername) {
+        foreach (post()->listString('dropplayer') as $playername) {
             $event->dropPlayer($playername);
         }
     }
@@ -421,7 +420,7 @@ function updateReg(): void
     }
 
     if (isset($_POST['initial_byes'])) {
-        foreach ($_POST['initial_byes'] as $byedata) {
+        foreach (post()->listString('initial_byes') as $byedata) {
             if (!empty(trim($byedata))) {
                 $array_data = explode(' ', $byedata);
                 $bye_qty = intval($array_data[count($array_data) - 1]);
@@ -437,7 +436,7 @@ function updateReg(): void
     }
 
     if (isset($_POST['initial_seed'])) {
-        foreach ($_POST['initial_seed'] as $seeddata) {
+        foreach (post()->listString('initial_seed') as $seeddata) {
             if (!empty(trim($seeddata))) {
                 $array_data = explode(' ', $seeddata);
                 $seed = intval($array_data[count($array_data) - 1]);
@@ -455,20 +454,20 @@ function updateReg(): void
 
 function updateMatches(): void
 {
-    $event = new Event($_POST['name']);
+    $event = new Event(post()->string('name'));
     $deleteMatchIds = post()->listInt('matchdelete');
     foreach ($deleteMatchIds as $matchId) {
         Matchup::destroy($matchId);
     }
 
     if (isset($_POST['dropplayer'])) {
-        foreach ($_POST['dropplayer'] as $playername) {
+        foreach (post()->listString('dropplayer') as $playername) {
             $event->dropPlayer($playername);
         }
     }
 
     if (isset($_POST['hostupdatesmatches'])) {
-        for ($ndx = 0; $ndx < count($_POST['hostupdatesmatches']); $ndx++) {
+        for ($ndx = 0; $ndx < count(post()->listInt('hostupdatesmatches')); $ndx++) {
             $result = $_POST['matchresult'][$ndx];
             $resultForA = 'notset';
             $resultForB = 'notset';
@@ -498,41 +497,29 @@ function updateMatches(): void
         }
     }
 
-    if (isset($_POST['newmatchplayerA'])) {
-        $pA = $_POST['newmatchplayerA'];
-    } else {
-        $pA = '';
-    }
-    if (isset($_POST['newmatchplayerB'])) {
-        $pB = $_POST['newmatchplayerB'];
-    } else {
-        $pB = '';
-    }
-    if (isset($_POST['newmatchresult'])) {
-        $res = $_POST['newmatchresult'];
-        if ($res == '2-0') {
-            $pAWins = 2;
-            $pBWins = 0;
-            $res = 'A';
-        } elseif ($res == '2-1') {
-            $pAWins = 2;
-            $pBWins = 1;
-            $res = 'A';
-        } elseif ($res == '1-2') {
-            $pAWins = 1;
-            $pBWins = 2;
-            $res = 'B';
-        } elseif ($res == '0-2') {
-            $pAWins = 0;
-            $pBWins = 2;
-            $res = 'B';
-        } elseif ($res == 'D') {
-            $pAWins = 1;
-            $pBWins = 1;
-            $res = 'D';
-        }
-    } else {
-        $res = '';
+    $pA = post()->string('newmatchplayerA', '');
+    $pB = post()->string('newmatchplayerB', '');
+    $res = post()->string('newmatchresult', '');
+    if ($res == '2-0') {
+        $pAWins = 2;
+        $pBWins = 0;
+        $res = 'A';
+    } elseif ($res == '2-1') {
+        $pAWins = 2;
+        $pBWins = 1;
+        $res = 'A';
+    } elseif ($res == '1-2') {
+        $pAWins = 1;
+        $pBWins = 2;
+        $res = 'B';
+    } elseif ($res == '0-2') {
+        $pAWins = 0;
+        $pBWins = 2;
+        $res = 'B';
+    } elseif ($res == 'D') {
+        $pAWins = 1;
+        $pBWins = 1;
+        $res = 'D';
     }
     $rnd = post()->int('newmatchround');
 
@@ -549,38 +536,38 @@ function updateMatches(): void
         }
     }
 
-    if (isset($_POST['newbyeplayer']) && (strcmp($_POST['newbyeplayer'], '') != 0)) {
-        $playerBye = new Standings($event->name, $_POST['newbyeplayer']);
+    if (strcmp(post()->string('newbyeplayer', ''), '') != 0) {
+        $playerBye = new Standings($event->name, post()->string('newbyeplayer'));
         $event->addMatch($playerBye, $playerBye, (string) $rnd, 'BYE');
     }
 }
 
 function updateMedals(): void
 {
-    $event = new Event($_POST['name']);
+    $event = new Event(post()->string('name'));
 
-    $winner = $_POST['newmatchplayer1'];
-    $second = $_POST['newmatchplayer2'];
-    $t4 = [$_POST['newmatchplayer3'], $_POST['newmatchplayer4']];
-    $t8 = [$_POST['newmatchplayer5'], $_POST['newmatchplayer6'], $_POST['newmatchplayer7'], $_POST['newmatchplayer8']];
+    $winner = post()->string('newmatchplayer1');
+    $second = post()->optionalString('newmatchplayer2');
+    $t4 = [post()->optionalString('newmatchplayer3'), post()->optionalString('newmatchplayer4')];
+    $t8 = [post()->optionalString('newmatchplayer5'), post()->optionalString('newmatchplayer6'), post()->optionalString('newmatchplayer7'), post()->optionalString('newmatchplayer8')];
 
     $event->setFinalists($winner, $second, $t4, $t8);
 }
 
 function updateAdjustments(): void
 {
-    $event = new Event($_POST['name']);
+    $event = new Event(post()->string('name'));
 
-    $adjustments = $_POST['adjustments'];
-    $reasons = $_POST['reasons'];
+    $adjustments = post()->dictInt('adjustments');
+    $reasons = post()->dictString('reasons');
 
     foreach ($adjustments as $name => $points) {
         if ($points != '') {
-            $event->setSeasonPointAdjustment($name, (int) $points, $reasons[$name]);
+            $event->setSeasonPointAdjustment($name, $points, $reasons[$name]);
         }
     }
 }
 
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }

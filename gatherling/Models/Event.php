@@ -463,8 +463,8 @@ class Event
     }
 
     /**
-     * @param ?list<string> $t4
-     * @param ?list<string> $t8
+     * @param ?array<int, ?string> $t4
+     * @param ?array<int, ?string> $t8
      */
     public function setFinalists(string $win, ?string $sec, ?array $t4 = null, ?array $t8 = null): void
     {

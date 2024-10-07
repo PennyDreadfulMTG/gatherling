@@ -34,10 +34,21 @@ class RequestTest extends TestCase
 
     public function testListInt(): void
     {
-        $request = new Request(['foo' => ['1', '2', '3']]);
+        $request = new Request(['foo' => ['1', '2', '3'], 'bar' => ['a', 'b', 'c']]);
         $this->assertEquals([1, 2, 3], $request->listInt('foo'));
-        $this->assertEquals([], $request->listInt('bar'));
+        $this->assertEquals([], $request->listInt('baz'));
+        $this->expectException(\InvalidArgumentException::class);
+        $request->listInt('bar');
     }
+
+    public function testListString(): void
+    {
+        $request = new Request(['foo' => ['1', '2', '3'], 'bar' => ['a', 'b', 'c']]);
+        $this->assertEquals(['1', '2', '3'], $request->listString('foo'));
+        $this->assertEquals(['a', 'b', 'c'], $request->listString('bar'));
+        $this->assertEquals([], $request->listString('baz'));
+    }
+
 
     public function testDictString(): void
     {
