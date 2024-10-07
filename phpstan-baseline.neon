@@ -3161,42 +3161,7 @@ parameters:
 			path: gatherling/decksearch.php
 
 		-
-			message: "#^Parameter \\#1 \\$cardname of method Gatherling\\\\Models\\\\Decksearch\\:\\:searchByCardName\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$color_str_input of method Gatherling\\\\Models\\\\Decksearch\\:\\:searchByColor\\(\\) expects array\\<string, string\\>, mixed given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$colors of function checkboxMenu expects array\\<string, string\\>\\|null, mixed given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
 			message: "#^Parameter \\#1 \\$datetime of function time_element expects int, int\\|false given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$def of function archetypeDropMenu expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$format of function formatDropMenuDS expects string\\|null, mixed given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$format of method Gatherling\\\\Models\\\\Decksearch\\:\\:searchByFormat\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$id_arr of function displayDecksFromID expects list\\<int\\>, mixed given\\.$#"
 			count: 1
 			path: gatherling/decksearch.php
 
@@ -3206,52 +3171,12 @@ parameters:
 			path: gatherling/decksearch.php
 
 		-
-			message: "#^Parameter \\#1 \\$medal of method Gatherling\\\\Models\\\\Decksearch\\:\\:searchByMedals\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Decksearch\\:\\:searchByPlayer\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$series of function seriesDropMenu expects string\\|null, mixed given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$series of method Gatherling\\\\Models\\\\Decksearch\\:\\:searchBySeries\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
 			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, float\\|int\\|string\\|null given\\.$#"
 			count: 3
 			path: gatherling/decksearch.php
 
 		-
-			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
 			message: "#^Parameter \\#1 \\$value of function count expects array\\|Countable, array\\<int, int\\>\\|true given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$value of function count expects array\\|Countable, mixed given\\.$#"
 			count: 1
 			path: gatherling/decksearch.php
 
@@ -3262,11 +3187,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$contents of function page expects string, string\\|false given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#3 \\$selected of function medalsDropMenu expects string\\|null, mixed given\\.$#"
 			count: 1
 			path: gatherling/decksearch.php
 

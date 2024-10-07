@@ -1010,11 +1010,6 @@
       <code><![CDATA[$vals['name']]]></code>
     </InvalidArrayOffset>
   </file>
-  <file src="gatherling/decksearch.php">
-    <InvalidArgument>
-      <code><![CDATA[$_POST['color']]]></code>
-    </InvalidArgument>
-  </file>
   <file src="gatherling/event.php">
     <InvalidArgument>
       <code><![CDATA[$t4]]></code>
