@@ -26,7 +26,7 @@ print_header('Deck Database');
 $event = null;
 
 if (isset($_GET['event'])) {
-    if (!Event::exists($_GET['event'])) {
+    if (!Event::exists(get()->string('event'))) {
         unset($_GET['event']);
         echo '<div class="uppertitle">Deck Database</div>';
     } else {

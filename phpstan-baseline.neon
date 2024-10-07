@@ -3046,11 +3046,6 @@ parameters:
 			path: gatherling/deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of static method Gatherling\\\\Models\\\\Event\\:\\:exists\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
 			message: "#^Parameter \\#1 \\$oneplayer of method Gatherling\\\\Models\\\\Matchup\\:\\:otherPlayer\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/deck.php
