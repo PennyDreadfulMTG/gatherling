@@ -3231,11 +3231,6 @@ parameters:
 			path: gatherling/event.php
 
 		-
-			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:addPlayer\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
 			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:authCheck\\(\\) expects string\\|null, string\\|false given\\.$#"
 			count: 2
 			path: gatherling/event.php

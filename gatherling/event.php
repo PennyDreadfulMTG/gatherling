@@ -416,7 +416,7 @@ function updateReg(): void
         }
     }
     if (isset($_POST['newentry'])) {
-        $event->addPlayer($_POST['newentry']);
+        $event->addPlayer(post()->string('newentry'));
     }
 
     if (isset($_POST['initial_byes'])) {
