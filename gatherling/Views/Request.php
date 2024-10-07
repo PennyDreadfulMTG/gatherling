@@ -11,11 +11,20 @@ class Request
 
     public function int(string $key, int|false $default = false): int
     {
-        if (!isset($this->vars[$key])) {
+        $value = $this->optionalInt($key);
+        if ($value === null) {
             if ($default !== false) {
                 return $default;
             }
             throw new \InvalidArgumentException("Missing integer value: " . $key);
+        }
+        return $value;
+    }
+
+    public function optionalInt(string $key): ?int
+    {
+        if (!isset($this->vars[$key])) {
+            return null;
         }
         $value = $this->vars[$key];
         if (!is_numeric($value)) {
@@ -33,7 +42,7 @@ class Request
             }
             throw new \InvalidArgumentException("Missing string value: " . $key);
         }
-        return (string) $value;
+        return $value;
     }
 
     public function optionalString(string $key): ?string
@@ -45,7 +54,7 @@ class Request
         if (!is_string($value)) {
             throw new \InvalidArgumentException("Invalid string value for $key: " . var_export($value, true));
         }
-        return (string) $value;
+        return $value;
     }
 
     /** @return list<int> */

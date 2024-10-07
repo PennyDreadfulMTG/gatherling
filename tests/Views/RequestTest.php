@@ -15,6 +15,13 @@ class RequestTest extends TestCase
         $request->int('bar');
     }
 
+    public function testOptionalInt(): void
+    {
+        $request = new Request(['foo' => '123']);
+        $this->assertEquals(123, $request->optionalInt('foo'));
+        $this->assertNull($request->optionalInt('bar'));
+    }
+
     public function testString(): void
     {
         $request = new Request(['foo' => 'hello']);
