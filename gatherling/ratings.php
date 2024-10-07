@@ -7,11 +7,14 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Pagination;
 use Gatherling\Views\Pages\Ratings;
 
+use function Gatherling\Views\post;
+use function Gatherling\Views\server;
+
 require_once 'lib.php';
 
 function main(): void
 {
-    $format = $_POST['format'] ?? 'Composite';
+    $format = post()->string('format', 'Composite');
     ['date' => $lastTournamentDate, 'name' => $lastTournamentName] = currentThrough($format);
     ['rating' => $highestRating, 'player' => $highestRatedPlayer, 't' => $highestRatingTimestamp] = bestEver($format);
     $minMatches = 20;
@@ -94,6 +97,6 @@ function currentThrough(string $format): array
     return ['date' => new DateTime($start), 'name' => $name];
 }
 
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }

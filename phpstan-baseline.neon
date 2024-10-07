@@ -3806,32 +3806,7 @@ parameters:
 			path: gatherling/ratings.php
 
 		-
-			message: "#^Parameter \\#1 \\$format of class Gatherling\\\\Views\\\\Pages\\\\Ratings constructor expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/ratings.php
-
-		-
-			message: "#^Parameter \\#1 \\$format of function bestEver expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/ratings.php
-
-		-
-			message: "#^Parameter \\#1 \\$format of function currentThrough expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/ratings.php
-
-		-
-			message: "#^Parameter \\#1 \\$format of function ratingsData expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/ratings.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/ratings.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/ratings.php
 
