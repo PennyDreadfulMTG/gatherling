@@ -247,6 +247,7 @@ function add_player_to_event(Event $event, ?string $name, ?string $decklist): ar
     $result = [];
     $username = session()->string('username', '');
     if ($username && $event->authCheck($username)) {
+        $player = null;
         if ($event->addPlayer($name)) {
             $player = new Player($name);
             $result['success'] = true;
@@ -256,7 +257,7 @@ function add_player_to_event(Event $event, ?string $name, ?string $decklist): ar
         } else {
             $result['success'] = false;
         }
-        if (!empty($decklist)) {
+        if (!empty($decklist) && $player) {
             $decklist = str_replace('|', "\n", $decklist);
 
             $deck = new Deck(0);
@@ -390,6 +391,7 @@ function create_pairing(Event $event, int $round, ?string $a, ?string $b, ?strin
 
     $playerA = new Standings($event->name, $a);
     $playerB = new Standings($event->name, $b);
+    $pAWins = $pBWins = null;
     switch ($res) {
         case '2-0':
             $pAWins = 2;
