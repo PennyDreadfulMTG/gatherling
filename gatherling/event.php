@@ -23,7 +23,6 @@ use Gatherling\Views\Pages\PointsAdjustmentForm;
 use Gatherling\Views\Pages\ReportsForm;
 use Gatherling\Views\Pages\StandingsList;
 
-use function Gatherling\Views\files;
 use function Gatherling\Views\get;
 use function Gatherling\Views\post;
 use function Gatherling\Views\request;
@@ -374,10 +373,10 @@ function insertTrophy(): bool
     $file = $_FILES['trophy'];
     $event = $_POST['name'];
 
-    $tmp = files()->string('tmp_name');
+    $tmp = $file['tmp_name'];
     $size = $file['size'];
     $type = $file['type'];
-
+    assert(is_string($tmp) && is_string($type) && is_int($size));
     $f = fopen($tmp, 'rb');
 
     $db = Database::getPDOConnection();

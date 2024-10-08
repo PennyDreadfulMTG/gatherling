@@ -27,11 +27,6 @@ function server(): Request
     return new Request($_SERVER);
 }
 
-function files(): Request
-{
-    return new Request($_FILES);
-}
-
 function config(): Request
 {
     global $CONFIG;
