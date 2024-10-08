@@ -751,11 +751,6 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Variable \\$standings might not be defined\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Cannot access property \\$affected_rows on mysqli_stmt\\|false\\.$#"
 			count: 14
 			path: gatherling/Models/Format.php
@@ -1531,16 +1526,6 @@ parameters:
 			path: gatherling/Models/MaxWeightMatching.php
 
 		-
-			message: "#^Variable \\$kslack might not be defined\\.$#"
-			count: 2
-			path: gatherling/Models/MaxWeightMatching.php
-
-		-
-			message: "#^Variable \\$v might not be defined\\.$#"
-			count: 6
-			path: gatherling/Models/MaxWeightMatching.php
-
-		-
 			message: "#^Binary operation \"\\+\" between bool\\|int\\|string and 1 results in an error\\.$#"
 			count: 1
 			path: gatherling/Models/Pagination.php
@@ -1577,11 +1562,6 @@ parameters:
 
 		-
 			message: "#^Binary operation \"/\" between bool\\|int\\|string and bool\\|int\\|string results in an error\\.$#"
-			count: 1
-			path: gatherling/Models/Pagination.php
-
-		-
-			message: "#^Call to preg_quote\\(\\) is missing delimiter / to be effective\\.$#"
 			count: 1
 			path: gatherling/Models/Pagination.php
 
@@ -2691,11 +2671,6 @@ parameters:
 			path: gatherling/admin/infobot.php
 
 		-
-			message: "#^Variable \\$CONFIG might not be defined\\.$#"
-			count: 4
-			path: gatherling/admin/infobot.php
-
-		-
 			message: "#^Binary operation \"\\.\" between mixed and '\\:00' results in an error\\.$#"
 			count: 1
 			path: gatherling/admincp.php
@@ -2816,21 +2791,6 @@ parameters:
 			path: gatherling/api_lib.php
 
 		-
-			message: "#^Variable \\$pAWins might not be defined\\.$#"
-			count: 1
-			path: gatherling/api_lib.php
-
-		-
-			message: "#^Variable \\$pBWins might not be defined\\.$#"
-			count: 1
-			path: gatherling/api_lib.php
-
-		-
-			message: "#^Variable \\$player might not be defined\\.$#"
-			count: 1
-			path: gatherling/api_lib.php
-
-		-
 			message: "#^Cannot access property \\$discord_handle on Gatherling\\\\Models\\\\Player\\|null\\.$#"
 			count: 1
 			path: gatherling/auth.php
@@ -2856,11 +2816,6 @@ parameters:
 			path: gatherling/auth.php
 
 		-
-			message: "#^Function send_to_discord invoked with 1 parameter, 0 required\\.$#"
-			count: 3
-			path: gatherling/auth.php
-
-		-
 			message: "#^Property Gatherling\\\\Models\\\\Player\\:\\:\\$discord_handle \\(string\\|null\\) does not accept mixed\\.$#"
 			count: 1
 			path: gatherling/auth.php
@@ -2872,11 +2827,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$string of function substr expects string, string\\|false given\\.$#"
-			count: 1
-			path: gatherling/bootstrap.php
-
-		-
-			message: "#^Path in require_once\\(\\) \"/var/www/vendor/autoload\\.php\" is not a file or it does not exist\\.$#"
 			count: 1
 			path: gatherling/bootstrap.php
 
@@ -3311,16 +3261,6 @@ parameters:
 			path: gatherling/event.php
 
 		-
-			message: "#^Variable \\$pAWins might not be defined\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
-			message: "#^Variable \\$pBWins might not be defined\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
 			message: "#^Function eventList\\(\\) should return list\\<array\\{name\\: string, format\\: string, players\\: int, host\\: string, start\\: string, finalized\\: int, cohost\\: string, series\\: string, \\.\\.\\.\\}\\> but returns list\\<array\\<string, mixed\\>\\>\\.$#"
 			count: 1
 			path: gatherling/eventreport.php
@@ -3731,11 +3671,6 @@ parameters:
 			path: gatherling/player.php
 
 		-
-			message: "#^Variable \\$CONFIG might not be defined\\.$#"
-			count: 2
-			path: gatherling/player.php
-
-		-
 			message: "#^Cannot access property \\$name on Gatherling\\\\Models\\\\Player\\|null\\.$#"
 			count: 4
 			path: gatherling/prereg.php
@@ -3837,11 +3772,6 @@ parameters:
 
 		-
 			message: "#^Part \\$dispmode \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 1
-			path: gatherling/report.php
-
-		-
-			message: "#^Variable \\$match might not be defined\\.$#"
 			count: 1
 			path: gatherling/report.php
 
