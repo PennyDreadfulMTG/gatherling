@@ -114,6 +114,7 @@ switch ($dispmode) {
         break;
 
     case 'drop_form':
+        $match = null;
         $matches = $player->getCurrentMatches();
         $event_name = request()->string('event', '');
         $can_drop = true;
@@ -139,7 +140,7 @@ switch ($dispmode) {
 
         if ($can_drop) {
             print_dropConfirm($event_name, $player);
-        } else {
+        } elseif ($match) {
             print_submit_resultForm($match->id, true);
         }
         break;
