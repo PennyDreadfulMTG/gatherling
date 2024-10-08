@@ -8,6 +8,7 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Matchup;
 use Gatherling\Views\Components\GameName;
+use Gatherling\Views\Components\RoundDropMenu;
 use Gatherling\Views\Components\PlayerDropMenu;
 
 class MatchList extends EventFrame
@@ -23,8 +24,7 @@ class MatchList extends EventFrame
     public PlayerDropMenu $playerBDropMenu;
     /** @var array<string, string|array<string, bool|int|string>> */
     public ?array $playerByeMenu;
-    /** @var array<string, string|array<string, bool|int|string>> */
-    public ?array $roundDropMenu;
+    public ?RoundDropMenu $roundDropMenu;
     /** @var array<string, string|array<string, bool|int|string>> */
     public ?array $resultDropMenu;
     public bool $isBeforeRoundTwo;
@@ -112,7 +112,7 @@ class MatchList extends EventFrame
         if ($event->active) {
             $playerByeMenu = playerByeMenuArgs($event);
         } else {
-            $roundDropMenu = EventHelper::roundDropMenuArgs($event, $newMatchRound);
+            $roundDropMenu = new RoundDropMenu($event, $newMatchRound);
             $resultDropMenu = resultDropMenuArgs('newmatchresult');
         }
 

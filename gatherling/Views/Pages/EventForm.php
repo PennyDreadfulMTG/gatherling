@@ -9,6 +9,7 @@ use Gatherling\Models\Player;
 use Gatherling\Views\Components\TextInput;
 use Gatherling\Views\Components\NumDropMenu;
 use Gatherling\Views\Components\StringField;
+use Gatherling\Views\Components\RoundDropMenu;
 use Gatherling\Views\Components\FormatDropMenu;
 use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\SeriesDropMenu;
@@ -61,8 +62,7 @@ class EventForm extends EventFrame
     public ?array $finalizeEventCheckbox;
     /** @var array<string, mixed> */
     public ?array $eventActiveCheckbox;
-    /** @var array<string, mixed> */
-    public ?array $currentRoundDropMenu;
+    public ?RoundDropMenu $currentRoundDropMenu;
     /** @var ?array<string, mixed> */
     public ?array $trophyField;
     public bool $showCreateNextEvent;
@@ -140,7 +140,7 @@ class EventForm extends EventFrame
         if ($edit) {
             $finalizeEventCheckbox = checkboxInputArgs('Finalize Event', 'finalized', (bool) $event->finalized);
             $eventActiveCheckbox = checkboxInputArgs('Event Active', 'active', (bool) $event->active);
-            $currentRoundDropMenu = EventHelper::roundDropMenuArgs($event, $event->current_round);
+            $currentRoundDropMenu = new RoundDropMenu($event, $event->current_round);
             $trophyField = trophyFieldArgs($event);
             $nextEventName = sprintf('%s %d.%02d', $event->series, $event->season, $event->number + 1);
             $nextSeasonName = sprintf('%s %d.%02d', $event->series, $event->season + 1, 1);

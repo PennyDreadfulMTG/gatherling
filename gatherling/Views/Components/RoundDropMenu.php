@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Gatherling\Views\Pages;
+namespace Gatherling\Views\Components;
 
 use Gatherling\Models\Event;
 
-class EventHelper
+class RoundDropMenu extends DropMenu
 {
-    /** @return array{name: string, default: string, options: list<array{isSelected: bool, value: int, text: string}>} */
-    public static function roundDropMenuArgs(Event $event, int|string $selected): array
+    public function __construct(Event $event, int|string $selected)
     {
         $options = [];
         for ($r = 1; $r <= ((int) $event->mainrounds + (int) $event->finalrounds); $r++) {
@@ -20,11 +19,6 @@ class EventHelper
                 'text'       => "$r$star",
             ];
         }
-
-        return [
-            'name'    => 'newmatchround',
-            'default' => '- Round -',
-            'options' => $options,
-        ];
+        parent::__construct('newmatchround', $options, '- Round -');
     }
 }
