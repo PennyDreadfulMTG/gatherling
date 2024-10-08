@@ -352,32 +352,44 @@ class Matchup
     public static function validateReport(int $match_id): void
     {
         // get and compare reports
-        //echo "in validate report".$match_id;
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT subevent, playera_wins, playerb_wins, playera_losses, playerb_losses
-                            FROM matches
-                            WHERE id = ? ');
-        $stmt->bind_param('d', $match_id);
-        $stmt->execute();
-        $stmt->bind_result($subevent, $playera_wins, $playerb_wins, $playera_losses, $playerb_losses);
-        $stmt->fetch();
-        $stmt->close();
+        $report = self::getReport($match_id);
 
-        if (($playera_wins + $playera_losses) == 0 or ($playerb_wins + $playerb_losses) == 0) {
+        if (($report->playera_wins + $report->playera_losses) == 0 or ($report->playerb_wins + $report->playerb_losses) == 0) {
             //No second report, quit
             return;
         } else {
             //Compare reports
-            if (($playera_wins == $playerb_losses) and ($playerb_wins == $playera_losses)) {
+            if (($report->playera_wins == $report->playerb_losses) and ($report->playerb_wins == $report->playera_losses)) {
                 //matched, set verified
                 self::flagVerified($match_id);
-                $event = Event::getEventBySubevent($subevent);
-                $event->resolveRound($subevent, $event->current_round);
+                $event = Event::getEventBySubevent($report->subevent);
+                $event->resolveRound($report->subevent, $event->current_round);
             } else {
                 //failed match, flag
                 self::flagFailed($match_id);
             }
         }
+    }
+
+    private static function getReport(int $match_id): ReportDTO
+    {
+        $db = Database::getConnection();
+        $stmt = $db->prepare('SELECT subevent, playera_wins, playerb_wins, playera_losses, playerb_losses
+                            FROM matches
+                            WHERE id = ?');
+        $stmt->bind_param('d', $match_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $stmt->close();
+
+        return new ReportDTO(
+            $row['subevent'],
+            $row['playera_wins'],
+            $row['playerb_wins'],
+            $row['playera_losses'],
+            $row['playerb_losses']
+        );
     }
 
     public static function flagVerified(int $match_id): void
