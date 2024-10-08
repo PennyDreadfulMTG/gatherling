@@ -96,23 +96,23 @@ class Request
         return $result;
     }
 
-    /** @return list<int|string> */
-    public function listIntOrString(string $key): array
+    /** @return array<string, int|string> */
+    public function dictIntOrString(string $key): array
     {
         if (!isset($this->vars[$key])) {
             return [];
         }
         if (!is_array($this->vars[$key])) {
-            throw new \InvalidArgumentException("Invalid list of integers or strings: " . var_export($this->vars[$key], true));
+            throw new \InvalidArgumentException("Invalid dictionary of integers or strings: " . var_export($this->vars[$key], true));
         }
         $result = [];
-        foreach ($this->vars[$key] as $value) {
+        foreach ($this->vars[$key] as $key => $value) {
             if (is_int($value)) {
-                $result[] = (int) $value;
+                $result[$key] = (int) $value;
             } elseif (is_string($value)) {
-                $result[] = (string) $value;
+                $result[$key] = (string) $value;
             } else {
-                throw new \InvalidArgumentException("Invalid value in list: " . var_export($value, true));
+                throw new \InvalidArgumentException("Invalid value in dictionary: " . var_export($value, true));
             }
         }
         return $result;
