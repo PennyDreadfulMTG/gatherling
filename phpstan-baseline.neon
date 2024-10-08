@@ -166,11 +166,6 @@ parameters:
 			path: gatherling/Models/Database.php
 
 		-
-			message: "#^Parameter \\#1 \\$message of class Exception constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Database.php
-
-		-
 			message: "#^Parameter \\#1 \\$query of method mysqli\\:\\:prepare\\(\\) expects string, mixed given\\.$#"
 			count: 2
 			path: gatherling/Models/Database.php

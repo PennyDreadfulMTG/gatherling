@@ -27,7 +27,7 @@ class Database
                 $CONFIG['db_password']
             );
             if (mysqli_connect_errno()) {
-                throw new Exception(mysqli_connect_error());
+                throw new Exception((string) mysqli_connect_error());
             }
             $db_selected = $instance->select_db($CONFIG['db_database']);
             if (!$db_selected) {
