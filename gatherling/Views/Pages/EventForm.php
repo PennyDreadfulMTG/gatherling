@@ -212,15 +212,16 @@ function clientDropMenuArgs(string $field, int $def): array
     ];
 }
 
-/** @return array<string, mixed> */
+/** @return array{id: string, name: string, label: string, select: array{id: string, name: string, options: list<array{isSelected: bool, value: string, text: string}>}} */
 function kValueSelectInput(int $kvalue): array
 {
+    /** @var array<string, string> */
     $names = [
         '' => '- K-Value -',
-        8 => 'Casual (Alt Event)',
-        16 => 'Regular (less than 24 players)',
-        24 => 'Large (24 or more players)',
-        32 => 'Championship',
+        '8' => 'Casual (Alt Event)',
+        '16' => 'Regular (less than 24 players)',
+        '24' => 'Large (24 or more players)',
+        '32' => 'Championship',
     ];
     return selectInputArgs('K-Value', 'kvalue', $names, $kvalue);
 }
