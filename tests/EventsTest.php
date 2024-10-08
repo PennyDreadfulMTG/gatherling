@@ -16,10 +16,6 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 final class EventsTest extends DatabaseCase
 {
-    /**
-     * @throws InvalidArgumentException
-     * @throws ExpectationFailedException
-     */
     public function testSeriesCreation(): Series
     {
         if (!Series::exists('Test')) {
@@ -37,13 +33,6 @@ final class EventsTest extends DatabaseCase
         return $series;
     }
 
-    /**
-     * @throws Exception
-     * @throws InvalidArgumentException
-     * @throws ExpectationFailedException
-     *
-     * @depends testSeriesCreation
-     */
     public function testEventCreation(Series $series): Event
     {
         $recentEvents = $series->getRecentEvents(1);
@@ -90,13 +79,6 @@ final class EventsTest extends DatabaseCase
         return $event;
     }
 
-    /**
-     * @throws InvalidArgumentException
-     * @throws ExpectationFailedException
-     * @throws Exception
-     *
-     * @depends testEventCreation
-     */
     public function testRegistration(Event $event): Event
     {
         for ($i = 0; $i < 10; $i++) {
@@ -129,12 +111,6 @@ final class EventsTest extends DatabaseCase
         return $event;
     }
 
-    /**
-     * @throws InvalidArgumentException
-     * @throws ExpectationFailedException
-     *
-     * @depends testRegistration
-     */
     public function testEventStart(Event $event): Event
     {
         $this->assertEquals($event->active, 0);
@@ -149,12 +125,6 @@ final class EventsTest extends DatabaseCase
         return $event;
     }
 
-    /**
-     * @throws InvalidArgumentException
-     * @throws ExpectationFailedException
-     *
-     * @depends testEventStart
-     */
     public function testReporting(Event $event): Event
     {
         $matches = $event->getRoundMatches(1);
@@ -174,9 +144,6 @@ final class EventsTest extends DatabaseCase
     }
 }
 
-/**
- * @throws Exception
- */
 function insertDeck(string $player, Event $event, string $main, string $side): Deck
 {
     $deck = new Deck(0);
