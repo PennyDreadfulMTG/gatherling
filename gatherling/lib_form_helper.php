@@ -48,7 +48,7 @@ function submit(string $label, string $name = 'action'): string
 
 /**
  * @param array<string, string> $options
- * @return array{id: string, name: string, options: array<int, array{isSelected: bool, value: string, text: string}>}
+ * @return array{id: string, name: string, options: list<array{isSelected: bool, value: string, text: string}>}
  */
 function selectArgs(string $name, array $options = [], mixed $selected = null, ?string $id = null): array
 {
@@ -81,7 +81,7 @@ function selectInput(string $label, string $name, ?array $options, mixed $select
 
 /**
  * @param array<string, string> $options
- * @return array{id: string, name: string, label: string, select: array{id: string, name: string, options: array<int, array{isSelected: bool, value: string, text: string}>}}
+ * @return array{id: string, name: string, label: string, select: array{id: string, name: string, options: list<array{isSelected: bool, value: string, text: string}>}}
  */
 function selectInputArgs(string $label, string $name, ?array $options, mixed $selected = null, ?string $id = null): array
 {
