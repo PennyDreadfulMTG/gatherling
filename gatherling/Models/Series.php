@@ -823,7 +823,7 @@ class Series
     }
 
     /**
-     * @param array<string, array<string, int|array<string, string|int>>> $results
+     * @param array<string, array<string, mixed>> $results
      * @param array<string, array<string, int>> $thispoints
      * @param array<string, array<string, int>> $decklists
      */
