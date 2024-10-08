@@ -696,24 +696,6 @@
       <code><![CDATA[getObjectVarsCamelCase($event)]]></code>
     </UndefinedFunction>
   </file>
-  <file src="gatherling/Views/Pages/EventHelper.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[[
-            'name'    => "newmatchplayer$letter",
-            'default' => $default,
-            'options' => $options,
-        ]]]></code>
-      <code><![CDATA[[
-            'name'    => 'newmatchround',
-            'default' => '- Round -',
-            'options' => $options,
-        ]]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[array<string, string|array<string, bool|int|string>>]]></code>
-      <code><![CDATA[array<string, string|array<string, bool|int|string>>]]></code>
-    </InvalidReturnType>
-  </file>
   <file src="gatherling/Views/Pages/EventList.php">
     <InvalidPropertyAssignmentValue>
       <code><![CDATA[$results]]></code>
@@ -792,22 +774,6 @@
     </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Pages/MatchList.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[[
-        'name'    => $name,
-        'default' => '- Result -',
-        'options' => $options,
-    ]]]></code>
-      <code><![CDATA[[
-        'name'    => 'newbyeplayer',
-        'default' => '- Bye Player -',
-        'options' => $options,
-    ]]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[array<string, string|array<string, bool|int|string>>]]></code>
-      <code><![CDATA[array<string, string|array<string, bool|int|string>>]]></code>
-    </InvalidReturnType>
     <PossiblyUnusedProperty>
       <code><![CDATA[$hasMatches]]></code>
       <code><![CDATA[$isBeforeRoundTwo]]></code>
@@ -1021,31 +987,13 @@
   <file src="gatherling/lib.php">
     <InvalidReturnStatement>
       <code><![CDATA[$cardarr]]></code>
-      <code><![CDATA[[
-        'name'    => 'hour',
-        'default' => '- Hour -',
-        'options' => $options,
-    ]]]></code>
     </InvalidReturnStatement>
     <InvalidReturnType>
       <code><![CDATA[array<string, int>]]></code>
-      <code><![CDATA[array<string, string|array<string, string|bool|null>>]]></code>
     </InvalidReturnType>
     <UnusedVariable>
       <code><![CDATA[$R1]]></code>
     </UnusedVariable>
-  </file>
-  <file src="gatherling/lib_form_helper.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[[
-        'id'      => $id,
-        'name'    => $name,
-        'options' => $opts,
-    ]]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[array<string, string|bool|null>]]></code>
-    </InvalidReturnType>
   </file>
   <file src="gatherling/player.php">
     <UnusedVariable>
@@ -1080,18 +1028,6 @@
       <code><![CDATA[$row]]></code>
       <code><![CDATA[$row]]></code>
     </UnusedVariable>
-  </file>
-  <file src="tests/EventsTest.php">
-    <UndefinedDocblockClass>
-      <code><![CDATA[Exception]]></code>
-      <code><![CDATA[Exception]]></code>
-      <code><![CDATA[Exception]]></code>
-      <code><![CDATA[InvalidArgumentException]]></code>
-      <code><![CDATA[InvalidArgumentException]]></code>
-      <code><![CDATA[InvalidArgumentException]]></code>
-      <code><![CDATA[InvalidArgumentException]]></code>
-      <code><![CDATA[InvalidArgumentException]]></code>
-    </UndefinedDocblockClass>
   </file>
   <file src="tests/Models/DeckTest.php">
     <UndefinedFunction>
