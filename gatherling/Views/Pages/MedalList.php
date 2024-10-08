@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Event;
+use Gatherling\Views\Components\PlayerDropMenu;
 
 class MedalList extends EventFrame
 {
@@ -17,7 +18,7 @@ class MedalList extends EventFrame
         $finalists = $event->getFinalists();
         $pos = 1;
         foreach ($finalists as &$finalist) {
-            $finalist['playerDropMenu'] = EventHelper::playerDropMenuArgs($event, "$pos", $finalist['player']);
+            $finalist['playerDropMenu'] = new PlayerDropMenu($event, "$pos", $finalist['player']);
             $finalist['src'] = "styles/images/{$finalist['medal']}.png";
             $pos++;
         }

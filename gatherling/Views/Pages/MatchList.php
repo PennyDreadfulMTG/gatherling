@@ -8,6 +8,7 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Matchup;
 use Gatherling\Views\Components\GameName;
+use Gatherling\Views\Components\PlayerDropMenu;
 
 class MatchList extends EventFrame
 {
@@ -18,10 +19,8 @@ class MatchList extends EventFrame
     public array $rounds;
     /** @var array<string, mixed> */
     public array $lastRound;
-    /** @var array<string, string|array<string, bool|int|string>> */
-    public array $playerADropMenu;
-    /** @var array<string, string|array<string, bool|int|string>> */
-    public array $playerBDropMenu;
+    public PlayerDropMenu $playerADropMenu;
+    public PlayerDropMenu $playerBDropMenu;
     /** @var array<string, string|array<string, bool|int|string>> */
     public ?array $playerByeMenu;
     /** @var array<string, string|array<string, bool|int|string>> */
@@ -107,8 +106,8 @@ class MatchList extends EventFrame
 
         $lastRound = $rounds ? $rounds[count($rounds) - 1] : [];
 
-        $playerADropMenu = EventHelper::playerDropMenuArgs($event, 'A');
-        $playerBDropMenu = EventHelper::playerDropMenuArgs($event, 'B');
+        $playerADropMenu = new PlayerDropMenu($event, 'A');
+        $playerBDropMenu = new PlayerDropMenu($event, 'B');
         $playerByeMenu = $roundDropMenu = $resultDropMenu = null;
         if ($event->active) {
             $playerByeMenu = playerByeMenuArgs($event);
