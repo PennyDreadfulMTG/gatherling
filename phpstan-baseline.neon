@@ -71,11 +71,6 @@ parameters:
 			path: gatherling/Data/DB.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Data/DB.php
-
-		-
 			message: "#^Parameter \\#2 \\$params of static method Gatherling\\\\Data\\\\DB\\:\\:_execute\\(\\) expects array\\<string, mixed\\>, mixed given\\.$#"
 			count: 1
 			path: gatherling/Data/DB.php

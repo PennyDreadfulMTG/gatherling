@@ -240,6 +240,9 @@ class DB
     private static function safeName(string $name): string
     {
         $safeName = preg_replace('/[^a-zA-Z0-9_]/', '_', $name);
+        if ($safeName === null) {
+            throw new DatabaseException("Failed to safely name $name");
+        }
         $safeName = trim($safeName, '_');
         if (empty($safeName) || is_numeric($safeName[0])) {
             $safeName = 'sp_'.$safeName;
