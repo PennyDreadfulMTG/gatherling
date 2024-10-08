@@ -3956,21 +3956,6 @@ parameters:
 			path: gatherling/seriescp.php
 
 		-
-			message: "#^Cannot cast mixed to int\\.$#"
-			count: 1
-			path: gatherling/seriesreport.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/seriesreport.php
-
-		-
-			message: "#^Parameter \\#1 \\$seriesName of class Gatherling\\\\Views\\\\Pages\\\\SeriesReport constructor expects string\\|null, mixed given\\.$#"
-			count: 1
-			path: gatherling/seriesreport.php
-
-		-
 			message: "#^Parameter \\#3 \\$value of function curl_setopt expects array\\|string, string\\|false given\\.$#"
 			count: 1
 			path: gatherling/util/email.php
