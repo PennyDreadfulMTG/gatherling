@@ -1011,11 +1011,6 @@ parameters:
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Call to function is_null\\(\\) with string will always evaluate to false\\.$#"
-			count: 2
-			path: gatherling/Models/Matchup.php
-
-		-
 			message: "#^Cannot access property \\$affected_rows on mysqli_stmt\\|false\\.$#"
 			count: 1
 			path: gatherling/Models/Matchup.php
@@ -1103,11 +1098,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$season_number of method Gatherling\\\\Models\\\\Series\\:\\:getSeasonRules\\(\\) expects int, int\\|null given\\.$#"
 			count: 2
-			path: gatherling/Models/Matchup.php
-
-		-
-			message: "#^Parameter \\#1 \\$string1 of function strcasecmp expects string, string\\|null given\\.$#"
-			count: 1
 			path: gatherling/Models/Matchup.php
 
 		-
@@ -2356,11 +2346,6 @@ parameters:
 			path: gatherling/Views/Pages/EventForm.php
 
 		-
-			message: "#^Parameter \\#3 \\$options of function selectInputArgs expects array\\<string, string\\>\\|null, array\\<int\\|string, string\\> given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventForm.php
-
-		-
 			message: "#^Cannot access property \\$num_rows on bool\\|mysqli_result\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventList.php
@@ -2862,21 +2847,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method getPlaceDeck\\(\\) on Gatherling\\\\Models\\\\Event\\|null\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Offset 'archetype' on array\\{contents\\: '', sideboard\\: '', name\\: ''\\} in isset\\(\\) does not exist\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Offset 'desc' on array\\{contents\\: '', sideboard\\: '', name\\: '', archetype\\: ''\\} in isset\\(\\) does not exist\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Offset 'name' on array\\{contents\\: '', sideboard\\: ''\\} in isset\\(\\) does not exist\\.$#"
 			count: 1
 			path: gatherling/deck.php
 
@@ -3757,11 +3727,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method organizersSeries\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
 			path: gatherling/seriescp.php
 
