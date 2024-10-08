@@ -2351,11 +2351,6 @@ parameters:
 			path: gatherling/Views/Pages/EventForm.php
 
 		-
-			message: "#^Parameter \\#2 \\$selected of static method Gatherling\\\\Views\\\\Pages\\\\EventHelper\\:\\:roundDropMenuArgs\\(\\) expects int\\|string, int\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventForm.php
-
-		-
 			message: "#^Parameter \\#3 \\$limitTo of class Gatherling\\\\Views\\\\Components\\\\SeriesDropMenu constructor expects list\\<string\\>, array\\<int\\<0, max\\>, string\\> given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventForm.php
@@ -2364,16 +2359,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$options of function selectInputArgs expects array\\<string, string\\>\\|null, array\\<int\\|string, string\\> given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventForm.php
-
-		-
-			message: "#^Method Gatherling\\\\Views\\\\Pages\\\\EventHelper\\:\\:playerDropMenuArgs\\(\\) should return array\\<string, array\\<string, bool\\|int\\|string\\>\\|string\\> but returns array\\<string, array\\<int, array\\<string, bool\\|string\\>\\>\\|string\\>\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventHelper.php
-
-		-
-			message: "#^Method Gatherling\\\\Views\\\\Pages\\\\EventHelper\\:\\:roundDropMenuArgs\\(\\) should return array\\<string, array\\<string, bool\\|int\\|string\\>\\|string\\> but returns array\\<string, array\\<int, array\\<string, bool\\|int\\|string\\>\\>\\|string\\>\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventHelper.php
 
 		-
 			message: "#^Cannot access property \\$num_rows on bool\\|mysqli_result\\.$#"
@@ -2461,16 +2446,6 @@ parameters:
 			path: gatherling/Views/Pages/Home.php
 
 		-
-			message: "#^Function Gatherling\\\\Views\\\\Pages\\\\playerByeMenuArgs\\(\\) should return array\\<string, array\\<string, bool\\|int\\|string\\>\\|string\\> but returns array\\<string, array\\<int, array\\<string, string\\>\\>\\|string\\>\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/MatchList.php
-
-		-
-			message: "#^Function Gatherling\\\\Views\\\\Pages\\\\resultDropMenuArgs\\(\\) should return array\\<string, array\\<string, bool\\|int\\|string\\>\\|string\\> but returns array\\<string, array\\<int, array\\<string, string\\>\\>\\|string\\>\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/MatchList.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
 			count: 2
 			path: gatherling/Views/Pages/MatchList.php
@@ -2497,11 +2472,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$string1 of function strcasecmp expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/MatchList.php
-
-		-
-			message: "#^Parameter \\#2 \\$selected of static method Gatherling\\\\Views\\\\Pages\\\\EventHelper\\:\\:roundDropMenuArgs\\(\\) expects int\\|string, int\\|string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/MatchList.php
 
@@ -2664,11 +2634,6 @@ parameters:
 			message: "#^Part \\$_SESSION\\['DISCORD_NAME'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
 			count: 1
 			path: gatherling/action.php
-
-		-
-			message: "#^Part \\$_REQUEST\\['mode'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 1
-			path: gatherling/admin/infobot.php
 
 		-
 			message: "#^Binary operation \"\\.\" between mixed and '\\:00' results in an error\\.$#"
@@ -3346,11 +3311,6 @@ parameters:
 			path: gatherling/lib.php
 
 		-
-			message: "#^Function timeDropMenuArgs\\(\\) should return array\\<string, array\\<string, bool\\|string\\|null\\>\\|string\\> but returns array\\<string, array\\<int, array\\<string, bool\\|string\\>\\>\\|string\\>\\.$#"
-			count: 1
-			path: gatherling/lib.php
-
-		-
 			message: "#^Parameter \\#1 \\$string of function strtolower expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/lib.php
@@ -3394,11 +3354,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
 			count: 1
 			path: gatherling/lib.php
-
-		-
-			message: "#^Function selectArgs\\(\\) should return array\\<string, bool\\|string\\|null\\> but returns array\\<string, array\\<int, array\\<string, bool\\|string\\>\\>\\|string\\>\\.$#"
-			count: 1
-			path: gatherling/lib_form_helper.php
 
 		-
 			message: "#^Parameter \\#2 \\$options of function selectArgs expects array\\<string, string\\>, array\\<string, string\\>\\|null given\\.$#"
@@ -3894,21 +3849,6 @@ parameters:
 			message: "#^Offset 'name' might not exist on array\\<string, mixed\\>\\|null\\.$#"
 			count: 1
 			path: tests/Data/DBTest.php
-
-		-
-			message: "#^PHPDoc tag @throws with type Gatherling\\\\Tests\\\\Exception is not subtype of Throwable$#"
-			count: 1
-			path: tests/EventsTest.php
-
-		-
-			message: "#^PHPDoc tag @throws with type Gatherling\\\\Tests\\\\Exception\\|PHPUnit\\\\Framework\\\\ExpectationFailedException\\|SebastianBergmann\\\\RecursionContext\\\\InvalidArgumentException is not subtype of Throwable$#"
-			count: 2
-			path: tests/EventsTest.php
-
-		-
-			message: "#^PHPDoc tag @throws with type PHPUnit\\\\Framework\\\\ExpectationFailedException\\|SebastianBergmann\\\\RecursionContext\\\\InvalidArgumentException is not subtype of Throwable$#"
-			count: 3
-			path: tests/EventsTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, string\\|null given\\.$#"
