@@ -286,6 +286,7 @@ class MaxWeightMatching
         if ($DEBUG) {
             $DEBUG("expandBlossom($b,$endstage) ".$this->arr_repr($this->blossomchilds[$b]));
         }
+        $v = null;
         foreach ($this->blossomchilds[$b] as $s) {
             $this->blossomparent[$s] = -1;
             if ($s < $this->nvertex) {
@@ -620,6 +621,8 @@ class MaxWeightMatching
         global $DEBUG;
         global $CHECK_DELTA;
         global $CHECK_OPTIMUM;
+
+        $kslack = null;
 
         if (!$this->edges) {
             return [];
