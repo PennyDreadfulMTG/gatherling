@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use mysqli_stmt;
 use stdClass;
+use mysqli_stmt;
 use Gatherling\Log;
+use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\FileNotFoundException;
 
 class CardSet
@@ -46,6 +47,9 @@ class CardSet
         $database = Database::getConnection();
 
         $stmt = $database->prepare('SELECT * FROM cardsets where name = ?');
+        if (!$stmt) {
+            throw new DatabaseException($database->error);
+        }
 
         $stmt->bind_param('s', $set);
 
