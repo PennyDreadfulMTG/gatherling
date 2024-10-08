@@ -209,7 +209,6 @@ function deckRegisterForm(): void
 {
     $player = isset($_POST['player']) ? post()->string('player') : get()->string('player');
     $event = isset($_POST['player']) ? post()->string('event') : get()->string('event');
-    $vals = ['contents' => '', 'sideboard' => ''];
 
     echo "<form action=\"deck.php?mode=addregdeck\" method=\"post\">\n";
     echo "<table>\n";
@@ -233,27 +232,18 @@ function deckRegisterForm(): void
     }
     echo '</select></td></tr>';
     echo "<tr><td><b>Name</td>\n<td>";
-    if (!isset($vals['name'])) {
-        $vals['name'] = '';
-    }
-    echo "<input id=\"deck-name\" class=\"inputbox\" type=\"text\" name=\"name\" value=\"{$vals['name']}\" ";
+    echo "<input id=\"deck-name\" class=\"inputbox\" type=\"text\" name=\"name\" value=\"\" ";
     echo "size=\"40\"></td></tr>\n";
-    if (!isset($vals['archetype'])) {
-        $vals['archetype'] = '';
-    }
-    archetypeDropMenu($vals['archetype']);
+    archetypeDropMenu();
     echo "<tr><td valign=\"top\"><b>Main Deck</td>\n<td>";
     echo '<textarea id="deck-contents" class="inputbox" rows="20" cols="60" name="contents">';
-    echo "{$vals['contents']}</textarea></td></tr>\n";
+    echo "</textarea></td></tr>\n";
     echo "<tr><td valign=\"top\"><b>Sideboard</td>\n<td>";
     echo '<textarea id="deck-sideboard" class="inputbox" rows="10" cols="60" name="sideboard">';
-    echo "{$vals['sideboard']}</textarea></td></tr>\n";
+    echo "</textarea></td></tr>\n";
     echo "<tr><td valign=\"top\"><b>Comments</td>\n<td>";
     echo '<textarea class="inputbox" rows="10" cols="60" name="notes">';
-    if (!isset($vals['desc'])) {
-        $vals['desc'] = '';
-    }
-    echo "{$vals['desc']}</textarea></td></tr>\n";
+    echo "</textarea></td></tr>\n";
     echo "<tr><td>&nbsp;</td></tr>\n";
     echo "<tr><td colspan=\"2\" align=\"center\">\n";
     echo "<input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Create Deck\">\n";
