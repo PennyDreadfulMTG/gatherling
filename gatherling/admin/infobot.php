@@ -10,6 +10,8 @@ use function Gatherling\Views\server;
 
 require_once __DIR__.'/../lib.php';
 
+global $CONFIG;
+
 if (strncmp(server()->string('HTTP_USER_AGENT', ''), 'infobot', 7) != 0) {
     exit("<error>You're not infobot!</error>");
 }
