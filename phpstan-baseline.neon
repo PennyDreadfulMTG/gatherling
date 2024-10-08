@@ -3196,6 +3196,11 @@ parameters:
 			path: gatherling/event.php
 
 		-
+			message: "#^Cannot access offset 'tmp_name' on mixed\\.$#"
+			count: 1
+			path: gatherling/event.php
+
+		-
 			message: "#^Cannot access offset 'type' on mixed\\.$#"
 			count: 1
 			path: gatherling/event.php
@@ -3866,17 +3871,7 @@ parameters:
 			path: gatherling/report.php
 
 		-
-			message: "#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\\.$#"
-			count: 2
-			path: gatherling/seriescp.php
-
-		-
 			message: "#^Binary operation \"\\.\" between mixed and '\\:00' results in an error\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Cannot access offset 'name' on mixed\\.$#"
 			count: 1
 			path: gatherling/seriescp.php
 
@@ -3906,17 +3901,7 @@ parameters:
 			path: gatherling/seriescp.php
 
 		-
-			message: "#^Cannot cast mixed to int\\.$#"
-			count: 3
-			path: gatherling/seriescp.php
-
-		-
 			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#1 \\$content_filename of method Gatherling\\\\Models\\\\Series\\:\\:setLogo\\(\\) expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/seriescp.php
 
@@ -3941,11 +3926,6 @@ parameters:
 			path: gatherling/seriescp.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Series constructor expects string\\|null, mixed given\\.$#"
-			count: 3
-			path: gatherling/seriescp.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of method Gatherling\\\\Models\\\\Series\\:\\:addBannedPlayer\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/seriescp.php
@@ -3956,88 +3936,13 @@ parameters:
 			path: gatherling/seriescp.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of method Gatherling\\\\Models\\\\Series\\:\\:removeBannedPlayer\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of method Gatherling\\\\Models\\\\Series\\:\\:removeOrganizer\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#1 \\$playerName of static method Gatherling\\\\Models\\\\Player\\:\\:findOrCreateByName\\(\\) expects string\\|null, mixed given\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
 			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Series\\:\\:authCheck\\(\\) expects string, string\\|false given\\.$#"
 			count: 3
 			path: gatherling/seriescp.php
 
 		-
-			message: "#^Parameter \\#1 \\$playername of static method Gatherling\\\\Models\\\\Player\\:\\:findByName\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#1 \\$season of function seasonDropMenu expects int\\|string\\|null, mixed given\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#1 \\$season_number of method Gatherling\\\\Models\\\\Series\\:\\:getSeasonRules\\(\\) expects int, mixed given\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function urlencode expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#2 \\$new_rules of method Gatherling\\\\Models\\\\Series\\:\\:setSeasonRules\\(\\) expects array\\<string, int\\|string\\>, mixed given\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#2 \\$reason of method Gatherling\\\\Models\\\\Series\\:\\:addBannedPlayer\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#2 \\$selected of function printOrganizerSelect expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
 			message: "#^Parameter \\#2 \\$string of function explode expects string, string\\|null given\\.$#"
 			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#2 \\$type of method Gatherling\\\\Models\\\\Series\\:\\:setLogo\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#3 \\$size of method Gatherling\\\\Models\\\\Series\\:\\:setLogo\\(\\) expects int, mixed given\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Part \\$active_series_name \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Part \\$addition \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 2
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Part \\$chosen_season \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 2
 			path: gatherling/seriescp.php
 
 		-

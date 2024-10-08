@@ -1068,14 +1068,10 @@
     </UnusedVariable>
   </file>
   <file src="gatherling/seriescp.php">
-    <InvalidArgument>
-      <code><![CDATA[$new_rules]]></code>
-    </InvalidArgument>
     <UnusedParam>
       <code><![CDATA[$cur]]></code>
     </UnusedParam>
     <UnusedVariable>
-      <code><![CDATA[$name]]></code>
       <code><![CDATA[$winningDeck]]></code>
     </UnusedVariable>
   </file>
