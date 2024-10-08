@@ -83,6 +83,7 @@ if (isset($_POST['action'])) {
             $result = 'Successfully verified your account with MTGO.';
             $success = true;
         } else {
+            global $CONFIG;
             $result = "Your challenge is wrong.  Get a new one by sending the message '<code>!verify {$CONFIG['infobot_prefix']}</code>' to pdbot on MTGO!";
         }
     }
@@ -147,6 +148,7 @@ switch ($dispmode) {
         break;
 
     case 'verifymtgo':
+        global $CONFIG;
         if ($CONFIG['infobot_passkey'] == '') {
             print_manualverifyMtgoForm();
         } else {
