@@ -6,21 +6,6 @@ parameters:
 			path: gatherling/Auth/Login.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function strlen expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Auth/Login.php
-
-		-
-			message: "#^Parameter \\#1 \\$username of static method Gatherling\\\\Models\\\\Player\\:\\:checkPassword\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Auth/Login.php
-
-		-
-			message: "#^Parameter \\#2 \\$password of static method Gatherling\\\\Models\\\\Player\\:\\:checkPassword\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Auth/Login.php
-
-		-
 			message: "#^Cannot access property \\$discord_handle on Gatherling\\\\Models\\\\Player\\|null\\.$#"
 			count: 1
 			path: gatherling/Auth/Registration.php
