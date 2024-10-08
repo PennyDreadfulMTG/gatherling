@@ -142,7 +142,7 @@ function timeDropMenu(int|string $hour, int|string $minutes = 0): string
     return TemplateHelper::render('partials/dropMenu', $args);
 }
 
-/** @return array<string, string|array<string, string|bool|null>> */
+/** @return array{name: string, default: string, options: array<int, array{value: string, text: string}>} */
 function timeDropMenuArgs(int|string $hour, int|string $minutes = 0): array
 {
     if (strcmp($hour, '') == 0) {
