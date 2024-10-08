@@ -10,6 +10,7 @@ use Gatherling\Models\Ratings;
 use Gatherling\Models\Series;
 use Gatherling\Models\Standings;
 
+use function Gatherling\Views\config;
 use function Gatherling\Views\get;
 use function Gatherling\Views\post;
 
@@ -83,8 +84,8 @@ if (isset($_POST['action'])) {
             $result = 'Successfully verified your account with MTGO.';
             $success = true;
         } else {
-            global $CONFIG;
-            $result = "Your challenge is wrong.  Get a new one by sending the message '<code>!verify {$CONFIG['infobot_prefix']}</code>' to pdbot on MTGO!";
+            $infobotPrefix = config()->string('infobot_prefix', '');
+            $result = "Your challenge is wrong.  Get a new one by sending the message '<code>!verify {$infobotPrefix}</code>' to pdbot on MTGO!";
         }
     }
 }
@@ -148,8 +149,8 @@ switch ($dispmode) {
         break;
 
     case 'verifymtgo':
-        global $CONFIG;
-        if ($CONFIG['infobot_passkey'] == '') {
+        $infobotPasskey = config()->string('infobot_passkey', '');
+        if ($infobotPasskey == '') {
             print_manualverifyMtgoForm();
         } else {
             print_verifyMtgoForm($player, $result);
