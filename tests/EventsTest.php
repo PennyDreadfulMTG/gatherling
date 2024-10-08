@@ -11,8 +11,6 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Matchup;
 use Gatherling\Models\Series;
 use Gatherling\Tests\Support\TestCases\DatabaseCase;
-use PHPUnit\Framework\ExpectationFailedException;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 final class EventsTest extends DatabaseCase
 {
@@ -33,6 +31,7 @@ final class EventsTest extends DatabaseCase
         return $series;
     }
 
+    /** @depends testSeriesCreation */
     public function testEventCreation(Series $series): Event
     {
         $recentEvents = $series->getRecentEvents(1);
@@ -79,6 +78,7 @@ final class EventsTest extends DatabaseCase
         return $event;
     }
 
+    /** @depends testEventCreation */
     public function testRegistration(Event $event): Event
     {
         for ($i = 0; $i < 10; $i++) {
@@ -111,6 +111,7 @@ final class EventsTest extends DatabaseCase
         return $event;
     }
 
+    /** @depends testRegistration */
     public function testEventStart(Event $event): Event
     {
         $this->assertEquals($event->active, 0);
@@ -125,6 +126,7 @@ final class EventsTest extends DatabaseCase
         return $event;
     }
 
+    /** @depends testEventStart */
     public function testReporting(Event $event): Event
     {
         $matches = $event->getRoundMatches(1);
