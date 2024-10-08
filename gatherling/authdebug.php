@@ -22,7 +22,7 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
 
     debug_info($token);
 } elseif (!isset($_GET['code'])) {
-    send_to_discord();
+    send_to_discord_debug();
 
 // Check given state against previously stored one to mitigate CSRF attack
 } elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
@@ -38,7 +38,7 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     debug_info($token);
 }
 
-function send_to_discord(): void
+function send_to_discord_debug(): void
 {
     // Step 1. Get authorization code
     global $provider;
