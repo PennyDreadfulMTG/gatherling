@@ -8,7 +8,7 @@ use Gatherling\Models\Event;
 
 class EventHelper
 {
-    /** @return array<string, string|array<string, bool|int|string>> */
+    /** @return array{name: string, default: string, options: list<array{isSelected: bool, value: string, text: string}>} */
     public static function playerDropMenuArgs(Event $event, string|int $letter, string $def = "\n"): array
     {
         // If the event is active, only list players who haven't already dropped.
@@ -33,7 +33,7 @@ class EventHelper
         ];
     }
 
-    /** @return array<string, string|array<string, bool|int|string>> */
+    /** @return array{name: string, default: string, options: list<array{isSelected: bool, value: int, text: string}>} */
     public static function roundDropMenuArgs(Event $event, int|string $selected): array
     {
         $options = [];
