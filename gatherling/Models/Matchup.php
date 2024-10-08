@@ -84,21 +84,17 @@ class Matchup
 
     private function playerA(string $name): bool
     {
-        if (is_null($name)) {
+        if (is_null($this->playera)) {
             return false;
         }
-
         return strcasecmp($this->playera, $name) == 0;
     }
 
     private function playerB(string $name): bool
     {
-        if (is_null($name)) {
-            return false;
-        } elseif (is_null($this->playerb)) {
+        if (is_null($this->playerb)) {
             return false;
         }
-
         return strcasecmp($this->playerb, $name) == 0;
     }
 
