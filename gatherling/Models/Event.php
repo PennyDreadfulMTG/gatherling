@@ -576,13 +576,8 @@ class Event
             if (is_null($entry->deck)) {
                 continue;
             }
-            if ($checkActive) {
-                $standings = new Standings($this->name, $player);
-            }
-            if (
-                $entry->deck->isValid()
-                && (!$checkActive || $standings->active)
-            ) {
+            $activeCheck = $checkActive ? (new Standings($this->name, $player))->active : true;
+            if ($entry->deck->isValid() && $activeCheck) {
                 $registeredPlayers[] = $player;
             }
         }
