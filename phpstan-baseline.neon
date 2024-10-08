@@ -3986,11 +3986,6 @@ parameters:
 			path: gatherling/util/updateDefaultFormats.php
 
 		-
-			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/util/updateDefaultFormats.php
-
-		-
 			message: "#^Offset 'name' might not exist on array\\<string, mixed\\>\\|null\\.$#"
 			count: 1
 			path: tests/Data/DBTest.php
