@@ -969,13 +969,6 @@
       <code><![CDATA[$CONFIG]]></code>
     </UnusedVariable>
   </file>
-  <file src="gatherling/deck.php">
-    <InvalidArrayOffset>
-      <code><![CDATA[$vals['archetype']]]></code>
-      <code><![CDATA[$vals['desc']]]></code>
-      <code><![CDATA[$vals['name']]]></code>
-    </InvalidArrayOffset>
-  </file>
   <file src="gatherling/formatcp.php">
     <InvalidArgument>
       <code><![CDATA[$_POST]]></code>
