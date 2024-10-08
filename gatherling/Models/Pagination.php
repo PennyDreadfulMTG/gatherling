@@ -240,7 +240,7 @@ class Pagination
                 $this->_properties['method'] == 'url' &&
 
                 // the current page is set in the URL
-                preg_match('/\b'.preg_quote($this->_properties['variable_name']).'([0-9]+)\b/i', $_SERVER['REQUEST_URI'], $matches) > 0
+                preg_match('/\b' . preg_quote($this->_properties['variable_name'], '/') . '([0-9]+)\b/i', $_SERVER['REQUEST_URI'], $matches) > 0
             ) {
                 // set the current page to whatever it is indicated in the URL
                 $this->set_page((int) $matches[1]);
