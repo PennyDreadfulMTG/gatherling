@@ -22,10 +22,10 @@ class MatchList extends EventFrame
     public array $lastRound;
     public PlayerDropMenu $playerADropMenu;
     public PlayerDropMenu $playerBDropMenu;
-    /** @var array<string, string|array<string, bool|int|string>> */
+    /** @var array{name: string, default: string, options: array<int, array{value: string, text: string}>} */
     public ?array $playerByeMenu;
     public ?RoundDropMenu $roundDropMenu;
-    /** @var array<string, string|array<string, bool|int|string>> */
+    /** @var array{name: string, default: string, options: array<int, array{value: string, text: string}>} */
     public ?array $resultDropMenu;
     public bool $isBeforeRoundTwo;
     public string $structureSummary;
@@ -134,7 +134,7 @@ class MatchList extends EventFrame
     }
 }
 
-/** @return array<string, string|array<string, bool|int|string>> */
+/** @return array{name: string, default: string, options: array<int, array{value: string, text: string}>} */
 function playerByeMenuArgs(Event $event): array
 {
     $playerNames = $event->getRegisteredPlayers(true);
@@ -155,7 +155,7 @@ function playerByeMenuArgs(Event $event): array
 
 /**
  * @param array<string, string> $extraOptions
- * @return array<string, string|array<string, bool|int|string>>
+ * @return array{name: string, default: string, options: array<int, array{value: string, text: string}>}
  */
 function resultDropMenuArgs(string $name, array $extraOptions = []): array
 {
