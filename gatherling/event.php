@@ -499,6 +499,7 @@ function updateMatches(): void
     $pA = post()->string('newmatchplayerA', '');
     $pB = post()->string('newmatchplayerB', '');
     $res = post()->string('newmatchresult', '');
+    $pAWins = $pBWins = null;
     if ($res == '2-0') {
         $pAWins = 2;
         $pBWins = 0;
