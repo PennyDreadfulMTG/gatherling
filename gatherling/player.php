@@ -773,9 +773,9 @@ function print_currentMatchTable(array $Leagues): void
             echo "<td>vs.</td>\n";
             echo '<td>'.$oppplayer->linkTo($event->client).'</td><td>';
             if ($match->verification == 'unverified') {
-                if ($player_number == 'b' and ($match->playerb_wins + $match->playerb_losses) > 0) {
+                if ($player_number == 'b' and ((int) $match->playerb_wins + (int) $match->playerb_losses) > 0) {
                     echo '(Report Submitted)';
-                } elseif ($player_number == 'a' and ($match->playera_wins + $match->playera_losses) > 0) {
+                } elseif ($player_number == 'a' and ((int) $match->playera_wins + (int) $match->playera_losses) > 0) {
                     echo '(Report Submitted)';
                 } else {
                     if ($match->player_reportable_check() == true) {
