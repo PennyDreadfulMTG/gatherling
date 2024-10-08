@@ -430,9 +430,6 @@ function handleActions(): void
     }
     $seriesname = post()->string('series');
     $series = new Series($seriesname);
-    if (!$series) {
-        return;
-    }
     if (!$series->authCheck(Player::loginName())) {
         return;
     }
