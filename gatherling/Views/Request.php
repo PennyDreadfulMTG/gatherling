@@ -96,6 +96,28 @@ class Request
         return $result;
     }
 
+    /** @return list<int|string> */
+    public function listIntOrString(string $key): array
+    {
+        if (!isset($this->vars[$key])) {
+            return [];
+        }
+        if (!is_array($this->vars[$key])) {
+            throw new \InvalidArgumentException("Invalid list of integers or strings: " . var_export($this->vars[$key], true));
+        }
+        $result = [];
+        foreach ($this->vars[$key] as $value) {
+            if (is_int($value)) {
+                $result[] = (int) $value;
+            } elseif (is_string($value)) {
+                $result[] = (string) $value;
+            } else {
+                throw new \InvalidArgumentException("Invalid value in list: " . var_export($value, true));
+            }
+        }
+        return $result;
+    }
+
     /** @return array<string, int> */
     public function dictInt(string $key): array
     {

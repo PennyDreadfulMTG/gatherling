@@ -56,6 +56,13 @@ class RequestTest extends TestCase
         $this->assertEquals([], $request->listString('baz'));
     }
 
+    public function testListIntOrString(): void
+    {
+        $request = new Request(['foo' => ['1', 'a', '2', 'b']]);
+        $this->assertEquals([1, 'a', 2, 'b'], $request->listIntOrString('foo'));
+        $this->assertEquals([], $request->listIntOrString('bar'));
+    }
+
 
     public function testDictString(): void
     {
