@@ -3971,21 +3971,6 @@ parameters:
 			path: gatherling/util/insertcardset.php
 
 		-
-			message: "#^Parameter \\#1 \\$code of static method Gatherling\\\\Models\\\\CardSet\\:\\:insert\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/util/insertcardset.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of static method Gatherling\\\\Models\\\\CardSet\\:\\:insertFromLocation\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/util/insertcardset.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of function basename expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/util/insertcardset.php
-
-		-
 			message: "#^Part \\$_REQUEST\\['return'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
 			count: 3
 			path: gatherling/util/insertcardset.php

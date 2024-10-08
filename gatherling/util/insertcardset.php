@@ -5,6 +5,9 @@ declare(strict_types=1);
 use Gatherling\Models\CardSet;
 use Gatherling\Models\Player;
 
+use function Gatherling\Views\request;
+use function Gatherling\Views\server;
+
 set_time_limit(0);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
@@ -30,10 +33,12 @@ function main(): void
         }
         if (isset($_REQUEST['cardsetcode'])) {
             // Due to an ancient bug in MS-DOS, Windows-based computers can't handle Conflux correctly.
-            $code = $_REQUEST['cardsetcode'] == 'CON' ? 'CON_' : $_REQUEST['cardsetcode'];
+            $code = request()->string('cardsetcode') == 'CON' ? 'CON_' : request()->string('cardsetcode');
             CardSet::insert($code);
         } elseif (isset($_FILES['cardsetfile'])) {
-            CardSet::insertFromLocation($_FILES['cardsetfile']['tmp_name']);
+            $tmp_name = $_FILES['cardsetfile']['tmp_name'];
+            assert(is_string($tmp_name));
+            CardSet::insertFromLocation($tmp_name);
         } else {
             throw new \Exception('No set provided');
         }
@@ -52,6 +57,6 @@ function main(): void
     }
 }
 
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }
