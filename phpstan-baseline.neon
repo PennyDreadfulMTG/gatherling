@@ -1776,6 +1776,11 @@ parameters:
 			path: gatherling/Models/Ratings.php
 
 		-
+			message: "#^Binary operation \"\\+\" between mixed and int results in an error\\.$#"
+			count: 1
+			path: gatherling/Models/Series.php
+
+		-
 			message: "#^Cannot access property \\$error on mysqli_stmt\\|false\\.$#"
 			count: 1
 			path: gatherling/Models/Series.php
