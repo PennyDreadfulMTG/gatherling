@@ -154,6 +154,21 @@ class DB
         });
     }
 
+    /**
+     * @param array<string, mixed> $params
+     * @return list<mixed>
+     */
+    public static function values(string $sql, array $params = []): array
+    {
+        /** @var list<mixed> */
+        return self::_execute($sql, $params, function ($sql, $params) {
+            $stmt = self::connect()->pdo->prepare($sql);
+            $stmt->execute($params);
+            $result = $stmt->fetchAll(PDO::FETCH_NUM);
+            return array_column($result, 0);
+        });
+    }
+
     public static function begin(string $rawName): void
     {
         $name = self::safeName($rawName);
