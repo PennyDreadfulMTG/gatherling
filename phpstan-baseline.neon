@@ -901,11 +901,6 @@ parameters:
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Parameter \\#1 \\$cardname of method Gatherling\\\\Models\\\\Format\\:\\:getCardID\\(\\) expects string, string\\|null given\\.$#"
-			count: 4
-			path: gatherling/Models/Format.php
-
-		-
 			message: "#^Parameter \\#1 \\$seriesName of method Gatherling\\\\Models\\\\Player\\:\\:isOrganizer\\(\\) expects string, string\\|null given\\.$#"
 			count: 3
 			path: gatherling/Models/Format.php

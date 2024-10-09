@@ -1495,8 +1495,11 @@ class Format
         return $removed;
     }
 
-    private function getCardID(string $cardname): ?int
+    private function getCardID(?string $cardname): ?int
     {
+        if (is_null($cardname)) {
+            return null;
+        }
         // Honestly I can't think of a good reason why we would have to ban a specific card (ban by id number).
         // When you ban a card, don't you want to ban all versions of it? Not just one version?
         // so it makes more sense to ban by card name. But I will implement cardID's for now since that is how the
