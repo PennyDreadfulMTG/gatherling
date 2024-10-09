@@ -156,12 +156,12 @@ class DB
 
     /**
      * @param array<string, mixed> $params
-     * @param 'bool'|'int'|'float'|'string' $type
-     * @return list<($type is 'bool'? bool : ($type is 'int' ? int : ($type is 'float' ? float : string)))>
+     * @param 'bool'|'int'|'float'|'string' $_type
+     * @return list<($_type is 'bool'? bool : ($_type is 'int' ? int : ($_type is 'float' ? float : string)))>
      */
-    public static function values(string $sql, string $type, array $params = []): array
+    public static function values(string $sql, string $_type, array $params = []): array
     {
-        /** @var list<($type is 'bool'? bool : ($type is 'int' ? int : ($type is 'float' ? float : string)))> */
+        /** @var list<($_type is 'bool'? bool : ($_type is 'int' ? int : ($_type is 'float' ? float : string)))> */
         return self::_execute($sql, $params, function ($sql, $params) {
             $stmt = self::connect()->pdo->prepare($sql);
             $stmt->execute($params);
