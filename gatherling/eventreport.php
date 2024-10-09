@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Gatherling\Data\DB;
 use Gatherling\Models\Event;
-use Gatherling\Models\EventDTO;
+use Gatherling\Models\EventDto;
 use Gatherling\Views\Pages\EventReport;
 use Gatherling\Views\Pages\PlayerEventList;
 
@@ -31,7 +31,7 @@ function main(): void
     $page->send();
 }
 
-/** @return list<EventDTO> */
+/** @return list<EventDto> */
 function eventList(string $format, string $series, string $season): array
 {
     $sql = '
@@ -72,7 +72,7 @@ function eventList(string $format, string $series, string $season): array
             e.start DESC
         LIMIT 100';
 
-    return DB::select($sql, EventDTO::class, $params);
+    return DB::select($sql, EventDto::class, $params);
 }
 
 if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {

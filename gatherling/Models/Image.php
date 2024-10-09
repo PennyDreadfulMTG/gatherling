@@ -10,7 +10,7 @@ class Image
     {
     }
 
-    public static function fromValues(?ImageDTO $values): self
+    public static function fromValues(?ImageDto $values): self
     {
         if (!$values || !isset($values->image, $values->type, $values->size)) {
             return self::empty();

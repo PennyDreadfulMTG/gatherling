@@ -2,9 +2,9 @@
 
 namespace Gatherling\Tests\Support;
 
-use Gatherling\Models\DTO;
+use Gatherling\Models\Dto;
 
-class TestDTO extends DTO
+class TestDto extends Dto
 {
     public string $name;
 }

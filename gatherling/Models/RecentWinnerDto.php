@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-class RecentWinnerDTO extends DTO
+class RecentWinnerDto extends Dto
 {
     public string $event;
     public string $player;

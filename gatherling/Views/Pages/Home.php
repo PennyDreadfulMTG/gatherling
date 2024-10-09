@@ -7,7 +7,7 @@ namespace Gatherling\Views\Pages;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Views\Components\Time;
-use Gatherling\Models\UpcomingEventDTO;
+use Gatherling\Models\UpcomingEventDto;
 
 class Home extends Page
 {
@@ -27,7 +27,7 @@ class Home extends Page
 
     /**
      * @param list<Event> $activeEvents
-     * @param list<UpcomingEventDTO> $upcomingEvents
+     * @param list<UpcomingEventDto> $upcomingEvents
      * @param array<string, int> $stats
      * @param list<array<string, int|string>> $recentWinners
      */

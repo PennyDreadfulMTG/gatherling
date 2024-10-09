@@ -9,8 +9,8 @@ use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
-use Gatherling\Models\MetaDTO;
-use Gatherling\Models\MetaColorsDTO;
+use Gatherling\Models\MetaDto;
+use Gatherling\Models\MetaColorsDto;
 
 use function Gatherling\Views\session;
 
@@ -65,7 +65,7 @@ class FullMetagame extends Component
         foreach ($players as $player) {
             DB::execute($sql, $player);
         }
-        $result = DB::select('SELECT colors, COUNT(player) AS cnt FROM meta GROUP BY(colors)', MetaColorsDTO::class);
+        $result = DB::select('SELECT colors, COUNT(player) AS cnt FROM meta GROUP BY(colors)', MetaColorsDto::class);
         $sql = 'UPDATE meta SET srtordr = :cnt WHERE colors = :colors';
         foreach ($result as $row) {
             DB::execute($sql, (array) $row);
@@ -77,7 +77,7 @@ class FullMetagame extends Component
                 meta
             ORDER BY
                 srtordr DESC, colors, medal, player';
-        $result = DB::select($sql, MetaDTO::class);
+        $result = DB::select($sql, MetaDto::class);
         $this->decklistsAreVisible = $event->decklistsVisible();
         $this->meta = $this->players = [];
         $color = null;

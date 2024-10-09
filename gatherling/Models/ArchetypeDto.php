@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-class ArchetypeDTO extends DTO
+class ArchetypeDto extends Dto
 {
     /** @psalm-suppress PossiblyUnusedProperty */
     public string $name;

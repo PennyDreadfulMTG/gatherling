@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-class PlayerRatingDTO extends DTO
+class PlayerRatingDto extends Dto
 {
     public string $player;
     public int $rating;

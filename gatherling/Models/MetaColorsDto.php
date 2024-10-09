@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-class MetaColorsDTO extends DTO
+class MetaColorsDto extends Dto
 {
     /** @psalm-suppress PossiblyUnusedProperty */
     public string $colors;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-class MetaDTO extends DTO
+class MetaDto extends Dto
 {
     public string $player;
     public string $deckname;

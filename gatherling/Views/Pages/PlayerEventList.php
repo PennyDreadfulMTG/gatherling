@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Pages;
 
-use Gatherling\Models\EventDTO;
+use Gatherling\Models\EventDto;
 use Gatherling\Views\Components\FormatDropMenu;
 use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\SeriesDropMenu;
@@ -18,7 +18,7 @@ class PlayerEventList extends Page
     public array $events;
     public bool $hasMore;
 
-    /** @param list<EventDTO> $events */
+    /** @param list<EventDto> $events */
     public function __construct(string $format, string $series, string $season, array $events)
     {
         parent::__construct();

@@ -349,7 +349,7 @@ class Matchup
     {
         // get and compare reports
         $sql = 'SELECT subevent, playera_wins, playerb_wins, playera_losses, playerb_losses FROM matches WHERE id = :id';
-        $report = DB::selectOnly($sql, ReportDTO::class, ['id' => $match_id]);
+        $report = DB::selectOnly($sql, ReportDto::class, ['id' => $match_id]);
 
         if (($report->playera_wins + $report->playera_losses) == 0 or ($report->playerb_wins + $report->playerb_losses) == 0) {
             //No second report, quit

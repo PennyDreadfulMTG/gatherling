@@ -2,7 +2,7 @@
 
 namespace Gatherling\Models;
 
-class BestEverDTO extends DTO
+class BestEverDto extends Dto
 {
     public string $player;
     public int $rating;

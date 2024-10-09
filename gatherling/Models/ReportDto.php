@@ -2,7 +2,7 @@
 
 namespace Gatherling\Models;
 
-class ReportDTO extends DTO
+class ReportDto extends Dto
 {
     public int $subevent;
     public int $playera_wins;

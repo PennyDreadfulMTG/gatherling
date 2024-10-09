@@ -46,5 +46,6 @@ final class LibTest extends TestCase
         $this->assertEquals('adWords', toCamel('AdWords'));
         $this->assertEquals('alreadyCamelCase', toCamel('alreadyCamelCase'));
         $this->assertEquals('xmlHttpRequest', toCamel('XMLHttpRequest'));
+        $this->assertEquals('userDto', toCamel('userDTO'));
     }
 }

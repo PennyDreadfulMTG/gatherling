@@ -5,8 +5,8 @@ declare(strict_types=1);
 use Gatherling\Data\DB;
 use Gatherling\Models\Player;
 use Gatherling\Models\Pagination;
-use Gatherling\Models\BestEverDTO;
-use Gatherling\Models\PlayerRatingDTO;
+use Gatherling\Models\BestEverDto;
+use Gatherling\Models\PlayerRatingDto;
 use Gatherling\Views\Pages\Ratings;
 
 use function Gatherling\Views\post;
@@ -47,7 +47,7 @@ function ratingsData(string $format, int $minMatches): array
             r.format = :format AND p.name = r.player AND q.qplayer = r.player AND q.qmax = r.updated AND r.wins + r.losses >= :min_matches
         ORDER BY
             r.rating DESC";
-    $ratings_data = DB::select($sql, PlayerRatingDTO::class, ['format' => $format, 'min_matches' => $minMatches]);
+    $ratings_data = DB::select($sql, PlayerRatingDto::class, ['format' => $format, 'min_matches' => $minMatches]);
     $rank = 0;
     $results = [];
     foreach ($ratings_data as $data) {
@@ -94,7 +94,7 @@ function bestEver(string $format): array
             ) AS q
         WHERE
             format = :format AND p.name = r.player AND q.qmax = r.rating';
-    $bestEver = DB::select($sql, BestEverDTO::class, ['format' => $format])[0];
+    $bestEver = DB::select($sql, BestEverDto::class, ['format' => $format])[0];
     return [
         'player' => $bestEver->player,
         'rating' => $bestEver->rating,

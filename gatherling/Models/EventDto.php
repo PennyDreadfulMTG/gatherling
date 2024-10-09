@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-class EventDTO extends DTO
+class EventDto extends Dto
 {
     public string $name;
     public string $format;

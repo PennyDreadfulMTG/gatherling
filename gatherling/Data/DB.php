@@ -7,7 +7,7 @@ namespace Gatherling\Data;
 use Gatherling\Log;
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\ConfigurationException;
-use Gatherling\Models\DTO;
+use Gatherling\Models\Dto;
 use PDO;
 use PDOException;
 
@@ -85,7 +85,7 @@ class DB
     }
 
     /**
-     * @template T of DTO
+     * @template T of Dto
      * @param class-string<T> $class
      * @param array<string, mixed> $params
      * @return list<T>
@@ -109,12 +109,12 @@ class DB
     }
 
     /**
-     * @template T of DTO
+     * @template T of Dto
      * @param class-string<T> $class
      * @param array<string, mixed> $params
      * @return T
      */
-    public static function selectOnly(string $sql, string $class, array $params = []): DTO
+    public static function selectOnly(string $sql, string $class, array $params = []): Dto
     {
         $result = self::select($sql, $class, $params);
         if (count($result) !== 1) {
@@ -124,12 +124,12 @@ class DB
     }
 
     /**
-     * @template T of DTO
+     * @template T of Dto
      * @param class-string<T> $class
      * @param array<string, mixed> $params
      * @return T|null
      */
-    public static function selectOnlyOrNull(string $sql, string $class, array $params = []): ?DTO
+    public static function selectOnlyOrNull(string $sql, string $class, array $params = []): ?Dto
     {
         $result = self::select($sql, $class, $params);
         if (count($result) > 1) {

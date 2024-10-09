@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-class CalendarEventDTO extends DTO
+class UpcomingEventDto extends Dto
 {
     public int $d;
     public string $name;
-    public string $threadurl;
+    public string $format;
 }

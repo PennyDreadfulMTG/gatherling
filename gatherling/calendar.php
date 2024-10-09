@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Gatherling\Data\DB;
-use Gatherling\Models\CalendarEventDTO;
+use Gatherling\Models\CalendarEventDto;
 use Gatherling\Views\ICal;
 
 use function Gatherling\Views\server;
@@ -30,19 +30,19 @@ function main(): void
     $page->send();
 }
 
-/** @return list<CalendarEventDTO> */
+/** @return list<CalendarEventDto> */
 function lastNEvents(int $n): array
 {
     return events('start < NOW()', $n);
 }
 
-/** @return list<CalendarEventDTO> */
+/** @return list<CalendarEventDto> */
 function upcomingEvents(): array
 {
     return events('start > NOW()');
 }
 
-/** @return list<CalendarEventDTO> */
+/** @return list<CalendarEventDto> */
 function events(string $where, int $limit = 0): array
 {
     $sql = "
@@ -59,7 +59,7 @@ function events(string $where, int $limit = 0): array
         $sql .= ' ORDER BY start DESC LIMIT :limit';
         $params['limit'] = $limit;
     }
-    return DB::select($sql, CalendarEventDTO::class, $params);
+    return DB::select($sql, CalendarEventDto::class, $params);
 }
 
 if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
