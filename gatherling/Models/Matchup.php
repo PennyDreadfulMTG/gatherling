@@ -303,7 +303,6 @@ class Matchup
             $sql = 'UPDATE matches SET playerb_wins = :wins, playerb_losses = :losses WHERE id = :id';
         }
 
-        $wins = $losses = 0;
         switch ($result) {
             case 'W20':
                 $wins = 2;
