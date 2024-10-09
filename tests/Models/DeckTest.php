@@ -25,13 +25,18 @@ class DeckTest extends DatabaseCase
         $series->start_time = '12:00:00';
         $series->save();
 
+        $host = Player::findOrCreateByName('JimmyTheHost');
+        $this->assertNotNull($host);
+
         $event = new Event('');
         $event->name = 'Test Event';
+        $event->host = $host->name;
         $event->start = '2024-01-01';
         $event->kvalue = 16;
         $event->format = 'Standard';
         $event->series = 'Test Series';
         $event->season = 1;
+        $event->number = 1;
         $event->save();
 
         $this->event = new Event($event->name);

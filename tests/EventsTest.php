@@ -8,8 +8,9 @@ require_once 'gatherling/lib.php';
 
 use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
-use Gatherling\Models\Matchup;
+use Gatherling\Models\Player;
 use Gatherling\Models\Series;
+use Gatherling\Models\Matchup;
 use Gatherling\Tests\Support\TestCases\DatabaseCase;
 
 final class EventsTest extends DatabaseCase
@@ -50,8 +51,11 @@ final class EventsTest extends DatabaseCase
         $event->start = date('Y-m-d H:00:00');
         $event->name = $name;
 
+        $host = Player::findOrCreateByName('JimmyTheHost');
+        $this->assertNotNull($host);
+
         $event->format = 'Modern';
-        $event->host = null;
+        $event->host = $host->name;
         $event->cohost = null;
         $event->client = 1;
         $event->kvalue = 16;
