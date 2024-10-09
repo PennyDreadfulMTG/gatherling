@@ -136,11 +136,11 @@ final class EventsTest extends DatabaseCase
         Matchup::saveReport('W20', $matches[1]->id, 'a');
         Matchup::saveReport('W20', $matches[1]->id, 'b');
         $matches = $event->getRoundMatches(1);
-        $this->assertEquals($matches[0]->verification, 'verified');
-        $this->assertEquals($matches[1]->verification, 'failed');
+        $this->assertEquals('verified', $matches[0]->verification);
+        $this->assertEquals('failed', $matches[1]->verification);
         Matchup::saveReport('L20', $matches[1]->id, 'b');
         $matches = $event->getRoundMatches(1);
-        $this->assertEquals($matches[1]->verification, 'verified');
+        $this->assertEquals('verified', $matches[1]->verification);
 
         return $event;
     }
