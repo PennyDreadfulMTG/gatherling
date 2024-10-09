@@ -133,7 +133,6 @@ class Setup
         }
         foreach ($dir as $file) {
             if (!preg_match('/^[1-9]\d*\.sql$/', $file)) {
-
                 continue;
             }
             $fileVersion = filter_var(basename($file, '.sql'), FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
