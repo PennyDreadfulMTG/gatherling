@@ -92,7 +92,8 @@ class DB
      */
     public static function select(string $sql, string $class, array $params = []): array
     {
-        $rows = self::_execute($sql, $params, function ($sql, $params) use ($class) {
+        /** @var list<T> */
+        return self::_execute($sql, $params, function ($sql, $params) use ($class) {
             $stmt = self::connect()->pdo->prepare($sql);
             foreach ($params as $key => $value) {
                 if (is_int($value)) {
@@ -105,8 +106,6 @@ class DB
             $rows = $stmt->fetchAll(PDO::FETCH_CLASS, $class);
             return $rows;
         });
-        /** @var list<T> */
-        return $rows;
     }
 
     /**
