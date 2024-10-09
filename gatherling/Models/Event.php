@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
+use Gatherling\Data\DB;
 use Gatherling\Views\Components\ReportLink;
 
 class Event
@@ -782,7 +783,6 @@ class Event
     {
         $all_rounds = $roundnum == 'ALL';
         $roundnum = intval($roundnum);
-        $db = Database::getConnection();
         if ($roundnum > $this->mainrounds) {
             $subevnum = 2;
             $roundnum = $roundnum - $this->mainrounds;
@@ -791,27 +791,27 @@ class Event
         }
 
         if ($all_rounds) {
-            $stmt = $db->prepare("SELECT m.id FROM matches m, subevents s, events e
-        WHERE m.subevent = s.id AND s.parent = e.name AND e.name = ? AND
-        s.timing = ? AND m.result <> 'P'");
-            $stmt->bind_param('sd', $this->name, $subevnum);
+            $sql = "
+                SELECT
+                    m.id
+                FROM
+                    matches m, subevents s, events e
+                WHERE
+                    m.subevent = s.id AND s.parent = e.name AND e.name = :name AND s.timing = :timing AND m.result <> 'P'";
+            $params = ['name' => $this->name, 'timing' => $subevnum];
         } else {
-            $stmt = $db->prepare('SELECT m.id FROM matches m, subevents s, events e
-        WHERE m.subevent = s.id AND s.parent = e.name AND e.name = ? AND
-        s.timing = ? AND m.round = ?');
-            $stmt->bind_param('sdd', $this->name, $subevnum, $roundnum);
+            $sql = '
+                SELECT
+                    m.id
+                FROM
+                    matches m, subevents s, events e
+                WHERE
+                    m.subevent = s.id AND s.parent = e.name AND e.name = :name AND s.timing = :timing AND m.round = :round';
+            $params = ['name' => $this->name, 'timing' => $subevnum, 'round' => $roundnum];
         }
 
-        $stmt->execute();
-        $stmt->bind_result($matchid);
+        $mids = DB::values($sql, $params);
 
-        $mids = [];
-        while ($stmt->fetch()) {
-            $mids[] = $matchid;
-        }
-        $stmt->close();
-
-        $matches = [];
         foreach ($mids as $mid) {
             $matches[] = new Matchup($mid);
         }

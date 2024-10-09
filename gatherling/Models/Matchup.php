@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
+use Gatherling\Data\DB;
+use Gatherling\Exceptions\DatabaseException;
 
 class Matchup
 {
@@ -294,44 +296,39 @@ class Matchup
         if ($savedMatch->result != 'P') {
             return;
         }
-        $db = Database::getConnection();
         // Which player is reporting?
         if ($player == 'a') {
-            $stmt = $db->prepare('UPDATE matches SET playera_wins = ?, playera_losses = ? WHERE id = ?');
+            $sql = 'UPDATE matches SET playera_wins = :wins, playera_losses = :losses WHERE id = :id';
         } else {
-            $stmt = $db->prepare('UPDATE matches SET playerb_wins = ?, playerb_losses = ? WHERE id = ?');
+            $sql = 'UPDATE matches SET playerb_wins = :wins, playerb_losses = :losses WHERE id = :id';
         }
-        $stmt or exit($db->error);
-        // this is dumb, fix later
-        // I agree it's dumb, but you can't because PDO sucks.
-        $two = 2;
-        $one = 1;
-        $zero = 0;
 
+        $wins = $losses = 0;
         switch ($result) {
             case 'W20':
-                //echo "writing a 2-0 win";
-                $stmt->bind_param('ddd', $two, $zero, $match_id);
+                $wins = 2;
+                $losses = 0;
                 break;
             case 'W21':
-                //echo "writing a 2-1 win";
-                $stmt->bind_param('ddd', $two, $one, $match_id);
+                $wins = 2;
+                $losses = 1;
                 break;
             case 'L20':
-                //echo "writing a 2-0 loss";
-                $stmt->bind_param('ddd', $zero, $two, $match_id);
+                $wins = 0;
+                $losses = 2;
                 break;
             case 'L21':
-                //echo "writing a 2-1 loss";
-                $stmt->bind_param('ddd', $one, $two, $match_id);
+                $wins = 1;
+                $losses = 2;
                 break;
             case 'D':
-                //writing a draw
-                $stmt->bind_param('ddd', $one, $one, $match_id);
+                $wins = 1;
+                $losses = 1;
                 break;
+            default:
+                throw new Exception("Invalid result: $result"); // BAKERT better exception
         }
-
-        $stmt->execute();
+        DB::execute($sql, ['wins' => $wins, 'losses' => $losses, 'id' => $match_id]);
         self::validateReport($match_id);
     }
 
@@ -352,7 +349,8 @@ class Matchup
     public static function validateReport(int $match_id): void
     {
         // get and compare reports
-        $report = self::getReport($match_id);
+        $sql = 'SELECT subevent, playera_wins, playerb_wins, playera_losses, playerb_losses FROM matches WHERE id = :id';
+        $report = DB::selectOnly($sql, ReportDTO::class, ['id' => $match_id]);
 
         if (($report->playera_wins + $report->playera_losses) == 0 or ($report->playerb_wins + $report->playerb_losses) == 0) {
             //No second report, quit
@@ -371,43 +369,16 @@ class Matchup
         }
     }
 
-    private static function getReport(int $match_id): ReportDTO
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT subevent, playera_wins, playerb_wins, playera_losses, playerb_losses
-                            FROM matches
-                            WHERE id = ?');
-        $stmt->bind_param('d', $match_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-        $stmt->close();
-
-        return new ReportDTO(
-            $row['subevent'],
-            $row['playera_wins'],
-            $row['playerb_wins'],
-            $row['playera_losses'],
-            $row['playerb_losses']
-        );
-    }
-
     public static function flagVerified(int $match_id): void
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare("UPDATE matches SET verification = 'verified' WHERE id = ?");
-        $stmt->bind_param('d', $match_id);
-        $stmt->execute();
-        $stmt->close();
+        $sql = "UPDATE matches SET verification = 'verified' WHERE id = :id";
+        DB::execute($sql, ['id' => $match_id]);
     }
 
     public static function flagFailed(int $match_id): void
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare("UPDATE matches SET verification = 'failed' WHERE id = ?");
-        $stmt->bind_param('d', $match_id);
-        $stmt->execute();
-        $stmt->close();
+        $sql = "UPDATE matches SET verification = 'failed' WHERE id = :id";
+        DB::execute($sql, ['id' => $match_id]);
     }
 
     public static function unresolvedMatchesCheck(int $subevent, int $current_round): int
