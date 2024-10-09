@@ -35,7 +35,7 @@ class PlayerEventList extends Page
                 'format' => $event->format,
                 'numPlayers' => $event->players,
                 'host' => $event->host,
-                'cohost' => $event->cohost,
+                'cohost' => $event->cohost ?? '',
             ];
         }
 

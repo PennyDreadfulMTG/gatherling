@@ -12,7 +12,7 @@ class EventDTO extends DTO
     public string $host;
     public string $start;
     public int $finalized;
-    public string $cohost;
+    public ?string $cohost;
     public string $series;
     public string $season;
 }
