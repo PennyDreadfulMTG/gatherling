@@ -40,11 +40,7 @@ function eventList(string $format, string $series, string $season): array
             e.format,
             COUNT(DISTINCT n.player) AS players,
             e.host,
-            e.start,
-            e.finalized,
-            e.cohost,
-            e.series,
-            e.season
+            e.cohost
         FROM
             events e
         LEFT OUTER JOIN
