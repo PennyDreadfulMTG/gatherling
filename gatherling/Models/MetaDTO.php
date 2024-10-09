@@ -11,6 +11,5 @@ class MetaDTO extends DTO
     public string $archetype;
     public string $colors;
     public string $medal;
-    public int $id;
     public int $srtordr;
 }

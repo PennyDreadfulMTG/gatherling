@@ -72,7 +72,7 @@ class FullMetagame extends Component
         }
         $sql = '
             SELECT
-                player, deckname, archetype, colors, medal, id, srtordr
+                player, deckname, archetype, colors, medal, srtordr
             FROM
                 meta
             ORDER BY
