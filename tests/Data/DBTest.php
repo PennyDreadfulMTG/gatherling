@@ -85,7 +85,7 @@ class DBTest extends DatabaseCase
     {
         DB::execute("INSERT INTO test_table (name) VALUES ('Test1')");
         DB::execute("INSERT INTO test_table (name) VALUES ('Test2')");
-        $values = DB::values('SELECT name FROM test_table');
+        $values = DB::values('SELECT name FROM test_table', 'string');
         $this->assertEquals(['Test1', 'Test2'], $values);
     }
 

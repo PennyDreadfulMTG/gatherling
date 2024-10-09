@@ -810,8 +810,9 @@ class Event
             $params = ['name' => $this->name, 'timing' => $subevnum, 'round' => $roundnum];
         }
 
-        $mids = DB::values($sql, $params);
+        $mids = DB::values($sql, 'int', $params);
 
+        $matches = [];
         foreach ($mids as $mid) {
             $matches[] = new Matchup($mid);
         }
