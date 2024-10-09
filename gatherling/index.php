@@ -35,7 +35,7 @@ function getUpcomingEvents(): array
 {
     $sql = '
         SELECT
-            UNIX_TIMESTAMP(start) AS d, format, series, name, threadurl
+            UNIX_TIMESTAMP(start) AS d, format, name
         FROM
             events
         WHERE

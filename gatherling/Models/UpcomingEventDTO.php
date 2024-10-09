@@ -8,8 +8,5 @@ class UpcomingEventDTO extends DTO
 {
     public int $d;
     public string $name;
-    public string $threadurl;
     public string $format;
-    public string $series;
-    public string $season;
 }
