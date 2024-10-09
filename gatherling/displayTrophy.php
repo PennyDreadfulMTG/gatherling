@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Gatherling\Data\DB;
 use Gatherling\Models\Image;
-use Gatherling\Models\Database;
+use Gatherling\Models\ImageDTO;
 use Gatherling\Views\ImageResponse;
 
 use function Gatherling\Views\server;
@@ -15,7 +15,7 @@ function main(): void
 {
     $sql = 'SELECT image, type, size FROM trophies WHERE event = :event';
     $args = ['event' => $_GET['event']];
-    $values = DB::selectOnlyOrNull($sql, $args);
+    $values = DB::selectOnlyOrNull($sql, ImageDTO::class, $args);
     $image = Image::fromValues($values);
     $response = new ImageResponse($image);
     $response->send();

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Gatherling\Data;
 
-use Gatherling\Exceptions\ConfigurationException;
-use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Log;
+use Gatherling\Exceptions\DatabaseException;
+use Gatherling\Exceptions\ConfigurationException;
+use Gatherling\Models\DTO;
 use PDO;
 use PDOException;
 
@@ -84,12 +85,14 @@ class DB
     }
 
     /**
+     * @template T of DTO
+     * @param class-string<T> $class
      * @param array<string, mixed> $params
-     * @return list<array<string, mixed>>
+     * @return list<T>
      */
-    public static function select(string $sql, array $params = []): array
+    public static function select(string $sql, string $class, array $params = []): array
     {
-        return self::_execute($sql, $params, function ($sql, $params) {
+        $rows = self::_execute($sql, $params, function ($sql, $params) use ($class) {
             $stmt = self::connect()->pdo->prepare($sql);
             foreach ($params as $key => $value) {
                 if (is_int($value)) {
@@ -99,17 +102,22 @@ class DB
                 }
             }
             $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $rows = $stmt->fetchAll(PDO::FETCH_CLASS, $class);
+            return $rows;
         });
+        /** @var list<T> */
+        return $rows;
     }
 
     /**
+     * @template T of DTO
+     * @param class-string<T> $class
      * @param array<string, mixed> $params
-     * @return array<string, mixed>
+     * @return T
      */
-    public static function selectOnly(string $sql, array $params = []): array
+    public static function selectOnly(string $sql, string $class, array $params = []): DTO
     {
-        $result = self::select($sql, $params);
+        $result = self::select($sql, $class, $params);
         if (count($result) !== 1) {
             throw new DatabaseException('Expected 1 row, got ' . count($result) . " for query: $sql");
         }
@@ -117,12 +125,14 @@ class DB
     }
 
     /**
+     * @template T of DTO
+     * @param class-string<T> $class
      * @param array<string, mixed> $params
-     * @return array<string, mixed>|null
+     * @return T|null
      */
-    public static function selectOnlyOrNull(string $sql, array $params = []): ?array
+    public static function selectOnlyOrNull(string $sql, string $class, array $params = []): ?DTO
     {
-        $result = self::select($sql, $params);
+        $result = self::select($sql, $class, $params);
         if (count($result) > 1) {
             throw new DatabaseException('Expected 1 row, got ' . count($result) . " for query: $sql");
         }

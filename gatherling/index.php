@@ -7,6 +7,8 @@ use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Matchup;
+use Gatherling\Models\RecentWinnerDTO;
+use Gatherling\Models\UpcomingEventDTO;
 use Gatherling\Views\Pages\Home;
 
 use function Gatherling\Views\server;
@@ -28,7 +30,7 @@ function main(): void
     $page->send();
 }
 
-/** @return list<array{d: int, format: string, series: string, name: string, threadurl: string}> */
+/** @return list<UpcomingEventDTO> */
 function getUpcomingEvents(): array
 {
     $sql = '
@@ -41,7 +43,7 @@ function getUpcomingEvents(): array
         ORDER BY
             start ASC
         LIMIT 20';
-    return DB::select($sql);
+    return DB::select($sql, UpcomingEventDTO::class);
 }
 
 /** @return array<string, int> */
@@ -69,12 +71,19 @@ function recentWinners(): array
         ORDER BY
             e.start DESC
         LIMIT 10";
-    $winners = DB::select($sql);
-    foreach ($winners as &$winner) {
-        $deck = new Deck($winner['id']);
-        $winner['manaSymbolSafe'] = $deck->getColorImages();
+    $winners = DB::select($sql, RecentWinnerDTO::class);
+    $results = [];
+    foreach ($winners as $winner) {
+        $deck = new Deck($winner->id);
+        $results[] = [
+            'event' => $winner->event,
+            'player' => $winner->player,
+            'name' => $winner->name,
+            'id' => $winner->id,
+            'manaSymbolSafe' => $deck->getColorImages(),
+        ];
     }
-    return $winners;
+    return $results;
 }
 
 if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {

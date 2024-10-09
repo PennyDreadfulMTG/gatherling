@@ -6,8 +6,8 @@ namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
-use Gatherling\Views\Components\Component;
 use Gatherling\Views\Components\Time;
+use Gatherling\Models\UpcomingEventDTO;
 
 class Home extends Page
 {
@@ -27,7 +27,7 @@ class Home extends Page
 
     /**
      * @param list<Event> $activeEvents
-     * @param list<array{d: int, format: string, series: string, name: string, threadurl: string}> $upcomingEvents
+     * @param list<UpcomingEventDTO> $upcomingEvents
      * @param array<string, int> $stats
      * @param list<array<string, int|string>> $recentWinners
      */
@@ -45,10 +45,10 @@ class Home extends Page
         $this->hasActiveEvents = count($this->activeEvents) > 0;
         foreach ($upcomingEvents as $event) {
             $this->upcomingEvents[] = [
-                'name' => $event['name'],
-                'format' => $event['format'],
-                'reportLink' => 'eventreport.php?event=' . rawurlencode($event['name']),
-                'time' => new Time($event['d'], time()),
+                'name' => $event->name,
+                'format' => $event->format,
+                'reportLink' => 'eventreport.php?event=' . rawurlencode($event->name),
+                'time' => new Time($event->d, time()),
             ];
         }
         $this->hasUpcomingEvents = count($this->upcomingEvents) > 0;

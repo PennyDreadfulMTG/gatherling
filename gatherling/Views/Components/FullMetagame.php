@@ -9,6 +9,8 @@ use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
+use Gatherling\Models\MetaDTO;
+use Gatherling\Models\MetaColorsDTO;
 
 use function Gatherling\Views\session;
 
@@ -63,7 +65,7 @@ class FullMetagame extends Component
         foreach ($players as $player) {
             DB::execute($sql, $player);
         }
-        $result = DB::select('SELECT colors, COUNT(player) AS cnt FROM meta GROUP BY(colors)');
+        $result = DB::select('SELECT colors, COUNT(player) AS cnt FROM meta GROUP BY(colors)', MetaColorsDTO::class);
         $sql = 'UPDATE meta SET srtordr = :cnt WHERE colors = :colors';
         foreach ($result as $row) {
             DB::execute($sql, $row);
@@ -75,13 +77,13 @@ class FullMetagame extends Component
                 meta
             ORDER BY
                 srtordr DESC, colors, medal, player';
-        $result = DB::select($sql);
+        $result = DB::select($sql, MetaDTO::class);
         $this->decklistsAreVisible = $event->decklistsVisible();
         $this->meta = $this->players = [];
         $color = null;
         $idx = -1;
         foreach ($result as $row) {
-            $player = new Player($row['player']);
+            $player = new Player($row->player);
             $entry = new Entry($event->id, $player->name);
             $info = [
                 'playerLink' => new PlayerLink($player),
@@ -89,21 +91,20 @@ class FullMetagame extends Component
                 'tribe' => $this->showTribes ? $entry->deck->tribe ?? null : null,
             ];
             if ($this->decklistsAreVisible) {
-                if ($color !== $row['colors']) {
+                if ($color !== $row->colors) {
                     $idx++;
-                    $color = $row['colors'];
+                    $color = $row->colors;
                     $this->meta[] = [
-                        'numPlayers' => $row['srtordr'],
-                        'manaSrc' => 'styles/images/mana' . rawurlencode($row['colors']) . '.png',
+                        'numPlayers' => $row->srtordr,
+                        'manaSrc' => 'styles/images/mana' . rawurlencode($row->colors) . '.png',
                         'entries' => [],
                     ];
                 }
-                if ($row['medal'] != 'z') {  // puts medal next to name of person who won it
-                    $info['medal'] = $row['medal'];
-                }
-                $info['deckName'] = $row['deckname'];
-                $info['deckLink'] = 'deck.php?mode=view&id=' . rawurlencode((string) $row['id']);
-                $info['archetype'] = $row['archetype'];
+                // puts medal next to name of person who won it
+                $info['medal'] = $row->medal == 'z' ? '' : $row->medal;
+                $info['deckName'] = $row->deckname;
+                $info['deckLink'] = 'deck.php?mode=view&id=' . rawurlencode((string) $row->id);
+                $info['archetype'] = $row->archetype;
                 $this->meta[$idx]['entries'][] = $info;
             } else {
                 $this->players[] = $info;
