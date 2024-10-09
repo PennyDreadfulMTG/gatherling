@@ -81,6 +81,14 @@ class DBTest extends DatabaseCase
         DB::value('SELECT id FROM test_table WHERE id = 9999');
     }
 
+    public function testValues(): void
+    {
+        DB::execute("INSERT INTO test_table (name) VALUES ('Test1')");
+        DB::execute("INSERT INTO test_table (name) VALUES ('Test2')");
+        $values = DB::values('SELECT name FROM test_table');
+        $this->assertEquals(['Test1', 'Test2'], $values);
+    }
+
     public function testCommit(): void
     {
         DB::begin('my_transaction');
