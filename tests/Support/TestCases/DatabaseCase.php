@@ -13,12 +13,18 @@ abstract class DatabaseCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        if (!empty($this->requires())) {
+            return;
+        }
         DB::begin($this->transactionName());
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
+        if (!empty($this->requires())) {
+            return;
+        }
         DB::rollback($this->transactionName());
     }
 
