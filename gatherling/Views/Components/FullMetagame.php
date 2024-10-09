@@ -68,7 +68,7 @@ class FullMetagame extends Component
         $result = DB::select('SELECT colors, COUNT(player) AS cnt FROM meta GROUP BY(colors)', MetaColorsDTO::class);
         $sql = 'UPDATE meta SET srtordr = :cnt WHERE colors = :colors';
         foreach ($result as $row) {
-            DB::execute($sql, $row);
+            DB::execute($sql, (array) $row);
         }
         $sql = '
             SELECT
