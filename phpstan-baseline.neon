@@ -16,11 +16,6 @@ parameters:
 			path: gatherling/Auth/Session.php
 
 		-
-			message: "#^Cannot access offset 0 on mixed\\.$#"
-			count: 1
-			path: gatherling/Data/DB.php
-
-		-
 			message: "#^Parameter \\#2 \\$params of static method Gatherling\\\\Data\\\\DB\\:\\:_execute\\(\\) expects array\\<string, mixed\\>, mixed given\\.$#"
 			count: 1
 			path: gatherling/Data/DB.php
