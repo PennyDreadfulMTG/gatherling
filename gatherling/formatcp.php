@@ -2,30 +2,30 @@
 
 declare(strict_types=1);
 
+use Gatherling\Models\CardSet;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
-use Gatherling\Models\Database;
-use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\Components\BAndR;
-use Gatherling\Views\Pages\FormatAdmin;
 use Gatherling\Views\Components\CardSets;
 use Gatherling\Views\Components\Component;
-use Gatherling\Views\Components\FormatError;
-use Gatherling\Views\Components\TribalBAndR;
 use Gatherling\Views\Components\ErrorMessage;
-use Gatherling\Views\Components\FormatSuccess;
-use Gatherling\Views\Components\NewFormatForm;
-use Gatherling\Views\Components\NullComponent;
-use Gatherling\Views\Components\FormatSettings;
-use Gatherling\Views\Components\LoadFormatForm;
 use Gatherling\Views\Components\FormatDeleteForm;
+use Gatherling\Views\Components\FormatError;
 use Gatherling\Views\Components\FormatRenameForm;
 use Gatherling\Views\Components\FormatSaveAsForm;
+use Gatherling\Views\Components\FormatSettings;
+use Gatherling\Views\Components\FormatSuccess;
+use Gatherling\Views\Components\LoadFormatForm;
+use Gatherling\Views\Components\NewFormatForm;
+use Gatherling\Views\Components\NullComponent;
+use Gatherling\Views\Components\TribalBAndR;
+use Gatherling\Views\LoginRedirect;
+use Gatherling\Views\Pages\FormatAdmin;
 use Gatherling\Views\Pages\InsufficientPermissions;
 
 use function Gatherling\Views\post;
-use function Gatherling\Views\request;
 use function Gatherling\Views\server;
+use function Gatherling\Views\request;
 
 require_once 'lib.php';
 include 'lib_form_helper.php';
@@ -261,7 +261,7 @@ function updateCardSets(string $formatName, string $cardSetName, array $delCardS
 function addAll(string $formatName, string $cardsetType): Component
 {
     $format = new Format($formatName);
-    $missing = getMissingSets($cardsetType, $format);
+    $missing = CardSet::getMissingSets($cardsetType, $format);
     foreach ($missing as $set) {
         $format->insertNewLegalSet($set);
     }
@@ -559,23 +559,6 @@ function updateTribeBan(string $formatName, string $tribeBan, array $delBannedTr
         }
     }
     return new NullComponent();
-}
-
-/**
- * @return list<string>
- */
-function getMissingSets(string $cardsetType, Format $format): array
-{
-    $cardsets = Database::list_result_single_param('SELECT name FROM cardsets WHERE type = ?', 's', $cardsetType);
-
-    $finalList = [];
-    foreach ($cardsets as $cardsetName) {
-        if (!$format->isCardSetLegal($cardsetName)) {
-            $finalList[] = $cardsetName;
-        }
-    }
-
-    return $finalList;
 }
 
 if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {

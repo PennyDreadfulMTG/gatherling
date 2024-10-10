@@ -7,6 +7,7 @@ namespace Gatherling\Models;
 use stdClass;
 use mysqli_stmt;
 use Gatherling\Log;
+use Gatherling\Data\DB;
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\FileNotFoundException;
 
@@ -177,4 +178,23 @@ class CardSet
             echo '</table>';
         }
     }
+
+    /**
+     * @return list<string>
+     */
+    public static function getMissingSets(string $cardSetType, Format $format): array
+    {
+        $sql = 'SELECT name FROM cardsets WHERE type = :type';
+        $cardSets = DB::values($sql, 'string', ['type' => $cardSetType]);
+
+        $finalList = [];
+        foreach ($cardSets as $cardSetName) {
+            if (!$format->isCardSetLegal($cardSetName)) {
+                $finalList[] = $cardSetName;
+            }
+        }
+
+        return $finalList;
+    }
+
 }

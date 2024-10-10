@@ -3131,17 +3131,7 @@ parameters:
 			path: gatherling/formatcp.php
 
 		-
-			message: "#^Function getMissingSets\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
-			count: 1
-			path: gatherling/formatcp.php
-
-		-
 			message: "#^Parameter \\#1 \\$oldFormatName of class Gatherling\\\\Views\\\\Components\\\\FormatSaveAsForm constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/formatcp.php
-
-		-
-			message: "#^Parameter \\#1 \\$setName of method Gatherling\\\\Models\\\\Format\\:\\:isCardSetLegal\\(\\) expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/formatcp.php
 

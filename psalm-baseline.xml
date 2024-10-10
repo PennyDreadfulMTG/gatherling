@@ -294,9 +294,6 @@
       <code><![CDATA[$isDisabled]]></code>
       <code><![CDATA[$options]]></code>
     </PossiblyUnusedProperty>
-    <UndefinedFunction>
-      <code><![CDATA[getMissingSets($cardsetType, $format)]]></code>
-    </UndefinedFunction>
   </file>
   <file src="gatherling/Views/Components/DeckLink.php">
     <PossiblyUnusedProperty>
