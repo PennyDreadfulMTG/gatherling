@@ -27,7 +27,7 @@ class EventList extends Page
     {
         parent::__construct();
         $player = Player::getSessionPlayer();
-        $playerSeries = $player->organizersSeries();
+        $playerSeries = $player?->organizersSeries() ?? [];
 
         $result = queryEvents($player, $playerSeries, $seriesName);
         $seriesShown = $results = $finalizedResults = [];

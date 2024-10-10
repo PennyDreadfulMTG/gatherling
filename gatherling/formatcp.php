@@ -41,7 +41,7 @@ function main(): void
         (new InsufficientPermissions($player->isOrganizer()))->send();
     }
 
-    $playerSeries = Player::getSessionPlayer()->organizersSeries();
+    $playerSeries = $player->organizersSeries();
     if ($player->isSuper()) {
         array_unshift($playerSeries, 'System');
     }

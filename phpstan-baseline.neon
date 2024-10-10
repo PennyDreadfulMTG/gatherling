@@ -2081,11 +2081,6 @@ parameters:
 			path: gatherling/Views/Pages/DeckDownload.php
 
 		-
-			message: "#^Cannot call method organizersSeries\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventForm.php
-
-		-
 			message: "#^Offset 1 might not exist on array\\{0\\?\\: string, 1\\?\\: numeric\\-string, 2\\?\\: numeric\\-string, 3\\?\\: numeric\\-string, 4\\?\\: numeric\\-string, 5\\?\\: numeric\\-string\\}\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventForm.php
@@ -2142,11 +2137,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method fetch_assoc\\(\\) on bool\\|mysqli_result\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventList.php
-
-		-
-			message: "#^Cannot call method organizersSeries\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventList.php
 
@@ -2931,11 +2921,6 @@ parameters:
 			path: gatherling/forgot.php
 
 		-
-			message: "#^Cannot call method organizersSeries\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/formatcp.php
-
-		-
 			message: "#^Parameter \\#1 \\$oldFormatName of class Gatherling\\\\Views\\\\Components\\\\FormatSaveAsForm constructor expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/formatcp.php
@@ -3287,11 +3272,6 @@ parameters:
 
 		-
 			message: "#^Cannot access property \\$super on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Cannot call method organizersSeries\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
 			count: 1
 			path: gatherling/seriescp.php
 

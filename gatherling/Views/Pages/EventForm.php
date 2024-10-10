@@ -101,7 +101,7 @@ class EventForm extends EventFrame
         $dayDropMenu = new NumDropMenu('day', '- Day- ', 31, $day, 1);
         $timeDropMenu = timeDropMenuArgs($hour, $minutes);
 
-        $seriesList = Player::getSessionPlayer()->organizersSeries();
+        $seriesList = Player::getSessionPlayer()?->organizersSeries() ?? [];
         if ($event->series) {
             $seriesList[] = $event->series;
         }

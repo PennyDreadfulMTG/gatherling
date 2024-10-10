@@ -39,7 +39,7 @@ do_page();
 
 function do_page(): void
 {
-    $player_series = Player::getSessionPlayer()->organizersSeries();
+    $player_series = Player::getSessionPlayer()?->organizersSeries() ?? [];
     if (count($player_series) == 0) {
         printNoSeries();
         return;
