@@ -26,7 +26,7 @@ class SeasonStandings extends Component
 
         $seasonEvents = [];
         foreach ($seasonEventNames as $eventName) {
-            $shortName = preg_replace("/^{$series->name} /", '', $eventName);
+            $shortName = preg_replace("/^{$series->name} /", '', $eventName) ?? '';
             $reportLink = 'eventreport.php?event=' . rawurlencode($eventName);
             $seasonEvents[] = [
                 'shortName' => $shortName,

@@ -11,7 +11,7 @@ use Gatherling\Views\Components\OrganizerSelect;
 
 class FormatAdmin extends Page
 {
-    public OrganizerSelect $organizerSelect;
+    public ?OrganizerSelect $organizerSelect;
     public string $actionResultSafe = '';
     public FormatCPMenu $formatCPMenu;
     public string $viewSafe;

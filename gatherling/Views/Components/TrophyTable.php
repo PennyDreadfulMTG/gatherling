@@ -14,7 +14,7 @@ class TrophyTable extends Component
     public function __construct(Player $player)
     {
         $events = $player->getEventsWithTrophies();
-        $this->playerName = $player->name;
+        $this->playerName = $player->name ?? '';
         $this->trophies = array_map(fn($eventName) => [
             'deckLink' => 'deck.php?mode=view&event=' . rawurlencode($eventName),
             'eventName' => $eventName,
