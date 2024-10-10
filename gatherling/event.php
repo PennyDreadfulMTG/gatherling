@@ -35,8 +35,6 @@ function main(): void
 {
     if (!Player::isLoggedIn()) {
         linkToLogin('Host Control Panel');
-
-        return;
     }
 
     $getSeriesName = get()->string('series', '');

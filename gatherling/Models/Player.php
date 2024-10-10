@@ -261,7 +261,7 @@ class Player
         return $playername;
     }
 
-    public static function createByName(string $playername): ?self
+    public static function createByName(string $playername): self
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO players(name) VALUES(?)');
@@ -269,20 +269,20 @@ class Player
         $stmt->execute();
         $stmt->close();
 
-        return self::findByName($playername);
+        $newPlayer = self::findByName($playername);
+        if (!$newPlayer) {
+            throw new \RuntimeException("Failed to retrieve player we just created: {$playername}");
+        }
+        return $newPlayer;
     }
 
-    public static function findOrCreateByName(?string $playerName): ?self
+    public static function findOrCreateByName(string $playerName): self
     {
-        if (is_null($playerName)) {
-            return null;
-        }
         $playerName = self::sanitizeUsername($playerName);
         $found = self::findByName($playerName);
         if (is_null($found)) {
             return self::createByName($playerName);
         }
-
         return $found;
     }
 

@@ -12,7 +12,6 @@ final class PlayerTest extends DatabaseCase
     public function testFindOrCreateByName(): void
     {
         $player = Player::findOrCreateByName('test');
-        $this->assertNotNull($player);
         $this->assertEquals('test', $player->name);
         $this->assertNull($player->password);
 
@@ -23,8 +22,19 @@ final class PlayerTest extends DatabaseCase
         $player2 = Player::findOrCreateByName('test');
         $this->assertEquals($player, $player2);
         $this->assertEquals('password', $player2->password);
+    }
 
-        $player3 = Player::findOrCreateByName(null);
-        $this->assertNull($player3);
+    public function testFindByName(): void
+    {
+        $player = Player::findByName('foo');
+        $this->assertNull($player);
+
+        Player::findOrCreateByName('foo');
+
+        $player = Player::findByName('foo');
+        $this->assertNotNull($player);
+
+        $player2 = Player::findByName('bar');
+        $this->assertNull($player2);
     }
 }

@@ -483,12 +483,11 @@ function handleActions(): void
         foreach (post()->listString('removebannedplayer') as $playertoremove) {
             $series->removeBannedPlayer($playertoremove);
         }
-        $addition = post()->optionalString('addbannedplayer');
-        $addplayer = Player::findOrCreateByName($addition);
+        $addition = post()->string('addbannedplayer');
+        $addplayer = Player::findByName($addition);
         if ($addplayer == null) {
             $hasError = true;
             $errormsg .= "Can't add {$addition} to Banned Players, they don't exist!";
-
             return;
         }
         $series->addBannedPlayer($addplayer->name, post()->string('reason', ''));

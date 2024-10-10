@@ -15,7 +15,7 @@ class Registration
     public static function register(string $username, string $pw1, string $pw2, string $email, int $emailStatus, ?float $timezone, ?string $discordId, ?string $discordName): int
     {
         $player = Player::findOrCreateByName(trim($username));
-        if ($player && !is_null($player->password)) {
+        if (!is_null($player->password)) {
             return self::ERROR_PLAYER_EXISTS;
         }
         if (strcmp($pw1, $pw2) != 0) {

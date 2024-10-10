@@ -26,7 +26,6 @@ class DeckTest extends DatabaseCase
         $series->save();
 
         $host = Player::findOrCreateByName('JimmyTheHost');
-        $this->assertNotNull($host);
 
         $event = new Event('');
         $event->name = 'Test Event';

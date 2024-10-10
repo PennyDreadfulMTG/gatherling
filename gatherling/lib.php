@@ -91,7 +91,7 @@ function headerColor(): string
     return $HC;
 }
 
-function linkToLogin(string $_pagename = null, ?string $redirect = null, ?string $message = null, ?string $username = null): void
+function linkToLogin(string $_pagename = null, ?string $redirect = null, ?string $message = null, ?string $username = null): never
 {
     (new LoginRedirect($redirect ?? '', $message ?? '', $username ?? ''))->send();
 }

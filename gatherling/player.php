@@ -39,7 +39,7 @@ if (isset($_POST['action'])) {
             if (strlen(post()->string('newPassword', '')) >= 8) {
                 $authenticated = Player::checkPassword($player->name, post()->string('oldPassword', ''));
                 if ($authenticated) {
-                    $player->setPassword($_POST['newPassword']);
+                    $player->setPassword(post()->string('newPassword'));
                     $result = 'Password changed.';
                     $success = true;
                 } else {
@@ -54,7 +54,7 @@ if (isset($_POST['action'])) {
     } elseif ($_POST['action'] == 'editEmail') {
         $success = false;
         if ($_POST['newEmail'] == $_POST['newEmail2']) {
-            $player->emailAddress = ($_POST['newEmail']);
+            $player->emailAddress = (post()->string('newEmail'));
             $player->emailPrivacy = (int) $_POST['emailstatus'];
             $result = 'Email changed.';
             $success = true;
@@ -65,11 +65,11 @@ if (isset($_POST['action'])) {
     } elseif ($_POST['action'] == 'editAccounts') {
         $success = false;
 
-        $player->mtgo_username = empty($_POST['mtgo_username']) ? null : $_POST['mtgo_username'];
+        $player->mtgo_username = post()->optionalString('mtgo_username');
         if (!preg_match('/^.{3,24}#\d{5}$/', post()->string('mtga_username', ''))) {
             $_POST['mtga_username'] = null;
         }
-        $player->mtga_username = empty($_POST['mtga_username']) ? null : $_POST['mtga_username'];
+        $player->mtga_username = post()->optionalString('mtga_username');
         $player->save();
         $result = 'Accounts updated.';
         $success = true;
@@ -79,7 +79,7 @@ if (isset($_POST['action'])) {
         $player->save();
     } elseif ($_POST['action'] == 'verifyAccount') {
         $success = false;
-        if ($player->checkChallenge($_POST['challenge'])) {
+        if ($player->checkChallenge(post()->string('challenge'))) {
             $player->setVerified(true);
             $result = 'Successfully verified your account with MTGO.';
             $success = true;

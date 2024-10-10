@@ -7,6 +7,7 @@ use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use Wohali\OAuth2\Client\Provider\Exception\DiscordIdentityProviderException;
 
 use function Gatherling\Views\request;
+use function Gatherling\Views\session;
 
 require_once __DIR__ . '/lib.php';
 require __DIR__ . '/authlib.php';
@@ -105,8 +106,8 @@ function do_login(\League\OAuth2\Client\Token\AccessTokenInterface $token): void
         $_SESSION['DISCORD_ID'] = $user->getId();
         $_SESSION['DISCORD_NAME'] = "{$user->getUsername()}#{$user->getDiscriminator()}";
 
-        if (Player::isLoggedIn()) {
-            $player = Player::getSessionPlayer();
+        $player = Player::getSessionPlayer();
+        if ($player) {
             $player->discord_id = $_SESSION['DISCORD_ID'];
             $player->discord_handle = $_SESSION['DISCORD_NAME'];
             if (empty($player->emailAddress) && $user->getVerified()) {
@@ -124,7 +125,7 @@ function do_login(\League\OAuth2\Client\Token\AccessTokenInterface $token): void
             $_SESSION['username'] = $player->name;
             if ($player->discord_handle != $_SESSION['DISCORD_NAME']) {
                 $player->discord_handle = $_SESSION['DISCORD_NAME'];
-                $player->discord_id = $_SESSION['DISCORD_ID'];
+                $player->discord_id = session()->optionalString('DISCORD_ID');
                 if (empty($player->emailAddress) && $user->getVerified()) {
                     $player->emailAddress = $user->getEmail();
                 }

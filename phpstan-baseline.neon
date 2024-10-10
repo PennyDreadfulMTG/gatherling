@@ -1,46 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Cannot access property \\$discord_handle on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/Auth/Registration.php
-
-		-
-			message: "#^Cannot access property \\$discord_id on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/Auth/Registration.php
-
-		-
-			message: "#^Cannot access property \\$emailAddress on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/Auth/Registration.php
-
-		-
-			message: "#^Cannot access property \\$emailPrivacy on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/Auth/Registration.php
-
-		-
-			message: "#^Cannot access property \\$password on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/Auth/Registration.php
-
-		-
-			message: "#^Cannot access property \\$super on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/Auth/Registration.php
-
-		-
-			message: "#^Cannot access property \\$timezone on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/Auth/Registration.php
-
-		-
-			message: "#^Cannot call method save\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/Auth/Registration.php
-
-		-
 			message: "#^Method Gatherling\\\\Auth\\\\Session\\:\\:load\\(\\) should return array\\<string, mixed\\> but returns mixed\\.$#"
 			count: 1
 			path: gatherling/Auth/Session.php
@@ -497,11 +457,6 @@ parameters:
 
 		-
 			message: "#^Cannot access property \\$insert_id on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Cannot access property \\$name on Gatherling\\\\Models\\\\Player\\|null\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
 
@@ -2551,27 +2506,7 @@ parameters:
 			path: gatherling/api_lib.php
 
 		-
-			message: "#^Cannot access property \\$discord_handle on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/auth.php
-
-		-
-			message: "#^Cannot access property \\$discord_id on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/auth.php
-
-		-
-			message: "#^Cannot access property \\$emailAddress on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/auth.php
-
-		-
 			message: "#^Cannot call method getEmail\\(\\) on mixed\\.$#"
-			count: 1
-			path: gatherling/auth.php
-
-		-
-			message: "#^Cannot call method save\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
 			count: 1
 			path: gatherling/auth.php
 
@@ -3111,37 +3046,7 @@ parameters:
 			path: gatherling/player.php
 
 		-
-			message: "#^Cannot access property \\$emailAddress on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot access property \\$emailPrivacy on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot access property \\$mtga_username on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot access property \\$mtgo_username on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot access property \\$name on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
 			message: "#^Cannot access property \\$num_rows on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot access property \\$timezone on Gatherling\\\\Models\\\\Player\\|null\\.$#"
 			count: 1
 			path: gatherling/player.php
 
@@ -3161,11 +3066,6 @@ parameters:
 			path: gatherling/player.php
 
 		-
-			message: "#^Cannot call method checkChallenge\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
 			count: 1
 			path: gatherling/player.php
@@ -3178,21 +3078,6 @@ parameters:
 		-
 			message: "#^Cannot call method linkTo\\(\\) on Gatherling\\\\Models\\\\Deck\\|null\\.$#"
 			count: 2
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot call method save\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 3
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot call method setPassword\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot call method setVerified\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
 			path: gatherling/player.php
 
 		-
@@ -3261,46 +3146,6 @@ parameters:
 			path: gatherling/player.php
 
 		-
-			message: "#^Parameter \\#1 \\$player of function print_allMatchForm expects Gatherling\\\\Models\\\\Player, Gatherling\\\\Models\\\\Player\\|null given\\.$#"
-			count: 2
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of function print_changePassForm expects Gatherling\\\\Models\\\\Player, Gatherling\\\\Models\\\\Player\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of function print_editAccountsForm expects Gatherling\\\\Models\\\\Player, Gatherling\\\\Models\\\\Player\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of function print_editEmailForm expects Gatherling\\\\Models\\\\Player, Gatherling\\\\Models\\\\Player\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of function print_editTimeZoneForm expects Gatherling\\\\Models\\\\Player, Gatherling\\\\Models\\\\Player\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of function print_mainPlayerCP expects Gatherling\\\\Models\\\\Player, Gatherling\\\\Models\\\\Player\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of function print_matchTable expects Gatherling\\\\Models\\\\Player, Gatherling\\\\Models\\\\Player\\|null given\\.$#"
-			count: 2
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of function print_verifyMtgoForm expects Gatherling\\\\Models\\\\Player, Gatherling\\\\Models\\\\Player\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
 			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:getPlayerLosses\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/player.php
@@ -3346,11 +3191,6 @@ parameters:
 			path: gatherling/player.php
 
 		-
-			message: "#^Cannot access property \\$name on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 4
-			path: gatherling/prereg.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of method Gatherling\\\\Models\\\\Series\\:\\:isPlayerBanned\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/prereg.php
@@ -3387,12 +3227,7 @@ parameters:
 
 		-
 			message: "#^Cannot access property \\$name on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 4
-			path: gatherling/report.php
-
-		-
-			message: "#^Cannot call method getCurrentMatches\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
+			count: 3
 			path: gatherling/report.php
 
 		-
@@ -3559,8 +3394,3 @@ parameters:
 			message: "#^Parameter \\#2 \\$haystack of method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: tests/Models/PaginationTest.php
-
-		-
-			message: "#^Cannot access property \\$password on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: tests/Models/PlayerTest.php

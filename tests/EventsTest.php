@@ -52,7 +52,6 @@ final class EventsTest extends DatabaseCase
         $event->name = $name;
 
         $host = Player::findOrCreateByName('JimmyTheHost');
-        $this->assertNotNull($host);
 
         $event->format = 'Modern';
         $event->host = $host->name;
