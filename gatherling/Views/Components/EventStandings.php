@@ -43,8 +43,8 @@ class EventStandings extends Component
                 'opMatch' => $standing->OP_Match,
                 'plGame' => $standing->PL_Game,
                 'opGame' => $standing->OP_Game,
-                'matchesPlayed' => $standing->matches_played,
-                'byes' => $standing->byes,
+                'matchesPlayed' => $standing->matches_played ?? 0,
+                'byes' => $standing->byes ?? 0,
             ];
             $rank++;
             $standingInfoList[] = $standingInfo;
