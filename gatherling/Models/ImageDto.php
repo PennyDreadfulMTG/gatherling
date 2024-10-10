@@ -6,7 +6,7 @@ namespace Gatherling\Models;
 
 class ImageDto extends Dto
 {
-    public string $image;
-    public string $type;
-    public int $size;
+    public ?string $image;
+    public ?string $type;
+    public ?int $size;
 }
