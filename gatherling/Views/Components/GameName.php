@@ -16,7 +16,7 @@ class GameName extends Component
         parent::__construct('partials/gameName');
 
         $iconClass = null;
-        $name = $player->name;
+        $name = $player->name ?? '';
         if ($html) {
             if ($game == MTGO && !empty($player->mtgo_username)) {
                 $iconClass = 'ss ss-pmodo';
