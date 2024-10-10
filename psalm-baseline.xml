@@ -132,48 +132,6 @@
       <code><![CDATA[int]]></code>
     </PossiblyUnusedReturnValue>
   </file>
-  <file src="gatherling/Models/MaxWeightMatching.php">
-    <InvalidFunctionCall>
-      <code><![CDATA[$DEBUG("PAIR(b) $v $w (k=$k)")]]></code>
-      <code><![CDATA[$DEBUG("PAIR(c) $s $t (k=".$this->floorintdiv($p, 2).')')]]></code>
-      <code><![CDATA[$DEBUG("POP v=$v")]]></code>
-      <code><![CDATA[$DEBUG("PUSH $leaf")]]></code>
-      <code><![CDATA[$DEBUG("STAGE $t")]]></code>
-      <code><![CDATA[$DEBUG("addBlossom($base,$k) (v=$v w=$w) -> $b")]]></code>
-      <code><![CDATA[$DEBUG("assignLabel($w,$t,$p)")]]></code>
-      <code><![CDATA[$DEBUG("augmentBlossom($b,$v)")]]></code>
-      <code><![CDATA[$DEBUG("augmentMatching($k) (v=$v w=$w)")]]></code>
-      <code><![CDATA[$DEBUG("bk=$bk tbk=$tbk bd=".$this->arr_repr($bd).' tbd='.$this->arr_repr($tbd))]]></code>
-      <code><![CDATA[$DEBUG("blossomchilds[$b]=".$this->arr_repr($this->blossomchilds[$b]))]]></code>
-      <code><![CDATA[$DEBUG("delta$deltatype=$delta")]]></code>
-      <code><![CDATA[$DEBUG("expandBlossom($b,$endstage) ".$this->arr_repr($this->blossomchilds[$b]))]]></code>
-      <code><![CDATA[$DEBUG("scanBlossom($v,$w)")]]></code>
-      <code><![CDATA[$DEBUG('PAIR(a) '.$this->endpoint[$p].' '.$this->endpoint[$p ^ 1].' (k='.$this->floorintdiv($p, 2).')')]]></code>
-      <code><![CDATA[$DEBUG('SUBSTAGE')]]></code>
-      <code><![CDATA[$DEBUG('v='.$v.' bk='.$bk.' bd='.$bd.' $this->bestedge[$v]='.$this->bestedge[$v].' slack='.$this->slack($this->bestedge[$v]))]]></code>
-    </InvalidFunctionCall>
-    <PossiblyUnusedMethod>
-      <code><![CDATA[print_arr]]></code>
-    </PossiblyUnusedMethod>
-    <UnusedVariable>
-      <code><![CDATA[$CHECK_DELTA]]></code>
-      <code><![CDATA[$CHECK_OPTIMUM]]></code>
-      <code><![CDATA[$DEBUG]]></code>
-      <code><![CDATA[$i]]></code>
-      <code><![CDATA[$i]]></code>
-      <code><![CDATA[$j]]></code>
-      <code><![CDATA[$j]]></code>
-      <code><![CDATA[$j]]></code>
-      <code><![CDATA[$w]]></code>
-      <code><![CDATA[$w]]></code>
-      <code><![CDATA[$wt]]></code>
-      <code><![CDATA[$wt]]></code>
-      <code><![CDATA[$wt]]></code>
-      <code><![CDATA[$wt]]></code>
-      <code><![CDATA[$wt]]></code>
-      <code><![CDATA[$wt]]></code>
-    </UnusedVariable>
-  </file>
   <file src="gatherling/Models/Pagination.php">
     <InvalidArrayOffset>
       <code><![CDATA[$query[$this->_properties['variable_name']]]]></code>

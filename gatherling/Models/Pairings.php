@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
+use Bakert\BlossomPhp\MaxWeightMatching;
+
 class Pairings
 {
     private int $lowestScoreWithoutBye = -1;

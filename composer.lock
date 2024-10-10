@@ -4,8 +4,49 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "37df5ec053e7e6a89f3f89fdde7f2d45",
+    "content-hash": "9254475d6c44c9052b0b0ab99a504eee",
     "packages": [
+        {
+            "name": "bakert/blossom-php",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bakert/blossom-php.git",
+                "reference": "2d1da47048db4b39810083bcc2f101d8dbf19411"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bakert/blossom-php/zipball/2d1da47048db4b39810083bcc2f101d8dbf19411",
+                "reference": "2d1da47048db4b39810083bcc2f101d8dbf19411",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6 || ^7 || ^8 || ^9.5 || ^10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Bakert\\BlossomPhp\\": "src/",
+                    "Bakert\\BlossomPhp\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Thomas David Baker",
+                    "email": "bakert@gmail.com"
+                }
+            ],
+            "description": "Edmonds's Blossom Algorithm in PHP",
+            "support": {
+                "issues": "https://github.com/bakert/blossom-php/issues",
+                "source": "https://github.com/bakert/blossom-php/tree/v1.0.0"
+            },
+            "time": "2024-10-10T16:07:24+00:00"
+        },
         {
             "name": "firebase/php-jwt",
             "version": "v6.10.1",
