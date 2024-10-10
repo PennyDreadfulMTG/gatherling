@@ -150,8 +150,11 @@ class DB
             if ($result === false && !$missingOk) {
                 throw new DatabaseException("Failed to fetch value for $sql");
             }
+            if ($result === false) {
+                return null;
+            }
             if (!is_array($result)) {
-                throw new DatabaseException("Failed to fetch array for $sql");
+                throw new DatabaseException("Failed to fetch array for $sql, was " . gettype($result));
             }
             return $result[0] ?? null;
         });
