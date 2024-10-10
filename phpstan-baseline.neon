@@ -1886,11 +1886,6 @@ parameters:
 			path: gatherling/Models/Series.php
 
 		-
-			message: "#^Property Gatherling\\\\Models\\\\Series\\:\\:\\$this_season_season \\(int\\) does not accept int\\|null\\.$#"
-			count: 1
-			path: gatherling/Models/Series.php
-
-		-
 			message: "#^Cannot access property \\$data on mixed\\.$#"
 			count: 1
 			path: gatherling/Models/SetScraper.php

@@ -106,7 +106,7 @@ class Series
 
         // Most recent season
         $mostRecentEvent = $this->mostRecentEvent();
-        $this_season = $mostRecentEvent ? $mostRecentEvent->season : 0;
+        $this_season = $mostRecentEvent->season ?? 0;
         $stmt = $db->prepare('SELECT format, master_link FROM series_seasons WHERE series = ? AND season <= ?
                               ORDER BY season DESC
                               LIMIT 1');
