@@ -14,7 +14,7 @@ class BestDecksTable extends Component
 
     public function __construct(Player $player)
     {
-        $this->playerName = $player->name;
+        $this->playerName = $player->name ?? '';
         foreach ($player->getBestDeckStats() as $row) {
             if ($row['score'] <= 0) {
                 continue;

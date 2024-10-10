@@ -1149,7 +1149,7 @@ class Player
         return $medals;
     }
 
-    /** @return list<array<string, int|string>> */
+    /** @return list<array{name: string, cnt: int, id: int, t8: int, t4: int, '2nd': int, '1st': int, score: int}> */
     public function getBestDeckStats(): array
     {
         $db = Database::getConnection();
