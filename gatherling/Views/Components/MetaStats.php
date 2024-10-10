@@ -12,7 +12,7 @@ class MetaStats extends Component
 {
     /** @var list<array{name: string, pcg: int}> */
     public array $archetypes;
-    /** @var list<array{pcg: int}> */
+    /** @var list<array{pcg: int|'??'}> */
     public array $colors;
 
     public function __construct(Event $event)
@@ -33,7 +33,7 @@ class MetaStats extends Component
         $this->archetypes = [];
         foreach ($archcnt as $arch => $cnt) {
             if ($cnt > 0) {
-                $pcg = round(($cnt / $ndecks) * 100);
+                $pcg = (int) (round(($cnt / $ndecks) * 100));
                 $this->archetypes[] = [
                     'name' => $arch,
                     'pcg' => $pcg,
@@ -45,7 +45,7 @@ class MetaStats extends Component
         foreach ($colorcnt as $col => $cnt) {
             if ($col != '') {
                 if ($ndecks > 0) {
-                    $pcg = round(($cnt / $ndecks) * 100);
+                    $pcg = (int) (round(($cnt / $ndecks) * 100));
                 } else {
                     $pcg = '??';
                 }
