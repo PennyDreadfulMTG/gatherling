@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Gatherling\Views\Pages;
 
 use DateTime;
-use Gatherling\Models\Pagination;
 use Gatherling\Models\Player;
 use Gatherling\Views\Components\PlayerLink;
 use Gatherling\Views\Components\RatingsTable;
 use Gatherling\Views\Components\FormatDropMenuR;
+use Zebra_Pagination;
 
 class Ratings extends Page
 {
@@ -29,7 +29,7 @@ class Ratings extends Page
         int $highestRatingTimestamp,
         public int $minMatches,
         public array $ratingsData,
-        Pagination $pagination,
+        Zebra_Pagination $pagination,
     ) {
         parent::__construct();
         $this->title = 'Ratings';

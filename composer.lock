@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9254475d6c44c9052b0b0ab99a504eee",
+    "content-hash": "e9fdda05fda02e3eaa359f84ad43672f",
     "packages": [
         {
             "name": "bakert/blossom-php",
@@ -1229,6 +1229,66 @@
                 }
             ],
             "time": "2024-08-08T14:40:50+00:00"
+        },
+        {
+            "name": "stefangabos/zebra_pagination",
+            "version": "2.4.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stefangabos/Zebra_Pagination.git",
+                "reference": "2067a9e395b2c9de2a1454fe0fa9cad81a1ecf46"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stefangabos/Zebra_Pagination/zipball/2067a9e395b2c9de2a1454fe0fa9cad81a1ecf46",
+                "reference": "2067a9e395b2c9de2a1454fe0fa9cad81a1ecf46",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.8",
+                "squizlabs/php_codesniffer": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "Zebra_Pagination.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Stefan Gabos",
+                    "email": "contact@stefangabos.ro",
+                    "homepage": "https://github.com/stefangabos",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A generic, Twitter Bootstrap compatible, PHP pagination library that automatically generates navigation links",
+            "homepage": "https://github.com/stefangabos/Zebra_Pagination",
+            "keywords": [
+                "paginate",
+                "pagination",
+                "paginator",
+                "paging",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/stefangabos/Zebra_Pagination/issues",
+                "source": "https://github.com/stefangabos/Zebra_Pagination/tree/2.4.8"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/stefangabos",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-06-19T15:28:21+00:00"
         },
         {
             "name": "symfony/css-selector",

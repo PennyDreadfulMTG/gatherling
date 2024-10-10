@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Gatherling\Models\Database;
 use Gatherling\Models\Decksearch;
-use Gatherling\Models\Pagination;
+use Zebra_Pagination;
 
 use function Gatherling\Views\get;
 use function Gatherling\Views\post;
@@ -363,7 +363,7 @@ function displayDecksFromID(array $id_arr): void
 
     $records_per_page = 25;
 
-    $pagination = new Pagination();
+    $pagination = new Zebra_Pagination();
     $pagination->records(count($ids_populated));
     $pagination->records_per_page($records_per_page);
     $pagination->avoid_duplicate_content(false);

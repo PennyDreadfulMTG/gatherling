@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Gatherling\Tests\Models;
 
-use Gatherling\Models\Pagination;
 use PHPUnit\Framework\TestCase;
+use Zebra_Pagination;
 
 class PaginationTest extends TestCase
 {
@@ -17,7 +17,7 @@ class PaginationTest extends TestCase
 
     public function testSetProperties(): void
     {
-        $pagination = new Pagination();
+        $pagination = new Zebra_Pagination();
         $pagination->records(100);
         $pagination->records_per_page(10);
         $pagination->set_page(2);
@@ -31,7 +31,7 @@ class PaginationTest extends TestCase
 
     public function testGetPages(): void
     {
-        $pagination = new Pagination();
+        $pagination = new Zebra_Pagination();
 
         $pagination->records(100);
         $pagination->records_per_page(10);

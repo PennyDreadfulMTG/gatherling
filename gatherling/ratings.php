@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use Gatherling\Data\DB;
 use Gatherling\Models\Player;
-use Gatherling\Models\Pagination;
 use Gatherling\Models\BestEverDto;
 use Gatherling\Models\PlayerRatingDto;
 use Gatherling\Views\Pages\Ratings;
+use Zebra_Pagination;
 
 use function Gatherling\Views\post;
 use function Gatherling\Views\server;
@@ -25,7 +25,7 @@ function main(): void
     $page->send();
 }
 
-/** @return array{ratings_data: list<array{player: string, rank: int, playerName: string, player: Player}>, pagination: Pagination} */
+/** @return array{ratings_data: list<array{player: string, rank: int, playerName: string, player: Player}>, pagination: Zebra_Pagination} */
 function ratingsData(string $format, int $minMatches): array
 {
     $subquery = '
@@ -63,7 +63,7 @@ function ratingsData(string $format, int $minMatches): array
     }
 
     $records_per_page = 25;
-    $pagination = new Pagination();
+    $pagination = new Zebra_Pagination();
     $pagination->records(count($results));
     $pagination->records_per_page($records_per_page);
     $pagination->avoid_duplicate_content(false);

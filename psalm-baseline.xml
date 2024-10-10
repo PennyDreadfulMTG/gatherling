@@ -132,31 +132,6 @@
       <code><![CDATA[int]]></code>
     </PossiblyUnusedReturnValue>
   </file>
-  <file src="gatherling/Models/Pagination.php">
-    <InvalidArrayOffset>
-      <code><![CDATA[$query[$this->_properties['variable_name']]]]></code>
-    </InvalidArrayOffset>
-    <InvalidReturnStatement>
-      <code><![CDATA[$this->_properties['page']]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[int]]></code>
-    </InvalidReturnType>
-    <PossiblyUnusedMethod>
-      <code><![CDATA[always_show_navigation]]></code>
-      <code><![CDATA[labels]]></code>
-      <code><![CDATA[method]]></code>
-      <code><![CDATA[navigation_position]]></code>
-      <code><![CDATA[padding]]></code>
-      <code><![CDATA[reverse]]></code>
-      <code><![CDATA[selectable_pages]]></code>
-      <code><![CDATA[trailing_slash]]></code>
-      <code><![CDATA[variable_name]]></code>
-    </PossiblyUnusedMethod>
-    <PossiblyUnusedReturnValue>
-      <code><![CDATA[string|null]]></code>
-    </PossiblyUnusedReturnValue>
-  </file>
   <file src="gatherling/Models/Player.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[getClientIPAddress]]></code>
