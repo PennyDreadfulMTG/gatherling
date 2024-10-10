@@ -9,7 +9,7 @@ use Gatherling\Models\Player;
 use Gatherling\Views\Components\PlayerLink;
 use Gatherling\Views\Components\RatingsTable;
 use Gatherling\Views\Components\FormatDropMenuR;
-use Zebra_Pagination;
+use Zebra_Pagination as Pagination;
 
 class Ratings extends Page
 {
@@ -29,7 +29,7 @@ class Ratings extends Page
         int $highestRatingTimestamp,
         public int $minMatches,
         public array $ratingsData,
-        Zebra_Pagination $pagination,
+        Pagination $pagination,
     ) {
         parent::__construct();
         $this->title = 'Ratings';
