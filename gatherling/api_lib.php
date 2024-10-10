@@ -51,13 +51,12 @@ function is_admin(): bool
 
     if (!Player::isLoggedIn()) {
         header('X-Logged-In: false');
-    } elseif (Player::getSessionPlayer()->isSuper()) {
+    } elseif (Player::getSessionPlayer()?->isSuper() ?? false) {
         header('X-Admin: true');
-
         return true;
     }
-    header('X-Admin: false');
 
+    header('X-Admin: false');
     return false;
 }
 

@@ -1,11 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Cannot call method isSuper\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/Auth/Login.php
-
-		-
 			message: "#^Cannot access property \\$discord_handle on Gatherling\\\\Models\\\\Player\\|null\\.$#"
 			count: 1
 			path: gatherling/Auth/Registration.php
@@ -2451,11 +2446,6 @@ parameters:
 			path: gatherling/admincp.php
 
 		-
-			message: "#^Cannot call method isSuper\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 2
-			path: gatherling/admincp.php
-
-		-
 			message: "#^Cannot cast mixed to int\\.$#"
 			count: 2
 			path: gatherling/admincp.php
@@ -2507,11 +2497,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method fetch_assoc\\(\\) on bool\\|mysqli_result\\.$#"
-			count: 1
-			path: gatherling/api_lib.php
-
-		-
-			message: "#^Cannot call method isSuper\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
 			count: 1
 			path: gatherling/api_lib.php
 
@@ -2638,11 +2623,6 @@ parameters:
 		-
 			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
 			count: 4
-			path: gatherling/cardscp.php
-
-		-
-			message: "#^Cannot call method isSuper\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 2
 			path: gatherling/cardscp.php
 
 		-
@@ -3014,16 +2994,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$to of function sendEmail expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/forgot.php
-
-		-
-			message: "#^Cannot call method isOrganizer\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 3
-			path: gatherling/formatcp.php
-
-		-
-			message: "#^Cannot call method isSuper\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 2
-			path: gatherling/formatcp.php
 
 		-
 			message: "#^Cannot call method organizersSeries\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
@@ -3551,11 +3521,6 @@ parameters:
 			path: gatherling/util/insertcardset.php
 
 		-
-			message: "#^Cannot call method isSuper\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/util/insertcardset.php
-
-		-
 			message: "#^Part \\$_REQUEST\\['return'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
 			count: 3
 			path: gatherling/util/insertcardset.php
@@ -3564,11 +3529,6 @@ parameters:
 			message: "#^Part \\$args \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
 			count: 2
 			path: gatherling/util/insertcardset.php
-
-		-
-			message: "#^Cannot call method isSuper\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/util/updateDefaultFormats.php
 
 		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, string\\|null given\\.$#"

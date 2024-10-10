@@ -18,7 +18,7 @@ require_once __DIR__ . '/../lib.php';
 function main(): void
 {
     if (PHP_SAPI != 'cli' && $_SERVER['REQUEST_METHOD'] == 'GET') { // unauthorized POST is okay
-        if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
+        if (!(Player::getSessionPlayer()?->isSuper() ?? false)) {
             redirect('index.php');
         }
     }

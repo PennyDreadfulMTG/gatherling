@@ -11,7 +11,7 @@ class Redirect extends Response
         $this->setHeader('Location', $url);
     }
 
-    public function send(): void
+    public function send(): never
     {
         parent::send();
         exit;

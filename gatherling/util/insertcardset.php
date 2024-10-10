@@ -28,7 +28,7 @@ function main(): void
             CardSet::insertFromLocation($argv[1]);
         }
     } else { // CGI
-        if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
+        if (!(Player::getSessionPlayer()?->isSuper() ?? false)) {
             redirect('index.php');
         }
         if (isset($_REQUEST['cardsetcode'])) {

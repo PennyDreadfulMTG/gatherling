@@ -14,7 +14,7 @@ include 'lib_form_helper.php';
 $hasError = false;
 $errormsg = '';
 
-if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
+if (!(Player::getSessionPlayer()?->isSuper() ?? false)) {
     redirect('index.php');
 }
 
@@ -38,9 +38,8 @@ print_header('Admin Control Panel');
 function do_page(): void
 {
     $player = Player::getSessionPlayer();
-    if (!$player->isSuper()) {
+    if (!$player || !$player->isSuper()) {
         printNoAdmin();
-
         return;
     }
 

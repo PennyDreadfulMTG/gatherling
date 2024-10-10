@@ -32,11 +32,10 @@ include 'lib_form_helper.php';
 
 function main(): void
 {
-    if (!Player::isLoggedIn()) {
+    $player = Player::getSessionPlayer();
+    if (!$player) {
         (new LoginRedirect())->send();
     }
-
-    $player = Player::getSessionPlayer();
 
     if (!$player->isOrganizer() && !$player->isSuper()) {
         (new InsufficientPermissions($player->isOrganizer()))->send();
