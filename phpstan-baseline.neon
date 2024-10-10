@@ -1981,11 +1981,6 @@ parameters:
 			path: gatherling/Views/Components/BAndR.php
 
 		-
-			message: "#^Parameter \\#1 \\$deckname of function Gatherling\\\\Views\\\\Components\\\\deckRecordString expects string, int\\|string given\\.$#"
-			count: 1
-			path: gatherling/Views/Components/BestDecksTable.php
-
-		-
 			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:playerBye\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Components/BestDecksTable.php
@@ -2006,29 +2001,9 @@ parameters:
 			path: gatherling/Views/Components/BestDecksTable.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function rtrim expects string, int\\|string given\\.$#"
-			count: 1
-			path: gatherling/Views/Components/BestDecksTable.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\BestDecksTable\\:\\:\\$decks \\(array\\<array\\{name\\: string, link\\: string, record\\: string, medals\\: array\\<array\\{src\\: string, alt\\: string\\}\\>\\}\\>\\) does not accept non\\-empty\\-array\\<array\\{name\\: int\\|string, link\\: string, record\\: string, medals\\: array\\<array\\{src\\: string, alt\\: string\\}\\>\\}\\>\\.$#"
-			count: 1
-			path: gatherling/Views/Components/BestDecksTable.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\BestDecksTable\\:\\:\\$playerName \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Components/BestDecksTable.php
-
-		-
 			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Components/CardLink.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\CardSets\\:\\:\\$activeFormatName \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Components/CardSets.php
 
 		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
@@ -2036,24 +2011,9 @@ parameters:
 			path: gatherling/Views/Components/EventStandings.php
 
 		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\EventStandings\\:\\:\\$standings \\(list\\<array\\{shouldHighlight\\: bool, rank\\: int, gameName\\: Gatherling\\\\Views\\\\Components\\\\GameName, matchScore\\: int, opMatch\\: float\\|null, plGame\\: float\\|null, opGame\\: float\\|null, matchesPlayed\\: int, \\.\\.\\.\\}\\>\\) does not accept list\\<array\\{shouldHighlight\\: bool, rank\\: int\\<1, max\\>, gameName\\: Gatherling\\\\Views\\\\Components\\\\GameName, matchScore\\: int, opMatch\\: float\\|null, plGame\\: float\\|null, opGame\\: float\\|null, matchesPlayed\\: int\\|null, \\.\\.\\.\\}\\>\\.$#"
-			count: 1
-			path: gatherling/Views/Components/EventStandings.php
-
-		-
 			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Components/FormatCPMenu.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\FormatCPMenu\\:\\:\\$activeFormatName \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Components/FormatCPMenu.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\FormatSettings\\:\\:\\$activeFormatName \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Components/FormatSettings.php
 
 		-
 			message: "#^Parameter \\#1 \\$eventName of class Gatherling\\\\Views\\\\Components\\\\EventStandings constructor expects string, string\\|null given\\.$#"
@@ -2076,11 +2036,6 @@ parameters:
 			path: gatherling/Views/Components/FullMetagame.php
 
 		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\GameName\\:\\:\\$name \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Components/GameName.php
-
-		-
 			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Components/InfoCell.php
@@ -2092,26 +2047,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$timestamp of function date expects int\\|null, int\\|false given\\.$#"
-			count: 1
-			path: gatherling/Views/Components/InfoCell.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\InfoCell\\:\\:\\$eventFormat \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Components/InfoCell.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\InfoCell\\:\\:\\$eventName \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Components/InfoCell.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\InfoCell\\:\\:\\$reportLink \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Components/InfoCell.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\InfoCell\\:\\:\\$threadLink \\(string\\) does not accept string\\|null\\.$#"
 			count: 1
 			path: gatherling/Views/Components/InfoCell.php
 
@@ -2129,16 +2064,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$time of class Gatherling\\\\Views\\\\Components\\\\Time constructor expects int, int\\|false given\\.$#"
 			count: 1
 			path: gatherling/Views/Components/InfoTable.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\MetaStats\\:\\:\\$archetypes \\(list\\<array\\{name\\: string, pcg\\: int\\}\\>\\) does not accept non\\-empty\\-list\\<array\\{name\\: string, pcg\\: float\\|int\\}\\>\\.$#"
-			count: 1
-			path: gatherling/Views/Components/MetaStats.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\MetaStats\\:\\:\\$colors \\(list\\<array\\{pcg\\: int\\}\\>\\) does not accept non\\-empty\\-list\\<array\\{pcg\\: '\\?\\?'\\|float\\}\\|array\\{pcg\\: int\\}\\>\\.$#"
-			count: 1
-			path: gatherling/Views/Components/MetaStats.php
 
 		-
 			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:hasRegistrant\\(\\) expects string, string\\|null given\\.$#"
@@ -2181,19 +2106,9 @@ parameters:
 			path: gatherling/Views/Components/SeasonStandings.php
 
 		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\SeasonStandings\\:\\:\\$seasonEvents \\(list\\<array\\{shortName\\: string, reportLink\\: string\\}\\>\\) does not accept list\\<array\\{shortName\\: string\\|null, reportLink\\: non\\-falsy\\-string\\}\\>\\.$#"
-			count: 1
-			path: gatherling/Views/Components/SeasonStandings.php
-
-		-
 			message: "#^Cannot cast mixed to string\\.$#"
 			count: 1
 			path: gatherling/Views/Components/TextInput.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\TribalBAndR\\:\\:\\$activeFormatName \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Components/TribalBAndR.php
 
 		-
 			message: "#^Cannot call method manaSrc\\(\\) on Gatherling\\\\Models\\\\Deck\\|null\\.$#"
@@ -2209,11 +2124,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Event\\:\\:trophySrc\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Components/TrophyCell.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\TrophyTable\\:\\:\\$playerName \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Components/TrophyTable.php
 
 		-
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
@@ -2319,11 +2229,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventReport.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\FormatAdmin\\:\\:\\$organizerSelect \\(Gatherling\\\\Views\\\\Components\\\\OrganizerSelect\\) does not accept Gatherling\\\\Views\\\\Components\\\\OrganizerSelect\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/FormatAdmin.php
 
 		-
 			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, int\\|string given\\.$#"
