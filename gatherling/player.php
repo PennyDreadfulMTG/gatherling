@@ -407,13 +407,13 @@ function print_mainPlayerCP(Player $player, string $result): void
     if (empty($player->mtgo_username)) {
         echo "<li><a href=\"player.php?mode=edit_accounts\">Add a Magic Online account</a></li>\n";
     } else {
-        echo '<li><span style="color: green; font-weight: bold;"><i class="ss ss-pmodo"></i> '."$player->mtgo_username</span> (<a href=\"player.php?mode=edit_accounts\">edit</a>)</li>\n";
+        echo '<li><span style="color: green; font-weight: bold;"><i class="ss ss-pmodo"></i> ' . "$player->mtgo_username</span> (<a href=\"player.php?mode=edit_accounts\">edit</a>)</li>\n";
     }
 
     if (empty($player->mtga_username)) {
         echo "<li><a href=\"player.php?mode=edit_accounts\">Add an Arena account</a></li>\n";
     } else {
-        echo '<li><span style="color: green; font-weight: bold;"><i class="ss ss-parl3"></i> '."$player->mtga_username</span> (<a href=\"player.php?mode=edit_accounts\">edit</a>)</li>\n";
+        echo '<li><span style="color: green; font-weight: bold;"><i class="ss ss-parl3"></i> ' . "$player->mtga_username</span> (<a href=\"player.php?mode=edit_accounts\">edit</a>)</li>\n";
     }
     // if ($player->verified == 0) {
     //     echo "<li><a href=\"player.php?mode=verifymtgo\">Verify your <i class=\"ss ss-pmodo\"></i> MTGO account</a></li>\n";
@@ -469,15 +469,15 @@ function print_recentDeckTable(): void
             $decks = $player->getRecentDecks(5);
         }
         foreach ($decks as $deck) {
-            echo '<tr><td style="white-space: nowrap;">'.medalImgStr($deck->medal)."</td>\n";
-            echo '<td style="white-space: nowrap;">'.$deck->linkTo()."</td>\n";
+            echo '<tr><td style="white-space: nowrap;">' . medalImgStr($deck->medal) . "</td>\n";
+            echo '<td style="white-space: nowrap;">' . $deck->linkTo() . "</td>\n";
             $targetUrl = 'eventreport';
             $event = new Event($deck->eventname);
             if ($event->authCheck($player->name)) {
                 $targetUrl = 'event';
             }
             echo "<td style=\"white-space: nowrap;\"><a href=\"{$targetUrl}.php?event={$deck->eventname}\">{$deck->eventname}</a></a></td>\n";
-            echo '<td width="99%" align="right">'.$deck->recordString()."</td></tr>\n";
+            echo '<td width="99%" align="right">' . $deck->recordString() . "</td></tr>\n";
         }
     }
     echo "</table>\n";
@@ -522,7 +522,7 @@ function print_preRegistration(): void
         if ($event->authCheck($player->name)) {
             $targetUrl = 'event';
         }
-        echo '<tr><td><a href="'.$targetUrl.'.php?event='.rawurlencode($event->name)."\">{$event->name}</a></td>";
+        echo '<tr><td><a href="' . $targetUrl . '.php?event=' . rawurlencode($event->name) . "\">{$event->name}</a></td>";
         if (time() >= strtotime($event->start)) {
             echo '<td>Starting soon</td>';
         } else {
@@ -530,12 +530,12 @@ function print_preRegistration(): void
         }
         $entry = new Entry($event->id, $player->name);
         if (is_null($entry->deck)) {
-            echo '<td align="left">'.$entry->createDeckLink().'</td>';
+            echo '<td align="left">' . $entry->createDeckLink() . '</td>';
         } else {
-            echo '<td align="left" style="font-size: 1.1em">'.$entry->deck->linkTo().'</td>';
+            echo '<td align="left" style="font-size: 1.1em">' . $entry->deck->linkTo() . '</td>';
         }
 
-        echo '<td><a href="prereg.php?action=unreg&event='.rawurlencode($event->name).'">Unreg</a></td>';
+        echo '<td><a href="prereg.php?action=unreg&event=' . rawurlencode($event->name) . '">Unreg</a></td>';
         echo '</tr>';
     }
     if ($mtgo && empty($player->mtgo_username)) {
@@ -552,7 +552,7 @@ function print_preRegistration(): void
     }
 
     foreach ($available_events as $event) {
-        echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a>";
+        echo '<tr><td><a href="eventreport.php?event=' . rawurlencode($event->name) . "\">{$event->name}</a>";
         echo '<br>' . time_element(strtotime($event->start), time()) . '</td>';
 
         if ($event->isFull()) {
@@ -562,7 +562,7 @@ function print_preRegistration(): void
         } elseif ($event->client == 2 && empty($player->mtga_username)) {
             echo '<td><a href="player.php?mode=edit_accounts">Requires a Magic Arena account</a></td>';
         } else {
-            echo '<td><a href="prereg.php?action=reg&event='.rawurlencode($event->name).'">Register</a></td>';
+            echo '<td><a href="prereg.php?action=reg&event=' . rawurlencode($event->name) . '">Register</a></td>';
         }
         echo '</tr>';
     }
@@ -590,7 +590,7 @@ function print_ActiveEvents(): array
         if ($event->authCheck($player->name)) {
             $targetUrl = 'event';
         }
-        echo "<tr><td><a href=\"{$targetUrl}.php?event=".rawurlencode($event->name)."\">{$event->name}</a>";
+        echo "<tr><td><a href=\"{$targetUrl}.php?event=" . rawurlencode($event->name) . "\">{$event->name}</a>";
         $series = new Series($event->series);
         if ($series->discord_guild_name && $series->discord_channel_name) {
             echo " <pre style=\"cursor:help;\" title=\"The Tournament Organizer prefers that your join their Discord server.\" ><i class=\"fab fa-discord\"></i> #$series->discord_channel_name in $series->discord_guild_name</pre>";
@@ -609,7 +609,7 @@ function print_ActiveEvents(): array
         if (Standings::playerActive($event->name, $player->name) == 1) {
             $entry = new Entry($event->id, $player->name);
             if (is_null($entry->deck) || !$entry->deck->isValid()) {
-                echo '<td>'.$entry->createDeckLink().'</td>';
+                echo '<td>' . $entry->createDeckLink() . '</td>';
             } elseif ($structure == 'League') {
                 $count = $event->getPlayerLeagueMatchCount($player->name) + 1;
                 if ($count <= $event->leagueLength()) {
@@ -666,8 +666,8 @@ function print_noDeckTable(bool $allDecks): void
         }
         if (count($entriesNoDecks)) {
             foreach ($entriesNoDecks as $entry) {
-                echo '<tr><td>'.medalImgStr($entry->medal)."</td>\n";
-                echo '<td align="left">'.$entry->createDeckLink().'</td>';
+                echo '<tr><td>' . medalImgStr($entry->medal) . "</td>\n";
+                echo '<td align="left">' . $entry->createDeckLink() . '</td>';
                 echo "<td align=\"right\"><a href=\"{$entry->event->threadurl}\">{$entry->event->name}</a></td>\n";
                 echo "</tr>\n";
             }
@@ -694,7 +694,7 @@ function print_allDeckTable(): void
         $recordString = $deck->recordString();
         echo "<td width=20>$imgcell</td>\n";
         echo "<td width=20>$recordString</td>\n";
-        echo '<td>'.$deck->linkTo();
+        echo '<td>' . $deck->linkTo();
         if (!$deck->isValid()) {
             echo $rstar;
         }
@@ -704,7 +704,7 @@ function print_allDeckTable(): void
         if ($event->authCheck($player->name)) {
             $targetUrl = 'event';
         }
-        echo "<td align=\"right\"><a href=\"{$targetUrl}.php?event=".rawurlencode($event->name)."\">{$event->name}</a></td>\n";
+        echo "<td align=\"right\"><a href=\"{$targetUrl}.php?event=" . rawurlencode($event->name) . "\">{$event->name}</a></td>\n";
         echo "</td></tr>\n";
     }
     echo "</table>\n";
@@ -735,11 +735,11 @@ function print_recentMatchTable(): void
         }
         $event = new Event($match->getEventNamebyMatchid());
 
-        echo '<td>'.$event->name.'</td><td>Round: '.$match->round.'</td>';
+        echo '<td>' . $event->name . '</td><td>Round: ' . $match->round . '</td>';
         echo "<td width=\"4\"><b>$res</b> <b>{$match->getPlayerWins($player->name)}</b><b> - </b><b>{$match->getPlayerLosses($player->name)}</b></td>";
         echo "<td>vs.</td>\n";
         $oppplayer = new Player($opp);
-        echo '<td>'.$oppplayer->linkTo($event->client)."</td></tr>\n";
+        echo '<td>' . $oppplayer->linkTo($event->client) . "</td></tr>\n";
     }
     echo "</table>\n";
 }
@@ -768,10 +768,10 @@ function print_currentMatchTable(array $Leagues): void
         if ($match->result != 'BYE') {
             $oppplayer = new Player($opp);
             echo '<tr><td>';
-            echo $event->name.' Round: '.$event->current_round.' ';
+            echo $event->name . ' Round: ' . $event->current_round . ' ';
             echo '</td>';
             echo "<td>vs.</td>\n";
-            echo '<td>'.$oppplayer->linkTo($event->client).'</td><td>';
+            echo '<td>' . $oppplayer->linkTo($event->client) . '</td><td>';
             if ($match->verification == 'unverified') {
                 if ($player_number == 'b' and ((int) $match->playerb_wins + (int) $match->playerb_losses) > 0) {
                     echo '(Report Submitted)';
@@ -779,13 +779,13 @@ function print_currentMatchTable(array $Leagues): void
                     echo '(Report Submitted)';
                 } else {
                     if ($match->playerReportableCheck() == true) {
-                        echo '<a href="report.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
+                        echo '<a href="report.php?mode=submit_result&match_id=' . $match->id . '&player=' . $player_number . '">(Report Result)</a>';
                     } else {
                         echo 'Please report results in the report channel for this event';
                     }
                 }
             } elseif ($match->verification == 'failed') {
-                echo "<font style=\"color: red; font-weight: bold;\">The reported result wasn't consistent with your opponent's, please check with the host  </style><a href=\"report.php?mode=submit_result&match_id=".$match->id.'&player='.$player_number.'">(Correct Result)</a>';
+                echo "<font style=\"color: red; font-weight: bold;\">The reported result wasn't consistent with your opponent's, please check with the host  </style><a href=\"report.php?mode=submit_result&match_id=" . $match->id . '&player=' . $player_number . '">(Correct Result)</a>';
             } elseif ($match->result == 'BYE') {
             } else {
                 echo '(Reported)';
@@ -794,7 +794,7 @@ function print_currentMatchTable(array $Leagues): void
         } else {
             if (($match->round == $event->current_round) && $event->active) {
                 echo '<tr><td>';
-                echo $event->name.' Round: '.$event->current_round.' ';
+                echo $event->name . ' Round: ' . $event->current_round . ' ';
                 echo '</td>';
                 echo "<td>You have a BYE for the current round.</td>\n";
                 echo "</tr>\n";
@@ -845,7 +845,7 @@ function print_matchTable(Player $player): void
     foreach ($matches as $match) {
         $rnd = $match->round;
         if ($match->timing == 2 && $match->type == 'Single Elimination') {
-            $rnd = 'T'.pow(2, $match->rounds + 1 - $match->round);
+            $rnd = 'T' . pow(2, $match->rounds + 1 - $match->round);
         }
 
         if ($match->type == 'League') {
@@ -885,7 +885,7 @@ function print_matchTable(Player $player): void
         }
         $oldname = $event->name;
         echo "<td>$rnd</td>\n";
-        echo '<td>'.$opponent->linkTo()."</td>\n";
+        echo '<td>' . $opponent->linkTo() . "</td>\n";
         echo "<td>$deckStr</td>\n";
         echo "<td>$oppRating</td>\n";
         echo "<td>$res {$match->getPlayerWins($player->name)} - {$match->getPlayerLosses($player->name)} </td>";
@@ -997,7 +997,7 @@ function print_ratingsHistory(string $format): void
 
             echo "<tr><td align=\"center\">{$rating}</td>\n";
             echo "<td>{$preveventname}</td>\n";
-            echo '<td>'.$entry->deck->linkTo()."</td>\n";
+            echo '<td>' . $entry->deck->linkTo() . "</td>\n";
             echo "<td align=\"center\">$wl</td>\n";
             echo "<td align=\"center\">$img</td>";
             echo "<td align=\"center\">{$prevrating}</td></tr>";
@@ -1011,7 +1011,7 @@ function print_ratingsHistory(string $format): void
         $img = medalImgStr($entry->medal);
         echo "<tr><td align=\"center\">1600</td>\n";
         echo "<td>{$preveventname}</td>\n";
-        echo '<td>'.$entry->deck->linkTo()."</td>\n";
+        echo '<td>' . $entry->deck->linkTo() . "</td>\n";
         echo "<td align=\"center\">$wl</td>\n";
         echo "<td align=\"center\">$img</td>";
         echo "<td align=\"center\">{$prevrating}</td></tr>";

@@ -90,7 +90,7 @@ class Ratings
     public function calcRatingByFormat(string $format): void
     {
         $db = Database::getConnection();
-        $searchString = '%'.$format.'%';
+        $searchString = '%' . $format . '%';
 
         $stmt = $db->prepare("SELECT name, start FROM events WHERE finalized = '1' AND format LIKE ? ORDER BY start");
         $stmt->bind_param('s', $searchString);
@@ -124,7 +124,7 @@ class Ratings
 
         $notlike = '';
         foreach ($this->ratingNames as $format) {
-            $notlike = $notlike.' AND format NOT LIKE "%'.$format.'%" ';
+            $notlike = $notlike . ' AND format NOT LIKE "%' . $format . '%" ';
         }
 
         $result = $db->query("SELECT name, start

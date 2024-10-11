@@ -10,7 +10,7 @@ use function Gatherling\Views\server;
 
 set_time_limit(0);
 
-require_once __DIR__.'/../lib.php';
+require_once __DIR__ . '/../lib.php';
 
 function main(): void
 {

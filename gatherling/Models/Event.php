@@ -140,7 +140,7 @@ class Event
                 $this->client
             );
             if ($stmt->fetch() == null) {
-                throw new Exception('Event '.$name.' not found in DB');
+                throw new Exception('Event ' . $name . ' not found in DB');
             }
             $stmt->close();
         }
@@ -505,7 +505,7 @@ class Event
     public function getTrophyImageLink(): string
     {
         return "<a href=\"deck.php?mode=view&event={$this->id}\" class=\"borderless\">\n"
-           .self::trophyImageTag($this->name)."\n</a>\n";
+           . self::trophyImageTag($this->name) . "\n</a>\n";
     }
 
     public function isHost(string $name): bool
@@ -1037,7 +1037,7 @@ class Event
     public function makeLinkArgs(string $text): array
     {
         return [
-            'link' => 'event.php?name='.rawurlencode($this->name),
+            'link' => 'event.php?name=' . rawurlencode($this->name),
             'text' => $text,
         ];
     }
@@ -1833,7 +1833,7 @@ class Event
 
         $ret = $this->toEnglish($this->mainstruct, $this->mainrounds, false);
         if ($this->finalrounds > 0) {
-            $ret = $ret.' followed by ' . $this->toEnglish($this->finalstruct, $this->finalrounds, true);
+            $ret = $ret . ' followed by ' . $this->toEnglish($this->finalstruct, $this->finalrounds, true);
         }
 
         return $ret;

@@ -9,8 +9,6 @@
     <rule ref="PSR12">
         <!-- Exclude some stuff we're very far away from right now -->
         <exclude name="Generic.Files.LineLength" />
-        <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceBefore" />
-        <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceAfter" />
         <exclude name="PSR1.Files.SideEffects.FoundWithSymbols" />
     </rule>
 	<rule ref="Generic.PHP.RequireStrictTypes"/>

@@ -31,6 +31,6 @@ abstract class DatabaseCase extends TestCase
     private function transactionName(): string
     {
         $classHash = substr(md5(get_class($this)), 0, 7);
-        return $this->name().'_'.$classHash;
+        return $this->name() . '_' . $classHash;
     }
 }

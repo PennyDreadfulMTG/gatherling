@@ -195,7 +195,7 @@ function json_headers(): void
     header('Cache-Control: no-cache');
     header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
     header('Access-Control-Allow-Origin: *');
-    header('HTTP_X_USERNAME: '.Player::loginName());
+    header('HTTP_X_USERNAME: ' . Player::loginName());
 }
 
 /** @param array<string> $player_series */

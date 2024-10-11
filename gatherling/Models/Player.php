@@ -68,7 +68,7 @@ class Player
             $this->mtgo_username
         );
         if ($stmt->fetch() == null) {
-            throw new Exception('Player '.$name.' is not found.');
+            throw new Exception('Player ' . $name . ' is not found.');
         }
         $stmt->close();
     }
@@ -826,7 +826,7 @@ class Player
         $stmt->fetch();
         $stmt->close();
 
-        return $wins.'-'.$losses;
+        return $wins . '-' . $losses;
     }
 
     public function getMaxRating(string $format = 'Composite'): ?int
@@ -887,9 +887,9 @@ class Player
         }
 
         if ($draws == 0) {
-            return $wins.'-'.$losses;
+            return $wins . '-' . $losses;
         } else {
-            return $wins.'-'.$losses.'-'.$draws;
+            return $wins . '-' . $losses . '-' . $draws;
         }
     }
 
@@ -915,9 +915,9 @@ class Player
         }
 
         if ($draws == 0) {
-            return $wins.'-'.$losses;
+            return $wins . '-' . $losses;
         } else {
-            return $wins.'-'.$losses.'-'.$draws;
+            return $wins . '-' . $losses . '-' . $draws;
         }
     }
 

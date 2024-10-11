@@ -65,7 +65,7 @@ class EventList extends Page
 
         foreach ($results as &$event) {
             $event['kvalueDisplay'] = $kvalueMap[$event['kvalue']] ?? '';
-            $event['link'] = 'event.php?name='.rawurlencode($event['name']);
+            $event['link'] = 'event.php?name=' . rawurlencode($event['name']);
             $event['isOngoing'] = $event['finalized'] == 0 && $event['active'] == 1;
         }
 
@@ -95,13 +95,13 @@ function queryEvents(Player $player, array $playerSeries, string $seriesName): \
         LEFT OUTER JOIN entries AS n ON n.event_id = e.id
         WHERE (e.host = \"{$db->escape_string($player->name)}\"
             OR e.cohost = \"{$db->escape_string($player->name)}\"
-            OR e.series IN (".$seriesString.'))';
+            OR e.series IN (" . $seriesString . '))';
     $format = get()->optionalString('format');
     if ($format) {
         $query = $query . " AND e.format=\"{$db->escape_string($format)}\" ";
     }
     if (strcmp($seriesName, '') != 0) {
-        $query = $query." AND e.series=\"{$db->escape_string($seriesName)}\" ";
+        $query = $query . " AND e.series=\"{$db->escape_string($seriesName)}\" ";
     }
     $season = get()->optionalString('season');
     if ($season) {

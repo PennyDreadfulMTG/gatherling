@@ -75,7 +75,7 @@ class Series
             $this->discord_require_membership
         );
         if ($stmt->fetch() == null) {
-            throw new Exception('Series '.$name.' not found in DB');
+            throw new Exception('Series ' . $name . ' not found in DB');
         }
 
         $stmt->close();

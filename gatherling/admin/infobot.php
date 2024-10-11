@@ -9,7 +9,7 @@ use function Gatherling\Views\get;
 use function Gatherling\Views\request;
 use function Gatherling\Views\server;
 
-require_once __DIR__.'/../lib.php';
+require_once __DIR__ . '/../lib.php';
 
 if (strncmp(server()->string('HTTP_USER_AGENT', ''), 'infobot', 7) != 0) {
     exit("<error>You're not infobot!</error>");

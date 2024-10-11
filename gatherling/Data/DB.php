@@ -36,9 +36,9 @@ class DB
                 throw new ConfigurationException("Missing configuration key: $key");
             }
         }
-        $dsn = 'mysql:host='.$CONFIG['db_hostname'].';charset=utf8mb4';
+        $dsn = 'mysql:host=' . $CONFIG['db_hostname'] . ';charset=utf8mb4';
         if ($connectToDatabase) {
-            $dsn .= ';dbname='.$CONFIG['db_database'];
+            $dsn .= ';dbname=' . $CONFIG['db_database'];
         }
 
         try {
@@ -276,7 +276,7 @@ class DB
         }
         $safeName = trim($safeName, '_');
         if (empty($safeName) || is_numeric($safeName[0])) {
-            $safeName = 'sp_'.$safeName;
+            $safeName = 'sp_' . $safeName;
         }
 
         return $safeName;

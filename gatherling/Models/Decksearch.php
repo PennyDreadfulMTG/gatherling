@@ -123,7 +123,7 @@ class Decksearch
     public function searchByPlayer(string $player): void
     {
         $sql = 'SELECT id FROM decks WHERE playername LIKE ?';
-        $results = Database::listResultSingleParam($sql, 's', '%'.$player.'%');
+        $results = Database::listResultSingleParam($sql, 's', '%' . $player . '%');
         if (count($results) > 0) {
             $this->results['player'] = $results;
         } else {
@@ -253,7 +253,7 @@ class Decksearch
         //sanitize the id_arr to protect against sql injection.
         $id_arr = array_filter(array_map('intval', $id_arr));
 
-        $query = 'SELECT id, archetype, name, playername, format, created_date from decks WHERE id IN ('.implode(',', $id_arr).') ORDER BY DATE(`created_date`) DESC';
+        $query = 'SELECT id, archetype, name, playername, format, created_date from decks WHERE id IN (' . implode(',', $id_arr) . ') ORDER BY DATE(`created_date`) DESC';
         $stmt = $db->prepare($query);
         $stmt->execute();
         $stmt->bind_result($id, $archetype, $name, $playername, $format, $created_date);
@@ -340,9 +340,9 @@ class Decksearch
         }
 
         if ($draws == 0) {
-            return $wins.'-'.$losses;
+            return $wins . '-' . $losses;
         } else {
-            return $wins.'-'.$losses.'-'.$draws;
+            return $wins . '-' . $losses . '-' . $draws;
         }
     }
 }

@@ -98,7 +98,7 @@ class Entry
         $stmt->bind_result($deckid, $this->medal, $this->ignored, $this->drop_round, $this->initial_byes, $this->initial_seed);
 
         if ($stmt->fetch() == null) {
-            throw new Exception('Entry for '.$playername.' in '.$event_id.' not found');
+            throw new Exception('Entry for ' . $playername . ' in ' . $event_id . ' not found');
         }
         $stmt->close();
 
@@ -133,9 +133,9 @@ class Entry
         }
 
         if ($draws == 0) {
-            return $wins.'-'.$losses;
+            return $wins . '-' . $losses;
         } else {
-            return $wins.'-'.$losses.'-'.$draws;
+            return $wins . '-' . $losses . '-' . $draws;
         }
     }
 
@@ -242,7 +242,7 @@ class Entry
             $db->rollback();
             $db->autocommit(true);
 
-            throw new Exception('Entry for '.$this->player->name.' in '.$this->event->name.' not found');
+            throw new Exception('Entry for ' . $this->player->name . ' in ' . $this->event->name . ' not found');
         }
         $db->commit();
         $db->autocommit(true);
@@ -259,7 +259,7 @@ class Entry
             $db->rollback();
             $db->autocommit(true);
 
-            throw new Exception('Entry for '.$this->player->name.' in '.$this->event->name.' not found');
+            throw new Exception('Entry for ' . $this->player->name . ' in ' . $this->event->name . ' not found');
         }
         $db->commit();
         $db->autocommit(true);

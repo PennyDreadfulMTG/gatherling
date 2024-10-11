@@ -142,7 +142,7 @@ class Format
                 $this->is_meta_format
             );
             if ($stmt->fetch() == null) {
-                throw new Exception('Format '.$name.' not found in DB');
+                throw new Exception('Format ' . $name . ' not found in DB');
             }
             $stmt->close();
             $this->card_banlist = $this->getBanList();
@@ -1518,7 +1518,7 @@ class Format
     {
         // this is used to return the name of the card as it appears in the database
         // otherwise the ban list will have cards on it like rOnCoR, RONCOR, rONCOR, etc
-        return Database::singleResultSingleParam('SELECT name FROM cards WHERE name LIKE ?', 's', $cardname.'/%');
+        return Database::singleResultSingleParam('SELECT name FROM cards WHERE name LIKE ?', 's', $cardname . '/%');
     }
 
     public function insertNewLegalSet(string $cardsetName): bool
