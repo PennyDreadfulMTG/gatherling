@@ -9,6 +9,7 @@ use Gatherling\Models\Player;
 use Gatherling\Views\Components\TextInput;
 use Gatherling\Views\Components\NumDropMenu;
 use Gatherling\Views\Components\StringField;
+use Gatherling\Views\Components\CheckboxInput;
 use Gatherling\Views\Components\RoundDropMenu;
 use Gatherling\Views\Components\FormatDropMenu;
 use Gatherling\Views\Components\SeasonDropMenu;
@@ -42,26 +43,18 @@ class EventForm extends EventFrame
     public NumDropMenu $finalRoundsNumDropMenu;
     /** @var array<string, mixed> */
     public array $finalRoundsStructDropMenu;
-    /** @var array<string, mixed> */
-    public array $preregistrationAllowedCheckbox;
+    public CheckboxInput $preregistrationAllowedCheckbox;
     public TextInput $lateEntryLimitField;
-    /** @var array<string, mixed> */
-    public array $playerReportedResultsCheckbox;
+    public CheckboxInput $playerReportedResultsCheckbox;
     public TextInput $registrationCapField;
-    /** @var array<string, mixed> */
-    public array $deckPrivacyCheckbox;
-    /** @var array<string, mixed> */
-    public array $finalsListPrivacyCheckbox;
-    /** @var array<string, mixed> */
-    public array $playerReportedDrawsCheckbox;
-    /** @var array<string, mixed> */
-    public array $privateEventCheckbox;
+    public CheckboxInput $deckPrivacyCheckbox;
+    public CheckboxInput $finalsListPrivacyCheckbox;
+    public CheckboxInput $playerReportedDrawsCheckbox;
+    public CheckboxInput $privateEventCheckbox;
     /** @var array<string, mixed> */
     public array $clientDropMenu;
-    /** @var array<string, mixed> */
-    public ?array $finalizeEventCheckbox;
-    /** @var array<string, mixed> */
-    public ?array $eventActiveCheckbox;
+    public ?CheckboxInput $finalizeEventCheckbox;
+    public ?CheckboxInput $eventActiveCheckbox;
     public ?RoundDropMenu $currentRoundDropMenu;
     /** @var ?array<string, mixed> */
     public ?array $trophyField;
@@ -125,21 +118,21 @@ class EventForm extends EventFrame
         $mainRoundsStructDropMenu = structDropMenuArgs('mainstruct', $event->mainstruct);
         $finalRoundsNumDropMenu = new NumDropMenu('finalrounds', '- No. of Rounds -', 10, $event->finalrounds, 0);
         $finalRoundsStructDropMenu = structDropMenuArgs('finalstruct', $event->finalstruct);
-        $preregistrationAllowedCheckbox = checkboxInputArgs('Allow Pre-Registration', 'prereg_allowed', (bool) $event->prereg_allowed, null);
+        $preregistrationAllowedCheckbox = new CheckboxInput('Allow Pre-Registration', 'prereg_allowed', (bool) $event->prereg_allowed, null);
         $lateEntryLimitField = new TextInput('Late Entry Limit', 'late_entry_limit', $event->late_entry_limit, 4, 'The event host may still add players after this round.');
-        $playerReportedResultsCheckbox = checkboxInputArgs('Allow Players to Report Results', 'player_reportable', (bool) $event->player_reportable);
+        $playerReportedResultsCheckbox = new CheckboxInput('Allow Players to Report Results', 'player_reportable', (bool) $event->player_reportable);
         $registrationCapField = new TextInput('Player initiatied registration cap', 'prereg_cap', $event->prereg_cap, 4, 'The event host may still add players beyond this limit. 0 is disabled.', null);
-        $deckPrivacyCheckbox = checkboxInputArgs('Deck List Privacy', 'private_decks', (bool) $event->private_decks);
-        $finalsListPrivacyCheckbox = checkboxInputArgs('Finals List Privacy', 'private_finals', (bool) $event->private_finals);
-        $playerReportedDrawsCheckbox = checkboxInputArgs('Allow Player Reported Draws', 'player_reported_draws', (bool) $event->player_reported_draws, 'This allows players to report a draw result for matches.');
-        $privateEventCheckbox = checkboxInputArgs('Private Event', 'private', (bool) $event->private, 'This event is invisible to non-participants');
+        $deckPrivacyCheckbox = new CheckboxInput('Deck List Privacy', 'private_decks', (bool) $event->private_decks);
+        $finalsListPrivacyCheckbox = new CheckboxInput('Finals List Privacy', 'private_finals', (bool) $event->private_finals);
+        $playerReportedDrawsCheckbox = new CheckboxInput('Allow Player Reported Draws', 'player_reported_draws', (bool) $event->player_reported_draws, 'This allows players to report a draw result for matches.');
+        $privateEventCheckbox = new CheckboxInput('Private Event', 'private', (bool) $event->private, 'This event is invisible to non-participants');
         $clientDropMenu = clientDropMenuArgs('client', $event->client);
 
         $finalizeEventCheckbox = $eventActiveCheckbox = $currentRoundDropMenu = $trophyField = null;
         $showCreateNextEvent = $showCreateNextSeason = false;
         if ($edit) {
-            $finalizeEventCheckbox = checkboxInputArgs('Finalize Event', 'finalized', (bool) $event->finalized);
-            $eventActiveCheckbox = checkboxInputArgs('Event Active', 'active', (bool) $event->active);
+            $finalizeEventCheckbox = new CheckboxInput('Finalize Event', 'finalized', (bool) $event->finalized);
+            $eventActiveCheckbox = new CheckboxInput('Event Active', 'active', (bool) $event->active);
             $currentRoundDropMenu = new RoundDropMenu($event, $event->current_round);
             $trophyField = trophyFieldArgs($event);
             $nextEventName = sprintf('%s %d.%02d', $event->series, $event->season, $event->number + 1);

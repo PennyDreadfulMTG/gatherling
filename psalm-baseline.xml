@@ -228,6 +228,14 @@
       <code><![CDATA[$options]]></code>
     </PossiblyUnusedProperty>
   </file>
+  <file src="gatherling/Views/Components/CheckboxInput.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$isChecked]]></code>
+      <code><![CDATA[$label]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$reminderText]]></code>
+    </PossiblyUnusedProperty>
+  </file>
   <file src="gatherling/Views/Components/DeckLink.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$deckLink]]></code>
@@ -242,6 +250,29 @@
       <code><![CDATA[$name]]></code>
       <code><![CDATA[$options]]></code>
     </PossiblyUnusedProperty>
+  </file>
+  <file src="gatherling/Views/Components/EditCard.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$cardSet]]></code>
+      <code><![CDATA[$creatureType]]></code>
+      <code><![CDATA[$isChangelingInput]]></code>
+      <code><![CDATA[$nameInput]]></code>
+      <code><![CDATA[$rarityInput]]></code>
+      <code><![CDATA[$scryfallIdInput]]></code>
+      <code><![CDATA[$typelineInput]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="gatherling/Views/Components/EditSet.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$cardSetName]]></code>
+      <code><![CDATA[$modernLegalInput]]></code>
+      <code><![CDATA[$releaseDateInput]]></code>
+      <code><![CDATA[$setCodeInput]]></code>
+      <code><![CDATA[$standardLegalInput]]></code>
+    </PossiblyUnusedProperty>
+    <UnusedVariable>
+      <code><![CDATA[$names]]></code>
+    </UnusedVariable>
   </file>
   <file src="gatherling/Views/Components/ErrorMessage.php">
     <PossiblyUnusedProperty>
@@ -556,6 +587,11 @@
       <code><![CDATA[$name]]></code>
     </PossiblyUnusedProperty>
   </file>
+  <file src="gatherling/Views/Pages/CardsAdmin.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$viewSafe]]></code>
+    </PossiblyUnusedProperty>
+  </file>
   <file src="gatherling/Views/Pages/DeckDownload.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$maindeckCards]]></code>
@@ -604,14 +640,6 @@
       <code><![CDATA[$yearDropMenu]]></code>
     </PossiblyUnusedProperty>
     <UndefinedFunction>
-      <code><![CDATA[checkboxInputArgs('Allow Player Reported Draws', 'player_reported_draws', (bool) $event->player_reported_draws, 'This allows players to report a draw result for matches.')]]></code>
-      <code><![CDATA[checkboxInputArgs('Allow Players to Report Results', 'player_reportable', (bool) $event->player_reportable)]]></code>
-      <code><![CDATA[checkboxInputArgs('Allow Pre-Registration', 'prereg_allowed', (bool) $event->prereg_allowed, null)]]></code>
-      <code><![CDATA[checkboxInputArgs('Deck List Privacy', 'private_decks', (bool) $event->private_decks)]]></code>
-      <code><![CDATA[checkboxInputArgs('Event Active', 'active', (bool) $event->active)]]></code>
-      <code><![CDATA[checkboxInputArgs('Finalize Event', 'finalized', (bool) $event->finalized)]]></code>
-      <code><![CDATA[checkboxInputArgs('Finals List Privacy', 'private_finals', (bool) $event->private_finals)]]></code>
-      <code><![CDATA[checkboxInputArgs('Private Event', 'private', (bool) $event->private, 'This event is invisible to non-participants')]]></code>
       <code><![CDATA[getObjectVarsCamelCase($event)]]></code>
       <code><![CDATA[selectInputArgs('K-Value', 'kvalue', $names, $kvalue)]]></code>
       <code><![CDATA[timeDropMenuArgs($hour, $minutes)]]></code>
@@ -884,15 +912,6 @@
     <InvalidGlobal>
       <code><![CDATA[global $CONFIG;]]></code>
     </InvalidGlobal>
-  </file>
-  <file src="gatherling/cardscp.php">
-    <InvalidGlobal>
-      <code><![CDATA[global $errormsg;]]></code>
-      <code><![CDATA[global $hasError;]]></code>
-    </InvalidGlobal>
-    <UnusedForeachValue>
-      <code><![CDATA[$playername]]></code>
-    </UnusedForeachValue>
   </file>
   <file src="gatherling/config.php">
     <UnusedVariable>

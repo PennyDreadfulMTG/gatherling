@@ -1,0 +1,43 @@
+<h4>Editing '{{cardSetName}}'</h4>
+
+<form action="cardscp.php" method="post">
+    <table>
+        <input type="hidden" name="view" value="edit_set" />
+        <input type="hidden" name="set" value="{{cardSetName}}" />
+        <input type="hidden" name="action" value="modify_set" />
+
+        <table>
+
+            {{#setCodeInput}}{{> textInput}}{{/setCodeInput}}
+            {{#releaseDateInput}}{{> textInput}}{{/releaseDateInput}}
+            {{#standardLegalInput}}{{> checkboxInput}}{{/standardLegalInput}}
+            {{#modernLegalInput}}{{> checkboxInput}}{{/modernLegalInput}}
+
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Rarity</th>
+                <th># of Decks</th>
+                <th>Delete</th>
+            </tr>
+
+            {{#cards}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{name}}</td>
+                    <td>{{type}}</td>
+                    <td>{{rarity}}</td>
+                    <td>{{count}}</td>
+                    <td>
+                        <input type="checkbox" name="delentries[]" value="{{id}}"{{#checked}} checked="yes"{{/checked}} />
+                    </td>
+                    <td>
+                        <a href="{{editLink}}">Edit</a>
+                    </td>
+                </tr>
+            {{/cards}}
+
+    </table>
+    <input class="inputbutton" type="submit" name="mode" value="Modify Set" />
+</form>

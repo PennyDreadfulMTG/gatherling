@@ -2011,51 +2011,6 @@ parameters:
 			path: gatherling/bootstrap.php
 
 		-
-			message: "#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: gatherling/cardscp.php
-
-		-
-			message: "#^Cannot access property \\$error on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/cardscp.php
-
-		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 5
-			path: gatherling/cardscp.php
-
-		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 4
-			path: gatherling/cardscp.php
-
-		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 4
-			path: gatherling/cardscp.php
-
-		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 6
-			path: gatherling/cardscp.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 4
-			path: gatherling/cardscp.php
-
-		-
-			message: "#^Part \\$count \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 2
-			path: gatherling/cardscp.php
-
-		-
-			message: "#^Part \\$set \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 2
-			path: gatherling/cardscp.php
-
-		-
 			message: "#^Cannot access property \\$name on Gatherling\\\\Models\\\\Event\\|null\\.$#"
 			count: 1
 			path: gatherling/deck.php
