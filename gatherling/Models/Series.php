@@ -472,7 +472,7 @@ class Series
                                                   loss_pts=?, bye_pts=?, must_decklist=?, cutoff_ord=?, master_link=?,
                                                   format=?');
         if (!$stmt) {
-            echo $db->error;
+            throw new \Exception($db->error);
         }
         $stmt->bind_param(
             'sdddddddddddddssddddddddddddss',
