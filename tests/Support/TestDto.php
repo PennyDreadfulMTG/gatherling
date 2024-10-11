@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Tests\Support;
 
 use Gatherling\Models\Dto;

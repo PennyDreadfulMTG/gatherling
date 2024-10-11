@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Tests\Views\Components;
 
 use Gatherling\Views\Components\NumDropMenu;
