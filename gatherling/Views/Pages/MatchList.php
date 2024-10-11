@@ -1,22 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Matchup;
 use Gatherling\Views\Components\GameName;
+use Gatherling\Views\Components\RoundDropMenu;
+use Gatherling\Views\Components\PlayerDropMenu;
 
 class MatchList extends EventFrame
 {
+    /** @var list<array<string, string>> */
     public array $roundLinks;
     public bool $hasMatches;
+    /** @var array<int, array<string, mixed>> */
     public array $rounds;
+    /** @var array<string, mixed> */
     public array $lastRound;
-    public array $playerADropMenu;
-    public array $playerBDropMenu;
+    public PlayerDropMenu $playerADropMenu;
+    public PlayerDropMenu $playerBDropMenu;
+    /** @var array{name: string, default: string, options: array<int, array{value: string, text: string}>} */
     public ?array $playerByeMenu;
-    public ?array $roundDropMenu;
+    public ?RoundDropMenu $roundDropMenu;
+    /** @var array{name: string, default: string, options: array<int, array{value: string, text: string}>} */
     public ?array $resultDropMenu;
     public bool $isBeforeRoundTwo;
     public string $structureSummary;
@@ -97,13 +106,13 @@ class MatchList extends EventFrame
 
         $lastRound = $rounds ? $rounds[count($rounds) - 1] : [];
 
-        $playerADropMenu = EventHelper::playerDropMenuArgs($event, 'A');
-        $playerBDropMenu = EventHelper::playerDropMenuArgs($event, 'B');
+        $playerADropMenu = new PlayerDropMenu($event, 'A');
+        $playerBDropMenu = new PlayerDropMenu($event, 'B');
         $playerByeMenu = $roundDropMenu = $resultDropMenu = null;
         if ($event->active) {
             $playerByeMenu = playerByeMenuArgs($event);
         } else {
-            $roundDropMenu = EventHelper::roundDropMenuArgs($event, $newMatchRound);
+            $roundDropMenu = new RoundDropMenu($event, $newMatchRound);
             $resultDropMenu = resultDropMenuArgs('newmatchresult');
         }
 
@@ -125,6 +134,7 @@ class MatchList extends EventFrame
     }
 }
 
+/** @return array{name: string, default: string, options: array<int, array{value: string, text: string}>} */
 function playerByeMenuArgs(Event $event): array
 {
     $playerNames = $event->getRegisteredPlayers(true);
@@ -143,6 +153,10 @@ function playerByeMenuArgs(Event $event): array
     ];
 }
 
+/**
+ * @param array<string, string> $extraOptions
+ * @return array{name: string, default: string, options: array<int, array{value: string, text: string}>}
+ */
 function resultDropMenuArgs(string $name, array $extraOptions = []): array
 {
     $options = [
@@ -164,6 +178,7 @@ function resultDropMenuArgs(string $name, array $extraOptions = []): array
     ];
 }
 
+/** @return array<string, mixed> */
 function unverifiedPlayerCellArgs(Event $event, Matchup $match, Player $player): array
 {
     $playerName = $player->name;

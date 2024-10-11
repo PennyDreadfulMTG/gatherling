@@ -1098,5 +1098,101 @@ table.center {
     vertical-align: top;
 }
 
-/* Pagination */
+/* Pagination
+
+This is kind of a mess.
+
+We have the current latest CSS from zebra_pagination.css first.
+
+Then we have our old pagination CSS from when we had the Pagination class just copy and pasted into the repo.
+It has some customizations that we want that I haven't parsed out yet and sets the colors to our colors.
+
+The finallly there's a little new bit of CSS that overrides some colors in the zebra_pagination.css that aren't set in the old CSS.
+
+Enjoy.
+
+*/
+
+/* zebra_pagination.css copy and pasted in from v2.4 of Zebra_Pagination */
+.Zebra_Pagination {
+    clear: both;
+    width: 100%;
+    overflow: hidden;
+}
+
+.Zebra_Pagination ol {
+    position: relative;
+    left: 50%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    float: left
+}
+
+.Zebra_Pagination li {
+    position: relative;
+    float: left;
+    right: 50%
+}
+
+.Zebra_Pagination .pagination {
+    display: inline-block;
+}
+
+.Zebra_Pagination li {
+    display: inline;
+}
+
+.Zebra_Pagination a,
+.Zebra_Pagination span {
+    padding: 6px 12px;
+    color: #337AB7;
+    text-decoration: none;
+    background-color: #FFF;
+    border: 1px solid #DDD;
+    display: block;
+    float: left;
+    position: relative;
+    margin-left: -1px;
+}
+
+.Zebra_Pagination li.active a {
+    color: #FFF;
+    cursor: default;
+    background-color: #337AB7;
+    border-color: #337AB7;
+}
+
+.Zebra_Pagination li a:hover,
+.Zebra_Pagination li span:hover {
+    color: #23527C;
+    background-color: #EEE;
+    border-color: #DDD;
+}
+
+.Zebra_Pagination li.disabled a {
+    color: #DEDEDE;
+    background-color: transparent;
+    border-color: #DEDEDE;
+    cursor: default;
+}
+
+.Zebra_Pagination li.disabled a:hover {
+    color: #DEDEDE;
+    background-color: transparent;
+    border-color: #DEDEDE;
+}
+
+/* Our old customized version of Zebra Pagination CSS from when we copy and pasted it rather than having it as a dependency. */
 /* ATTRIBUTES FOR THE CONTAINER (THIS HOW WE CENTER EVERYTHING)----------------------------------------------------------------------------------------------------------------------*/.Zebra_Pagination                       { clear: both; width: 100%; }.Zebra_Pagination ul                    { position: relative; left: 50%; list-style-type: none; margin: 0; padding: 0; float: left }.Zebra_Pagination li                    { position: relative; float: left; right: 50%; margin: 6px; }/* COMMON ATTRIBUTES FOR ALL THE LINKS----------------------------------------------------------------------------------------------------------------------*/.Zebra_Pagination a                     { padding: 4px; border: 1px solid Black; color: #CCCCCC; background-color: #262626; text-decoration: none; margin: 0 2px; display: block; float: left; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: #000 0 2px 5px; -moz-box-shadow: #000 0 2px 5px; box-shadow: #000 0 2px 5px }.Zebra_Pagination a:hover               { border-color: #D45E28; background-color: #353535; color: #D45E28; -webkit-box-shadow: #D45E28 0 2px 5px; -moz-box-shadow: #D45E28 0 2px 5px; box-shadow: #D45E28 0 2px 5px; }/* "NEXT PAGE" AND "PREVIOUS PAGE" LINKS----------------------------------------------------------------------------------------------------------------------*/.Zebra_Pagination a.navigation          { border: 1px solid Black; background-repeat: no-repeat }.Zebra_Pagination a.navigation:hover    { border-color: #D45E28; }.Zebra_Pagination a.previous            { background-image: url(../images/larrow.png); background-position: left center; padding-left: 45px }.Zebra_Pagination a.next                { background-image: url(../images/rarrow.png); background-position: right center; padding-right: 45px }.Zebra_Pagination a.disabled            { filter: alpha(opacity=20); -khtml-opacity: 0.2; -moz-opacity: 0.2; opacity: 0.2; -webkit-box-shadow: #000 0 0px 0px; -moz-box-shadow: #000 0 0px 0px; box-shadow: #000 0 0px 0px; }.Zebra_Pagination a.disabled:hover      { background-color: #262626; border: 1px solid Black; color: inherit }/* hack for transparent borders in IE6 */*html .Zebra_Pagination a.navigation    { border-color: #000001; filter: chroma(color=#000001) }/* CURRENT PAGE----------------------------------------------------------------------------------------------------------------------*/.Zebra_Pagination a.current,.Zebra_Pagination a.current:hover       { background: #D45E28; border-color: Black; color: Black }/* THE "..." SEPARATOR----------------------------------------------------------------------------------------------------------------------*/.Zebra_Pagination span                  { color: #667; margin-right: 2px; display: block; float: left; padding: 8px 4px }
+
+/* A little extra CSS that overrides some colors in the zebra_pagination.css that aren't set in the old CSS. */
+.Zebra_Pagination li.active a {
+    background-color: #D45E28;
+    color: #000;
+}
+
+.Zebra_Pagination span {
+    background-color: inherit;
+    border: none;
+}

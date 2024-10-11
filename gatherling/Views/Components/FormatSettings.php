@@ -9,6 +9,7 @@ use Gatherling\Models\Format;
 class FormatSettings extends Component
 {
     public string $activeFormatName;
+    /** @var array<string, mixed> */
     public array $activeFormat;
     public StringField $minMainStringField;
     public bool $showMinMainWarning;
@@ -26,7 +27,7 @@ class FormatSettings extends Component
     public function __construct(public string $seriesName, Format $activeFormat)
     {
         parent::__construct('partials/formatSettings');
-        $this->activeFormatName = $activeFormat->name;
+        $this->activeFormatName = $activeFormat->name ?? '';
         $this->activeFormat = getObjectVarsCamelCase($activeFormat);
         $this->minMainStringField = new StringField('minmain', $activeFormat->min_main_cards_allowed, 5);
         $this->showMinMainWarning = $activeFormat->min_main_cards_allowed == 0;

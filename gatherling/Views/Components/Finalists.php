@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Views\Components;
 
 use Gatherling\Models\Deck;
@@ -8,8 +10,10 @@ use Gatherling\Models\Player;
 class Finalists extends Component
 {
     public int $numFinalists;
+    /** @var list<array{medalSrc: string, medalText: string, manaSrc: string, deckLink: DeckLink, deckIsValid: bool, playerLink: PlayerLink}> */
     public array $finalists;
 
+    /** @param array<array{medal: string, player: string, deck: Deck}> $finalists */
     public function __construct(array $finalists)
     {
         parent::__construct('partials/finalists');

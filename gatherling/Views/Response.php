@@ -6,6 +6,7 @@ namespace Gatherling\Views;
 
 class Response
 {
+    /** @var array<string, string> */
     private array $headers = [];
 
     public function getHeader(string $header): ?string

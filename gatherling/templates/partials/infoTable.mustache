@@ -1,0 +1,83 @@
+    <table>
+        <tr>
+        <td colspan="2">
+            <b>{{line1}}</td>
+        </tr>
+        {{#mtgoUsername}}
+            <tr>
+                <td colspan="2">
+                    <i class="ss ss-pmodo"></i> {{mtgoUsername}}
+                </td>
+            </tr>
+        {{/mtgoUsername}}
+        {{#mtgaUsername}}
+            <tr>
+                <td colspan="2">
+                    <i class="ss ss-parl3"></i> {{mtgaUsername}}
+                </td>
+            </tr>
+        {{/mtgaUsername}}
+        {{#discordHandle}}
+            <tr>
+                <td colspan="2">
+                    <i class="fab fa-discord"></i> {{discordHandle}}
+                </td>
+            </tr>
+        {{/discordHandle}}
+        <tr>
+            <td style="min-width: 16ch">Rating:</td>
+            <td align="right">{{rating}}</td>
+        <tr>
+            <td>Matches Played:</td>
+            <td align="right">{{numMatches}}</td>
+        </tr>
+        <tr>
+            <td>Record:</td>
+            <td align="right">{{record}}</td>
+        </tr>
+        {{#hosted}}
+            <tr>
+                <td>Events Hosted:</td>
+                <td align="right">{{hosted}}</td>
+            </tr>
+        {{/hosted}}
+        <tr>
+            <td>Favorite Format:</td>
+            <td align="right">{{favF}} ({{pcgF}}%)</td>
+        </tr>
+        <tr>
+            <td>Favorite Series:</td>
+        <td align="right">{{favS}} ({{pcgS}}%)</td>
+    </tr>
+    <tr>
+        <td>Last Active:</td>
+        <td align="right">
+            {{#lastEventTime}}
+                {{#lastEventTime}}{{> time}}{{/lastEventTime}}<br>({{lastEventName}})
+            {{/lastEventTime}}
+            {{^lastEventTime}}
+                Never
+            {{/lastEventTime}}
+        </td>
+    </tr>
+    <tr>
+        <td>Email:</td>
+        <td align="right">
+            {{#emailIsPublic}}
+                {{email}}<br>(Publicly Viewable)
+            {{/emailIsPublic}}
+            {{^emailIsPublic}}
+                Admin Viewable Only
+            {{/emailIsPublic}}
+        </td>
+    </tr>
+    <tr>
+        <td>Time Zone:</td>
+        <td align="right">{{timeZone}}</td>
+    </tr>
+    <tr>
+        <td class="c" colspan="2">
+            <a href="profile.php?profile_edit=1" class="borderless">Edit Player Information</a>
+        </td>
+    </tr>
+</table>

@@ -10,12 +10,12 @@ class Image
     {
     }
 
-    public static function fromValues(?array $values): self
+    public static function fromValues(?ImageDto $values): self
     {
-        if (!$values || !isset($values['image'], $values['type'], $values['size'])) {
+        if (!$values || !isset($values->image, $values->type, $values->size)) {
             return self::empty();
         }
-        return new self($values['image'], $values['type'], $values['size']);
+        return new self($values->image, $values->type, $values->size);
     }
 
     private static ?self $emptyInstance = null;

@@ -1,15 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Data\DB;
 use Gatherling\Models\Player;
-use Gatherling\Models\Pagination;
+use Gatherling\Models\BestEverDto;
+use Gatherling\Models\PlayerRatingDto;
 use Gatherling\Views\Pages\Ratings;
+use Zebra_Pagination as Pagination;
+
+use function Gatherling\Views\post;
+use function Gatherling\Views\server;
 
 require_once 'lib.php';
 
 function main(): void
 {
-    $format = $_POST['format'] ?? 'Composite';
+    $format = post()->string('format', 'Composite');
     ['date' => $lastTournamentDate, 'name' => $lastTournamentName] = currentThrough($format);
     ['rating' => $highestRating, 'player' => $highestRatedPlayer, 't' => $highestRatingTimestamp] = bestEver($format);
     $minMatches = 20;
@@ -18,7 +25,8 @@ function main(): void
     $page->send();
 }
 
-function ratingsData($format, $minMatches)
+/** @return array{ratings_data: list<array{player: string, rank: int, playerName: string, player: Player}>, pagination: Pagination} */
+function ratingsData(string $format, int $minMatches): array
 {
     $subquery = '
         SELECT
@@ -39,29 +47,36 @@ function ratingsData($format, $minMatches)
             r.format = :format AND p.name = r.player AND q.qplayer = r.player AND q.qmax = r.updated AND r.wins + r.losses >= :min_matches
         ORDER BY
             r.rating DESC";
-    $ratings_data = DB::select($sql, ['format' => $format, 'min_matches' => $minMatches]);
+    $ratings_data = DB::select($sql, PlayerRatingDto::class, ['format' => $format, 'min_matches' => $minMatches]);
     $rank = 0;
-    foreach ($ratings_data as &$data) {
+    $results = [];
+    foreach ($ratings_data as $data) {
         $rank++;
-        $data['rank'] = $rank;
-        $data['playerName'] = $data['player'];
-        $data['player'] = new Player($data['player']);
+        $results[] = [
+            'rank' => $rank,
+            'playerName' => $data->player,
+            'player' => new Player($data->player),
+            'rating' => $data->rating,
+            'wins' => $data->wins,
+            'losses' => $data->losses,
+        ];
     }
 
     $records_per_page = 25;
     $pagination = new Pagination();
-    $pagination->records(count($ratings_data));
+    $pagination->records(count($results));
     $pagination->records_per_page($records_per_page);
     $pagination->avoid_duplicate_content(false);
 
     // get the ratings for the current page
-    $ratings_data = array_slice($ratings_data, (($pagination->get_page() - 1)
+    $results = array_slice($results, (($pagination->get_page() - 1)
                                     * $records_per_page), $records_per_page);
 
-    return ['ratings_data' => $ratings_data, 'pagination' => $pagination];
+    return ['ratings_data' => $results, 'pagination' => $pagination];
 }
 
-function bestEver($format): array
+/** @return array{player: string, rating: int, t: int} */
+function bestEver(string $format): array
 {
     $sql = '
         SELECT
@@ -79,16 +94,22 @@ function bestEver($format): array
             ) AS q
         WHERE
             format = :format AND p.name = r.player AND q.qmax = r.rating';
-    return DB::select($sql, ['format' => $format])[0];
+    $bestEver = DB::select($sql, BestEverDto::class, ['format' => $format])[0];
+    return [
+        'player' => $bestEver->player,
+        'rating' => $bestEver->rating,
+        't' => $bestEver->t,
+    ];
 }
 
-function currentThrough($format): array
+/** @return array{date: DateTime, name: string} */
+function currentThrough(string $format): array
 {
     $start = DB::value('SELECT MAX(updated) FROM ratings WHERE format = :format', ['format' => $format]);
     $name = DB::value('SELECT name FROM events WHERE start = :start', ['start' => $start]);
     return ['date' => new DateTime($start), 'name' => $name];
 }
 
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }

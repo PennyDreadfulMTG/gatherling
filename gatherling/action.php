@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /// Information banner informing user that they have pending actions.
 /// Appears at top of each page
 
@@ -25,7 +27,8 @@ if (!is_null($player)) {
         if ($series->active) {
             if (is_null($series->nextEvent())) {
                 $message = "Your series <a href=\"seriescp.php?series=$player_series\">$player_series</a> doesn't have an upcoming event.<br/>";
-                $nameMostRecent = $series->mostRecentEvent()->name;
+                $mostRecentEvent = $series->mostRecentEvent();
+                $nameMostRecent = $mostRecentEvent ? $mostRecentEvent->name : null;
                 if (is_null($nameMostRecent) || $nameMostRecent == '') {
                     $createLink = 'event.php?mode=Create Next Event&name='.$series->name.' 1.00';
                 } else {
@@ -35,7 +38,7 @@ if (!is_null($player)) {
             }
         }
         $recent = $series->mostRecentEvent();
-        if (!$recent->finalized && !$recent->active && !empty($recent->name)) {
+        if ($recent && !$recent->finalized && !$recent->active && !empty($recent->name)) {
             $message = "Your event <a href=\"event.php?event={$recent->id}\">{$recent->name}</a> is ready to start. <br />";
             $reg = count($recent->getPlayers());
             $valid = count($recent->getRegisteredPlayers());

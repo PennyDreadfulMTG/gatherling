@@ -8,26 +8,19 @@ require_once 'gatherling/lib.php';
 
 use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
-use Gatherling\Models\Matchup;
+use Gatherling\Models\Player;
 use Gatherling\Models\Series;
+use Gatherling\Models\Matchup;
 use Gatherling\Tests\Support\TestCases\DatabaseCase;
-use PHPUnit\Framework\ExpectationFailedException;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 final class EventsTest extends DatabaseCase
 {
-    /**
-     * @throws InvalidArgumentException
-     * @throws ExpectationFailedException
-     *
-     * @return Series
-     */
-    public function testSeriesCreation()
+    public function testSeriesCreation(): Series
     {
         if (!Series::exists('Test')) {
             $series = new Series('');
             $series->name = 'Test';
-            $series->active = true;
+            $series->active = 1;
             $series->start_time = '00:00'.':00';
             $series->start_day = 'Friday';
             $series->save();
@@ -39,18 +32,8 @@ final class EventsTest extends DatabaseCase
         return $series;
     }
 
-    /**
-     * @param Series $series
-     *
-     * @throws Exception
-     * @throws InvalidArgumentException
-     * @throws ExpectationFailedException
-     *
-     * @return Event
-     *
-     * @depends testSeriesCreation
-     */
-    public function testEventCreation($series)
+    /** @depends testSeriesCreation */
+    public function testEventCreation(Series $series): Event
     {
         $recentEvents = $series->getRecentEvents(1);
         if (count($recentEvents) == 0) {
@@ -68,8 +51,10 @@ final class EventsTest extends DatabaseCase
         $event->start = date('Y-m-d H:00:00');
         $event->name = $name;
 
+        $host = Player::findOrCreateByName('JimmyTheHost');
+
         $event->format = 'Modern';
-        $event->host = null;
+        $event->host = $host->name;
         $event->cohost = null;
         $event->client = 1;
         $event->kvalue = 16;
@@ -96,18 +81,8 @@ final class EventsTest extends DatabaseCase
         return $event;
     }
 
-    /**
-     * @param Event $event
-     *
-     * @throws InvalidArgumentException
-     * @throws ExpectationFailedException
-     * @throws Exception
-     *
-     * @return Event
-     *
-     * @depends testEventCreation
-     */
-    public function testRegistration($event)
+    /** @depends testEventCreation */
+    public function testRegistration(Event $event): Event
     {
         for ($i = 0; $i < 10; $i++) {
             $event->addPlayer('testplayer'.$i);
@@ -139,17 +114,8 @@ final class EventsTest extends DatabaseCase
         return $event;
     }
 
-    /**
-     * @param Event $event
-     *
-     * @throws InvalidArgumentException
-     * @throws ExpectationFailedException
-     *
-     * @return Event
-     *
-     * @depends testRegistration
-     */
-    public function testEventStart($event)
+    /** @depends testRegistration */
+    public function testEventStart(Event $event): Event
     {
         $this->assertEquals($event->active, 0);
         $this->assertEquals($event->current_round, 0);
@@ -163,17 +129,8 @@ final class EventsTest extends DatabaseCase
         return $event;
     }
 
-    /**
-     * @param Event $event
-     *
-     * @throws InvalidArgumentException
-     * @throws ExpectationFailedException
-     *
-     * @return mixed
-     *
-     * @depends testEventStart
-     */
-    public function testReporting($event)
+    /** @depends testEventStart */
+    public function testReporting(Event $event): Event
     {
         $matches = $event->getRoundMatches(1);
         $this->assertEquals(count($matches), 3);
@@ -182,27 +139,17 @@ final class EventsTest extends DatabaseCase
         Matchup::saveReport('W20', $matches[1]->id, 'a');
         Matchup::saveReport('W20', $matches[1]->id, 'b');
         $matches = $event->getRoundMatches(1);
-        $this->assertEquals($matches[0]->verification, 'verified');
-        $this->assertEquals($matches[1]->verification, 'failed');
+        $this->assertEquals('verified', $matches[0]->verification);
+        $this->assertEquals('failed', $matches[1]->verification);
         Matchup::saveReport('L20', $matches[1]->id, 'b');
         $matches = $event->getRoundMatches(1);
-        $this->assertEquals($matches[1]->verification, 'verified');
+        $this->assertEquals('verified', $matches[1]->verification);
 
         return $event;
     }
 }
 
-/**
- * @param string $player
- * @param Event  $event
- * @param string $main
- * @param string $side
- *
- * @throws Exception
- *
- * @return Deck
- */
-function insertDeck($player, $event, $main, $side)
+function insertDeck(string $player, Event $event, string $main, string $side): Deck
 {
     $deck = new Deck(0);
     $deck->playername = $player;

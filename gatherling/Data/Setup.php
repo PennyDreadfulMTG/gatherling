@@ -120,11 +120,18 @@ class Setup
         Log::info('Database restored from dump.');
     }
 
+    /**
+     * @return list<Migration>
+     */
     private static function findMigrations(int $version): array
     {
         $migrationDirectory = __DIR__ . '/sql/migrations';
         $migrations = [];
-        foreach (scandir($migrationDirectory) as $file) {
+        $dir = scandir($migrationDirectory);
+        if ($dir === false) {
+            throw new FileNotFoundException("Failed to read migration directory: $migrationDirectory");
+        }
+        foreach ($dir as $file) {
             if (!preg_match('/^[1-9]\d*\.sql$/', $file)) {
                 continue;
             }

@@ -1,9 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Event;
 use Gatherling\Models\Matchup;
 use Gatherling\Models\Player;
 use Gatherling\Models\Standings;
+
+use function Gatherling\Views\get;
+use function Gatherling\Views\post;
+use function Gatherling\Views\request;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
@@ -27,18 +33,18 @@ if ($player == null) {
                 $drop = $_POST['drop'] == 'Y';
             }
             if ($drop) {
-                $match = new Matchup($_POST['match_id']);
+                $match = new Matchup(post()->int('match_id'));
                 $eventname = $match->getEventNamebyMatchid();
                 $event = new Event($eventname);
                 $event->dropPlayer($player->name);
             }
             if ($_POST['opponent'] != '0') {
-                $event = new Event($_POST['event']);
+                $event = new Event(post()->string('event'));
                 if ($event->isLeague()) {
-                    $player = new Standings($event->name, $_POST['player']);
-                    $opponent = new Standings($event->name, $_POST['opponent']);
+                    $player = new Standings($event->name, post()->string('player'));
+                    $opponent = new Standings($event->name, post()->string('opponent'));
                     $new_match_id = $event->addPairing($player, $opponent, $event->current_round, 'P');
-                    Matchup::saveReport($_POST['report'], $new_match_id, 'a');
+                    Matchup::saveReport(post()->string('report'), $new_match_id, 'a');
                     redirect('player.php');
 
                     return;
@@ -47,9 +53,9 @@ if ($player == null) {
                 }
             } else {
                 // Non-league matches
-                $match = new Matchup($_POST['match_id']);
+                $match = new Matchup(post()->int('match_id'));
                 if ($match->playerLetter($player->name) == $_POST['player']) {
-                    Matchup::saveReport($_POST['report'], $_POST['match_id'], $_POST['player']);
+                    Matchup::saveReport(post()->string('report'), post()->int('match_id'), post()->string('player'));
                     redirect('player.php');
 
                     return;
@@ -59,7 +65,7 @@ if ($player == null) {
             }
         } elseif ($_POST['action'] == 'drop') {
             // drop player from event
-            $event = new Event($_POST['event']);
+            $event = new Event(post()->string('event'));
             $event->dropPlayer($player->name);
             redirect('player.php');
 
@@ -73,42 +79,44 @@ print_header('Player Control Panel');
 <div id="gatherling_main" class="box">
 <div class="uppertitle"> Player Control Panel </div>
 <?php
+
     // Handle modes
     $dispmode = 'playercp';
-    if (isset($_REQUEST['mode'])) {
-        $dispmode = $_REQUEST['mode'];
-    }
+if (isset($_REQUEST['mode'])) {
+    $dispmode = $_REQUEST['mode'];
+}
 
-    switch ($dispmode) {
+switch ($dispmode) {
     case 'submit_result':
-    if (!isset($_GET['match_id'])) {
-        // print_mainPlayerCP($player, '');
-        redirect('player.php');
+        if (!isset($_GET['match_id'])) {
+            // print_mainPlayerCP($player, '');
+            redirect('player.php');
+            break;
+        }
+        print_submit_resultForm(get()->int('match_id'));
         break;
-    }
-    print_submit_resultForm($_GET['match_id']);
-    break;
 
     case 'submit_league_result':
-    League_print_submit_resultForm($_REQUEST['event'], $_REQUEST['round'], $player, $_REQUEST['subevent']);
-    break;
+        League_print_submit_resultForm(request()->string('event'), request()->int('round'), $player, request()->string('subevent'));
+        break;
 
     case 'verify_result':
     case 'verify_league_result':
-    if (isset($_POST['report'])) {
-        $drop = (isset($_POST['drop'])) ? 'Y' : 'N';
-        $opponent = isset($_REQUEST['opponent']) ? $_REQUEST['opponent'] : 0;
-        $event = isset($_REQUEST['event']) ? $_REQUEST['event'] : 0;
+        if (isset($_POST['report'])) {
+            $drop = (isset($_POST['drop'])) ? 'Y' : 'N';
+            $opponent = request()->string('opponent', '0');
+            $eventName = request()->string('event', '0');
 
-        print_verify_resultForm($_POST['report'], $_POST['match_id'], $_POST['player'], $drop, $opponent, $event);
-    } else {
-        print_submit_resultForm($_REQUEST['match_id']);
-    }
-    break;
+            print_verify_resultForm(post()->string('report'), post()->int('match_id'), post()->string('player'), $drop, $opponent, $eventName);
+        } else {
+            print_submit_resultForm(request()->int('match_id'));
+        }
+        break;
 
     case 'drop_form':
+        $match = null;
         $matches = $player->getCurrentMatches();
-        $event_name = $_REQUEST['event'];
+        $event_name = request()->string('event', '');
         $can_drop = true;
         foreach ($matches as $match) {
             if (strcasecmp($event_name, $match->getEventNamebyMatchid()) != 0) {
@@ -132,16 +140,16 @@ print_header('Player Control Panel');
 
         if ($can_drop) {
             print_dropConfirm($event_name, $player);
-        } else {
+        } elseif ($match) {
             print_submit_resultForm($match->id, true);
         }
-    break;
+        break;
     default:
-    echo "$result<br/>Unknown dispmode: $dispmode";
+        echo "$result<br/>Unknown dispmode: $dispmode";
     // redirect('player.php');
 
-    return;
-    }
+        return;
+}
 ?>
 </div> <!-- gatherling_main box -->
 </div> <!-- grid 10 suff 1 pre 1 -->
@@ -150,7 +158,7 @@ print_header('Player Control Panel');
 
 <?php
 //Drop confirmation form
-function print_dropConfirm($event_name, $player)
+function print_dropConfirm(string $event_name, ?Player $player): void
 {
     echo '<center><h3>Drop Form</h3>';
     echo "<center style=\"color: red; font-weight: bold;\">
@@ -173,7 +181,7 @@ function print_dropConfirm($event_name, $player)
     echo "</form>\n";
 }
 
-function print_submit_resultForm($match_id, $drop = false)
+function print_submit_resultForm(int $match_id, bool $drop = false): void
 {
     $match = new Matchup($match_id);
     $event = new Event($match->getEventNamebyMatchid());
@@ -212,16 +220,7 @@ function print_submit_resultForm($match_id, $drop = false)
     echo '<div class="clear"></div>';
 }
 
-// *form to report League results
-/**
- * @param string $event
- * @param string $round
- * @param mixed  $player
- * @param int    $subevent
- *
- * @return void
- */
-function League_print_submit_resultForm($event, $round, $player, $subevent)
+function League_print_submit_resultForm(string $event, int $round, ?Player $player, string $subevent): void
 {
     echo "<center><h3>Report League Game Results</h3>
     Enter results</center>\n";
@@ -234,7 +233,7 @@ function League_print_submit_resultForm($event, $round, $player, $subevent)
     echo '<table class="form">';
 
     echo '<tr><th>';
-    leagueOpponentDropMenu($event, $round, $player, $subevent);
+    leagueOpponentDropMenu($event, $round, $player, (int) $subevent);
 
     echo "<br /></th>\n";
     echo "<td></td></tr>\n";
@@ -256,7 +255,7 @@ function League_print_submit_resultForm($event, $round, $player, $subevent)
 
 /** form to confirm submission.
  */
-function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, $event)
+function print_verify_resultForm(string $report, int $match_id, string $player, string|int $drop, string $opponent, string $event): void
 {
     echo "<center><h3><br>Confirm Game Results</p></h3></center>\n";
     echo "<center style=\"color: red; font-weight: bold;\">Please confirm your entry.</center></p>\n";
@@ -279,7 +278,7 @@ function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, 
             break;
         case 'D':
             echo 'The match was a draw';
-        break;
+            break;
     }
     if ($drop == 1) {
         $drop = 'Y';
@@ -318,4 +317,3 @@ function print_verify_resultForm($report, $match_id, $player, $drop, $opponent, 
     echo "</form>\n";
     echo "<div class=\"clear\"> </div>\n";
 }
-?>

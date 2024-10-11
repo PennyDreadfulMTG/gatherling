@@ -1,7 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Player;
+use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use Wohali\OAuth2\Client\Provider\Exception\DiscordIdentityProviderException;
+
+use function Gatherling\Views\request;
+use function Gatherling\Views\session;
 
 require_once __DIR__ . '/lib.php';
 require __DIR__ . '/authlib.php';
@@ -38,7 +44,7 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     }
     // We might be here to upgrade our requested Discord permissions (Series Organizers setting up Discord Channels, for example)
     if (isset($_REQUEST['scope'])) {
-        $needed = explode(' ', $_REQUEST['scope']);
+        $needed = explode(' ', request()->string('scope', ''));
         $current = explode(' ', $token->getValues()['scope']);
 
         if (!empty(array_diff($needed, $current))) {
@@ -71,7 +77,7 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     do_login($token);
 }
 
-function send_to_discord($scope = null)
+function send_to_discord(mixed $scope = null): void
 {
     // Step 1. Get authorization code
     global $provider;
@@ -84,10 +90,7 @@ function send_to_discord($scope = null)
     header('Location: ' . $authUrl);
 }
 
-/**
- * @param \League\OAuth2\Client\Token\AccessTokenInterface $token
- */
-function store_token($token)
+function store_token(\League\OAuth2\Client\Token\AccessTokenInterface $token): void
 {
     $_SESSION['DISCORD_TOKEN'] = $token->getToken();
     $_SESSION['DISCORD_REFRESH_TOKEN'] = $token->getRefreshToken();
@@ -95,7 +98,7 @@ function store_token($token)
     $_SESSION['DISCORD_SCOPES'] = $token->getValues()['scope'];
 }
 
-function do_login($token)
+function do_login(\League\OAuth2\Client\Token\AccessTokenInterface $token): void
 {
     try {
         global $provider;
@@ -103,8 +106,8 @@ function do_login($token)
         $_SESSION['DISCORD_ID'] = $user->getId();
         $_SESSION['DISCORD_NAME'] = "{$user->getUsername()}#{$user->getDiscriminator()}";
 
-        if (Player::isLoggedIn()) {
-            $player = Player::getSessionPlayer();
+        $player = Player::getSessionPlayer();
+        if ($player) {
             $player->discord_id = $_SESSION['DISCORD_ID'];
             $player->discord_handle = $_SESSION['DISCORD_NAME'];
             if (empty($player->emailAddress) && $user->getVerified()) {
@@ -122,7 +125,7 @@ function do_login($token)
             $_SESSION['username'] = $player->name;
             if ($player->discord_handle != $_SESSION['DISCORD_NAME']) {
                 $player->discord_handle = $_SESSION['DISCORD_NAME'];
-                $player->discord_id = $_SESSION['DISCORD_ID'];
+                $player->discord_id = session()->optionalString('DISCORD_ID');
                 if (empty($player->emailAddress) && $user->getVerified()) {
                     $player->emailAddress = $user->getEmail();
                 }
@@ -139,7 +142,7 @@ function do_login($token)
     }
 }
 
-function prompt_link_account($user)
+function prompt_link_account(mixed $user): void
 {
     print_header('Login'); ?>
     <div class="grid_10 suffix_1 prefix_1">
@@ -178,5 +181,6 @@ function prompt_link_account($user)
     </div> <!-- grid 10 pre 1 suff 1 -->
 
     <?php
+
     print_footer();
 }

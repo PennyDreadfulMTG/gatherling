@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Views\Pages;
 
 // Abstract class parent for all the pages that need to show the "control panel" set of links.
@@ -9,17 +11,20 @@ use Gatherling\Models\Event;
 abstract class EventFrame extends Page
 {
     public string $title = 'Event Host Control Panel';
+    /** @var array<string, mixed> */
     public array $event;
+    /** @var list<array{link: string, text: string}> */
     public array $controlPanelLinks;
 
     public function __construct(Event $event)
     {
         parent::__construct();
         $this->event = getObjectVarsCamelCase($event);
-        $this->controlPanelLinks = $this->controlPanelLinks();
+        $this->controlPanelLinks = $this->getControlPanelLinks($event);
     }
 
-    public function controlPanelLinks(): array
+    /** @return list<array{link: string, text: string}> */
+    public function getControlPanelLinks(Event $event): array
     {
         $views = [
             'settings'   => 'Event Settings',
@@ -33,7 +38,7 @@ abstract class EventFrame extends Page
         $links = [];
         foreach ($views as $view => $text) {
             $links[] = [
-                'link' => 'event.php?name='.rawurlencode($this->event['name']).'&view='.$view,
+                'link' => 'event.php?name=' . rawurlencode($event->name ?? '') . '&view=' . $view,
                 'text' => $text,
             ];
         }

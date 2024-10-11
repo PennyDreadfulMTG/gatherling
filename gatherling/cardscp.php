@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling;
 
 use Gatherling\Models\Format;
@@ -12,7 +14,7 @@ include 'lib_form_helper.php';
 $hasError = false;
 $errormsg = '';
 
-if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
+if (!(Player::getSessionPlayer()?->isSuper() ?? false)) {
     redirect('index.php');
 }
 
@@ -33,12 +35,11 @@ print_header('Admin Control Panel');
 
 <?php
 
-function do_page()
+function do_page(): void
 {
     $player = Player::getSessionPlayer();
-    if (!$player->isSuper()) {
+    if (!$player || !$player->isSuper()) {
         printNoAdmin();
-
         return;
     }
 
@@ -72,7 +73,7 @@ function do_page()
     }
 }
 
-function printNoAdmin()
+function printNoAdmin(): void
 {
     global $hasError;
     global $errormsg;
@@ -81,7 +82,8 @@ function printNoAdmin()
     printError();
     echo '<a href="player.php">Back to the Player Control Panel</a></center>';
 }
-function printError()
+
+function printError(): void
 {
     global $hasError;
     global $errormsg;
@@ -90,7 +92,7 @@ function printError()
     }
 }
 
-function cardsCPMenu()
+function cardsCPMenu(): void
 {
     echo '<table><tr><td colspan="2" align="center">';
     echo '<a href="cardscp.php?view=list_sets">List Card Sets</a>';
@@ -98,7 +100,7 @@ function cardsCPMenu()
     echo '</td></tr></table>';
 }
 
-function handleActions()
+function handleActions(): void
 {
     if (!isset($_POST['action'])) {
         return;
@@ -128,7 +130,7 @@ function handleActions()
     }
 }
 
-function check_for_unique_cards_constraint()
+function check_for_unique_cards_constraint(): bool
 {
     global $CONFIG;
     $has_constraint = Database::single_result_single_param("SELECT COUNT(*)
@@ -150,7 +152,7 @@ function check_for_unique_cards_constraint()
     return true;
 }
 
-function printSetList()
+function printSetList(): void
 {
     check_for_unique_cards_constraint();
 
@@ -174,7 +176,7 @@ function printSetList()
     echo '</table>';
 }
 
-function printEditSet()
+function printEditSet(): void
 {
     $is_unique = check_for_unique_cards_constraint();
     $names = [];
@@ -235,7 +237,7 @@ function printEditSet()
     echo '</form>';
 }
 
-function printEditCard()
+function printEditCard(): void
 {
     $id = $_REQUEST['id'];
 

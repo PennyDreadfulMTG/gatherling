@@ -10,7 +10,8 @@ use Gatherling\Models\Player;
 class TrophyCell extends Component
 {
     public ?string $trophySrc;
-    public array $winner;
+    /** @var array{playerLink: PlayerLink, manaSrc: string, deckLink: DeckLink}|null */
+    public ?array $winner;
 
     public function __construct(Event $event)
     {

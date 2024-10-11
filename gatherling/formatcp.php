@@ -2,65 +2,68 @@
 
 declare(strict_types=1);
 
+use Gatherling\Models\CardSet;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
-use Gatherling\Models\Database;
-use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\Components\BAndR;
-use Gatherling\Views\Pages\FormatAdmin;
 use Gatherling\Views\Components\CardSets;
 use Gatherling\Views\Components\Component;
-use Gatherling\Views\Components\FormatError;
-use Gatherling\Views\Components\TribalBAndR;
 use Gatherling\Views\Components\ErrorMessage;
-use Gatherling\Views\Components\FormatSuccess;
-use Gatherling\Views\Components\NewFormatForm;
-use Gatherling\Views\Components\NullComponent;
-use Gatherling\Views\Components\FormatSettings;
-use Gatherling\Views\Components\LoadFormatForm;
 use Gatherling\Views\Components\FormatDeleteForm;
+use Gatherling\Views\Components\FormatError;
 use Gatherling\Views\Components\FormatRenameForm;
 use Gatherling\Views\Components\FormatSaveAsForm;
+use Gatherling\Views\Components\FormatSettings;
+use Gatherling\Views\Components\FormatSuccess;
+use Gatherling\Views\Components\LoadFormatForm;
+use Gatherling\Views\Components\NewFormatForm;
+use Gatherling\Views\Components\NullComponent;
+use Gatherling\Views\Components\TribalBAndR;
+use Gatherling\Views\LoginRedirect;
+use Gatherling\Views\Pages\FormatAdmin;
 use Gatherling\Views\Pages\InsufficientPermissions;
+
+use function Gatherling\Views\post;
+use function Gatherling\Views\server;
+use function Gatherling\Views\request;
 
 require_once 'lib.php';
 include 'lib_form_helper.php';
 
 function main(): void
 {
-    if (!Player::isLoggedIn()) {
+    $player = Player::getSessionPlayer();
+    if (!$player) {
         (new LoginRedirect())->send();
     }
-
-    $player = Player::getSessionPlayer();
 
     if (!$player->isOrganizer() && !$player->isSuper()) {
         (new InsufficientPermissions($player->isOrganizer()))->send();
     }
 
-    $playerSeries = Player::getSessionPlayer()->organizersSeries();
+    $playerSeries = $player->organizersSeries();
     if ($player->isSuper()) {
         array_unshift($playerSeries, 'System');
     }
 
-    $seriesName = $_REQUEST['series'] ?? $playerSeries[0];
+    $seriesName = request()->optionalString('series') ?? $playerSeries[0];
 
     if (!in_array($seriesName, $playerSeries)) {
         (new InsufficientPermissions($player->isOrganizer()))->send();
     }
 
-    $actionResultComponent = handleActions($seriesName);
+    $actionResultComponent = handleAction($seriesName);
 
     if (!isset($_REQUEST['format']) || empty($_REQUEST['format'])) {
         if (!($actionResultComponent instanceof LoadFormatForm)) {
             $actionResultComponent = [$actionResultComponent, new LoadFormatForm($seriesName)];
         }
-        $page = new FormatAdmin($_SERVER['PHP_SELF'], $playerSeries, $seriesName, new Format(''), $actionResultComponent);
+        $page = new FormatAdmin(server()->string('PHP_SELF'), $playerSeries, $seriesName, new Format(''), $actionResultComponent);
         $page->send();
     }
 
-    $format = $_REQUEST['format'];
-    if (Format::doesFormatExist($format)) {
+    $format = request()->optionalString('format');
+    if ($format && Format::doesFormatExist($format)) {
         $activeFormat = new Format($format);
     } else {
         $activeFormat = new Format('');
@@ -83,11 +86,11 @@ function main(): void
         default:
             $view = new FormatSettings($seriesName, $activeFormat);
     }
-    $page = new FormatAdmin($_SERVER['PHP_SELF'], $playerSeries, $seriesName, $activeFormat, $actionResultComponent, $view);
+    $page = new FormatAdmin(server()->string('PHP_SELF'), $playerSeries, $seriesName, $activeFormat, $actionResultComponent, $view);
     $page->send();
 }
 
-function handleActions(string $seriesName): Component
+function handleAction(string $seriesName): Component
 {
     if (!isset($_POST['action']) ||$_POST['action'] == 'Continue' || $_POST['action'] == 'Load Format') {
         return new NullComponent();
@@ -99,35 +102,32 @@ function handleActions(string $seriesName): Component
         return new LoadFormatForm($seriesName);
     }
     if ($_POST['action'] == 'Update Banlist') {
-        return updateBanlist($_POST['format'], $_POST['addbancard'] ?? [], $_POST['delbancards'] ?? []);
+        return updateBanlist(post()->string('format'), post()->string('addbancard', ''), post()->listString('delbancards'));
     }
     if ($_POST['action'] == 'Delete Entire Banlist') {
-        $format = new Format($_POST['format']);
+        $format = new Format(post()->string('format'));
         $success = $format->deleteEntireBanlist(); // leave a message of success
         return $success ? new NullComponent() : new ErrorMessage(['Failed to delete banlist']);
     }
     if ($_POST['action'] == 'Update Legal List') {
-        return updateLegalList($_POST['format'], $_POST['addlegalcard'] ?? [], $_POST['dellegalcards'] ?? []);
+        return updateLegalList(post()->string('format'), post()->string('addlegalcard'), post()->listString('dellegalcards'));
     }
     if ($_POST['action'] == 'Delete Entire Legal List') {
-        $format = new Format($_POST['format']);
+        $format = new Format(post()->string('format'));
         $success = $format->deleteEntireLegallist(); // leave a message of success
-        return $success ? null : new ErrorMessage(['Failed to delete legal list']);
+        return $success ? new NullComponent() : new ErrorMessage(['Failed to delete legal list']);
     }
     if ($_POST['action'] == 'Update Cardsets') {
-        return updateCardSets($_POST['format'], $_POST['cardsetname'] ?? '', $_POST['delcardsetname'] ?? []);
+        return updateCardSets(post()->string('format'), post()->string('cardsetname', ''), post()->listString('delcardsetname'));
     }
-    if ($_POST['action'] == 'Update Children') {
-        return updateChildren($_POST['format'], $_POST['addchild'] ?? '', $_POST['delchild'] ?? []);
-    }
-    if (strncmp($_POST['action'], 'Add All', 7) == 0) {
-        return addAll($_POST['format'], substr($_POST['action'], 8));
+    if (strncmp(post()->string('action', ''), 'Add All', 7) == 0) {
+        return addAll(post()->string('format'), substr(post()->string('action', ''), 8));
     }
     if ($_POST['action'] == 'Update Restricted List') {
-        return updateRestrictedList($_POST['format'], $_POST['addrestrictedcard'] ?? [], $_POST['delrestrictedcards'] ?? []);
+        return updateRestrictedList(post()->string('format'), post()->string('addrestrictedcard', ''), post()->listString('delrestrictedcards'));
     }
     if ($_POST['action'] == 'Delete Entire Restricted List') {
-        $format = new Format($_POST['format']);
+        $format = new Format(post()->string('format'));
         $success = $format->deleteEntireRestrictedlist(); // leave a message of success
         return $success ? new NullComponent() : new ErrorMessage(['Failed to delete restricted list']);
     }
@@ -135,49 +135,52 @@ function handleActions(string $seriesName): Component
         return updateFormat($_POST);
     }
     if ($_POST['action'] == 'Create New Format') {
-        return createNewFormat($seriesName, $_POST['newformatname']);
+        return createNewFormat($seriesName, post()->string('newformatname'));
     }
     if ($_POST['action'] == 'Save As') {
-        return saveAsForm($_POST['format']);
+        return saveAsForm(post()->string('format'));
     }
     if ($_POST['action'] == 'Save') {
-        return save($seriesName, $_POST['newformat'], $_POST['oldformat']);
+        return save($seriesName, post()->string('newformat'), post()->string('oldformat'));
     }
     if ($_POST['action'] == 'Rename') {
         return renameForm($seriesName);
     }
     if ($_POST['action'] == 'Rename Format') {
-        return renameFormat($seriesName, $_POST['newformat'], $_POST['format']);
+        return renameFormat($seriesName, post()->string('newformat'), post()->string('format'));
     }
     if ($_POST['action'] == 'Delete') {
-        return deleteForm($seriesName, $_POST['format']);
+        return deleteForm($seriesName, post()->string('format'));
     }
     if ($_POST['action'] == 'Delete Format') {
-        return deleteFormat($_POST['format']);
+        return deleteFormat(post()->string('format'));
     }
     if ($_POST['action'] == 'Update Restricted To Tribe List') {
-        // addrestrictedtotribecreature, and these are all going to need to be checked :(
-        return updateRestrictedToTribeList($_POST['format'], $_POST['addrestrictedtotribecreature'] ?? [], $_POST['delrestrictedtotribe'] ?? []);
+        return updateRestrictedToTribeList(post()->string('format'), post()->string('addrestrictedtotribecreature'), post()->listString('delrestrictedtotribe'));
     }
     if ($_POST['action'] == 'Delete Entire Restricted To Tribe List') {
-        $format = new Format($_POST['format']);
+        $format = new Format(post()->string('format'));
         $success = $format->deleteEntireRestrictedToTribeList(); // leave a message of success
         return $success ? new NullComponent() : new ErrorMessage(['Failed to delete restricted to tribe list']);
     }
     if ($_POST['action'] == 'Update Subtype Ban') {
-        return updateSubtypeBan($_POST['format'], $_POST['subtypeban'] ?? '', $_POST['delbannedsubtype'] ?? []);
+        return updateSubtypeBan(post()->string('format'), post()->string('subtypeban'), post()->listString('delbannedsubtype'));
     }
     if ($_POST['action'] == 'Update Tribe Ban') {
-        return updateTribeBan($_POST['format'], $_POST['tribeban'] ?? '', $_POST['delbannedtribe'] ?? []);
+        return updateTribeBan(post()->string('format'), post()->string('tribeban'), post()->listString('delbannedtribe'));
     }
     if ($_POST['action'] == 'Ban All Tribes') {
-        $format = new Format($_POST['format']);
+        $format = new Format(post()->string('format'));
         $format->banAllTribes();
         return new NullComponent();
     }
     return new ErrorMessage(["Unknown action '{$_POST['action']}'"]);
 }
 
+/**
+ * @param string|array<string> $addBanCards
+ * @param array<string> $delBanCards
+ */
 function updateBanlist(string $activeFormat, string|array $addBanCards, array $delBanCards): Component
 {
     $format = new Format($activeFormat);
@@ -199,6 +202,10 @@ function updateBanlist(string $activeFormat, string|array $addBanCards, array $d
     return $errors ? new ErrorMessage($errors) : new NullComponent();
 }
 
+/**
+ * @param string|array<string> $addLegalCards
+ * @param array<string> $delLegalCards
+ */
 function updateLegalList(string $formatName, array|string $addLegalCards, array $delLegalCards): Component
 {
     $errors = [];
@@ -228,6 +235,10 @@ function updateLegalList(string $formatName, array|string $addLegalCards, array 
     return $errors ? new ErrorMessage($errors) : new NullComponent();
 }
 
+/**
+ * @param string $cardSetName
+ * @param array<string> $delCardSets
+ */
 function updateCardSets(string $formatName, string $cardSetName, array $delCardSets): Component
 {
     $format = new Format($formatName);
@@ -246,34 +257,20 @@ function updateCardSets(string $formatName, string $cardSetName, array $delCardS
     return $errors ? new ErrorMessage($errors) : new NullComponent();
 }
 
-function updateChildren(string $formatName, string $addChild, array $delChildren): Component
-{
-    $errors = [];
-    $format = new Format($formatName);
-
-    if ($addChild) {
-        $format->insertSubFormat($addChild);
-    }
-
-    foreach ($delChildren as $childFormatName) {
-        $success = $format->deleteSubFormat($childFormatName);
-        if (!$success) {
-            $errors[] = "Can't delete {$childFormatName} from child formats";
-        }
-    }
-    return $errors ? new ErrorMessage($errors) : new NullComponent();
-}
-
 function addAll(string $formatName, string $cardsetType): Component
 {
     $format = new Format($formatName);
-    $missing = getMissingSets($cardsetType, $format);
+    $missing = CardSet::getMissingSets($cardsetType, $format);
     foreach ($missing as $set) {
         $format->insertNewLegalSet($set);
     }
     return new NullComponent();
 }
 
+/**
+ * @param string|array<string> $addRestrictedCards
+ * @param array<string> $delRestrictedCards
+ */
 function updateRestrictedList(string $formatName, string|array $addRestrictedCards, array $delRestrictedCards): Component
 {
     $format = new Format($formatName);
@@ -301,6 +298,7 @@ function updateRestrictedList(string $formatName, string|array $addRestrictedCar
     return $errors ? new ErrorMessage($errors) : new NullComponent();
 }
 
+/** @param array<string, string> $values */
 function updateFormat(array $values): Component
 {
     $format = new Format($values['format']);
@@ -310,16 +308,16 @@ function updateFormat(array $values): Component
     }
 
     if (isset($values['minmain'])) {
-        $format->min_main_cards_allowed = $values['minmain'];
+        $format->min_main_cards_allowed = (int) $values['minmain'];
     }
     if (isset($values['maxmain'])) {
-        $format->max_main_cards_allowed = $values['maxmain'];
+        $format->max_main_cards_allowed = (int) $values['maxmain'];
     }
     if (isset($values['minside'])) {
-        $format->min_side_cards_allowed = $values['minside'];
+        $format->min_side_cards_allowed = (int) $values['minside'];
     }
     if (isset($values['maxside'])) {
-        $format->max_side_cards_allowed = $values['maxside'];
+        $format->max_side_cards_allowed = (int) $values['maxside'];
     }
 
     if (isset($values['singleton'])) {
@@ -417,7 +415,7 @@ function updateFormat(array $values): Component
     return new NullComponent();
 }
 
-function createNewFormat($seriesName, $newFormatName): Component
+function createNewFormat(string $seriesName, string $newFormatName): Component
 {
     $format = new Format('');
     $format->name = $newFormatName;
@@ -480,12 +478,12 @@ function renameFormat(string $seriesName, string $newFormatName, string $formatN
     return new FormatError("Format {$formatName} Could Not Be Renamed :-(", $formatName);
 }
 
-function deleteForm($seriesName, $formatName): Component
+function deleteForm(string $seriesName, string $formatName): Component
 {
     return new FormatDeleteForm($seriesName);
 }
 
-function deleteFormat($formatName): Component
+function deleteFormat(string $formatName): Component
 {
     $format = new Format($formatName);
 
@@ -496,6 +494,10 @@ function deleteFormat($formatName): Component
     return new FormatError("Could Not Delete {$formatName}!", $formatName);
 }
 
+/**
+ * @param string|array<string> $addRestrictedToTribeCreature
+ * @param array<string> $delRestrictedToTribe
+ */
 function updateRestrictedToTribeList(string $formatName, string|array $addRestrictedToTribeCreature, array $delRestrictedToTribe): Component
 {
     $format = new Format($formatName);
@@ -517,6 +519,10 @@ function updateRestrictedToTribeList(string $formatName, string|array $addRestri
     return new NullComponent();
 }
 
+/**
+ * @param string $subTypeBan
+ * @param array<string> $delBannedSubType
+ */
 function updateSubtypeBan(string $formatName, string $subTypeBan, array $delBannedSubType): Component
 {
     $format = new Format($formatName);
@@ -533,6 +539,10 @@ function updateSubtypeBan(string $formatName, string $subTypeBan, array $delBann
     return new NullComponent();
 }
 
+/**
+ * @param string $tribeBan
+ * @param array<string> $delBannedTribe
+ */
 function updateTribeBan(string $formatName, string $tribeBan, array $delBannedTribe): Component
 {
     $format = new Format($formatName);
@@ -550,20 +560,6 @@ function updateTribeBan(string $formatName, string $tribeBan, array $delBannedTr
     return new NullComponent();
 }
 
-function getMissingSets(string $cardsetType, Format $format): array
-{
-    $cardsets = Database::list_result_single_param('SELECT name FROM cardsets WHERE type = ?', 's', $cardsetType);
-
-    $finalList = [];
-    foreach ($cardsets as $cardsetName) {
-        if (!$format->isCardSetLegal($cardsetName)) {
-            $finalList[] = $cardsetName;
-        }
-    }
-
-    return $finalList;
-}
-
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }

@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Auth;
 
 use Gatherling\Data\DB;
-use Gatherling\Log;
 
 class Session
 {
@@ -25,9 +26,15 @@ class Session
             return;
         }
         $token = $_COOKIE['remember_me'];
+        if (!is_string($token)) {
+            return;
+        }
         $_SESSION = self::load($token);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private static function load(string $token): array
     {
         $sql = '
@@ -44,10 +51,10 @@ class Session
         return $details ? json_decode($details, true) : [];
     }
 
-    private static function save(): void
+    public static function save(): void
     {
         $token = $_COOKIE['remember_me'] ?? null;
-        if (empty($_SESSION) && $token) {
+        if (empty($_SESSION) && is_string($token)) {
             self::clear($token);
             return;
         }

@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Admin;
 
 use Gatherling\Data\Setup;
+
+use function Gatherling\Views\server;
 
 set_time_limit(0);
 
@@ -14,6 +18,6 @@ function main(): void
     echo 'done';
 }
 
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }

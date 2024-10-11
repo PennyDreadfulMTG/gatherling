@@ -1,10 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Deck;
 use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
+
+use function Gatherling\Views\get;
+use function Gatherling\Views\post;
+use function Gatherling\Views\request;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
@@ -16,26 +22,23 @@ print_header('Deck Database');
 <div id="gatherling_main" class="box">
 
 <?php
+
 $event = null;
 
 if (isset($_GET['event'])) {
-    if (!Event::exists($_GET['event'])) {
+    if (!Event::exists(get()->string('event'))) {
         unset($_GET['event']);
         echo '<div class="uppertitle">Deck Database</div>';
     } else {
-        $event = new Event($_GET['event']);
+        $event = new Event(get()->string('event'));
         echo '<div class="uppertitle">' . $event->name . '</div>';
     }
 } else {
     echo '<div class="uppertitle">Deck Database</div>';
 }
-if (!isset($_REQUEST['mode'])) {
-    $_REQUEST['mode'] = '';
-}
-if (!isset($_POST['mode'])) {
-    $_POST['mode'] = '';
-}
-if (strcmp($_REQUEST['mode'], 'view') == 0) {
+$requestMode = request()->string('mode', '');
+$postMode = post()->string('mode', '');
+if (strcmp($requestMode, 'view') == 0) {
     $deck = null;
     if (isset($_GET['event'])) {
         $deck = $event->getPlaceDeck('1st');
@@ -50,7 +53,6 @@ if (strcmp($_REQUEST['mode'], 'view') == 0) {
     if (!isset($_POST['player']) and isset($_GET['player'])) {
         $_POST['player'] = $_GET['player'];
     }
-    $deck_player = isset($_POST['player']) ? $_POST['player'] : Player::loginName();
     $deck = isset($_POST['id']) ? new Deck($_POST['id']) : null;
     if (!isset($_POST['event'])) {
         if (!isset($_GET['event'])) {
@@ -60,27 +62,28 @@ if (strcmp($_REQUEST['mode'], 'view') == 0) {
     }
 
     if (isset($_REQUEST['event']) && is_null($event)) {
-        $event = new Event($_REQUEST['event']);
+        $event = new Event(request()->string('event'));
     }
 
+    $deck_player = isset($_POST['player']) ? post()->string('player') : Player::loginName();
     // part of the reg-decklist feature. both "register" and "addregdeck" switches
-    if (strcmp($_REQUEST['mode'], 'register') == 0) {
+    if (strcmp($requestMode, 'register') == 0) {
         deckRegisterForm();
-    } elseif (strcmp($_REQUEST['mode'], 'addregdeck') == 0) {
+    } elseif (strcmp($requestMode, 'addregdeck') == 0) {
         $deck = insertDeck($event);
         deckProfile($deck);
     } elseif (is_null($deck) && $event->name == '') {
-        echo 'No deck or event id specifed.<br/>';
-        echo "Go back to <a href='player.php'>Player CP</a>";
+        echo '<p>No deck or event id specifed.<br/>';
+        echo "Go back to <a href='player.php'>Player CP</a></p>";
     } elseif (checkDeckAuth($event, $deck_player, $deck)) {
-        if (strcmp($_POST['mode'], 'Create Deck') == 0) {
+        if (strcmp($postMode, 'Create Deck') == 0) {
             $deck = insertDeck($event);
             if ($deck->isValid()) {
                 deckProfile($deck);
             } else {
                 deckForm($deck);
             }
-        } elseif (strcmp($_POST['mode'], 'Update Deck') == 0) {
+        } elseif (strcmp($postMode, 'Update Deck') == 0) {
             $deck = updateDeck($deck);
             $deck = new Deck($deck->id); // had to do this to get the constructor to run, otherwise errors weren't loading
             if ($deck->isValid()) {
@@ -88,9 +91,9 @@ if (strcmp($_REQUEST['mode'], 'view') == 0) {
             } else {
                 deckForm($deck);
             }
-        } elseif (strcmp($_POST['mode'], 'Edit Deck') == 0) {
+        } elseif (strcmp($postMode, 'Edit Deck') == 0) {
             deckForm($deck);
-        } elseif (strcmp($_REQUEST['mode'], 'create') == 0) {
+        } elseif (strcmp($requestMode, 'create') == 0) {
             deckForm();
         }
     }
@@ -104,21 +107,22 @@ if (strcmp($_REQUEST['mode'], 'view') == 0) {
 
 <?php
 
-function deckForm($deck = null)
+function deckForm(?Deck $deck = null): void
 {
     $create = is_null($deck) || $deck->id == 0;
     $mode = $create ? 'Create Deck' : 'Update Deck';
     if (!$create) {
-        $player = $deck->playername;
+        $player = $deck->playername ?? false;
         $event = new Event($deck->eventname);
     } else {
-        $player = (isset($_POST['player'])) ? $_POST['player'] : $_GET['player'];
-        $event = new Event((isset($_POST['player'])) ? $_REQUEST['event'] : $_GET['event']);
+        $player = isset($_POST['player']) ? post()->string('player') : get()->string('player');
+        $event = new Event(isset($_POST['player']) ? request()->string('event') : get()->string('event'));
     }
 
     if (!checkDeckAuth($event, $player, $deck)) {
         return;
     }
+    assert($player !== false); // Otherwise checkDeckAuth would have redirected us.
 
     $vals = ['contents' => '', 'sideboard' => ''];
     if (!$create) {
@@ -201,11 +205,10 @@ function deckForm($deck = null)
 }
 
 // deckRegisterForm is part of the reg-decklist feature
-function deckRegisterForm()
+function deckRegisterForm(): void
 {
-    $player = (isset($_POST['player'])) ? $_POST['player'] : $_GET['player'];
-    $event = (isset($_POST['player'])) ? $_POST['event'] : $_GET['event'];
-    $vals = ['contents' => '', 'sideboard' => ''];
+    $player = isset($_POST['player']) ? post()->string('player') : get()->string('player');
+    $event = isset($_POST['player']) ? post()->string('event') : get()->string('event');
 
     echo "<form action=\"deck.php?mode=addregdeck\" method=\"post\">\n";
     echo "<table>\n";
@@ -229,27 +232,18 @@ function deckRegisterForm()
     }
     echo '</select></td></tr>';
     echo "<tr><td><b>Name</td>\n<td>";
-    if (!isset($vals['name'])) {
-        $vals['name'] = '';
-    }
-    echo "<input id=\"deck-name\" class=\"inputbox\" type=\"text\" name=\"name\" value=\"{$vals['name']}\" ";
+    echo "<input id=\"deck-name\" class=\"inputbox\" type=\"text\" name=\"name\" value=\"\" ";
     echo "size=\"40\"></td></tr>\n";
-    if (!isset($vals['archetype'])) {
-        $vals['archetype'] = '';
-    }
-    archetypeDropMenu($vals['archetype']);
+    archetypeDropMenu();
     echo "<tr><td valign=\"top\"><b>Main Deck</td>\n<td>";
     echo '<textarea id="deck-contents" class="inputbox" rows="20" cols="60" name="contents">';
-    echo "{$vals['contents']}</textarea></td></tr>\n";
+    echo "</textarea></td></tr>\n";
     echo "<tr><td valign=\"top\"><b>Sideboard</td>\n<td>";
     echo '<textarea id="deck-sideboard" class="inputbox" rows="10" cols="60" name="sideboard">';
-    echo "{$vals['sideboard']}</textarea></td></tr>\n";
+    echo "</textarea></td></tr>\n";
     echo "<tr><td valign=\"top\"><b>Comments</td>\n<td>";
     echo '<textarea class="inputbox" rows="10" cols="60" name="notes">';
-    if (!isset($vals['desc'])) {
-        $vals['desc'] = '';
-    }
-    echo "{$vals['desc']}</textarea></td></tr>\n";
+    echo "</textarea></td></tr>\n";
     echo "<tr><td>&nbsp;</td></tr>\n";
     echo "<tr><td colspan=\"2\" align=\"center\">\n";
     echo "<input class=\"inputbutton\" type=\"submit\" name=\"mode\" value=\"Create Deck\">\n";
@@ -258,7 +252,7 @@ function deckRegisterForm()
     echo "</td></tr></table></form>\n";
 }
 
-function archetypeDropMenu($def = '')
+function archetypeDropMenu(string $def = ''): void
 {
     $archetypes = Deck::getArchetypes();
     $archetypes = array_combine($archetypes, $archetypes);
@@ -266,7 +260,7 @@ function archetypeDropMenu($def = '')
     echo selectInput('Archetype', 'archetype', $archetypes, $def, 'deck-archetype');
 }
 
-function insertDeck($event)
+function insertDeck(Event $event): Deck
 {
     $deck = new Deck(0);
 
@@ -278,8 +272,8 @@ function insertDeck($event)
     $deck->eventname = $event->name;
     $deck->event_id = $event->id;
 
-    $deck->maindeck_cards = parseCardsWithQuantity($_POST['contents'] ?? []);
-    $deck->sideboard_cards = parseCardsWithQuantity($_POST['sideboard'] ?? []);
+    $deck->maindeck_cards = parseCardsWithQuantity(post()->string('contents', ''));
+    $deck->sideboard_cards = parseCardsWithQuantity(post()->string('sideboard', ''));
 
     if (!$deck->save()) {
         deckForm($deck);
@@ -288,14 +282,14 @@ function insertDeck($event)
     return $deck;
 }
 
-function updateDeck($deck)
+function updateDeck(Deck $deck): Deck
 {
     $deck->archetype = $_POST['archetype'];
     $deck->name = $_POST['name'];
     $deck->notes = $_POST['notes'];
 
-    $deck->maindeck_cards = parseCardsWithQuantity($_POST['contents'] ?? []);
-    $deck->sideboard_cards = parseCardsWithQuantity($_POST['sideboard'] ?? []);
+    $deck->maindeck_cards = parseCardsWithQuantity(post()->string('contents', ''));
+    $deck->sideboard_cards = parseCardsWithQuantity(post()->string('sideboard', ''));
 
     if (!$deck->save()) {
         deckForm($deck);
@@ -304,7 +298,7 @@ function updateDeck($deck)
     return $deck;
 }
 
-function deckProfile($deck)
+function deckProfile(?Deck $deck): void
 {
     if ($deck == null || $deck->id == 0) {
         echo '<span class="error"><center>Deck is not found.  It is possible that it is not entered yet.</center></span>';
@@ -355,14 +349,14 @@ function deckProfile($deck)
         echo '<span class="error"><center>You do not have permission to view this deck. Decks are anonymous for privacy until event is finalized.</center></span>';
         echo '<br /><br />';
         echo '<ul>People who can see decks while events are active:</ul>';
-        echo "<li>Gatherling Admin's</li>";
+        echo "<li>Gatherling Admins</li>";
         echo '<li>The Series Organizer</li>';
         echo '<li>The Event Host</li>';
         echo '<li>The Player Who Created The Deck</li>';
     }
 }
 
-function commentsTable($deck)
+function commentsTable(Deck $deck): void
 {
     $notes = $deck->notes;
     if ($notes == '' || is_null($notes)) {
@@ -381,7 +375,7 @@ function commentsTable($deck)
     echo '</table>';
 }
 
-function deckInfoCell($deck)
+function deckInfoCell(Deck $deck): void
 {
     $nmaincards = $deck->getCardCount($deck->maindeck_cards);
     $nsidecards = $deck->getCardCount($deck->sideboard_cards);
@@ -443,7 +437,7 @@ function deckInfoCell($deck)
     echo "</table>\n";
 }
 
-function trophyCell($deck)
+function trophyCell(Deck $deck): void
 {
     if ($deck->medal == '1st') {
         echo '<center>';
@@ -456,7 +450,7 @@ function trophyCell($deck)
     }
 }
 
-function sideboardTable($deck)
+function sideboardTable(Deck $deck): void
 {
     $sideboardcards = $deck->sideboard_cards;
 
@@ -472,14 +466,14 @@ function sideboardTable($deck)
     echo "</table>\n";
 }
 
-function exactMatchTable($deck)
+function exactMatchTable(Deck $deck): void
 {
     if ($deck->maindeck_cardcount < 5) {
         return;
     }
     $decks = $deck->findIdenticalDecks();
     if (count($decks) == 0) {
-        return false;
+        return;
     }
     echo "<table cellpadding=1 align=\"right\">\n";
     echo "<tr><th colspan=5 align=\"left\"><b>THIS DECK ALSO PLAYED AS</td></tr>\n";
@@ -498,7 +492,7 @@ function exactMatchTable($deck)
     echo "</table>\n";
 }
 
-function matchupTable($deck)
+function matchupTable(Deck $deck): void
 {
     echo "<table cellpadding=1 align=\"right\">\n";
     $event = new Event($deck->eventname);
@@ -562,7 +556,8 @@ function matchupTable($deck)
     echo "</table>\n";
 }
 
-function deckErrorTable($deckErrors)
+/** @param list<string> $deckErrors */
+function deckErrorTable(array $deckErrors): void
 {
     echo "<table style=\"width: 100%\" cellpadding=1>\n";
     echo '<tr><td><span class="error"><b>ERRORS</spa></td></tr>';
@@ -572,7 +567,7 @@ function deckErrorTable($deckErrors)
     echo '</table>';
 }
 
-function maindeckTable($deck)
+function maindeckTable(Deck $deck): void
 {
     $creatures = $deck->getCreatureCards();
     $creaturesCount = $deck->getCardCount($creatures);
@@ -606,7 +601,7 @@ function maindeckTable($deck)
     echo "</table>\n";
 }
 
-function ccTable($deck)
+function ccTable(Deck $deck): void
 {
     $convertedcosts = $deck->getCastingCosts();
 
@@ -632,7 +627,7 @@ function ccTable($deck)
     echo '</table>';
 }
 
-function symbolTable($deck)
+function symbolTable(Deck $deck): void
 {
     echo "<table>\n";
     echo '<tr><td align="center" colspan=2 width=150><b>MANA SYMBOLS';
@@ -655,7 +650,7 @@ function symbolTable($deck)
     echo "</table>\n";
 }
 
-function authFailed()
+function authFailed(): void
 {
     echo 'You are not permitted to make that change.  Reasons why you cannot make changes to a deck are: <br /> ';
     echo '<ul>';
@@ -668,16 +663,15 @@ function authFailed()
     echo 'should contact the admin via <a href="https://discord.gg/2VJ8Fa6">the Discord server</a>.<br><br>';
 }
 
-function loginRequired()
+function loginRequired(): void
 {
     echo "<center>You can't do that unless you <a href=\"login.php\">log in first</a></center>";
 }
 
-function checkDeckAuth($event, $player, $deck = null)
+function checkDeckAuth(Event $event, string|false $player, ?Deck $deck = null): bool
 {
-    if (!Player::isLoggedIn()) {
+    if ($player === false || !Player::isLoggedIn()) {
         loginRequired();
-
         return false;
     }
     if (is_null($deck) && $event->id > 0) {

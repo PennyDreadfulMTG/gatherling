@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once 'lib.php';
 
 //## Helper Functions
@@ -11,7 +13,19 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Models\Standings;
 
-function populate($array, $src, $keys)
+use function Gatherling\Views\config;
+use function Gatherling\Views\request;
+use function Gatherling\Views\server;
+use function Gatherling\Views\session;
+
+/**
+ * @param array<string, mixed> $array
+ * @param object $src
+ * @param array<string> $keys
+ *
+ * @return array<string, mixed>
+ */
+function populate(array $array, object $src, array $keys): array
 {
     foreach ($keys as $key) {
         $array[$key] = $src->{$key};
@@ -20,15 +34,15 @@ function populate($array, $src, $keys)
     return $array;
 }
 
-/** @return bool  */
 function is_admin(): bool
 {
-    global $CONFIG;
-
     if (!isset($_SESSION['infobot'])) {
         $_SESSION['infobot'] = false;
     }
-    if (strncmp($_SERVER['HTTP_USER_AGENT'], 'infobot', 7) == 0 && $_REQUEST['passkey'] == $CONFIG['infobot_passkey']) {
+    $userAgent = server()->string('HTTP_USER_AGENT', '');
+    $requestPasskey = request()->string('passkey', 'badrequestpasskey');
+    $configPasskey = config()->string('infobot_passkey', 'badconfigpasskey');
+    if (strncmp($userAgent, 'infobot', 7) == 0 && $requestPasskey == $configPasskey) {
         $_SESSION['infobot'] = true;
         header('X-InfoBot: true');
 
@@ -37,28 +51,26 @@ function is_admin(): bool
 
     if (!Player::isLoggedIn()) {
         header('X-Logged-In: false');
-    } elseif (Player::getSessionPlayer()->isSuper()) {
+    } elseif (Player::getSessionPlayer()?->isSuper() ?? false) {
         header('X-Admin: true');
-
         return true;
     }
-    header('X-Admin: false');
 
+    header('X-Admin: false');
     return false;
 }
 
-/** @return string  */
-function auth()
+function auth(): string|bool
 {
     $username = null;
     $apikey = null;
     if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
-        $username = $_SERVER['PHP_AUTH_USER'];
-        $apikey = $_SERVER['PHP_AUTH_PW'];
+        $username = server()->string('PHP_AUTH_USER');
+        $apikey = server()->string('PHP_AUTH_PW');
     }
     if (isset($_SERVER['HTTP_X_USERNAME']) && isset($_SERVER['HTTP_X_APIKEY'])) {
-        $username = $_SERVER['HTTP_X_USERNAME'];
-        $apikey = $_SERVER['HTTP_X_APIKEY'];
+        $username = server()->string('HTTP_X_USERNAME');
+        $apikey = server()->string('HTTP_X_APIKEY');
     }
 
     if (is_null($username) || is_null($apikey)) {
@@ -78,13 +90,7 @@ function auth()
     return Player::isLoggedIn();
 }
 
-/**
- * @param string $msg
- * @param mixed  $extra
- *
- * @return never
- */
-function error($msg, $extra = null)
+function error(string $msg, mixed $extra = null): never
 {
     $result = [];
     if (is_array($extra)) {
@@ -96,13 +102,16 @@ function error($msg, $extra = null)
     exit(json_encode($result));
 }
 
-/**
- * @param string $key
- * @param mixed  $default
- *
- * @return mixed
- */
-function arg($key, $default = null)
+function argStr(string $key, string|false $default = false): string
+{
+    try {
+        return request()->string($key, $default);
+    } catch (InvalidArgumentException $e) {
+        error("missing argument '$key'");
+    }
+}
+
+function arg(string $key, mixed $default = null): mixed
 {
     if (!isset($_REQUEST[$key])) {
         if ($default !== null) {
@@ -115,7 +124,9 @@ function arg($key, $default = null)
     return $_REQUEST[$key];
 }
 
-function repr_json_event(Event $event)
+
+/** @return array<string, mixed> */
+function repr_json_event(Event $event): array
 {
     $series = new Series($event->series);
     $json = [];
@@ -189,7 +200,8 @@ function repr_json_event(Event $event)
     return $json;
 }
 
-function repr_json_deck(Deck $deck)
+/** @return array<string, mixed> */
+function repr_json_deck(Deck $deck): array
 {
     $json = [];
     $json['id'] = $deck->id;
@@ -205,18 +217,20 @@ function repr_json_deck(Deck $deck)
     return $json;
 }
 
-function repr_json_series(Series $series)
+/** @return array<string, mixed> */
+function repr_json_series(Series $series): array
 {
     $json = populate([], $series, ['name', 'active', 'start_day', 'start_time', 'organizers', 'mtgo_room', 'this_season_format', 'this_season_master_link', 'this_season_season', 'discord_guild_id', 'discord_channel_id', 'discord_channel_name', 'discord_guild_name']);
     $mostRecent = $series->mostRecentEvent();
-    $json['most_recent_season'] = $mostRecent->season;
-    $json['most_recent_number'] = $mostRecent->number;
-    $json['most_recent_id'] = $mostRecent->id;
+    $json['most_recent_season'] = $mostRecent ? $mostRecent->season : null;
+    $json['most_recent_number'] = $mostRecent ? $mostRecent->number : null;
+    $json['most_recent_id'] = $mostRecent ? $mostRecent->id : null;
 
     return $json;
 }
 
-function repr_json_player(Player $player, ?int $client = null): mixed
+/** @return array<string, mixed> */
+function repr_json_player(Player $player, int|string|null $client = null): array
 {
     $json = populate([], $player, ['name', 'verified', 'discord_id', 'discord_handle', 'mtga_username', 'mtgo_username']);
     $json['display_name'] = $player->gameName($client);
@@ -226,13 +240,13 @@ function repr_json_player(Player $player, ?int $client = null): mixed
 
 //## Actions
 
-/**
- * @return (bool|string|int)[]|false[]|(string|false)[]
- */
-function add_player_to_event(Event $event, ?string $name, ?string $decklist)
+/** @return array<string, mixed> */
+function add_player_to_event(Event $event, ?string $name, ?string $decklist): array
 {
     $result = [];
-    if ($event->authCheck($_SESSION['username'])) {
+    $username = session()->string('username', '');
+    if ($username && $event->authCheck($username)) {
+        $player = null;
         if ($event->addPlayer($name)) {
             $player = new Player($name);
             $result['success'] = true;
@@ -242,7 +256,7 @@ function add_player_to_event(Event $event, ?string $name, ?string $decklist)
         } else {
             $result['success'] = false;
         }
-        if (!empty($decklist)) {
+        if (!empty($decklist) && $player) {
             $decklist = str_replace('|', "\n", $decklist);
 
             $deck = new Deck(0);
@@ -263,9 +277,11 @@ function add_player_to_event(Event $event, ?string $name, ?string $decklist)
     return $result;
 }
 
+/** @return array<string, mixed> */
 function delete_player_from_event(Event $event, ?string $name): array
 {
-    if ($event->authCheck($_SESSION['username'])) {
+    $username = session()->string('username', '');
+    if ($username && $event->authCheck($username)) {
         $result = [];
         $result['success'] = $event->removeEntry($name);
         $result['player'] = $name;
@@ -277,9 +293,11 @@ function delete_player_from_event(Event $event, ?string $name): array
     return $result;
 }
 
+/** @return array<string, mixed> */
 function drop_player_from_event(Event $event, ?string $name): array
 {
-    if ($event->authCheck($_SESSION['username'])) {
+    $username = session()->string('username', '');
+    if ($username && $event->authCheck($username)) {
         $event->dropPlayer($name);
         $result['success'] = true;
         $result['player'] = $name;
@@ -293,14 +311,8 @@ function drop_player_from_event(Event $event, ?string $name): array
     return $result;
 }
 
-/**
- * @param string $newseries
- * @param bool   $active
- * @param string $day
- *
- * @return array
- */
-function create_series($newseries, $active, $day)
+/** @return array<string, mixed> */
+function create_series(string $newseries, bool $active, string $day): array
 {
     $result = [];
     if (!is_admin()) {
@@ -309,7 +321,7 @@ function create_series($newseries, $active, $day)
     } else {
         $series = new Series('');
         $series->name = $newseries;
-        $series->active = $active;
+        $series->active = $active ? 1 : 0;
         $series->start_time = '0:00:00';
         $series->start_day = $day;
         $series->save();
@@ -322,40 +334,41 @@ function create_series($newseries, $active, $day)
     return $result;
 }
 
-function create_event()
+/** @return array<string, mixed> */
+function create_event(): array
 {
-    $name = arg('name', '');
+    $name = argStr('name', '');
     $naming = '';
     if ($name == '') {
         $naming = 'auto';
     }
 
     $event = Event::CreateEvent(
-        arg('year'),
-        arg('month'),
-        arg('day'),
-        arg('hour'),
+        argStr('year'),
+        argStr('month'),
+        argStr('day'),
+        argStr('hour'),
         $naming,
         $name,
-        arg('format'),
-        arg('host', ''),
-        arg('cohost', ''),
-        arg('kvalue', ''),
-        arg('series'),
-        arg('season'),
-        arg('number'),
-        arg('threadurl', ''),
-        arg('metaurl', ''),
-        arg('reporturl', ''),
-        arg('prereg_allowed', ''),
-        arg('player_reportable', ''),
-        arg('late_entry_limit', ''),
-        arg('private', ''),
-        arg('mainrounds', ''),
-        arg('mainstruct', ''),
-        arg('finalrounds', ''),
-        arg('finalstruct', ''),
-        arg('client', 1)
+        argStr('format'),
+        argStr('host', ''),
+        argStr('cohost', ''),
+        argStr('kvalue', ''),
+        argStr('series'),
+        argStr('season'),
+        argStr('number'),
+        argStr('threadurl', ''),
+        argStr('metaurl', ''),
+        argStr('reporturl', ''),
+        argStr('prereg_allowed', ''),
+        argStr('player_reportable', ''),
+        argStr('late_entry_limit', ''),
+        argStr('private', ''),
+        argStr('mainrounds', ''),
+        argStr('mainstruct', ''),
+        argStr('finalrounds', ''),
+        argStr('finalstruct', ''),
+        argStr('client', '1')
     );
 
     $result = [];
@@ -365,14 +378,19 @@ function create_event()
     return $result;
 }
 
-function create_pairing(Event $event, mixed $round, ?string $a, ?string $b, ?string $res): void
+
+function create_pairing(Event $event, int $round, ?string $a, ?string $b, ?string $res): void
 {
-    if (!is_admin() && !$event->authCheck(Player::loginName())) {
-        error('Unauthorized');
+    if (!is_admin()) {
+        $username = Player::loginName();
+        if (!$username || !$event->authCheck($username)) {
+            error('Unauthorized');
+        }
     }
 
     $playerA = new Standings($event->name, $a);
     $playerB = new Standings($event->name, $b);
+    $pAWins = $pBWins = null;
     switch ($res) {
         case '2-0':
             $pAWins = 2;
@@ -410,12 +428,12 @@ function create_pairing(Event $event, mixed $round, ?string $a, ?string $b, ?str
     if ($res == 'P') {
         $event->addPairing($playerA, $playerB, $round, $res);
     } else {
-        $event->addMatch($playerA, $playerB, $round, $res, $pAWins, $pBWins);
+        $event->addMatch($playerA, $playerB, (string) $round, $res, (string) $pAWins, (string) $pBWins);
     }
 }
 
-/** @return string[]  */
-function card_catalog()
+/** @return list<string> */
+function card_catalog(): array
 {
     $result = [];
     $db = Database::getConnection();
@@ -430,14 +448,7 @@ function card_catalog()
     return $result;
 }
 
-/**
- * @param string $id
- *
- * @throws Exception
- *
- * @return string
- */
-function cardname_from_id($id)
+function cardname_from_id(string $id): string
 {
     $sql = 'SELECT c.name as name FROM cards c WHERE c.scryfallId = ?';
     $name = Database::single_result_single_param($sql, 's', $id);

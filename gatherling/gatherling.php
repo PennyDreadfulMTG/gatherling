@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 require_once 'lib.php';
 print_header('Home'); ?>
 
@@ -248,4 +251,6 @@ print_header('Home'); ?>
     </div>
 </div>
 
-<?php print_footer();
+<?php
+
+print_footer();

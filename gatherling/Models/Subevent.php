@@ -1,18 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Models;
 
 use Exception;
 
 class Subevent
 {
-    public $parent;
-    public $rounds;
-    public $timing;
-    public $type;
-    public $id;
+    public ?string $parent;
+    public ?int $rounds;
+    public ?int $timing;
+    public ?string $type;
+    public ?int $id;
 
-    public function __construct($id)
+    public function __construct(int $id)
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT parent, rounds, timing, type
@@ -27,7 +29,7 @@ class Subevent
         }
     }
 
-    public function save()
+    public function save(): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('UPDATE subevents SET parent = ?, rounds = ?,

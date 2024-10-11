@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Format;
@@ -9,11 +11,15 @@ use Gatherling\Views\Components\OrganizerSelect;
 
 class FormatAdmin extends Page
 {
-    public OrganizerSelect $organizerSelect;
+    public ?OrganizerSelect $organizerSelect;
     public string $actionResultSafe = '';
     public FormatCPMenu $formatCPMenu;
     public string $viewSafe;
 
+    /**
+     * @param list<string> $playerSeries
+     * @param Component|array<Component> $actionResultComponent
+     */
     public function __construct(string $action, array $playerSeries, string $seriesName, Format $activeFormat, Component|array $actionResultComponent, ?Component $viewComponent = null)
     {
         parent::__construct();

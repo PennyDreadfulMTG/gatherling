@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling;
 
 use Gatherling\Exceptions\ConfigurationException;
@@ -27,9 +29,9 @@ class Log
 
         if (defined('TESTING') && TESTING) {
             $bufferHandler = new BufferHandler(
-                new StreamHandler('php://stderr', Logger::DEBUG),
+                new StreamHandler('php://stderr', Level::Debug),
                 0, // No buffer limit
-                Logger::DEBUG, // Minimum log level to buffer
+                Level::Debug, // Minimum log level to buffer
                 false, // Don't flush when script ends (flush manually)
                 false // Do NOT flush on overflow
             );
@@ -60,49 +62,68 @@ class Log
         self::$logger = $logger;
     }
 
-    public static function emergency($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function emergency(string $message, array $context = []): void
     {
         self::getLogger()->emergency($message, $context);
     }
 
-    public static function alert($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function alert(string $message, array $context = []): void
     {
         self::getLogger()->alert($message, $context);
     }
 
-    public static function critical($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function critical(string $message, array $context = []): void
     {
         self::getLogger()->critical($message, $context);
     }
 
-    public static function error($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function error(string $message, array $context = []): void
     {
         self::getLogger()->error($message, $context);
     }
 
-    public static function warning($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function warning(string $message, array $context = []): void
     {
         self::getLogger()->warning($message, $context);
     }
 
-    public static function notice($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function notice(string $message, array $context = []): void
     {
         self::getLogger()->notice($message, $context);
     }
 
-    public static function info($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function info(string $message, array $context = []): void
     {
         self::getLogger()->info($message, $context);
     }
 
-    public static function debug($message, array $context = []): void
+    /**
+     * @param array<string, mixed> $context
+     */
+    public static function debug(string $message, array $context = []): void
     {
         self::getLogger()->debug($message, $context);
-    }
-
-    public static function log($level, $message, array $context = []): void
-    {
-        self::getLogger()->log($level, $message, $context);
     }
 
     public static function clear(): void

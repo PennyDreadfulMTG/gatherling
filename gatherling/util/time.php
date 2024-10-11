@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Views\Components\Time;
 
-function time_element($datetime, $now, $long = false): string
+function time_element(int $datetime, int $now, bool $long = false): string
 {
     return (new Time($datetime, $now, $long))->render();
 }
 
-function human_date($datetime, $now): string
+function human_date(int $datetime, int $now): string
 {
     $elapsed = abs($now - $datetime);
     if ($elapsed == 0) {
@@ -29,13 +31,13 @@ function human_date($datetime, $now): string
     ];
     foreach ($INTERVALS as $interval => $duration) {
         if ($elapsed >= $duration) {
-            return pluralize(intdiv($elapsed, $duration), $interval)." $suffix";
+            return pluralize(intdiv($elapsed, $duration), $interval) . " $suffix";
         }
     }
-	return 'unknown';
+    return 'unknown';
 }
 
-function pluralize($n, $noun): string
+function pluralize(int $n, string $noun): string
 {
-    return $n.' '.$noun.($n != 1 ? 's' : '');
+    return $n . ' ' . $noun . ($n != 1 ? 's' : '');
 }

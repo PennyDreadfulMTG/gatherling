@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Tests\Auth;
 
 use Gatherling\Auth\Registration;
@@ -7,7 +9,7 @@ use Gatherling\Tests\Support\TestCases\DatabaseCase;
 
 final class RegistrationTest extends DatabaseCase
 {
-    public function testRegister()
+    public function testRegister(): void
     {
         // Test successful registration with all fields
         $this->assertEquals(Registration::SUCCESS, Registration::register('newuser1', 'password123', 'password123', 'newuser1@example.com', 1, -5.0, '123456789', 'NewUser1#1234'));

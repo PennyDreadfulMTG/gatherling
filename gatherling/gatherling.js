@@ -107,7 +107,6 @@ if (typeof window !== 'undefined') {
         const locale = navigator.language || navigator.languages[0]; // Fallback to languages array if needed
         const short = !timeElement.classList.contains('long');
         const formattedDate = formatDate(originalDate, start, timeZone, locale, short);
-        console.log(originalDate, formattedDate);
         timeElement.textContent = formattedDate;
     });
 }

@@ -1,16 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Models;
 
 class Decksearch
 {
-    public $errors = [];
+    /**
+     * @var list<string>
+     */
+    public array $errors = [];
 
+    /**
+     * @var array<string, list<int>>
+     */
     private $_results = [];
-    private $_final_results = [];
 
-    private $_eventname;
-    private $_playername;
+    /**
+     * @var list<int>
+     */
+    private array $_final_results = [];
+
+    private ?string $_eventname;
+    private ?string $_playername;
 
     // holds the current deck id that info is being collected for
 
@@ -45,9 +57,9 @@ class Decksearch
      * call getFinalResults to complete a search request with any set inputs
      * and returns a list of deck id's that match.
      *
-     * @return array List of id's that match the search request
+     * @return bool|list<int> List of id's that match the search request
      */
-    public function getFinalResults()
+    public function getFinalResults(): bool|array
     {
         if (count($this->_results) > 0 && count($this->errors) == 0) {
             $array_keys = array_keys($this->_results);
@@ -92,7 +104,7 @@ class Decksearch
      *
      * @param string $format Format to search decks by
      */
-    public function searchByFormat($format)
+    public function searchByFormat(string $format): void
     {
         $sql = 'SELECT id FROM decks WHERE format = ?';
         $results = Database::list_result_single_param($sql, 's', $format);
@@ -108,7 +120,7 @@ class Decksearch
      *
      * @param string $player Player name to search decks by
      */
-    public function searchByPlayer($player)
+    public function searchByPlayer(string $player): void
     {
         $sql = 'SELECT id FROM decks WHERE playername LIKE ?';
         $results = Database::list_result_single_param($sql, 's', '%'.$player.'%');
@@ -126,7 +138,7 @@ class Decksearch
      *
      * @param string $medal Medal to search decks by
      */
-    public function searchByMedals($medal)
+    public function searchByMedals(string $medal): void
     {
         $sql = 'SELECT decks.id
         FROM decks INNER JOIN entries
@@ -147,8 +159,10 @@ class Decksearch
      *
      *  bcgruw u=Blue w=White b=Black r=Red g=Green c=Colorless
      *  e.g. array(u => 'u') order does not matter.
+     *
+     * @param array<string, string> $color_str_input
      */
-    public function searchByColor(array $color_str_input)
+    public function searchByColor(array $color_str_input): void
     {
         // alphebetizes then sets the search string
         $final_color_str = null;
@@ -171,7 +185,7 @@ class Decksearch
      *
      * @param string $archetype Name of archetype to search for
      */
-    public function searchByArchetype($archetype)
+    public function searchByArchetype(string $archetype): void
     {
         $sql = 'SELECT id FROM decks WHERE archetype = ?';
         $results = Database::list_result_single_param($sql, 's', $archetype);
@@ -187,7 +201,7 @@ class Decksearch
      *
      * @param string $series Series name to search by
      */
-    public function searchBySeries($series)
+    public function searchBySeries(string $series): void
     {
         $sql = 'SELECT entries.deck
         FROM entries INNER JOIN events
@@ -208,7 +222,7 @@ class Decksearch
      *
      * @param string $cardname Name of card to search for
      */
-    public function searchByCardName($cardname)
+    public function searchByCardName(string $cardname): void
     {
         if (strlen($cardname) >= 3) {
             $sql = 'SELECT deckcontents.deck
@@ -228,7 +242,11 @@ class Decksearch
         }
     }
 
-    public function idsToSortedInfo($id_arr)
+    /**
+     * @param list<int> $id_arr
+     * @return list<array{id: int, archetype: string, name: string, playername: string, format: string, created_date: string, record: string}>
+     */
+    public function idsToSortedInfo(array $id_arr): array
     {
         $db = Database::getConnection();
 
@@ -261,7 +279,7 @@ class Decksearch
         return $list;
     }
 
-    private function _getDeckRecord($deckid)
+    private function _getDeckRecord(int $deckid): string
     {
         // check if there is a record in entries
         $sql = 'select Count(*) FROM entries where deck = ?';
@@ -287,7 +305,7 @@ class Decksearch
         }
     }
 
-    private function _recordString()
+    private function _recordString(): string
     {
         $wins = 0;
         $losses = 0;

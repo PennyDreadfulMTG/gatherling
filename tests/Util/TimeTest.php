@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 final class TimeTest extends TestCase
 {
-    public function testHumanDate()
+    public function testHumanDate(): void
     {
         $now = strtotime('2024-08-29T12:00:00-07:00');
         $this->assertEquals('just now', human_date($now, $now));
@@ -35,7 +35,7 @@ final class TimeTest extends TestCase
         $this->assertEquals('Jun 14th', human_date($differsNewYorkAndLosAngeles, $now));
     }
 
-    public function testTimeElement()
+    public function testTimeElement(): void
     {
         $now = strtotime('2024-08-29T12:00:00-07:00');
         $elem = time_element($now, $now);

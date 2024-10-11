@@ -1,10 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Database;
 use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
+
+use function Gatherling\Views\get;
+use function Gatherling\Views\request;
 
 require_once 'lib.php';
 require_once 'api_lib.php';
@@ -25,8 +30,8 @@ switch ($action) {
 
     case 'eventinfo':
     case 'event_info':
-        if (Event::exists(arg('event'))) {
-            $event = new Event(arg('event'));
+        if (Event::exists(argStr('event'))) {
+            $event = new Event(argStr('event'));
             $result = repr_json_event($event);
         } else {
             $result['error'] = 'Event not found';
@@ -35,10 +40,10 @@ switch ($action) {
 
     case 'seriesinfo':
     case 'series_info':
-        $seriesname = $_REQUEST['series'];
+        $seriesName = request()->string('series');
 
         try {
-            $series = new Series($seriesname);
+            $series = new Series($seriesName);
             $result = repr_json_series($series);
             $result['success'] = true;
         } catch (Exception $e) {
@@ -50,30 +55,30 @@ switch ($action) {
     case 'addplayer':
     case 'add_player':
         auth();
-        $event = new Event(arg('event'));
-        $player = arg('addplayer');
-        $decklist = arg('decklist', '');
+        $event = new Event(argStr('event'));
+        $player = argStr('addplayer');
+        $decklist = argStr('decklist', '');
         $result = add_player_to_event($event, $player, $decklist);
         break;
 
     case 'delplayer':
     case 'delete_player':
         auth();
-        $event = new Event($_GET['event']);
-        $player = $_GET['delplayer'];
+        $event = new Event(get()->string('event'));
+        $player = get()->optionalString('delplayer');
         $result = delete_player_from_event($event, $player);
         break;
 
     case 'dropplayer':
     case 'drop_player':
-        $event = new Event($_GET['event']);
-        $player = $_GET['dropplayer'];
+        $event = new Event(get()->string('event'));
+        $player = get()->optionalString('dropplayer');
         $result = drop_player_from_event($event, $player);
         break;
 
     case 'add_deck':
-        $event = new Event(arg('event'));
-        $player = arg('player');
+        $event = new Event(argStr('event'));
+        $player = argStr('player');
         $entries = $event->getEntries();
         foreach ($entries as $entry) {
             if ($entry->player->name == $player) {
@@ -126,12 +131,9 @@ switch ($action) {
         break;
 
     case 'create_series':
-        $series = $_REQUEST['series'];
+        $series = request()->string('series');
         $active = true;
-        $day = 'Monday';
-        if (isset($_REQUEST['day'])) {
-            $day = $_REQUEST['day'];
-        }
+        $day = request()->string('day', 'Monday');
         $result = create_series($series, $active, $day);
         break;
 
@@ -142,12 +144,15 @@ switch ($action) {
 
     case 'create_pairing':
         auth();
-        $event = new Event(arg('event'));
-        $round = arg('round');
-        $a = arg('player_a');
-        $b = arg('player_b');
-        $res = arg('res', 'P');
-
+        try {
+            $event = new Event(argStr('event'));
+            $round = request()->int('round');
+            $a = argStr('player_a');
+            $b = argStr('player_b');
+            $res = argStr('res', 'P');
+        } catch (\InvalidArgumentException $e) {
+            error($e->getMessage());
+        }
         create_pairing($event, $round, $a, $b, $res);
         break;
 
@@ -166,8 +171,8 @@ switch ($action) {
         break;
 
     case 'whois':
-        $discord = arg('discordid', 0);
-        $handle = arg('discord_handle', '');
+        $discord = request()->string('discordid', '');
+        $handle = request()->string('discord_handle', '');
         if ($discord) {
             $name = $discord;
             $player = Player::findByDiscordID($discord);
@@ -175,7 +180,7 @@ switch ($action) {
             $name = $handle;
             $player = Player::findByDiscordHandle($handle);
         } else {
-            $name = arg('name');
+            $name = argStr('name');
             $player = Player::findByName($name);
         }
         if (is_null($player)) {
@@ -185,7 +190,7 @@ switch ($action) {
         break;
 
     case 'find_player':
-        $name = arg('name');
+        $name = argStr('name');
         $result = [];
         if ($player = Player::findByDiscordID($name)) {
             $result[] = repr_json_player($player, 'discord');
@@ -219,12 +224,12 @@ switch ($action) {
         break;
 
     case 'cardname_from_id':
-        $result = cardname_from_id(arg('id'));
+        $result = cardname_from_id(argStr('id'));
         break;
 
     case 'start_event':
         auth();
-        $event = new Event(arg('event'));
+        $event = new Event(argStr('event'));
         $event->startEvent(true);
         $result = repr_json_event($event);
         break;

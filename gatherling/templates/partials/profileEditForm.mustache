@@ -1,0 +1,17 @@
+<form action="profile.php" mode="POST">
+    <label for="timezone">Time Zone:</label>
+    {{#timezoneDropMenu}}
+        {{> dropMenu}}
+    {{/timezoneDropMenu}}
+    <br>
+    <label for="player">Email Address: </label>
+    <input class="inputbox" type="text" name="email" value="{{email}}" />
+    <br>
+    <input type="radio" name="email_public" value="1"{{#emailPrivacy}} checked{{/emailPrivacy}}>Make my email publicly viewable
+    <br>
+    <input type="radio" name="email_public" value="0"{{#emailPrivacy}} checked{{/emailPrivacy}}>Only allow administrators and event hosts to view my email
+    <br>
+    <input type="hidden" name="profile_edit" value="2">
+    <br>
+    <input class="inputbutton" type="submit" name="mode" value="Submit Changes" />
+</form>

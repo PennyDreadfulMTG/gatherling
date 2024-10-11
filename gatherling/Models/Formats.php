@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Models;
 
 use Gatherling\Log;
@@ -15,7 +17,7 @@ class Formats
         self::updatePennyDreadful();
     }
 
-    private static function loadFormat($format): Format
+    private static function loadFormat(string $format): Format
     {
         if (!Format::doesFormatExist($format)) {
             $active_format = new Format('');
@@ -33,7 +35,7 @@ class Formats
     {
         $fmt = self::loadFormat('Standard');
         if (!$fmt->standard) {
-            $fmt->standard = true;
+            $fmt->standard = 1;
             $fmt->save();
         }
         $legal = json_decode(file_get_contents('https://whatsinstandard.com/api/v5/sets.json'));
@@ -85,7 +87,7 @@ class Formats
         Log::info('Updating Modern...');
         $fmt = self::loadFormat('Modern');
         if (!$fmt->modern) {
-            $fmt->modern = true;
+            $fmt->modern = 1;
             $fmt->save();
         }
 
@@ -157,7 +159,7 @@ class Formats
         }
     }
 
-    private static function findSetForCard($card): string
+    private static function findSetForCard(string $card): string
     {
         $card = rawurlencode($card);
         $options = ['http' => ['header' => "User-Agent: gatherling.com/1.0\r\n"]];

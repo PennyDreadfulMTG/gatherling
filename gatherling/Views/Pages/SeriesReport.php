@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Series;
@@ -12,7 +14,7 @@ class SeriesReport extends Page
     public SeasonSelect $seasonSelect;
     public ?SeasonStandings $seasonStandings;
 
-    public function __construct(?string $seriesName, ?string $season)
+    public function __construct(?string $seriesName, ?int $season)
     {
         parent::__construct();
         $this->title = 'Season Report';

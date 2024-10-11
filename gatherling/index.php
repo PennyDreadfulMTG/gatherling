@@ -1,19 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Data\DB;
 use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Matchup;
-use Gatherling\Models\Database;
+use Gatherling\Models\RecentWinnerDto;
+use Gatherling\Models\UpcomingEventDto;
 use Gatherling\Views\Pages\Home;
+
+use function Gatherling\Views\server;
 
 require_once 'lib.php';
 
 function main(): void
 {
     $activeEvents = Event::getActiveEvents(false);
-    $upcomingEvents = upcomingEvents();
+    $upcomingEvents = getUpcomingEvents();
     $stats = stats();
     $player = Player::getSessionPlayer();
     if (!$player instanceof Player) {
@@ -25,11 +30,12 @@ function main(): void
     $page->send();
 }
 
-function upcomingEvents()
+/** @return list<UpcomingEventDto> */
+function getUpcomingEvents(): array
 {
     $sql = '
         SELECT
-            UNIX_TIMESTAMP(start) AS d, format, series, name, threadurl
+            UNIX_TIMESTAMP(start) AS d, format, name
         FROM
             events
         WHERE
@@ -37,10 +43,11 @@ function upcomingEvents()
         ORDER BY
             start ASC
         LIMIT 20';
-    return DB::select($sql);
+    return DB::select($sql, UpcomingEventDto::class);
 }
 
-function stats()
+/** @return array<string, int> */
+function stats(): array
 {
     return [
         'decks' => Deck::uniqueCount(),
@@ -51,7 +58,8 @@ function stats()
     ];
 }
 
-function recentWinners()
+/** @return list<array<string, int|string>> */
+function recentWinners(): array
 {
     $sql = "
         SELECT
@@ -63,14 +71,21 @@ function recentWinners()
         ORDER BY
             e.start DESC
         LIMIT 10";
-    $winners = DB::select($sql);
-    foreach ($winners as &$winner) {
-        $deck = new Deck($winner['id']);
-        $winner['manaSymbolSafe'] = $deck->getColorImages();
+    $winners = DB::select($sql, RecentWinnerDto::class);
+    $results = [];
+    foreach ($winners as $winner) {
+        $deck = new Deck($winner->id);
+        $results[] = [
+            'event' => $winner->event,
+            'player' => $winner->player,
+            'name' => $winner->name,
+            'id' => $winner->id,
+            'manaSymbolSafe' => $deck->getColorImages(),
+        ];
     }
-    return $winners;
+    return $results;
 }
 
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }

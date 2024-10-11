@@ -1,0 +1,19 @@
+<table width="260">
+    <tr>
+        <td class="c"><b>TROPHIES EARNED</b></td>
+    </tr>
+    {{^trophies}}
+        <tr>
+            <td align="center"><i>{{playerName}} has not earned any trophies.</i></td>
+        </tr>
+    {{/trophies}}
+    {{#trophies}}
+        <tr>
+            <td align="center">
+                <a href="{{deckLink}}" class="borderless">
+                    <img alt="{{eventName}} trophy" src="{{trophySrc}}" style="max-width: 260px;">
+                </a>
+            </td>
+        </tr>
+    {{/trophies}}
+</table>

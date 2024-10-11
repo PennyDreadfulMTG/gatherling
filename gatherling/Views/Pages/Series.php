@@ -10,8 +10,10 @@ use Gatherling\Models\Series as SeriesModel;
 
 class Series extends Page
 {
+    /** @var array<string, mixed> */
     public array $activeSeries;
 
+    /** @param list<string> $activeSeriesNames */
     public function __construct(array $activeSeriesNames)
     {
         parent::__construct();
@@ -21,13 +23,18 @@ class Series extends Page
             $series = new SeriesModel($seriesName);
             $mostRecentEvent = $series->mostRecentEvent();
             $nextEvent = $series->nextEvent();
-            $mostRecentEventDoesntCount = !$mostRecentEvent->start || strtotime($mostRecentEvent->start) + (86400 * 7 * 4) < time();
+            $mostRecentEventDoesntCount = !$mostRecentEvent || !$mostRecentEvent->start || strtotime($mostRecentEvent->start) + (86400 * 7 * 4) < time();
             if ($mostRecentEventDoesntCount && !$nextEvent) {
                 continue;
             }
             $formatName = $nextEvent ? $nextEvent->format : $mostRecentEvent->format;
             $regularTime = $series->start_day ? date('l, h:i a', strtotime($series->start_time)) : "Not scheduled yet";
-            $masterDocumentLink = empty($series->this_season_master_link) ? $mostRecentEvent->threadurl : $series->this_season_master_link;
+            $masterDocumentLink = '';
+            if ($series->this_season_master_link) {
+                $masterDocumentLink = $series->this_season_master_link;
+            } elseif ($mostRecentEvent) {
+                $masterDocumentLink = $mostRecentEvent->threadurl;
+            }
             $season = $series->this_season_season;
             $nextEventStart = $nextEvent && $nextEvent->start ? new Time(strtotime($nextEvent->start), time()) : null;
             $this->activeSeries[] = [
@@ -38,7 +45,7 @@ class Series extends Page
                 'regularTime' => $regularTime,
                 'masterDocumentLink' => $masterDocumentLink,
                 'season' => $season,
-                'reportLink' => new ReportLink($mostRecentEvent->name),
+                'reportLink' => $mostRecentEvent ? new ReportLink($mostRecentEvent->name) : null,
                 'nextEventStart' => $nextEventStart,
             ];
         }

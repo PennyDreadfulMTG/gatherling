@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Auth;
 
 use Gatherling\Log;
@@ -19,9 +21,10 @@ class Login
         if ($errors) {
             return new LoginResult(false, $errors);
         }
+        assert(is_string($username) && is_string($password));
         $auth = Player::checkPassword($username, $password);
         // The $admin check allows an admin to su into any user without a password.
-        $admin = Player::isLoggedIn() && Player::getSessionPlayer()->isSuper();
+        $admin = Player::getSessionPlayer()?->isSuper() ?? false;
         if (!$auth && !$admin) {
             return new LoginResult(false, [LoginError::INVALID_CREDENTIALS]);
         }

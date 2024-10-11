@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Views\Components;
 
 class TextInput extends Component
@@ -11,6 +13,6 @@ class TextInput extends Component
     {
         parent::__construct('partials/textInput');
         $this->id = $id ?? $this->name;
-        $this->value = $value ?? '';
+        $this->value = (string) $value;
     }
 }

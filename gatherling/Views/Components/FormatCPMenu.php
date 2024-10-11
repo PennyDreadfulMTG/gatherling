@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Views\Components;
 
 use Gatherling\Models\Format;
@@ -16,7 +18,7 @@ class FormatCPMenu extends Component
     public function __construct(public string $seriesName, Format $activeFormat)
     {
         parent::__construct('partials/formatCPMenu');
-        $this->activeFormatName = $activeFormat->name;
+        $this->activeFormatName = $activeFormat->name ?? '';
         $escaped = rawurlencode($activeFormat->name);
         $this->formatSettingsLink = "formatcp.php?view=settings&format={$escaped}";
         $this->bAndRLink = "formatcp.php?view=bandr&format={$escaped}";

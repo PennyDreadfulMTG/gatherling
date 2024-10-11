@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Views\Components;
 
 use Gatherling\Views\Components\DropMenu;
@@ -8,7 +10,7 @@ class NumDropMenu extends DropMenu
 {
     public function __construct(string $field, string $title, int $max, int|string|null $def, int $min = 0, ?string $special = null)
     {
-        if ($def && strcmp($def, '') == 0) {
+        if ($def === '') {
             $def = -1;
         }
 
@@ -16,14 +18,14 @@ class NumDropMenu extends DropMenu
         if ($special) {
             $options[] = [
                 'text'       => $special,
-                'value'      => 128,
+                'value'      => '128',
                 'isSelected' => $def == 128,
             ];
         }
         for ($n = $min; $n <= $max; $n++) {
             $options[] = [
-                'text'       => $n,
-                'value'      => $n,
+                'text'       => (string) $n,
+                'value'      => (string) $n,
                 'isSelected' => $n == $def,
             ];
         }

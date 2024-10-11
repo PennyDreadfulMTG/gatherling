@@ -1,8 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Database;
 use Gatherling\Models\Decksearch;
-use Gatherling\Models\Pagination;
+use Zebra_Pagination as Pagination;
+
+use function Gatherling\Views\get;
+use function Gatherling\Views\post;
+use function Gatherling\Views\server;
+use function Gatherling\Views\session;
 
 require_once 'lib.php';
 
@@ -21,7 +28,7 @@ function main(): void
     echo page('Deck Search', ob_get_clean());
 }
 
-function handleRequest()
+function handleRequest(): void
 {
     if (count($_POST) > 0) {
         unset($_SESSION['search_results']);
@@ -32,45 +39,45 @@ function handleRequest()
         $_GET['mode'] = '';
     }
 
-    if (isset($_GET['mode']) && strcmp($_GET['mode'], 'search') == 0 && !isset($_GET['page'])) {
+    if (isset($_GET['mode']) && strcmp(get()->string('mode'), 'search') == 0 && !isset($_GET['page'])) {
         if (!empty($_POST['format'])) {
-            $decksearch->searchByFormat($_POST['format']);
+            $decksearch->searchByFormat(post()->string('format'));
             $_SESSION['format'] = $_POST['format'];
         } else {
             unset($_SESSION['format']);
         }
         if (!empty($_POST['cardname'])) {
-            $decksearch->searchByCardName($_POST['cardname']);
+            $decksearch->searchByCardName(post()->string('cardname'));
             $_SESSION['cardname'] = $_POST['cardname'];
         } else {
             unset($_SESSION['cardname']);
         }
         if (!empty($_POST['player'])) {
-            $decksearch->searchByPlayer($_POST['player']);
+            $decksearch->searchByPlayer(post()->string('player'));
             $_SESSION['player'] = $_POST['player'];
         } else {
             unset($_SESSION['player']);
         }
         if (!empty($_POST['archetype'])) {
-            $decksearch->searchByArchetype($_POST['archetype']);
+            $decksearch->searchByArchetype(post()->string('archetype'));
             $_SESSION['archetype'] = $_POST['archetype'];
         } else {
             unset($_SESSION['archetype']);
         }
         if (!empty($_POST['medals'])) {
-            $decksearch->searchByMedals($_POST['medals']);
+            $decksearch->searchByMedals(post()->string('medals'));
             $_SESSION['medals'] = $_POST['medals'];
         } else {
             unset($_SESSION['medals']);
         }
         if (!empty($_POST['series'])) {
-            $decksearch->searchBySeries($_POST['series']);
+            $decksearch->searchBySeries(post()->string('series'));
             $_SESSION['series'] = $_POST['series'];
         } else {
             unset($_SESSION['series']);
         }
         if (isset($_POST['color'])) {
-            $decksearch->searchByColor($_POST['color']);
+            $decksearch->searchByColor(post()->dictString('color'));
             if (isset($_POST['color']['w'])) {
                 $_SESSION['color']['w'] = $_POST['color']['w'];
             }
@@ -102,8 +109,8 @@ function handleRequest()
         }
     } else {
         if (isset($_GET['page']) && isset($_SESSION['search_results'])) {
-            showSearchForm(count($_SESSION['search_results']));
-            displayDecksFromID($_SESSION['search_results']);
+            showSearchForm(count(session()->listInt('search_results')));
+            displayDecksFromID(session()->listInt('search_results'));
         } else {
             unset($_SESSION['search_results']);
             unset($_SESSION['archetype']);
@@ -119,7 +126,7 @@ function handleRequest()
     }
 }
 
-function showMostPlayedDecks()
+function showMostPlayedDecks(): void
 {
     echo '<br />';
     echo '<div class="ds_inputbox group">';
@@ -167,12 +174,12 @@ function showMostPlayedDecks()
     echo '<br />';
 }
 
-function showSearchForm($res_num = null)
+function showSearchForm(?int $res_num = null): void
 {
     echo '<br />';
     echo '<div class="ds_inputbox group">';
     echo '<div class="ds_left group">';
-    echo '<form  method="post" action="' . htmlspecialchars($_SERVER['PHP_SELF']) . '?mode=search">';
+    echo '<form  method="post" action="' . htmlspecialchars(server()->string('PHP_SELF')) . '?mode=search">';
     echo '<label class="ds_label" for="player">Player Name: <input class="ds_input" type="text" name="player"  value="';
     if (isset($_SESSION['player'])) {
         echo $_SESSION['player'];
@@ -187,25 +194,25 @@ function showSearchForm($res_num = null)
 
     echo '<div class="ds_select group">';
     if (isset($_SESSION['format'])) {
-        formatDropMenuDS($_SESSION['format']);
+        formatDropMenuDS(session()->string('format'));
     } else {
         formatDropMenuDS($arg = null);
     }
 
     if (isset($_SESSION['archetype'])) {
-        archetypeDropMenu($_SESSION['archetype']);
+        archetypeDropMenu(session()->string('archetype'));
     } else {
         archetypeDropMenu();
     }
 
     if (isset($_SESSION['series'])) {
-        seriesDropMenu($_SESSION['series']);
+        seriesDropMenu(session()->string('series'));
     } else {
         seriesDropMenu();
     }
 
     if (isset($_SESSION['medals'])) {
-        medalsDropMenu('medals', ['1st', '2nd', 't4', 't8'], $_SESSION['medals']);
+        medalsDropMenu('medals', ['1st', '2nd', 't4', 't8'], session()->string('medals'));
     } else {
         medalsDropMenu('medals', ['1st', '2nd', 't4', 't8']);
     }
@@ -214,7 +221,7 @@ function showSearchForm($res_num = null)
 
     echo '<div class="ds_color">';
     if (isset($_SESSION['color'])) {
-        checkboxMenu($_SESSION['color']);
+        checkboxMenu(session()->dictString('color'));
     } else {
         checkboxMenu();
     }
@@ -236,7 +243,8 @@ function showSearchForm($res_num = null)
     echo '</div>';
 }
 
-function checkboxMenu($colors = null)
+/** @param ?array<string, string> $colors */
+function checkboxMenu(?array $colors = null): void
 {
 
     //check it see if the colors were set and check any boxes that were
@@ -273,7 +281,7 @@ function checkboxMenu($colors = null)
     echo "<label class=\"ds_checkbox\" for=\"color[r]\"><input type=\"checkbox\" name=\"color[r]\" value=\"r\" $r/>" . image_tag('manar.png', ['class' => 'ds_mana_image']) . '</label>';
 }
 
-function archetypeDropMenu($archetype = null, $useAll = 0, $form_name = 'archetype')
+function archetypeDropMenu(?string $archetype = null, int $useAll = 0, string $form_name = 'archetype'): void
 {
     $db = Database::getConnection();
     $query = 'SELECT name FROM archetypes WHERE priority > 0 ORDER BY  name';
@@ -292,7 +300,7 @@ function archetypeDropMenu($archetype = null, $useAll = 0, $form_name = 'archety
     $result->close();
 }
 
-function seriesDropMenu($series = null, $useAll = 0, $form_name = 'series')
+function seriesDropMenu(?string $series = null, int $useAll = 0, string $form_name = 'series'): void
 {
     $db = Database::getConnection();
     $query = 'SELECT name FROM series ORDER BY name';
@@ -309,7 +317,9 @@ function seriesDropMenu($series = null, $useAll = 0, $form_name = 'series')
     $result->close();
 }
 
-function medalsDropMenu($name, $options, $selected = null)
+
+/** @param list<string> $options */
+function medalsDropMenu(string $name, array $options, ?string $selected = null): void
 {
     echo "<select id=\"ds_select\" name=\"{$name}\">";
     echo '<option value="">- Medals -</option>';
@@ -323,7 +333,7 @@ function medalsDropMenu($name, $options, $selected = null)
     echo '</select>';
 }
 
-function formatDropMenuDS($format, $useAll = 0, $form_name = 'format')
+function formatDropMenuDS(?string $format, int $useAll = 0, string $form_name = 'format'): void
 {
     if (is_null($format)) {
         $format = '';
@@ -344,7 +354,8 @@ function formatDropMenuDS($format, $useAll = 0, $form_name = 'format')
     $result->close();
 }
 
-function displayDecksFromID($id_arr)
+/** @param list<int> $id_arr */
+function displayDecksFromID(array $id_arr): void
 {
     // grab an array of the values of the decks with matching id's
     $decksearch = new Decksearch();
@@ -399,6 +410,6 @@ function displayDecksFromID($id_arr)
     echo '<br />';
 }
 
-if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
     main();
 }

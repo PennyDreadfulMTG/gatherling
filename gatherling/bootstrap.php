@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 if (file_exists('/var/www/vendor/autoload.php')) {
     // Docker environment
+    /** @phpstan-ignore-next-line */
     require_once '/var/www/vendor/autoload.php';
 } else {
     require_once __DIR__.'/../vendor/autoload.php';

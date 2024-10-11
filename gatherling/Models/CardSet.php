@@ -1,8 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Models;
 
+use stdClass;
+use mysqli_stmt;
 use Gatherling\Log;
+use Gatherling\Data\DB;
+use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\FileNotFoundException;
 
 class CardSet
@@ -42,6 +48,9 @@ class CardSet
         $database = Database::getConnection();
 
         $stmt = $database->prepare('SELECT * FROM cardsets where name = ?');
+        if (!$stmt) {
+            throw new DatabaseException($database->error);
+        }
 
         $stmt->bind_param('s', $set);
 
@@ -100,7 +109,7 @@ class CardSet
         Format::constructTribes($set);
     }
 
-    public static function insertCard($card, $set, $rarity, $stmt): void
+    public static function insertCard(stdClass $card, string $set, string $rarity, mysqli_stmt $stmt): void
     {
         $typeline = implode(' ', $card->types);
         if (isset($card->subtypes) && count($card->subtypes) > 0) {
@@ -169,4 +178,23 @@ class CardSet
             echo '</table>';
         }
     }
+
+    /**
+     * @return list<string>
+     */
+    public static function getMissingSets(string $cardSetType, Format $format): array
+    {
+        $sql = 'SELECT name FROM cardsets WHERE type = :type';
+        $cardSets = DB::values($sql, 'string', ['type' => $cardSetType]);
+
+        $finalList = [];
+        foreach ($cardSets as $cardSetName) {
+            if (!$format->isCardSetLegal($cardSetName)) {
+                $finalList[] = $cardSetName;
+            }
+        }
+
+        return $finalList;
+    }
+
 }

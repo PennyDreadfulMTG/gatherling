@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Gatherling\Data;
 
-use Gatherling\Exceptions\ConfigurationException;
-use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Log;
+use Gatherling\Exceptions\DatabaseException;
+use Gatherling\Exceptions\ConfigurationException;
+use Gatherling\Models\Dto;
 use PDO;
 use PDOException;
 
@@ -14,6 +15,9 @@ class DB
 {
     private static ?DB $db = null;
 
+    /**
+     * @param list<string> $transactions
+     */
     public function __construct(private PDO $pdo, private array $transactions = [])
     {
     }
@@ -80,9 +84,16 @@ class DB
         });
     }
 
-    public static function select(string $sql, array $params = []): array
+    /**
+     * @template T of Dto
+     * @param class-string<T> $class
+     * @param array<string, mixed> $params
+     * @return list<T>
+     */
+    public static function select(string $sql, string $class, array $params = []): array
     {
-        return self::_execute($sql, $params, function ($sql, $params) {
+        /** @var list<T> */
+        return self::_execute($sql, $params, function ($sql, $params) use ($class) {
             $stmt = self::connect()->pdo->prepare($sql);
             foreach ($params as $key => $value) {
                 if (is_int($value)) {
@@ -92,28 +103,44 @@ class DB
                 }
             }
             $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $rows = $stmt->fetchAll(PDO::FETCH_CLASS, $class);
+            return $rows;
         });
     }
 
-    public static function selectOnly(string $sql, array $params = []): array
+    /**
+     * @template T of Dto
+     * @param class-string<T> $class
+     * @param array<string, mixed> $params
+     * @return T
+     */
+    public static function selectOnly(string $sql, string $class, array $params = []): Dto
     {
-        $result = self::select($sql, $params);
+        $result = self::select($sql, $class, $params);
         if (count($result) !== 1) {
             throw new DatabaseException('Expected 1 row, got ' . count($result) . " for query: $sql");
         }
         return $result[0];
     }
 
-    public static function selectOnlyOrNull(string $sql, array $params = []): ?array
+    /**
+     * @template T of Dto
+     * @param class-string<T> $class
+     * @param array<string, mixed> $params
+     * @return T|null
+     */
+    public static function selectOnlyOrNull(string $sql, string $class, array $params = []): ?Dto
     {
-        $result = self::select($sql, $params);
+        $result = self::select($sql, $class, $params);
         if (count($result) > 1) {
             throw new DatabaseException('Expected 1 row, got ' . count($result) . " for query: $sql");
         }
         return $result[0] ?? null;
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     public static function value(string $sql, array $params = [], bool $missingOk = false): mixed
     {
         return self::_execute($sql, $params, function ($sql, $params) use ($missingOk) {
@@ -123,14 +150,36 @@ class DB
             if ($result === false && !$missingOk) {
                 throw new DatabaseException("Failed to fetch value for $sql");
             }
+            if ($result === false) {
+                return null;
+            }
+            if (!is_array($result)) {
+                throw new DatabaseException("Failed to fetch array for $sql, was " . gettype($result));
+            }
             return $result[0] ?? null;
+        });
+    }
+
+    /**
+     * @param array<string, mixed> $params
+     * @param 'bool'|'int'|'float'|'string' $_type
+     * @return list<($_type is 'bool'? bool : ($_type is 'int' ? int : ($_type is 'float' ? float : string)))>
+     */
+    public static function values(string $sql, string $_type, array $params = []): array
+    {
+        /** @var list<($_type is 'bool'? bool : ($_type is 'int' ? int : ($_type is 'float' ? float : string)))> */
+        return self::_execute($sql, $params, function ($sql, $params) {
+            $stmt = self::connect()->pdo->prepare($sql);
+            $stmt->execute($params);
+            $result = $stmt->fetchAll(PDO::FETCH_NUM);
+            return array_column($result, 0);
         });
     }
 
     public static function begin(string $rawName): void
     {
         $name = self::safeName($rawName);
-        Log::debug("[DB] COMMIT $rawName ($name)");
+        Log::debug("[DB] BEGIN $rawName ($name)");
         $isOuterTransaction = !self::connect()->transactions;
         self::connect()->transactions[] = $name;
         if ($isOuterTransaction) {
@@ -145,10 +194,11 @@ class DB
     {
         $name = self::safeName($rawName);
         Log::debug("[DB] COMMIT $rawName ($name)");
-        if (!self::connect()->transactions) {
+        $numTransactions = count(self::connect()->transactions);
+        if ($numTransactions === 0) {
             throw new DatabaseException("Asked to commit $name, but no transaction is open");
         }
-        $latestTransaction = self::connect()->transactions[count(self::connect()->transactions) - 1];
+        $latestTransaction = self::connect()->transactions[$numTransactions - 1];
         if ($latestTransaction !== $name) {
             self::execute('ROLLBACK');
 
@@ -164,12 +214,12 @@ class DB
     {
         $name = self::safeName($rawName);
         Log::debug("[DB] ROLLBACK $rawName ($name)");
-        if (!self::connect()->transactions) {
+        $numTransactions = count(self::connect()->transactions);
+        if ($numTransactions === 0) {
             DB::execute('ROLLBACK');
-
             throw new DatabaseException("Asked to rollback $name, but no transaction is open. ROLLBACK issued.");
         }
-        $latestTransaction = self::connect()->transactions[count(self::connect()->transactions) - 1];
+        $latestTransaction = self::connect()->transactions[$numTransactions - 1];
         if ($latestTransaction !== $name) {
             DB::execute('ROLLBACK');
 
@@ -185,6 +235,9 @@ class DB
         array_pop(self::connect()->transactions);
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     private static function _execute(string $sql, array $params, callable $operation, bool $connectToDatabase = true): mixed
     {
         $context = [];
@@ -218,6 +271,9 @@ class DB
     private static function safeName(string $name): string
     {
         $safeName = preg_replace('/[^a-zA-Z0-9_]/', '_', $name);
+        if ($safeName === null) {
+            throw new DatabaseException("Failed to safely name $name");
+        }
         $safeName = trim($safeName, '_');
         if (empty($safeName) || is_numeric($safeName[0])) {
             $safeName = 'sp_'.$safeName;

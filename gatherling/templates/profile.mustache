@@ -1,0 +1,20 @@
+{{#playerSearchForm}}
+    {{>playerSearchForm}}
+{{/playerSearchForm}}
+<div class="grid_10 suffix_1 prefix_1">
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle">Player Profile</div>
+        {{#isLoggedOut}}
+            <p>Please <a href="login.php">log in</a> to see your profile. You may also use the search above without logging in.</p>
+        {{/isLoggedOut}}
+        {{#notFound}}
+            <p><b>{{playername}}</b> could not be found in the database. Please check your spelling and try again.</p>
+        {{/notFound}}
+        {{#profileEditForm}}
+            {{>profileEditForm}}
+        {{/profileEditForm}}
+        {{#profileTable}}
+            {{>profileTable}}
+        {{/profileTable}}
+    </div>
+</div>

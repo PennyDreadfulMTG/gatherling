@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Database;
 use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
@@ -7,6 +9,10 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Ratings;
 use Gatherling\Models\Series;
 use Gatherling\Models\Standings;
+
+use function Gatherling\Views\config;
+use function Gatherling\Views\get;
+use function Gatherling\Views\post;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
@@ -30,10 +36,10 @@ if (isset($_POST['action'])) {
     } elseif ($_POST['action'] == 'changePassword') {
         $success = false;
         if ($_POST['newPassword2'] == $_POST['newPassword']) {
-            if (strlen($_POST['newPassword']) >= 8) {
-                $authenticated = Player::checkPassword($player->name, $_POST['oldPassword']);
+            if (strlen(post()->string('newPassword', '')) >= 8) {
+                $authenticated = Player::checkPassword($player->name, post()->string('oldPassword', ''));
                 if ($authenticated) {
-                    $player->setPassword($_POST['newPassword']);
+                    $player->setPassword(post()->string('newPassword'));
                     $result = 'Password changed.';
                     $success = true;
                 } else {
@@ -48,8 +54,8 @@ if (isset($_POST['action'])) {
     } elseif ($_POST['action'] == 'editEmail') {
         $success = false;
         if ($_POST['newEmail'] == $_POST['newEmail2']) {
-            $player->emailAddress = ($_POST['newEmail']);
-            $player->emailPrivacy = ($_POST['emailstatus']);
+            $player->emailAddress = (post()->string('newEmail'));
+            $player->emailPrivacy = (int) $_POST['emailstatus'];
             $result = 'Email changed.';
             $success = true;
             $player->save();
@@ -59,26 +65,27 @@ if (isset($_POST['action'])) {
     } elseif ($_POST['action'] == 'editAccounts') {
         $success = false;
 
-        $player->mtgo_username = empty($_POST['mtgo_username']) ? null : $_POST['mtgo_username'];
-        if (!preg_match('/^.{3,24}#\d{5}$/', $_POST['mtga_username'])) {
+        $player->mtgo_username = post()->optionalString('mtgo_username');
+        if (!preg_match('/^.{3,24}#\d{5}$/', post()->string('mtga_username', ''))) {
             $_POST['mtga_username'] = null;
         }
-        $player->mtga_username = empty($_POST['mtga_username']) ? null : $_POST['mtga_username'];
+        $player->mtga_username = post()->optionalString('mtga_username');
         $player->save();
         $result = 'Accounts updated.';
         $success = true;
     } elseif ($_POST['action'] == 'changeTimeZone') {
-        $player->timezone = ($_POST['timezone']);
+        $player->timezone = (float) $_POST['timezone'];
         $result = 'Time Zone Changed.';
         $player->save();
     } elseif ($_POST['action'] == 'verifyAccount') {
         $success = false;
-        if ($player->checkChallenge($_POST['challenge'])) {
+        if ($player->checkChallenge(post()->string('challenge'))) {
             $player->setVerified(true);
             $result = 'Successfully verified your account with MTGO.';
             $success = true;
         } else {
-            $result = "Your challenge is wrong.  Get a new one by sending the message '<code>!verify {$CONFIG['infobot_prefix']}</code>' to pdbot on MTGO!";
+            $infobotPrefix = config()->string('infobot_prefix', '');
+            $result = "Your challenge is wrong.  Get a new one by sending the message '<code>!verify {$infobotPrefix}</code>' to pdbot on MTGO!";
         }
     }
 }
@@ -89,72 +96,70 @@ if (isset($_REQUEST['mode'])) {
 }
 
 switch ($dispmode) {
-case 'submit_result':
-case 'submit_league_result':
-case 'verify_result':
-case 'verify_league_result':
-case 'drop_form':
-    echo 'oops';
+    case 'submit_result':
+    case 'submit_league_result':
+    case 'verify_result':
+    case 'verify_league_result':
+    case 'drop_form':
+        echo 'oops';
 
-break;
+        break;
 
-case 'alldecks':
-  print_allContainer();
-  break;
+    case 'alldecks':
+        print_allContainer();
+        break;
 
-case 'allratings':
-    $format = 'Composite';
-    if (isset($_GET['format'])) {
-        $format = $_GET['format'];
-    }
-    print_ratingsTable();
-    echo '<br /><br />';
-    print_ratingHistoryForm($format);
-    echo '<br />';
-    print_ratingsHistory($format);
-    break;
+    case 'allratings':
+        $formatName = post()->string('format', 'Composite');
+        print_ratingsTable();
+        echo '<br /><br />';
+        print_ratingHistoryForm($formatName);
+        echo '<br />';
+        print_ratingsHistory($formatName);
+        break;
 
-case 'allmatches':
-print_allMatchForm($player);
-print_matchTable($player);
-break;
+    case 'allmatches':
+        print_allMatchForm($player);
+        print_matchTable($player);
+        break;
 
-case 'Filter Matches':
-print_allMatchForm($player);
-print_matchTable($player);
-break;
+    case 'Filter Matches':
+        print_allMatchForm($player);
+        print_matchTable($player);
+        break;
 
-case 'changepass':
-print_changePassForm($player, $result);
-break;
+    case 'changepass':
+        print_changePassForm($player, $result);
+        break;
 
-case 'edit_email':
-print_editEmailForm($player, $result);
-break;
+    case 'edit_email':
+        print_editEmailForm($player, $result);
+        break;
 
-case 'edit_accounts':
-print_editAccountsForm($player, $result);
-break;
+    case 'edit_accounts':
+        print_editAccountsForm($player, $result);
+        break;
 
-case 'change_timezone':
-print_editTimeZoneForm($player, $result);
-break;
+    case 'change_timezone':
+        print_editTimeZoneForm($player, $result);
+        break;
 
-case 'standings':
-echo Standings::eventStandings($_GET['event'], Player::loginName());
-break;
+    case 'standings':
+        echo Standings::eventStandings(get()->string('event'), Player::loginName());
+        break;
 
-case 'verifymtgo':
-if ($CONFIG['infobot_passkey'] == '') {
-    print_manualverifyMtgoForm();
-} else {
-    print_verifyMtgoForm($player, $result);
-}
-break;
+    case 'verifymtgo':
+        $infobotPasskey = config()->string('infobot_passkey', '');
+        if ($infobotPasskey == '') {
+            print_manualverifyMtgoForm();
+        } else {
+            print_verifyMtgoForm($player, $result);
+        }
+        break;
 
-default:
-print_mainPlayerCP($player, $result);
-break;
+    default:
+        print_mainPlayerCP($player, $result);
+        break;
 }
 ?>
 </div> <!-- gatherling_main box -->
@@ -164,7 +169,7 @@ break;
 
 <?php
 
-function print_changePassForm($player, $result)
+function print_changePassForm(Player $player, string $result): void
 {
     if (isset($_REQUEST['tooshort'])) {
         echo "<center><h3>You must change your password to continue</h3></center>\n";
@@ -190,7 +195,7 @@ function print_changePassForm($player, $result)
     echo "<div class=\"clear\"> </div>\n";
 }
 
-function print_editEmailForm($player, $result)
+function print_editEmailForm(Player $player, string $result): void
 {
     if ($player->emailAddress == '') {
         // add email form
@@ -239,7 +244,7 @@ function print_editEmailForm($player, $result)
     }
 }
 
-function print_editAccountsForm($player, $result)
+function print_editAccountsForm(Player $player, string $result): void
 {
     echo "<center><h3>Set your accounts</h3></center>\n";
     echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
@@ -255,7 +260,7 @@ function print_editAccountsForm($player, $result)
     echo "<div class=\"clear\"></div>\n";
 }
 
-function print_editTimeZoneForm($player, $result)
+function print_editTimeZoneForm(Player $player, string $result): void
 {
     echo "<center><h3>Changing Your Time Zone</h3></center>\n";
     echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
@@ -278,7 +283,7 @@ function print_editTimeZoneForm($player, $result)
     echo "<div class=\"clear\"></div>\n";
 }
 
-function print_manualverifyMtgoForm()
+function print_manualverifyMtgoForm(): void
 {
     $player = Player::getSessionPlayer();
     if ($player->verified == 1) {
@@ -291,7 +296,7 @@ function print_manualverifyMtgoForm()
     }
 }
 
-function print_verifyMtgoForm($player, $result)
+function print_verifyMtgoForm(Player $player, string $result): void
 {
     global $CONFIG;
     echo "<center><h3>Verifying your MTGO account</h3>
@@ -320,7 +325,7 @@ function print_verifyMtgoForm($player, $result)
 }
 
 // TODO: Remove deck ignore functionality
-function setPlayerIgnores()
+function setPlayerIgnores(): void
 {
     global $player;
     $noDeckEntries = $player->getNoDeckEntries();
@@ -333,7 +338,7 @@ function setPlayerIgnores()
     }
 }
 
-function print_mainPlayerCP($player, $result)
+function print_mainPlayerCP(Player $player, string $result): void
 {
     echo '<script defer src="tab_view.js"></script>';
     echo '<button class="tablink" id="defaultOpen" onclick="openPage(\'future\', this)">Events</button>';
@@ -429,7 +434,7 @@ function print_mainPlayerCP($player, $result)
     echo "<div class=\"clear\"></div>\n";
 }
 
-function print_allContainer()
+function print_allContainer(): void
 {
     $rstar = '<font color="#FF0000">*</font>';
     echo "<p> Decks marked with a $rstar are not legal under current format.<p>\n";
@@ -444,7 +449,7 @@ function print_allContainer()
     echo '<div class="clear"> </div> ';
 }
 
-function print_recentDeckTable()
+function print_recentDeckTable(): void
 {
     global $player;
 
@@ -478,7 +483,7 @@ function print_recentDeckTable()
     echo "</table>\n";
 }
 
-function print_preRegistration()
+function print_preRegistration(): void
 {
     global $player;
     $upcoming_events = Event::getUpcomingEvents($player->name);
@@ -566,7 +571,8 @@ function print_preRegistration()
 
 //* Modified above function to display active events and a link to current standings
 // Undecided about showing all active events, or only those the player is enrolled in.
-function print_ActiveEvents()
+/** @return array<string> */
+function print_ActiveEvents(): array
 {
     global $player;
     $events = Event::getActiveEvents();
@@ -635,7 +641,7 @@ function print_ActiveEvents()
     return $Leagues;
 }
 
-function print_noDeckTable($allDecks)
+function print_noDeckTable(bool $allDecks): void
 {
     global $player;
     $entriesNoDecks = $player->getNoDeckEntries();
@@ -674,7 +680,7 @@ function print_noDeckTable($allDecks)
     }
 }
 
-function print_allDeckTable()
+function print_allDeckTable(): void
 {
     global $player;
     $decks = $player->getAllDecks();
@@ -704,7 +710,7 @@ function print_allDeckTable()
     echo "</table>\n";
 }
 
-function print_recentMatchTable()
+function print_recentMatchTable(): void
 {
     global $player;
     $matches = $player->getRecentMatches();
@@ -739,7 +745,8 @@ function print_recentMatchTable()
 }
 
 //copied above function and altered to show matches in progress
-function print_currentMatchTable($Leagues)
+/** @param array<string> $Leagues */
+function print_currentMatchTable(array $Leagues): void
 {
     global $player;
     $matches = $player->getCurrentMatches();
@@ -766,9 +773,9 @@ function print_currentMatchTable($Leagues)
             echo "<td>vs.</td>\n";
             echo '<td>'.$oppplayer->linkTo($event->client).'</td><td>';
             if ($match->verification == 'unverified') {
-                if ($player_number == 'b' and ($match->playerb_wins + $match->playerb_losses) > 0) {
+                if ($player_number == 'b' and ((int) $match->playerb_wins + (int) $match->playerb_losses) > 0) {
                     echo '(Report Submitted)';
-                } elseif ($player_number == 'a' and ($match->playera_wins + $match->playera_losses) > 0) {
+                } elseif ($player_number == 'a' and ((int) $match->playera_wins + (int) $match->playera_losses) > 0) {
                     echo '(Report Submitted)';
                 } else {
                     if ($match->player_reportable_check() == true) {
@@ -801,7 +808,7 @@ function print_currentMatchTable($Leagues)
     echo "</table>\n";
 }
 
-function leagueResultDropMenu()
+function leagueResultDropMenu(): void
 {
     echo '<select name="result">';
     echo '<option value="">- Match Result -</option>';
@@ -812,7 +819,7 @@ function leagueResultDropMenu()
     echo '</select>';
 }
 
-function print_matchTable($player, $limit = 0)
+function print_matchTable(Player $player): void
 {
     if (!isset($_POST['format'])) {
         $_POST['format'] = '%';
@@ -827,7 +834,8 @@ function print_matchTable($player, $limit = 0)
         $_POST['opp'] = '%';
     }
 
-    $matches = $player->getFilteredMatches($_POST['format'], $_POST['series'], $_POST['season'], $_POST['opp']);
+    $matches = $player->getFilteredMatches(post()->string('format'), post()->string('series'), post()->string('season'), post()->string('opp'));
+
 
     echo '<table class="scoreboard">';
     echo '<tr class="top"><th>Event</th><th>Round</th><th>Opponent</th><th>Deck</th><th>Rating</th><th>Result</th></tr>';
@@ -886,7 +894,7 @@ function print_matchTable($player, $limit = 0)
     echo '</table>';
 }
 
-function print_ratingsTableSmall()
+function print_ratingsTableSmall(): void
 {
     global $player;
     $ratings = new Ratings();
@@ -916,7 +924,7 @@ function print_ratingsTableSmall()
     echo '</table>';
 }
 
-function print_ratingsTable()
+function print_ratingsTable(): void
 {
     echo "<table class=\"c\" width=400>\n";
     echo "<tr><td><b>Format</td>\n";
@@ -933,7 +941,7 @@ function print_ratingsTable()
     echo "</table>\n";
 }
 
-function print_ratingLine($format)
+function print_ratingLine(string $format): void
 {
     global $player;
     $rating = $player->getRating($format);
@@ -954,7 +962,7 @@ function print_ratingLine($format)
     echo "</tr>\n";
 }
 
-function print_ratingsHistory($format)
+function print_ratingsHistory(string $format): void
 {
     global $player;
     $db = Database::getConnection();
@@ -1014,7 +1022,7 @@ function print_ratingsHistory($format)
     echo "</table>\n";
 }
 
-function print_ratingHistoryForm($format)
+function print_ratingHistoryForm(string $format): void
 {
     $formats = ['Composite'];
     $ratings = new Ratings();
@@ -1036,7 +1044,7 @@ function print_ratingHistoryForm($format)
     echo "</form></center>\n";
 }
 
-function print_allMatchForm($player)
+function print_allMatchForm(Player $player): void
 {
     if (!isset($_POST['format'])) {
         $_POST['format'] = '%';
@@ -1055,23 +1063,23 @@ function print_allMatchForm($player)
     echo "<tr><td align=\"center\" colspan=2><b>Filters</td></tr>\n";
     echo "<tr><td>&nbsp;</td>\n";
     echo '<tr><td>Format&nbsp</td><td>';
-    formatDropMenuP($player, $_POST['format']);
+    formatDropMenuP($player, post()->string('format'));
     echo "</td></tr>\n";
     echo '<tr><td>Series&nbsp;</td><td>';
-    seriesDropMenuP($player, $_POST['series']);
+    seriesDropMenuP($player, post()->string('series'));
     echo "</td></tr>\n";
     echo '<tr><td>Season&nbsp;</td><td>';
-    seasonDropMenuP($player, $_POST['season']);
+    seasonDropMenuP($player, post()->string('season'));
     echo "</td></tr>\n";
     echo '<tr><td>Opponent&nbsp;</td><td>';
-    oppDropMenu($player, $_POST['opp']);
+    oppDropMenu($player, post()->string('opp'));
     echo "</td></tr><tr><td>&nbsp;</td></tr>\n";
     echo '<tr><td colspan=2 align="center">';
     echo '<input type="submit" name="mode" value="Filter Matches">';
     echo "</td></tr><tr><td>&nbsp;</td></tr></table></form>\n";
 }
 
-function formatDropMenuP($player, $def)
+function formatDropMenuP(Player $player, string $def): void
 {
     $formats = $player->getFormatsPlayed();
 
@@ -1084,7 +1092,7 @@ function formatDropMenuP($player, $def)
     echo "</select>\n";
 }
 
-function seriesDropMenuP($player, $def)
+function seriesDropMenuP(Player $player, string $def): void
 {
     $series = $player->getSeriesPlayed();
 
@@ -1097,7 +1105,7 @@ function seriesDropMenuP($player, $def)
     echo "</select>\n";
 }
 
-function seasonDropMenuP($player, $def)
+function seasonDropMenuP(Player $player, string $def): void
 {
     $seasons = $player->getSeasonsPlayed();
 
@@ -1110,7 +1118,7 @@ function seasonDropMenuP($player, $def)
     echo "</select>\n";
 }
 
-function oppDropMenu($player, $def)
+function oppDropMenu(Player $player, string $def): void
 {
     $opponents = $player->getOpponents();
 
@@ -1125,7 +1133,7 @@ function oppDropMenu($player, $def)
     echo '</select>';
 }
 
-function print_statsTable()
+function print_statsTable(): void
 {
     global $player;
     echo '<table>';
@@ -1168,7 +1176,7 @@ function print_statsTable()
 //creativity
 }
 
-function statTrophy()
+function statTrophy(): void
 {
     global $player;
     $trophyevent = $player->getLastEventWithTrophy();
@@ -1180,7 +1188,7 @@ function statTrophy()
     }
 }
 
-function print_conditionalAllDecks()
+function print_conditionalAllDecks(): void
 {
     global $player;
     $noentrycount = $player->getUnenteredCount();
@@ -1190,5 +1198,3 @@ function print_conditionalAllDecks()
         echo 'Click here to enter them.</a>';
     }
 }
-
-?>

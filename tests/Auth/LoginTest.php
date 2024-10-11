@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Tests\Auth;
 
 use Gatherling\Auth\Login;
@@ -9,14 +11,14 @@ use Gatherling\Tests\Support\TestCases\DatabaseCase;
 
 final class LoginTest extends DatabaseCase
 {
-    public function testBadLogin()
+    public function testBadLogin(): void
     {
         $result = Login::login('doesnotexist', 'testpassword');
         $this->assertFalse($result->success);
         $this->assertContains(LoginError::INVALID_CREDENTIALS, $result->errors);
     }
 
-    public function testGoodLogin()
+    public function testGoodLogin(): void
     {
         $regResult = Registration::register('testuser', 'testpassword', 'testpassword', 'test@example.com', 1, -5.0, null, null);
         $this->assertSame(Registration::SUCCESS, $regResult);
@@ -38,7 +40,7 @@ final class LoginTest extends DatabaseCase
         $this->assertContains(LoginError::MISSING_PASSWORD, $result->errors);
     }
 
-    public function testShortPasswordLogin()
+    public function testShortPasswordLogin(): void
     {
         $regResult = Registration::register('testuser2', 'short', 'short', 'test2@example.com', 1, -5.0, null, null);
         $this->assertSame(Registration::SUCCESS, $regResult);

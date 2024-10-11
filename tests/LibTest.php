@@ -8,12 +8,10 @@ require_once 'gatherling/lib.php';
 
 use stdClass;
 use PHPUnit\Framework\TestCase;
-use Gatherling\Views\Pages\Page;
-use Gatherling\Views\Components\Component;
 
 final class LibTest extends TestCase
 {
-    public function testObjectVarsCamelCase()
+    public function testObjectVarsCamelCase(): void
     {
         $grandchild = new stdClass();
         $grandchild->foo = 'bar';
@@ -24,6 +22,7 @@ final class LibTest extends TestCase
         $parent->child = $child;
         $parent->monkey = 'business';
         $parent->OP_Match = 1;
+        $child->list = [1, 2, 3, 4, 5];
         $arr = getObjectVarsCamelCase($parent);
         $this->assertEquals([
             'monkey' => 'business',
@@ -33,16 +32,18 @@ final class LibTest extends TestCase
                 'child' => [
                     'foo' => 'bar',
                 ],
+                'list' => [1, 2, 3, 4, 5],
             ],
         ], $arr);
     }
 
-    public function testToCamel()
+    public function testToCamel(): void
     {
         $this->assertEquals('fooBar', toCamel('foo_bar'));
         $this->assertEquals('opMatch', toCamel('OP_Match'));
         $this->assertEquals('adWords', toCamel('AdWords'));
         $this->assertEquals('alreadyCamelCase', toCamel('alreadyCamelCase'));
         $this->assertEquals('xmlHttpRequest', toCamel('XMLHttpRequest'));
+        $this->assertEquals('userDto', toCamel('userDTO'));
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once __DIR__.'/lib.php';
 require __DIR__.'/authlib.php';
 
@@ -20,7 +22,7 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
 
     debug_info($token);
 } elseif (!isset($_GET['code'])) {
-    send_to_discord();
+    send_to_discord_debug();
 
 // Check given state against previously stored one to mitigate CSRF attack
 } elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
@@ -36,7 +38,7 @@ if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
     debug_info($token);
 }
 
-function send_to_discord()
+function send_to_discord_debug(): void
 {
     // Step 1. Get authorization code
     global $provider;
@@ -46,7 +48,7 @@ function send_to_discord()
     header('Location: '.$authUrl);
 }
 
-function store_token($token)
+function store_token(\League\OAuth2\Client\Token\AccessToken $token): void
 {
     $_SESSION['DISCORD_TOKEN'] = $token->getToken();
     $_SESSION['DISCORD_REFRESH_TOKEN'] = $token->getRefreshToken();

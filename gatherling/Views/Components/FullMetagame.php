@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Views\Components;
 
 use Gatherling\Data\DB;
@@ -7,11 +9,17 @@ use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
+use Gatherling\Models\MetaDto;
+use Gatherling\Models\MetaColorsDto;
+
+use function Gatherling\Views\session;
 
 class FullMetagame extends Component
 {
     public bool $decklistsAreVisible;
+    /** @var array<int, array{numPlayers: int, manaSrc: string, entries: array<int, array{playerLink: PlayerLink, record: string, tribe: string|null, medal: string|null, deckName: string, deckLink: string, archetype: string}>}> */
     public array $meta;
+    /** @var array<int, array{playerLink: PlayerLink, record: string, tribe: string|null}> */
     public array $players;
     public bool $showTribes = false;
     public EventStandings $eventStandings;
@@ -57,25 +65,25 @@ class FullMetagame extends Component
         foreach ($players as $player) {
             DB::execute($sql, $player);
         }
-        $result = DB::select('SELECT colors, COUNT(player) AS cnt FROM meta GROUP BY(colors)');
+        $result = DB::select('SELECT colors, COUNT(player) AS cnt FROM meta GROUP BY(colors)', MetaColorsDto::class);
         $sql = 'UPDATE meta SET srtordr = :cnt WHERE colors = :colors';
         foreach ($result as $row) {
-            DB::execute($sql, $row);
+            DB::execute($sql, (array) $row);
         }
         $sql = '
             SELECT
-                player, deckname, archetype, colors, medal, id, srtordr
+                id, player, deckname, archetype, colors, medal, srtordr
             FROM
                 meta
             ORDER BY
                 srtordr DESC, colors, medal, player';
-        $result = DB::select($sql);
+        $result = DB::select($sql, MetaDto::class);
         $this->decklistsAreVisible = $event->decklistsVisible();
         $this->meta = $this->players = [];
         $color = null;
         $idx = -1;
         foreach ($result as $row) {
-            $player = new Player($row['player']);
+            $player = new Player($row->player);
             $entry = new Entry($event->id, $player->name);
             $info = [
                 'playerLink' => new PlayerLink($player),
@@ -83,28 +91,27 @@ class FullMetagame extends Component
                 'tribe' => $this->showTribes ? $entry->deck->tribe ?? null : null,
             ];
             if ($this->decklistsAreVisible) {
-                if ($color !== $row['colors']) {
+                if ($color !== $row->colors) {
                     $idx++;
-                    $color = $row['colors'];
+                    $color = $row->colors;
                     $this->meta[] = [
-                        'numPlayers' => $row['srtordr'],
-                        'manaSrc' => 'styles/images/mana' . rawurlencode($row['colors']) . '.png',
+                        'numPlayers' => $row->srtordr,
+                        'manaSrc' => 'styles/images/mana' . rawurlencode($row->colors) . '.png',
                         'entries' => [],
                     ];
                 }
-                if ($row['medal'] != 'z') {  // puts medal next to name of person who won it
-                    $info['medal'] = $row['medal'];
-                }
-                $info['deckName'] = $row['deckname'];
-                $info['deckLink'] = 'deck.php?mode=view&id=' . rawurlencode((string) $row['id']);
-                $info['archetype'] = $row['archetype'];
+                // puts medal next to name of person who won it
+                $info['medal'] = $row->medal == 'z' ? '' : $row->medal;
+                $info['deckName'] = $row->deckname;
+                $info['deckLink'] = 'deck.php?mode=view&id=' . rawurlencode((string) $row->id);
+                $info['archetype'] = $row->archetype;
                 $this->meta[$idx]['entries'][] = $info;
             } else {
                 $this->players[] = $info;
             }
         }
         if ($event->active || $event->finalized) {
-            $this->eventStandings = new EventStandings($event->name, $_SESSION['username'] ?? null);
+            $this->eventStandings = new EventStandings($event->name, session()->optionalString('username'));
         }
     }
 }

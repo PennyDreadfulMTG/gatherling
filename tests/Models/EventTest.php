@@ -1,13 +1,15 @@
 <?php
 
-namespace Tests\Models;
+declare(strict_types=1);
+
+namespace Gatherling\Tests\Models;
 
 use Gatherling\Models\Event;
 use PHPUnit\Framework\TestCase;
 
 class EventTest extends TestCase
 {
-    public function testStructureSummary()
+    public function testStructureSummary(): void
     {
         $event = new Event('');
         $event->mainstruct = 'Single Elimination';

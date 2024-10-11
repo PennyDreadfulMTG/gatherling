@@ -1,9 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Deck;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Views\Components\SeasonStandings;
+
+use function Gatherling\Views\get;
+use function Gatherling\Views\post;
 
 require_once 'lib.php';
 include 'lib_form_helper.php';
@@ -32,12 +37,11 @@ do_page();
 
 <?php
 
-function do_page()
+function do_page(): void
 {
-    $player_series = Player::getSessionPlayer()->organizersSeries();
+    $player_series = Player::getSessionPlayer()?->organizersSeries() ?? [];
     if (count($player_series) == 0) {
         printNoSeries();
-
         return;
     }
     if (isset($_POST['series'])) {
@@ -46,25 +50,20 @@ function do_page()
     if (!isset($_GET['series'])) {
         $_GET['series'] = $player_series[0];
     }
-    $active_series_name = $_GET['series'];
+    $active_series_name = get()->string('series');
 
     handleActions();
 
-    $view = 'settings';
-
-    if (isset($_GET['view'])) {
-        $view = $_GET['view'];
-    }
-    if (isset($_POST['view'])) {
-        $view = $_POST['view'];
-    }
+    $view = post()->optionalString('view') ?? get()->optionalString('view') ?? 'settings';
 
     if ($view != 'no_view') {
+        echo "<center>";
         if (count($player_series) > 1) {
             echo printOrganizerSelect($player_series, $active_series_name);
         } else {
-            echo "<center> Managing {$active_series_name} </center>";
+            echo "Managing {$active_series_name}";
         }
+        echo '</center>';
     }
     $active_series = new Series($active_series_name);
     printError();
@@ -114,7 +113,7 @@ function do_page()
     }
 }
 
-function printMissingTrophies($series)
+function printMissingTrophies(Series $series): void
 {
     $recentEvents = $series->getRecentEvents(1000);
     $winningDeck = null;
@@ -151,7 +150,7 @@ function printMissingTrophies($series)
     echo '</table>';
 }
 
-function seasonPointsAdj()
+function seasonPointsAdj(): void
 {
     global $hasError;
     global $errormsg;
@@ -161,7 +160,7 @@ function seasonPointsAdj()
     printError();
 }
 
-function printError()
+function printError(): void
 {
     global $hasError;
     global $errormsg;
@@ -170,16 +169,16 @@ function printError()
     }
 }
 
-function printNoSeries()
+function printNoSeries(): void
 {
     echo "<center>You're not a organizer of any series, so you can't use this page.<br />";
     echo '<a href="player.php">Back to the Player Control Panel</a></center>';
 }
 
-function printSeriesForm($series)
+function printSeriesForm(Series $series): void
 {
     echo '<form action="seriescp.php" method="post">';
-    echo '<table class="form c">';
+    echo '<table class="form">';
     echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
     // Active
     echo '<tr><th>Series is Active</th><td> ';
@@ -222,7 +221,7 @@ function printSeriesForm($series)
     echo '</table></form>';
 }
 
-function seriesCPMenu($series, $cur = '')
+function seriesCPMenu(Series $series, string $cur = ''): void
 {
     $name = $series->name;
     echo '<table><tr><td colspan="2" align="center">';
@@ -238,7 +237,7 @@ function seriesCPMenu($series, $cur = '')
     echo '</td></tr></table>';
 }
 
-function printSeriesOrganizersForm($series)
+function printSeriesOrganizersForm(Series $series): void
 {
     $player = new Player(Player::loginName());
     echo '<form action="seriescp.php" method="post">';
@@ -263,7 +262,7 @@ function printSeriesOrganizersForm($series)
     echo '</table> ';
 }
 
-function printPlayerBanForm($series)
+function printPlayerBanForm(Series $series): void
 {
     $player = new Player(Player::loginName());
     echo '<form action="seriescp.php" method="post">';
@@ -301,7 +300,8 @@ function printPlayerBanForm($series)
     echo '</table> ';
 }
 
-function printPointsRule($rule, $key, $rules, $formtype = 'text', $size = 4)
+/** @param array<string, int|string> $rules */
+function printPointsRule(string $rule, string $key, array $rules, string $formtype = 'text', int $size = 4): void
 {
     echo "<tr><th>{$rule}</th>";
     if ($formtype == 'text') {
@@ -319,15 +319,9 @@ function printPointsRule($rule, $key, $rules, $formtype = 'text', $size = 4)
     }
 }
 
-function printPointsForm($series)
+function printPointsForm(Series $series): void
 {
-    $chosen_season = $series->currentSeason();
-    if (isset($_GET['season'])) {
-        $chosen_season = $_GET['season'];
-    }
-    if (isset($_POST['season'])) {
-        $chosen_season = $_POST['season'];
-    }
+    $chosen_season = post()->optionalInt('season') ?? get()->optionalInt('season') ?? $series->currentSeason();
 
     echo '<h3><center> Season Points Management </center> </h3>';
     echo '<p style="width:75%; text-align: left;">Here you can edit the way that season points are calculated for each player.  Choose the season that you want your point rules to be active for, and then put in the number of season points for each type of event.  You can adjust the points a player gets for each event individually as well, to take away points for not posting a deck for example or giving extra points for a tiebreaker-miss of top eight.</p>';
@@ -367,7 +361,7 @@ function printPointsForm($series)
     echo '</td></table></form>';
 }
 
-function printLogoForm($series)
+function printLogoForm(Series $series): void
 {
     echo '<form action="seriescp.php" method="post" enctype="multipart/form-data">';
     echo '<table class="form c">';
@@ -380,7 +374,7 @@ function printLogoForm($series)
     echo '</table></form> ';
 }
 
-function printDiscordForm($series)
+function printDiscordForm(Series $series): void
 {
     $player = new Player(Player::loginName());
     echo '<form action="seriescp.php" method="post">';
@@ -405,7 +399,7 @@ function printDiscordForm($series)
     echo '</table> ';
 }
 
-function printRecentEventsTable($series)
+function printRecentEventsTable(Series $series): void
 {
     $recentEvents = $series->getRecentEvents();
     echo '<center> <h3> Recent Events </h3> </center>';
@@ -427,32 +421,25 @@ function printRecentEventsTable($series)
     echo '</table>';
 }
 
-function handleActions()
+function handleActions(): void
 {
     global $hasError;
     global $errormsg;
     if (!isset($_POST['series'])) {
         return;
     }
-    $seriesname = $_POST['series'];
+    $seriesname = post()->string('series');
     $series = new Series($seriesname);
-    if (!$series) {
-        return;
-    }
     if (!$series->authCheck(Player::loginName())) {
         return;
     }
     if ($_POST['action'] == 'Update Series') {
-        $newactive = $_POST['isactive'];
+        $newactive = post()->int('isactive', 0);
         $newtime = $_POST['hour'];
         $newday = $_POST['start_day'];
         $room = $_POST['mtgo_room'];
 
-        if (!isset($_POST['preregdefault'])) {
-            $prereg = 0;
-        } else {
-            $prereg = $_POST['preregdefault'];
-        }
+        $prereg = post()->int('preregdefault', 0);
 
         $series = new Series($seriesname);
         if ($series->authCheck(Player::loginName())) {
@@ -466,59 +453,47 @@ function handleActions()
     } elseif ($_POST['action'] == 'Change Logo') {
         if ($_FILES['logo']['size'] > 0) {
             $file = $_FILES['logo'];
-            $name = $file['name'];
             $tmp = $file['tmp_name'];
             $size = $file['size'];
             $type = $file['type'];
-
+            assert(is_string($tmp) && is_string($type) && is_int($size));
             $series->setLogo($tmp, $type, $size);
         }
     } elseif ($_POST['action'] == 'Update Organizers') {
-        if (isset($_POST['delorganizers'])) {
-            $removals = $_POST['delorganizers'];
-            foreach ($removals as $deadorganizer) {
-                $series->removeOrganizer($deadorganizer);
-            }
+        foreach (post()->listString('delorganizers') as $deadorganizer) {
+            $series->removeOrganizer($deadorganizer);
         }
-        if (!isset($_POST['addorganizer'])) {
+        $addition = post()->optionalString('addorganizer');
+        if (!$addition) {
             return;
         }
-        $addition = $_POST['addorganizer'];
         $addplayer = Player::findByName($addition);
         if ($addplayer == null) {
             $hasError = true;
             $errormsg .= "Can't add {$addition} to Series Organizers, they don't exist!";
-
             return;
         }
         if ($addplayer->verified == 0 && Player::getSessionPlayer()->super == 0) {
             $hasError = true;
             $errormsg .= "Can't add {$addplayer->name} to Series Organizers, they aren't a verified user!";
-
             return;
         }
         $series->addOrganizer($addplayer->name);
     } elseif ($_POST['action'] == 'Update Banned Players') {
-        if (isset($_POST['removebannedplayer'])) {
-            $removals = $_POST['removebannedplayer'];
-            foreach ($removals as $playertoremove) {
-                $series->removeBannedPlayer($playertoremove);
-            }
+        foreach (post()->listString('removebannedplayer') as $playertoremove) {
+            $series->removeBannedPlayer($playertoremove);
         }
-        if (!isset($_POST['addbannedplayer'])) {
-            return;
-        }
-        $addition = $_POST['addbannedplayer'];
-        $addplayer = Player::findOrCreateByName($addition);
+        $addition = post()->string('addbannedplayer');
+        $addplayer = Player::findByName($addition);
         if ($addplayer == null) {
             $hasError = true;
             $errormsg .= "Can't add {$addition} to Banned Players, they don't exist!";
-
             return;
         }
-        $series->addBannedPlayer($addplayer->name, $_POST['reason']);
+        $series->addBannedPlayer($addplayer->name, post()->string('reason', ''));
     } elseif ($_POST['action'] == 'Update Points Rules') {
-        $new_rules = $_POST['new_rules'];
-        $series->setSeasonRules($_POST['season'], $new_rules);
+        $season = post()->int('season');
+        $new_rules = post()->dictIntOrString('new_rules');
+        $series->setSeasonRules($season, $new_rules);
     }
 }

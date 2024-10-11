@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Views\Components;
 
 use Gatherling\Models\Series;
 
 class SeriesDropMenu extends DropMenu
 {
+    /** @param list<string> $limitTo */
     public function __construct(?string $seriesName, ?string $default = '- Series -', array $limitTo = [])
     {
         $allSeries = empty($limitTo) ? Series::allNames() : $limitTo;

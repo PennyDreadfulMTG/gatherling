@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once __DIR__.'/lib.php';
 
 global $CONFIG;
@@ -10,7 +12,7 @@ $provider = new \Wohali\OAuth2\Client\Provider\Discord([
     'redirectUri'  => $CONFIG['base_url'].'auth.php',
 ]);
 
-function load_cached_token()
+function load_cached_token(): \League\OAuth2\Client\Token\AccessToken
 {
     return new \League\OAuth2\Client\Token\AccessToken([
         'access_token'  => $_SESSION['DISCORD_TOKEN'],
@@ -20,7 +22,8 @@ function load_cached_token()
     ]);
 }
 
-function get_user_guilds($token)
+/** @return list<array{id: string, name: string, icon: string, owner: bool, permissions: int}> */
+function get_user_guilds(\League\OAuth2\Client\Token\AccessToken $token): array
 {
     global $provider;
 
@@ -29,7 +32,7 @@ function get_user_guilds($token)
     return $provider->getParsedResponse($guildsRequest);
 }
 
-function debug_info($token)
+function debug_info(\League\OAuth2\Client\Token\AccessToken $token): void
 {
     // Show some token details
     echo '<h2>Token details:</h2>';
@@ -52,7 +55,7 @@ function debug_info($token)
         var_export($user->toArray());
     } catch (Exception $e) {
         // Failed to get user details
-        exit($e);
+        exit($e->getMessage());
     }
     echo '<h2>Guilds:</h2>';
     $guilds = get_user_guilds($token);

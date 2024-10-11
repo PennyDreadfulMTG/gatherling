@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use Gatherling\Models\Format;
 use Gatherling\Models\Player;
 use Gatherling\Models\Ratings;
 use Gatherling\Models\Series;
 use Gatherling\Models\SetScraper;
+
+use function Gatherling\Views\post;
 
 require_once 'lib.php';
 include 'lib_form_helper.php';
@@ -12,7 +16,7 @@ include 'lib_form_helper.php';
 $hasError = false;
 $errormsg = '';
 
-if (!Player::isLoggedIn() || !Player::getSessionPlayer()->isSuper()) {
+if (!(Player::getSessionPlayer()?->isSuper() ?? false)) {
     redirect('index.php');
 }
 
@@ -29,12 +33,11 @@ print_header('Admin Control Panel');
 
 <?php
 
-function do_page()
+function do_page(): void
 {
     $player = Player::getSessionPlayer();
-    if (!$player->isSuper()) {
+    if (!$player || !$player->isSuper()) {
         printNoAdmin();
-
         return;
     }
 
@@ -69,12 +72,12 @@ function do_page()
     echo '</center><div class="clear"></div></div>';
 }
 
-function printAdminCPIntroduction()
+function printAdminCPIntroduction(): void
 {
     echo 'Welcome to the Admin CP! <br />';
 }
 
-function printNoAdmin()
+function printNoAdmin(): void
 {
     global $hasError;
     global $errormsg;
@@ -84,7 +87,7 @@ function printNoAdmin()
     echo '<a href="player.php">Back to the Player Control Panel</a></center>';
 }
 
-function printError()
+function printError(): void
 {
     global $hasError;
     global $errormsg;
@@ -93,7 +96,7 @@ function printError()
     }
 }
 
-function adminCPMenu()
+function adminCPMenu(): void
 {
     echo '<table><tr><td colspan="2" align="center">';
     echo '<a href="admincp.php?view=change_password">Change Player Password</a>';
@@ -104,7 +107,7 @@ function adminCPMenu()
     echo '</td></tr></table>';
 }
 
-function printCreateNewSeriesForm()
+function printCreateNewSeriesForm(): void
 {
     echo '<h4>Create New Series</h4>';
     echo '<form action="admincp.php" method="post">';
@@ -143,7 +146,7 @@ function printCreateNewSeriesForm()
     echo '</table></form>';
 }
 
-function printCalcRatingsForm()
+function printCalcRatingsForm(): void
 {
     $ratings = new Ratings();
     echo '<h4>Calculate Ratings</h4>';
@@ -165,7 +168,7 @@ function printCalcRatingsForm()
     echo '</table></form>';
 }
 
-function printAddCardSet()
+function printAddCardSet(): void
 {
     echo '<h3><center>Install New Cardset</center></h3>';
     echo '<form action="util/insertcardset.php" method="post" enctype="multipart/form-data">';
@@ -189,7 +192,7 @@ function printAddCardSet()
     echo '</table></form>';
 }
 
-function printChangePasswordForm()
+function printChangePasswordForm(): void
 {
     echo '<form action="admincp.php" method="post">';
     echo '<input type="hidden" name="view" value="change_password" />';
@@ -201,7 +204,7 @@ function printChangePasswordForm()
     echo '</table> </form>';
 }
 
-function printManualVerificationForm()
+function printManualVerificationForm(): void
 {
     echo '<form action="admincp.php" method="post">';
     echo '<input type="hidden" name="view" value="verify_player" />';
@@ -212,7 +215,7 @@ function printManualVerificationForm()
     echo '</table> </form>';
 }
 
-function handleActions()
+function handleActions(): void
 {
     if (!isset($_POST['action'])) {
         return;
@@ -221,23 +224,24 @@ function handleActions()
     global $errormsg;
     if ($_POST['action'] == 'Change Password') {
         $hasError = true;
-        $username = $_POST['username'];
 
         try {
+            $username = post()->string('username');
+            $password = post()->string('new_password');
             $player = new Player($username);
-            $player->setPassword($_POST['new_password']);
-            $errormsg = "Password changed for user {$player->name} to {$_POST['new_password']}";
+            $player->setPassword($password);
+            $errormsg = "Password changed for user {$player->name} to {$password}";
         } catch (Exception $e) {
-            $errormsg = "User $username is not found.";
+            $errormsg = 'User ' . post()->string('username', 'None') . ' is not found.';
         }
     } elseif ($_POST['action'] == 'Verify Player') {
         $hasError = true;
-        $player = new Player($_POST['username']);
+        $player = new Player(post()->string('username'));
         $player->setVerified(true);
         $errormsg = "User {$player->name} is now verified.";
     } elseif ($_POST['action'] == 'Create Series') {
         $hasError = true;
-        $newactive = $_POST['isactive'];
+        $newactive = (int) $_POST['isactive'];
         $newtime = $_POST['hour'];
         $newday = $_POST['start_day'];
         $prereg = 0;
@@ -250,12 +254,13 @@ function handleActions()
 
         $series = new Series('');
         $newseries = $_POST['seriesname'];
-        if ($series->authCheck(Player::loginName())) {
+        $playerName = Player::loginName();
+        if ($playerName && $series->authCheck($playerName)) {
             $series->name = $newseries;
             $series->active = $newactive;
             $series->start_time = $newtime . ':00';
             $series->start_day = $newday;
-            $series->prereg_default = $prereg;
+            $series->prereg_default = (int) $prereg;
             $series->save();
         }
         $errormsg = "New series $series->name was created!";
@@ -265,18 +270,18 @@ function handleActions()
         $ratings->calcAllRatings();
     } elseif ($_POST['action'] == 'Re-Calcualte By Format') {
         $ratings = new Ratings();
-        $ratings->deleteRatingByFormat($_POST['format']);
+        $ratings->deleteRatingByFormat(post()->string('format'));
         if ($_POST['format'] == 'Composite') {
             $ratings->calcCompositeRating();
         } else {
-            $ratings->calcRatingByFormat($_POST['format']);
+            $ratings->calcRatingByFormat(post()->string('format'));
         }
     } elseif ($_POST['action'] == 'Rebuild Tribes') {
         Format::constructTribes('All');
     }
 }
 
-function printNewFormat()
+function printNewFormat(): void
 {
     echo "<h4>New Format</h4>\n";
     echo '<form action="admincp.php" method="post">';

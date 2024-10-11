@@ -1,58 +1,64 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Models;
 
 use Exception;
 
 class Format
 {
-    public $name;
-    public $description;
-    public $type;        // who has access to filter: public, private, system
-    public $series_name; // filter owner
-    public $priority;
-    public $new;
+    public ?string $name;
+    public ?string $description;
+    public ?string $type;        // who has access to filter: public, private, system
+    public ?string $series_name; // filter owner
+    public ?int $priority;
+    public ?bool $new = null;
 
     // card set construction
-    public $card_banlist = [];
-    public $card_restrictedlist = [];
-    public $card_legallist = [];
-    public $legal_sets = [];
-    public $eternal;
-    public $modern;
-    public $standard;
+    /** @var list<string> */
+    public array $card_banlist = [];
+    /** @var list<string> */
+    public array $card_restrictedlist = [];
+    /** @var list<string> */
+    public array $card_legallist = [];
+    /** @var list<string> */
+    public array $legal_sets = [];
+    public ?int $eternal;
+    public ?int $modern;
+    public ?int $standard;
 
     // deck construction switches
-    public $singleton;
-    public $commander;
-    public $planechase;
-    public $vanguard;
-    public $prismatic;
-    public $tribal;
-    public $pure;
-    public $underdog;
-    public $limitless;
+    public ?int $singleton;
+    public ?int $commander;
+    public ?int $planechase;
+    public ?int $vanguard;
+    public ?int $prismatic;
+    public ?int $tribal;
+    public ?int $pure;
+    public ?int $underdog;
+    public ?int $limitless;
 
     // rarities allowed switches
-    public $allow_commons;
-    public $allow_uncommons;
-    public $allow_rares;
-    public $allow_mythics;
-    public $allow_timeshifted;
+    public ?int $allow_commons;
+    public ?int $allow_uncommons;
+    public ?int $allow_rares;
+    public ?int $allow_mythics;
+    public ?int $allow_timeshifted;
 
     // deck limits
-    public $min_main_cards_allowed;
-    public $max_main_cards_allowed;
-    public $min_side_cards_allowed;
-    public $max_side_cards_allowed;
+    public ?int $min_main_cards_allowed;
+    public ?int $max_main_cards_allowed;
+    public ?int $min_side_cards_allowed;
+    public ?int $max_side_cards_allowed;
 
     // Meta Formats
-    public $is_meta_format;
-    public $sub_formats = [];
+    public ?int $is_meta_format;
 
-    private $error = [];
+    /** @var list<string> */
+    private array $error = [];
 
-    public function __construct($name)
+    public function __construct(string $name)
     {
         if ($name == '') {
             $this->name = '';
@@ -85,7 +91,6 @@ class Format
             $this->min_side_cards_allowed = 0;
             $this->max_side_cards_allowed = 15;
             $this->is_meta_format = 0;
-            $this->sub_formats = [];
             $this->new = true;
 
             return;
@@ -144,11 +149,10 @@ class Format
             $this->card_legallist = $this->getLegalList();
             $this->card_restrictedlist = $this->getRestrictedList();
             $this->legal_sets = $this->getLegalCardsets();
-            $this->sub_formats = [];
         }
     }
 
-    public static function constructTribes($set = 'All')
+    public static function constructTribes(string $set = 'All'): void
     {
         // adds tribe types to tribes table in database
         // if no set is specified, uses all sets from cardsets table
@@ -191,19 +195,15 @@ class Format
         }
     }
 
-    public static function isTribeTypeInDatabase($type)
+    public static function isTribeTypeInDatabase(string $type): bool
     {
         $tribe = Database::single_result_single_param('SELECT name
                                            FROM tribes
                                            WHERE name = ?', 's', $type);
-        if ($type && $tribe && strcasecmp($tribe, $type) == 0) {
-            return true;
-        }
-
-        return false;
+        return ($type && $tribe && strcasecmp($tribe, $type) == 0);
     }
 
-    public static function doesFormatExist($format)
+    public static function doesFormatExist(string $format): bool
     {
         $success = false;
         $formatName = Database::single_result_single_param('SELECT name FROM formats WHERE name = ?', 's', $format);
@@ -214,7 +214,7 @@ class Format
         return $success;
     }
 
-    private function insertNewFormat()
+    private function insertNewFormat(): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO formats(name, description, type, series_name, singleton, commander, planechase,
@@ -259,7 +259,7 @@ class Format
         return true;
     }
 
-    public function saveAndDeleteAuthorization($playerName)
+    public function saveAndDeleteAuthorization(string $playerName): bool
     {
         // this will be used to determine if the save and delete buttons will appear on the format editor
         // there are 3 different format types: system, public, private
@@ -294,7 +294,7 @@ class Format
         return $authorized;
     }
 
-    public function viewAuthorization($playerName)
+    public function viewAuthorization(string $playerName): bool
     {
         // this will be used to determine if a format will appear in the drop down to load in the format filter
         // there are 3 different format types: system, public, private
@@ -316,7 +316,7 @@ class Format
         return false;
     }
 
-    public function save()
+    public function save(): bool
     {
         if ($this->new) {
             $this->new = false;
@@ -370,7 +370,7 @@ class Format
         }
     }
 
-    public function saveAs($oldName = '')
+    public function saveAs(string $oldName = ''): bool
     {
         // name, type, and series_name should all be specified before calling this function
         $success = $this->insertNewFormat();
@@ -426,7 +426,7 @@ class Format
         return $success;
     }
 
-    public function rename($oldName = '')
+    public function rename(string $oldName = ''): bool
     {
         // $this->name, $this->type, and $this->series_name of the new format should all be specified before calling this function
         $success = $this->saveAs($oldName);
@@ -438,7 +438,7 @@ class Format
         return $success;
     }
 
-    public function delete()
+    public function delete(): bool
     {
         $success = $this->deleteEntireLegallist();
         $success = $this->deleteEntireBanlist();
@@ -454,12 +454,13 @@ class Format
         return $success;
     }
 
-    public function noFormatLoaded()
+    public function noFormatLoaded(): bool
     {
         return ($this->name == '') || is_null($this->name);
     }
 
-    public function getLegalCardsets()
+    /** @return list<string> */
+    public function getLegalCardsets(): array
     {
         if ($this->eternal) {
             return Database::list_result('SELECT name FROM cardsets');
@@ -474,7 +475,8 @@ class Format
         return Database::list_result_single_param('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
     }
 
-    public function getLegalCard($cardName)
+    /** @return ?array<string, string> */
+    public function getLegalCard(string $cardName): ?array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT id, name FROM cards WHERE name = ? AND cardset = ?');
@@ -495,17 +497,20 @@ class Format
         return $cardar;
     }
 
-    public static function getSystemFormats()
+    /** @return list<string> */
+    public static function getSystemFormats(): array
     {
         return Database::list_result_single_param('SELECT name FROM formats WHERE type = ?', 's', 'System');
     }
 
-    public static function getPublicFormats()
+    /** @return list<string> */
+    public static function getPublicFormats(): array
     {
         return Database::list_result_single_param('SELECT name FROM formats WHERE type = ?', 's', 'Public');
     }
 
-    public static function getPrivateFormats($seriesName)
+    /** @return list<string> */
+    public static function getPrivateFormats(string $seriesName): array
     {
         return Database::list_result_double_param(
             'SELECT name FROM formats WHERE type = ? AND series_name = ?',
@@ -515,12 +520,14 @@ class Format
         );
     }
 
-    public static function getAllFormats()
+    /** @return list<string> */
+    public static function getAllFormats(): array
     {
         return Database::list_result('SELECT name FROM formats');
     }
 
-    public function getCoreCardsets()
+    /** @return list<string> */
+    public function getCoreCardsets(): array
     {
         $legalSets = Database::list_result_single_param('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
 
@@ -535,7 +542,8 @@ class Format
         return $legalCoreSets;
     }
 
-    public function getBlockCardsets()
+    /** @return list<string> */
+    public function getBlockCardsets(): array
     {
         $legalSets = Database::list_result_single_param('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
 
@@ -550,7 +558,8 @@ class Format
         return $legalBlockSets;
     }
 
-    public function getExtraCardsets()
+    /** @return list<string> */
+    public function getExtraCardsets(): array
     {
         $legalSets = Database::list_result_single_param('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
 
@@ -565,7 +574,8 @@ class Format
         return $legalExtraSets;
     }
 
-    public function getBanList()
+    /** @return list<string> */
+    public function getBanList(): array
     {
         return Database::list_result_single_param('SELECT card_name
                                                    FROM bans
@@ -574,7 +584,8 @@ class Format
                                                    ORDER BY card_name', 's', $this->name);
     }
 
-    public function getTribesBanned()
+    /** @return list<string> */
+    public function getTribesBanned(): array
     {
         return Database::list_result_single_param('SELECT name
                                                    FROM tribe_bans
@@ -583,7 +594,8 @@ class Format
                                                    ORDER BY name', 's', $this->name);
     }
 
-    public function getSubTypesBanned()
+    /** @return list<string> */
+    public function getSubTypesBanned(): array
     {
         return Database::list_result_single_param('SELECT name
                                                    FROM subtype_bans
@@ -592,7 +604,8 @@ class Format
                                                    ORDER BY name', 's', $this->name);
     }
 
-    public function getLegalList()
+    /** @return list<string> */
+    public function getLegalList(): array
     {
         return Database::list_result_single_param(
             'SELECT card_name
@@ -604,7 +617,8 @@ class Format
         );
     }
 
-    public function getTribesAllowed()
+    /** @return list<string> */
+    public function getTribesAllowed(): array
     {
         return Database::list_result_single_param(
             'SELECT name
@@ -616,7 +630,8 @@ class Format
         );
     }
 
-    public function getRestrictedList()
+    /** @return list<string> */
+    public function getRestrictedList(): array
     {
         return Database::list_result_single_param(
             'SELECT card_name
@@ -628,7 +643,8 @@ class Format
         );
     }
 
-    public function getRestrictedTotribeList()
+    /** @return list<string> */
+    public function getRestrictedTotribeList(): array
     {
         return Database::list_result_single_param(
             'SELECT card_name
@@ -640,7 +656,8 @@ class Format
         );
     }
 
-    public function getErrors()
+    /** @return list<string> */
+    public function getErrors(): array
     {
         $currentErrors = $this->error;
         $this->error = [];
@@ -648,17 +665,19 @@ class Format
         return $currentErrors;
     }
 
-    public function getFormats()
+    /** @return list<string> */
+    public function getFormats(): array
     {
         return Database::list_result('SELECT name FROM formats');
     }
 
-    public static function getTribesList()
+    /** @return list<string> */
+    public static function getTribesList(): array
     {
         return Database::list_result('SELECT name FROM tribes ORDER BY name');
     }
 
-    public function isCardLegalByRarity($cardName)
+    public function isCardLegalByRarity(string $cardName): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT rarity FROM cards WHERE name = ? AND cardset = ?');
@@ -726,7 +745,7 @@ class Format
         return false;
     }
 
-    public function isCardOnBanList($card)
+    public function isCardOnBanList(string $card): bool
     {
         return count(Database::list_result_double_param(
             'SELECT card_name
@@ -740,7 +759,7 @@ class Format
         )) > 0;
     }
 
-    public function isCardOnLegalList($card)
+    public function isCardOnLegalList(string $card): bool
     {
         return count(Database::list_result_double_param(
             'SELECT card_name
@@ -754,7 +773,7 @@ class Format
         )) > 0;
     }
 
-    public function isCardOnRestrictedList($card)
+    public function isCardOnRestrictedList(string $card): bool
     {
         return count(Database::list_result_double_param(
             'SELECT card_name
@@ -767,7 +786,7 @@ class Format
         )) > 0;
     }
 
-    public function isCardOnRestrictedToTribeList($card)
+    public function isCardOnRestrictedToTribeList(string $card): bool
     {
         return count(Database::list_result_double_param(
             'SELECT card_name
@@ -780,7 +799,7 @@ class Format
         )) > 0;
     }
 
-    public function isCardSetLegal($setName)
+    public function isCardSetLegal(string $setName): bool
     {
         if ($this->eternal) {
             return true;
@@ -795,7 +814,7 @@ class Format
         return false;
     }
 
-    public function isCardBasic($card)
+    public function isCardBasic(string $card): bool
     {
         switch ($card) {
             case 'Relentless Rats':
@@ -819,7 +838,7 @@ class Format
         }
     }
 
-    public function isCardSingletonLegal($card, $amt)
+    public function isCardSingletonLegal(string $card, int $amt): bool
     {
         if ($amt == 1) {
             return true;
@@ -836,7 +855,7 @@ class Format
         return false;
     }
 
-    public static function getCardType($card)
+    public static function getCardType(string $card): string
     {
         // Selecting card type for card = $card
         $cardType = Database::single_result_single_param('SELECT type
@@ -846,7 +865,7 @@ class Format
         return $cardType;
     }
 
-    public static function removeTypeCrap($typeString)
+    public static function removeTypeCrap(string $typeString): string
     {
         // leave only the tribal sub types
         $typeString = str_ireplace('Tribal ', '', $typeString);
@@ -864,7 +883,7 @@ class Format
         return $typeString;
     }
 
-    public static function isChangeling($card)
+    public static function isChangeling(string $card): bool
     {
         switch ($card) {
             case 'Amoeboid Changeling':
@@ -894,7 +913,8 @@ class Format
         }
     }
 
-    public function getTribe($deckID)
+    /** @return array{name: string, count: int} */
+    public function getTribe(int $deckID): array
     {
         $deck = new Deck($deckID);
         $creatures = $deck->getCreatureCards();
@@ -1116,7 +1136,7 @@ class Format
         return $tribe;
     }
 
-    public function isDeckTribalLegal($deckID)
+    public function isDeckTribalLegal(int $deckID): bool
     {
         $isLegal = true;
         $deck = new Deck($deckID);
@@ -1148,7 +1168,7 @@ class Format
         return $isLegal;
     }
 
-    public function isDeckCommanderLegal($deckID)
+    public function isDeckCommanderLegal(int $deckID): bool
     {
         $isLegal = true;
         $deck = new Deck($deckID);
@@ -1178,7 +1198,8 @@ class Format
         return $isLegal;
     }
 
-    public static function getCardColors($card)
+    /** @return array<string, int> */
+    public static function getCardColors(string $card): array
     {
         $colors = [];
         $db = Database::getConnection();
@@ -1194,16 +1215,17 @@ class Format
         return $colors;
     }
 
-    public static function getCommanderCard($deck)
+    public static function getCommanderCard(Deck $deck): ?string
     {
         foreach ($deck->sideboard_cards as $card => $amt) {
             if (self::isCardLegendary($card)) {
                 return $card;
             }
         }
+        return null;
     }
 
-    public static function isCardLegendary($card)
+    public static function isCardLegendary(string $card): bool
     {
         return count(Database::list_result_single_param(
             "SELECT id FROM cards WHERE name = ? AND type LIKE '%Legendary%'",
@@ -1212,7 +1234,7 @@ class Format
         )) > 0;
     }
 
-    public function isQuantityLegal($card, $amt)
+    public function isQuantityLegal(string $card, int $amt): bool
     {
         if ($amt <= 4) {
             return true;
@@ -1229,7 +1251,7 @@ class Format
         return false;
     }
 
-    public function isQuantityLegalAgainstMain($sideCard, $sideAmt, $mainCard, $mainAmt)
+    public function isQuantityLegalAgainstMain(string $sideCard, int $sideAmt, string $mainCard, int $mainAmt): bool
     {
         if ($sideCard == $mainCard) {
             if (($sideAmt + $mainAmt) <= 4) {
@@ -1252,7 +1274,7 @@ class Format
         return false;
     }
 
-    public function insertCardIntoBanlist($card)
+    public function insertCardIntoBanlist(string $card): bool
     {
         $card = stripslashes($card);
         $card = normaliseCardName($card);
@@ -1277,7 +1299,7 @@ class Format
         }
     }
 
-    public function insertCardIntoLegallist($card)
+    public function insertCardIntoLegallist(string $card): bool
     {
         $card = stripslashes($card);
         $card = normaliseCardName($card);
@@ -1306,7 +1328,7 @@ class Format
         }
     }
 
-    public function insertCardIntoRestrictedlist($card)
+    public function insertCardIntoRestrictedlist(string $card): bool
     {
         $card = stripslashes($card);
         $card = normaliseCardName($card);
@@ -1331,7 +1353,7 @@ class Format
         }
     }
 
-    public function insertCardIntoRestrictedToTribeList($card)
+    public function insertCardIntoRestrictedToTribeList(string $card): bool
     {
         $card = stripslashes($card);
         $card = $this->getCardName($card);
@@ -1353,7 +1375,7 @@ class Format
         }
     }
 
-    public function deleteCardFromBanlist($cardName)
+    public function deleteCardFromBanlist(string $cardName): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM bans WHERE format = ? AND card_name = ? and allowed = 0');
@@ -1365,7 +1387,7 @@ class Format
         return $removed;
     }
 
-    public function deleteEntireBanlist()
+    public function deleteEntireBanlist(): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM bans WHERE format = ? AND allowed = 0');
@@ -1377,7 +1399,7 @@ class Format
         return $removed;
     }
 
-    public function deleteAllLegalSets()
+    public function deleteAllLegalSets(): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM setlegality WHERE format = ?');
@@ -1389,7 +1411,7 @@ class Format
         return $removed;
     }
 
-    public function deleteAllBannedTribes()
+    public function deleteAllBannedTribes(): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM tribe_bans WHERE format = ?');
@@ -1401,7 +1423,7 @@ class Format
         return $removed;
     }
 
-    public function deleteCardFromLegallist($cardName)
+    public function deleteCardFromLegallist(string $cardName): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM bans WHERE format = ? AND card_name = ? AND allowed = 1');
@@ -1413,7 +1435,7 @@ class Format
         return $removed;
     }
 
-    public function deleteEntireLegallist()
+    public function deleteEntireLegallist(): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM bans WHERE format = ? AND allowed = 1');
@@ -1425,7 +1447,7 @@ class Format
         return $removed;
     }
 
-    public function deleteCardFromRestrictedlist($cardName)
+    public function deleteCardFromRestrictedlist(string $cardName): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM restricted WHERE format = ? AND card_name = ?');
@@ -1437,7 +1459,7 @@ class Format
         return $removed;
     }
 
-    public function deleteCardFromRestrictedToTribeList($cardName)
+    public function deleteCardFromRestrictedToTribeList(string $cardName): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM restrictedtotribe WHERE format = ? AND card_name = ?');
@@ -1449,7 +1471,7 @@ class Format
         return $removed;
     }
 
-    public function deleteEntireRestrictedlist()
+    public function deleteEntireRestrictedlist(): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM restricted WHERE format = ?');
@@ -1461,7 +1483,7 @@ class Format
         return $removed;
     }
 
-    public function deleteEntireRestrictedToTribeList()
+    public function deleteEntireRestrictedToTribeList(): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM restrictedtotribe WHERE format = ?');
@@ -1473,8 +1495,11 @@ class Format
         return $removed;
     }
 
-    private function getCardID($cardname)
+    private function getCardID(?string $cardname): ?int
     {
+        if (is_null($cardname)) {
+            return null;
+        }
         // Honestly I can't think of a good reason why we would have to ban a specific card (ban by id number).
         // When you ban a card, don't you want to ban all versions of it? Not just one version?
         // so it makes more sense to ban by card name. But I will implement cardID's for now since that is how the
@@ -1482,21 +1507,21 @@ class Format
         return Database::single_result_single_param('SELECT id FROM cards WHERE name = ?', 's', $cardname);
     }
 
-    public static function getCardName($cardname)
+    public static function getCardName(string $cardname): ?string
     {
         // this is used to return the name of the card as it appears in the database
         // otherwise the ban list will have cards on it like rOnCoR, RONCOR, rONCOR, etc
         return Database::single_result_single_param('SELECT name FROM cards WHERE name = ?', 's', $cardname);
     }
 
-    public static function getCardNameFromPartialDFC($cardname)
+    public static function getCardNameFromPartialDFC(string $cardname): ?string
     {
         // this is used to return the name of the card as it appears in the database
         // otherwise the ban list will have cards on it like rOnCoR, RONCOR, rONCOR, etc
         return Database::single_result_single_param('SELECT name FROM cards WHERE name LIKE ?', 's', $cardname.'/%');
     }
 
-    public function insertNewLegalSet($cardsetName)
+    public function insertNewLegalSet(string $cardsetName): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO setlegality(format, cardset)VALUES(?, ?)');
@@ -1507,7 +1532,7 @@ class Format
         return true;
     }
 
-    public function insertNewSubTypeBan($subTypeBanned)
+    public function insertNewSubTypeBan(string $subTypeBanned): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO subtype_bans(name, format, allowed) VALUES(?, ?, 0)');
@@ -1518,7 +1543,7 @@ class Format
         return true;
     }
 
-    public function insertNewTribeBan($tribeBanned)
+    public function insertNewTribeBan(string $tribeBanned): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO tribe_bans(name, format, allowed) VALUES(?, ?, 0)');
@@ -1529,7 +1554,7 @@ class Format
         return true;
     }
 
-    public function insertSubFormat($subformat)
+    public function insertSubFormat(string $subformat): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO subformats(parentformat, childformat) VALUES(?, ?)');
@@ -1540,7 +1565,7 @@ class Format
         return true;
     }
 
-    public function banAllTribes()
+    public function banAllTribes(): void
     {
         $this->deleteAllBannedTribes();
         $tribes = self::getTribesList();
@@ -1550,7 +1575,7 @@ class Format
         }
     }
 
-    public function deleteLegalCardSet($cardsetName)
+    public function deleteLegalCardSet(string $cardsetName): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM setlegality WHERE format = ? AND cardset = ?');
@@ -1562,7 +1587,7 @@ class Format
         return $removed;
     }
 
-    public function deleteSubTypeBan($subTypeName)
+    public function deleteSubTypeBan(string $subTypeName): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM subtype_bans WHERE format = ? AND name = ?');
@@ -1574,7 +1599,7 @@ class Format
         return $removed;
     }
 
-    public function deleteTribeBan($tribeName)
+    public function deleteTribeBan(string $tribeName): bool
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM tribe_bans WHERE format = ? AND name = ?');
