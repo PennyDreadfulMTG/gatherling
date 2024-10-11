@@ -555,7 +555,7 @@ function print_preRegistration(): void
         echo '<tr><td><a href="eventreport.php?event='.rawurlencode($event->name)."\">{$event->name}</a>";
         echo '<br>' . time_element(strtotime($event->start), time()) . '</td>';
 
-        if ($event->is_full()) {
+        if ($event->isFull()) {
             echo '<td>This event is currently at capacity.</td>';
         } elseif ($event->client == 1 && empty($player->mtgo_username)) {
             echo '<td><a href="player.php?mode=edit_accounts">Requires an MTGO account</a></td>';

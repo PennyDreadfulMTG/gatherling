@@ -187,7 +187,7 @@ class Event
         return "Gatherling/Event($this->name)";
     }
 
-    public static function CreateEvent(
+    public static function createEvent(
         string $year,
         string $month,
         string $day,
@@ -505,7 +505,7 @@ class Event
     public function getTrophyImageLink(): string
     {
         return "<a href=\"deck.php?mode=view&event={$this->id}\" class=\"borderless\">\n"
-           .self::trophy_image_tag($this->name)."\n</a>\n";
+           .self::trophyImageTag($this->name)."\n</a>\n";
     }
 
     public function isHost(string $name): bool
@@ -1133,7 +1133,7 @@ class Event
         $stmt->close();
     }
 
-    public static function trophy_image_tag(string $eventname): string
+    public static function trophyImageTag(string $eventname): string
     {
         return "<img style=\"border-width: 0px; max-width: 260px\" src=\"{self::trophySrc($eventname)}\" />";
     }
@@ -1277,11 +1277,11 @@ class Event
                 if ($active_players[$i] != null && !$active_players[$i]['paired']) {
                     $player1 = new Standings($this->name, $active_players[$i]['player']);
                     if (count($bye_data) > 0 && $active_players[$pairing[$i]]['player'] == $bye_data['player']) {
-                        $this->award_bye($player1);
+                        $this->awardBye($player1);
                     } elseif ($active_players[$pairing[$i]] == null || $active_players[$pairing[$i]]['player'] == null) {
                         //In a very rare case where a player has played against all remaining players
                         //and the number of active players is even, hence no bye allowed initially
-                        $this->award_bye($player1);
+                        $this->awardBye($player1);
                     } else {
                         $player2 = new Standings($this->name, $active_players[$pairing[$i]]['player']);
                         $this->addPairing($player1, $player2, $this->current_round + 1, 'P');
@@ -1320,7 +1320,7 @@ class Event
                 continue;
             }
             $player1 = new Standings($this->name, $entry->player->name);
-            $this->award_bye($player1);
+            $this->awardBye($player1);
             $player1->matched = 1;
             $player1->save();
         }
@@ -1393,7 +1393,7 @@ class Event
             }
             $counter++;
             if ($players[$counter] == null || $players[$counter]->player == null) {
-                $this->award_bye($playera);
+                $this->awardBye($playera);
             } else {
                 $this->addPairing($playera, $players[$counter], $this->current_round + 1, 'P');
             }
@@ -1412,7 +1412,7 @@ class Event
             $byes_needed = $check - count($players);
             while ($byes_needed > 0) {
                 $bye = rand(0, count($players) - 1);
-                $this->award_bye($players[$bye]);
+                $this->awardBye($players[$bye]);
                 Standings::writeSeed($this->name, $players[$bye]->player, $seedcounter);
                 $seedcounter++;
                 unset($players[$bye]);
@@ -1488,7 +1488,7 @@ class Event
         }
     }
 
-    public function award_bye(Standings $player): void
+    public function awardBye(Standings $player): void
     {
         $this->addPairing($player, $player, $this->current_round + 1, 'BYE');
     }
@@ -1742,7 +1742,7 @@ class Event
         $this->setFinalists($win, $sec, $t4, $t8);
     }
 
-    public function is_full(): bool
+    public function isFull(): bool
     {
         $entries = $this->getEntries();
         $players = count($entries);

@@ -343,7 +343,7 @@ function create_event(): array
         $naming = 'auto';
     }
 
-    $event = Event::CreateEvent(
+    $event = Event::createEvent(
         argStr('year'),
         argStr('month'),
         argStr('day'),

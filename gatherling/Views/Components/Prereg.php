@@ -29,7 +29,7 @@ class Prereg extends Component
         } elseif ($event->hasRegistrant($player->name)) {
             $this->showRegistered = true;
             $this->unregisterLink = 'prereg.php?action=unreg&event=' . rawurlencode($event->name);
-        } elseif ($event->is_full()) {
+        } elseif ($event->isFull()) {
             $this->showFull = true;
         } else {
             $this->showRegister = true;

@@ -42,7 +42,7 @@ if ($event->finalized) {
 }
 
 // check for max registerd players
-if ($event->is_full()) {
+if ($event->isFull()) {
     $prevent_registration = 1;
 }
 
