@@ -6,6 +6,7 @@ namespace Gatherling\Models;
 
 class MetaDto extends Dto
 {
+    public int $id;
     public string $player;
     public string $deckname;
     public string $archetype;

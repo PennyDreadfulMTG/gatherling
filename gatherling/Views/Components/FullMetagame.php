@@ -17,7 +17,7 @@ use function Gatherling\Views\session;
 class FullMetagame extends Component
 {
     public bool $decklistsAreVisible;
-    /** @var array<int, array{numPlayers: int, manaSrc: string, entries: array<int, array{playerLink: PlayerLink, record: string, tribe: string|null, medal: string|null, deckName: string, archetype: string}>}> */
+    /** @var array<int, array{numPlayers: int, manaSrc: string, entries: array<int, array{playerLink: PlayerLink, record: string, tribe: string|null, medal: string|null, deckName: string, deckLink: string, archetype: string}>}> */
     public array $meta;
     /** @var array<int, array{playerLink: PlayerLink, record: string, tribe: string|null}> */
     public array $players;
@@ -72,7 +72,7 @@ class FullMetagame extends Component
         }
         $sql = '
             SELECT
-                player, deckname, archetype, colors, medal, srtordr
+                id, player, deckname, archetype, colors, medal, srtordr
             FROM
                 meta
             ORDER BY
