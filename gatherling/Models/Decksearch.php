@@ -14,15 +14,15 @@ class Decksearch
     /**
      * @var array<string, list<int>>
      */
-    private $_results = [];
+    private $results = [];
 
     /**
      * @var list<int>
      */
-    private array $_final_results = [];
+    private array $finalResults = [];
 
-    private ?string $_eventname;
-    private ?string $_playername;
+    private ?string $eventName;
+    private ?string $playerName;
 
     // holds the current deck id that info is being collected for
 
@@ -61,12 +61,12 @@ class Decksearch
      */
     public function getFinalResults(): bool|array
     {
-        if (count($this->_results) > 0 && count($this->errors) == 0) {
-            $array_keys = array_keys($this->_results);
+        if (count($this->results) > 0 && count($this->errors) == 0) {
+            $array_keys = array_keys($this->results);
             $first_key = array_shift($array_keys);
-            $tmp_results = $this->_results[$first_key];
-            foreach ($this->_results as $key => $value) {
-                $tmp_results = array_intersect($tmp_results, $this->_results[$key]);
+            $tmp_results = $this->results[$first_key];
+            foreach ($this->results as $key => $value) {
+                $tmp_results = array_intersect($tmp_results, $this->results[$key]);
             }
             // check if there was matches, if not set error and return
             if (count($tmp_results) != 0) {
@@ -76,19 +76,19 @@ class Decksearch
                 foreach ($tmp_results as $value) {
                     // check if there is a record in entries
                     $sql = 'select Count(*) FROM entries where deck = ?';
-                    $result = Database::single_result_single_param($sql, 'd', $value);
+                    $result = Database::singleResultSingleParam($sql, 'd', $value);
                     if ($result) {
                         $sql = 'SELECT d.id FROM decks d, entries n, events e WHERE d.id = ? AND d.id = n.deck AND n.event_id = e.id AND e.finalized = 1';
-                        $arr_tmp = Database::single_result_single_param($sql, 'd', $value);
+                        $arr_tmp = Database::singleResultSingleParam($sql, 'd', $value);
                         if (!empty($arr_tmp)) {
-                            array_push($this->_final_results, $arr_tmp);
+                            array_push($this->finalResults, $arr_tmp);
                         }
                     } else {
-                        array_push($this->_final_results, $value);
+                        array_push($this->finalResults, $value);
                     }
                 }
 
-                return $this->_final_results;
+                return $this->finalResults;
             } else {
                 $this->errors[] = '<center><br>Your search query did not have any matches';
 
@@ -107,9 +107,9 @@ class Decksearch
     public function searchByFormat(string $format): void
     {
         $sql = 'SELECT id FROM decks WHERE format = ?';
-        $results = Database::list_result_single_param($sql, 's', $format);
+        $results = Database::listResultSingleParam($sql, 's', $format);
         if (count($results) > 0) {
-            $this->_results['format'] = $results;
+            $this->results['format'] = $results;
         } else {
             $this->errors[] = "<center><br>No decks match the format: $format";
         }
@@ -123,9 +123,9 @@ class Decksearch
     public function searchByPlayer(string $player): void
     {
         $sql = 'SELECT id FROM decks WHERE playername LIKE ?';
-        $results = Database::list_result_single_param($sql, 's', '%'.$player.'%');
+        $results = Database::listResultSingleParam($sql, 's', '%' . $player . '%');
         if (count($results) > 0) {
-            $this->_results['player'] = $results;
+            $this->results['player'] = $results;
         } else {
             $this->errors[] = "<center><br>No decks by the player like: <font color=red>$player</font></center>";
         }
@@ -146,9 +146,9 @@ class Decksearch
         WHERE entries.medal = ?
         ORDER BY DATE(`created_date`) DESC';
 
-        $results = Database::list_result_single_param($sql, 's', $medal);
+        $results = Database::listResultSingleParam($sql, 's', $medal);
         if (count($results) > 0) {
-            $this->_results['medal'] = $results;
+            $this->results['medal'] = $results;
         } else {
             $this->errors[] = "<center><br>No decks found with the medal: <font color=red>$medal</font></center>";
         }
@@ -172,9 +172,9 @@ class Decksearch
         }
 
         $sql = 'SELECT id FROM decks WHERE deck_colors = ?';
-        $results = Database::list_result_single_param($sql, 's', $final_color_str);
+        $results = Database::listResultSingleParam($sql, 's', $final_color_str);
         if (count($results) > 0) {
-            $this->_results['color'] = $results;
+            $this->results['color'] = $results;
         } else {
             $this->errors[] = "<center><br>No decks found matching the colors: <font color=red>$final_color_str</font></center>";
         }
@@ -188,9 +188,9 @@ class Decksearch
     public function searchByArchetype(string $archetype): void
     {
         $sql = 'SELECT id FROM decks WHERE archetype = ?';
-        $results = Database::list_result_single_param($sql, 's', $archetype);
+        $results = Database::listResultSingleParam($sql, 's', $archetype);
         if (count($results) > 0) {
-            $this->_results['archetype'] = $results;
+            $this->results['archetype'] = $results;
         } else {
             $this->errors[] = "<center><br>No decks found matching archetype: <font color=red>$archetype</font></center>";
         }
@@ -209,9 +209,9 @@ class Decksearch
         WHERE events.series = ?
         AND entries.deck ORDER BY DATE(`registered_at`) DESC';
 
-        $results = Database::list_result_single_param($sql, 's', $series);
+        $results = Database::listResultSingleParam($sql, 's', $series);
         if (count($results) > 0) {
-            $this->_results['series'] = $results;
+            $this->results['series'] = $results;
         } else {
             $this->errors[] = "<center><br>No decks found matching series: <font color=red>$series</font></center>";
         }
@@ -229,11 +229,11 @@ class Decksearch
             FROM deckcontents INNER JOIN cards
             on deckcontents.card = cards.id
             WHERE cards.name LIKE ?';
-            $results = Database::list_result_single_param($sql, 's', "%$cardname%");
+            $results = Database::listResultSingleParam($sql, 's', "%$cardname%");
             if (count($results) > 0) {
                 //Remove Duplicate decks
                 $results = array_unique($results);
-                $this->_results['cardname'] = $results;
+                $this->results['cardname'] = $results;
             } else {
                 $this->errors[] = "<center><br>No decks found with the card name like: <font color=red>$cardname</font></center>";
             }
@@ -253,7 +253,7 @@ class Decksearch
         //sanitize the id_arr to protect against sql injection.
         $id_arr = array_filter(array_map('intval', $id_arr));
 
-        $query = 'SELECT id, archetype, name, playername, format, created_date from decks WHERE id IN ('.implode(',', $id_arr).') ORDER BY DATE(`created_date`) DESC';
+        $query = 'SELECT id, archetype, name, playername, format, created_date from decks WHERE id IN (' . implode(',', $id_arr) . ') ORDER BY DATE(`created_date`) DESC';
         $stmt = $db->prepare($query);
         $stmt->execute();
         $stmt->bind_result($id, $archetype, $name, $playername, $format, $created_date);
@@ -272,18 +272,18 @@ class Decksearch
 
         $list = [];
         foreach ($info as $row) {
-            $row['record'] = $this->_getDeckRecord($row['id']);
+            $row['record'] = $this->getDeckRecord($row['id']);
             $list[] = $row;
         }
 
         return $list;
     }
 
-    private function _getDeckRecord(int $deckid): string
+    private function getDeckRecord(int $deckid): string
     {
         // check if there is a record in entries
         $sql = 'select Count(*) FROM entries where deck = ?';
-        $result = Database::single_result_single_param($sql, 'd', $deckid);
+        $result = Database::singleResultSingleParam($sql, 'd', $deckid);
 
         if ($result) {
             $database = Database::getConnection();
@@ -291,12 +291,12 @@ class Decksearch
             $stmt || exit($database->error);
             $stmt->bind_param('d', $deckid);
             $stmt->execute();
-            $stmt->bind_result($this->_eventname, $this->_playername);
+            $stmt->bind_result($this->eventName, $this->playerName);
             $stmt->fetch();
             $stmt->close();
 
-            if (!empty($this->_eventname) && !empty($this->_playername)) {
-                return $this->_recordString();
+            if (!empty($this->eventName) && !empty($this->playerName)) {
+                return $this->recordString();
             } else {
                 return '?-?';
             }
@@ -305,7 +305,7 @@ class Decksearch
         }
     }
 
-    private function _recordString(): string
+    private function recordString(): string
     {
         $wins = 0;
         $losses = 0;
@@ -314,7 +314,7 @@ class Decksearch
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT m.id FROM matches m, subevents s WHERE m.subevent = s.id AND s.parent = ?
         AND (m.playera = ? OR m.playerb = ?) ORDER BY s.timing, m.round');
-        $stmt->bind_param('sss', $this->_eventname, $this->_playername, $this->_playername);
+        $stmt->bind_param('sss', $this->eventName, $this->playerName, $this->playerName);
         $stmt->execute();
         $stmt->bind_result($matchid);
 
@@ -330,9 +330,9 @@ class Decksearch
         }
 
         foreach ($matches as $match) {
-            if ($match->playerWon($this->_playername)) {
+            if ($match->playerWon($this->playerName)) {
                 $wins = $wins + 1;
-            } elseif ($match->playerLost($this->_playername)) {
+            } elseif ($match->playerLost($this->playerName)) {
                 $losses = $losses + 1;
             } else {
                 $draws = $draws + 1;
@@ -340,9 +340,9 @@ class Decksearch
         }
 
         if ($draws == 0) {
-            return $wins.'-'.$losses;
+            return $wins . '-' . $losses;
         } else {
-            return $wins.'-'.$losses.'-'.$draws;
+            return $wins . '-' . $losses . '-' . $draws;
         }
     }
 }

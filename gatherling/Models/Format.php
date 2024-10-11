@@ -142,7 +142,7 @@ class Format
                 $this->is_meta_format
             );
             if ($stmt->fetch() == null) {
-                throw new Exception('Format '.$name.' not found in DB');
+                throw new Exception('Format ' . $name . ' not found in DB');
             }
             $stmt->close();
             $this->card_banlist = $this->getBanList();
@@ -159,14 +159,14 @@ class Format
 
         $cardSets = [];
         if ($set == 'All') {
-            $cardSets = Database::list_result('SELECT name FROM cardsets');
+            $cardSets = Database::listResult('SELECT name FROM cardsets');
         } else {
             $cardSets[] = $set;
         }
 
         foreach ($cardSets as $cardSet) {
             echo "Processing $cardSet<br />";
-            $cardTypes = Database::list_result_single_param("SELECT type
+            $cardTypes = Database::listResultSingleParam("SELECT type
                                                              FROM cards
                                                              WHERE type
                                                              LIKE '%Creature%'
@@ -197,7 +197,7 @@ class Format
 
     public static function isTribeTypeInDatabase(string $type): bool
     {
-        $tribe = Database::single_result_single_param('SELECT name
+        $tribe = Database::singleResultSingleParam('SELECT name
                                            FROM tribes
                                            WHERE name = ?', 's', $type);
         return ($type && $tribe && strcasecmp($tribe, $type) == 0);
@@ -206,7 +206,7 @@ class Format
     public static function doesFormatExist(string $format): bool
     {
         $success = false;
-        $formatName = Database::single_result_single_param('SELECT name FROM formats WHERE name = ?', 's', $format);
+        $formatName = Database::singleResultSingleParam('SELECT name FROM formats WHERE name = ?', 's', $format);
         if ($formatName) {
             $success = true;
         }
@@ -463,16 +463,16 @@ class Format
     public function getLegalCardsets(): array
     {
         if ($this->eternal) {
-            return Database::list_result('SELECT name FROM cardsets');
+            return Database::listResult('SELECT name FROM cardsets');
         }
         if ($this->modern) {
-            return Database::list_result('SELECT name FROM cardsets WHERE modern_legal = 1');
+            return Database::listResult('SELECT name FROM cardsets WHERE modern_legal = 1');
         }
         if ($this->standard) {
-            return Database::list_result('SELECT name FROM cardsets WHERE standard_legal = 1');
+            return Database::listResult('SELECT name FROM cardsets WHERE standard_legal = 1');
         }
 
-        return Database::list_result_single_param('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
+        return Database::listResultSingleParam('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
     }
 
     /** @return ?array<string, string> */
@@ -500,19 +500,19 @@ class Format
     /** @return list<string> */
     public static function getSystemFormats(): array
     {
-        return Database::list_result_single_param('SELECT name FROM formats WHERE type = ?', 's', 'System');
+        return Database::listResultSingleParam('SELECT name FROM formats WHERE type = ?', 's', 'System');
     }
 
     /** @return list<string> */
     public static function getPublicFormats(): array
     {
-        return Database::list_result_single_param('SELECT name FROM formats WHERE type = ?', 's', 'Public');
+        return Database::listResultSingleParam('SELECT name FROM formats WHERE type = ?', 's', 'Public');
     }
 
     /** @return list<string> */
     public static function getPrivateFormats(string $seriesName): array
     {
-        return Database::list_result_double_param(
+        return Database::listResultDoubleParam(
             'SELECT name FROM formats WHERE type = ? AND series_name = ?',
             'ss',
             'Private',
@@ -523,17 +523,17 @@ class Format
     /** @return list<string> */
     public static function getAllFormats(): array
     {
-        return Database::list_result('SELECT name FROM formats');
+        return Database::listResult('SELECT name FROM formats');
     }
 
     /** @return list<string> */
     public function getCoreCardsets(): array
     {
-        $legalSets = Database::list_result_single_param('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
+        $legalSets = Database::listResultSingleParam('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
 
         $legalCoreSets = [];
         foreach ($legalSets as $legalSet) {
-            $setType = Database::single_result_single_param('SELECT type FROM cardsets WHERE name = ?', 's', $legalSet);
+            $setType = Database::singleResultSingleParam('SELECT type FROM cardsets WHERE name = ?', 's', $legalSet);
             if (strcmp($setType, 'Core') == 0) {
                 $legalCoreSets[] = $legalSet;
             }
@@ -545,11 +545,11 @@ class Format
     /** @return list<string> */
     public function getBlockCardsets(): array
     {
-        $legalSets = Database::list_result_single_param('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
+        $legalSets = Database::listResultSingleParam('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
 
         $legalBlockSets = [];
         foreach ($legalSets as $legalSet) {
-            $setType = Database::single_result_single_param('SELECT type FROM cardsets WHERE name = ?', 's', $legalSet);
+            $setType = Database::singleResultSingleParam('SELECT type FROM cardsets WHERE name = ?', 's', $legalSet);
             if (strcmp($setType, 'Block') == 0) {
                 $legalBlockSets[] = $legalSet;
             }
@@ -561,11 +561,11 @@ class Format
     /** @return list<string> */
     public function getExtraCardsets(): array
     {
-        $legalSets = Database::list_result_single_param('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
+        $legalSets = Database::listResultSingleParam('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
 
         $legalExtraSets = [];
         foreach ($legalSets as $legalSet) {
-            $setType = Database::single_result_single_param('SELECT type FROM cardsets WHERE name = ?', 's', $legalSet);
+            $setType = Database::singleResultSingleParam('SELECT type FROM cardsets WHERE name = ?', 's', $legalSet);
             if (strcmp($setType, 'Extra') == 0) {
                 $legalExtraSets[] = $legalSet;
             }
@@ -577,7 +577,7 @@ class Format
     /** @return list<string> */
     public function getBanList(): array
     {
-        return Database::list_result_single_param('SELECT card_name
+        return Database::listResultSingleParam('SELECT card_name
                                                    FROM bans
                                                    WHERE format = ?
                                                    AND allowed = 0
@@ -587,7 +587,7 @@ class Format
     /** @return list<string> */
     public function getTribesBanned(): array
     {
-        return Database::list_result_single_param('SELECT name
+        return Database::listResultSingleParam('SELECT name
                                                    FROM tribe_bans
                                                    WHERE format = ?
                                                    AND allowed = 0
@@ -597,7 +597,7 @@ class Format
     /** @return list<string> */
     public function getSubTypesBanned(): array
     {
-        return Database::list_result_single_param('SELECT name
+        return Database::listResultSingleParam('SELECT name
                                                    FROM subtype_bans
                                                    WHERE format = ?
                                                    AND allowed = 0
@@ -607,7 +607,7 @@ class Format
     /** @return list<string> */
     public function getLegalList(): array
     {
-        return Database::list_result_single_param(
+        return Database::listResultSingleParam(
             'SELECT card_name
                                                    FROM bans
                                                    WHERE format = ? AND allowed = 1
@@ -620,7 +620,7 @@ class Format
     /** @return list<string> */
     public function getTribesAllowed(): array
     {
-        return Database::list_result_single_param(
+        return Database::listResultSingleParam(
             'SELECT name
                                                    FROM tribe_bans
                                                    WHERE format = ? AND allowed = 1
@@ -633,7 +633,7 @@ class Format
     /** @return list<string> */
     public function getRestrictedList(): array
     {
-        return Database::list_result_single_param(
+        return Database::listResultSingleParam(
             'SELECT card_name
                                                    FROM restricted
                                                    WHERE format = ?
@@ -646,7 +646,7 @@ class Format
     /** @return list<string> */
     public function getRestrictedTotribeList(): array
     {
-        return Database::list_result_single_param(
+        return Database::listResultSingleParam(
             'SELECT card_name
                                                    FROM restrictedtotribe
                                                    WHERE format = ? AND allowed = 1
@@ -668,13 +668,13 @@ class Format
     /** @return list<string> */
     public function getFormats(): array
     {
-        return Database::list_result('SELECT name FROM formats');
+        return Database::listResult('SELECT name FROM formats');
     }
 
     /** @return list<string> */
     public static function getTribesList(): array
     {
-        return Database::list_result('SELECT name FROM tribes ORDER BY name');
+        return Database::listResult('SELECT name FROM tribes ORDER BY name');
     }
 
     public function isCardLegalByRarity(string $cardName): bool
@@ -747,7 +747,7 @@ class Format
 
     public function isCardOnBanList(string $card): bool
     {
-        return count(Database::list_result_double_param(
+        return count(Database::listResultDoubleParam(
             'SELECT card_name
                                                          FROM bans
                                                          WHERE (format = ?
@@ -761,7 +761,7 @@ class Format
 
     public function isCardOnLegalList(string $card): bool
     {
-        return count(Database::list_result_double_param(
+        return count(Database::listResultDoubleParam(
             'SELECT card_name
                                                          FROM bans
                                                          WHERE (format = ?
@@ -775,7 +775,7 @@ class Format
 
     public function isCardOnRestrictedList(string $card): bool
     {
-        return count(Database::list_result_double_param(
+        return count(Database::listResultDoubleParam(
             'SELECT card_name
                                                          FROM restricted
                                                          WHERE (format = ?
@@ -788,7 +788,7 @@ class Format
 
     public function isCardOnRestrictedToTribeList(string $card): bool
     {
-        return count(Database::list_result_double_param(
+        return count(Database::listResultDoubleParam(
             'SELECT card_name
                                                          FROM restrictedtotribe
                                                          WHERE (format = ?
@@ -858,7 +858,7 @@ class Format
     public static function getCardType(string $card): string
     {
         // Selecting card type for card = $card
-        $cardType = Database::single_result_single_param('SELECT type
+        $cardType = Database::singleResultSingleParam('SELECT type
                                                           FROM cards
                                                           WHERE name = ?', 's', $card);
 
@@ -987,7 +987,7 @@ class Format
                 // current routine has two logic errors
                 // 1) Cards that have more than one printing should only be counted once
                 // 2) Can't remember what the second one is... blah!
-                $frequency = Database::single_result("SELECT Count(*) FROM cards WHERE type LIKE '%{$Type}%'");
+                $frequency = Database::singleResult("SELECT Count(*) FROM cards WHERE type LIKE '%{$Type}%'");
                 $tribesTied[$Type] = $frequency;
             }
             asort($tribesTied); // sorts tribe size by value from low to high for tie breaker
@@ -1013,7 +1013,7 @@ class Format
         if ($this->underdog) {
             echo "Tribe is: $underdogKey<br />";
             if ($underdogKey != 'Shapeshifter') {
-                $frequency = Database::single_result("SELECT Count(*) FROM cards WHERE type LIKE '%{$underdogKey}%'");
+                $frequency = Database::singleResult("SELECT Count(*) FROM cards WHERE type LIKE '%{$underdogKey}%'");
                 if ($frequency < 4) {
                     echo "$underdogKey is a 3 card tribe<br />";
                     if ($subTypeChangeling > 8) {
@@ -1079,7 +1079,7 @@ class Format
                 // current routine has two logic errors
                 // 1) Cards that have more than one printing should only be counted once
                 // 2) Can't remember what the second one is... blah!
-                $frequency = Database::single_result("SELECT Count(*) FROM cards WHERE type LIKE '%{$Type}%'");
+                $frequency = Database::singleResult("SELECT Count(*) FROM cards WHERE type LIKE '%{$Type}%'");
                 $tribesTied[$Type] = $frequency;
             }
             asort($tribesTied); // sorts tribe size by value from low to high for tie breaker
@@ -1227,7 +1227,7 @@ class Format
 
     public static function isCardLegendary(string $card): bool
     {
-        return count(Database::list_result_single_param(
+        return count(Database::listResultSingleParam(
             "SELECT id FROM cards WHERE name = ? AND type LIKE '%Legendary%'",
             's',
             $card
@@ -1504,21 +1504,21 @@ class Format
         // When you ban a card, don't you want to ban all versions of it? Not just one version?
         // so it makes more sense to ban by card name. But I will implement cardID's for now since that is how the
         // database was set up.
-        return Database::single_result_single_param('SELECT id FROM cards WHERE name = ?', 's', $cardname);
+        return Database::singleResultSingleParam('SELECT id FROM cards WHERE name = ?', 's', $cardname);
     }
 
     public static function getCardName(string $cardname): ?string
     {
         // this is used to return the name of the card as it appears in the database
         // otherwise the ban list will have cards on it like rOnCoR, RONCOR, rONCOR, etc
-        return Database::single_result_single_param('SELECT name FROM cards WHERE name = ?', 's', $cardname);
+        return Database::singleResultSingleParam('SELECT name FROM cards WHERE name = ?', 's', $cardname);
     }
 
     public static function getCardNameFromPartialDFC(string $cardname): ?string
     {
         // this is used to return the name of the card as it appears in the database
         // otherwise the ban list will have cards on it like rOnCoR, RONCOR, rONCOR, etc
-        return Database::single_result_single_param('SELECT name FROM cards WHERE name LIKE ?', 's', $cardname.'/%');
+        return Database::singleResultSingleParam('SELECT name FROM cards WHERE name LIKE ?', 's', $cardname . '/%');
     }
 
     public function insertNewLegalSet(string $cardsetName): bool

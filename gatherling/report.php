@@ -129,7 +129,7 @@ switch ($dispmode) {
                 } elseif ($player_number == 'a' and ($match->playera_wins + $match->playera_losses) > 0) {
                     // Also Fine
                 } else {
-                    if ($match->player_reportable_check() == true) {
+                    if ($match->playerReportableCheck() == true) {
                         $can_drop = false;
                     }
                 }
@@ -261,7 +261,7 @@ function print_verify_resultForm(string $report, int $match_id, string $player, 
     echo "<center style=\"color: red; font-weight: bold;\">Please confirm your entry.</center></p>\n";
     echo '<center><h4>';
     if ($opponent != '0') {
-        echo 'Opponent: '.$opponent.'<br />';
+        echo 'Opponent: ' . $opponent . '<br />';
     }
     switch ($report) {
         case 'W20':

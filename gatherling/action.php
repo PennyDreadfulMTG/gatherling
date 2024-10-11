@@ -30,11 +30,11 @@ if (!is_null($player)) {
                 $mostRecentEvent = $series->mostRecentEvent();
                 $nameMostRecent = $mostRecentEvent ? $mostRecentEvent->name : null;
                 if (is_null($nameMostRecent) || $nameMostRecent == '') {
-                    $createLink = 'event.php?mode=Create Next Event&name='.$series->name.' 1.00';
+                    $createLink = 'event.php?mode=Create Next Event&name=' . $series->name . ' 1.00';
                 } else {
-                    $createLink = 'event.php?mode=Create Next Event&name='.$nameMostRecent;
+                    $createLink = 'event.php?mode=Create Next Event&name=' . $nameMostRecent;
                 }
-                $message = $message."<a href=\"$createLink\">Create one</a> or set the series as inactive.";
+                $message = $message . "<a href=\"$createLink\">Create one</a> or set the series as inactive.";
             }
         }
         $recent = $series->mostRecentEvent();
@@ -86,12 +86,12 @@ if (!is_null($player)) {
                 $message = "You have an unreported match in $event->name vs. ";
                 if ($event->decklistsVisible()) {
                     $opp_entry = Entry::findByEventAndPlayer($event->id, $oppplayer->name);
-                    $message = $message.$oppplayer->linkTo($event->client).' ('.$opp_entry->deck->linkTo().').';
+                    $message = $message . $oppplayer->linkTo($event->client) . ' (' . $opp_entry->deck->linkTo() . ').';
                 } else {
-                    $message = $message.$oppplayer->linkTo($event->client).'.';
+                    $message = $message . $oppplayer->linkTo($event->client) . '.';
                 }
-                if ($match->player_reportable_check() == true) {
-                    $message = $message.'  <a href="report.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
+                if ($match->playerReportableCheck() == true) {
+                    $message = $message . '  <a href="report.php?mode=submit_result&match_id=' . $match->id . '&player=' . $player_number . '">(Report Result)</a>';
                 }
             }
         } elseif ($match->result != 'BYE' && $match->verification == 'failed') {
@@ -103,9 +103,9 @@ if (!is_null($player)) {
             }
             $oppplayer = new Player($opp);
 
-            if ($match->player_reportable_check() == true) {
-                $message = "The reported result wasn't consistent with your opponent's, please resubmit $event->name vs. ".$oppplayer->linkTo().'.';
-                $message = $message.'<a href="report.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
+            if ($match->playerReportableCheck() == true) {
+                $message = "The reported result wasn't consistent with your opponent's, please resubmit $event->name vs. " . $oppplayer->linkTo() . '.';
+                $message = $message . '<a href="report.php?mode=submit_result&match_id=' . $match->id . '&player=' . $player_number . '">(Report Result)</a>';
             } else {
                 $message = "You have an unreported match in $match->eventname.";
             }

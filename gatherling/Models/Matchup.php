@@ -286,7 +286,7 @@ class Matchup
     // Returns a count of how many matches there are total.
     public static function count(): int
     {
-        return Database::single_result('SELECT count(id) FROM matches');
+        return Database::singleResult('SELECT count(id) FROM matches');
     }
 
     // Saves a report from a player on their match results.
@@ -452,7 +452,7 @@ class Matchup
             $playera_standing->save();
             $playerb_standing->save();
         }
-        $this->finalize_match($this->result, $this->id);
+        $this->finalizeMatch($this->result, $this->id);
     }
 
     // temp, will fix later
@@ -529,7 +529,7 @@ class Matchup
         $playerb_standing->save();
     }
 
-    public function finalize_match(string $winner, int $match_id): void
+    public function finalizeMatch(string $winner, int $match_id): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('UPDATE matches SET result = ? WHERE id = ?');
@@ -538,7 +538,7 @@ class Matchup
         $stmt->close();
     }
 
-    public function player_reportable_check(): bool
+    public function playerReportableCheck(): bool
     {
         $event = new Event($this->getEventNamebyMatchid());
         return $event->player_reportable == 1;

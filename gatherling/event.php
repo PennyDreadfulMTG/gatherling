@@ -244,7 +244,7 @@ function insertEvent(): Event
         $_POST['private'] = '0';
     }
 
-    $event = Event::CreateEvent(
+    $event = Event::createEvent(
         post()->string('year'),
         post()->string('month'),
         post()->string('day'),

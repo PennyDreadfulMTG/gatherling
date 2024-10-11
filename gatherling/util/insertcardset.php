@@ -11,7 +11,7 @@ use function Gatherling\Views\server;
 set_time_limit(0);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-require_once __DIR__.'/../lib.php';
+require_once __DIR__ . '/../lib.php';
 
 function main(): void
 {

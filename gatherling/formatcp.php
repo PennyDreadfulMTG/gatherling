@@ -92,7 +92,7 @@ function main(): void
 
 function handleAction(string $seriesName): Component
 {
-    if (!isset($_POST['action']) ||$_POST['action'] == 'Continue' || $_POST['action'] == 'Load Format') {
+    if (!isset($_POST['action']) || $_POST['action'] == 'Continue' || $_POST['action'] == 'Load Format') {
         return new NullComponent();
     }
     if ($_POST['action'] == 'New') {

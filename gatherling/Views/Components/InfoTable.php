@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Views\Components;
 
 use Gatherling\Models\Player;
@@ -80,6 +82,6 @@ class InfoTable extends Component
         $this->numMatches = count($matches);
         $this->email = $player->emailAddress;
         $this->emailIsPublic = $player->emailIsPublic();
-        $this->timeZone = $player->time_zone() ?? '';
+        $this->timeZone = $player->timeZone() ?? '';
     }
 }

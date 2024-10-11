@@ -196,5 +196,4 @@ class CardSet
 
         return $finalList;
     }
-
 }

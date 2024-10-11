@@ -140,7 +140,7 @@ class Event
                 $this->client
             );
             if ($stmt->fetch() == null) {
-                throw new Exception('Event '.$name.' not found in DB');
+                throw new Exception('Event ' . $name . ' not found in DB');
             }
             $stmt->close();
         }
@@ -187,7 +187,7 @@ class Event
         return "Gatherling/Event($this->name)";
     }
 
-    public static function CreateEvent(
+    public static function createEvent(
         string $year,
         string $month,
         string $day,
@@ -416,7 +416,7 @@ class Event
 
     public function getPlacePlayer(string $placing = '1st'): ?string
     {
-        $playername = Database::db_query_single('SELECT n.player from entries n, events e
+        $playername = Database::dbQuerySingle('SELECT n.player from entries n, events e
                                              WHERE n.event_id = e.id
                                              AND n.medal = ?
                                              AND e.name = ?', 'ss', $placing, $this->name);
@@ -433,7 +433,7 @@ class Event
     public function getDecks(): array
     {
         $decks = [];
-        $deckids = Database::list_result_single_param('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
+        $deckids = Database::listResultSingleParam('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
 
         foreach ($deckids as $deckid) {
             $decks[] = new Deck($deckid);
@@ -505,7 +505,7 @@ class Event
     public function getTrophyImageLink(): string
     {
         return "<a href=\"deck.php?mode=view&event={$this->id}\" class=\"borderless\">\n"
-           .self::trophy_image_tag($this->name)."\n</a>\n";
+           . self::trophyImageTag($this->name) . "\n</a>\n";
     }
 
     public function isHost(string $name): bool
@@ -557,13 +557,13 @@ class Event
 
     public function getPlayerCount(): int
     {
-        return Database::single_result_single_param('SELECT count(*) FROM entries WHERE event_id = ?', 'd', $this->id);
+        return Database::singleResultSingleParam('SELECT count(*) FROM entries WHERE event_id = ?', 'd', $this->id);
     }
 
     /** @return list<string> */
     public function getPlayers(): array
     {
-        return Database::list_result_single_param('SELECT player FROM entries WHERE event_id = ? ORDER BY medal, player', 'd', $this->id);
+        return Database::listResultSingleParam('SELECT player FROM entries WHERE event_id = ? ORDER BY medal, player', 'd', $this->id);
     }
 
     /** @return list<string> */
@@ -625,7 +625,7 @@ class Event
     /** @return list<string> */
     public function getEntriesByDateTime(): array
     {
-        return Database::list_result_single_param(
+        return Database::listResultSingleParam(
             'SELECT player
                                                  FROM entries
                                                  WHERE event_id = ?
@@ -638,7 +638,7 @@ class Event
     /** @return list<string> */
     public function getEntriesByMedal(): array
     {
-        return Database::list_result_single_param(
+        return Database::listResultSingleParam(
             'SELECT player
                                              FROM entries
                                              WHERE event_id = ?
@@ -743,14 +743,14 @@ class Event
         if ($round == -1) {
             $round = $this->current_round;
         }
-        Database::db_query('UPDATE entries SET drop_round = ? WHERE event_id = ? AND player = ?', 'dds', $round, $this->id, $playername);
-        Database::db_query('UPDATE standings SET active = 0 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
+        Database::dbQuery('UPDATE entries SET drop_round = ? WHERE event_id = ? AND player = ?', 'dds', $round, $this->id, $playername);
+        Database::dbQuery('UPDATE standings SET active = 0 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
     }
 
     public function undropPlayer(string $playername): void
     {
-        Database::db_query('UPDATE entries SET drop_round = 0 WHERE event_id = ? AND player = ?', 'ds', $this->id, $playername);
-        Database::db_query('UPDATE standings SET active = 1 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
+        Database::dbQuery('UPDATE entries SET drop_round = 0 WHERE event_id = ? AND player = ?', 'ds', $this->id, $playername);
+        Database::dbQuery('UPDATE standings SET active = 1 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
     }
 
     /** @return list<Matchup> */
@@ -833,7 +833,7 @@ class Event
             $subevnum = 1;
             $roundnum = $this->current_round;
         }
-        $count = Database::db_query_single('SELECT COUNT(m.id) FROM matches m, subevents s, events e
+        $count = Database::dbQuerySingle('SELECT COUNT(m.id) FROM matches m, subevents s, events e
             WHERE m.subevent = s.id AND s.parent = e.name AND e.name = ? AND
             s.timing = ? AND m.round = ? AND (m.playera = ? OR m.playerb = ?)', 'sddss', $this->name, $subevnum, $roundnum, $player_name, $player_name);
 
@@ -1037,19 +1037,19 @@ class Event
     public function makeLinkArgs(string $text): array
     {
         return [
-            'link' => 'event.php?name='.rawurlencode($this->name),
+            'link' => 'event.php?name=' . rawurlencode($this->name),
             'text' => $text,
         ];
     }
 
     public static function count(): int
     {
-        return Database::single_result('SELECT count(name) FROM events');
+        return Database::singleResult('SELECT count(name) FROM events');
     }
 
     public static function largestEventNum(): int
     {
-        return Database::single_result('SELECT max(number) FROM events where number != 128'); // 128 is "special"
+        return Database::singleResult('SELECT max(number) FROM events where number != 128'); // 128 is "special"
     }
 
     /** @return list<self> */
@@ -1133,7 +1133,7 @@ class Event
         $stmt->close();
     }
 
-    public static function trophy_image_tag(string $eventname): string
+    public static function trophyImageTag(string $eventname): string
     {
         return "<img style=\"border-width: 0px; max-width: 260px\" src=\"{self::trophySrc($eventname)}\" />";
     }
@@ -1185,7 +1185,7 @@ class Event
                     $round = 'main';
                 }
 
-                $lock_db = Database::get_lock((string) $subevent_id);
+                $lock_db = Database::getLock((string) $subevent_id);
                 if ($lock_db !== 1) {
                     return false;
                 }
@@ -1208,7 +1208,7 @@ class Event
                         break;
                 }
 
-                Database::release_lock((string) $subevent_id);
+                Database::releaseLock((string) $subevent_id);
             } else {
                 $this->active = 0;
                 $this->finalized = 1;
@@ -1277,11 +1277,11 @@ class Event
                 if ($active_players[$i] != null && !$active_players[$i]['paired']) {
                     $player1 = new Standings($this->name, $active_players[$i]['player']);
                     if (count($bye_data) > 0 && $active_players[$pairing[$i]]['player'] == $bye_data['player']) {
-                        $this->award_bye($player1);
+                        $this->awardBye($player1);
                     } elseif ($active_players[$pairing[$i]] == null || $active_players[$pairing[$i]]['player'] == null) {
                         //In a very rare case where a player has played against all remaining players
                         //and the number of active players is even, hence no bye allowed initially
-                        $this->award_bye($player1);
+                        $this->awardBye($player1);
                     } else {
                         $player2 = new Standings($this->name, $active_players[$pairing[$i]]['player']);
                         $this->addPairing($player1, $player2, $this->current_round + 1, 'P');
@@ -1320,7 +1320,7 @@ class Event
                 continue;
             }
             $player1 = new Standings($this->name, $entry->player->name);
-            $this->award_bye($player1);
+            $this->awardBye($player1);
             $player1->matched = 1;
             $player1->save();
         }
@@ -1393,7 +1393,7 @@ class Event
             }
             $counter++;
             if ($players[$counter] == null || $players[$counter]->player == null) {
-                $this->award_bye($playera);
+                $this->awardBye($playera);
             } else {
                 $this->addPairing($playera, $players[$counter], $this->current_round + 1, 'P');
             }
@@ -1412,7 +1412,7 @@ class Event
             $byes_needed = $check - count($players);
             while ($byes_needed > 0) {
                 $bye = rand(0, count($players) - 1);
-                $this->award_bye($players[$bye]);
+                $this->awardBye($players[$bye]);
                 Standings::writeSeed($this->name, $players[$bye]->player, $seedcounter);
                 $seedcounter++;
                 unset($players[$bye]);
@@ -1488,7 +1488,7 @@ class Event
         }
     }
 
-    public function award_bye(Standings $player): void
+    public function awardBye(Standings $player): void
     {
         $this->addPairing($player, $player, $this->current_round + 1, 'BYE');
     }
@@ -1724,25 +1724,32 @@ class Event
         switch ($medalCount) {
             case 8:
                 $t8[3] = $players[7]->player;
+                // Intentional fallthrough
             case 7:
                 $t8[2] = $players[6]->player;
+                // Intentional fallthrough
             case 6:
                 $t8[1] = $players[5]->player;
+                // Intentional fallthrough
             case 5:
                 $t8[0] = $players[4]->player;
+                // Intentional fallthrough
             case 4:
                 $t4[1] = $players[3]->player;
+                // Intentional fallthrough
             case 3:
                 $t4[0] = $players[2]->player;
+                // Intentional fallthrough
             case 2:
                 $sec = $players[1]->player;
+                // Intentional fallthrough
             case 1:
                 $win = $players[0]->player;
         }
         $this->setFinalists($win, $sec, $t4, $t8);
     }
 
-    public function is_full(): bool
+    public function isFull(): bool
     {
         $entries = $this->getEntries();
         $players = count($entries);
@@ -1798,7 +1805,7 @@ class Event
 
     public function updateDecksFormat(string $format): void
     {
-        $deckIDs = Database::list_result_single_param('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
+        $deckIDs = Database::listResultSingleParam('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
 
         if (count($deckIDs)) {
             $db = Database::getConnection();
@@ -1826,7 +1833,7 @@ class Event
 
         $ret = $this->toEnglish($this->mainstruct, $this->mainrounds, false);
         if ($this->finalrounds > 0) {
-            $ret = $ret.' followed by ' . $this->toEnglish($this->finalstruct, $this->finalrounds, true);
+            $ret = $ret . ' followed by ' . $this->toEnglish($this->finalstruct, $this->finalrounds, true);
         }
 
         return $ret;

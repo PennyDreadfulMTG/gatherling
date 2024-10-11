@@ -148,11 +148,11 @@ class Deck
         //     l
         // Find subevent id     - ignores sub-subevents like finals, which have the same name but different subevent id
         if (!is_null($this->eventname)) {
-            $this->format = Database::single_result_single_param('SELECT  events.format
+            $this->format = Database::singleResultSingleParam('SELECT  events.format
                                                                FROM entries INNER JOIN events
                                                                ON entries.event_id = events.id
                                                                WHERE entries.deck = ?', 'd', $this->id);
-            $this->subeventid = (int) Database::single_result_single_param('SELECT id
+            $this->subeventid = (int) Database::singleResultSingleParam('SELECT id
                                                                    FROM subevents
                                                                    WHERE parent = ?', 's', $this->eventname);
         } else {
@@ -198,7 +198,7 @@ class Deck
      */
     public static function getArchetypes(): array
     {
-        return Database::list_result('SELECT name FROM archetypes WHERE priority > 0 ORDER BY priority DESC, name');
+        return Database::listResult('SELECT name FROM archetypes WHERE priority > 0 ORDER BY priority DESC, name');
     }
 
     public function getEntry(): Entry
@@ -221,7 +221,7 @@ class Deck
         $str = '';
         foreach ($count as $color => $n) {
             if ($n > 0) {
-                $str = $str.image_tag("mana{$color}.png");
+                $str = $str . image_tag("mana{$color}.png");
             }
         }
 
@@ -556,7 +556,7 @@ class Deck
 
         // had to put this here since the constructor doesn't run entirely when a new deck is created
         if (!is_null($this->event_id) && is_null($this->format)) {
-            $this->format = Database::single_result_single_param('SELECT format
+            $this->format = Database::singleResultSingleParam('SELECT format
                                                                FROM events
                                                                WHERE id = ?', 'd', $this->event_id);
         }
@@ -584,7 +584,7 @@ class Deck
                 $db->rollback();
                 $db->autocommit(true);
 
-                throw new Exception('Entry for '.$this->playername.' in '.$this->eventname.' not found');
+                throw new Exception('Entry for ' . $this->playername . ' in ' . $this->eventname . ' not found');
             }
         } else {
             $stmt = $db->prepare('UPDATE decks SET archetype = ?, name = ?, format = ?, tribe = ?, deck_colors = ?, notes = ? WHERE id = ?');
@@ -596,7 +596,7 @@ class Deck
                 $db->rollback();
                 $db->autocommit(true);
 
-                throw new Exception('Can\'t update deck '.$this->id);
+                throw new Exception('Can\'t update deck ' . $this->id);
             }
             $format = new Format($this->format);
         }
@@ -836,7 +836,7 @@ class Deck
             $db->rollback();
             $db->autocommit(true);
 
-            throw new Exception('Can\'t update deck '.$this->id);
+            throw new Exception('Can\'t update deck ' . $this->id);
         }
 
         $this->deck_contents_cache = implode('|', array_merge(
@@ -895,9 +895,9 @@ class Deck
         // Autonamer Function
         if ($this->name == 'Temp') {
             if ($format->tribal) {
-                $this->name = strtoupper($this->deck_color_str).' '.$this->tribe;
+                $this->name = strtoupper($this->deck_color_str) . ' ' . $this->tribe;
             } else {
-                $this->name = strtoupper($this->deck_color_str).' '.$this->archetype;
+                $this->name = strtoupper($this->deck_color_str) . ' ' . $this->archetype;
             }
             $stmt = $db->prepare('UPDATE decks set name = ? WHERE id = ?');
             $stmt->bind_param('ss', $this->name, $this->id);
@@ -909,7 +909,7 @@ class Deck
 
     public function getTribe(): ?string
     {
-        return Database::single_result_single_param('SELECT tribe FROM decks WHERE id = ?', 'd', $this->id);
+        return Database::singleResultSingleParam('SELECT tribe FROM decks WHERE id = ?', 'd', $this->id);
     }
 
     /**
@@ -971,17 +971,17 @@ class Deck
         sort($cards, SORT_STRING);
         $maindeckStr = '';
         foreach ($cards as $cardname) {
-            $maindeckStr .= $this->maindeck_cards[$cardname].$cardname;
+            $maindeckStr .= $this->maindeck_cards[$cardname] . $cardname;
         }
         $this->deck_hash = sha1($maindeckStr);
         $sideboardStr = '';
         $cards = array_keys($this->sideboard_cards);
         sort($cards, SORT_STRING);
         foreach ($cards as $cardname) {
-            $sideboardStr .= $this->sideboard_cards[$cardname].$cardname;
+            $sideboardStr .= $this->sideboard_cards[$cardname] . $cardname;
         }
         $this->sideboard_hash = sha1($sideboardStr);
-        $this->whole_hash = sha1($maindeckStr.'<sb>'.$sideboardStr);
+        $this->whole_hash = sha1($maindeckStr . '<sb>' . $sideboardStr);
         $db = Database::getConnection();
         $stmt = $db->prepare('UPDATE decks SET sideboard_hash = ?, deck_hash = ?, whole_hash = ? where id = ?');
         $stmt->bind_param('sssd', $this->sideboard_hash, $this->deck_hash, $this->whole_hash, $this->id);

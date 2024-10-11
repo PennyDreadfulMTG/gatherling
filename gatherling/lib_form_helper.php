@@ -106,7 +106,7 @@ function leagueOpponentDropMenu(string $eventname, int $round, Player $player, i
 {
     $event = new Event($eventname);
     $player_standings = new Standings($eventname, $player->name);
-    $playernames = $player_standings->League_getAvailable_Opponents($subevent, $round, $event->leagueLength());
+    $playernames = $player_standings->getAvailableLeagueOpponents($subevent, $round, $event->leagueLength());
 
     echo '<select class="inputbox" name="opponent"> Opponent';
 

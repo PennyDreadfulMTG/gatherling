@@ -233,7 +233,7 @@ class Standings
     }
 
     /** @return list<string> */
-    public function League_getAvailable_Opponents(int $subevent, int $round, int $league_length): array
+    public function getAvailableLeagueOpponents(int $subevent, int $round, int $league_length): array
     {
         $opponentsAlreadyFaced = [];
         $allPlayers = [];
@@ -262,7 +262,7 @@ class Standings
             }
             $stmt->close();
         }
-        $structure = Database::single_result_single_param('SELECT `type` FROM subevents WHERE id = ?', 'd', $subevent);
+        $structure = Database::singleResultSingleParam('SELECT `type` FROM subevents WHERE id = ?', 'd', $subevent);
         if ($structure == 'League Match' && count($opponentsAlreadyFaced) >= 1) {
             return [];
         }
@@ -270,7 +270,7 @@ class Standings
             return [];
         }
         // Get all opponents who haven't dropped from event and exclude myself
-        $allPlayers = Database::list_result_double_param('SELECT player
+        $allPlayers = Database::listResultDoubleParam('SELECT player
                                                           FROM standings
                                                           WHERE event = ?
                                                           AND active = 1

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-require_once __DIR__.'/lib.php';
+require_once __DIR__ . '/lib.php';
 
 global $CONFIG;
 
 $provider = new \Wohali\OAuth2\Client\Provider\Discord([
     'clientId'     => $CONFIG['DISCORD_CLIENT_ID'],
     'clientSecret' => $CONFIG['DISCORD_CLIENT_SECRET'],
-    'redirectUri'  => $CONFIG['base_url'].'auth.php',
+    'redirectUri'  => $CONFIG['base_url'] . 'auth.php',
 ]);
 
 function load_cached_token(): \League\OAuth2\Client\Token\AccessToken
@@ -27,7 +27,7 @@ function get_user_guilds(\League\OAuth2\Client\Token\AccessToken $token): array
 {
     global $provider;
 
-    $guildsRequest = $provider->getAuthenticatedRequest('GET', $provider->getResourceOwnerDetailsUrl($token).'/guilds', $token);
+    $guildsRequest = $provider->getAuthenticatedRequest('GET', $provider->getResourceOwnerDetailsUrl($token) . '/guilds', $token);
 
     return $provider->getParsedResponse($guildsRequest);
 }
@@ -36,10 +36,10 @@ function debug_info(\League\OAuth2\Client\Token\AccessToken $token): void
 {
     // Show some token details
     echo '<h2>Token details:</h2>';
-    echo 'Token: '.$token->getToken().'<br/>';
-    echo 'Refresh token: '.$token->getRefreshToken().'<br/>';
-    echo 'Expires: '.$token->getExpires().' - ';
-    echo($token->hasExpired() ? 'expired' : 'not expired').'<br/>';
+    echo 'Token: ' . $token->getToken() . '<br/>';
+    echo 'Refresh token: ' . $token->getRefreshToken() . '<br/>';
+    echo 'Expires: ' . $token->getExpires() . ' - ';
+    echo($token->hasExpired() ? 'expired' : 'not expired') . '<br/>';
     echo 'Values: <br/>';
     foreach ($token->getValues() as $key => $value) {
         echo "$key=$value<br/>";

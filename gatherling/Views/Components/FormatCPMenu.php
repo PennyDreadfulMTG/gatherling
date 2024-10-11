@@ -23,7 +23,7 @@ class FormatCPMenu extends Component
         $this->formatSettingsLink = "formatcp.php?view=settings&format={$escaped}";
         $this->bAndRLink = "formatcp.php?view=bandr&format={$escaped}";
         if ($activeFormat->tribal) {
-            $this->tribalLink= "formatcp.php?view=tribal&format={$escaped}";
+            $this->tribalLink = "formatcp.php?view=tribal&format={$escaped}";
         }
         if ($activeFormat->eternal) {
             $this->restrictedTooltip = new Tooltip('Legal Sets', 'All sets are legal, as this is an Eternal format');

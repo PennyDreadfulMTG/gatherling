@@ -68,7 +68,7 @@ class Player
             $this->mtgo_username
         );
         if ($stmt->fetch() == null) {
-            throw new Exception('Player '.$name.' is not found.');
+            throw new Exception('Player ' . $name . ' is not found.');
         }
         $stmt->close();
     }
@@ -305,7 +305,7 @@ class Player
         return (bool) $this->emailPrivacy;
     }
 
-    public function time_zone(): ?string
+    public function timeZone(): ?string
     {
         switch ($this->timezone) {
             case -12:
@@ -404,7 +404,7 @@ class Player
         if ($seriesName == '') {
             return ($this->super == 1) || (count($this->organizersSeries()) > 0);
         } else {
-            return Database::single_result("SELECT series
+            return Database::singleResult("SELECT series
                                         FROM series_organizers
                                         WHERE player = '{$this->name}' AND series = '{$seriesName}'") > 0;
         }
@@ -826,7 +826,7 @@ class Player
         $stmt->fetch();
         $stmt->close();
 
-        return $wins.'-'.$losses;
+        return $wins . '-' . $losses;
     }
 
     public function getMaxRating(string $format = 'Composite'): ?int
@@ -887,9 +887,9 @@ class Player
         }
 
         if ($draws == 0) {
-            return $wins.'-'.$losses;
+            return $wins . '-' . $losses;
         } else {
-            return $wins.'-'.$losses.'-'.$draws;
+            return $wins . '-' . $losses . '-' . $draws;
         }
     }
 
@@ -915,9 +915,9 @@ class Player
         }
 
         if ($draws == 0) {
-            return $wins.'-'.$losses;
+            return $wins . '-' . $losses;
         } else {
-            return $wins.'-'.$losses.'-'.$draws;
+            return $wins . '-' . $losses . '-' . $draws;
         }
     }
 
@@ -1354,11 +1354,11 @@ class Player
 
     public static function activeCount(): int
     {
-        return Database::single_result('SELECT count(name) FROM players where password is not null');
+        return Database::singleResult('SELECT count(name) FROM players where password is not null');
     }
 
     public static function verifiedCount(): int
     {
-        return Database::single_result('SELECT count(name) FROM players where mtgo_confirmed = 1');
+        return Database::singleResult('SELECT count(name) FROM players where mtgo_confirmed = 1');
     }
 }

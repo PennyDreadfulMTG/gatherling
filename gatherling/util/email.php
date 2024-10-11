@@ -23,7 +23,7 @@ function sendEmail(string $to, string $subj, string $msg): bool
 
     $headers = [];
     $headers[] = 'Accept: application/json';
-    $headers[] = 'Api-Key: '.$CONFIG['brevo_api_key'];
+    $headers[] = 'Api-Key: ' . $CONFIG['brevo_api_key'];
     $headers[] = 'Content-Type: application/json';
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 

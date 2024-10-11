@@ -36,9 +36,9 @@ class DB
                 throw new ConfigurationException("Missing configuration key: $key");
             }
         }
-        $dsn = 'mysql:host='.$CONFIG['db_hostname'].';charset=utf8mb4';
+        $dsn = 'mysql:host=' . $CONFIG['db_hostname'] . ';charset=utf8mb4';
         if ($connectToDatabase) {
-            $dsn .= ';dbname='.$CONFIG['db_database'];
+            $dsn .= ';dbname=' . $CONFIG['db_database'];
         }
 
         try {
@@ -57,7 +57,7 @@ class DB
     public static function createDatabase(string $rawName): void
     {
         $dbName = self::quoteIdentifier($rawName);
-        self::_execute("CREATE DATABASE IF NOT EXISTS $dbName", [], function ($sql, $params) use ($dbName) {
+        self::executeInternal("CREATE DATABASE IF NOT EXISTS $dbName", [], function ($sql, $params) use ($dbName) {
             $stmt = self::connect(false)->pdo->prepare($sql);
             $stmt->execute($params);
             $stmt = self::connect(false)->pdo->prepare("USE $dbName");
@@ -68,7 +68,7 @@ class DB
     public static function dropDatabase(string $rawName): void
     {
         $dbName = self::quoteIdentifier($rawName);
-        self::_execute("DROP DATABASE IF EXISTS $dbName", [], function ($sql, $params) {
+        self::executeInternal("DROP DATABASE IF EXISTS $dbName", [], function ($sql, $params) {
             $stmt = self::connect(false)->pdo->prepare($sql);
 
             return $stmt->execute($params);
@@ -78,7 +78,7 @@ class DB
     public static function execute(string $sql, mixed $params = []): void
     {
         // No return here because PDO::ERROMODE_EXCEPTION means we'd throw if anything went wrong
-        self::_execute($sql, $params, function ($sql, $params) {
+        self::executeInternal($sql, $params, function ($sql, $params) {
             $stmt = self::connect()->pdo->prepare($sql);
             $stmt->execute($params);
         });
@@ -93,7 +93,7 @@ class DB
     public static function select(string $sql, string $class, array $params = []): array
     {
         /** @var list<T> */
-        return self::_execute($sql, $params, function ($sql, $params) use ($class) {
+        return self::executeInternal($sql, $params, function ($sql, $params) use ($class) {
             $stmt = self::connect()->pdo->prepare($sql);
             foreach ($params as $key => $value) {
                 if (is_int($value)) {
@@ -143,7 +143,7 @@ class DB
      */
     public static function value(string $sql, array $params = [], bool $missingOk = false): mixed
     {
-        return self::_execute($sql, $params, function ($sql, $params) use ($missingOk) {
+        return self::executeInternal($sql, $params, function ($sql, $params) use ($missingOk) {
             $stmt = self::connect()->pdo->prepare($sql);
             $stmt->execute($params);
             $result = $stmt->fetch(PDO::FETCH_NUM);
@@ -168,7 +168,7 @@ class DB
     public static function values(string $sql, string $_type, array $params = []): array
     {
         /** @var list<($_type is 'bool'? bool : ($_type is 'int' ? int : ($_type is 'float' ? float : string)))> */
-        return self::_execute($sql, $params, function ($sql, $params) {
+        return self::executeInternal($sql, $params, function ($sql, $params) {
             $stmt = self::connect()->pdo->prepare($sql);
             $stmt->execute($params);
             $result = $stmt->fetchAll(PDO::FETCH_NUM);
@@ -238,7 +238,7 @@ class DB
     /**
      * @param array<string, mixed> $params
      */
-    private static function _execute(string $sql, array $params, callable $operation, bool $connectToDatabase = true): mixed
+    private static function executeInternal(string $sql, array $params, callable $operation, bool $connectToDatabase = true): mixed
     {
         $context = [];
         if ($params) {
@@ -276,7 +276,7 @@ class DB
         }
         $safeName = trim($safeName, '_');
         if (empty($safeName) || is_numeric($safeName[0])) {
-            $safeName = 'sp_'.$safeName;
+            $safeName = 'sp_' . $safeName;
         }
 
         return $safeName;
