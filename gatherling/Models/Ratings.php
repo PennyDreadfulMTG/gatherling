@@ -267,7 +267,7 @@ class Ratings
     /** @return array<string, array<string, int>> */
     public function getEntryRatings(string $event, string $format): array
     {
-        $event_id = Database::single_result_single_param('SELECT id
+        $event_id = Database::singleResultSingleParam('SELECT id
                                                           FROM events
                                                           WHERE name = ?', 's', $event);
 

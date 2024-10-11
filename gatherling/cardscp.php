@@ -133,7 +133,7 @@ function handleActions(): void
 function check_for_unique_cards_constraint(): bool
 {
     global $CONFIG;
-    $has_constraint = Database::single_result_single_param("SELECT COUNT(*)
+    $has_constraint = Database::singleResultSingleParam("SELECT COUNT(*)
                                                             FROM information_schema.TABLE_CONSTRAINTS
                                                             WHERE `CONSTRAINT_NAME` = 'unique_index' and TABLE_NAME = 'cards'
                                                             and TABLE_SCHEMA = ?;", 's', $CONFIG['db_database']);
@@ -169,7 +169,7 @@ function printSetList(): void
     echo '<table>';
     echo '<tr><th>Name</th><th>Code</th><th>Release Date</th><th>Set Type</th><th># Cards</th><th>Last Updated</th></tr>';
     foreach ($sets as $set) {
-        $count = Database::single_result_single_param('SELECT COUNT(*) FROM `cards` WHERE `cardset` = ?', 's', $set['name']);
+        $count = Database::singleResultSingleParam('SELECT COUNT(*) FROM `cards` WHERE `cardset` = ?', 's', $set['name']);
         echo "<tr><td><a href='cardscp.php?view=edit_set&set={$set['name']}'>{$set['name']}</a></td>";
         echo "<td>{$set['code']}</td><td>{$set['released']}</td><td>{$set['type']}</td><td>$count</td><td>{$set['last_updated']}</td></tr>";
     }
@@ -215,7 +215,7 @@ function printEditSet(): void
 
     echo "<tr><th>ID</th><th>Name</th><th>Type</th><th>Rarity</th><th># of Decks</th><th>Delete</th></tr>\n";
     foreach ($cards as $card) {
-        $count = Database::single_result_single_param('SELECT COUNT(*) FROM `deckcontents` WHERE card = ?;', 'd', $card['id']);
+        $count = Database::singleResultSingleParam('SELECT COUNT(*) FROM `deckcontents` WHERE card = ?;', 'd', $card['id']);
         echo "<tr><td>{$card['id']}</td><td>{$card['name']}</td>";
         echo "<td>{$card['type']}</td><td>{$card['rarity']}</td><td>$count</td>";
         $checked = false;

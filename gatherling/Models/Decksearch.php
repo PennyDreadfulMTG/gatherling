@@ -76,10 +76,10 @@ class Decksearch
                 foreach ($tmp_results as $value) {
                     // check if there is a record in entries
                     $sql = 'select Count(*) FROM entries where deck = ?';
-                    $result = Database::single_result_single_param($sql, 'd', $value);
+                    $result = Database::singleResultSingleParam($sql, 'd', $value);
                     if ($result) {
                         $sql = 'SELECT d.id FROM decks d, entries n, events e WHERE d.id = ? AND d.id = n.deck AND n.event_id = e.id AND e.finalized = 1';
-                        $arr_tmp = Database::single_result_single_param($sql, 'd', $value);
+                        $arr_tmp = Database::singleResultSingleParam($sql, 'd', $value);
                         if (!empty($arr_tmp)) {
                             array_push($this->finalResults, $arr_tmp);
                         }
@@ -107,7 +107,7 @@ class Decksearch
     public function searchByFormat(string $format): void
     {
         $sql = 'SELECT id FROM decks WHERE format = ?';
-        $results = Database::list_result_single_param($sql, 's', $format);
+        $results = Database::listResultSingleParam($sql, 's', $format);
         if (count($results) > 0) {
             $this->results['format'] = $results;
         } else {
@@ -123,7 +123,7 @@ class Decksearch
     public function searchByPlayer(string $player): void
     {
         $sql = 'SELECT id FROM decks WHERE playername LIKE ?';
-        $results = Database::list_result_single_param($sql, 's', '%'.$player.'%');
+        $results = Database::listResultSingleParam($sql, 's', '%'.$player.'%');
         if (count($results) > 0) {
             $this->results['player'] = $results;
         } else {
@@ -146,7 +146,7 @@ class Decksearch
         WHERE entries.medal = ?
         ORDER BY DATE(`created_date`) DESC';
 
-        $results = Database::list_result_single_param($sql, 's', $medal);
+        $results = Database::listResultSingleParam($sql, 's', $medal);
         if (count($results) > 0) {
             $this->results['medal'] = $results;
         } else {
@@ -172,7 +172,7 @@ class Decksearch
         }
 
         $sql = 'SELECT id FROM decks WHERE deck_colors = ?';
-        $results = Database::list_result_single_param($sql, 's', $final_color_str);
+        $results = Database::listResultSingleParam($sql, 's', $final_color_str);
         if (count($results) > 0) {
             $this->results['color'] = $results;
         } else {
@@ -188,7 +188,7 @@ class Decksearch
     public function searchByArchetype(string $archetype): void
     {
         $sql = 'SELECT id FROM decks WHERE archetype = ?';
-        $results = Database::list_result_single_param($sql, 's', $archetype);
+        $results = Database::listResultSingleParam($sql, 's', $archetype);
         if (count($results) > 0) {
             $this->results['archetype'] = $results;
         } else {
@@ -209,7 +209,7 @@ class Decksearch
         WHERE events.series = ?
         AND entries.deck ORDER BY DATE(`registered_at`) DESC';
 
-        $results = Database::list_result_single_param($sql, 's', $series);
+        $results = Database::listResultSingleParam($sql, 's', $series);
         if (count($results) > 0) {
             $this->results['series'] = $results;
         } else {
@@ -229,7 +229,7 @@ class Decksearch
             FROM deckcontents INNER JOIN cards
             on deckcontents.card = cards.id
             WHERE cards.name LIKE ?';
-            $results = Database::list_result_single_param($sql, 's', "%$cardname%");
+            $results = Database::listResultSingleParam($sql, 's', "%$cardname%");
             if (count($results) > 0) {
                 //Remove Duplicate decks
                 $results = array_unique($results);
@@ -283,7 +283,7 @@ class Decksearch
     {
         // check if there is a record in entries
         $sql = 'select Count(*) FROM entries where deck = ?';
-        $result = Database::single_result_single_param($sql, 'd', $deckid);
+        $result = Database::singleResultSingleParam($sql, 'd', $deckid);
 
         if ($result) {
             $database = Database::getConnection();

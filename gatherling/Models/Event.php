@@ -416,7 +416,7 @@ class Event
 
     public function getPlacePlayer(string $placing = '1st'): ?string
     {
-        $playername = Database::db_query_single('SELECT n.player from entries n, events e
+        $playername = Database::dbQuerySingle('SELECT n.player from entries n, events e
                                              WHERE n.event_id = e.id
                                              AND n.medal = ?
                                              AND e.name = ?', 'ss', $placing, $this->name);
@@ -433,7 +433,7 @@ class Event
     public function getDecks(): array
     {
         $decks = [];
-        $deckids = Database::list_result_single_param('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
+        $deckids = Database::listResultSingleParam('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
 
         foreach ($deckids as $deckid) {
             $decks[] = new Deck($deckid);
@@ -557,13 +557,13 @@ class Event
 
     public function getPlayerCount(): int
     {
-        return Database::single_result_single_param('SELECT count(*) FROM entries WHERE event_id = ?', 'd', $this->id);
+        return Database::singleResultSingleParam('SELECT count(*) FROM entries WHERE event_id = ?', 'd', $this->id);
     }
 
     /** @return list<string> */
     public function getPlayers(): array
     {
-        return Database::list_result_single_param('SELECT player FROM entries WHERE event_id = ? ORDER BY medal, player', 'd', $this->id);
+        return Database::listResultSingleParam('SELECT player FROM entries WHERE event_id = ? ORDER BY medal, player', 'd', $this->id);
     }
 
     /** @return list<string> */
@@ -625,7 +625,7 @@ class Event
     /** @return list<string> */
     public function getEntriesByDateTime(): array
     {
-        return Database::list_result_single_param(
+        return Database::listResultSingleParam(
             'SELECT player
                                                  FROM entries
                                                  WHERE event_id = ?
@@ -638,7 +638,7 @@ class Event
     /** @return list<string> */
     public function getEntriesByMedal(): array
     {
-        return Database::list_result_single_param(
+        return Database::listResultSingleParam(
             'SELECT player
                                              FROM entries
                                              WHERE event_id = ?
@@ -743,14 +743,14 @@ class Event
         if ($round == -1) {
             $round = $this->current_round;
         }
-        Database::db_query('UPDATE entries SET drop_round = ? WHERE event_id = ? AND player = ?', 'dds', $round, $this->id, $playername);
-        Database::db_query('UPDATE standings SET active = 0 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
+        Database::dbQuery('UPDATE entries SET drop_round = ? WHERE event_id = ? AND player = ?', 'dds', $round, $this->id, $playername);
+        Database::dbQuery('UPDATE standings SET active = 0 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
     }
 
     public function undropPlayer(string $playername): void
     {
-        Database::db_query('UPDATE entries SET drop_round = 0 WHERE event_id = ? AND player = ?', 'ds', $this->id, $playername);
-        Database::db_query('UPDATE standings SET active = 1 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
+        Database::dbQuery('UPDATE entries SET drop_round = 0 WHERE event_id = ? AND player = ?', 'ds', $this->id, $playername);
+        Database::dbQuery('UPDATE standings SET active = 1 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
     }
 
     /** @return list<Matchup> */
@@ -833,7 +833,7 @@ class Event
             $subevnum = 1;
             $roundnum = $this->current_round;
         }
-        $count = Database::db_query_single('SELECT COUNT(m.id) FROM matches m, subevents s, events e
+        $count = Database::dbQuerySingle('SELECT COUNT(m.id) FROM matches m, subevents s, events e
             WHERE m.subevent = s.id AND s.parent = e.name AND e.name = ? AND
             s.timing = ? AND m.round = ? AND (m.playera = ? OR m.playerb = ?)', 'sddss', $this->name, $subevnum, $roundnum, $player_name, $player_name);
 
@@ -1044,12 +1044,12 @@ class Event
 
     public static function count(): int
     {
-        return Database::single_result('SELECT count(name) FROM events');
+        return Database::singleResult('SELECT count(name) FROM events');
     }
 
     public static function largestEventNum(): int
     {
-        return Database::single_result('SELECT max(number) FROM events where number != 128'); // 128 is "special"
+        return Database::singleResult('SELECT max(number) FROM events where number != 128'); // 128 is "special"
     }
 
     /** @return list<self> */
@@ -1185,7 +1185,7 @@ class Event
                     $round = 'main';
                 }
 
-                $lock_db = Database::get_lock((string) $subevent_id);
+                $lock_db = Database::getLock((string) $subevent_id);
                 if ($lock_db !== 1) {
                     return false;
                 }
@@ -1208,7 +1208,7 @@ class Event
                         break;
                 }
 
-                Database::release_lock((string) $subevent_id);
+                Database::releaseLock((string) $subevent_id);
             } else {
                 $this->active = 0;
                 $this->finalized = 1;
@@ -1805,7 +1805,7 @@ class Event
 
     public function updateDecksFormat(string $format): void
     {
-        $deckIDs = Database::list_result_single_param('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
+        $deckIDs = Database::listResultSingleParam('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
 
         if (count($deckIDs)) {
             $db = Database::getConnection();

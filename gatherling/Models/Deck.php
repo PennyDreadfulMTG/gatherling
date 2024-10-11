@@ -148,11 +148,11 @@ class Deck
         //     l
         // Find subevent id     - ignores sub-subevents like finals, which have the same name but different subevent id
         if (!is_null($this->eventname)) {
-            $this->format = Database::single_result_single_param('SELECT  events.format
+            $this->format = Database::singleResultSingleParam('SELECT  events.format
                                                                FROM entries INNER JOIN events
                                                                ON entries.event_id = events.id
                                                                WHERE entries.deck = ?', 'd', $this->id);
-            $this->subeventid = (int) Database::single_result_single_param('SELECT id
+            $this->subeventid = (int) Database::singleResultSingleParam('SELECT id
                                                                    FROM subevents
                                                                    WHERE parent = ?', 's', $this->eventname);
         } else {
@@ -198,7 +198,7 @@ class Deck
      */
     public static function getArchetypes(): array
     {
-        return Database::list_result('SELECT name FROM archetypes WHERE priority > 0 ORDER BY priority DESC, name');
+        return Database::listResult('SELECT name FROM archetypes WHERE priority > 0 ORDER BY priority DESC, name');
     }
 
     public function getEntry(): Entry
@@ -556,7 +556,7 @@ class Deck
 
         // had to put this here since the constructor doesn't run entirely when a new deck is created
         if (!is_null($this->event_id) && is_null($this->format)) {
-            $this->format = Database::single_result_single_param('SELECT format
+            $this->format = Database::singleResultSingleParam('SELECT format
                                                                FROM events
                                                                WHERE id = ?', 'd', $this->event_id);
         }
@@ -909,7 +909,7 @@ class Deck
 
     public function getTribe(): ?string
     {
-        return Database::single_result_single_param('SELECT tribe FROM decks WHERE id = ?', 'd', $this->id);
+        return Database::singleResultSingleParam('SELECT tribe FROM decks WHERE id = ?', 'd', $this->id);
     }
 
     /**

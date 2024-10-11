@@ -286,7 +286,7 @@ class Matchup
     // Returns a count of how many matches there are total.
     public static function count(): int
     {
-        return Database::single_result('SELECT count(id) FROM matches');
+        return Database::singleResult('SELECT count(id) FROM matches');
     }
 
     // Saves a report from a player on their match results.

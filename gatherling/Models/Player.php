@@ -404,7 +404,7 @@ class Player
         if ($seriesName == '') {
             return ($this->super == 1) || (count($this->organizersSeries()) > 0);
         } else {
-            return Database::single_result("SELECT series
+            return Database::singleResult("SELECT series
                                         FROM series_organizers
                                         WHERE player = '{$this->name}' AND series = '{$seriesName}'") > 0;
         }
@@ -1354,11 +1354,11 @@ class Player
 
     public static function activeCount(): int
     {
-        return Database::single_result('SELECT count(name) FROM players where password is not null');
+        return Database::singleResult('SELECT count(name) FROM players where password is not null');
     }
 
     public static function verifiedCount(): int
     {
-        return Database::single_result('SELECT count(name) FROM players where mtgo_confirmed = 1');
+        return Database::singleResult('SELECT count(name) FROM players where mtgo_confirmed = 1');
     }
 }

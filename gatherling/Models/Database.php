@@ -34,7 +34,7 @@ class Database
                 // If we couldn't, then it either doesn't exist, or we can't see it.
                 $sql = "CREATE DATABASE {$CONFIG['db_database']}";
 
-                self::single_result($sql);
+                self::singleResult($sql);
                 $db_selected = $instance->select_db($CONFIG['db_database']);
                 if (!$db_selected) {
                     exit('Error creating database: '.mysqli_error($instance)."\n");
@@ -64,7 +64,7 @@ class Database
         return $pdo_instance;
     }
 
-    public static function single_result(string $sql): mixed
+    public static function singleResult(string $sql): mixed
     {
         $db = self::getConnection();
         $stmt = $db->prepare($sql);
@@ -91,7 +91,7 @@ class Database
     // Does PHP have an arguments[] property that would allow processing of any number of parameters?
     // could I just make $paramType and $param arrays that would allow a single function to handle any number
     // of parameters? Going to have to play with this.
-    public static function single_result_single_param(string $sql, string $paramType, mixed $param): mixed
+    public static function singleResultSingleParam(string $sql, string $paramType, mixed $param): mixed
     {
         $db = self::getConnection();
         $stmt = $db->prepare($sql);
@@ -110,7 +110,7 @@ class Database
     /**
      * @return list<mixed>
      */
-    public static function list_result(string $sql): array
+    public static function listResult(string $sql): array
     {
         $db = self::getConnection();
         $stmt = $db->prepare($sql);
@@ -129,7 +129,7 @@ class Database
     /**
      * @return list<mixed>
      */
-    public static function list_result_single_param(string $sql, string $paramType, mixed $param): array
+    public static function listResultSingleParam(string $sql, string $paramType, mixed $param): array
     {
         $db = self::getConnection();
         $stmt = $db->prepare($sql);
@@ -152,7 +152,7 @@ class Database
     /**
      * @return list<mixed>
      */
-    public static function list_result_double_param(string $sql, string $paramTypes, mixed $param1, mixed $param2): array
+    public static function listResultDoubleParam(string $sql, string $paramTypes, mixed $param1, mixed $param2): array
     {
         $db = self::getConnection();
         $stmt = $db->prepare($sql);
@@ -169,7 +169,7 @@ class Database
         return $list;
     }
 
-    public static function db_query(): void
+    public static function dbQuery(): void
     {
         $params = func_get_args();
         $query = array_shift($params);
@@ -217,7 +217,7 @@ class Database
         $stmt->close();
     }
 
-    public static function db_query_single(): mixed
+    public static function dbQuerySingle(): mixed
     {
         $params = func_get_args();
         $query = array_shift($params);
@@ -275,17 +275,17 @@ class Database
         return $result;
     }
 
-    public static function get_lock(string $name = 'lock_db', int $timeout = 0): int
+    public static function getLock(string $name = 'lock_db', int $timeout = 0): int
     {
         $sql = "SELECT GET_LOCK('{$name}',{$timeout})";
 
-        return self::single_result($sql);
+        return self::singleResult($sql);
     }
 
-    public static function release_lock(string $name = 'lock_db'): int
+    public static function releaseLock(string $name = 'lock_db'): int
     {
         $sql = "SELECT RELEASE_LOCK('{$name}')";
 
-        return self::single_result($sql);
+        return self::singleResult($sql);
     }
 }

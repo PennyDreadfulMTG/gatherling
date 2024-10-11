@@ -214,12 +214,12 @@ class Series
 
     public function getBannedPlayerDate(string $name): ?string
     {
-        return Database::single_result_single_param('SELECT date FROM playerbans WHERE player = ?', 's', $name);
+        return Database::singleResultSingleParam('SELECT date FROM playerbans WHERE player = ?', 's', $name);
     }
 
     public function getBannedPlayerReason(string $name): ?string
     {
-        return Database::single_result_single_param('SELECT reason FROM playerbans WHERE player = ?', 's', $name);
+        return Database::singleResultSingleParam('SELECT reason FROM playerbans WHERE player = ?', 's', $name);
     }
 
     public function authCheck(string $playername): bool
@@ -347,7 +347,7 @@ class Series
 
     public function mostRecentEvent(): ?Event
     {
-        $result = Database::db_query_single('SELECT events.name
+        $result = Database::dbQuerySingle('SELECT events.name
                                          FROM events
                                          JOIN series
                                          ON series.name = events.series
@@ -363,7 +363,7 @@ class Series
 
     public function nextEvent(): ?Event
     {
-        $result = Database::db_query_single('SELECT events.name
+        $result = Database::dbQuerySingle('SELECT events.name
                                          FROM events
                                          JOIN series
                                          ON series.name = events.series

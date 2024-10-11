@@ -451,7 +451,7 @@ function card_catalog(): array
 function cardname_from_id(string $id): string
 {
     $sql = 'SELECT c.name as name FROM cards c WHERE c.scryfallId = ?';
-    $name = Database::single_result_single_param($sql, 's', $id);
+    $name = Database::singleResultSingleParam($sql, 's', $id);
 
     return $name;
 }

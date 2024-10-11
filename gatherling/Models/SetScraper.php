@@ -28,7 +28,7 @@ class SetScraper
         }
         $sets = $sets->data;
 
-        $knowncodes = Database::list_result('SELECT code FROM cardsets;');
+        $knowncodes = Database::listResult('SELECT code FROM cardsets;');
 
         // Turn this into a dict for faster lookup
         $knowncodesDict = [];
