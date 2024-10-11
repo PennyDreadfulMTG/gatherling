@@ -132,7 +132,7 @@ parameters:
 
 		-
 			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 21
+			count: 20
 			path: gatherling/Models/Deck.php
 
 		-
@@ -147,7 +147,7 @@ parameters:
 
 		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 22
+			count: 21
 			path: gatherling/Models/Deck.php
 
 		-
@@ -1232,7 +1232,7 @@ parameters:
 
 		-
 			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 21
+			count: 20
 			path: gatherling/Models/Series.php
 
 		-
@@ -1242,12 +1242,12 @@ parameters:
 
 		-
 			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 21
+			count: 20
 			path: gatherling/Models/Series.php
 
 		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 23
+			count: 22
 			path: gatherling/Models/Series.php
 
 		-
