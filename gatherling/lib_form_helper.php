@@ -8,6 +8,7 @@ use Gatherling\Models\Standings;
 use Gatherling\Views\TemplateHelper;
 use Gatherling\Views\Components\Submit;
 use Gatherling\Views\Components\TextInput;
+use Gatherling\Views\Components\CheckboxInput;
 use Gatherling\Views\Components\TimeZoneDropMenu;
 
 require_once 'lib.php';
@@ -19,20 +20,7 @@ function textInput(string $label, string $name, mixed $value = '', int $size = 0
 
 function checkboxInput(string $label, string $name, bool $isChecked = false, ?string $reminderText = null): string
 {
-    $args = checkboxInputArgs($label, $name, $isChecked, $reminderText);
-
-    return TemplateHelper::render('partials/checkboxInput', $args);
-}
-
-/** @return array<string, string|bool|null> */
-function checkboxInputArgs(string $label, string $name, bool $isChecked = false, ?string $reminderText = null): array
-{
-    return [
-        'name'         => $name,
-        'label'        => $label,
-        'isChecked'    => $isChecked,
-        'reminderText' => $reminderText,
-    ];
+    return (new CheckboxInput($label, $name, $isChecked, $reminderText))->render();
 }
 
 function print_file_input(string $label, string $name): void

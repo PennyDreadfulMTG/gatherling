@@ -1,0 +1,19 @@
+<h4>Editing '{{id}}' ({{cardSet}})</h4>
+
+<form action="cardscp.php" method="post">
+    <input type="hidden" name="view" value="edit_card" />
+    <input type="hidden" name="id" value="{{id}}" />
+    <input type="hidden" name="action" value="modify_card" />
+    <table>
+        {{#nameInput}}{{> textInput}}{{/nameInput}}
+        {{#typelineInput}}{{> textInput}}{{/typelineInput}}
+        {{#rarityInput}}{{> textInput}}{{/rarityInput}}
+        {{#scryfallIdInput}}{{> textInput}}{{/scryfallIdInput}}
+        {{#isChangelingInput}}{{> checkboxInput}}{{/isChangelingInput}}
+    </table>
+    <input class="inputbutton" type="submit" name="mode" value="Update Card" />
+</form>
+
+{{#creatureType}}
+    Calculated Tribe(s): {{creatureType}}
+{{/creatureType}}

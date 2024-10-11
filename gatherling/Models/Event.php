@@ -1530,7 +1530,6 @@ class Event
 
         if ($matches_remaining > 0) {
             // Nothing to do yet
-            //echo "There are still {$matches_remaining} unresolved matches";
             return;
         } else {
             if ($this->current_round > $this->mainrounds) {
@@ -1542,7 +1541,6 @@ class Event
             if ($this->current_round == $current_round) {
                 $matches2 = $this->getRoundMatches($this->current_round);
                 foreach ($matches2 as $match) {
-                    //echo "about to update scores";
                     $match->updateScores($structure);
                 }
                 if (strpos($structure, 'Swiss') === 0) {
@@ -1585,7 +1583,6 @@ class Event
         $this->resetScores();
         $matches2 = $this->getRoundMatches('ALL');
         foreach ($matches2 as $match) {
-            //echo "about to update scores";
             $match->fixScores($structure);
         }
     }

@@ -444,7 +444,6 @@ class Matchup
                 $playera_standing->matches_played++;
                 $playera_standing->games_played += ($this->playera_wins + $this->playera_losses);
                 $playera_standing->games_won += $this->playera_wins;
-                //echo "****playeragameswon".$playera_standing->games_won;
                 $playerb_standing->matches_played++;
                 $playerb_standing->games_played += $this->playera_wins + $this->playera_losses;
                 $playerb_standing->games_won += $this->playerb_wins;

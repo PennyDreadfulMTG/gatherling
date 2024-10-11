@@ -78,7 +78,7 @@ class CardSet
             Log::info("Inserting card set ($set, $releaseDate, $setType)...");
 
             // Insert the card set
-            $stmt = $database->prepare('INSERT INTO cardsets(released, name, type, code) values(?, ?, ?, ?)');
+            $stmt = $database->prepare('INSERT INTO cardsets(released, name, type, code, standard_legal, modern_legal) values(?, ?, ?, ?, 0, 0)');
             $stmt->bind_param('ssss', $releaseDate, $set, $setType, $data->code);
 
             if (!$stmt->execute()) {

@@ -589,7 +589,7 @@ class Deck
         } else {
             $stmt = $db->prepare('UPDATE decks SET archetype = ?, name = ?, format = ?, tribe = ?, deck_colors = ?, notes = ? WHERE id = ?');
             if (!$stmt) {
-                echo $db->error;
+                throw new \Exception($db->error);
             }
             $stmt->bind_param('ssssssd', $this->archetype, $this->name, $this->format, $this->tribe, $this->deck_color_str, $this->notes, $this->id);
             if (!$stmt->execute()) {

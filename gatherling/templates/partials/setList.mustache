@@ -1,0 +1,20 @@
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Code</th>
+        <th>Release Date</th>
+        <th>Set Type</th>
+        <th># Cards</th>
+        <th>Last Updated</th>
+    </tr>
+    {{#sets}}
+        <tr>
+            <td><a href="{{editLink}}">{{name}}</a></td>
+            <td>{{code}}</td>
+            <td>{{released}}</td>
+            <td>{{type}}</td>
+            <td>{{count}}</td>
+            <td>{{lastUpdated}}</td>
+        </tr>
+    {{/sets}}
+</table>
