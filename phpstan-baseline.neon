@@ -331,12 +331,12 @@ parameters:
 			path: gatherling/Models/Decksearch.php
 
 		-
-			message: "#^Property Gatherling\\\\Models\\\\Decksearch\\:\\:\\$_results \\(array\\<string, list\\<int\\>\\>\\) does not accept non\\-empty\\-array\\<string, array\\<int\\<0, max\\>, mixed\\>\\>\\.$#"
+			message: "#^Property Gatherling\\\\Models\\\\Decksearch\\:\\:\\$results \\(array\\<string, list\\<int\\>\\>\\) does not accept non\\-empty\\-array\\<string, array\\<int\\<0, max\\>, mixed\\>\\>\\.$#"
 			count: 1
 			path: gatherling/Models/Decksearch.php
 
 		-
-			message: "#^Property Gatherling\\\\Models\\\\Decksearch\\:\\:\\$_results \\(array\\<string, list\\<int\\>\\>\\) does not accept non\\-empty\\-array\\<string, list\\<mixed\\>\\>\\.$#"
+			message: "#^Property Gatherling\\\\Models\\\\Decksearch\\:\\:\\$results \\(array\\<string, list\\<int\\>\\>\\) does not accept non\\-empty\\-array\\<string, list\\<mixed\\>\\>\\.$#"
 			count: 6
 			path: gatherling/Models/Decksearch.php
 
