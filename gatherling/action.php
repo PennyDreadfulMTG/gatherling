@@ -90,7 +90,7 @@ if (!is_null($player)) {
                 } else {
                     $message = $message.$oppplayer->linkTo($event->client).'.';
                 }
-                if ($match->player_reportable_check() == true) {
+                if ($match->playerReportableCheck() == true) {
                     $message = $message.'  <a href="report.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
                 }
             }
@@ -103,7 +103,7 @@ if (!is_null($player)) {
             }
             $oppplayer = new Player($opp);
 
-            if ($match->player_reportable_check() == true) {
+            if ($match->playerReportableCheck() == true) {
                 $message = "The reported result wasn't consistent with your opponent's, please resubmit $event->name vs. ".$oppplayer->linkTo().'.';
                 $message = $message.'<a href="report.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
             } else {

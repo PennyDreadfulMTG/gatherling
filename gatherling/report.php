@@ -129,7 +129,7 @@ switch ($dispmode) {
                 } elseif ($player_number == 'a' and ($match->playera_wins + $match->playera_losses) > 0) {
                     // Also Fine
                 } else {
-                    if ($match->player_reportable_check() == true) {
+                    if ($match->playerReportableCheck() == true) {
                         $can_drop = false;
                     }
                 }

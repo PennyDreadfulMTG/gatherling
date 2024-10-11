@@ -233,7 +233,7 @@ class Standings
     }
 
     /** @return list<string> */
-    public function League_getAvailable_Opponents(int $subevent, int $round, int $league_length): array
+    public function getAvailableLeagueOpponents(int $subevent, int $round, int $league_length): array
     {
         $opponentsAlreadyFaced = [];
         $allPlayers = [];

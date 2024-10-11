@@ -778,7 +778,7 @@ function print_currentMatchTable(array $Leagues): void
                 } elseif ($player_number == 'a' and ((int) $match->playera_wins + (int) $match->playera_losses) > 0) {
                     echo '(Report Submitted)';
                 } else {
-                    if ($match->player_reportable_check() == true) {
+                    if ($match->playerReportableCheck() == true) {
                         echo '<a href="report.php?mode=submit_result&match_id='.$match->id.'&player='.$player_number.'">(Report Result)</a>';
                     } else {
                         echo 'Please report results in the report channel for this event';
