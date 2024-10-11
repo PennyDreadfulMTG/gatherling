@@ -367,7 +367,7 @@ function printLogoForm(Series $series): void
     echo '<table class="form c">';
     echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
     echo '<tr><th>Current Logo</th>';
-    echo '<td>' . Series::image_tag($series->name) . '</td></tr>';
+    echo '<td>' . Series::imageTag($series->name) . '</td></tr>';
     echo '<tr><th>Upload New Logo</th>';
     echo '<td><input class="inputbox" type="file" name="logo" /> ';
     echo '<input class="inputbutton" type="submit" name="action" value="Change Logo" /></td></tr>';

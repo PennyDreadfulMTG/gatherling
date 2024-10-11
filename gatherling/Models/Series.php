@@ -335,7 +335,7 @@ class Series
     }
 
     // Returns a HTML image tag which displays the logo for this series.
-    public static function image_tag(string $seriesname): string
+    public static function imageTag(string $seriesname): string
     {
         return '<img src="'  . self::logoSrc($seriesname) . '" />';
     }
@@ -827,7 +827,7 @@ class Series
      * @param array<string, array<string, int>> $thispoints
      * @param array<string, array<string, int>> $decklists
      */
-    private function multiply_and_add_points(array &$results, array $thispoints, int $multiplier, array $decklists, bool $reqdeck): void
+    private function multiplyAndAddPoints(array &$results, array $thispoints, int $multiplier, array $decklists, bool $reqdeck): void
     {
         if ($multiplier == 0) {
             return;
@@ -871,16 +871,16 @@ class Series
 
         $reqdeck = $rules['must_decklist'] == 1;
 
-        $this->multiply_and_add_points($total_pointarray, $firsts, $rules['first_pts'], $decklists_posted, $reqdeck);
-        $this->multiply_and_add_points($total_pointarray, $seconds, $rules['second_pts'], $decklists_posted, $reqdeck);
-        $this->multiply_and_add_points($total_pointarray, $semis, $rules['semi_pts'], $decklists_posted, $reqdeck);
-        $this->multiply_and_add_points($total_pointarray, $quarters, $rules['quarter_pts'], $decklists_posted, $reqdeck);
-        $this->multiply_and_add_points($total_pointarray, $decklists_posted, $rules['decklist_pts'], $decklists_posted, $reqdeck);
-        $this->multiply_and_add_points($total_pointarray, $rounds_played, $rules['rounds_pts'], $decklists_posted, $reqdeck);
-        $this->multiply_and_add_points($total_pointarray, $rounds_won, $rules['win_pts'], $decklists_posted, $reqdeck);
-        $this->multiply_and_add_points($total_pointarray, $rounds_lost, $rules['loss_pts'], $decklists_posted, $reqdeck);
-        $this->multiply_and_add_points($total_pointarray, $rounds_bye, $rules['bye_pts'], $decklists_posted, $reqdeck);
-        $this->multiply_and_add_points($total_pointarray, $participations, $rules['participation_pts'], $decklists_posted, $reqdeck);
+        $this->multiplyAndAddPoints($total_pointarray, $firsts, $rules['first_pts'], $decklists_posted, $reqdeck);
+        $this->multiplyAndAddPoints($total_pointarray, $seconds, $rules['second_pts'], $decklists_posted, $reqdeck);
+        $this->multiplyAndAddPoints($total_pointarray, $semis, $rules['semi_pts'], $decklists_posted, $reqdeck);
+        $this->multiplyAndAddPoints($total_pointarray, $quarters, $rules['quarter_pts'], $decklists_posted, $reqdeck);
+        $this->multiplyAndAddPoints($total_pointarray, $decklists_posted, $rules['decklist_pts'], $decklists_posted, $reqdeck);
+        $this->multiplyAndAddPoints($total_pointarray, $rounds_played, $rules['rounds_pts'], $decklists_posted, $reqdeck);
+        $this->multiplyAndAddPoints($total_pointarray, $rounds_won, $rules['win_pts'], $decklists_posted, $reqdeck);
+        $this->multiplyAndAddPoints($total_pointarray, $rounds_lost, $rules['loss_pts'], $decklists_posted, $reqdeck);
+        $this->multiplyAndAddPoints($total_pointarray, $rounds_bye, $rules['bye_pts'], $decklists_posted, $reqdeck);
+        $this->multiplyAndAddPoints($total_pointarray, $participations, $rules['participation_pts'], $decklists_posted, $reqdeck);
 
         // Include adjustments.
         $db = Database::getConnection();
