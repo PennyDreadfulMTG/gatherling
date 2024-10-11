@@ -16,7 +16,7 @@ parameters:
 			path: gatherling/Auth/Session.php
 
 		-
-			message: "#^Parameter \\#2 \\$params of static method Gatherling\\\\Data\\\\DB\\:\\:_execute\\(\\) expects array\\<string, mixed\\>, mixed given\\.$#"
+			message: "#^Parameter \\#2 \\$params of static method Gatherling\\\\Data\\\\DB\\:\\:executeInternal\\(\\) expects array\\<string, mixed\\>, mixed given\\.$#"
 			count: 1
 			path: gatherling/Data/DB.php
 
@@ -91,12 +91,12 @@ parameters:
 			path: gatherling/Models/Database.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Database\\:\\:get_lock\\(\\) should return int but returns mixed\\.$#"
+			message: "#^Method Gatherling\\\\Models\\\\Database\\:\\:getLock\\(\\) should return int but returns mixed\\.$#"
 			count: 1
 			path: gatherling/Models/Database.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Database\\:\\:release_lock\\(\\) should return int but returns mixed\\.$#"
+			message: "#^Method Gatherling\\\\Models\\\\Database\\:\\:releaseLock\\(\\) should return int but returns mixed\\.$#"
 			count: 1
 			path: gatherling/Models/Database.php
 
@@ -586,7 +586,7 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Event\\:\\:trophy_image_tag\\(\\) expects string, string\\|null given\\.$#"
+			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Event\\:\\:trophyImageTag\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
 
@@ -1016,7 +1016,7 @@ parameters:
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Parameter \\#1 \\$winner of method Gatherling\\\\Models\\\\Matchup\\:\\:finalize_match\\(\\) expects string, string\\|null given\\.$#"
+			message: "#^Parameter \\#1 \\$winner of method Gatherling\\\\Models\\\\Matchup\\:\\:finalizeMatch\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Matchup.php
 
@@ -1326,7 +1326,7 @@ parameters:
 			path: gatherling/Models/Series.php
 
 		-
-			message: "#^Parameter \\#3 \\$multiplier of method Gatherling\\\\Models\\\\Series\\:\\:multiply_and_add_points\\(\\) expects int, int\\|string given\\.$#"
+			message: "#^Parameter \\#3 \\$multiplier of method Gatherling\\\\Models\\\\Series\\:\\:multiplyAndAddPoints\\(\\) expects int, int\\|string given\\.$#"
 			count: 10
 			path: gatherling/Models/Series.php
 
@@ -1371,7 +1371,7 @@ parameters:
 			path: gatherling/Models/Standings.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Standings\\:\\:League_getAvailable_Opponents\\(\\) should return list\\<string\\> but returns array\\<int\\<0, max\\>, mixed\\>\\.$#"
+			message: "#^Method Gatherling\\\\Models\\\\Standings\\:\\:getAvailableLeagueOpponents\\(\\) should return list\\<string\\> but returns array\\<int\\<0, max\\>, mixed\\>\\.$#"
 			count: 1
 			path: gatherling/Models/Standings.php
 
