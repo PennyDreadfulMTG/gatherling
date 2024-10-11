@@ -1724,18 +1724,25 @@ class Event
         switch ($medalCount) {
             case 8:
                 $t8[3] = $players[7]->player;
+                // Intentional fallthrough
             case 7:
                 $t8[2] = $players[6]->player;
+                // Intentional fallthrough
             case 6:
                 $t8[1] = $players[5]->player;
+                // Intentional fallthrough
             case 5:
                 $t8[0] = $players[4]->player;
+                // Intentional fallthrough
             case 4:
                 $t4[1] = $players[3]->player;
+                // Intentional fallthrough
             case 3:
                 $t4[0] = $players[2]->player;
+                // Intentional fallthrough
             case 2:
                 $sec = $players[1]->player;
+                // Intentional fallthrough
             case 1:
                 $win = $players[0]->player;
         }
