@@ -271,7 +271,7 @@ function print_editTimeZoneForm(Player $player, string $result): void
     echo '<table class="form">';
     echo "<tr><th>Current Time Zone: </th>\n";
     echo '<td>';
-    echo $player->time_zone();
+    echo $player->timeZone();
     echo '</td></tr>';
     echo "<tr><th>Desired Time Zone</th>\n";
     echo '<td>';

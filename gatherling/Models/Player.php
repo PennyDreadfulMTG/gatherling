@@ -305,7 +305,7 @@ class Player
         return (bool) $this->emailPrivacy;
     }
 
-    public function time_zone(): ?string
+    public function timeZone(): ?string
     {
         switch ($this->timezone) {
             case -12:
