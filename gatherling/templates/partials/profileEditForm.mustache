@@ -9,7 +9,7 @@
     <br>
     <input type="radio" name="email_public" value="1"{{#emailPrivacy}} checked{{/emailPrivacy}}>Make my email publicly viewable
     <br>
-    <input type="radio" name="email_public" value="0"{{#emailPrivacy}} checked{{/emailPrivacy}}>Only allow administrators and event hosts to view my email
+    <input type="radio" name="email_public" value="0"{{^emailPrivacy}} checked{{/emailPrivacy}}>Only allow administrators and event hosts to view my email
     <br>
     <input type="hidden" name="profile_edit" value="2">
     <br>
