@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
+use Gatherling\Log;
 use Gatherling\Data\DB;
-use Gatherling\Views\Components\ReportLink;
+use Gatherling\Exceptions\NotFoundException;
 
 class Event
 {
@@ -698,9 +699,13 @@ class Event
 
     public function removeEntry(string $playername): bool
     {
-        $entry = new Entry($this->id, $playername);
-
-        return $entry->removeEntry();
+        try {
+            $entry = new Entry($this->id, $playername);
+            return $entry->removeEntry();
+        } catch (NotFoundException $e) {
+            Log::info("Tried to remove $playername from {$this->name} but no entry was found.");
+            return true;
+        }
     }
 
     public function addPlayer(string $playername): bool

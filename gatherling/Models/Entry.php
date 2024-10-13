@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
+use Gatherling\Exceptions\NotFoundException;
 use Gatherling\Views\TemplateHelper;
 
 class Entry
@@ -98,7 +99,7 @@ class Entry
         $stmt->bind_result($deckid, $this->medal, $this->ignored, $this->drop_round, $this->initial_byes, $this->initial_seed);
 
         if ($stmt->fetch() == null) {
-            throw new Exception('Entry for ' . $playername . ' in ' . $event_id . ' not found');
+            throw new NotFoundException('Entry for ' . $playername . ' in ' . $event_id . ' not found');
         }
         $stmt->close();
 
