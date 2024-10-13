@@ -308,7 +308,11 @@ function print_verify_resultForm(string $report, int $match_id, string $player, 
     echo "<input name=\"match_id\" type=\"hidden\" value=\"{$match_id}\" />\n";
     echo "<input name=\"player\" type=\"hidden\" value=\"{$player}\" />\n";
     echo "<input name=\"mode\" type=\"hidden\" value=\"submit_result\" />\n";
-    echo "<input name=\"submit\" type=\"submit\" value=\"Go Back and Correct\" />\n";
+    // It would be nice if this functionality worked for league matches
+    // where there is no match_id, but it currently does not so don't show it.
+    if ($match_id) {
+        echo "<input name=\"submit\" type=\"submit\" value=\"Go Back and Correct\" />\n";
+    }
     echo "</form>\n";
     echo "</td> </tr> \n";
     echo "<tr> <td colspan=\"2\" class=\"buttons\">\n";
