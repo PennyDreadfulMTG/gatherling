@@ -6,6 +6,7 @@ namespace Gatherling\Models;
 
 use Exception;
 use Gatherling\Data\DB;
+use Gatherling\Exceptions\NotFoundException;
 use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\PlayerLink;
 
@@ -68,7 +69,7 @@ class Player
             $this->mtgo_username
         );
         if ($stmt->fetch() == null) {
-            throw new Exception('Player ' . $name . ' is not found.');
+            throw new NotFoundException('Player ' . $name . ' is not found.');
         }
         $stmt->close();
     }
@@ -99,7 +100,12 @@ class Player
         if (!isset($_SESSION['username'])) {
             return null;
         }
-        return new self(session()->string('username'));
+        try {
+            return new self(session()->string('username'));
+        } catch (NotFoundException $e) {
+            Player::logOut();
+            return null;
+        }
     }
 
     public static function checkPassword(string $username, string $password): bool
