@@ -16,12 +16,8 @@ class AllDecks extends Component
     {
         $decks = $player->getAllDecks();
         $this->upPlayer = strtoupper($player->name ?? '');
-        $rstar = '<font color="#FF0000">*</font>';
 
         foreach ($decks as $deck) {
-            if (!$deck->isValid()) {
-                echo $rstar;
-            }
             $event = $deck->getEvent();
             $targetUrl = $event->authCheck($player->name) ? 'event' : 'eventreport';
             $eventLink = $targetUrl . '.php?event=' . rawurlencode($event->name ?? '');
