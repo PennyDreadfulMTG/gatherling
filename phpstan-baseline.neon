@@ -2396,11 +2396,6 @@ parameters:
 			path: gatherling/lib.php
 
 		-
-			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, int\\|string given\\.$#"
-			count: 1
-			path: gatherling/lib.php
-
-		-
 			message: "#^Parameter \\#2 \\$arr of function arrayMapRecursive expects array\\<string, mixed\\>, array given\\.$#"
 			count: 1
 			path: gatherling/lib.php
@@ -2429,11 +2424,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
 			count: 1
 			path: gatherling/lib.php
-
-		-
-			message: "#^Parameter \\#2 \\$options of function selectArgs expects array\\<string, string\\>, array\\<string, string\\>\\|null given\\.$#"
-			count: 1
-			path: gatherling/lib_form_helper.php
 
 		-
 			message: "#^Parameter \\#2 \\$playername of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"

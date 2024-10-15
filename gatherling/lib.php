@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 use Gatherling\Auth\Session;
 use Gatherling\Models\Player;
-use Gatherling\Models\Series;
-use Gatherling\Views\LoginRedirect;
-use Gatherling\Views\TemplateHelper;
 use Gatherling\Views\Components\CardLink;
 use Gatherling\Views\Components\FormatDropMenu;
-use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\OrganizerSelect;
-use Gatherling\Views\Components\EmailStatusDropDown;
+use Gatherling\Views\Components\SeasonDropMenu;
+use Gatherling\Views\Components\TimeDropMenu;
+use Gatherling\Views\LoginRedirect;
+use Gatherling\Views\TemplateHelper;
 
 use function Gatherling\Views\server;
 
@@ -132,56 +131,7 @@ function formatDropMenu(?string $format, bool $useAll = false, string $formName 
 
 function timeDropMenu(int|string $hour, int|string $minutes = 0): string
 {
-    $args = timeDropMenuArgs($hour, $minutes);
-
-    return TemplateHelper::render('partials/dropMenu', $args);
-}
-
-/** @return array{name: string, default: string, options: list<array{value: string, text: string, isSelected: bool}>} */
-function timeDropMenuArgs(int|string $hour, int|string $minutes = 0): array
-{
-    if (strcmp($hour, '') == 0) {
-        $hour = -1;
-    }
-    $options = [];
-    for ($h = 0; $h < 24; $h++) {
-        for ($m = 0; $m < 60; $m += 30) {
-            $hstring = $h;
-            if ($m == 0) {
-                $mstring = ':00';
-            } else {
-                $mstring = ":$m";
-            }
-            if ($h == 0) {
-                $hstring = '12';
-            }
-            $apstring = ' AM';
-            if ($h >= 12) {
-                $hstring = $h != 12 ? $h - 12 : $h;
-                $apstring = ' PM';
-            }
-            if ($h == 0 && $m == 0) {
-                $hstring = 'Midnight';
-                $mstring = '';
-                $apstring = '';
-            } elseif ($h == 12 && $m == 0) {
-                $hstring = 'Noon';
-                $mstring = '';
-                $apstring = '';
-            }
-            $options[] = [
-                'value'      => "$h:$m",
-                'text'       => "$hstring$mstring$apstring",
-                'isSelected' => $hour == $h && $minutes == $m,
-            ];
-        }
-    }
-
-    return [
-        'name'    => 'hour',
-        'default' => '- Hour -',
-        'options' => $options,
-    ];
+    return (new TimeDropMenu('hour', $hour, $minutes))->render();
 }
 
 function json_headers(): void

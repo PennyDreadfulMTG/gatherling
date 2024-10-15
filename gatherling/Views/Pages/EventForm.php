@@ -8,12 +8,14 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Views\Components\TextInput;
 use Gatherling\Views\Components\NumDropMenu;
+use Gatherling\Views\Components\SelectInput;
 use Gatherling\Views\Components\StringField;
 use Gatherling\Views\Components\CheckboxInput;
 use Gatherling\Views\Components\RoundDropMenu;
 use Gatherling\Views\Components\FormatDropMenu;
 use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\SeriesDropMenu;
+use Gatherling\Views\Components\TimeDropMenu;
 
 class EventForm extends EventFrame
 {
@@ -24,14 +26,12 @@ class EventForm extends EventFrame
     /** @var array<string, mixed> */
     public array $monthDropMenu;
     public NumDropMenu $dayDropMenu;
-    /** @var array<string, mixed> */
-    public array $timeDropMenu;
+    public TimeDropMenu $timeDropMenu;
     public SeriesDropMenu $seriesDropMenu;
     public SeasonDropMenu $seasonDropMenu;
     public NumDropMenu $numberDropMenu;
     public FormatDropMenu $formatDropMenu;
-    /** @var array<string, mixed> */
-    public array $kValueDropMenu;
+    public SelectInput $kValueDropMenu;
     public StringField $hostField;
     public StringField $cohostField;
     public TextInput $eventThreadUrlField;
@@ -92,7 +92,7 @@ class EventForm extends EventFrame
         $yearDropMenu = new NumDropMenu('year', '- Year -', (int) date('Y') + 1, $year, 2011);
         $monthDropMenu = monthDropMenuArgs($month);
         $dayDropMenu = new NumDropMenu('day', '- Day- ', 31, $day, 1);
-        $timeDropMenu = timeDropMenuArgs($hour, $minutes);
+        $timeDropMenu = new TimeDropMenu('hour', $hour, $minutes);
 
         $seriesList = Player::getSessionPlayer()?->organizersSeries() ?? [];
         if ($event->series) {
@@ -205,8 +205,7 @@ function clientDropMenuArgs(string $field, int $def): array
     ];
 }
 
-/** @return array{id: string, name: string, label: string, select: array{id: string, name: string, options: list<array{isSelected: bool, value: string, text: string}>}} */
-function kValueSelectInput(int $kvalue): array
+function kValueSelectInput(int $kvalue): SelectInput
 {
     /** @var array<string, string> */
     $names = [
@@ -216,7 +215,7 @@ function kValueSelectInput(int $kvalue): array
         '24' => 'Large (24 or more players)',
         '32' => 'Championship',
     ];
-    return selectInputArgs('K-Value', 'kvalue', $names, $kvalue);
+    return new SelectInput('K-Value', 'kvalue', $names, $kvalue);
 }
 
 /** @return array{name: string, default: string, options: array<int, array{isSelected: bool, value: int, text: string}>} */

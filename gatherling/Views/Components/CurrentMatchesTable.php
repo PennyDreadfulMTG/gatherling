@@ -67,4 +67,3 @@ class CurrentMatchesTable extends Component
         $this->tournamentMatches = $matchInfoList;
     }
 }
-
