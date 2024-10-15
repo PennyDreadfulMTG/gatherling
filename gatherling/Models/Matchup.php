@@ -110,15 +110,14 @@ class Matchup
         return $player_or_name;
     }
 
-    public function playerLetter(string|Player $player): ?string
+    public function playerLetter(string $playerName): ?string
     {
-        if ($this->playerA($player)) {
+        if ($this->playerA($playerName)) {
             return 'a';
-        } elseif ($this->playerB($player)) {
+        } elseif ($this->playerB($playerName)) {
             return 'b';
-        } else {
-            return null;
         }
+        return null;
     }
 
     // Returns true if $player has a bye in this match

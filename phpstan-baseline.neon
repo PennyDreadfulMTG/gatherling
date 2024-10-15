@@ -961,18 +961,8 @@ parameters:
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of method Gatherling\\\\Models\\\\Matchup\\:\\:playerA\\(\\) expects string, Gatherling\\\\Models\\\\Player\\|string given\\.$#"
-			count: 1
-			path: gatherling/Models/Matchup.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of method Gatherling\\\\Models\\\\Matchup\\:\\:playerA\\(\\) expects string, string\\|null given\\.$#"
 			count: 7
-			path: gatherling/Models/Matchup.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of method Gatherling\\\\Models\\\\Matchup\\:\\:playerB\\(\\) expects string, Gatherling\\\\Models\\\\Player\\|string given\\.$#"
-			count: 1
 			path: gatherling/Models/Matchup.php
 
 		-
@@ -2426,11 +2416,6 @@ parameters:
 			path: gatherling/lib.php
 
 		-
-			message: "#^Parameter \\#2 \\$playername of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/lib_form_helper.php
-
-		-
 			message: "#^Cannot call method close\\(\\) on bool\\|mysqli_result\\.$#"
 			count: 1
 			path: gatherling/masterplayerfile.php
@@ -2486,23 +2471,8 @@ parameters:
 			path: gatherling/ratings.php
 
 		-
-			message: "#^Cannot access property \\$name on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 3
-			path: gatherling/report.php
-
-		-
 			message: "#^Parameter \\#1 \\$eventname of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"
 			count: 2
-			path: gatherling/report.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/report.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:playerLetter\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
-			count: 3
 			path: gatherling/report.php
 
 		-
@@ -2511,17 +2481,7 @@ parameters:
 			path: gatherling/report.php
 
 		-
-			message: "#^Parameter \\#3 \\$player of function leagueOpponentDropMenu expects Gatherling\\\\Models\\\\Player, Gatherling\\\\Models\\\\Player\\|null given\\.$#"
-			count: 1
-			path: gatherling/report.php
-
-		-
 			message: "#^Parameter \\#3 \\$round of method Gatherling\\\\Models\\\\Event\\:\\:addPairing\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: gatherling/report.php
-
-		-
-			message: "#^Part \\$dispmode \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
 			count: 1
 			path: gatherling/report.php
 

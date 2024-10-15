@@ -1,0 +1,44 @@
+<center>
+    <h3>Report League Game Results</h3>
+    Enter results
+</center>
+<center style="font-weight: bold;">Opponent</center>
+<form action="report.php" method="post">
+    <input name="mode" type="hidden" value="verify_league_result" />
+    <input name="match_id" type="hidden" value="0" />
+    <input name="event" type="hidden" value="{{eventName}}" />
+    <input name="player" type="hidden" value="{{playerName}}" />
+    <table class="form">
+        <tr>
+            <th>
+                {{#leagueOpponentDropMenu}}{{> dropMenu}}{{/leagueOpponentDropMenu}}
+                <br>
+            </th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>
+                <input type='radio' name='report' value='W20' /> I won the match 2-0<br />
+            </th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>
+                <input type='radio' name='report' value='W21' /> I won the match 2-1</th>
+            <td></td>
+        </tr>
+        <!--
+            // Allowing the loser to report leads to race conditions :/
+            // echo "<tr><th><input type='radio' name='report' value='L20' /> I lost the match 0-2<br /></th>\n";
+            // echo "<td></td> </tr> \n";
+            // echo "<tr><th><input type='radio' name='report' value='L21' /> I lost the match 1-2</th>\n";
+            // echo "<td></td></tr>\n";
+        -->
+        <tr>
+            <td colspan="2" class="buttons">
+                <input class="inputbutton" name="submit" type="submit" value="Submit Match Report" />
+            </td>
+        </tr>
+    </table>
+</form>
+<div class="clear"></div>

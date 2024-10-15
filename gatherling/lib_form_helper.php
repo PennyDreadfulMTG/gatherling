@@ -33,25 +33,6 @@ function selectInput(string $label, string $name, ?array $options, mixed $select
     return (new SelectInput($label, $name, $options, $selected, $id))->render();
 }
 
-function leagueOpponentDropMenu(string $eventname, int $round, Player $player, int $subevent): void
-{
-    $event = new Event($eventname);
-    $player_standings = new Standings($eventname, $player->name);
-    $playernames = $player_standings->getAvailableLeagueOpponents($subevent, $round, $event->leagueLength());
-
-    echo '<select class="inputbox" name="opponent"> Opponent';
-
-    if (count($playernames)) {
-        foreach ($playernames as $playername) {
-            $oppplayer = new Player($playername);
-            echo "<option value=\"{$playername}\">{$oppplayer->gameName($event->client, false)}</option>";
-        }
-    } else {
-        echo '<option value="">-No Available Opponents-</option>';
-    }
-    echo '</select>';
-}
-
 /**
  * @param list<string|int> $items
  * @return list<array{value: string, text: string}>

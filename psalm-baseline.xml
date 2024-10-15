@@ -322,6 +322,12 @@
       <code><![CDATA[$name]]></code>
     </PossiblyUnusedProperty>
   </file>
+  <file src="gatherling/Views/Components/DropConfirm.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$eventName]]></code>
+      <code><![CDATA[$playerName]]></code>
+    </PossiblyUnusedProperty>
+  </file>
   <file src="gatherling/Views/Components/DropMenu.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$default]]></code>
@@ -516,6 +522,13 @@
       <code><![CDATA[$timeZone]]></code>
     </PossiblyUnusedProperty>
   </file>
+  <file src="gatherling/Views/Components/LeagueOpponentDropMenu.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$eventName]]></code>
+      <code><![CDATA[$player]]></code>
+      <code><![CDATA[$round]]></code>
+    </PossiblyUnusedProperty>
+  </file>
   <file src="gatherling/Views/Components/LoadFormatForm.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$formatsDropMenu]]></code>
@@ -704,6 +717,24 @@
       <code><![CDATA[$name]]></code>
     </PossiblyUnusedProperty>
   </file>
+  <file src="gatherling/Views/Components/SubmitLeagueResultForm.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$eventName]]></code>
+      <code><![CDATA[$leagueOpponentDropMenu]]></code>
+      <code><![CDATA[$playerName]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="gatherling/Views/Components/SubmitResultForm.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$allowsPlayerReportedDraws]]></code>
+      <code><![CDATA[$currentRound]]></code>
+      <code><![CDATA[$drop]]></code>
+      <code><![CDATA[$dropCheckboxInput]]></code>
+      <code><![CDATA[$isSingleElimination]]></code>
+      <code><![CDATA[$matchId]]></code>
+      <code><![CDATA[$opponentGameName]]></code>
+    </PossiblyUnusedProperty>
+  </file>
   <file src="gatherling/Views/Components/TextInput.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$id]]></code>
@@ -763,6 +794,19 @@
       <code><![CDATA[$infobotPrefix]]></code>
       <code><![CDATA[$isVerified]]></code>
       <code><![CDATA[$playerName]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="gatherling/Views/Components/VerifyResultForm.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$drop]]></code>
+      <code><![CDATA[$eventName]]></code>
+      <code><![CDATA[$isDrop]]></code>
+      <code><![CDATA[$matchId]]></code>
+      <code><![CDATA[$opponent]]></code>
+      <code><![CDATA[$playerName]]></code>
+      <code><![CDATA[$report]]></code>
+      <code><![CDATA[$resultText]]></code>
+      <code><![CDATA[$showOpponent]]></code>
     </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/ICal.php">
@@ -1038,6 +1082,13 @@
       <code><![CDATA[$message]]></code>
       <code><![CDATA[$showRegForm]]></code>
       <code><![CDATA[$timeZoneDropMenu]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="gatherling/Views/Pages/Report.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[$viewComponent]]></code>
+      <code><![CDATA[$viewSafe]]></code>
     </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Pages/ReportsForm.php">

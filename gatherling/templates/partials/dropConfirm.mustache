@@ -1,0 +1,29 @@
+<center>
+    <h3>Drop Form</h3>
+    <center style="color: red; font-weight: bold;">
+        Are you sure you want to drop? This cannot be undone.
+    </center>
+    <center style="font-weight: bold;">
+        Please be sure to submit a result for any active matches before you leave.
+    </center>
+    <table class="form">
+        <tr>
+            <th>
+                <form action="report.php" method="post">
+                    <input name="action" type="hidden" value="drop" />
+                    <input name="event" type="hidden" value="{{eventName}}" />
+                    <input name="player" type="hidden" value="{{playerName}}" />
+                    <input class="inputbutton" name="submit" type="submit" value="Drop from Event" />
+                </form>
+            </th>
+            <td>
+                <form action="player.php" method="get">
+                    <input class="inputbutton" name="submit" type="submit" value="Cancel" />
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="buttons"></td>
+        </tr>
+    </table>
+</center>
