@@ -829,7 +829,7 @@ class Deck
 
         $stmt = $db->prepare('UPDATE decks SET notes = ?, deck_colors = ? WHERE id = ?');
         if (!$stmt) {
-            echo $db->error;
+            throw new Exception("Failed to prepare db statement");
         }
         $stmt->bind_param('ssd', $this->notes, $this->deck_color_str, $this->id);
         if (!$stmt->execute()) {
