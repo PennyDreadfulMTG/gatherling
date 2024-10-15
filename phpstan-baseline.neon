@@ -386,16 +386,6 @@ parameters:
 			path: gatherling/Models/Entry.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Entry.php
-
-		-
-			message: "#^Parameter \\#1 \\$username of method Gatherling\\\\Models\\\\Entry\\:\\:canCreateDeck\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: gatherling/Models/Entry.php
-
-		-
 			message: "#^Parameter \\#2 \\$string2 of function strcasecmp expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Entry.php
@@ -1067,27 +1057,27 @@ parameters:
 
 		-
 			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 44
-			path: gatherling/Models/Player.php
-
-		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 36
-			path: gatherling/Models/Player.php
-
-		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
 			count: 42
 			path: gatherling/Models/Player.php
 
 		-
+			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
+			count: 34
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
+			count: 40
+			path: gatherling/Models/Player.php
+
+		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 43
+			count: 41
 			path: gatherling/Models/Player.php
 
 		-
 			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 36
+			count: 34
 			path: gatherling/Models/Player.php
 
 		-
@@ -1142,11 +1132,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/Models/Player.php
-
-		-
-			message: "#^Parameter \\#2 \\$playername of class Gatherling\\\\Models\\\\Entry constructor expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Player.php
 
@@ -1372,11 +1357,6 @@ parameters:
 
 		-
 			message: "#^Method Gatherling\\\\Models\\\\Standings\\:\\:getAvailableLeagueOpponents\\(\\) should return list\\<string\\> but returns array\\<int\\<0, max\\>, mixed\\>\\.$#"
-			count: 1
-			path: gatherling/Models/Standings.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventName of class Gatherling\\\\Views\\\\Components\\\\EventStandings constructor expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Standings.php
 
@@ -2476,152 +2456,7 @@ parameters:
 			path: gatherling/masterplayerfile.php
 
 		-
-			message: "#^Cannot access offset mixed on mixed\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot access property \\$num_rows on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot access property \\$verified on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 2
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot call method linkTo\\(\\) on Gatherling\\\\Models\\\\Deck\\|null\\.$#"
-			count: 2
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot call method store_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot cast mixed to float\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Cannot cast mixed to int\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$currentStatus of function emailStatusDropDown expects int, int\\|null given\\.$#"
-			count: 2
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$datetime of function strtotime expects string, string\\|null given\\.$#"
-			count: 3
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$datetime of function time_element expects int, int\\|false given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$event_id of class Gatherling\\\\Models\\\\Entry constructor expects int, int\\|null given\\.$#"
-			count: 2
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$event_id of method Gatherling\\\\Models\\\\Player\\:\\:getDeckEvent\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventid of static method Gatherling\\\\Models\\\\Entry\\:\\:playerRegistered\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Standings\\:\\:playerActive\\(\\) expects string, string\\|null given\\.$#"
-			count: 2
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$medal of function medalImgStr expects string, string\\|null given\\.$#"
-			count: 2
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$oneplayer of method Gatherling\\\\Models\\\\Matchup\\:\\:otherPlayer\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:getPlayerLosses\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:getPlayerWins\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:playerLost\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:playerWon\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, string\\|null given\\.$#"
-			count: 5
-			path: gatherling/player.php
-
-		-
 			message: "#^Parameter \\#1 \\$username of static method Gatherling\\\\Models\\\\Player\\:\\:checkPassword\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#2 \\$date of method Gatherling\\\\Models\\\\Player\\:\\:getRating\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Parameter \\#2 \\$playerName of static method Gatherling\\\\Models\\\\Standings\\:\\:eventStandings\\(\\) expects string\\|null, string\\|false given\\.$#"
-			count: 1
-			path: gatherling/player.php
-
-		-
-			message: "#^Part \\$_SESSION\\['DISCORD_NAME'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
 			count: 1
 			path: gatherling/player.php
 

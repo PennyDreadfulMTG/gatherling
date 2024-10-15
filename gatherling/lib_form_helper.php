@@ -85,11 +85,6 @@ function selectInputArgs(string $label, string $name, ?array $options, mixed $se
     ];
 }
 
-function timeZoneDropMenu(?float $selected = null): string
-{
-    return (new TimeZoneDropMenu($selected))->render();
-}
-
 function leagueOpponentDropMenu(string $eventname, int $round, Player $player, int $subevent): void
 {
     $event = new Event($eventname);

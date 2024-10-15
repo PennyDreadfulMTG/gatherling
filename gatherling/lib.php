@@ -130,11 +130,6 @@ function formatDropMenu(?string $format, bool $useAll = false, string $formName 
     return (new FormatDropMenu($format, $useAll, $formName))->render();
 }
 
-function emailStatusDropDown(int $currentStatus = 1): string
-{
-    return (new EmailStatusDropDown($currentStatus))->render();
-}
-
 function timeDropMenu(int|string $hour, int|string $minutes = 0): string
 {
     $args = timeDropMenuArgs($hour, $minutes);
@@ -215,7 +210,8 @@ function git_hash(): string
 
 function version_tagline(): string
 {
-    return 'Gatherling version 6.0.0 ("A foolish consistency is the hobgoblin of little minds")';
+    return 'Gatherling version 6.0.1 ("A guilty system recognizes no innocents.")';
+    // return 'Gatherling version 6.0.0 ("A foolish consistency is the hobgoblin of little minds")';
     // return 'Gatherling version 5.2.0 ("I mustache you a question...")';
     // return 'Gatherling version 5.1.0 ("Have no fear of perfection – you’ll never reach it.")';
     // echo 'Gatherling version 5.0.1 ("No rest. No mercy. No matter what.")';

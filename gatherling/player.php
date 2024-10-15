@@ -2,1199 +2,172 @@
 
 declare(strict_types=1);
 
-use Gatherling\Models\Database;
-use Gatherling\Models\Entry;
-use Gatherling\Models\Event;
 use Gatherling\Models\Player;
-use Gatherling\Models\Ratings;
-use Gatherling\Models\Series;
-use Gatherling\Models\Standings;
+use Gatherling\Views\Components\AllDecks;
+use Gatherling\Views\Components\AllRatings;
+use Gatherling\Views\Components\ChangePassForm;
+use Gatherling\Views\Components\EditAccountsForm;
+use Gatherling\Views\Components\EditEmailForm;
+use Gatherling\Views\Components\EditTimeZoneForm;
+use Gatherling\Views\Components\EventStandings;
+use Gatherling\Views\Components\MainPlayerControlPanel;
+use Gatherling\Views\Components\ManualVerifyMtgoForm;
+use Gatherling\Views\Components\VerifyMtgoForm;
+use Gatherling\Views\Components\PlayerMatches;
+use Gatherling\Views\LoginRedirect;
+use Gatherling\Views\Pages\PlayerControlPanel;
 
 use function Gatherling\Views\config;
 use function Gatherling\Views\get;
 use function Gatherling\Views\post;
+use function Gatherling\Views\request;
+use function Gatherling\Views\server;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
-$player = Player::getSessionPlayer();
-if ($player == null) {
-    linkToLogin('your Player Control Panel');
-}
 
-print_header('Player Control Panel');
-?>
-<div class="grid_10 suffix_1 prefix_1">
-<div id="gatherling_main" class="box">
-<div class="uppertitle"> Player Control Panel </div>
-<?php
-$result = '';
-// Handle actions
-if (isset($_POST['action'])) {
-    // TODO: remove deck ignore functionality
-    if ($_POST['action'] == 'setIgnores') {
-        setPlayerIgnores();
-    } elseif ($_POST['action'] == 'changePassword') {
-        $success = false;
-        if ($_POST['newPassword2'] == $_POST['newPassword']) {
-            if (strlen(post()->string('newPassword', '')) >= 8) {
-                $authenticated = Player::checkPassword($player->name, post()->string('oldPassword', ''));
-                if ($authenticated) {
-                    $player->setPassword(post()->string('newPassword'));
-                    $result = 'Password changed.';
-                    $success = true;
-                } else {
-                    $result = 'Password *not* changed, your old password was incorrect!';
-                }
-            } else {
-                $result = 'Password *not* changed, your new password needs to be longer!';
-            }
-        } else {
-            $result = 'Password *not* changed, your new passwords did not match!';
-        }
-    } elseif ($_POST['action'] == 'editEmail') {
-        $success = false;
-        if ($_POST['newEmail'] == $_POST['newEmail2']) {
-            $player->emailAddress = (post()->string('newEmail'));
-            $player->emailPrivacy = (int) $_POST['emailstatus'];
-            $result = 'Email changed.';
-            $success = true;
-            $player->save();
-        } else {
-            $result = 'Email *NOT* Changed, your new emails did not match!';
-        }
-    } elseif ($_POST['action'] == 'editAccounts') {
-        $success = false;
-
-        $player->mtgo_username = post()->optionalString('mtgo_username');
-        if (!preg_match('/^.{3,24}#\d{5}$/', post()->string('mtga_username', ''))) {
-            $_POST['mtga_username'] = null;
-        }
-        $player->mtga_username = post()->optionalString('mtga_username');
-        $player->save();
-        $result = 'Accounts updated.';
-        $success = true;
-    } elseif ($_POST['action'] == 'changeTimeZone') {
-        $player->timezone = (float) $_POST['timezone'];
-        $result = 'Time Zone Changed.';
-        $player->save();
-    } elseif ($_POST['action'] == 'verifyAccount') {
-        $success = false;
-        if ($player->checkChallenge(post()->string('challenge'))) {
-            $player->setVerified(true);
-            $result = 'Successfully verified your account with MTGO.';
-            $success = true;
-        } else {
-            $infobotPrefix = config()->string('infobot_prefix', '');
-            $result = "Your challenge is wrong.  Get a new one by sending the message '<code>!verify {$infobotPrefix}</code>' to pdbot on MTGO!";
-        }
-    }
-}
-// Handle modes
-$dispmode = 'playercp';
-if (isset($_REQUEST['mode'])) {
-    $dispmode = $_REQUEST['mode'];
-}
-
-switch ($dispmode) {
-    case 'submit_result':
-    case 'submit_league_result':
-    case 'verify_result':
-    case 'verify_league_result':
-    case 'drop_form':
-        echo 'oops';
-
-        break;
-
-    case 'alldecks':
-        print_allContainer();
-        break;
-
-    case 'allratings':
-        $formatName = post()->string('format', 'Composite');
-        print_ratingsTable();
-        echo '<br /><br />';
-        print_ratingHistoryForm($formatName);
-        echo '<br />';
-        print_ratingsHistory($formatName);
-        break;
-
-    case 'allmatches':
-        print_allMatchForm($player);
-        print_matchTable($player);
-        break;
-
-    case 'Filter Matches':
-        print_allMatchForm($player);
-        print_matchTable($player);
-        break;
-
-    case 'changepass':
-        print_changePassForm($player, $result);
-        break;
-
-    case 'edit_email':
-        print_editEmailForm($player, $result);
-        break;
-
-    case 'edit_accounts':
-        print_editAccountsForm($player, $result);
-        break;
-
-    case 'change_timezone':
-        print_editTimeZoneForm($player, $result);
-        break;
-
-    case 'standings':
-        echo Standings::eventStandings(get()->string('event'), Player::loginName());
-        break;
-
-    case 'verifymtgo':
-        $infobotPasskey = config()->string('infobot_passkey', '');
-        if ($infobotPasskey == '') {
-            print_manualverifyMtgoForm();
-        } else {
-            print_verifyMtgoForm($player, $result);
-        }
-        break;
-
-    default:
-        print_mainPlayerCP($player, $result);
-        break;
-}
-?>
-</div> <!-- gatherling_main box -->
-</div> <!-- grid 10 suff 1 pre 1 -->
-
-<?php print_footer(); ?>
-
-<?php
-
-function print_changePassForm(Player $player, string $result): void
-{
-    if (isset($_REQUEST['tooshort'])) {
-        echo "<center><h3>You must change your password to continue</h3></center>\n";
-    } else {
-        echo "<center><h3>Changing your password</h3></center>\n";
-    }
-    echo "<center id='notice'>Passwords are required to be at least 8 characters long.</center>\n";
-    echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
-    echo "<form action=\"player.php\" method=\"post\" onsubmit=\"return validate_pw()\">\n";
-    echo "<input name=\"action\" type=\"hidden\" value=\"changePassword\" />\n";
-    echo "<input name=\"mode\" type=\"hidden\" value=\"changepass\" />\n";
-    echo '<table class="form">';
-    echo "<tr><th>Current Password</th>\n";
-    echo "<td><input class=\"inputbox\" name=\"oldPassword\" type=\"password\" /></td></tr>\n";
-    echo "<tr><th>New Password</th>\n";
-    echo "<td><input class=\"inputbox\" name=\"newPassword\" id=\"pw\" type=\"password\" /></td></tr>\n";
-    echo "<tr><th>Repeat New Password</th>\n";
-    echo "<td><input class=\"inputbox\" name=\"newPassword2\" id=\"pw2\" type=\"password\" /></td></tr>\n";
-    echo "<tr><td colspan=\"2\" class=\"buttons\">\n";
-    echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Change Password\" />\n";
-    echo "</td></tr></table>\n";
-    echo "</form>\n";
-    echo "<div class=\"clear\"> </div>\n";
-}
-
-function print_editEmailForm(Player $player, string $result): void
-{
-    if ($player->emailAddress == '') {
-        // add email form
-        echo "<center><h3>Add an Email Address to your Account</h3></center>\n";
-        echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
-        echo "<form action=\"player.php\" method=\"post\">\n";
-        echo "<input name=\"action\" type=\"hidden\" value=\"editEmail\" />\n";
-        echo "<input name=\"mode\" type=\"hidden\" value=\"edit_email\" />\n";
-        echo '<table class="form">';
-        echo "<tr><th>New Email</th>\n";
-        echo "<td><input class=\"inputbox\" name=\"newEmail\" type=\"email\" /></td></tr>\n";
-        echo "<tr><th>Repeat New Email</th>\n";
-        echo "<td><input class=\"inputbox\" name=\"newEmail2\" type=\"email\" /></td></tr>\n";
-        echo "<tr><th>Privacy Status</th>\n";
-        echo '<td>';
-        echo emailStatusDropDown($player->emailPrivacy);
-        echo '</td></tr>';
-        echo "<tr><td colspan=\"2\" class=\"buttons\">\n";
-        echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Add Email\" />\n";
-        echo "</td></tr></table>\n";
-        echo "</form>\n";
-        echo "<div class=\"clear\"></div>\n";
-    } else {
-        // edit email form
-        echo "<center><h3>Edit Existing Email Address</h3></center>\n";
-        echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
-        echo "<form action=\"player.php\" method=\"post\">\n";
-        echo "<input name=\"action\" type=\"hidden\" value=\"editEmail\" />\n";
-        echo "<input name=\"mode\" type=\"hidden\" value=\"edit_email\" />\n";
-        echo '<table class="form">';
-        echo "<tr><th>Existing Email: </th>\n";
-        echo "<td>{$player->emailAddress}</td></tr>";
-        echo "<tr><th>New Email</th>\n";
-        echo "<td><input class=\"inputbox\" name=\"newEmail\" type=\"email\" /></td></tr>\n";
-        echo "<tr><th>Repeat New Email</th>\n";
-        echo "<td><input class=\"inputbox\" name=\"newEmail2\" type=\"email\" /></td></tr>\n";
-        echo "<tr><th>Privacy Status</th>\n";
-        echo '<td>';
-        echo emailStatusDropDown($player->emailPrivacy);
-        echo '</td></tr>';
-        echo "<tr><td colspan=\"2\" class=\"buttons\">\n";
-        echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Edit Email\" />\n";
-        echo "</td></tr></table>\n";
-        echo "</form>\n";
-        echo "<div class=\"clear\"></div>\n";
-    }
-}
-
-function print_editAccountsForm(Player $player, string $result): void
-{
-    echo "<center><h3>Set your accounts</h3></center>\n";
-    echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
-    echo "<form action=\"player.php\" method=\"post\">\n";
-    echo "<input name=\"action\" type=\"hidden\" value=\"editAccounts\" />\n";
-    echo '<table class="form">';
-    echo textInput('Magic Online', 'mtgo_username', $player->mtgo_username);
-    echo textInput('Magic Arena', 'mtga_username', $player->mtga_username, 0, "Don't forget the 5-digit number!");
-    echo "<tr><td colspan=\"2\" class=\"buttons\">\n";
-    echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Update Accounts\" />\n";
-    echo "</td></tr></table>\n";
-    echo "</form>\n";
-    echo "<div class=\"clear\"></div>\n";
-}
-
-function print_editTimeZoneForm(Player $player, string $result): void
-{
-    echo "<center><h3>Changing Your Time Zone</h3></center>\n";
-    echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
-    echo "<form action=\"player.php\" method=\"post\">\n";
-    echo "<input name=\"action\" type=\"hidden\" value=\"changeTimeZone\" />\n";
-    // echo "<input name=\"mode\" type=\"hidden\" value=\"change_timezone\" />\n";
-    echo "<input name=\"username\" type=\"hidden\" value=\"{$player->name}\" />\n";
-    echo '<table class="form">';
-    echo "<tr><th>Current Time Zone: </th>\n";
-    echo '<td>';
-    echo $player->timeZone();
-    echo '</td></tr>';
-    echo "<tr><th>Desired Time Zone</th>\n";
-    echo '<td>';
-    echo timeZoneDropMenu();
-    echo "<tr><td colspan=\"2\" class=\"buttons\">\n";
-    echo "<input class=\"inputbutton\" name=\"submit\" type=\"submit\" value=\"Change Time Zone\" />\n";
-    echo "</td></tr></table>\n";
-    echo "</form>\n";
-    echo "<div class=\"clear\"></div>\n";
-}
-
-function print_manualverifyMtgoForm(): void
+function main(): void
 {
     $player = Player::getSessionPlayer();
-    if ($player->verified == 1) {
-        echo "<center>You are already verified!</center>\n";
-        echo "<a href=\"player.php\">Go back to the Player CP</a>\n";
-    } else {
-        echo "<center><h3>Verifying your MTGO account</h3>
-        Verify your MTGO account in one simple step:<br />
-        1. Contact an admin via <a href=\"https://discord.gg/2VJ8Fa6\">the Discord server</a>.<br />\n";
-    }
-}
-
-function print_verifyMtgoForm(Player $player, string $result): void
-{
-    global $CONFIG;
-    echo "<center><h3>Verifying your MTGO account</h3>
-    Verify your MTGO account by following these simple steps:<br />
-    1. Chat <code>!verify {$CONFIG['infobot_prefix']}</code> to pdbot to get a verification code <br />
-    2. Enter the verification code here to be verified <br />
-    \n";
-    echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
-    if ($player->verified == 1) {
-        echo "<center>You are already verified!</center>\n";
-        echo "<a href=\"player.php\">Go back to the Player CP</a>\n";
-    } else {
-        echo "<form action=\"player.php\" method=\"post\">\n";
-        echo "<input name=\"action\" type=\"hidden\" value=\"verifyAccount\" />\n";
-        echo "<input name=\"mode\" type=\"hidden\" value=\"verifymtgo\" />\n";
-        echo "<input name=\"username\" type=\"hidden\" value=\"{$player->name}\" />\n";
-        echo '<table class="form">';
-        echo "<tr><th>Verification Code</th>\n";
-        echo "<td> <input name=\"challenge\" type=\"text\" /></td> </tr> \n";
-        echo "<tr> <td colspan=\"2\" class=\"buttons\">\n";
-        echo "<input name=\"submit\" type=\"submit\" value=\"Verify Account\" />\n";
-        echo "</td> </tr> </table> \n";
-        echo "</form>\n";
-    }
-    echo "<div class=\"clear\"> </div>\n";
-}
-
-// TODO: Remove deck ignore functionality
-function setPlayerIgnores(): void
-{
-    global $player;
-    $noDeckEntries = $player->getNoDeckEntries();
-    foreach ($noDeckEntries as $entry) {
-        if (isset($_POST['ignore'][$entry->event->name])) {
-            $entry->setIgnored(1);
-        } else {
-            $entry->setIgnored(0);
-        }
-    }
-}
-
-function print_mainPlayerCP(Player $player, string $result): void
-{
-    echo '<script defer src="tab_view.js"></script>';
-    echo '<button class="tablink" id="defaultOpen" onclick="openPage(\'future\', this)">Events</button>';
-    echo '<button class="tablink" onclick="openPage(\'past\', this)">History</button>';
-    echo '<button class="tablink" onclick="openPage(\'statistics\', this)">Statistics</button>';
-    echo '<button class="tablink" onclick="openPage(\'settings\', this)">Settings</button>';
-
-    if ($result) {
-        echo "<center style=\"color: red; font-weight: bold;\">{$result}</center>\n";
-    }
-    /// Events
-    echo '<div id="future" class="tabcontent">';
-    echo "<div class=\"alpha grid_5\">\n";
-    echo "<div id=\"gatherling_lefthalf\">\n";
-    print_preRegistration();
-    echo "</div></div>\n";
-    echo "<div class=\"omega grid_5\">\n";
-    echo "<div id=\"gatherling_righthalf\">\n";
-    $Leagues = print_ActiveEvents();
-    print_currentMatchTable($Leagues);
-    echo "</div></div>\n";
-    echo '</div>';
-
-    /// History
-    echo '<div id="past" class="tabcontent">';
-    echo "<div class=\"grid_7\">\n";
-    echo "<div id=\"gatherling_lefthalf\">\n";
-    print_recentDeckTable();
-    echo "</div></div>\n";
-    echo "<div class=\"grid_7\">\n";
-    echo "<div id=\"gatherling_righthalf\">\n";
-    print_recentMatchTable();
-    echo "</div></div>\n";
-    echo '</div>';
-
-    /// Statistics
-    echo '<div id="statistics" class="tabcontent">';
-    echo "<div class=\"alpha grid_5\">\n";
-    echo "<div id=\"gatherling_lefthalf\">\n";
-    print_ratingsTableSmall();
-    echo "</div></div>\n";
-    echo "<div class=\"omega grid_5\">\n";
-    echo "<div id=\"gatherling_righthalf\">\n";
-    print_statsTable();
-    echo "</div></div>\n";
-    echo '</div>';
-
-    /// Settings
-    echo '<div id="settings" class="tabcontent">';
-    echo "<div class=\"alpha grid_5\">\n";
-    echo "<div id=\"gatherling_lefthalf\">\n";
-    echo "<b>ACTIONS</b><br />\n";
-    echo "<ul>\n";
-    echo "<li><a href=\"player.php?mode=changepass\">Change your password</a></li>\n";
-    if ($player->emailAddress == '') {
-        echo "<li><a href=\"player.php?mode=edit_email\">Add Email Address</a></li>\n";
-    } else {
-        echo "<li><a href=\"player.php?mode=edit_email\">Change Email Address: {$player->emailAddress}</a></li>\n";
-    }
-    echo "<li><a href=\"player.php?mode=change_timezone\">Change Your Time Zone</a></li>\n";
-    echo "</div></div>\n";
-    //
-    echo "<div class=\"omega grid_5\">\n";
-    echo "<div id=\"gatherling_righthalf\">\n";
-    echo "<b>CONNECTIONS</b><br />\n";
-    if (empty($player->mtgo_username)) {
-        echo "<li><a href=\"player.php?mode=edit_accounts\">Add a Magic Online account</a></li>\n";
-    } else {
-        echo '<li><span style="color: green; font-weight: bold;"><i class="ss ss-pmodo"></i> ' . "$player->mtgo_username</span> (<a href=\"player.php?mode=edit_accounts\">edit</a>)</li>\n";
+    if ($player == null) {
+        (new LoginRedirect())->send();
     }
 
-    if (empty($player->mtga_username)) {
-        echo "<li><a href=\"player.php?mode=edit_accounts\">Add an Arena account</a></li>\n";
-    } else {
-        echo '<li><span style="color: green; font-weight: bold;"><i class="ss ss-parl3"></i> ' . "$player->mtga_username</span> (<a href=\"player.php?mode=edit_accounts\">edit</a>)</li>\n";
-    }
-    // if ($player->verified == 0) {
-    //     echo "<li><a href=\"player.php?mode=verifymtgo\">Verify your <i class=\"ss ss-pmodo\"></i> MTGO account</a></li>\n";
-    // } else {
-    //     echo '<li><span style="color: green; font-weight: bold;">'.image_tag('verified.png').'<i class="ss ss-pmodo"></i> '."MTGO Verified</span></li>\n";
-    // }
+    $result = '';
+    $action = post()->optionalString('action');
 
-    if (isset($_SESSION['DISCORD_ID']) && empty($player->discord_id)) {
-        echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> {$_SESSION['DISCORD_NAME']}</a></li>\n";
-    } elseif (empty($player->discord_id)) {
-        echo "<li><a href=\"auth.php\">Link your account to <i class=\"fab fa-discord\"></i> Discord</a></li>\n";
-    } else {
-        echo "<li><span style=\"color: green; font-weight: bold;\"><i class=\"fab fa-discord\"></i> $player->discord_handle</span> (<a href=\"auth.php\">Link new account</a>)</li>\n";
-    }
-    echo "</ul>\n";
-    echo "</div></div>\n";
-    echo '</div>';
-    echo "<div class=\"clear\"></div>\n";
-}
-
-function print_allContainer(): void
-{
-    $rstar = '<font color="#FF0000">*</font>';
-    echo "<p> Decks marked with a $rstar are not legal under current format.<p>\n";
-    echo "<div class=\"alpha grid_6\">\n";
-    echo "<div id=\"gatherling_lefthalf\">\n";
-    print_allDeckTable();
-    echo "</div> </div> \n";
-    echo "<div class=\"omega grid_4\">\n";
-    echo "<div id=\"gatherling_righthalf\">\n";
-    // print_noDeckTable(1);
-    echo "</div> </div> \n";
-    echo '<div class="clear"> </div> ';
-}
-
-function print_recentDeckTable(): void
-{
-    global $player;
-
-    echo "<table width='100%'>\n";
-    echo "<tr><td colspan=3><b>RECENT DECKS</td>\n";
-    echo '<td colspan=2 align="right">';
-    echo "<a href=\"player.php?mode=alldecks\">(see all)</a></td>\n";
-
-    $event = $player->getLastEventPlayed();
-    if (is_null($event)) {
-        echo "<tr><td>No Decks Found!</td>\n";
-    } else {
-        $entry = new Entry($event->id, $player->name);
-        if ($entry->deck) {
-            $decks = $player->getRecentDecks(6);
-        } else {
-            $decks = $player->getRecentDecks(5);
-        }
-        foreach ($decks as $deck) {
-            echo '<tr><td style="white-space: nowrap;">' . medalImgStr($deck->medal) . "</td>\n";
-            echo '<td style="white-space: nowrap;">' . $deck->linkTo() . "</td>\n";
-            $targetUrl = 'eventreport';
-            $event = new Event($deck->eventname);
-            if ($event->authCheck($player->name)) {
-                $targetUrl = 'event';
-            }
-            echo "<td style=\"white-space: nowrap;\"><a href=\"{$targetUrl}.php?event={$deck->eventname}\">{$deck->eventname}</a></a></td>\n";
-            echo '<td width="99%" align="right">' . $deck->recordString() . "</td></tr>\n";
-        }
-    }
-    echo "</table>\n";
-}
-
-function print_preRegistration(): void
-{
-    global $player;
-    $upcoming_events = Event::getUpcomingEvents($player->name);
-    $events = Event::getNextPreRegister();
-
-    $available_events = [];
-    $series = [];
-
-    foreach ($events as $event) {
-        if (in_array($event->series, $series)) {
-            continue;
-        }
-        $series[] = $event->series;
-        if ($event->hasRegistrant($player->name)) {
-            continue;
-        }
-        $available_events[] = $event;
+    // Handle actions
+    if ($action == 'changePassword') {
+        $result = changePassword($player, post()->string('oldPasssword', ''), post()->string('newPassword'), post()->string('newPassword2'));
+    } elseif ($action == 'editEmail') {
+        $result = editEmail($player, post()->string('newEmail'), post()->string('newEmail2'), post()->int('emailStatus'));
+    } elseif ($action == 'editAccounts') {
+        $result = editAccounts($player, post()->optionalString('mtgo_username'), post()->string('mtga_username', ''));
+    } elseif ($action == 'changeTimeZone') {
+        $result = changeTimeZone($player, post()->float('timezone'));
+    } elseif ($action == 'verifyAccount') {
+        $result = verifyAccount($player, post()->string('challenge'));
     }
 
-    echo '<table class="gatherling_full"><tr><td colspan="3"><b>YOUR UPCOMING EVENTS</b></td></tr>';
-    if (count($upcoming_events) == 0) {
-        echo '<tr><td colspan="3"> You haven\'t registered for any events </td> </tr>';
-    }
+    $dispmode = request()->string('mode', 'playercp');
+    switch ($dispmode) {
+        case 'submit_result':
+        case 'submit_league_result':
+        case 'verify_result':
+        case 'verify_league_result':
+        case 'drop_form':
+            throw new InvalidArgumentException('Invalid mode: ' . $dispmode);
 
-    $arena = false;
-    $mtgo = false;
-    $now = time();
-    foreach ($upcoming_events as $event) {
-        if ($event->client == 1) {
-            $mtgo = true;
-        } elseif ($event->client == 2) {
-            $arena = true;
-        }
+        case 'alldecks':
+            $viewComponent = new AllDecks($player);
+            break;
 
-        $targetUrl = 'eventreport';
-        if ($event->authCheck($player->name)) {
-            $targetUrl = 'event';
-        }
-        echo '<tr><td><a href="' . $targetUrl . '.php?event=' . rawurlencode($event->name) . "\">{$event->name}</a></td>";
-        if (time() >= strtotime($event->start)) {
-            echo '<td>Starting soon</td>';
-        } else {
-            echo '<td>' . time_element(strtotime($event->start), $now) . '</td>';
-        }
-        $entry = new Entry($event->id, $player->name);
-        if (is_null($entry->deck)) {
-            echo '<td align="left">' . $entry->createDeckLink() . '</td>';
-        } else {
-            echo '<td align="left" style="font-size: 1.1em">' . $entry->deck->linkTo() . '</td>';
-        }
+        case 'allratings':
+            $formatName = post()->string('format', 'Composite');
+            $viewComponent = new AllRatings($player, $formatName);
+            break;
 
-        echo '<td><a href="prereg.php?action=unreg&event=' . rawurlencode($event->name) . '">Unreg</a></td>';
-        echo '</tr>';
-    }
-    if ($mtgo && empty($player->mtgo_username)) {
-        echo '<tr>Please <a href="player.php?mode=edit_accounts">set your MTGO username</a>.</tr>';
-    }
-    if ($arena && empty($player->mtga_username)) {
-        echo '<tr>Please <a href="player.php?mode=edit_accounts">set your MTGA username</a>.</tr>';
-    }
+        case 'allmatches':
+        case 'Filter Matches':
+            $selectedFormat = post()->string('format', '%');
+            $selectedSeries = post()->string('series', '%');
+            $selectedSeason = post()->string('season', '%');
+            $selectedOpponent = post()->string('opp', '%');
+            $viewComponent = new PlayerMatches($player, $selectedFormat, $selectedSeries, $selectedSeason, $selectedOpponent);
+            break;
 
-    echo '</table>';
-    echo '<table class="gatherling_full"><tr><td colspan="3"><b>PREREGISTER FOR EVENTS</b></td></tr>';
-    if (count($available_events) == 0) {
-        echo '<tr><td colspan="3"> No upcoming events </td> </tr>';
-    }
+        case 'changepass':
+            $viewComponent = new ChangePassForm(request()->optionalString('tooshort') === 'true');
+            break;
 
-    foreach ($available_events as $event) {
-        echo '<tr><td><a href="eventreport.php?event=' . rawurlencode($event->name) . "\">{$event->name}</a>";
-        echo '<br>' . time_element(strtotime($event->start), time()) . '</td>';
+        case 'edit_email':
+            $viewComponent = new EditEmailForm($player);
+            break;
 
-        if ($event->isFull()) {
-            echo '<td>This event is currently at capacity.</td>';
-        } elseif ($event->client == 1 && empty($player->mtgo_username)) {
-            echo '<td><a href="player.php?mode=edit_accounts">Requires an MTGO account</a></td>';
-        } elseif ($event->client == 2 && empty($player->mtga_username)) {
-            echo '<td><a href="player.php?mode=edit_accounts">Requires a Magic Arena account</a></td>';
-        } else {
-            echo '<td><a href="prereg.php?action=reg&event=' . rawurlencode($event->name) . '">Register</a></td>';
-        }
-        echo '</tr>';
-    }
-    echo '</table>';
-}
+        case 'edit_accounts':
+            $viewComponent = new EditAccountsForm($player);
+            break;
 
-//* Modified above function to display active events and a link to current standings
-// Undecided about showing all active events, or only those the player is enrolled in.
-/** @return array<string> */
-function print_ActiveEvents(): array
-{
-    global $player;
-    $events = Event::getActiveEvents();
-    echo '<table class="gatherling_full"><tr><td colspan="12"><b>ACTIVE EVENTS</b></td></tr>';
-    if (count($events) == 0) {
-        echo '<tr><td colspan="12"> No events are currently active. </td> </tr>';
-    }
+        case 'change_timezone':
+            $viewComponent = new EditTimeZoneForm($player);
+            break;
 
-    $Leagues = [];
-    foreach ($events as $event) {
-        if (Standings::playerActive($event->name, $player->name) == 0 && $event->private) {
-            continue;
-        }
-        $targetUrl = 'eventreport';
-        if ($event->authCheck($player->name)) {
-            $targetUrl = 'event';
-        }
-        echo "<tr><td><a href=\"{$targetUrl}.php?event=" . rawurlencode($event->name) . "\">{$event->name}</a>";
-        $series = new Series($event->series);
-        if ($series->discord_guild_name && $series->discord_channel_name) {
-            echo " <pre style=\"cursor:help;\" title=\"The Tournament Organizer prefers that your join their Discord server.\" ><i class=\"fab fa-discord\"></i> #$series->discord_channel_name in $series->discord_guild_name</pre>";
-        } elseif ($series->mtgo_room) {
-            echo " <pre style=\"cursor:help;\" title=\"To join a Chat room, use the Chat menu, or type /join #$series->mtgo_room into your game chat.\" ><i class=\"ss ss-pmodo\"></i> MTGO room #$series->mtgo_room</pre>";
-        }
-        echo '</td>';
-        echo "<td><a href=\"player.php?mode=standings&event={$event->name}\">Current Standings</a></td>";
-        if ($event->current_round > $event->mainrounds) {
-            $structure = $event->finalstruct;
-            $subevent_id = $event->finalid;
-        } else {
-            $structure = $event->mainstruct;
-            $subevent_id = $event->mainid;
-        }
-        if (Standings::playerActive($event->name, $player->name) == 1) {
-            $entry = new Entry($event->id, $player->name);
-            if (is_null($entry->deck) || !$entry->deck->isValid()) {
-                echo '<td>' . $entry->createDeckLink() . '</td>';
-            } elseif ($structure == 'League') {
-                $count = $event->getPlayerLeagueMatchCount($player->name) + 1;
-                if ($count <= $event->leagueLength()) {
-                    $Leagues[] = "<tr><td>{$event->name} Match: {$count}</td><td><a href=\"report.php?mode=submit_league_result&event={$event->name}&round={$event->current_round}&subevent={$subevent_id}\">Report League Game</a></td></tr>";
-                }
-            } elseif ($structure == 'League Match') {
-                $count = $event->getPlayerLeagueMatchCount($player->name);
-                if ($count < 1) {
-                    $Leagues[] = "<tr><td>{$event->name} Match: {$event->current_round}</td><td><a href=\"report.php?mode=submit_league_result&event={$event->name}&round={$event->current_round}&subevent={$subevent_id}\">Report League Game</a></td></tr>";
-                }
-            }
-            if ($structure !== 'Single Elimination') {
-                echo "<td><a href=\"report.php?mode=drop_form&event={$event->name}\" style='color:red;'>Drop From Event</a></td>";
-            }
-        } else {
-            if ($event->late_entry_limit > 0 && $event->late_entry_limit >= $event->current_round && !Entry::playerRegistered($event->id, $player->name)) {
-                if ($structure == 'League') {
-                    $text = 'Join League';
-                } else {
-                    $text = 'Submit Late Entry';
-                }
-                echo "<td><a href=\"prereg.php?action=reg&event={$event->name}\">$text</a></td>";
-            }
-        }
-        echo '</tr>';
-    }
-    echo '</table>';
+        case 'standings':
+            $viewComponent = new EventStandings(get()->string('event'), Player::loginName() ?: null);
+            break;
 
-    return $Leagues;
-}
-
-function print_noDeckTable(bool $allDecks): void
-{
-    global $player;
-    $entriesNoDecks = $player->getNoDeckEntries();
-
-    if (count($entriesNoDecks) or $allDecks) {
-        // don't print the unentered decks part of player cp if player has no unentered decks
-        // OR if we are on the $allDecks page. Then always print it.
-        echo '<form action="player.php" method="post">';
-        // TODO: Remove deck ignore functionality
-        echo '<input type="hidden" name="action" value="setIgnores" />';
-        echo "<table width=275>\n";
-        if (!$allDecks) {
-            // print this on the player cp
-            echo '<tr><td colspan=2 style="font-size: 14px; color: red;">';
-            echo '<b>UNENTERED DECKS</td>';
-            echo '<td colspan=2 align="right">';
-            echo "<a href=\"player.php?mode=alldecks\">(see all)</a></td></tr>\n";
-        } else {
-            // print this on the all decks page
-            echo '<tr><td colspan=4 style="font-size: 14px; color: red;">';
-            echo '<b>UNENTERED DECKS</td></tr>';
-        }
-        if (count($entriesNoDecks)) {
-            foreach ($entriesNoDecks as $entry) {
-                echo '<tr><td>' . medalImgStr($entry->medal) . "</td>\n";
-                echo '<td align="left">' . $entry->createDeckLink() . '</td>';
-                echo "<td align=\"right\"><a href=\"{$entry->event->threadurl}\">{$entry->event->name}</a></td>\n";
-                echo "</tr>\n";
-            }
-        } else {
-            echo '<tr><td>No Unentered Decklists Found</td></tr>';
-        }
-        echo "</table>\n";
-        echo '<input type="hidden" name="mode" value="alldecks" />';
-        echo '</form>';
-    }
-}
-
-function print_allDeckTable(): void
-{
-    global $player;
-    $decks = $player->getAllDecks();
-    $rstar = '<font color="#FF0000">*</font>';
-    $upPlayer = strtoupper($player->name);
-
-    echo "<table width=275>\n";
-    echo "<tr><td colspan=3><b>$upPlayer'S DECKS</td></tr>\n";
-    foreach ($decks as $deck) {
-        $imgcell = medalImgStr($deck->medal);
-        $recordString = $deck->recordString();
-        echo "<td width=20>$imgcell</td>\n";
-        echo "<td width=20>$recordString</td>\n";
-        echo '<td>' . $deck->linkTo();
-        if (!$deck->isValid()) {
-            echo $rstar;
-        }
-        echo "</td>\n";
-        $event = $deck->getEvent();
-        $targetUrl = 'eventreport';
-        if ($event->authCheck($player->name)) {
-            $targetUrl = 'event';
-        }
-        echo "<td align=\"right\"><a href=\"{$targetUrl}.php?event=" . rawurlencode($event->name) . "\">{$event->name}</a></td>\n";
-        echo "</td></tr>\n";
-    }
-    echo "</table>\n";
-}
-
-function print_recentMatchTable(): void
-{
-    global $player;
-    $matches = $player->getRecentMatches();
-
-    echo "<table width=300>\n";
-    echo "<tr><td colspan=\"4\"><b>RECENT MATCHES</td><td align=\"right\">\n";
-    echo "<a href=\"player.php?mode=allmatches\">(see all)</a></td></tr>\n";
-    foreach ($matches as $match) {
-        $res = 'Draw';
-        if ($match->playerWon($player->name)) {
-            $res = 'Win';
-        }
-        if ($match->playerLost($player->name)) {
-            $res = 'Loss';
-        }
-        if ($match->playera == $match->playerb) {
-            $res = 'BYE';
-        }
-        $opp = $match->playera;
-        if (strcasecmp($player->name, $opp) == 0) {
-            $opp = $match->playerb;
-        }
-        $event = new Event($match->getEventNamebyMatchid());
-
-        echo '<td>' . $event->name . '</td><td>Round: ' . $match->round . '</td>';
-        echo "<td width=\"4\"><b>$res</b> <b>{$match->getPlayerWins($player->name)}</b><b> - </b><b>{$match->getPlayerLosses($player->name)}</b></td>";
-        echo "<td>vs.</td>\n";
-        $oppplayer = new Player($opp);
-        echo '<td>' . $oppplayer->linkTo($event->client) . "</td></tr>\n";
-    }
-    echo "</table>\n";
-}
-
-//copied above function and altered to show matches in progress
-/** @param array<string> $Leagues */
-function print_currentMatchTable(array $Leagues): void
-{
-    global $player;
-    $matches = $player->getCurrentMatches();
-    if (empty($matches) && empty($Leagues)) {
-        return;
-    }
-    echo "<table class='gatherling_full'>\n";
-    echo "<tr><td colspan=\"4\"><b>ACTIVE MATCHES</td><td align=\"right\">\n";
-    echo "</td></tr>\n";
-    foreach ($matches as $match) {
-        $event = new Event($match->getEventNamebyMatchid());
-        $opp = $match->playera;
-        $player_number = 'b';
-        if (strcasecmp($player->name, $opp) == 0) {
-            $opp = $match->playerb;
-            $player_number = 'a';
-        }
-
-        if ($match->result != 'BYE') {
-            $oppplayer = new Player($opp);
-            echo '<tr><td>';
-            echo $event->name . ' Round: ' . $event->current_round . ' ';
-            echo '</td>';
-            echo "<td>vs.</td>\n";
-            echo '<td>' . $oppplayer->linkTo($event->client) . '</td><td>';
-            if ($match->verification == 'unverified') {
-                if ($player_number == 'b' and ((int) $match->playerb_wins + (int) $match->playerb_losses) > 0) {
-                    echo '(Report Submitted)';
-                } elseif ($player_number == 'a' and ((int) $match->playera_wins + (int) $match->playera_losses) > 0) {
-                    echo '(Report Submitted)';
-                } else {
-                    if ($match->playerReportableCheck() == true) {
-                        echo '<a href="report.php?mode=submit_result&match_id=' . $match->id . '&player=' . $player_number . '">(Report Result)</a>';
-                    } else {
-                        echo 'Please report results in the report channel for this event';
-                    }
-                }
-            } elseif ($match->verification == 'failed') {
-                echo "<font style=\"color: red; font-weight: bold;\">The reported result wasn't consistent with your opponent's, please check with the host  </style><a href=\"report.php?mode=submit_result&match_id=" . $match->id . '&player=' . $player_number . '">(Correct Result)</a>';
-            } elseif ($match->result == 'BYE') {
+        case 'verifymtgo':
+            $infobotPasskey = config()->string('infobot_passkey', '');
+            if ($infobotPasskey == '') {
+                $viewComponent = new ManualVerifyMtgoForm($player);
             } else {
-                echo '(Reported)';
+                $viewComponent = new VerifyMtgoForm($player, config()->string('infobot_prefix', ''));
             }
-            echo "</td></tr>\n";
-        } else {
-            if (($match->round == $event->current_round) && $event->active) {
-                echo '<tr><td>';
-                echo $event->name . ' Round: ' . $event->current_round . ' ';
-                echo '</td>';
-                echo "<td>You have a BYE for the current round.</td>\n";
-                echo "</tr>\n";
-            }
-        }
-    }
-    foreach ($Leagues as $League) {
-        echo $League;
+            break;
+
+        default:
+            $viewComponent = new MainPlayerControlPanel($player);
     }
 
-    echo "</table>\n";
+    $page = new PlayerControlPanel($result, $viewComponent);
+    $page->send();
 }
 
-function leagueResultDropMenu(): void
+function changePassword(Player $player, string $oldPassword, string $newPassword, string $newPassword2): string
 {
-    echo '<select name="result">';
-    echo '<option value="">- Match Result -</option>';
-    echo '<option value="W20">I won the match 2-0</option>';
-    echo '<option value="W21">I won the match 2-1</option>';
-    echo '<option value="L20">I loss the match 2-0</option>';
-    echo '<option value="L21">I loss the match 2-1</option>';
-    echo '</select>';
+    if ($newPassword2 != $newPassword) {
+        return 'Password *not* changed, your new passwords did not match!';
+    }
+    if (strlen($newPassword) < 8) {
+        return 'Passsword *not* changed, your new password needs to be longer!';
+    }
+    $authenticated = Player::checkPassword($player->name, $oldPassword);
+    if (!$authenticated) {
+        return 'Password *not* changed, your old password was incorrect!';
+    }
+    $player->setPassword($newPassword);
+    return 'Password changed.';
 }
 
-function print_matchTable(Player $player): void
+function editEmail(Player $player, string $newEmail, string $newEmail2, int $emailStatus): string
 {
-    if (!isset($_POST['format'])) {
-        $_POST['format'] = '%';
+    if ($newEmail != $newEmail2) {
+        return 'Email *NOT* Changed, your new emails did not match!';
     }
-    if (!isset($_POST['series'])) {
-        $_POST['series'] = '%';
-    }
-    if (!isset($_POST['season'])) {
-        $_POST['season'] = '%';
-    }
-    if (!isset($_POST['opp'])) {
-        $_POST['opp'] = '%';
-    }
-
-    $matches = $player->getFilteredMatches(post()->string('format'), post()->string('series'), post()->string('season'), post()->string('opp'));
-
-
-    echo '<table class="scoreboard">';
-    echo '<tr class="top"><th>Event</th><th>Round</th><th>Opponent</th><th>Deck</th><th>Rating</th><th>Result</th></tr>';
-    $oldname = '';
-    $rowcolor = 'even';
-    $Count = 1;
-    foreach ($matches as $match) {
-        $rnd = $match->round;
-        if ($match->timing == 2 && $match->type == 'Single Elimination') {
-            $rnd = 'T' . pow(2, $match->rounds + 1 - $match->round);
-        }
-
-        if ($match->type == 'League') {
-            $rnd = 'L';
-        }
-
-        $opp = $match->otherPlayer($player->name);
-        $res = 'D';
-        if ($match->playerWon($player->name)) {
-            $res = 'W';
-        }
-        if ($match->playerLost($player->name)) {
-            $res = 'L';
-        }
-        $opponent = new Player($opp);
-
-        $event = $match->getEvent();
-        $oppRating = $opponent->getRating('Composite', $event->start);
-        $oppDeck = $opponent->getDeckEvent($event->id);
-        $deckStr = 'No Deck Found';
-
-        if (!is_null($oppDeck)) {
-            $deckStr = $oppDeck->linkTo();
-        }
-
-        if ($oldname != $event->name) {
-            if ($Count % 2 != 0) {
-                $rowcolor = 'odd';
-                $Count++;
-            } else {
-                $rowcolor = 'even';
-                $Count++;
-            }
-            echo "<tr class=\"{$rowcolor}\"><td>{$event->name}</td>";
-        } else {
-            echo "<tr class=\"{$rowcolor}\"><td></td>\n";
-        }
-        $oldname = $event->name;
-        echo "<td>$rnd</td>\n";
-        echo '<td>' . $opponent->linkTo() . "</td>\n";
-        echo "<td>$deckStr</td>\n";
-        echo "<td>$oppRating</td>\n";
-        echo "<td>$res {$match->getPlayerWins($player->name)} - {$match->getPlayerLosses($player->name)} </td>";
-        echo "</tr>\n";
-    }
-    echo '</table>';
+    $player->emailAddress = $newEmail;
+    $player->emailPrivacy = $emailStatus;
+    $player->save();
+    return 'Email changed.';
 }
 
-function print_ratingsTableSmall(): void
+function editAccounts(Player $player, ?string $mtgoUsername, string $mtgaUsername): string
 {
-    global $player;
-    $ratings = new Ratings();
-    $names = [];
-    $composite = $player->getRating('Composite');
-    foreach ($ratings->ratingNames as $rating) {
-        $names[] = $rating;
+    $player->mtgo_username = $mtgoUsername;
+    if (!preg_match('/^.{3,24}#\d{5}$/', post()->string('mtga_username', ''))) {
+        $mtgaUsername = null;
     }
-    $names[] = 'Other Formats';
-
-    echo '<table width=300>';
-    echo "<tr><td colspan=1><b>MY RATINGS</td>\n";
-    echo '<td colspan=1 align="right">';
-    echo "<a href=\"player.php?mode=allratings\">(see all)</a></td></tr>\n";
-
-    if ($composite > 0) {
-        echo "<tr><td>Composite</td><td align=\"right\">$composite</td></tr>\n";
-    } else {
-        echo "<tr><td>Composite</td><td align=\"right\">1600</td></tr>\n";
-    }
-    foreach ($names as $rating) {
-        $n = $player->getRating($rating);
-        if ($n != 0 && $n != 1600) {
-            echo "<tr><td>$rating</td><td align=\"right\">{$n}</td></tr>\n";
-        }
-    }
-    echo '</table>';
+    $player->mtga_username = $mtgaUsername;
+    $player->save();
+    return 'Accounts updated.';
 }
 
-function print_ratingsTable(): void
+function changeTimeZone(Player $player, float $timezone): string
 {
-    echo "<table class=\"c\" width=400>\n";
-    echo "<tr><td><b>Format</td>\n";
-    echo "<td align=\"center\"><b>Rating</td>\n";
-    echo "<td align=\"center\"><b>Record</td>\n";
-    echo "<td align=\"center\"><b>Low</td>\n";
-    echo "<td align=\"center\"><b>High</td></tr>\n";
-    $ratings = new Ratings();
-    print_ratingLine('Composite');
-    foreach ($ratings->ratingNames as $rating) {
-        print_ratingLine($rating);
-    }
-    print_ratingLine('Other Formats');
-    echo "</table>\n";
+    $player->timezone = $timezone;
+    $player->save();
+    return 'Time Zone Changed.';
 }
 
-function print_ratingLine(string $format): void
+function verifyAccount(Player $player, string $challenge): string
 {
-    global $player;
-    $rating = $player->getRating($format);
-    $record = $player->getRatingRecord($format);
-    $max = $player->getMaxRating($format);
-    $min = $player->getMinRating($format);
-
-    echo "<tr><td>$format</td>\n";
-    echo "<td align=\"center\">$rating</td>\n";
-    echo "<td align=\"center\">$record</td>\n";
-    if (isset($min)) {
-        echo "<td align=\"center\">$min</td>\n";
-        echo "<td align=\"center\">$max</td>\n";
-    } else {
-        echo '<td colspan=2 align="center">';
-        echo "<i>Less than 20 matches played</td>\n";
+    if ($player->checkChallenge($challenge)) {
+        $player->setVerified(true);
+        return 'Successfully verified your account with MTGO.';
     }
-    echo "</tr>\n";
+    $infobotPrefix = config()->string('infobot_prefix', '');
+    return "Your challenge is wrong.  Get a new one by sending the message '<code>!verify {$infobotPrefix}</code>' to pdbot on MTGO!";
 }
 
-function print_ratingsHistory(string $format): void
-{
-    global $player;
-    $db = Database::getConnection();
-    $stmt = $db->prepare('SELECT e.name, e.id, r.rating, n.medal, n.deck AS id
-    FROM events e, entries n, ratings r
-    WHERE r.format= ? AND r.player = ?
-    AND e.start=r.updated AND n.player=r.player AND n.event_id=e.id
-    ORDER BY e.start DESC');
-    $stmt->bind_param('ss', $format, $player->name);
-    $stmt->execute();
-    $stmt->bind_result($eventname, $event_id, $rating, $medal, $deckid);
-
-    $stmt->store_result();
-
-    echo "<table class=\"c\">\n";
-    echo "<tr><td align=\"center\"><b>Pre-Event</td>\n";
-    echo "<td><b>Event</td>\n";
-    echo "<td><b>Deck</td>\n";
-    echo "<td align=\"center\"><b>Record</td>\n";
-    echo "<td align=\"center\"><b>Medal</td>\n";
-    echo "<td align=\"center\"><b>Post-Event</td></tr>\n";
-
-    if ($stmt->num_rows > 0) {
-        $stmt->fetch();
-        $preveventname = $eventname;
-        $prevevent_id = $event_id;
-        $prevrating = $rating;
-        while ($stmt->fetch()) {
-            $entry = new Entry($prevevent_id, $player->name);
-            $wl = $entry->recordString();
-            $img = medalImgStr($entry->medal);
-
-            echo "<tr><td align=\"center\">{$rating}</td>\n";
-            echo "<td>{$preveventname}</td>\n";
-            echo '<td>' . $entry->deck->linkTo() . "</td>\n";
-            echo "<td align=\"center\">$wl</td>\n";
-            echo "<td align=\"center\">$img</td>";
-            echo "<td align=\"center\">{$prevrating}</td></tr>";
-            $prevrating = $rating;
-            $preveventname = $eventname;
-            $prevevent_id = $event_id;
-        }
-
-        $entry = new Entry($prevevent_id, $player->name);
-        $wl = $entry->recordString();
-        $img = medalImgStr($entry->medal);
-        echo "<tr><td align=\"center\">1600</td>\n";
-        echo "<td>{$preveventname}</td>\n";
-        echo '<td>' . $entry->deck->linkTo() . "</td>\n";
-        echo "<td align=\"center\">$wl</td>\n";
-        echo "<td align=\"center\">$img</td>";
-        echo "<td align=\"center\">{$prevrating}</td></tr>";
-    } else {
-        echo '<tr><td colspan=6 align="center"><i>';
-        echo "You have not played any $format events.</td></tr>\n";
-    }
-    echo "</table>\n";
-}
-
-function print_ratingHistoryForm(string $format): void
-{
-    $formats = ['Composite'];
-    $ratings = new Ratings();
-    foreach ($ratings->ratingNames as $rating) {
-        $formats[] = $rating;
-    }
-    $formats[] = 'Other Formats';
-    echo "<center>\n";
-    echo "<form action=\"player.php\" method=\"get\">\n";
-    echo 'Show history for&nbsp;';
-    echo "<select class=\"inputbox\" name=\"format\">\n";
-    for ($i = 0; $i < count($formats); $i++) {
-        $sel = ($formats[$i] == $format) ? 'selected' : '';
-        echo "<option value=\"{$formats[$i]}\" $sel>{$formats[$i]}</option>\n";
-    }
-    echo "</select><br /><br />\n";
-    echo "<input class=\"inputbutton\" type=\"submit\" name=\"button\" value=\"Show History\">\n";
-    echo "<input type=\"hidden\" name=\"mode\" value=\"allratings\">\n";
-    echo "</form></center>\n";
-}
-
-function print_allMatchForm(Player $player): void
-{
-    if (!isset($_POST['format'])) {
-        $_POST['format'] = '%';
-    }
-    if (!isset($_POST['series'])) {
-        $_POST['series'] = '%';
-    }
-    if (!isset($_POST['season'])) {
-        $_POST['season'] = '%';
-    }
-    if (!isset($_POST['opp'])) {
-        $_POST['opp'] = '%';
-    }
-    echo "<form action=\"player.php\" method=\"post\">\n";
-    echo "<table class=\"c\">\n";
-    echo "<tr><td align=\"center\" colspan=2><b>Filters</td></tr>\n";
-    echo "<tr><td>&nbsp;</td>\n";
-    echo '<tr><td>Format&nbsp</td><td>';
-    formatDropMenuP($player, post()->string('format'));
-    echo "</td></tr>\n";
-    echo '<tr><td>Series&nbsp;</td><td>';
-    seriesDropMenuP($player, post()->string('series'));
-    echo "</td></tr>\n";
-    echo '<tr><td>Season&nbsp;</td><td>';
-    seasonDropMenuP($player, post()->string('season'));
-    echo "</td></tr>\n";
-    echo '<tr><td>Opponent&nbsp;</td><td>';
-    oppDropMenu($player, post()->string('opp'));
-    echo "</td></tr><tr><td>&nbsp;</td></tr>\n";
-    echo '<tr><td colspan=2 align="center">';
-    echo '<input type="submit" name="mode" value="Filter Matches">';
-    echo "</td></tr><tr><td>&nbsp;</td></tr></table></form>\n";
-}
-
-function formatDropMenuP(Player $player, string $def): void
-{
-    $formats = $player->getFormatsPlayed();
-
-    echo "<select class=\"inputbox\" name=\"format\">\n";
-    echo "<option value=\"%\">- Format -</option>\n";
-    foreach ($formats as $thisformat) {
-        $sel = ($thisformat == $def) ? 'selected' : '';
-        echo "<option value=\"$thisformat\" $sel>$thisformat</option>\n";
-    }
-    echo "</select>\n";
-}
-
-function seriesDropMenuP(Player $player, string $def): void
-{
-    $series = $player->getSeriesPlayed();
-
-    echo "<select name=\"series\">\n";
-    echo "<option value=\"%\">- Series -</option>\n";
-    foreach ($series as $thisseries) {
-        $sel = ($thisseries == $def) ? 'selected' : '';
-        echo "<option value=\"$thisseries\" $sel>$thisseries</option>\n";
-    }
-    echo "</select>\n";
-}
-
-function seasonDropMenuP(Player $player, string $def): void
-{
-    $seasons = $player->getSeasonsPlayed();
-
-    echo "<select name=\"season\">\n";
-    echo "<option value=\"%\">- Season -</option>\n";
-    foreach ($seasons as $thisseason) {
-        $sel = (($thisseason == $def) && ($def != '%')) ? 'selected' : '';
-        echo "<option value=\"$thisseason\" $sel>$thisseason</option>\n";
-    }
-    echo "</select>\n";
-}
-
-function oppDropMenu(Player $player, string $def): void
-{
-    $opponents = $player->getOpponents();
-
-    echo "<select name=\"opp\">\n";
-    echo "<option value=\"%\">- Opponent -</option>\n";
-    foreach ($opponents as $row) {
-        $thisopp = $row['opp'];
-        $cnt = $row['cnt'];
-        $sel = ($thisopp == $def) ? 'selected' : '';
-        echo "<option value=\"$thisopp\" $sel>$thisopp [$cnt]</option>\n";
-    }
-    echo '</select>';
-}
-
-function print_statsTable(): void
-{
-    global $player;
-    echo '<table>';
-    echo "<tr><td colspan=2><b>STATISTICS</td></tr>\n";
-    echo "<tr><td>Record</td><td align=\"right\"> {$player->getRecord()}";
-    echo "</td></tr>\n";
-    echo "<tr><td>Longest Winning Streak</td><td align=\"right\"> {$player->getStreak('W')}";
-    echo "</td></tr>\n";
-    echo "<tr><td>Longest Losing Streak</td><td align=\"right\"> {$player->getStreak('L')}";
-    echo "</td></tr>\n";
-    echo '<tr><td>Biggest Rival</td><td align="right"> ';
-    $rival = $player->getRival();
-    if ($rival != null) {
-        $rivalrec = $player->getRecordVs($rival->name);
-        echo $rival->linkTo();
-        echo " ({$rivalrec})";
-    } else {
-        echo 'none';
-    }
-    echo '</td></tr>';
-    echo "<tr><td>Favorite Card</td><td align=\"right\"> {$player->getFavoriteNonLand()}";
-    echo "</td></tr>\n";
-    echo "<tr><td>Favorite Land</td><td align=\"right\"> {$player->getFavoriteLand()}";
-    echo "</td></tr>\n";
-    echo "<tr><td>Medals Won</td><td align=\"right\"> {$player->getMedalCount()}";
-    echo "</td></tr>\n";
-    echo "<tr><td>Events Won</td><td align=\"right\"> {$player->getMedalCount('1st')}";
-    echo "</td></tr>\n";
-    echo "<tr><td>&nbsp;</td></tr>\n";
-    echo "<tr><td colspan=2 align=\"center\"><b>Most Recent Trophy</td></tr>\n";
-    echo '<tr><td colspan=2 align="center">';
-    statTrophy();
-    echo "</td></tr>\n";
-    echo "</table>\n";
-    //Fave Series
-//Fave Format
-//highrating
-//lowrating
-//bestdeck
-//creativity
-}
-
-function statTrophy(): void
-{
-    global $player;
-    $trophyevent = $player->getLastEventWithTrophy();
-    if ($trophyevent != null) {
-        $event = new Event($trophyevent);
-        echo $event->getTrophyImageLink();
-    } else {
-        echo "<i>No trophies earned</i>\n";
-    }
-}
-
-function print_conditionalAllDecks(): void
-{
-    global $player;
-    $noentrycount = $player->getUnenteredCount();
-    if ($noentrycount > 0) {
-        echo '<br /><a href="player.php?mode=alldecks" style="color: red;">';
-        echo "You have $noentrycount unreported decks<br />";
-        echo 'Click here to enter them.</a>';
-    }
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
+    main();
 }

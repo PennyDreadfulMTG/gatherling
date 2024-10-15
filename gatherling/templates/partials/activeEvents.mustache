@@ -1,0 +1,42 @@
+<table class="gatherling_full">
+    <tr>
+        <td colspan="12"><b>ACTIVE EVENTS</b></td>
+    </tr>
+    {{^events}}
+        <tr>
+            <td colspan="12">No events are currently active.</td>
+        </tr>
+    {{/events}}
+
+    {{#events}}
+        <tr>
+            <td>
+               <a href="{{eventLink}}">{{eventName}}</a>
+                {{#showDiscordRoom}}
+                    <pre style="cursor:help;" title="The Tournament Organizer prefers that your join their Discord server." ><i class="fab fa-discord"></i> #{{discordChannelName}} in {{discordGuildName}}</pre>
+                {{/showDiscordRoom}}
+                {{#showMtgoRoom}}
+                    <pre style="cursor:help;" title="To join a Chat room, use the Chat menu, or type /join #{{mtgoRoom}} into your game chat." ><i class="ss ss-pmodo"></i> MTGO room #{{mtgoRoom}}</pre>
+                {{/showMtgoRoom}}
+            </td>
+            <td>
+                <a href="{{standingsLink}}">Current Standings</a>
+            </td>
+            {{#showCreateDeckLink}}
+                <td>
+                    {{#createDeckLink}}{{> createDeckLink}}{{/createDeckLink}}
+                </td>
+            {{/showCreateDeckLink}}
+            {{#dropLink}}
+                <td>
+                    <a href="{{dropLink}}" style='color:red;'>Drop From Event</a>
+                </td>
+            {{/dropLink}}
+            {{#joinLink}}
+                <td>
+                    <a href="{{joinLink}}">{{joinLinkText}}</a>
+                </td>
+            {{/joinLink}}
+        </tr>
+    {{/events}}
+</table>

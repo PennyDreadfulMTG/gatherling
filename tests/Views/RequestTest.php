@@ -15,7 +15,11 @@ class RequestTest extends TestCase
         $this->assertEquals(123, $request->int('foo'));
         $this->expectException(\InvalidArgumentException::class);
         $request->int('bar');
-        // BAKERT can you do two expectEXceptions? Do they interferer?
+    }
+
+    public function testIntMissing(): void
+    {
+        $request = new Request(['foo' => '123', 'bar' => '123.4']);
         $this->expectException(\InvalidArgumentException::class);
         $request->int('baz');
     }

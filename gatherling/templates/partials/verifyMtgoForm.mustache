@@ -1,0 +1,29 @@
+<center>
+    <h3>Verifying your MTGO account</h3>
+</center>
+Verify your MTGO account by following these simple steps:<br />
+1. Chat <code>!verify {{infobotPrefix}}</code> to pdbot to get a verification code<br />
+2. Enter the verification code here to be verified<br />
+{{#isVerified}}
+    <center>You are already verified!</center>
+    <a href="player.php">Go back to the Player CP</a>
+{{/isVerified}}
+{{^isVerified}}
+    <form action="player.php" method="post">
+        <input name="action" type="hidden" value="verifyAccount" />
+        <input name="mode" type="hidden" value="verifymtgo" />
+        <input name="username" type="hidden" value="{{playerName}}" />
+        <table class="form">
+            <tr>
+                <th>Verification Code</th>
+                <td> <input name="challenge" type="text" /></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="buttons">
+                    <input name="submit" type="submit" value="Verify Account" />
+                </td>
+            </tr>
+        </table>
+    </form>
+{{/isVerified}}
+<div class="clear"> </div>

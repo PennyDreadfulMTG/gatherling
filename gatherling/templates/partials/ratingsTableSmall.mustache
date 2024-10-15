@@ -1,0 +1,14 @@
+<table width="300">
+    <tr>
+        <td><b>MY RATINGS</b></td>
+        <td align="right">
+            <a href="player.php?mode=allratings">(see all)</a>
+        </td>
+    </tr>
+    {{#ratings}}
+        <tr>
+            <td>{{name}}</td>
+            <td align="right">{{rating}}</td>
+        </tr>
+    {{/ratings}}
+</table>

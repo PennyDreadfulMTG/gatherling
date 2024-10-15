@@ -1,0 +1,97 @@
+<script defer src="tab_view.js"></script>
+<button class="tablink" id="defaultOpen" onclick="openPage('future', this)">Events</button>
+<button class="tablink" onclick="openPage('past', this)">History</button>
+<button class="tablink" onclick="openPage('statistics', this)">Statistics</button>
+<button class="tablink" onclick="openPage('settings', this)">Settings</button>
+
+<!-- Events -->
+<div id="future" class="tabcontent">
+    <div class="alpha grid_5">
+        <div id="gatherling_lefthalf">
+            {{#preregistration}}{{> preregistration}}{{/preregistration}}
+        </div>
+    </div>
+    <div class="omega grid_5">
+        <div id="gatherling_righthalf">
+            {{#activeEvents}}{{> activeEvents}}{{/activeEvents}}
+            {{#currentMatchesTable}}{{> currentMatchesTable}}{{/currentMatchesTable}}
+        </div>
+    </div>
+</div>
+
+<!-- History -->
+<div id="past" class="tabcontent">
+    <div class="grid_7">
+        <div id="gatherling_lefthalf">
+            {{#recentDecksTable}}{{> recentDecksTable}}{{/recentDecksTable}}
+        </div>
+    </div>
+    <div class="grid_7">
+        <div id="gatherling_righthalf">
+            {{#recentMatchTable}}{{> recentMatchTable}}{{/recentMatchTable}}
+        </div>
+    </div>
+</div>
+
+<!-- Statistics -->
+<div id="statistics" class="tabcontent">
+    <div class="alpha grid_5">
+        <div id="gatherling_lefthalf">
+            {{#ratingsTableSmall}}{{> ratingsTableSmall}}{{/ratingsTableSmall}}
+        </div>
+    </div>
+    <div class="omega grid_5">
+        <div id="gatherling_righthalf">
+            {{#statsTable}}{{> statsTable}}{{/statsTable}}
+        </div>
+    </div>
+</div>
+
+<!-- Settings -->
+<div id="settings" class="tabcontent">
+    <div class="alpha grid_5">
+        <div id="gatherling_lefthalf">
+            <b>ACTIONS</b><br />
+            <ul>
+                <li><a href="player.php?mode=changepass">Change your password</a></li>
+                {{^emailAddress}}
+                    <li><a href="player.php?mode=edit_email">Add Email Address</a></li>
+                {{/emailAddress}}
+                {{#emailAddress}}
+                    <li><a href="player.php?mode=edit_email">Change Email Address: {{emailAddress}}</a></li>
+                {{/emailAddress}}
+                <li><a href="player.php?mode=change_timezone">Change Your Time Zone</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="omega grid_5">
+        <div id="gatherling_righthalf">
+            <b>CONNECTIONS</b><br />
+            <ul>
+                {{^mtgoUsername}}
+                    <li><a href="player.php?mode=edit_accounts">Add a Magic Online account</a></li>
+                {{/mtgoUsername}}
+                {{#mtgoUsername}}
+                    <li><span style="color: green; font-weight: bold;"><i class="ss ss-pmodo"></i> {{mtgoUsername}}</span> (<a href="player.php?mode=edit_accounts">edit</a>)</li>
+                {{/mtgoUsername}}
+                {{^mtgaUsername}}
+                    <li><a href="player.php?mode=edit_accounts">Add an Arena account</a></li>
+                {{/mtgaUsername}}
+                {{#mtgaUsername}}
+                    <li><span style="color: green; font-weight: bold;"><i class="ss ss-parl3"></i> {{mtgaUsername}}</span> (<a href="player.php?mode=edit_accounts">edit</a>)</li>
+                {{/mtgaUsername}}
+                {{#unlinkedDiscordName}}
+                    <li><a href="auth.php">Link your account to <i class="fab fa-discord"></i> {{unlinkedDiscordName}}</a></li>
+                {{/unlinkedDiscordName}}
+                {{#promptToLinkDiscord}}
+                    <li><a href="auth.php">Link your account to <i class="fab fa-discord"></i> Discord</a></li>
+                {{/promptToLinkDiscord}}
+                {{#discordHandle}}
+                    <li><span style="color: green; font-weight: bold;"><i class="fab fa-discord"></i> {{discordHandle}}</span> (<a href="auth.php">Link new account</a>)</li>
+                {{/discordHandle}}
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+

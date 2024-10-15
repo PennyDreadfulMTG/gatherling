@@ -1,0 +1,35 @@
+<center>
+    <h3>{{title}}</h3>
+</center>
+<form action="player.php" method="post">
+    <input name="action" type="hidden" value="editEmail" />
+    <input name="mode" type="hidden" value="edit_email" />
+    <table class="form">
+        {{#emailAddress}}
+            <tr>
+                <th>Existing Email:</th>
+                <td>{{#emailAddress}}</td>
+            </tr>
+        {{/emailAddress}}
+        <tr>
+            <th>New Email</th>
+            <td><input class="inputbox" name="newEmail" type="email" /></td>
+        </tr>
+        <tr>
+            <th>Repeat New Email</th>
+            <td><input class="inputbox" name="newEmail2" type="email" /></td>
+        </tr>
+        <tr>
+            <th>Privacy Status</th>
+            <td>
+                {{#emailStatusDropDown}}{{> dropMenu}}{{/emailStatusDropDown}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="buttons">
+                <input class="inputbutton" name="submit" type="submit" value="{{#emailAddress}}Edit{{/emailAddress}}{{^emailAddress}}Add{{/emailAddress}} Email" />
+            </td>
+        </tr>
+    </table>
+</form>
+<div class="clear"></div>

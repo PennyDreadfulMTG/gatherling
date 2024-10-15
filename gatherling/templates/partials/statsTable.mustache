@@ -1,0 +1,71 @@
+<table>
+    <tr>
+        <td colspan="2"><b>STATISTICS</b></td>
+    </tr>
+    <tr>
+        <td>Record</td>
+        <td align="right">{{record}}</td>
+    </tr>
+    <tr>
+        <td>Longest Winning Streak</td>
+        <td align="right">{{longestWinningStreak}}</td>
+    </tr>
+    <tr>
+        <td>Longest Losing Streak</td>
+        <td align="right">{{longestLosingStreak}}</td>
+    </tr>
+    <tr>
+        <td>Biggest Rival</td>
+        <td align="right">
+            {{#hasRival}}
+                {{#rivalLink}}{{> playerLink}}{{/rivalLink}}
+                ({{rivalRecord}})
+            {{/hasRival}}
+            {{^hasRival}}
+                None
+            {{/hasRival}}
+        </td>
+    </tr>
+    <tr>
+        <td>Favorite Card</td>
+        <td align="right">{{favoriteNonLand}}</td>
+    </tr>
+    <tr>
+        <td>Favorite Land</td>
+        <td align="right">{{favoriteLand}}</td>
+    </tr>
+    <tr>
+        <td>Medals Won</td>
+        <td align="right">{{medalsWon}}</td>
+    </tr>
+    <tr>
+        <td>Events Won</td>
+        <td align="right">{{eventsWon}}</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td colspan="2" align="center"><b>Most Recent Trophy</td>
+    </tr>
+    <tr>
+        <td colspan="2" align="center">
+            {{#mostRecentTrophySrc}}
+                <a href="{{eventLink}}" class="borderless">
+                    <img alt="Trophy" style="border-width: 0px; max-width: 260px" src="{{mostRecentTrophySrc}}" />
+                </a>
+            {{/mostRecentTrophySrc}}
+            {{^mostRecentTrophySrc}}
+                <i>No trophies earned</i>
+            {{/mostRecentTrophySrc}}
+        </td>
+    </tr>
+</table>
+{{!
+    //Fave Series
+    //Fave Format
+    //highrating
+    //lowrating
+    //bestdeck
+    //creativity
+}}

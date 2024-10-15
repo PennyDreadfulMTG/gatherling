@@ -1,0 +1,23 @@
+<p>Decks marked with a <font color="#FF0000">*</font> are not legal under current format.</p>
+
+<div class="alpha grid_6">
+    <div id="gatherling_lefthalf">
+        <table width="275">
+            <tr>
+                <td colspan="3"><b>{{upPlayer}}'S DECKS</td>
+            </tr>
+            {{#decks}}
+            <tr>
+                <td width="20">{{#medalSrc}}<img alt="Medal" src="{{medalSrc}}" style="border-width: 0" />{{/medalSrc}}</td>
+                <td width="20">{{recordString}}</td>
+                <td>{{#deckLink}}{{> deckLink}}{{/deckLink}}{{^isValid}}<font color="#FF0000">*</font>{{/isValid}}</td>
+                <td align="right"><a href="{{eventLink}}">{{eventName}}</a></td>
+            </tr>
+            {{/decks}}
+        </table>
+    </div>
+</div>
+<div class="omega grid_4">
+    <div id="gatherling_righthalf"></div>
+</div>
+<div class="clear"></div>
