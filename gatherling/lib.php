@@ -35,16 +35,6 @@ const MTGO = 1;
 const MTGA = 2;
 const PAPER = 3;
 
-function page(string $title, string $contents): string
-{
-    ob_start();
-    print_header($title);
-    echo $contents;
-    print_footer();
-
-    return ob_get_clean();
-}
-
 function print_header(string $title, bool $enable_vue = false): void
 {
     global $CONFIG;

@@ -2121,71 +2121,6 @@ parameters:
 			path: gatherling/deckXmlParser.php
 
 		-
-			message: "#^Cannot access offset 'b' on mixed\\.$#"
-			count: 2
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Cannot access offset 'g' on mixed\\.$#"
-			count: 2
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Cannot access offset 'r' on mixed\\.$#"
-			count: 2
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Cannot access offset 'u' on mixed\\.$#"
-			count: 2
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Cannot access offset 'w' on mixed\\.$#"
-			count: 2
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Cannot call method close\\(\\) on mysqli_result\\|true\\.$#"
-			count: 3
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Cannot call method fetch_assoc\\(\\) on mysqli_result\\|true\\.$#"
-			count: 3
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$datetime of function time_element expects int, int\\|false given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$id_arr of function displayDecksFromID expects list\\<int\\>, non\\-empty\\-list\\<int\\>\\|true given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, float\\|int\\|string\\|null given\\.$#"
-			count: 3
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\$value of function count expects array\\|Countable, array\\<int, int\\>\\|true given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#1 \\(mixed\\) of echo cannot be converted to string\\.$#"
-			count: 2
-			path: gatherling/decksearch.php
-
-		-
-			message: "#^Parameter \\#2 \\$contents of function page expects string, string\\|false given\\.$#"
-			count: 1
-			path: gatherling/decksearch.php
-
-		-
 			message: "#^Cannot access offset 'size' on mixed\\.$#"
 			count: 2
 			path: gatherling/event.php
@@ -2362,11 +2297,6 @@ parameters:
 
 		-
 			message: "#^Function arrayMapRecursive\\(\\) should return array\\<string, mixed\\> but returns array\\<int\\|string, mixed\\>\\.$#"
-			count: 1
-			path: gatherling/lib.php
-
-		-
-			message: "#^Function page\\(\\) should return string but returns string\\|false\\.$#"
 			count: 1
 			path: gatherling/lib.php
 

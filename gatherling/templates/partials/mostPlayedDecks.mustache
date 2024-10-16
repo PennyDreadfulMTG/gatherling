@@ -1,0 +1,27 @@
+<br />
+<div class="ds_inputbox group">
+    <div class="uppertitle group"><center>Most Played Decks</center></div>
+    <table id="table-decksearch">
+        <thead>
+            <th>Played</th>
+            <th>Player Name</th>
+            <th>Deck Name</th>
+            <th>Archetype</th>
+            <th>Format</th>
+            <th>Created</th>
+        </thead>
+        <tbody>
+            {{#decks}}
+                <tr>
+                    <td>{{count}} times</td>
+                    <td><a href="{{playerLink}}">{{playerName}}</a></td>
+                    <td><a href="{{deckLink}}">{{deckName}}</a></td>
+                    <td>{{archetype}}</td>
+                    <td>{{format}}</td>
+                    <td>{{#created}}{{> time}}{{/created}}</td>
+                </tr>
+            {{/decks}}
+        </tbody>
+    </table>
+</div>
+<br />

@@ -1,0 +1,28 @@
+<div class="ds_inputbox group">
+    <table class="sortable" id="table-decksearch">
+        <thead>
+            <th>Player Name</th>
+            <th>Deck Name</th>
+            <th>Archetype</th>
+            <th>Format</th>
+            <th>Created</th>
+            <th>Win-Loss</th>
+        </thead>
+        <tbody>
+            {{#decks}}
+                <tr{{#isEven}} class="even"{{/isEven}}>
+                    <td><a href="{{playerLink}}">{{playerName}}</a></td>
+                    <td><a href="{{deckLink}}">{{deckName}}</a></td>
+                    <td>{{archetype}}</td>
+                    <td>{{format}}</td>
+                    <td>{{#created}}{{> time}}{{/created}}</td>
+                    <td align=center>{{record}}</td>
+                </tr>
+            {{/decks}}
+        </tbody>
+    </table>
+</div>
+<br />
+{{{paginationSafe}}}
+<br />
+<br />

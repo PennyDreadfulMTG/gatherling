@@ -223,6 +223,11 @@
       <code><![CDATA[$formatDropMenu]]></code>
     </PossiblyUnusedProperty>
   </file>
+  <file src="gatherling/Views/Components/ArchetypeDropMenu.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$archetypeName]]></code>
+    </PossiblyUnusedProperty>
+  </file>
   <file src="gatherling/Views/Components/BAndR.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$activeFormatName]]></code>
@@ -293,6 +298,15 @@
       <code><![CDATA[$reminderText]]></code>
     </PossiblyUnusedProperty>
   </file>
+  <file src="gatherling/Views/Components/ColorCheckboxMenu.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$bChecked]]></code>
+      <code><![CDATA[$gChecked]]></code>
+      <code><![CDATA[$rChecked]]></code>
+      <code><![CDATA[$uChecked]]></code>
+      <code><![CDATA[$wChecked]]></code>
+    </PossiblyUnusedProperty>
+  </file>
   <file src="gatherling/Views/Components/CreateDeckLink.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$createDeckLink]]></code>
@@ -320,6 +334,12 @@
       <code><![CDATA[$deckLink]]></code>
       <code><![CDATA[$isValid]]></code>
       <code><![CDATA[$name]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="gatherling/Views/Components/DisplayDecks.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$deckIds]]></code>
+      <code><![CDATA[$paginationSafe]]></code>
     </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Components/DropConfirm.php">
@@ -414,6 +434,11 @@
   <file src="gatherling/Views/Components/FormatDeleteForm.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$formatsDropMenu]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="gatherling/Views/Components/FormatDropMenuDS.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$formatName]]></code>
     </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Components/FormatDropMenuR.php">
@@ -663,6 +688,19 @@
       <code><![CDATA[$text]]></code>
     </PossiblyUnusedProperty>
   </file>
+  <file src="gatherling/Views/Components/SearchForm.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$archetypeDropMenu]]></code>
+      <code><![CDATA[$cardName]]></code>
+      <code><![CDATA[$colorCheckboxMenu]]></code>
+      <code><![CDATA[$formatDropMenuDS]]></code>
+      <code><![CDATA[$medalsDropMenu]]></code>
+      <code><![CDATA[$numSearchResults]]></code>
+      <code><![CDATA[$playerName]]></code>
+      <code><![CDATA[$searchLink]]></code>
+      <code><![CDATA[$seriesDropMenuDS]]></code>
+    </PossiblyUnusedProperty>
+  </file>
   <file src="gatherling/Views/Components/SeasonSelect.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$seasonDropMenu]]></code>
@@ -834,6 +872,13 @@
     <UndefinedFunction>
       <code><![CDATA[normaliseCardName($card)]]></code>
     </UndefinedFunction>
+  </file>
+  <file src="gatherling/Views/Pages/DeckSearch.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$displayDecks]]></code>
+      <code><![CDATA[$mostPlayedDecks]]></code>
+      <code><![CDATA[$searchForm]]></code>
+    </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Pages/EventForm.php">
     <PossiblyUnusedProperty>
