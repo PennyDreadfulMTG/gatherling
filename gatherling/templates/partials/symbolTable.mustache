@@ -1,0 +1,18 @@
+    <table>
+        <tr>
+             <td align="center" colspan="2" width="150"><b>MANA SYMBOLS</b></td>
+        </tr>
+        {{#colors}}
+            <tr>
+                <td align="right" width="75">
+                    <img alt="{{color}}" src="/images/mana{{color}}.png" />
+                    &nbsp;
+                </td>
+                <td align="left">{{num}}</td>
+            </tr>
+        {{/colors}}
+        <tr>
+            <td align="right"><i>Total:&nbsp;</i></td>
+            <td align="left"><i>{{sum}}</i></td>
+        </tr>
+    </table>

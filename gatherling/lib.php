@@ -85,11 +85,6 @@ function linkToLogin(string $_pagename = null, ?string $redirect = null, ?string
     (new LoginRedirect($redirect ?? '', $message ?? '', $username ?? ''))->send();
 }
 
-function printCardLink(string $card): string
-{
-    return (new CardLink($card))->render();
-}
-
 /** @param array<string, string|int> $extra_attr */
 function image_tag(string $filename, ?array $extra_attr = null): string
 {

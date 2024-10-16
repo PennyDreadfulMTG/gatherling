@@ -19,7 +19,7 @@ class Deck
     public array $sideboard_cards = []; // Has many sideboard_cards through deckcontents (issideboard = 1)
     public int $maindeck_cardcount = 0;
     public int $sideboard_cardcount = 0;
-    /** @var array<?string> */
+    /** @var array<string> */
     public array $errors = [];
     public ?string $playername = null; // Belongs to player through entries, now held in decks table
     public ?string $eventname; // Belongs to event through entries

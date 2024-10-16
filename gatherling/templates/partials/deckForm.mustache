@@ -1,0 +1,82 @@
+<form action="deck.php" method="post">
+    <table>
+        <tr>
+            <th valign="top">
+                <b>Directions:</b>
+            </th>
+            <td>
+                To enter your deck, please give it
+                a name and select an archetype from the drop-down menu below. If
+                you do not specify an archetype, your deck will be labeled as
+                "Unclassified". To enter cards, save your deck as a .txt or .dek file
+                using the official MTGO client, and then copy and paste the maindeck
+                and sideboard into the appropriate text boxes.
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label for='autoenter-deck'>Recent Decks</label>
+            </th>
+            <td>
+                <select class="inputbox" id="autoenter-deck">
+                    <option value="0">Select a recent deck to start from there</option>
+                    {{#recentDecks}}
+                        <option value="{{id}}">{{name}}</option>
+                    {{/recentDecks}}
+                </select>
+            </td>
+        </tr>
+        {{#showErrors}}
+            <tr>
+                <td class="error">Errors</td>
+                <td>There are some problems adding your deck:
+                    <ul>
+                        {{#errors}}
+                            <li class="error">{{error}}</li>
+                        {{/errors}}
+                    </ul>
+                </td>
+            </tr>
+        {{/showErrors}}
+        {{#fileInput}}
+            {{>fileInput}}
+        {{/fileInput}}
+        <tr>
+            <td></td>
+            <td><hr width="60%" align="left"/></td>
+        </tr>
+        {{#nameTextInput}}{{> textInput}}{{/nameTextInput}}
+        {{^create}}
+            <input type="hidden" name="id" value="{{deckId}}">
+        {{/create}}
+        {{#deckArchetypeDropMenu}}{{> selectInput}}{{/deckArchetypeDropMenu}}
+       <tr>
+            <td valign="top"><b>Main Deck</b></td>
+            <td>
+                <textarea id="deck-contents" class="inputbox" rows="20" cols="60" name="contents">{{contents}}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>Sideboard</b></td>
+            <td>
+                <textarea id="deck-sideboard" class="inputbox" rows="10" cols="60" name="sideboard">{{sideboard}}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>Comments</b></td>
+            <td>
+                <textarea class="inputbox" rows="10" cols="60" name="notes">{{desc}}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <input class="inputbutton" type="submit" name="mode" value="{{#create}}Create Deck{{/create}}{{^create}}Update Deck{{/create}}">
+                <input type="hidden" name="player" value="{{playerName}}">
+                <input type="hidden" name="event" value="{{eventId}}">
+            </td>
+        </tr>
+    </table>
+</form>

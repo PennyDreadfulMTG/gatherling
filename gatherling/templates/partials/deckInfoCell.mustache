@@ -1,0 +1,14 @@
+<table>
+    <tr>
+        <td style="font-size: 10pt;"><b>{{name}}</b> (deck id: {{deckId}}){{^isValid}}<font color="#FF0000">*</font>{{/isValid}}</td>
+    </tr>
+    <tr>
+        <td>{{#cardCounts}}{{> cardCounts}}{{/cardCounts}}</td>
+    </tr>
+    <tr>
+        <td>{{#deckInfo}}{{> deckInfo}}{{/deckInfo}}</td>
+    </tr>
+    <tr>
+        <td>{{#placing}}{{> placing}}{{/placing}}</td>
+    </tr>
+</table>
