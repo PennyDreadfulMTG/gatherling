@@ -1,0 +1,16 @@
+<center>
+    <h3>Set your accounts</h3>
+</center>
+<form action="player.php" method="post">
+    <input name="action" type="hidden" value="editAccounts" />
+    <table class="form">
+        {{#mtgoUsernameTextInput}}{{> textInput}}{{/mtgoUsernameTextInput}}
+        {{#mtgaUsernameTextInput}}{{> textInput}}{{/mtgaUsernameTextInput}}
+        <tr>
+            <td colspan="2" class="buttons">
+                <input class="inputbutton" name="submit" type="submit" value="Update Accounts" />
+            </td>
+        </tr>
+    </table>
+</form>
+<div class="clear"></div>

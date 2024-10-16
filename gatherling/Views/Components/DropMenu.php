@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-abstract class DropMenu extends Component
+class DropMenu extends Component
 {
     public string $name;
     /** @var list<array{value: string, text: string, isSelected?: bool}> */

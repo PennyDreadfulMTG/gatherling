@@ -36,11 +36,6 @@ class Ratings
         }
     }
 
-    public function formatDropMenuR(string $format = ''): string
-    {
-        return (new FormatDropMenuR($format))->render();
-    }
-
     public function deleteAllRatings(): void
     {
         $db = Database::getConnection();

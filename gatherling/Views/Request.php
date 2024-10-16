@@ -25,11 +25,11 @@ class Request
 
     public function optionalInt(string $key): ?int
     {
-        if (!isset($this->vars[$key])) {
+        $value = $this->optionalFloat($key);
+        if ($value === null) {
             return null;
         }
-        $value = $this->vars[$key];
-        if (!is_numeric($value)) {
+        if ((string)(int) $value !== (string) $value) {
             throw new \InvalidArgumentException("Invalid integer value for $key: " . var_export($value, true));
         }
         return (int) $value;
@@ -57,6 +57,30 @@ class Request
             throw new \InvalidArgumentException("Invalid string value for $key: " . var_export($value, true));
         }
         return $value;
+    }
+
+    public function float(string $key, float|false $default = false): float
+    {
+        $value = $this->optionalFloat($key);
+        if ($value === null) {
+            if ($default !== false) {
+                return $default;
+            }
+            throw new \InvalidArgumentException("Missing float value: " . $key);
+        }
+        return $value;
+    }
+
+    public function optionalFloat(string $key): ?float
+    {
+        if (!isset($this->vars[$key])) {
+            return null;
+        }
+        $value = $this->vars[$key];
+        if (!is_numeric($value)) {
+            throw new \InvalidArgumentException("Invalid float value for $key: " . var_export($value, true));
+        }
+        return (float) $value;
     }
 
     /** @return list<int> */

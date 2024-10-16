@@ -1,0 +1,8 @@
+<form action="admincp.php" method="post">
+    <input type="hidden" name="view" value="verify_player" />
+    <h3><center>Manual Player Verification</center></h3>
+    <table class="form c">
+        {{#usernameInput}}{{> textInput}}{{/usernameInput}}
+        {{#submitButton}}{{> submit}}{{/submitButton}}
+    </table>
+</form>

@@ -8,6 +8,7 @@ use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Format;
 use Gatherling\Models\Standings;
+use Gatherling\Views\Components\CreateDeckLink;
 use Gatherling\Views\Components\DeckLink;
 use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\NotAllowed;
@@ -109,7 +110,7 @@ function entryListArgs(Entry $entry, int $numEntries, bool $isTribal): array
     if ($entry->deck) {
         $entryInfo['deckLink'] = new DeckLink($entry->deck);
     } else {
-        $entryInfo['createDeckLink'] = $entry->createDeckLinkArgs();
+        $entryInfo['createDeckLink'] = new CreateDeckLink($entry);
     }
     $entryInfo['invalidRegistration'] = $entry->deck != null && !$entry->deck->isValid();
     $entryInfo['tribe'] = $isTribal && $entry->deck != null ? $entry->deck->tribe : '';

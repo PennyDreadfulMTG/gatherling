@@ -57,46 +57,42 @@ class Decksearch
      * call getFinalResults to complete a search request with any set inputs
      * and returns a list of deck id's that match.
      *
-     * @return bool|list<int> List of id's that match the search request
+     * @return list<int>|false List of id's that match the search request
      */
-    public function getFinalResults(): bool|array
+    public function getFinalResults(): array|false
     {
-        if (count($this->results) > 0 && count($this->errors) == 0) {
-            $array_keys = array_keys($this->results);
-            $first_key = array_shift($array_keys);
-            $tmp_results = $this->results[$first_key];
-            foreach ($this->results as $key => $value) {
-                $tmp_results = array_intersect($tmp_results, $this->results[$key]);
-            }
-            // check if there was matches, if not set error and return
-            if (count($tmp_results) != 0) {
-                // filter decks in events that are current active
-                // Only decks that has a field in entries will be filtered
-                // will allow for creation and searching of decks without entries
-                foreach ($tmp_results as $value) {
-                    // check if there is a record in entries
-                    $sql = 'select Count(*) FROM entries where deck = ?';
-                    $result = Database::singleResultSingleParam($sql, 'd', $value);
-                    if ($result) {
-                        $sql = 'SELECT d.id FROM decks d, entries n, events e WHERE d.id = ? AND d.id = n.deck AND n.event_id = e.id AND e.finalized = 1';
-                        $arr_tmp = Database::singleResultSingleParam($sql, 'd', $value);
-                        if (!empty($arr_tmp)) {
-                            array_push($this->finalResults, $arr_tmp);
-                        }
-                    } else {
-                        array_push($this->finalResults, $value);
-                    }
-                }
-
-                return $this->finalResults;
-            } else {
-                $this->errors[] = '<center><br>Your search query did not have any matches';
-
-                return false;
-            }
-        } else {
+        if (count($this->results) <= 0 || count($this->errors) > 0) {
             return false;
         }
+        $array_keys = array_keys($this->results);
+        $first_key = array_shift($array_keys);
+        $tmp_results = $this->results[$first_key];
+        foreach ($this->results as $key => $value) {
+            $tmp_results = array_intersect($tmp_results, $this->results[$key]);
+        }
+        if (count($tmp_results) == 0) {
+            $this->errors[] = '<center><br>Your search query did not have any matches';
+            return false;
+        }
+        // check if there was matches, if not set error and return
+        // filter decks in events that are current active
+        // Only decks that has a field in entries will be filtered
+        // will allow for creation and searching of decks without entries
+        foreach ($tmp_results as $value) {
+            // check if there is a record in entries
+            $sql = 'select Count(*) FROM entries where deck = ?';
+            $result = Database::singleResultSingleParam($sql, 'd', $value);
+            if ($result) {
+                $sql = 'SELECT d.id FROM decks d, entries n, events e WHERE d.id = ? AND d.id = n.deck AND n.event_id = e.id AND e.finalized = 1';
+                $arr_tmp = Database::singleResultSingleParam($sql, 'd', $value);
+                if (!empty($arr_tmp)) {
+                    array_push($this->finalResults, $arr_tmp);
+                }
+            } else {
+                array_push($this->finalResults, $value);
+            }
+        }
+        return $this->finalResults;
     }
 
     /**

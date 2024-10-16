@@ -1,0 +1,46 @@
+<table class="gatherling_full">
+
+    <tr>
+        <td colspan="2"><b>ACTIVE MATCHES</b></td>
+    </tr>
+
+    {{#tournamentMatches}}
+        <tr>
+            {{#isBye}}
+                <td>
+                    {{eventName}} Round {{currentRound}}
+                </td>
+                <td>You have a BYE for the current round.</td>
+            {{/isBye}}
+            {{^isBye}}
+                <td>
+                    {{eventName}} Round {{currentRound}}
+                    vs.
+                    {{#opponentLink}}{{> playerLink}}{{/opponentLink}}
+                </td>
+                <td>
+                    {{#isReportSubmitted}}(Report Submitted){{/isReportSubmitted}}
+                    {{#reportLink}}<a href="{{reportLink}}">(Report Result)</a>{{/reportLink}}
+                    {{#reportInChannel}}Please report results in the report channel for this event{{/reportInChannel}}
+                    {{#verificationFailed}}
+                        <span style="color: red; font-weight: bold;">The reported result wasn't consistent with your opponent's, please check with the host</span>
+                        <a href="{{reportLink}}">(Correct Result)</a>
+                    {{/verificationFailed}}
+                    {{#isReported}}(Reported){{/isReported}}
+                </td>
+            {{/isBye}}
+        </tr>
+    {{/tournamentMatches}}
+
+    {{#leagueMatches}}
+        <tr>
+            <td>
+                {{eventName}} Match: {{matchCount}}
+            </td>
+            <td>
+                <a href="{{reportLink}}">Report League Game</a>
+            </td>
+        </tr>
+    {{/leagueMatches}}
+
+</table>

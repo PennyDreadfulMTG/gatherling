@@ -1,0 +1,19 @@
+<h3><center>Install New Cardset</center></h3>
+<form action="util/insertcardset.php" method="post" enctype="multipart/form-data">
+    <table class="form c">
+        <input type="hidden" name="return" value="admincp.php" />
+        <input type="hidden" name="ret_args" value="view=add_cardset" />
+        {{#cardSetFileInput}}{{> fileInput}}{{/cardSetFileInput}}
+        {{#submitButton}}{{> submit}}{{/submitButton}}
+    </table>
+</form>
+
+<form action="util/insertcardset.php" method="post" enctype="multipart/form-data">
+    <h3><center>Or</center></h3>
+    <table class="form c">
+        <input type="hidden" name="return" value="admincp.php" />
+        <input type="hidden" name="ret_args" value="view=add_cardset" />
+        {{#missingSetsSelectInput}}{{> selectInput}}{{/missingSetsSelectInput}}
+        {{#submitButton}}{{> submit}}{{/submitButton}}
+    </table>
+</form>

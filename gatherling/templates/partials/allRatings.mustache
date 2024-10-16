@@ -1,0 +1,66 @@
+<table class="c" width="400">
+    <tr>
+        <td><b>Format</b></td>
+        <td align="center"><b>Rating</td>
+        <td align="center"><b>Record</td>
+        <td align="center"><b>Low</td>
+        <td align="center"><b>High</td>
+    </tr>
+    {{#ratingLines}}
+        <tr>
+            <td>{{formatName}}</td>
+            <td align="center">{{rating}}</td>
+            <td align="center">{{record}}</td>
+            {{#min}}
+                <td align="center">{{min}}</td>
+                <td align="center">{{max}}</td>
+            {{/min}}
+            {{^min}}
+                <td colspan=2 align="center">
+                    <i>Less than 20 matches played</i>
+                </td>
+            {{/min}}
+        </tr>
+    {{/ratingLines}}
+</table>
+
+<br><br>
+
+<center>
+    <form action="player.php" method="get">
+        Show history for&nbsp;{{#formatDropMenu}}{{> dropMenu}}{{/formatDropMenu}}
+        <br /><br />
+        <input class="inputbutton" type="submit" name="button" value="Show History">
+        <input type="hidden" name="mode" value="allratings">
+    </form>
+</center>
+
+<br>
+
+<table class="c">
+    <tr>
+        <td class="c"><b>Pre-Event</b></td>
+        <td><b>Event</b></td>
+        <td><b>Deck</b></td>
+        <td class="c"><b>Record</b></td>
+        <td class="c"><b>Medal</b></td>
+        <td class="c"><b>Post-Event</b></td>
+    </tr>
+
+    {{#entries}}
+        <tr>
+            <td align="center">{{preEventRating}}</td>
+            <td>{{eventName}}</td>
+            <td>{{#deckLink}}{{> deckLink}}{{/deckLink}}</td>
+            <td align="center">{{wl}}</td>
+            <td align="center"><img alt="Medal" src="{{medalSrc}}" /></td>
+            <td align="center">{{postEventRating}}</td>
+        </tr>
+    {{/entries}}
+
+    {{^entries}}
+        <tr>
+            <td colspan="6" align="center"><i>You have not played any {{formatName}} events.</i></td>
+        </tr>
+    {{/entries}}
+</table>

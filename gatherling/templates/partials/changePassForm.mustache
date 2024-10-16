@@ -1,0 +1,31 @@
+<center>
+    <h3>
+        {{#tooShort}}You must change your password to continue{{/tooShort}}
+        {{^tooShort}}Changing your password{{/tooShort}}
+    </h3>
+</center>
+<center id='notice'>Passwords are required to be at least 8 characters long.</center>
+<form action="player.php" method="post" onsubmit="return validate_pw()">
+    <input name="action" type="hidden" value="changePassword" />
+    <input name="mode" type="hidden" value="changepass" />
+    <table class="form">';
+        <tr>
+            <th>Current Password</th>
+            <td><input class="inputbox" name="oldPassword" type="password" /></td>
+        </tr>
+        <tr>
+            <th>New Password</th>
+            <td><input class="inputbox" name="newPassword" id="pw" type="password" /></td>
+        </tr>
+        <tr>
+            <th>Repeat New Password</th>
+            <td><input class="inputbox" name="newPassword2" id="pw2" type="password" /></td>
+        </tr>
+        <tr>
+            <td colspan="2" class="buttons">
+                <input class="inputbutton" name="submit" type="submit" value="Change Password" />
+            </td>
+        </tr>
+    </table>
+</form>
+<div class="clear"></div>

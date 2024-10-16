@@ -37,7 +37,9 @@ class SeasonStandings extends Component
         $players = [];
         $count = 0;
         foreach ($points as $playerName => $playerPoints) {
-            $player = new Player($playerName);
+            // Insanely we have to cast to string here because PHP has automatically converted
+            // any string keys that happen to resemble integers to ints here!
+            $player = new Player((string) $playerName);
             $count++;
             $classes = '';
             if ($count % 2 != 0) {

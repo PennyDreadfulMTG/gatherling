@@ -1,0 +1,19 @@
+<table class="scoreboard">
+    <tr class="top">
+        <th>Event</th>
+        <th>Round</th>
+        <th>Opponent</th>
+        <th>Deck</th>
+        <th>Rating</th>
+        <th>Result</th>
+    </tr>
+    {{#rows}}
+        <tr class="{{rowColor}}"><td>{{#eventName}}{{eventName}}{{/eventName}}</td>
+            <td>{{rnd}}</td>
+            <td>{{#opponentLink}}{{> playerLink}}{{/opponentLink}}</td>
+            <td>{{#deckLink}}{{> deckLink}}{{/deckLink}}</td>
+            <td>{{oppRating}}</td>
+            <td>{{res}} {{playerWins}} - {{playerLosses}}</td>
+        </tr>
+    {{/rows}}
+</table>

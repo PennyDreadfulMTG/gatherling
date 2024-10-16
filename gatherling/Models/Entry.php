@@ -210,28 +210,6 @@ class Entry
         return $removed;
     }
 
-    public function createDeckLink(): string
-    {
-        // creates a link to enter a deck list once a player is registered for the event
-        $args = $this->createDeckLinkArgs();
-
-        return TemplateHelper::render('partials/createDeckLink', $args);
-    }
-
-    /** @return array<string, mixed> */
-    public function createDeckLinkArgs(): array
-    {
-        $args = [
-            'canCreateDeck' => $this->canCreateDeck(Player::loginName()),
-        ];
-        if (!$args['canCreateDeck']) {
-            return $args;
-        }
-        $args['createDeckLink'] = 'deck.php?player=' . rawurlencode($this->player->name) . '&event=' . rawurlencode((string) $this->event->id) . '&mode=create';
-
-        return $args;
-    }
-
     public function setInitialByes(int $byeqty): void
     {
         $db = Database::getConnection();

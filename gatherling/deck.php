@@ -177,7 +177,7 @@ function deckForm(?Deck $deck = null): void
             echo '</ul></td></tr>';
         }
     }
-    print_file_input('Import File', 'txt');
+    echo print_file_input('Import File', 'txt');
     echo "<tr><td></td><td><hr width='60%' ALIGN=\"left\"/></td></tr>";
     echo textInput('Name', 'name', $vals['name'], 40, null, 'deck-name');
     if (!$create) {

@@ -130,11 +130,6 @@ class Standings
         return $event_standings;
     }
 
-    public static function eventStandings(?string $eventName, ?string $playerName = null): string
-    {
-        return (new EventStandings($eventName, $playerName))->render();
-    }
-
     public static function updateStandings(string $eventname, int $subevent, int $round): void
     {
         $players = self::getEventStandings($eventname, 0);

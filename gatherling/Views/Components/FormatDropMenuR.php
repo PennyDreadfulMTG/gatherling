@@ -6,7 +6,7 @@ namespace Gatherling\Views\Components;
 
 class FormatDropMenuR extends DropMenu
 {
-    public function __construct(public string $format)
+    public function __construct(public string $format = '')
     {
         $names = ['Composite', 'Standard', 'Extended', 'Modern',
             'Classic', 'Legacy', 'Pauper', 'SilverBlack', 'Heirloom',

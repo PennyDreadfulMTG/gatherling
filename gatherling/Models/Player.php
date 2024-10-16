@@ -750,47 +750,6 @@ class Player
         return $opponents;
     }
 
-    /** @return list<Entry> */
-    public function getNoDeckEntries(): array
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT event_id FROM entries n, events e
-      WHERE n.player = ? AND n.deck IS NULL AND n.event_id = e.id
-      ORDER BY e.start DESC');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->bind_result($event_id);
-
-        $event_ids = [];
-        while ($stmt->fetch()) {
-            $event_ids[] = $event_id;
-        }
-        $stmt->close();
-
-        $entries = [];
-        foreach ($event_ids as $event_id) {
-            $entries[] = new Entry($event_id, $this->name);
-        }
-
-        return $entries;
-    }
-
-    // TODO: remove ignore functionality for decks. Not sure what this function does. Part of it?
-    public function getUnenteredCount(): int
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT count(event_id) FROM entries n, events e
-      WHERE n.player = ? AND n.deck IS NULL AND n.event_id = e.id
-      AND n.ignored = false');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->bind_result($noentrycount);
-        $stmt->fetch();
-        $stmt->close();
-
-        return $noentrycount;
-    }
-
     public function getRating(string $format = 'Composite', string $date = '3000-01-01 00:00:00'): int
     {
         $db = Database::getConnection();

@@ -1,0 +1,48 @@
+<h4>Create New Series</h4>
+<form action="admincp.php" method="post">
+    <input type="hidden" name="view" value="create_series" />
+    <table class="form c">
+        <tr>
+            <td colspan="2">
+                New Series Name: <input class="inputbox" type="text" name="seriesname" style="width: 175px"/>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Series is Active</th>
+            <td>
+                <select class="inputbox" name="isactive">
+                    <option value="1">Yes</option>
+                    <option value="0" selected>No</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Normal Start Day</th>
+            <td>
+                {{#dayDropMenu}}{{> dropMenu}}{{/dayDropMenu}}
+            </td>
+        </tr>
+
+        <tr>
+            <th>Normal Start Time</th>
+            <td>
+                {{#timeDropMenu}}{{> dropMenu}}{{/timeDropMenu}}
+            </td>
+        </tr>
+
+        <tr>
+            <th>Pre-Registration Default</th>
+            <td>
+                <input type="checkbox" value="1" name="preregdefault" />
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" class="buttons">
+                <input class="inputbutton" type="submit" name="action" value="Create Series" />
+            </td>
+        </tr>
+    </table>
+</form>

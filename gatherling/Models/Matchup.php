@@ -7,6 +7,7 @@ namespace Gatherling\Models;
 use Exception;
 use Gatherling\Data\DB;
 use Gatherling\Exceptions\DatabaseException;
+use InvalidArgumentException;
 
 class Matchup
 {
@@ -109,15 +110,14 @@ class Matchup
         return $player_or_name;
     }
 
-    public function playerLetter(string|Player $player): ?string
+    public function playerLetter(string $playerName): ?string
     {
-        if ($this->playerA($player)) {
+        if ($this->playerA($playerName)) {
             return 'a';
-        } elseif ($this->playerB($player)) {
+        } elseif ($this->playerB($playerName)) {
             return 'b';
-        } else {
-            return null;
         }
+        return null;
     }
 
     // Returns true if $player has a bye in this match
@@ -325,7 +325,7 @@ class Matchup
                 $losses = 1;
                 break;
             default:
-                throw new Exception("Invalid result: $result"); // BAKERT better exception
+                throw new InvalidArgumentException("Invalid result: $result");
         }
         DB::execute($sql, ['wins' => $wins, 'losses' => $losses, 'id' => $match_id]);
         self::validateReport($match_id);

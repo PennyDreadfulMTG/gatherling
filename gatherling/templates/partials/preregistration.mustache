@@ -1,0 +1,67 @@
+<table class="gatherling_full">
+    <tr>
+        <td colspan="3"><b>YOUR UPCOMING EVENTS</b></td>
+    </tr>
+    {{^upcomingEvents}}
+        <tr>
+            <td colspan="3">You haven't registered for any events</td>
+        </tr>
+    {{/upcomingEvents}}
+    {{#upcomingEvents}}
+        <tr>
+            <td><a href="{{eventLink}}"\">{{eventName}}</a></td>
+            <td>
+                {{#startingSoon}}Staring soon{{/startingSoon}}
+                {{^startingSoon}}{{#startTime}}{{> time}}{{/startTime}}{{/startingSoon}}
+            </td>
+            {{#createDeckLink}}
+                <td align="left">{{#createDeckLink}}{{> createDeckLink}}{{/createDeckLink}}</td>
+            {{/createDeckLink}}
+            {{#deckLink}}
+                <td align="left" style="font-size: 1.1em">{{#deckLink}}{{> deckLink}}{{/deckLink}}</td>
+            {{/deckLink}}
+            <td><a href="{{unregLink}}">Unreg</a></td>
+        </tr>
+    {{/upcomingEvents}}
+    {{#promptToLinkMtgo}}
+        <tr>Please <a href="player.php?mode=edit_accounts">set your MTGO username</a>.</tr>
+    {{/promptToLinkMtgo}}
+    {{#promptToLinkMtga}}
+        <tr>Please <a href="player.php?mode=edit_accounts">set your MTGA username</a>.</tr>
+    {{/promptToLinkMtga}}
+</table>
+
+<table class="gatherling_full">
+    <tr>
+        <td colspan="3"><b>PREREGISTER FOR EVENTS</b></td>
+    </tr>
+    {{^availableEvents}}
+        <tr>
+            <td colspan="3">No upcoming events</td>
+        </tr>
+    {{/availableEvents}}
+    {{#availableEvents}}
+
+        <tr>
+            <td>
+                <a href="{{eventLink}}">{{eventName}}</a>
+                <br>{{#startTime}}{{> time}}{{/startTime}}
+            </td>
+            <td>
+                {{#isFull}}
+                    This event is currently at capacity.
+                {{/isFull}}
+                {{#requiresMtgo}}
+                    <a href="player.php?mode=edit_accounts">Requires an MTGO account</a>
+                {{/requiresMtgo}}
+                {{#requiresMtga}}
+                    <a href="player.php?mode=edit_accounts">Requires a Magic Arena account</a>
+                {{/requiresMtga}}
+                {{#isOpen}}
+                    <a href="{{registerLink}}">Register</a>
+                {{/isOpen}}
+            </td>
+
+        </tr>
+    {{/availableEvents}}
+</table>

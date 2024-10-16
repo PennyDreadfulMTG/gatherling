@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 use Gatherling\Auth\Session;
 use Gatherling\Models\Player;
-use Gatherling\Models\Series;
-use Gatherling\Views\LoginRedirect;
-use Gatherling\Views\TemplateHelper;
 use Gatherling\Views\Components\CardLink;
 use Gatherling\Views\Components\FormatDropMenu;
-use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\OrganizerSelect;
-use Gatherling\Views\Components\EmailStatusDropDown;
+use Gatherling\Views\Components\SeasonDropMenu;
+use Gatherling\Views\Components\TimeDropMenu;
+use Gatherling\Views\LoginRedirect;
+use Gatherling\Views\TemplateHelper;
 
 use function Gatherling\Views\server;
 
@@ -35,16 +34,6 @@ require_once 'util/time.php';
 const MTGO = 1;
 const MTGA = 2;
 const PAPER = 3;
-
-function page(string $title, string $contents): string
-{
-    ob_start();
-    print_header($title);
-    echo $contents;
-    print_footer();
-
-    return ob_get_clean();
-}
 
 function print_header(string $title, bool $enable_vue = false): void
 {
@@ -130,63 +119,9 @@ function formatDropMenu(?string $format, bool $useAll = false, string $formName 
     return (new FormatDropMenu($format, $useAll, $formName))->render();
 }
 
-function emailStatusDropDown(int $currentStatus = 1): string
-{
-    return (new EmailStatusDropDown($currentStatus))->render();
-}
-
 function timeDropMenu(int|string $hour, int|string $minutes = 0): string
 {
-    $args = timeDropMenuArgs($hour, $minutes);
-
-    return TemplateHelper::render('partials/dropMenu', $args);
-}
-
-/** @return array{name: string, default: string, options: list<array{value: string, text: string, isSelected: bool}>} */
-function timeDropMenuArgs(int|string $hour, int|string $minutes = 0): array
-{
-    if (strcmp($hour, '') == 0) {
-        $hour = -1;
-    }
-    $options = [];
-    for ($h = 0; $h < 24; $h++) {
-        for ($m = 0; $m < 60; $m += 30) {
-            $hstring = $h;
-            if ($m == 0) {
-                $mstring = ':00';
-            } else {
-                $mstring = ":$m";
-            }
-            if ($h == 0) {
-                $hstring = '12';
-            }
-            $apstring = ' AM';
-            if ($h >= 12) {
-                $hstring = $h != 12 ? $h - 12 : $h;
-                $apstring = ' PM';
-            }
-            if ($h == 0 && $m == 0) {
-                $hstring = 'Midnight';
-                $mstring = '';
-                $apstring = '';
-            } elseif ($h == 12 && $m == 0) {
-                $hstring = 'Noon';
-                $mstring = '';
-                $apstring = '';
-            }
-            $options[] = [
-                'value'      => "$h:$m",
-                'text'       => "$hstring$mstring$apstring",
-                'isSelected' => $hour == $h && $minutes == $m,
-            ];
-        }
-    }
-
-    return [
-        'name'    => 'hour',
-        'default' => '- Hour -',
-        'options' => $options,
-    ];
+    return (new TimeDropMenu('hour', $hour, $minutes))->render();
 }
 
 function json_headers(): void
@@ -215,7 +150,8 @@ function git_hash(): string
 
 function version_tagline(): string
 {
-    return 'Gatherling version 6.0.0 ("A foolish consistency is the hobgoblin of little minds")';
+    return 'Gatherling version 6.0.1 ("A guilty system recognizes no innocents.")';
+    // return 'Gatherling version 6.0.0 ("A foolish consistency is the hobgoblin of little minds")';
     // return 'Gatherling version 5.2.0 ("I mustache you a question...")';
     // return 'Gatherling version 5.1.0 ("Have no fear of perfection – you’ll never reach it.")';
     // echo 'Gatherling version 5.0.1 ("No rest. No mercy. No matter what.")';

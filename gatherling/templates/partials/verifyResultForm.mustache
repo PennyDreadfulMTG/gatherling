@@ -1,0 +1,53 @@
+<center>
+    <h3>
+        <br>Confirm Game Results
+    </h3>
+</center>
+<center style="color: red; font-weight: bold;">
+    <p>Please confirm your entry.</p>
+</center>
+
+<center>
+    <h4>
+        {{#showOpponent}}Opponent: {{opponent}}{{/showOpponent}}
+        {{resultText}}
+        {{#isDrop}}
+            <center style="color: red; font-weight: bold;"><p>I want to drop out of this event.</p></center>
+        {{/isDrop}}
+    </h4>
+</center>
+
+<table class="form">
+    <tr>
+        <th>
+            <form action="report.php" method="post">
+                {{#isDrop}}
+                    <input name="drop" type="hidden" value="Y" />
+                {{/isDrop}}
+                <input name="action" type="hidden" value="finalize_result" />
+                <input name="match_id" type="hidden" value="{{matchId}}" />
+                <input name="report" type="hidden" value="{{report}}" />
+                <input name="opponent" type="hidden" value="{{opponent}}" />
+                <input name="player" type="hidden" value="{{playerName}}" />
+                <input name="event" type="hidden" value="{{eventName}}" />
+                <input name="submit" type="submit" value="Verify Match Report" />
+            </form>
+        </th>
+        <td>
+            <!-- It would be nice if this functionality worked for league matches
+            where there is no match_id, but it currently does not so don't show it. -->
+            {{#matchId}}
+                <form action="report.php" method="get">
+                    <input name="match_id" type="hidden" value="{{matchId}}" />
+                    <input name="player" type="hidden" value="{{playerName}}" />
+                    <input name="mode" type="hidden" value="submit_result" />
+                        <input name="submit" type="submit" value="Go Back and Correct" />
+                </form>
+            {{/matchId}}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" class="buttons"></td>
+    </tr>
+</table>
+<div class="clear"></div>

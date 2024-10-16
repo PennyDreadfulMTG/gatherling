@@ -1,0 +1,26 @@
+<h4>Calculate Ratings</h4>
+<form action="admincp.php" method="post">
+    <input type="hidden" name="view" value="calc_ratings" />
+    <table class="form c">
+        <tr>
+            <td class="buttons">
+                <input class="inputbutton" type="submit" name="action" value="Re-Calculate All Ratings" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Select a rating to Re-Calculate:
+                {{#formatDropMenuR}}{{> dropMenu}}{{/formatDropMenuR}}
+                <input class="inputbutton" type="submit" name="action" value="Re-Calculate By Format" />
+            </td>
+        </tr>
+    </table>
+    <h4>Rebuild tribal database</h4>
+    <table class="form c">
+        <tr>
+            <td class="buttons">
+                <input class="inputbutton" type="submit" name="action" value="Rebuild Tribes" />
+            </td>
+        </tr>
+    </table>
+</form>

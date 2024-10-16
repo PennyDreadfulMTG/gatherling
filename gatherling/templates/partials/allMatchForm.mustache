@@ -1,0 +1,44 @@
+<form action="player.php" method="post">
+    <table class="c">
+        <tr>
+            <td align="center" colspan="2"><b>Filters</b></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        <tr>
+            <td>Format&nbsp</td>
+            <td>
+                {{#formatDropMenuP}}{{> dropMenu}}{{/formatDropMenuP}}
+            </td>
+        </tr>
+        <tr>
+            <td>Series&nbsp;</td>
+            <td>
+                {{#seriesDropMenuP}}{{> dropMenu}}{{/seriesDropMenuP}}
+            </td>
+        </tr>
+        <tr>
+            <td>Season&nbsp;</td>
+            <td>
+                {{#seasonDropMenuP}}{{> dropMenu}}{{/seasonDropMenuP}}
+            </td>
+        </tr>
+        <tr>
+            <td>Opponent&nbsp;</td>
+            <td>
+                {{#oppDropMenuP}}{{> dropMenu}}{{/oppDropMenuP}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="c">
+                <input type="submit" name="mode" value="Filter Matches">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+    </table>
+</form>

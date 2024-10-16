@@ -1,0 +1,17 @@
+<table width="300">
+    <tr>
+        <td colspan="4"><b>RECENT MATCHES</b></td>
+        <td align="right">
+            <a href="player.php?mode=allmatches">(see all)</a>
+        </td>
+    </tr>
+    {{#matches}}
+        <tr>
+            <td>{{eventName}}</td>
+            <td>Round: {{round}}</td>
+            <td width="4"><b>{{res}} {{playerWins}}</b> - <b>{{playerLosses}}</b></td>
+            <td>vs.</td>
+            <td>{{#opponentLink}}{{> playerLink}}{{/opponentLink}}</td>
+        </tr>
+    {{/matches}}
+</table>

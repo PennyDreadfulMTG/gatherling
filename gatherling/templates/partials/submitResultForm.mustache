@@ -1,0 +1,45 @@
+<center>
+    <h3>Report Game Results</h3>
+    Enter results for <em>{{eventName}}</em> round {{currentRound}} vs. {{#opponentGameName}}{{> gameName}}{{/opponentGameName}}
+</center>
+
+<form action="report.php" method="post">
+    <input name="mode" type="hidden" value="verify_result" />
+    <input name="action" type="hidden" value="verify_result" />
+    <input name="match_id" type="hidden" value="{{matchId}}" />
+    <input name="player" type="hidden" value="{{letter}}" />
+    <table class="form">
+        <tr>
+            <td><input type='radio' name='report' value='W20' /> I won the match 2-0</td>
+        </tr>
+        <tr>
+            <td><input type='radio' name='report' value='W21' />I won the match 2-1</td>
+        </tr>
+        <tr>
+            <td><input type='radio' name='report' value='L20' />I lost the match 0-2 </td>
+        </tr>
+        <tr>
+            <td><input type='radio' name='report' value='L21' />I lost the match 1-2</td>
+        </tr>
+        {{#allowsPlayerReportedDraws}}
+            <tr>
+                <td><input type='radio' name='report' value='D' />The match was a draw</td>
+            </tr>
+        {{/allowsPlayerReportedDraws}}
+        <tr>
+            <td></td>
+        </tr>
+        {{^isSingleElimination}}
+            {{#dropCheckboxInput}}{{> checkboxInput}}{{/dropCheckboxInput}}
+        {{/isSingleElimination}}
+        <tr>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="buttons">
+                <input class="inputbutton" name="submit" type="submit" value="Submit Match Report" />
+            </td>
+        </tr>
+    </table>
+</form>
+<div class="clear"></div>
