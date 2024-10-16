@@ -2,6 +2,11 @@
 
 declare(strict_types=1);
 
+// Some of the Pauper series seasons had 1000+ entrants and 256 tourneys.
+// We should find a better way to display that but for now make them work
+// without hitting the PHP memory limit.
+ini_set('memory_limit', '512M');
+
 use Gatherling\Views\Pages\SeriesReport;
 
 use function Gatherling\Views\get;
