@@ -1,0 +1,50 @@
+<form action="seriescp.php" method="post">
+    <input type="hidden" name="series" value="{{seriesName}}" />
+    <h3><center>Banned Players</center></h3>
+    <p style="width: 75%; text-align: left;">
+        Players added to this ban list will not be able to register for any event
+        (including alt events) that are created by this series. You can also suspend
+        a player simply by adding them to this list for a period of time and removing
+        them.
+    </p>
+    <table class="form c">
+        <tr>
+            <th style="text-align: center;">Player</th>
+            <th style="text-align: center;">Added On</th>
+            <th style="text-align: center;">Reason</th>
+            <th style="width: 50px; text-align: center;">Delete</th>
+        </tr>
+        {{#bannedPlayers}}
+            <tr>
+                <td style="text-align: center;">{{playerName}}</td>
+                <td style="text-align: center;">{{addedDate}}</td>
+                <td style="text-align: center;">{{reasonBanned}}</td>
+                <td style="text-align: center; width: 50px;">
+                    <input type="checkbox" value="{{playerName}}" name="removebannedplayer[]"
+                        {{#isCurrentPlayer}}disabled="yes"{{/isCurrentPlayer}}
+                    />
+                </td>
+            </tr>
+        {{/bannedPlayers}}
+        {{^bannedPlayers}}
+            <tr>
+                <td colspan="3" style="text-align: left;">No Banned Players</td>
+            </tr>
+        {{/bannedPlayers}}
+    </table>
+    <table class="form c">
+        <tr>
+            <td>Add new:</td>
+            <td><input class="inputbox" type="text" name="addbannedplayer" /></td>
+        </tr>
+        <tr>
+            <td>Reason:</td>
+            <td><input class="inputbox" type="text" name="reason" /></td>
+        </tr>
+        <tr>
+            <td colspan="2" class="buttons">
+                <input type="hidden" name="view" value="bannedplayers" />
+                <input class="inputbutton" type="submit" value="Update Banned Players" name="action" />
+            </td>
+        </tr>
+</table>

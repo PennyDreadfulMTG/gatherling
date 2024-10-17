@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 use Gatherling\Auth\Session;
 use Gatherling\Models\Player;
-use Gatherling\Views\Components\CardLink;
-use Gatherling\Views\Components\FormatDropMenu;
-use Gatherling\Views\Components\OrganizerSelect;
-use Gatherling\Views\Components\SeasonDropMenu;
-use Gatherling\Views\Components\TimeDropMenu;
 use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\TemplateHelper;
 
@@ -99,26 +94,6 @@ function image_tag(string $filename, ?array $extra_attr = null): string
     return $tag;
 }
 
-function medalImgStr(string $medal): string
-{
-    return image_tag("$medal.png", ['style' => 'border-width: 0px']);
-}
-
-function seasonDropMenu(int|string|null $season): string
-{
-    return (new SeasonDropMenu($season))->render();
-}
-
-function formatDropMenu(?string $format, bool $useAll = false, string $formName = 'format'): string
-{
-    return (new FormatDropMenu($format, $useAll, $formName))->render();
-}
-
-function timeDropMenu(int|string $hour, int|string $minutes = 0): string
-{
-    return (new TimeDropMenu('hour', $hour, $minutes))->render();
-}
-
 function json_headers(): void
 {
     header('Content-type: application/json');
@@ -126,12 +101,6 @@ function json_headers(): void
     header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
     header('Access-Control-Allow-Origin: *');
     header('HTTP_X_USERNAME: ' . Player::loginName());
-}
-
-/** @param array<string> $player_series */
-function printOrganizerSelect(array $player_series, string $selected): string
-{
-    return (new OrganizerSelect(server()->string('PHP_SELF'), $player_series, $selected))->render();
 }
 
 function git_hash(): string

@@ -1,0 +1,16 @@
+<form action="seriescp.php" method="post" enctype="multipart/form-data">
+    <table class="form c">
+        <input type="hidden" name="series" value="{{seriesName}}" />
+        <tr>
+            <th>Current Logo</th>
+            <td><img alt="{{seriesName}} logo" src="{{logoSrc}}" /></td>
+        </tr>
+        <tr>
+            <th>Upload New Logo</th>
+            <td>
+                <input class="inputbox" type="file" name="logo" />
+                <input class="inputbutton" type="submit" name="action" value="Change Logo" />
+            </td>
+        </tr>
+    </table>
+</form>

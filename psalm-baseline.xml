@@ -165,6 +165,7 @@
   </file>
   <file src="gatherling/Models/Series.php">
     <PossiblyUnusedMethod>
+      <code><![CDATA[addBannedPlayer]]></code>
       <code><![CDATA[getEvents]]></code>
     </PossiblyUnusedMethod>
     <PossiblyUnusedReturnValue>
@@ -216,11 +217,6 @@
       <code><![CDATA[$seasonDropMenuP]]></code>
       <code><![CDATA[$seriesDropMenuP]]></code>
     </PossiblyUnusedProperty>
-    <UndefinedFunction>
-      <code><![CDATA[opts($player->getFormatsPlayed())]]></code>
-      <code><![CDATA[opts($player->getSeasonsPlayed())]]></code>
-      <code><![CDATA[opts($player->getSeriesPlayed())]]></code>
-    </UndefinedFunction>
   </file>
   <file src="gatherling/Views/Components/AllRatings.php">
     <PossiblyUnusedProperty>
@@ -343,11 +339,6 @@
       <code><![CDATA[$leagueMatches]]></code>
       <code><![CDATA[$tournamentMatches]]></code>
     </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/DayDropMenu.php">
-    <UndefinedFunction>
-      <code><![CDATA[opts(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])]]></code>
-    </UndefinedFunction>
   </file>
   <file src="gatherling/Views/Components/DeckErrorTable.php">
     <PossiblyUnusedProperty>
@@ -645,6 +636,12 @@
       <code><![CDATA[$formatsDropMenu]]></code>
     </PossiblyUnusedProperty>
   </file>
+  <file src="gatherling/Views/Components/LogoForm.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$logoSrc]]></code>
+      <code><![CDATA[$seriesName]]></code>
+    </PossiblyUnusedProperty>
+  </file>
   <file src="gatherling/Views/Components/MainPlayerControlPanel.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$activeEvents]]></code>
@@ -697,6 +694,11 @@
       <code><![CDATA[$playerName]]></code>
     </PossiblyUnusedProperty>
   </file>
+  <file src="gatherling/Views/Components/MissingTrophies.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$noRecentEvents]]></code>
+    </PossiblyUnusedProperty>
+  </file>
   <file src="gatherling/Views/Components/NewFormatForm.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$action]]></code>
@@ -731,6 +733,12 @@
       <code><![CDATA[$recordString]]></code>
     </PossiblyUnusedProperty>
   </file>
+  <file src="gatherling/Views/Components/PlayerBanForm.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$series]]></code>
+      <code><![CDATA[$seriesName]]></code>
+    </PossiblyUnusedProperty>
+  </file>
   <file src="gatherling/Views/Components/PlayerLink.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$gameName]]></code>
@@ -746,6 +754,24 @@
   <file src="gatherling/Views/Components/PlayerSearchForm.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$playerName]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="gatherling/Views/Components/PointsForm.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$rules]]></code>
+      <code><![CDATA[$season]]></code>
+      <code><![CDATA[$seasonDropMenu]]></code>
+      <code><![CDATA[$series]]></code>
+      <code><![CDATA[$seriesName]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="gatherling/Views/Components/PointsRule.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$formatDropMenu]]></code>
+      <code><![CDATA[$isChecked]]></code>
+      <code><![CDATA[$rule]]></code>
+      <code><![CDATA[$size]]></code>
+      <code><![CDATA[$value]]></code>
     </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Components/Prereg.php">
@@ -797,6 +823,11 @@
       <code><![CDATA[$ratings]]></code>
     </PossiblyUnusedProperty>
   </file>
+  <file src="gatherling/Views/Components/RecentEventsTable.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$series]]></code>
+    </PossiblyUnusedProperty>
+  </file>
   <file src="gatherling/Views/Components/ReportLink.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$reportLink]]></code>
@@ -839,6 +870,34 @@
       <code><![CDATA[$label]]></code>
       <code><![CDATA[$name]]></code>
       <code><![CDATA[$select]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="gatherling/Views/Components/SeriesAndLogoForms.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$logoForm]]></code>
+      <code><![CDATA[$seriesForm]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="gatherling/Views/Components/SeriesControlPanelMenu.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$series]]></code>
+      <code><![CDATA[$seriesName]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="gatherling/Views/Components/SeriesForm.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$dayDropMenu]]></code>
+      <code><![CDATA[$isActive]]></code>
+      <code><![CDATA[$mtgoRoomTextInput]]></code>
+      <code><![CDATA[$preregDefault]]></code>
+      <code><![CDATA[$series]]></code>
+      <code><![CDATA[$seriesName]]></code>
+      <code><![CDATA[$timeDropMenu]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="gatherling/Views/Components/SeriesOrganizersForm.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$seriesName]]></code>
     </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Components/SideboardTable.php">
@@ -896,6 +955,11 @@
   <file src="gatherling/Views/Components/SymbolTable.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$sum]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="gatherling/Views/Components/TextComponent.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$text]]></code>
     </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Components/TextInput.php">
@@ -1288,6 +1352,14 @@
       <code><![CDATA[$this->activeSeries]]></code>
     </InvalidPropertyAssignmentValue>
   </file>
+  <file src="gatherling/Views/Pages/SeriesControlPanel.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$errorMsg]]></code>
+      <code><![CDATA[$orientationSafe]]></code>
+      <code><![CDATA[$seriesControlPanelMenu]]></code>
+      <code><![CDATA[$viewSafe]]></code>
+    </PossiblyUnusedProperty>
+  </file>
   <file src="gatherling/Views/Pages/SeriesReport.php">
     <PossiblyUnusedProperty>
       <code><![CDATA[$seasonSelect]]></code>
@@ -1369,14 +1441,6 @@
     </InvalidGlobal>
     <UnusedVariable>
       <code><![CDATA[$provider]]></code>
-    </UnusedVariable>
-  </file>
-  <file src="gatherling/seriescp.php">
-    <UnusedParam>
-      <code><![CDATA[$cur]]></code>
-    </UnusedParam>
-    <UnusedVariable>
-      <code><![CDATA[$winningDeck]]></code>
     </UnusedVariable>
   </file>
   <file src="tests/Data/DBTest.php">

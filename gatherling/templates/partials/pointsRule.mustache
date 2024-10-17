@@ -1,0 +1,16 @@
+<tr>
+    <th>{{rule}}</th>
+    <td>
+        {{#isText}}
+            <input class="inputbox" type="text" value="{{value}}" name="{{name}}" size="{{size}}" />
+        {{/isText}}
+        {{#isCheckbox}}
+            <input type="checkbox" value="1" name="{{name}}"
+                {{#isChecked}}checked{{/isChecked}}
+            />
+        {{/isCheckbox}}
+        {{#isDropMenu}}
+            {{#formatDropMenu}}{{> dropMenu}}{{/formatDropMenu}}
+        {{/isDropMenu}}
+    </td>
+</tr>
