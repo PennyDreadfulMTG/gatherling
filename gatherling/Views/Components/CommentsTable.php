@@ -8,7 +8,7 @@ use Gatherling\Models\Deck;
 
 class CommentsTable extends Component
 {
-    public string $notes = '';
+    public string $notesSafe = '';
 
     public function __construct(Deck $deck)
     {
@@ -21,6 +21,6 @@ class CommentsTable extends Component
             $notes = preg_replace("/\[i\]/", '<i>', $notes) ?? $notes;
             $notes = preg_replace("/\[\/i\]/", '</i>', $notes) ?? $notes;
         }
-        $this->notes = $notes ?? '';
+        $this->notesSafe = $notes ?? '';
     }
 }

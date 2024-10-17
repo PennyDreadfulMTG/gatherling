@@ -4,12 +4,12 @@
     </tr>
     <tr>
         <td>
-            {{#notes}}
-                {{notes}}
-            {{/notes}}
-            {{^notes}}
+            {{#notesSafe}}
+                {{{notesSafe}}}
+            {{/notesSafe}}
+            {{^notesSafe}}
                 <i>No comments have been recorded for this deck.</i>
-            {{/notes}}
+            {{/notesSafe}}
         </td>
     </tr>
 </table>
