@@ -128,6 +128,8 @@ function insertDeck(Event $event, string $name, string $archetype, string $notes
     $deck->maindeck_cards = parseCardsWithQuantity($contents);
     $deck->sideboard_cards = parseCardsWithQuantity($sideboard);
 
+    $deck->save();
+
     return $deck;
 }
 
@@ -139,6 +141,8 @@ function updateDeck(Deck $deck, string $archetype, string $name, string $notes, 
 
     $deck->maindeck_cards = parseCardsWithQuantity($contents);
     $deck->sideboard_cards = parseCardsWithQuantity($sideboard);
+
+    $deck->save();
 
     return $deck;
 }
