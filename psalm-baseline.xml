@@ -165,7 +165,6 @@
   </file>
   <file src="gatherling/Models/Series.php">
     <PossiblyUnusedMethod>
-      <code><![CDATA[addBannedPlayer]]></code>
       <code><![CDATA[getEvents]]></code>
     </PossiblyUnusedMethod>
     <PossiblyUnusedReturnValue>
@@ -1323,7 +1322,7 @@
   </file>
   <file src="gatherling/Views/Pages/Register.php">
     <PossiblyUnusedProperty>
-      <code><![CDATA[$emailStatusDropDown]]></code>
+      <code><![CDATA[$emailStatusDropMenu]]></code>
       <code><![CDATA[$message]]></code>
       <code><![CDATA[$showRegForm]]></code>
       <code><![CDATA[$timeZoneDropMenu]]></code>
