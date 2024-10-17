@@ -17,8 +17,6 @@ class MetaStats extends Component
 
     public function __construct(Event $event)
     {
-        parent::__construct('partials/metaStats');
-
         $archcnt = $this->initArchetypeCount();
         $colorcnt = ['w' => 0, 'g' => 0, 'u' => 0, 'r' => 0, 'b' => 0];
         $decks = $event->getDecks();

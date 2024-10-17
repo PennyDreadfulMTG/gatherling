@@ -14,8 +14,6 @@ class SymbolTable extends Component
 
     public function __construct(Deck $deck)
     {
-        parent::__construct('partials/symbolTable');
-
         $cnts = $deck->getColorCounts();
         asort($cnts);
         $cnts = array_reverse($cnts, true);

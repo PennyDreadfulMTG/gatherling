@@ -11,7 +11,6 @@ class Time extends Component
 
     public function __construct(int $time, int $now, public bool $long = false)
     {
-        parent::__construct('partials/time');
         $this->datetime = date('c', $time);
         $this->text = human_date($time, $now);
     }

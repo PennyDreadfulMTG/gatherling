@@ -22,7 +22,6 @@ class PointsRule extends Component
         string $formtype = 'text',
         public int $size = 4,
     ) {
-        parent::__construct('partials/pointsRule');
         $this->name = "new_rules[{$key}]";
         $this->isText = $formtype == 'text';
         $this->value = $this->isText ? (string) $rules[$key] : null;

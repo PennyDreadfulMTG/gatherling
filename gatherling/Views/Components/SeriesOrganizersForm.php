@@ -15,7 +15,6 @@ class SeriesOrganizersForm extends Component
 
     public function __construct(Series $series)
     {
-        parent::__construct('partials/seriesOrganizersForm');
         $player = Player::loginName() ? new Player(Player::loginName()) : null;
         $this->seriesName = $series->name;
         foreach ($series->organizers as $organizer) {

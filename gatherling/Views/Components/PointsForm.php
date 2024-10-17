@@ -15,7 +15,6 @@ class PointsForm extends Component
 
     public function __construct(public Series $series, public int $season)
     {
-        parent::__construct('partials/pointsForm');
         $this->seriesName = $series->name;
         $this->seasonDropMenu = new SeasonDropMenu($season);
         $seasonRules = $series->getSeasonRules($season);

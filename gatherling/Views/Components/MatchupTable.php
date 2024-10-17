@@ -18,7 +18,6 @@ class MatchupTable extends Component
 
     public function __construct(Deck $deck)
     {
-        parent::__construct('partials/matchupTable');
         if (!$deck->eventname) {
             throw new InvalidArgumentException('Deck event name is required');
         }

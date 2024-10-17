@@ -26,7 +26,6 @@ class FormatSettings extends Component
 
     public function __construct(public string $seriesName, Format $activeFormat)
     {
-        parent::__construct('partials/formatSettings');
         $this->activeFormatName = $activeFormat->name ?? '';
         $this->activeFormat = getObjectVarsCamelCase($activeFormat);
         $this->minMainStringField = new StringField('minmain', $activeFormat->min_main_cards_allowed, 5);

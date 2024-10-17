@@ -19,7 +19,6 @@ class EditSet extends Component
 
     public function __construct(public string $cardSetName)
     {
-        parent::__construct('partials/editSet');
         $names = [];
 
         $sql = '

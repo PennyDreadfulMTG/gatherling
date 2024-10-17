@@ -13,8 +13,6 @@ class RecentDecksDropMenu extends Component
 
     public function __construct(string $playerName)
     {
-        parent::__construct('partials/recentDecksDropMenu');
-
         $deckplayer = new Player($playerName);
         $recentDecks = $deckplayer->getRecentDecks();
 

@@ -14,7 +14,6 @@ class SideboardTable extends Component
 
     public function __construct(Deck $deck)
     {
-        parent::__construct('partials/sideboardTable');
         $sideboardCards = $deck->sideboard_cards;
 
         $this->numSideboardCards = $deck->getCardCount($sideboardCards);

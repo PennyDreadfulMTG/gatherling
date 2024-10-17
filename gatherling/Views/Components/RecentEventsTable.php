@@ -13,7 +13,6 @@ class RecentEventsTable extends Component
 
     public function __construct(public Series $series)
     {
-        parent::__construct('partials/recentEventsTable');
         $recentEvents = $series->getRecentEvents();
         $now = time();
         foreach ($recentEvents as $event) {

@@ -13,7 +13,6 @@ class PlayerLink extends Component
 
     public function __construct(Player $player, int|string|null $game = 'gatherling')
     {
-        parent::__construct('partials/playerLink');
         $this->gameName = new GameName($player, $game);
         $this->playerLink = "profile.php?player={$player->name}";
     }

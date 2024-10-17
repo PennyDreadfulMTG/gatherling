@@ -18,8 +18,6 @@ class DeckInfo extends Component
 
     public function __construct(Event $event, Deck $deck)
     {
-        parent::__construct('partials/deckInfo');
-
         if (!$event->format) {
             throw new InvalidArgumentException('Event format is required');
         }

@@ -12,7 +12,6 @@ class VerifyResultForm extends Component
 
     public function __construct(public string $report, public int $matchId, public string $playerName, public string|int $drop, public string $opponent, public string $eventName)
     {
-        parent::__construct('partials/verifyResultForm');
         $this->showOpponent = $opponent != '0';
         switch ($report) {
             case 'W20':

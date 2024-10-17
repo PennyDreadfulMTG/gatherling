@@ -22,7 +22,6 @@ class Placing extends Component
 
     public function __construct(Event $event, Deck $deck)
     {
-        parent::__construct('partials/placing');
         if (!$deck->playername) {
             throw new InvalidArgumentException('Deck player name is required');
         }

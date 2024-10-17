@@ -9,6 +9,5 @@ class ErrorMessage extends Component
     /** @param list<string> $errors */
     public function __construct(public array $errors)
     {
-        parent::__construct('partials/errorMessage');
     }
 }

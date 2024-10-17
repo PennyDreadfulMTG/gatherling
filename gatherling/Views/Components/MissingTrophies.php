@@ -15,8 +15,6 @@ class MissingTrophies extends Component
 
     public function __construct(Series $series)
     {
-        parent::__construct('partials/missingTrophies');
-
         $recentEvents = $series->getRecentEvents(1000);
 
         $this->noRecentEvents = count($recentEvents) == 0;

@@ -13,8 +13,6 @@ class VerifyMtgoForm extends Component
 
     public function __construct(Player $player, public string $infobotPrefix)
     {
-        parent::__construct('partials/verifyMtgoForm');
-
         $this->isVerified = $player->verified == 1;
         $this->playerName = $player->name ?? '';
     }

@@ -12,7 +12,6 @@ class CommentsTable extends Component
 
     public function __construct(Deck $deck)
     {
-        parent::__construct('partials/commentsTable');
         $notes = $deck->notes;
         if ($notes) {
             $notes = strip_tags($notes);

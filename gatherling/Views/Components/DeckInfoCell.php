@@ -17,8 +17,6 @@ class DeckInfoCell extends Component
 
     public function __construct(Deck $deck)
     {
-        parent::__construct('partials/deckInfoCell');
-
         $this->name = $deck->name ? strtoupper($deck->name) : '** NO NAME **';
         $this->isValid = $deck->isValid();
         $this->cardCounts = new CardCounts($deck);

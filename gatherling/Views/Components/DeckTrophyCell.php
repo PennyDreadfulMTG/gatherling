@@ -13,8 +13,6 @@ class DeckTrophyCell extends Component
 
     public function __construct(Deck $deck)
     {
-        parent::__construct('partials/deckTrophyCell');
-
         if (!$deck->medal == '1st') {
             return;
         }

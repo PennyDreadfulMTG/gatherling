@@ -12,7 +12,6 @@ class NewFormatForm extends Component
 
     public function __construct(public string $seriesName)
     {
-        parent::__construct('partials/newFormatForm');
         echo "<h4>New Format</h4>\n";
         echo '<form action="admincp.php" method="post">';
         echo '<input type="hidden" name="view" value="no_view" />';

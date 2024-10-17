@@ -11,7 +11,6 @@ class OrganizerSelect extends Component
     /** @param list<string> $playerSeries */
     public function __construct(public string $action, array $playerSeries, string $selected)
     {
-        parent::__construct('partials/organizerSelect');
         $this->seriesDropMenu = new SeriesDropMenu($selected, null, $playerSeries);
     }
 }

@@ -11,8 +11,6 @@ class DeckRegisterForm extends Component
 
     public function __construct(public string $playerName, public string $eventName)
     {
-        parent::__construct('partials/deckRegisterForm');
-
         $this->recentDecks = new RecentDecksDropMenu($playerName);
         $this->deckArchetypeDropMenu = new DeckArchetypeDropMenu();
     }

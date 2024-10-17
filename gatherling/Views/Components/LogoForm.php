@@ -10,6 +10,7 @@ class LogoForm
 {
     public string $seriesName;
     public string $logoSrc;
+
     public function __construct(Series $series)
     {
         $this->seriesName = $series->name;

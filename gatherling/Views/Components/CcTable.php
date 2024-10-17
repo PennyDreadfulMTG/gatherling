@@ -14,8 +14,6 @@ class CcTable extends Component
 
     public function __construct(Deck $deck)
     {
-        parent::__construct('partials/ccTable');
-
         $convertedCosts = $deck->getCastingCosts();
 
         $total = $cards = 0;

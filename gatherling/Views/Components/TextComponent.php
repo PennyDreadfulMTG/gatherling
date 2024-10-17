@@ -8,6 +8,5 @@ class TextComponent extends Component
 {
     public function __construct(public string $text)
     {
-        parent::__construct('partials/textComponent');
     }
 }

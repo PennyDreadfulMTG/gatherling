@@ -22,7 +22,6 @@ class AllRatings extends Component
 
     public function __construct(Player $player, string $formatName)
     {
-        parent::__construct('partials/allRatings');
         if (!$player->name) {
             throw new InvalidArgumentException('Player name is required');
         }

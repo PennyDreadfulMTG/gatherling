@@ -14,8 +14,6 @@ class RecentMatchTable extends Component
 
     public function __construct(Player $player)
     {
-        parent::__construct('partials/recentMatchTable');
-
         $matches = $player->getRecentMatches();
 
         foreach ($matches as $match) {

@@ -25,8 +25,6 @@ class DeckProfile extends Component
 
     public function __construct(Deck $deck)
     {
-        parent::__construct('partials/deckProfile');
-
         if (!$deck->id) {
             throw new InvalidArgumentException('Deck ID is required');
         }

@@ -13,8 +13,6 @@ class GameName extends Component
 
     public function __construct(Player $player, string|int|null $game = 'gatherling', bool $html = true)
     {
-        parent::__construct('partials/gameName');
-
         $iconClass = null;
         $name = $player->name ?? '';
         if ($html) {

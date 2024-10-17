@@ -13,8 +13,6 @@ class EditAccountsForm extends Component
 
     public function __construct(Player $player)
     {
-        parent::__construct('partials/editAccountsForm');
-
         $this->mtgoUsernameTextInput = new TextInput('Magic Online', 'mtgo_username', $player->mtgo_username);
         $this->mtgaUsernameTextInput = new TextInput('Magic Arena', 'mtga_username', $player->mtga_username, 0, "Don't forget the 5-digit number!");
     }

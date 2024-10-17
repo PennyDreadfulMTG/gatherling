@@ -32,4 +32,9 @@ class NumDropMenu extends DropMenu
 
         parent::__construct($field, $options, $title);
     }
+
+    public function template(): string
+    {
+        return 'partials/dropMenu';
+    }
 }

@@ -14,7 +14,6 @@ class ExactMatchTable extends Component
     /** @param list<Deck> $decks */
     public function __construct(array $decks)
     {
-        parent::__construct('partials/exactMatchTable');
         foreach ($decks as $deck) {
             if (!isset($deck->playername)) {
                 continue;

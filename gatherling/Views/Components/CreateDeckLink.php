@@ -14,8 +14,6 @@ class CreateDeckLink extends Component
 
     public function __construct(Entry $entry)
     {
-        parent::__construct('partials/createDeckLink');
-
         $this->canCreateDeck = Player::loginName() ? $entry->canCreateDeck(Player::loginName()) : false;
         if ($this->canCreateDeck) {
             $this->createDeckLink = 'deck.php?player=' . rawurlencode($entry->player->name ?? '') . '&event=' . rawurlencode((string) $entry->event->id) . '&mode=create';

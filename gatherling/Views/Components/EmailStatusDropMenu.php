@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-class EmailStatusDropDown extends DropMenu
+class EmailStatusDropMenu extends DropMenu
 {
     public function __construct(int $currentStatus = 1)
     {

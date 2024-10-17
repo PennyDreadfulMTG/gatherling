@@ -16,8 +16,6 @@ class SearchForm extends Component
     /** @param array<string, string> $colors */
     public function __construct(public int $numSearchResults, string $phpSelf, public string $playerName, public string $cardName, string $formatName, string $archetype, string $seriesName, string $medals, array $colors)
     {
-        parent::__construct('partials/searchForm');
-
         $this->searchLink = $phpSelf . '?mode=search';
 
         $this->formatDropMenuDS = new FormatDropMenuDS($formatName);

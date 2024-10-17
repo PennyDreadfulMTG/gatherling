@@ -13,8 +13,6 @@ class Trophy extends Component
 
     public function __construct(Event $event)
     {
-        parent::__construct('partials/trophy');
-
         $this->eventLink = 'deck.php?mode=view&event=' . rawurlencode((string) ($event->id ?? ''));
         $this->trophySrc = Event::trophySrc($event->name ?? '');
     }

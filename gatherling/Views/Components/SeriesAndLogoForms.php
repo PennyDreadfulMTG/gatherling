@@ -13,7 +13,6 @@ class SeriesAndLogoForms extends Component
 
     public function __construct(Series $series)
     {
-        parent::__construct('partials/seriesAndLogoForms');
         $this->seriesForm = new SeriesForm($series);
         $this->logoForm = new LogoForm($series);
     }

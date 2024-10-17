@@ -15,7 +15,6 @@ class TrophyCell extends Component
 
     public function __construct(Event $event)
     {
-        parent::__construct('partials/trophyCell');
         if ($event->hastrophy) {
             $this->trophySrc = Event::trophySrc($event->name);
         }

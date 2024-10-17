@@ -35,7 +35,6 @@ class MainPlayerControlPanel extends Component
 
     public function __construct(Player $player)
     {
-        parent::__construct('partials/mainPlayerControlPanel');
         $this->preregistration = new Preregistration($player);
         ['events' => $events, 'leagueMatches' => $leagueMatches] = $this->activeEventsAndMatches($player);
         $this->activeEvents = new ActiveEvents($events);

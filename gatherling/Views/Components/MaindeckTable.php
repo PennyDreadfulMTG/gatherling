@@ -21,8 +21,6 @@ class MaindeckTable extends Component
 
     public function __construct(Deck $deck)
     {
-        parent::__construct('partials/maindeckTable');
-
         $this->numMaindeckCards = $deck->getCardCount($deck->maindeck_cards);
 
         $creatures = $deck->getCreatureCards();

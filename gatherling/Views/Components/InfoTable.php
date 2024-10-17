@@ -28,7 +28,6 @@ class InfoTable extends Component
 
     public function __construct(Player $player)
     {
-        parent::__construct('partials/infoTable');
         $ndx = 0;
         $max = 0;
         $sum = 0;

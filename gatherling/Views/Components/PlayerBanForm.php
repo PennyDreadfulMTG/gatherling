@@ -15,7 +15,6 @@ class PlayerBanForm extends Component
 
     public function __construct(public Series $series)
     {
-        parent::__construct('partials/playerBanForm');
         $this->seriesName = $series->name;
         $currentPlayerName = Player::loginName();
         foreach ($series->bannedplayers as $bannedPlayerName) {

@@ -31,8 +31,6 @@ class DeckForm extends Component
 
     public function __construct(?Deck $deck, string $playerName, Event $event)
     {
-        parent::__construct('partials/deckForm');
-
         $this->create = is_null($deck) || $deck->id == 0;
         if (!$this->create) {
             $playerName = $deck->playername ?? false;

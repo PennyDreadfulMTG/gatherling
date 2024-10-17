@@ -14,7 +14,6 @@ class MostPlayedDecks extends Component
 
     public function __construct()
     {
-        parent::__construct('partials/mostPlayedDecks');
         DB::execute("set session sql_mode='';"); // Disable ONLY_FULL_GROUP_BY
         $sql = '
             SELECT
