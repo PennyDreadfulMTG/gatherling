@@ -18,7 +18,7 @@ class DeckProfile extends Component
     public MatchupTable $matchupTable;
     public SymbolTable $symbolTable;
     public CcTable $ccTable;
-    public ExactMatchTable $exactMatchTable;
+    public ?ExactMatchTable $exactMatchTable = null;
     public CommentsTable $commentsTable;
 
     public function __construct(Deck $deck)
@@ -40,7 +40,12 @@ class DeckProfile extends Component
         $this->matchupTable = new MatchupTable($deck);
         $this->symbolTable = new SymbolTable($deck);
         $this->ccTable = new CcTable($deck);
-        $this->exactMatchTable = new ExactMatchTable($deck);
+        if ($deck->maindeck_cardcount >= 5) {
+            $decks = $deck->findIdenticalDecks();
+            if (count($decks) > 0) {
+                $this->exactMatchTable = new ExactMatchTable($decks);
+            }
+        }
         $this->commentsTable = new CommentsTable($deck);
         $this->canEdit = $deck->canEdit(Player::loginName());
     }

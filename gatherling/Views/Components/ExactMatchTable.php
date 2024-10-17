@@ -9,16 +9,10 @@ class ExactMatchTable extends Component
     /** @var array<array{medal: Medal, recordString: string, deckLink: DeckLink, playerName: string, threadLink: string, eventName: string}> */
     public array $decks = [];
 
-    public function __construct(Deck $deck)
+    /** @param list<Deck> $decks */
+    public function __construct(array $decks)
     {
         parent::__construct('partials/exactMatchTable');
-        if ($deck->maindeck_cardcount < 5) {
-            return;
-        }
-        $decks = $deck->findIdenticalDecks();
-        if (count($decks) == 0) {
-            return;
-        }
         foreach ($decks as $deck) {
             if (!isset($deck->playername)) {
                 continue;
