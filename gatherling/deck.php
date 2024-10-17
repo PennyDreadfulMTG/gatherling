@@ -6,22 +6,22 @@ use Gatherling\Models\Deck;
 use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
+use Gatherling\Views\Components\AuthFailed;
+use Gatherling\Views\Components\Component;
+use Gatherling\Views\Components\DeckForm;
+use Gatherling\Views\Components\DeckNotAllowed;
+use Gatherling\Views\Components\DeckNotFound;
+use Gatherling\Views\Components\DeckProfile;
+use Gatherling\Views\Components\DeckRegisterForm;
+use Gatherling\Views\Components\LoginRequired;
+use Gatherling\Views\Components\NoDeckSpecified;
+use Gatherling\Views\Components\NullComponent;
+use Gatherling\Views\Pages\Deck as DeckPage;
+
 use function Gatherling\Views\get;
 use function Gatherling\Views\post;
 use function Gatherling\Views\server;
 use function Gatherling\Views\request;
-use Gatherling\Views\Components\DeckForm;
-use Gatherling\Views\Components\Component;
-use Gatherling\Views\Components\AuthFailed;
-use Gatherling\Views\Components\DeckProfile;
-use Gatherling\Views\Pages\Deck as DeckPage;
-use Gatherling\Views\Components\DeckNotFound;
-
-use Gatherling\Views\Components\LoginRequired;
-use Gatherling\Views\Components\NullComponent;
-use Gatherling\Views\Components\DeckNotAllowed;
-use Gatherling\Views\Components\NoDeckSpecified;
-use Gatherling\Views\Components\DeckRegisterForm;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';
