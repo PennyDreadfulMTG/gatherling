@@ -1,0 +1,18 @@
+<table>
+    <tr>
+        <td colspan="2" align="center" width="150"><b>CASTING COSTS</b></td>
+    </tr>
+    {{#castingCosts}}
+        <tr>
+            <td align="right" width="75">
+                <img src="styles/images/mana{{cost}}.png" alt="{{cost}}">
+                &nbsp;
+            </td>
+           <td width="75" align="left">x {{amt}}</td>
+        </tr>
+    {{/castingCosts}}
+    <tr>
+        <td align="right"><i>Avg CMC:&nbsp;</td>
+        <td align="left"><i>{{avgCmc}}</i></td>
+    </tr>
+</table>

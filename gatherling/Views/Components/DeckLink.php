@@ -15,7 +15,6 @@ class DeckLink extends Component
 
     public function __construct(Deck $deck)
     {
-        parent::__construct('partials/deckLink');
         $this->new = $deck->new;
         if ($this->new) {
             return;

@@ -10,7 +10,6 @@ class LoadFormatForm extends Component
 
     public function __construct(string $seriesName)
     {
-        parent::__construct('partials/loadFormatForm');
         $type = $seriesName == 'System' ? 'All' : 'Private';
         $this->formatsDropMenu = new FormatsDropMenu($type, $seriesName);
     }

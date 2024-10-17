@@ -25,7 +25,7 @@ class PlayerEventList extends Page
 
         $this->formatDropMenu = new FormatDropMenu($format, true);
         $this->seriesDropMenu = new SeriesDropMenu($series, 'All');
-        $this->seasonDropMenu = new SeasonDropMenu($season, true);
+        $this->seasonDropMenu = new SeasonDropMenu($season, 'All');
 
         $this->events = [];
         foreach ($events as $event) {

@@ -15,7 +15,6 @@ class ChangePasswordForm extends Component
 
     public function __construct()
     {
-        parent::__construct('partials/changePasswordForm');
         $this->usernameTextInput = new TextInput('Username', 'username');
         $this->newPasswordTextInput = new TextInput('New Password', 'new_password');
         $this->submitButton = new Submit('Change Password');

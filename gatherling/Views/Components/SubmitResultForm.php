@@ -19,7 +19,6 @@ class SubmitResultForm extends Component
     public CheckboxInput $dropCheckboxInput;
     public function __construct(public int $matchId, public bool $drop = false)
     {
-        parent::__construct('partials/submitResultForm');
         $match = new Matchup($matchId);
         $event = new Event($match->getEventNamebyMatchid());
         $player = Player::getSessionPlayer();

@@ -21,8 +21,6 @@ class EditCard extends Component
 
     public function __construct(public int $id)
     {
-        parent::__construct('partials/editcard');
-
         $sql = '
             SELECT
                 `id`, `name`, `type`, `rarity`, `scryfallId`, `is_changeling`, `cardset`

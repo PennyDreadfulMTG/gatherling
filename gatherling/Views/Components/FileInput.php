@@ -8,6 +8,5 @@ class FileInput extends Component
 {
     public function __construct(public string $label, public string $name)
     {
-        parent::__construct('partials/fileInput');
     }
 }

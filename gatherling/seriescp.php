@@ -2,498 +2,179 @@
 
 declare(strict_types=1);
 
-use Gatherling\Models\Deck;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
+use Gatherling\Views\Components\MissingTrophies;
+use Gatherling\Views\Components\NoSeries;
+use Gatherling\Views\Components\NullComponent;
+use Gatherling\Views\Components\OrganizerSelect;
+use Gatherling\Views\Components\PlayerBanForm;
+use Gatherling\Views\Components\PointsForm;
+use Gatherling\Views\Components\RecentEventsTable;
 use Gatherling\Views\Components\SeasonStandings;
+use Gatherling\Views\Components\SeriesAndLogoForms;
+use Gatherling\Views\Components\SeriesOrganizersForm;
+use Gatherling\Views\Components\TextComponent;
+use Gatherling\Views\LoginRedirect;
+use Gatherling\Views\Pages\SeriesControlPanel;
+use Gatherling\Views\Redirect;
 
 use function Gatherling\Views\get;
 use function Gatherling\Views\post;
+use function Gatherling\Views\server;
 
 require_once 'lib.php';
 include 'lib_form_helper.php';
 
-if (!Player::isLoggedIn()) {
-    linkToLogin('Series Control Panel');
-}
-
-$hasError = false;
-$errormsg = '';
-
-print_header('Series Control Panel');
-?>
-
-<div class="grid_10 suffix_1 prefix_1">
-<div id="gatherling_main" class="box">
-<div class="uppertitle"> Series Control Panel </div>
-
-<?php
-do_page();
-?>
-<div class="clear"></div>
-</div></div>
-
-<?php print_footer(); ?>
-
-<?php
-
-function do_page(): void
+function main(): void
 {
-    $player_series = Player::getSessionPlayer()?->organizersSeries() ?? [];
-    if (count($player_series) == 0) {
-        printNoSeries();
-        return;
+    if (!Player::isLoggedIn()) {
+        (new LoginRedirect())->send();
+    }
+
+    $errorMsg = '';
+
+    $playerSeries = Player::getSessionPlayer()?->organizersSeries() ?? [];
+    if (count($playerSeries) == 0) {
+        $viewComponent = new NoSeries();
+        (new SeriesControlPanel(null, null, '', $viewComponent))->send();
     }
     if (isset($_POST['series'])) {
         $_GET['series'] = $_POST['series'];
     }
     if (!isset($_GET['series'])) {
-        $_GET['series'] = $player_series[0];
+        $_GET['series'] = $playerSeries[0];
     }
-    $active_series_name = get()->string('series');
+    $activeSeriesName = get()->string('series');
 
-    handleActions();
+    if (isset($_POST['series'])) {
+        $seriesname = post()->string('series');
+        $series = new Series($seriesname);
+        if ($series->authCheck(Player::loginName())) {
+            if ($_POST['action'] == 'Update Series') {
+                $newactive = post()->int('isactive', 0);
+                $newtime = $_POST['hour'];
+                $newday = $_POST['start_day'];
+                $room = $_POST['mtgo_room'];
+
+                $prereg = post()->int('preregdefault', 0);
+
+                $series = new Series($seriesname);
+                if ($series->authCheck(Player::loginName())) {
+                    $series->active = $newactive;
+                    $series->start_time = $newtime . ':00';
+                    $series->start_day = $newday;
+                    $series->prereg_default = $prereg;
+                    $series->mtgo_room = $room;
+                    $series->save();
+                }
+            } elseif ($_POST['action'] == 'Change Logo') {
+                if ($_FILES['logo']['size'] > 0) {
+                    $file = $_FILES['logo'];
+                    $tmp = $file['tmp_name'];
+                    $size = $file['size'];
+                    $type = $file['type'];
+                    assert(is_string($tmp) && is_string($type) && is_int($size));
+                    $series->setLogo($tmp, $type, $size);
+                }
+            } elseif ($_POST['action'] == 'Update Organizers') {
+                $errorMsg = updateOrganizers($series, post()->listString('delorganizers'), post()->optionalString('addorganizer'));
+            } elseif ($_POST['action'] == 'Update Banned Players') {
+                $errorMsg = updateBannedPlayers($series, post()->listString('removebannedplayer'), post()->string('addbannedplayer', ''), post()->string('reason', ''));
+            } elseif ($_POST['action'] == 'Update Points Rules') {
+                $season = post()->int('season');
+                $new_rules = post()->dictIntOrString('new_rules');
+                $series->setSeasonRules($season, $new_rules);
+            }
+        }
+    }
 
     $view = post()->optionalString('view') ?? get()->optionalString('view') ?? 'settings';
 
     if ($view != 'no_view') {
-        echo "<center>";
-        if (count($player_series) > 1) {
-            echo printOrganizerSelect($player_series, $active_series_name);
-        } else {
-            echo "Managing {$active_series_name}";
-        }
-        echo '</center>';
+        $orientationComponent = new NullComponent();
+    } elseif (count($playerSeries) > 1) {
+        $orientationComponent = new OrganizerSelect(server()->string('PHP_SELF'), $playerSeries, $activeSeriesName);
+    } else {
+        $orientationComponent = new TextComponent("Managing {$activeSeriesName}");
     }
-    $active_series = new Series($active_series_name);
-    printError();
+    $activeSeries = new Series($activeSeriesName);
 
-    seriesCPMenu($active_series);
-
-    if (!$active_series->authCheck(Player::loginName())) {
-        printNoSeries();
-
-        return;
+    if (!$activeSeries->authCheck(Player::loginName())) {
+        $viewComponent = new NoSeries();
     } else {
         switch ($view) {
             case 'no_view':
             case 'settings':
-                printSeriesForm($active_series);
-                printLogoForm($active_series);
+                $viewComponent = new SeriesAndLogoForms($activeSeries);
                 break;
             case 'recent_events':
-                printRecentEventsTable($active_series);
+                $viewComponent = new RecentEventsTable($activeSeries);
                 break;
             case 'points_management':
-                printPointsForm($active_series);
+                $season = post()->optionalInt('season') ?? get()->optionalInt('season') ?? $activeSeries->currentSeason();
+                $viewComponent = new PointsForm($activeSeries, $season);
                 break;
             case 'organizers':
-                printSeriesOrganizersForm($active_series);
+                $viewComponent = new SeriesOrganizersForm($activeSeries);
                 break;
             case 'bannedplayers':
-                printPlayerBanForm($active_series);
+                $viewComponent = new PlayerBanForm($activeSeries);
                 break;
             case 'format_editor':
-                $esn = urlencode($active_series_name);
-                redirect("formatcp.php?series=$esn");
-                break;
+                $target = 'formatcp.php?series=' . rawurlencode($activeSeriesName);
+                (new Redirect($target))->send();
+                // Redirect send exits
             case 'trophies':
-                printMissingTrophies($active_series);
+                $viewComponent = new MissingTrophies($activeSeries);
                 break;
             case 'season_standings':
-                echo (new SeasonStandings($active_series, $active_series->currentSeason()))->render();
+                $viewComponent = new SeasonStandings($activeSeries, $activeSeries->currentSeason());
                 break;
-            case 'points_adj':
-                seasonPointsAdj();
-                break;
-            case 'discord':
-                printDiscordForm($active_series);
-                break;
+            default:
+                $viewComponent = new NullComponent();
         }
     }
+
+    $page = new SeriesControlPanel($activeSeries, $orientationComponent, $errorMsg, $viewComponent);
+    $page->send();
 }
 
-function printMissingTrophies(Series $series): void
+/** @param list<string> $delOrganizers */
+function updateOrganizers(Series $series, array $delOrganizers, ?string $addition): string
 {
-    $recentEvents = $series->getRecentEvents(1000);
-    $winningDeck = null;
-
-    echo '<center><h3>Events Missing Trophies</h3></center>';
-    echo '<table style="width: 75%;"><tr><th>Event</th><th>Date</th><th>Winner</th><th>Deck</th></tr> ';
-
-    if (count($recentEvents) == 0) {
-        echo '<tr><td colspan="4" style="text-align: center; font-weight: bold;">No Events Yet!</td></tr>';
+    foreach ($delOrganizers as $deadorganizer) {
+        $series->removeOrganizer($deadorganizer);
     }
-
-    $now = time();
-    foreach ($recentEvents as $event) {
-        if (!$event->hastrophy) {
-            echo "<tr><td style=\"text-align: center;\"><a href=\"event.php?name={$event->name}\">{$event->name}</a></td> ";
-            echo "<td style=\"text-align: center;\">" . time_element(strtotime($event->start), $now) . "</td>";
-            $finalists = $event->getFinalists();
-            $winningPlayer = $winningDeck = null;
-            foreach ($finalists as $finalist) {
-                if ($finalist['medal'] == '1st') {
-                    $winningPlayer = $finalist['player'];
-                    $winningDeck = new Deck($finalist['deck']);
-                }
-            }
-            if (!is_null($winningDeck)) {
-                echo "<td style=\"text-align: center;\"><a href=\"./profile.php?player={$winningPlayer}\">{$winningPlayer}</a></td>";
-                echo "<td style=\"text-align: center;\">{$winningDeck->linkTo()}</td>";
-            } else {
-                echo '<td></td><td></td>';
-            }
-            echo '</tr>';
-        }
+    if (!$addition) {
+        return '';
     }
-    echo '</table>';
+    $addplayer = Player::findByName($addition);
+    if ($addplayer == null) {
+        return "Can't add {$addition} to Series Organizers, they don't exist!";
+    }
+    if ($addplayer->verified == 0 && Player::getSessionPlayer()->super == 0) {
+        return "Can't add {$addplayer->name} to Series Organizers, they aren't a verified user!";
+    }
+    $series->addOrganizer($addplayer->name);
+    return '';
 }
 
-function seasonPointsAdj(): void
+/** @param list<string> $removeBannedPlayers */
+function updateBannedPlayers(Series $series, array $removeBannedPlayers, string $addition, string $reason): string
 {
-    global $hasError;
-    global $errormsg;
-
-    $hasError = true;
-    $errormsg .= 'Season Points Adjustment form has not been implemeted yet.';
-    printError();
+    foreach ($removeBannedPlayers as $playertoremove) {
+        $series->removeBannedPlayer($playertoremove);
+    }
+    $addplayer = Player::findByName($addition);
+    if ($addplayer == null) {
+        return "Can't add {$addition} to Banned Players, they don't exist!";
+    }
+    assert($addplayer->name !== null); // Else we would not have found them
+    $series->addBannedPlayer($addplayer->name, $reason);
+    return '';
 }
 
-function printError(): void
-{
-    global $hasError;
-    global $errormsg;
-    if ($hasError) {
-        echo "<div class=\"error\">{$errormsg}</div>";
-    }
-}
-
-function printNoSeries(): void
-{
-    echo "<center>You're not a organizer of any series, so you can't use this page.<br />";
-    echo '<a href="player.php">Back to the Player Control Panel</a></center>';
-}
-
-function printSeriesForm(Series $series): void
-{
-    echo '<form action="seriescp.php" method="post">';
-    echo '<table class="form">';
-    echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
-    // Active
-    echo '<tr><th>Series is Active</th><td> ';
-    if ($series->active == 1) {
-        echo '<select class="inputbox" name="isactive"><option value="1" selected>Yes</option><option value="0">No</option></select>';
-    } else {
-        echo '<select class="inputbox" name="isactive"><option value="1">Yes</option><option value="0" selected>No</option></select>';
-    }
-    echo '</td></tr>';
-    // Start day
-    echo '<tr><th>Normal start day</th><td> ';
-    echo '<select class="inputbox" name="start_day">';
-    $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    foreach ($days as $dayofweek) {
-        if ($dayofweek == $series->start_day) {
-            echo "<option selected>{$dayofweek}</option>";
-        } else {
-            echo "<option>{$dayofweek}</option>";
-        }
-    }
-    echo '</select>';
-    echo '</td></tr>';
-    // Start time
-    echo '<tr><th> Normal start time </th> <td> ';
-    $time_parts = explode(':', $series->start_time);
-    echo timeDropMenu($time_parts[0], $time_parts[1]);
-    echo '</td> </tr>';
-    // Pre-registration on by default?
-    echo '<tr><th>Pre-Registration Default</th>';
-    echo '<td><input type="checkbox" value="1" name="preregdefault" ';
-    if ($series->prereg_default == 1) {
-        echo 'checked ';
-    }
-    echo '/></td></tr>';
-    echo textInput('MTGO Room', 'mtgo_room', $series->mtgo_room);
-
-    // Submit button
-    echo '<tr><td colspan="2" class="buttons">';
-    echo '<input class="inputbutton" type="submit" name="action" value="Update Series" /></td></tr>';
-    echo '</table></form>';
-}
-
-function seriesCPMenu(Series $series, string $cur = ''): void
-{
-    $name = $series->name;
-    echo '<table><tr><td colspan="2" align="center">';
-    echo "<a href=\"seriescp.php?series=$name&view=settings\">Series Settings</a>";
-    echo " | <a href=\"seriescp.php?series=$name&view=recent_events\">Recent Events</a>";
-    echo " | <a href=\"seriescp.php?series=$name&view=points_management\">Points Management</a>";
-    // echo " | <a href=\"seriescp.php?series=$name&view=points_adj\">Points Adj.</a>";
-    echo " | <a href=\"seriescp.php?series=$name&view=organizers\">Series Organizers</a>";
-    // echo " | <a href=\"formatcp.php?series=$name\">Format Editor</a>";
-    echo " | <a href=\"seriescp.php?series=$name&view=trophies\">Trophies</a>";
-    echo " | <a href=\"seriescp.php?series=$name&view=season_standings\">Season Standings</a>";
-    echo " | <a href=\"seriescp.php?series=$name&view=bannedplayers\">Ban Players</a>";
-    echo '</td></tr></table>';
-}
-
-function printSeriesOrganizersForm(Series $series): void
-{
-    $player = new Player(Player::loginName());
-    echo '<form action="seriescp.php" method="post">';
-    echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
-    echo '<h3><center>Series Organizers</center></h3>';
-    echo '<p style="width: 75%; text-align: left;">Series organizers can create new series events, manage any event in the series, and modify anything on this page.  Please add them with care as they could screw with anything related to your series including changing the logo and the time.  Only verified members can be series organizers.</p>';
-    echo '<p style="width: 75%; text-align: left;"><em>If you just need a guest host, add them as the host to a specific event!</em></p>';
-    echo '<table class="form c">';
-    echo '<tr><th style="text-align: center;">Player</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
-    foreach ($series->organizers as $organizer) {
-        echo "<tr><td style=\"text-align: center;\">{$organizer}</td>";
-        echo "<td style=\"text-align: center; width: 50px; \"><input type=\"checkbox\" value=\"{$organizer}\" name=\"delorganizers[]\" ";
-        if ($organizer == $player->loginName() && !$player->isSuper()) {
-            echo 'disabled="yes" ';
-        }
-        echo '/></td></tr>';
-    }
-    echo '<tr><td colspan="2">Add new: <input class="inputbox" type="text" name="addorganizer" /></td></tr> ';
-    echo '<tr><td colspan="2" class="buttons">';
-    echo '<input type="hidden" name="view" value="organizers" />';
-    echo '<input class="inputbutton" type="submit" value="Update Organizers" name="action" /> </td> </tr> ';
-    echo '</table> ';
-}
-
-function printPlayerBanForm(Series $series): void
-{
-    $player = new Player(Player::loginName());
-    echo '<form action="seriescp.php" method="post">';
-    echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
-    echo '<h3><center>Banned Players</center></h3>';
-    echo '<p style="width: 75%; text-align: left;">Players added to this ban list will not be able to register for any event (including alt events) that are created by this series. You can also suspend a player simply by adding them to this list for a period of time and removing them.</p>';
-    echo '<table class="form c">';
-    echo '<tr><th style="text-align: center;">Player</th>';
-    echo '<th style="text-align: center;">Added On</th>';
-    echo '<th style="text-align: center;">Reason</th>';
-    echo '<th style="width: 50px; text-align: center;">Delete</th></tr>';
-    if (count($series->bannedplayers)) {
-        foreach ($series->bannedplayers as $bannedplayername) {
-            $addedDate = $series->getBannedPlayerDate($bannedplayername);
-            $reasonBanned = $series->getBannedPlayerReason($bannedplayername);
-            echo "<tr><td style=\"text-align: center;\">{$bannedplayername}</td>";
-            echo "<td style=\"text-align: center;\">$addedDate</td>";
-            echo "<td style=\"text-align: center;\">$reasonBanned</td>";
-            echo "<td style=\"text-align: center; width: 50px; \"><input type=\"checkbox\" value=\"{$bannedplayername}\" name=\"removebannedplayer[]\" ";
-            if ($bannedplayername == $player->loginName()) {
-                echo 'disabled="yes" ';
-            }
-            echo '/></td></tr>';
-        }
-    } else {
-        echo '<tr><td colspan="3" style="text-align: left;">No Banned Players</td></tr>';
-    }
-    echo '</table>';
-    echo '<table class="form c">';
-    echo '<tr><td>Add new:</td><td><input class="inputbox" type="text" name="addbannedplayer" /></td></tr> ';
-    echo '<tr><td>Reason:</td><td><input class="inputbox" type="text" name="reason" /></td></tr> ';
-    echo '<tr><td colspan="2" class="buttons">';
-    echo '<input type="hidden" name="view" value="bannedplayers" />';
-    echo '<input class="inputbutton" type="submit" value="Update Banned Players" name="action" /> </td> </tr> ';
-    echo '</table> ';
-}
-
-/** @param array<string, int|string> $rules */
-function printPointsRule(string $rule, string $key, array $rules, string $formtype = 'text', int $size = 4): void
-{
-    echo "<tr><th>{$rule}</th>";
-    if ($formtype == 'text') {
-        echo "<td><input class=\"inputbox\" type=\"text\" value=\"{$rules[$key]}\" name=\"new_rules[{$key}]\" size=\"{$size}\" /> </td> </tr> ";
-    } elseif ($formtype == 'checkbox') {
-        echo "<td><input type=\"checkbox\" value=\"1\" name=\"new_rules[{$key}]\" ";
-        if ($rules[$key] == 1) {
-            echo 'checked ';
-        }
-        echo ' /></td></tr>';
-    } elseif ($formtype == 'format') {
-        echo '<td> ';
-        echo formatDropMenu($rules[$key], false, "new_rules[{$key}]");
-        echo '</td></tr>';
-    }
-}
-
-function printPointsForm(Series $series): void
-{
-    $chosen_season = post()->optionalInt('season') ?? get()->optionalInt('season') ?? $series->currentSeason();
-
-    echo '<h3><center> Season Points Management </center> </h3>';
-    echo '<p style="width:75%; text-align: left;">Here you can edit the way that season points are calculated for each player.  Choose the season that you want your point rules to be active for, and then put in the number of season points for each type of event.  You can adjust the points a player gets for each event individually as well, to take away points for not posting a deck for example or giving extra points for a tiebreaker-miss of top eight.</p>';
-    echo "<p style=\"width:75%; text-align: left;\">Points are cumulative, so if someone gets the first place, they will get points for first place, participation, each round they played (in the main event, not the finals), for each match they won, lost, and got a bye, as well as the points for posting a decklist if they do post.  However, The first place to top 8 points are NOT added together, you only get points for where you end up (calculated by the medals).  An event winner doesn't get points for the second place, top 4 or top 8.</p>";
-    echo "<p style=\"width:75%; text-align: left;\"><strong>Points are NOT counted for events with the 'Custom' number!</strong></p>";
-    echo '<center>';
-    echo '<form action="seriescp.php">';
-    echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
-    echo seasonDropMenu($chosen_season);
-    echo '<input type="hidden" name="view" value="points_management" />';
-    echo '<input class="inputbutton" type="submit" value="Choose Season" />';
-    echo '</form>';
-    echo '</center>';
-    $seasonrules = $series->getSeasonRules($chosen_season);
-    echo '<form action="seriescp.php" method="post">';
-    echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
-    echo "<input type=\"hidden\" name=\"season\" value=\"{$chosen_season}\" />";
-    echo '<table class="form c">';
-    echo "<tr><th class=\"top\" colspan=\"2\">Season {$chosen_season} Settings</th></tr>";
-    printPointsRule('First Place', 'first_pts', $seasonrules);
-    printPointsRule('Second Place', 'second_pts', $seasonrules);
-    printPointsRule('Top 4', 'semi_pts', $seasonrules);
-    printPointsRule('Top 8', 'quarter_pts', $seasonrules);
-    printPointsRule('Participating', 'participation_pts', $seasonrules);
-    printPointsRule('Each round played', 'rounds_pts', $seasonrules);
-    printPointsRule('Match win', 'win_pts', $seasonrules);
-    printPointsRule('Match loss', 'loss_pts', $seasonrules);
-    printPointsRule('Round bye', 'bye_pts', $seasonrules);
-    printPointsRule('Posting a decklist', 'decklist_pts', $seasonrules);
-    printPointsRule('Require decklist for points', 'must_decklist', $seasonrules, 'checkbox');
-    printPointsRule('WORLDS Cutoff (players)', 'cutoff_ord', $seasonrules);
-    printPointsRule('Master Document Location', 'master_link', $seasonrules, 'text', 50);
-    printPointsRule('Season Format', 'format', $seasonrules, 'format');
-    echo '<tr><td colspan="2" class="buttons">';
-    echo '<input type="hidden" name="view" value="points_management" />';
-    echo '<input class="inputbutton" type="submit" name="action" value="Update Points Rules" />';
-    echo '</td></table></form>';
-}
-
-function printLogoForm(Series $series): void
-{
-    echo '<form action="seriescp.php" method="post" enctype="multipart/form-data">';
-    echo '<table class="form c">';
-    echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
-    echo '<tr><th>Current Logo</th>';
-    echo '<td>' . Series::imageTag($series->name) . '</td></tr>';
-    echo '<tr><th>Upload New Logo</th>';
-    echo '<td><input class="inputbox" type="file" name="logo" /> ';
-    echo '<input class="inputbutton" type="submit" name="action" value="Change Logo" /></td></tr>';
-    echo '</table></form> ';
-}
-
-function printDiscordForm(Series $series): void
-{
-    $player = new Player(Player::loginName());
-    echo '<form action="seriescp.php" method="post">';
-    echo "<input type=\"hidden\" name=\"series\" value=\"{$series->name}\" />";
-    echo '<h3><center>Series Organizers</center></h3>';
-    echo '<p style="width: 75%; text-align: left;">Series organizers can create new series events, manage any event in the series, and modify anything on this page.  Please add them with care as they could screw with anything related to your series including changing the logo and the time.  Only verified members can be series organizers.</p>';
-    echo '<p style="width: 75%; text-align: left;"><em>If you just need a guest host, add them as the host to a specific event!</em></p>';
-    echo '<table class="form c">';
-    echo '<tr><th style="text-align: center;">Player</th><th style="width: 50px; text-align: center;">Delete</th></tr>';
-    foreach ($series->organizers as $organizer) {
-        echo "<tr><td style=\"text-align: center;\">{$organizer}</td>";
-        echo "<td style=\"text-align: center; width: 50px; \"><input type=\"checkbox\" value=\"{$organizer}\" name=\"delorganizers[]\" ";
-        if ($organizer == $player->loginName() && !$player->isSuper()) {
-            echo 'disabled="yes" ';
-        }
-        echo '/></td></tr>';
-    }
-    echo '<tr><td colspan="2">Add new: <input class="inputbox" type="text" name="addorganizer" /></td></tr> ';
-    echo '<tr><td colspan="2" class="buttons">';
-    echo '<input type="hidden" name="view" value="organizers" />';
-    echo '<input class="inputbutton" type="submit" value="Update Organizers" name="action" /> </td> </tr> ';
-    echo '</table> ';
-}
-
-function printRecentEventsTable(Series $series): void
-{
-    $recentEvents = $series->getRecentEvents();
-    echo '<center> <h3> Recent Events </h3> </center>';
-    echo '<table style="width: 75%;"> <tr> <th> Event </th> <th> Date </th> <th> Players </th> <th> Hosts </th> </tr> ';
-    if (count($recentEvents) == 0) {
-        echo '<tr><td colspan="4" style="text-align: center; font-weight: bold;"> No Events Yet! </td> </tr>';
-    }
-    $now = time();
-    foreach ($recentEvents as $event) {
-        echo "<tr> <td> <a href=\"event.php?name={$event->name}\">{$event->name}</a> </td> ";
-        echo "<td>" . time_element(strtotime($event->start), $now) . "</td>";
-        echo "<td style=\"text-align: center;\"> {$event->getPlayerCount()} </td>";
-        echo "<td>{$event->host}";
-        if ($event->cohost != '') {
-            echo " / {$event->cohost}</td>";
-        }
-        echo '</tr>';
-    }
-    echo '</table>';
-}
-
-function handleActions(): void
-{
-    global $hasError;
-    global $errormsg;
-    if (!isset($_POST['series'])) {
-        return;
-    }
-    $seriesname = post()->string('series');
-    $series = new Series($seriesname);
-    if (!$series->authCheck(Player::loginName())) {
-        return;
-    }
-    if ($_POST['action'] == 'Update Series') {
-        $newactive = post()->int('isactive', 0);
-        $newtime = $_POST['hour'];
-        $newday = $_POST['start_day'];
-        $room = $_POST['mtgo_room'];
-
-        $prereg = post()->int('preregdefault', 0);
-
-        $series = new Series($seriesname);
-        if ($series->authCheck(Player::loginName())) {
-            $series->active = $newactive;
-            $series->start_time = $newtime . ':00';
-            $series->start_day = $newday;
-            $series->prereg_default = $prereg;
-            $series->mtgo_room = $room;
-            $series->save();
-        }
-    } elseif ($_POST['action'] == 'Change Logo') {
-        if ($_FILES['logo']['size'] > 0) {
-            $file = $_FILES['logo'];
-            $tmp = $file['tmp_name'];
-            $size = $file['size'];
-            $type = $file['type'];
-            assert(is_string($tmp) && is_string($type) && is_int($size));
-            $series->setLogo($tmp, $type, $size);
-        }
-    } elseif ($_POST['action'] == 'Update Organizers') {
-        foreach (post()->listString('delorganizers') as $deadorganizer) {
-            $series->removeOrganizer($deadorganizer);
-        }
-        $addition = post()->optionalString('addorganizer');
-        if (!$addition) {
-            return;
-        }
-        $addplayer = Player::findByName($addition);
-        if ($addplayer == null) {
-            $hasError = true;
-            $errormsg .= "Can't add {$addition} to Series Organizers, they don't exist!";
-            return;
-        }
-        if ($addplayer->verified == 0 && Player::getSessionPlayer()->super == 0) {
-            $hasError = true;
-            $errormsg .= "Can't add {$addplayer->name} to Series Organizers, they aren't a verified user!";
-            return;
-        }
-        $series->addOrganizer($addplayer->name);
-    } elseif ($_POST['action'] == 'Update Banned Players') {
-        foreach (post()->listString('removebannedplayer') as $playertoremove) {
-            $series->removeBannedPlayer($playertoremove);
-        }
-        $addition = post()->string('addbannedplayer');
-        $addplayer = Player::findByName($addition);
-        if ($addplayer == null) {
-            $hasError = true;
-            $errormsg .= "Can't add {$addition} to Banned Players, they don't exist!";
-            return;
-        }
-        $series->addBannedPlayer($addplayer->name, post()->string('reason', ''));
-    } elseif ($_POST['action'] == 'Update Points Rules') {
-        $season = post()->int('season');
-        $new_rules = post()->dictIntOrString('new_rules');
-        $series->setSeasonRules($season, $new_rules);
-    }
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
+    main();
 }

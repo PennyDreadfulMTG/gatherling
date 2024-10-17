@@ -8,15 +8,15 @@ use Gatherling\Views\TemplateHelper;
 
 abstract class Component
 {
-    protected string $template;
-
-    public function __construct(string $template)
+    public function template(): string
     {
-        $this->template = $template;
+        $className = get_called_class();
+        $baseName = ($pos = strrpos($className, '\\')) !== false ? substr($className, $pos + 1) : $className;
+        return 'partials/' . lcfirst($baseName);
     }
 
     public function render(): string
     {
-        return TemplateHelper::render($this->template, $this);
+        return TemplateHelper::render($this->template(), $this);
     }
 }

@@ -1,0 +1,47 @@
+<table cellpadding="1" align="right">
+    {{^canView}}
+        <tr>
+            <td>Decks are anonymous for privacy until event is finalized.</td>
+        <tr>
+    {{/canView}}
+    {{#canView}}
+        <tr>
+            <td colspan="4" align="left"><b>MATCHUPS</b></td>
+        </tr>
+        {{^matches}}
+            <tr>
+                <td colspan="4"><i>No matches were found for this deck</i></td>
+            </tr>
+        {{/matches}}
+        {{#matches}}
+            {{^isBye}}
+                <tr>
+                    <td>{{rnd}}:&nbsp;</td>
+                    <td><b style="color: {{color}}">{{res}}</b></td>
+                    <td class="score">{{playerWins}}-{{playerLosses}}</td>
+                    <td>vs.</td>
+                    <td class="player">{{#opponentLink}}{{> playerLink}}{{/opponentLink}}</td>
+                    {{#showOppDeck}}
+                            <td>
+                                {{#oppDeckLink}}{{> deckLink}}{{/oppDeckLink}}
+                                {{^oppDeckLink}}No Deck Found{{/oppDeckLink}}
+                            </td>
+                    {{/showOppDeck}}
+                </tr>
+            {{/isBye}}
+            {{#isBye}}
+                <tr>
+                    <td>{{rnd}}:</td>
+                    <td><b>{{res}}</b></td>
+                    <td class="score">0 - 0</td>
+                    <td>vs.</td>
+                    <td>No Opponent</td>
+                    <td>No Deck Found</td>
+                </tr>
+            {{/isBye}}
+        {{/matches}}
+    {{/canView}}
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+</table>

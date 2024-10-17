@@ -13,8 +13,6 @@ class FormatsDropMenu extends Component
 
     public function __construct(public string $formatType, string $seriesName)
     {
-        parent::__construct('partials/formatsDropMenu');
-
         $formatNames = [];
         if ($formatType == 'System') {
             $formatNames = Format::getSystemFormats();

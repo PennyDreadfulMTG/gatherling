@@ -26,7 +26,6 @@ class FullMetagame extends Component
 
     public function __construct(Event $event)
     {
-        parent::__construct('partials/fullMetagame');
         $decks = $event->getDecks();
         $players = [];
         $format = new Format($event->format);

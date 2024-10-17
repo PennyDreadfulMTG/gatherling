@@ -20,7 +20,6 @@ class CurrentMatchesTable extends Component
      */
     public function __construct(Player $player, array $tournamentMatches, public array $leagueMatches)
     {
-        parent::__construct('partials/currentMatchesTable');
         $matchInfoList = [];
         foreach ($tournamentMatches as $match) {
             $event = new Event($match->getEventNamebyMatchid());

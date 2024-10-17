@@ -77,8 +77,6 @@ class SeasonStandings extends Component
         $this->season = $season;
         $this->seasonEvents = $seasonEvents;
         $this->players = $players;
-
-        parent::__construct('partials/seasonStandings');
     }
 
 

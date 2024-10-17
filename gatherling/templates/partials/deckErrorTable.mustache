@@ -1,0 +1,14 @@
+<table style="width: 100%" cellpadding="1">
+    <tr>
+        <td>
+            <span class="error"><b>ERRORS</b></span>
+        </td>
+    </tr>
+    {{#deckErrors}}
+        <tr>
+            <td>
+                <span class="error">{{.}}</span>
+            </td>
+        </tr>
+    {{/deckErrors}}
+</table>

@@ -24,8 +24,6 @@ class BAndR extends Component
 
     public function __construct(public string $seriesName, Format $activeFormat)
     {
-        parent::__construct('partials/bAndR');
-
         $this->activeFormatName = $activeFormat->name;
 
         $restrictedCards = $activeFormat->getRestrictedList();

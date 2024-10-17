@@ -1996,11 +1996,6 @@ parameters:
 			path: gatherling/deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$datetime of function strtotime expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
 			message: "#^Parameter \\#1 \\$deck of function updateDeck expects Gatherling\\\\Models\\\\Deck, Gatherling\\\\Models\\\\Deck\\|null given\\.$#"
 			count: 1
 			path: gatherling/deck.php
@@ -2016,102 +2011,12 @@ parameters:
 			path: gatherling/deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$event_id of method Gatherling\\\\Models\\\\Player\\:\\:getDeckEvent\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$medal of function medalImgStr expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, string\\|null given\\.$#"
 			count: 2
 			path: gatherling/deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Format constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$oneplayer of method Gatherling\\\\Models\\\\Matchup\\:\\:otherPlayer\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:getPlayerLosses\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:getPlayerWins\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:playerBye\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:playerLost\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:playerMatchInProgress\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:playerWon\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
 			message: "#^Parameter \\#1 \\$username of method Gatherling\\\\Models\\\\Entry\\:\\:canCreateDeck\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Parameter \\#2 \\$timestamp of function date expects int\\|null, int\\|false given\\.$#"
-			count: 1
-			path: gatherling/deck.php
-
-		-
-			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
-			count: 4
-			path: gatherling/deck.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Deck\\:\\:\\$archetype \\(string\\|null\\) does not accept mixed\\.$#"
-			count: 2
-			path: gatherling/deck.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Deck\\:\\:\\$name \\(string\\|null\\) does not accept mixed\\.$#"
-			count: 2
-			path: gatherling/deck.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Deck\\:\\:\\$notes \\(string\\|null\\) does not accept mixed\\.$#"
-			count: 2
-			path: gatherling/deck.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Deck\\:\\:\\$playername \\(string\\|null\\) does not accept mixed\\.$#"
 			count: 1
 			path: gatherling/deck.php
 
@@ -2326,11 +2231,6 @@ parameters:
 			path: gatherling/lib.php
 
 		-
-			message: "#^Parameter \\#2 \\$playerSeries of class Gatherling\\\\Views\\\\Components\\\\OrganizerSelect constructor expects list\\<string\\>, array\\<string\\> given\\.$#"
-			count: 1
-			path: gatherling/lib.php
-
-		-
 			message: "#^Parameter \\#2 \\$string of function explode expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/lib.php
@@ -2441,31 +2341,6 @@ parameters:
 			path: gatherling/seriescp.php
 
 		-
-			message: "#^Parameter \\#1 \\$datetime of function strtotime expects string, string\\|null given\\.$#"
-			count: 2
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#1 \\$datetime of function time_element expects int, int\\|false given\\.$#"
-			count: 2
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#1 \\$format of function formatDropMenu expects string\\|null, int\\|string given\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|false given\\.$#"
-			count: 3
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of method Gatherling\\\\Models\\\\Series\\:\\:addBannedPlayer\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of method Gatherling\\\\Models\\\\Series\\:\\:addOrganizer\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/seriescp.php
@@ -2473,11 +2348,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Series\\:\\:authCheck\\(\\) expects string, string\\|false given\\.$#"
 			count: 3
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#2 \\$string of function explode expects string, string\\|null given\\.$#"
-			count: 1
 			path: gatherling/seriescp.php
 
 		-

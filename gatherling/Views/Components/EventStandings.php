@@ -28,7 +28,6 @@ class EventStandings extends Component
         public string $eventName,
         ?string $playerName = null,
     ) {
-        parent::__construct('partials/eventStandings');
         $event = new Event($eventName);
         $standings = Standings::getEventStandings($eventName, 0);
         $rank = 1;

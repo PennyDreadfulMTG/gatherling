@@ -12,7 +12,6 @@ class CalcRatingsForm extends Component
 
     public function __construct()
     {
-        parent::__construct('partials/calcRatingsForm');
         $this->formatDropMenuR = new FormatDropMenuR();
     }
 }

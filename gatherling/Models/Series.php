@@ -334,12 +334,6 @@ class Series
         return $names;
     }
 
-    // Returns a HTML image tag which displays the logo for this series.
-    public static function imageTag(string $seriesname): string
-    {
-        return '<img src="'  . self::logoSrc($seriesname) . '" />';
-    }
-
     public static function logoSrc(string $seriesName): string
     {
         return 'displaySeries.php?series=' . rawurlencode($seriesName);

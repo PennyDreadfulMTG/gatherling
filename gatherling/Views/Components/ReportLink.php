@@ -11,7 +11,6 @@ class ReportLink extends Component
 
     public function __construct(string $name)
     {
-        parent::__construct('partials/reportLink');
         $this->reportLink = 'eventreport.php?event=' . rawurlencode($name);
         $this->text = $name;
     }

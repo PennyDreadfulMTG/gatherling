@@ -8,6 +8,5 @@ class Tooltip extends Component
 {
     public function __construct(public string $text, public string $tooltip)
     {
-        parent::__construct('partials/tooltip');
     }
 }

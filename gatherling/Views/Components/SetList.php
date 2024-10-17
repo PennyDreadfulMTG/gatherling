@@ -14,7 +14,6 @@ class SetList extends Component
 
     public function __construct()
     {
-        parent::__construct('partials/setList');
         $sql = '
             SELECT
                 cs.name, cs.code, cs.released, cs.type, cs.last_updated, COUNT(*) AS `count`

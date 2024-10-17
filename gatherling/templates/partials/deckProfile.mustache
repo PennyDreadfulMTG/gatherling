@@ -1,0 +1,43 @@
+<center>
+    <form action="deckdl.php" method="post">
+        <input type="hidden" name="id" value="{{deckId}}">
+        <input class="inputbutton" type="submit" name="mode" value="Download deck as .txt file">
+    </form>
+</center>
+<br>
+<div class="grid_5 alpha">
+    <div id="gatherling_lefthalf">
+        <div class="clear"></div>
+        {{#deckErrorsTable}}{{> deckErrorTable}}{{/deckErrorsTable}}
+        {{#deckInfoCell}}{{> deckInfoCell}}{{/deckInfoCell}}
+        {{#maindeckTable}}{{> maindeckTable}}{{/maindeckTable}}
+        {{#sideboardTable}}{{> sideboardTable}}{{/sideboardTable}}
+    </div>
+</div>
+<div class="grid_5 omega">
+    <div id="gatherling_righthalf">
+        {{#trophyCell}}{{> trophyCell}}{{/trophyCell}}
+        {{#matchupTable}}{{> matchupTable}}{{/matchupTable}}
+        <div class="grid_2 alpha">
+            {{#symbolTable}}{{> symbolTable}}{{/symbolTable}}
+        </div>
+        <div class="grid_2 omega">
+            {{#ccTable}}{{> ccTable}}{{/ccTable}}
+        </div>
+        <div class="clear"></div>
+        {{#exactMatchTable}}{{> exactMatchTable}}{{/exactMatchTable}}
+    </div>
+</div>
+<div class="clear"></div>
+<div>
+    {{#commentsTable}}{{> commentsTable}}{{/commentsTable}}
+</div>
+<div class="clear"></div>
+{{#canEdit}}
+    <center>
+        <form action="deck.php" method="post">
+            <input type="hidden" name="id" value="{{deckId}}">
+            <input class="inputbutton" type="submit" name="mode" value="Edit Deck">
+        </form>
+    </center>
+{{/canEdit}}

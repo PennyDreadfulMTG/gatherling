@@ -25,7 +25,6 @@ class InfoCell extends Component
 
     public function __construct(Event $event)
     {
-        parent::__construct('partials/infoCell');
         $this->threadLink = $event->threadurl ?? '';
         $this->eventName = $event->name ?? '';
         $this->eventDate = $event->start ? date('j F Y', strtotime($event->start)) : '';

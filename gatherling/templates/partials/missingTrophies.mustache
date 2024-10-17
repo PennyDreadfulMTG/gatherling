@@ -1,0 +1,34 @@
+<center>
+    <h3>Events Missing Trophies</h3>
+</center>
+<table style="width: 75%;">
+    <tr>
+        <th>Event</th>
+        <th>Date</th>
+        <th>Winner</th>
+        <th>Deck</th>
+    </tr>
+    {{#noRecentEvents}}
+        <tr>
+            <td colspan="4" style="text-align: center; font-weight: bold;">No Events Yet!</td>
+        </tr>
+    {{/noRecentEvents}}
+    {{#eventsMissingTrophies}}
+        <tr>
+            <td>
+                <a href="{{eventLink}}">{{eventName}}</a>
+            </td>
+            <td>
+                {{#startTime}}{{> time}}{{/startTime}}
+            </td>
+            {{#hasWinner}}
+                <td><a href="{{playerLink}}">{{playerName}}</a></td>
+                <td>{{#deckLink}}{{> deckLink}}{{/deckLink}}</td>
+            {{/hasWinner}}
+            {{^hasWinner}}
+                <td></td>
+                <td></td>
+            {{/hasWinner}}
+        </tr>
+    {{/eventsMissingTrophies}}
+</table>

@@ -1,0 +1,14 @@
+<table cellpadding="1" align="right">
+    <tr>
+        <th colspan="5" align="left"><b>THIS DECK ALSO PLAYED AS</b></th>
+    </tr>
+    {{#decks}}
+        <tr>
+            <td>{{#medal}}{{> medal}}{{/medal}}</td>
+            <td style="width: 140px">{{#deckLink}}{{> deckLink}}{{/deckLink}}</td>
+            <td>{{playerName}}</td>
+            <td><a href="{{threadLink}}">{{eventName}}</a></td>
+            <td style="text-align: right; width: 30px;">{{recordString}}</td>
+        </tr>
+    {{/decks}}
+</table>

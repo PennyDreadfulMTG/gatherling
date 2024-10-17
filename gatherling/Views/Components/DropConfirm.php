@@ -8,6 +8,5 @@ class DropConfirm extends Component
 {
     public function __construct(public string $eventName, public string $playerName)
     {
-        parent::__construct('partials/dropConfirm');
     }
 }

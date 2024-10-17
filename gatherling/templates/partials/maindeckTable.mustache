@@ -1,0 +1,29 @@
+<table cellpadding="1">
+    <tr>
+        <td colspan="1"><b>MAINDECK ({{numMaindeckCards}} Cards)</b></td>
+    </tr>
+    <tr>
+        <td colspan="2"><i>{{creaturesCount}} Creatures</i></td>
+    </tr>
+    {{#creatures}}
+        <tr>
+            <td>{{amt}} {{#cardLink}}{{> cardLink}}{{/cardLink}}</td>
+        </tr>
+    {{/creatures}}
+    <tr>
+        <td colspan="2"><i>{{otherSpellsCount}} Spells</i></td>
+    </tr>
+    {{#other}}
+        <tr>
+            <td>{{amt}} {{#cardLink}}{{> cardLink}}{{/cardLink}}</td>
+        </tr>
+    {{/other}}
+    <tr>
+        <td colspan="2"><i>{{landsCount}} Lands</i></td>
+    </tr>
+    {{#lands}}
+        <tr>
+            <td>{{amt}} {{#cardLink}}{{> cardLink}}{{/cardLink}}</td>
+        </tr>
+    {{/lands}}
+</table>

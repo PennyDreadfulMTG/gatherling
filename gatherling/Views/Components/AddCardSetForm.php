@@ -14,7 +14,6 @@ class AddCardSetForm extends Component
 
     public function __construct()
     {
-        parent::__construct('partials/addCardSetForm');
         $this->cardSetFileInput = new FileInput('Cardset JSON', 'cardsetfile');
         $this->submitButton = new Submit('Install New Cardset');
         $missingSets = SetScraper::getSetList();

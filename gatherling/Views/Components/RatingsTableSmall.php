@@ -14,7 +14,6 @@ class RatingsTableSmall extends Component
 
     public function __construct(Player $player)
     {
-        parent::__construct('partials/ratingsTableSmall');
         $ratings = new Ratings();
         $compositeRating = $player->getRating('Composite');
         $ratingsInfo = [

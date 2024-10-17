@@ -1,0 +1,38 @@
+<form action="seriescp.php" method="post">
+    <table class="form">
+        <input type="hidden" name="series" value="{{seriesName}}" />
+        <tr>
+            <th>Series is Active</th>
+            <td>
+                <select class="inputbox" name="isactive">
+                    <option value="1" {{#isActive}}selected{{/isActive}}>Yes</option>
+                    <option value="0" {{^isSelected}}selected{{/isSelected}}>No</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>Normal start day</th>
+            <td>
+                {{#dayDropMenu}}{{> dropMenu}}{{/dayDropMenu}}
+            </td>
+        </tr>
+        <tr>
+            <th>Normal start time</th>
+            <td>
+                {{#timeDropMenu}}{{> dropMenu}}{{/timeDropMenu}}
+            </td>
+        </tr>
+        <tr>
+            <th>Pre-registration on by default?</th>
+            <td>
+                <input type="checkbox" value="1" name="preregdefault" {{#preregDefault}}checked{{/preregDefault}} />
+            </td>
+        </tr>
+        {{#mtgoRoomTextInput}}{{> textInput}}{{/mtgoRoomTextInput}}
+        <tr>
+            <td colspan="2" class="buttons">
+                <input class="inputbutton" type="submit" name="action" value="Update Series" />
+            </td>
+        </tr>
+    </table>
+</form>

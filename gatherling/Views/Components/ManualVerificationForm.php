@@ -11,7 +11,6 @@ class ManualVerificationForm extends Component
 
     public function __construct()
     {
-        parent::__construct('partials/manualVerificationForm');
         $this->usernameInput = new TextInput('Username', 'username');
         $this->submitButton = new Submit('Verify Player');
     }

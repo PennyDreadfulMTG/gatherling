@@ -1,0 +1,17 @@
+<div class="grid_10 suffix_1 prefix_1">
+    <div id="gatherling_main" class="box">
+        <div class="uppertitle">Series Control Panel</div>
+
+        {{{orientationSafe}}}
+
+        {{#errorMsg}}
+            <div class="error">{{errorMsg}}</div>
+        {{/errorMsg}}
+
+        {{#seriesControlPanelMenu}}{{> seriesControlPanelMenu}}{{/seriesControlPanelMenu}}
+
+        {{{viewSafe}}}
+
+         <div class="clear"></div>
+    </div>
+</div>

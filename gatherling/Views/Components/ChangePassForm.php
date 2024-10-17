@@ -8,6 +8,5 @@ class ChangePassForm extends Component
 {
     public function __construct(public bool $tooShort)
     {
-        parent::__construct('partials/changePassForm');
     }
 }
