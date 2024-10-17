@@ -8,7 +8,7 @@ use Gatherling\Views\Components\DropMenu;
 
 class NumDropMenu extends DropMenu
 {
-    public function __construct(string $field, string $title, int $max, int|string|null $def, int $min = 0, ?string $special = null)
+    public function __construct(string $field, ?string $title, int $max, int|string|null $def, int $min = 0, ?string $special = null)
     {
         if ($def === '') {
             $def = -1;

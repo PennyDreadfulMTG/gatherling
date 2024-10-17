@@ -104,9 +104,9 @@ function medalImgStr(string $medal): string
     return image_tag("$medal.png", ['style' => 'border-width: 0px']);
 }
 
-function seasonDropMenu(int|string|null $season, bool $useall = false): string
+function seasonDropMenu(int|string|null $season): string
 {
-    return (new SeasonDropMenu($season, $useall))->render();
+    return (new SeasonDropMenu($season))->render();
 }
 
 function formatDropMenu(?string $format, bool $useAll = false, string $formName = 'format'): string
