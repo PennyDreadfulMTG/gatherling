@@ -17,7 +17,7 @@ class AllRatings extends Component
     /** @var array<array-key, array{formatName: string, rating: ?int, record: ?string, min: ?int, max: ?int}> */
     public array $ratingLines = [];
     public DropMenu $formatDropMenu;
-    /** @var array<array-key, array{eventName: string, wl: string, medal: ?string, deckLink: ?DeckLink, preEventRating: float, postEventRating: float}> */
+    /** @var array<array-key, array{eventName: string, wl: string, medal: ?string, medalSrc: ?string, deckLink: ?DeckLink, preEventRating: float, postEventRating: float}> */
     public array $entries = [];
 
     public function __construct(Player $player, string $formatName)
@@ -81,6 +81,7 @@ class AllRatings extends Component
                 'eventName' => $rating->name,
                 'wl' => $wl,
                 'medal' => $rating->medal,
+                'medalSrc' => $rating->medal ? 'styles/images/' . rawurlencode($rating->medal) . '.png' : null,
                 'deckLink' => $entry->deck ? new DeckLink($entry->deck) : null,
                 'preEventRating' => $prevRating,
                 'postEventRating' => $rating->rating,
