@@ -10,13 +10,13 @@ class AddCardSetForm extends Component
 {
     public FileInput $cardSetFileInput;
     public Submit $submitButton;
-    public SelectInput $missingSetSelectInput;
+    public SelectInput $missingSetsSelectInput;
 
     public function __construct()
     {
         $this->cardSetFileInput = new FileInput('Cardset JSON', 'cardsetfile');
         $this->submitButton = new Submit('Install New Cardset');
         $missingSets = SetScraper::getSetList();
-        $this->missingSetSelectInput = new SelectInput('Missing Sets', 'cardsetcode', $missingSets);
+        $this->missingSetsSelectInput = new SelectInput('Missing Sets', 'cardsetcode', $missingSets);
     }
 }

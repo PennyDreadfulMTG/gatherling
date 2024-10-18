@@ -16,9 +16,9 @@ class EventStandings extends Component
         rank: int,
         gameName: GameName,
         matchScore: int,
-        opMatch: ?float,
-        plGame: ?float,
-        opGame: ?float,
+        opMatch: ?string,
+        plGame: ?string,
+        opGame: ?string,
         matchesPlayed: int,
         byes: int,
     }> */
