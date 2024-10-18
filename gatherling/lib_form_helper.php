@@ -22,22 +22,8 @@ function checkboxInput(string $label, string $name, bool $isChecked = false, ?st
     return (new CheckboxInput($label, $name, $isChecked, $reminderText))->render();
 }
 
-function print_file_input(string $label, string $name): string
-{
-    return (new FileInput($label, $name))->render();
-}
-
 /** @param array<string, string> $options */
 function selectInput(string $label, string $name, ?array $options, mixed $selected = null, ?string $id = null): string
 {
     return (new SelectInput($label, $name, $options, $selected, $id))->render();
-}
-
-/**
- * @param list<string|int> $items
- * @return list<array{value: string, text: string}>
- */
-function opts(array $items): array
-{
-    return array_map(fn (string|int $item) => ['value' => (string) $item, 'text' => (string) $item], $items);
 }

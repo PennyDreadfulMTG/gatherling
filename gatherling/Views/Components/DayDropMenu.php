@@ -6,8 +6,10 @@ namespace Gatherling\Views\Components;
 
 class DayDropMenu extends DropMenu
 {
-    public function __construct(string $name)
+    public function __construct(string $name, string $default = 'Monday')
     {
-        parent::__construct($name, opts(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']));
+        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        $options = array_map(fn (string $day) => ['value' => $day, 'text' => $day, 'isSelected' => ($day === $default)], $days);
+        parent::__construct($name, $options);
     }
 }

@@ -1,0 +1,63 @@
+<form action="deck.php?mode=addregdeck" method="post">
+<table>
+    <tr>
+        <td valign="top"><b>Directions:</b></td>
+        <td>
+            To enter your deck, please give it
+            a name and select an archetype from the drop-down menu below. If
+            you do not specify an archetype, your deck will be labeled as
+            "Unclassified". To enter cards, save your deck as a .txt or .dek file
+            using the official MTGO client, and then copy and paste the maindeck
+            and sideboard into the appropriate text boxes.
+            Do not use a format such as "1x Card".
+            The parser will not accept this structure. The correct pattern is
+            "1 Card".
+        </td>
+    </tr>
+    <tr>
+        <td><b>Recent Decks</b></td>
+        <td>
+            <select class="inputbox" id="autoenter-deck">
+                <option value="0">Select a recent deck to start from there</option>
+                {{#recentDecks}}
+                    <option value="{{id}}">{{name}}</option>
+                {{/recentDecks}}
+            </select>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Name</b></td>
+            <td>
+                <input id="deck-name" class="inputbox" type="text" name="name" value="" size="40">
+            </td>
+        </tr>
+        {{#deckArchetypeDropMenu}}{{> selectInput}}{{/deckArchetypeDropMenu}}
+        <tr>
+            <td valign="top"><b>Main Deck</b></td>
+            <td>
+                <textarea id="deck-contents" class="inputbox" rows="20" cols="60" name="contents"></textarea>
+            </td>
+        </tr>
+        <tr><td valign="top"><b>Sideboard</b></td>
+            <td>
+                <textarea id="deck-sideboard" class="inputbox" rows="10" cols="60" name="sideboard"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>Comments</td>
+            <td>
+                <textarea class="inputbox" rows="10" cols="60" name="notes"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <input class="inputbutton" type="submit" name="mode" value="Create Deck">
+                <input type="hidden" name="player" value="{{playerName}}">
+                <input type="hidden" name="event" value="{{eventName}}">
+            </td>
+        </tr>
+    </table>
+</form>

@@ -18,7 +18,6 @@ class CardsetDropMenu extends Component
 
     public function __construct(public string $cardsetType, Format $format)
     {
-        parent::__construct('partials/cardsetDropMenu');
         $cardsets = CardSet::getMissingSets($cardsetType, $format);
         $options = [];
         $defaultText = $cardsets ? "- {$cardsetType} Cardset Name -" : "- All {$cardsetType} sets have been added -";

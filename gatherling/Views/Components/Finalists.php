@@ -16,7 +16,6 @@ class Finalists extends Component
     /** @param array<array{medal: string, player: string, deck: Deck}> $finalists */
     public function __construct(array $finalists)
     {
-        parent::__construct('partials/finalists');
         $this->numFinalists = count($finalists);
         $this->finalists = [];
 

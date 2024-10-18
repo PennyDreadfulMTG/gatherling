@@ -21,8 +21,6 @@ class Preregistration extends Component
 
     public function __construct(Player $player)
     {
-        parent::__construct('partials/preregistration');
-
         if (!$player->name) {
             throw new NotFoundException("Tried to display preregistration for a player with no name");
         }

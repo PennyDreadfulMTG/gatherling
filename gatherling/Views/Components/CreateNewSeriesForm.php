@@ -13,7 +13,6 @@ class CreateNewSeriesForm extends Component
 
     public function __construct()
     {
-        parent::__construct('partials/createNewSeriesForm');
         $this->dayDropMenu = new DayDropMenu('start_day');
         $time_parts = explode(':', '12:00:00');
         $this->timeDropMenu = new TimeDropMenu('hour', $time_parts[0], $time_parts[1]);

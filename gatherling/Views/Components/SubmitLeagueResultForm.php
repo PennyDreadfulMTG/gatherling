@@ -13,7 +13,6 @@ class SubmitLeagueResultForm extends Component
 
     public function __construct(public string $eventName, int $round, Player $player, int $subevent)
     {
-        parent::__construct('partials/submitLeagueResultForm');
         $this->playerName = $player->name ?? '';
         $this->leagueOpponentDropMenu = new LeagueOpponentDropMenu($eventName, $round, $player, $subevent);
     }

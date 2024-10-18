@@ -24,8 +24,6 @@ class StatsTable extends Component
 
     public function __construct(Player $player)
     {
-        parent::__construct('partials/statsTable');
-
         $this->record = $player->getRecord();
         $this->longestWinningStreak = $player->getStreak('W');
         $this->longestLosingStreak = $player->getStreak('L');

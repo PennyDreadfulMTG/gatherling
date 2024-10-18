@@ -13,7 +13,6 @@ class PlayerMatches extends Component
 
     public function __construct(Player $player, string $selectedFormat, string $selectedSeries, string $selectedSeason, string $selectedOpponent)
     {
-        parent::__construct('partials/playerMatches');
         $this->allMatchForm = new AllMatchForm($player, $selectedFormat, $selectedSeries, $selectedSeason, $selectedOpponent);
         $this->matchTable = new MatchTable($player, $selectedFormat, $selectedSeries, $selectedSeason, $selectedOpponent);
     }

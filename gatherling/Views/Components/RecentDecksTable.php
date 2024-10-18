@@ -17,7 +17,6 @@ class RecentDecksTable extends Component
 
     public function __construct(Player $player)
     {
-        parent::__construct('partials/recentDecksTable');
         $event = $player->getLastEventPlayed();
         if (is_null($event)) {
             return;

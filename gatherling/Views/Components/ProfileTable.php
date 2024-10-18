@@ -15,7 +15,6 @@ class ProfileTable extends Component
 
     public function __construct(Player $player)
     {
-        parent::__construct('partials/profileTable');
         $this->infoTable = new InfoTable($player);
         $this->medalTable = new MedalTable($player);
         $this->trophyTable = new TrophyTable($player);

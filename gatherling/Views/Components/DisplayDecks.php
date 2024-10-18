@@ -16,7 +16,6 @@ class DisplayDecks extends Component
     /** @param list<int> $deckIds */
     public function __construct(public array $deckIds)
     {
-        parent::__construct('partials/displayDecks');
         $decksearch = new Decksearch();
         $ids_populated = $decksearch->idsToSortedInfo($deckIds);
 

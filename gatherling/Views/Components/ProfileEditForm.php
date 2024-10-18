@@ -10,7 +10,6 @@ class ProfileEditForm extends Component
 
     public function __construct(float $timezone, public string $email, public int $emailPrivacy)
     {
-        parent::__construct('partials/profileEditForm');
         $this->timezoneDropMenu = new TimeZoneDropMenu($timezone);
     }
 }

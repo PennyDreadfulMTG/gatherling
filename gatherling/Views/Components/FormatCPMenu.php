@@ -17,7 +17,6 @@ class FormatCPMenu extends Component
 
     public function __construct(public string $seriesName, Format $activeFormat)
     {
-        parent::__construct('partials/formatCPMenu');
         $this->activeFormatName = $activeFormat->name ?? '';
         $escaped = rawurlencode($activeFormat->name);
         $this->formatSettingsLink = "formatcp.php?view=settings&format={$escaped}";

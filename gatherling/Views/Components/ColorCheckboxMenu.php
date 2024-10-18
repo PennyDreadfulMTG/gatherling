@@ -15,8 +15,6 @@ class ColorCheckboxMenu extends Component
     /** @param ?array<string, string> $colors */
     public function __construct(array $colors = null)
     {
-        parent::__construct('partials/colorCheckboxMenu');
-
         $this->wChecked = isset($colors['w']);
         $this->bChecked = isset($colors['b']);
         $this->uChecked = isset($colors['u']);

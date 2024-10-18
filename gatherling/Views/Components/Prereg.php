@@ -20,7 +20,6 @@ class Prereg extends Component
 
     public function __construct(public Event $event)
     {
-        parent::__construct('partials/prereg');
         $player = Player::getSessionPlayer();
 
         $this->eventName = $event->name;

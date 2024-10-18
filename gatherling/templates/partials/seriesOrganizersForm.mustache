@@ -1,0 +1,33 @@
+<form action="seriescp.php" method="post">
+    <input type="hidden" name="series" value="{{seriesName}}" />
+    <h3><center>Series Organizers</center></h3>
+    <p style="width: 75%; text-align: left;">Series organizers can create new series events, manage any event in the series, and modify anything on this page.  Please add them with care as they could screw with anything related to your series including changing the logo and the time.  Only verified members can be series organizers.</p>
+    <p style="width: 75%; text-align: left;"><em>If you just need a guest host, add them as the host to a specific event!</em></p>
+    <table class="form">
+        <tr>
+            <th style="text-align: center;">Player</th>
+            <th style="width: 50px; text-align: center;">Delete</th>
+        </tr>
+        {{#organizers}}
+            <tr>
+                <td>{{name}}</td>
+                <td style="text-align: center; width: 50px; ">
+                    <input type="checkbox" value="{{name}}" name="delorganizers[]"
+                        {{#isDisabled}}disabled="yes"{{/isDisabled}}
+                    />
+                </td>
+            </tr>
+        {{/organizers}}
+        <tr>
+            <td colspan="2">
+                Add new: <input class="inputbox" type="text" name="addorganizer" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="buttons">
+                <input type="hidden" name="view" value="organizers" />
+                <input class="inputbutton" type="submit" value="Update Organizers" name="action" />
+            </td>
+        </tr>
+    </table>
+</form>

@@ -10,7 +10,6 @@ class FormatRenameForm extends Component
 
     public function __construct(string $seriesName)
     {
-        parent::__construct('partials/formatRenameForm');
         $this->formatsDropMenu = $seriesName == 'System' ? new FormatsDropMenu('All', $seriesName) : new FormatsDropMenu('Private', $seriesName);
     }
 }

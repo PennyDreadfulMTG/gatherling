@@ -53,7 +53,7 @@
             <td>{{eventName}}</td>
             <td>{{#deckLink}}{{> deckLink}}{{/deckLink}}</td>
             <td align="center">{{wl}}</td>
-            <td align="center"><img alt="Medal" src="{{medalSrc}}" /></td>
+            <td align="center">{{#medalSrc}}<img alt="Medal" src="{{medalSrc}}" />{{/medalSrc}}</td>
             <td align="center">{{postEventRating}}</td>
         </tr>
     {{/entries}}

@@ -13,7 +13,6 @@ class EditEmailForm extends Component
 
     public function __construct(Player $player)
     {
-        parent::__construct('partials/editEmailForm');
         $this->emailAddress = $player->emailAddress ?? '';
         $this->emailPrivacy = $player->emailPrivacy ?? 1;
     }

@@ -14,8 +14,6 @@ class EditTimeZoneForm extends Component
 
     public function __construct(Player $player)
     {
-        parent::__construct('partials/editTimeZoneForm');
-
         $this->playerName = $player->name ?? '';
         $this->timeZone = $player->timeZone() ?? '';
         $this->timeZoneDropMenu = new TimeZoneDropMenu($player->timezone);

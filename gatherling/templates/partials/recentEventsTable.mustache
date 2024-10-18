@@ -1,0 +1,24 @@
+<center>
+    <h3>Recent Events</h3>
+</center>
+<table style="width: 75%;">
+    <tr>
+        <th>Event</th>
+        <th>Date</th>
+        <th>Players</th>
+        <th>Hosts</th>
+    </tr>
+    {{^events}}
+        <tr>
+            <td colspan="4" style="text-align: center; font-weight: bold;"> No Events Yet! </td>
+        </tr>
+    {{/events}}
+    {{#events}}
+        <tr>
+            <td><a href="{{eventLink}}">{{eventName}}</a></td>
+            <td>{{#startTime}}{{> time}}{{/startTime}}</td>
+            <td style="text-align: center;">{{playerCount}}</td>
+            <td>{{host}}{{#cohost}} / {{cohost}}{{/cohost}}</td>
+        </tr>
+    {{/events}}
+</table>

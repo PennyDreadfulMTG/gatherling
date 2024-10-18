@@ -25,7 +25,6 @@ class TribalBAndR extends Component
 
     public function __construct(public string $seriesName, Format $activeFormat)
     {
-        parent::__construct('partials/tribalBAndR');
         $this->activeFormatName = $activeFormat->name ?? '';
 
         $restrictedToTribe = $activeFormat->getRestrictedToTribeList();

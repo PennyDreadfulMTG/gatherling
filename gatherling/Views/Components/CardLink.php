@@ -11,7 +11,6 @@ class CardLink extends Component
 
     public function __construct(public string $cardName)
     {
-        parent::__construct('partials/cardLink');
         $gathererName = preg_replace('/ /', ']+[', $cardName);
         $gathererName = str_replace('/', ']+[', $gathererName);
         $this->gathererLink = 'https://gatherer.wizards.com/Pages/Search/Default.aspx?name=+[' . rawurlencode($gathererName) . ']';
