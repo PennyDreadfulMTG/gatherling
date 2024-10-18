@@ -39,9 +39,9 @@ class EventStandings extends Component
                 'rank' => $rank,
                 'gameName' => new GameName($sp, $event->client),
                 'matchScore' => $standing->score ?? 0,
-                'opMatch' => $standing->OP_Match,
-                'plGame' => $standing->PL_Game,
-                'opGame' => $standing->OP_Game,
+                'opMatch' => $standing->OP_Match ? number_format($standing->OP_Match, 3) : null,
+                'plGame' => $standing->PL_Game ? number_format($standing->PL_Game, 3) : null,
+                'opGame' => $standing->OP_Game ? number_format($standing->OP_Game, 3) : null,
                 'matchesPlayed' => $standing->matches_played ?? 0,
                 'byes' => $standing->byes ?? 0,
             ];
