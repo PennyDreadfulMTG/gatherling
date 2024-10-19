@@ -722,6 +722,10 @@ class Deck
             if (is_null($testcard)) {
                 $testcard = Format::getCardNameFromPartialDFC($card);
             }
+            if (is_null($testcard)) {
+                $this->errors[] = "Could not find card in database, did you make a typo?: {$card}";
+                continue;
+            }
             $cardar = $format->getLegalCard($testcard);
             if (is_null($cardar)) {
                 $this->errors[] = "Could not find sideboard card: {$amt} {$card} in legal sets";
