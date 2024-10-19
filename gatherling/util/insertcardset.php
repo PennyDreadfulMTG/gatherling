@@ -5,8 +5,8 @@ declare(strict_types=1);
 use Gatherling\Models\CardSet;
 use Gatherling\Models\Player;
 
-use function Gatherling\Views\request;
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\request;
+use function Gatherling\Helpers\server;
 
 set_time_limit(0);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);

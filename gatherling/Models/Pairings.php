@@ -15,13 +15,13 @@ class Pairings
     public array $pairing = [];
 
     /**
-     * @param array<int, array<string, int|string|array<int, string>>> $players
-     * @param array<string, int|string|array<int, string>> $bye_data
+     * @param array<int, array{player: string, score: int, opponents: array<int, string>}> $players
+     * @param ?array{player: string, score: int, opponents: array<int, string>} $bye_data
      */
-    public function __construct(array $players, array $bye_data)
+    public function __construct(array $players, ?array $bye_data)
     {
         // $highest_points = 0;
-        $byeExist = (count($bye_data) > 0);
+        $byeExist = $bye_data !== null;
         for ($i = 0; $i < count($players); $i++) {
             $this->highest_points = max($this->highest_points, (int) $players[$i]['score']);
             if ($byeExist) {

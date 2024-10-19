@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use Gatherling\Models\Player;
 
-use function Gatherling\Views\config;
-use function Gatherling\Views\get;
-use function Gatherling\Views\request;
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\config;
+use function Gatherling\Helpers\get;
+use function Gatherling\Helpers\request;
+use function Gatherling\Helpers\server;
 
 require_once __DIR__ . '/../lib.php';
 

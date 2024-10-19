@@ -11,7 +11,7 @@ use Gatherling\Models\RecentWinnerDto;
 use Gatherling\Models\UpcomingEventDto;
 use Gatherling\Views\Pages\Home;
 
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 

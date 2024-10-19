@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
-use Gatherling\Exceptions\NotFoundException;
+use Gatherling\Data\DB;
 use Gatherling\Views\TemplateHelper;
+use Gatherling\Exceptions\NotFoundException;
 
 class Entry
 {
@@ -21,21 +22,13 @@ class Entry
 
     public static function findByEventAndPlayer(int $event_id, string $playername): ?self
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT deck, medal FROM entries WHERE event_id = ? AND player = ?');
-        $stmt->bind_param('ds', $event_id, $playername);
-        $stmt->execute();
-        $stmt->store_result();
-        $found = false;
-        if ($stmt->num_rows > 0) {
-            $found = true;
+        $sql = 'SELECT deck FROM entries WHERE event_id = :event_id AND player = :player';
+        $params = ['event_id' => $event_id, 'player' => $playername];
+        $deckId = DB::optionalInt($sql, $params);
+        if (!$deckId) {
+            return null;
         }
-        $stmt->close();
-
-        if ($found) {
-            return new self($event_id, $playername);
-        }
-        return null;
+        return new self($event_id, $playername);
     }
 
     /**
@@ -43,71 +36,72 @@ class Entry
      */
     public static function getActivePlayers(int $eventid): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT e.player
-            FROM entries e
-            JOIN events ev ON e.event_id = ev.id
-            JOIN standings s ON ev.name = s.event
-            WHERE e.event_id = ?
-            AND s.active = 1
-            GROUP BY player');
-        $stmt->bind_param('d', $eventid);
-        $entries = [];
-        $playernames = [];
-        $playername = '';
-        $stmt->execute();
-        $stmt->bind_result($playername);
-        while ($stmt->fetch()) {
-            $playernames[] = $playername;
-        }
-        $stmt->close();
-
-        foreach ($playernames as $name) {
-            $entries[] = new Entry($eventid, $name);
-        }
-
-        return $entries;
+        $sql = '
+            SELECT
+                e.player
+            FROM
+                entries e
+            JOIN
+                events ev ON e.event_id = ev.id
+            JOIN
+                standings s ON ev.name = s.event
+            WHERE
+                e.event_id = :eventid
+            AND
+                s.active = 1
+            GROUP BY
+                player';
+        $playernames = DB::strings($sql, ['eventid' => $eventid]);
+        return array_map(fn (string $name) => new Entry($eventid, $name), $playernames);
     }
 
     public static function playerRegistered(int $eventid, string $playername): bool
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT n.player
-            FROM entries n
-            JOIN events e ON n.event_id = e.id
-            WHERE n.event_id = ?
-            AND n.player = ?
-            GROUP BY player');
-        $stmt->bind_param('ds', $eventid, $playername);
-        $stmt->execute();
-        $stmt->store_result();
-        $entry_exists = $stmt->num_rows > 0;
-        $stmt->close();
-
-        return $entry_exists;
+        $sql = '
+            SELECT
+                n.player
+            FROM
+                entries n
+            JOIN
+                events e ON n.event_id = e.id
+            WHERE
+                n.event_id = :event_id  AND n.player = :player
+            GROUP BY
+                player';
+        $params = ['event_id' => $eventid, 'player' => $playername];
+        return DB::optionalString($sql, $params) !== null;
     }
 
     // TODO: remove ignore functionality
     public function __construct(int $event_id, string $playername)
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT deck, medal, ignored, drop_round, initial_byes, initial_seed FROM entries WHERE event_id = ? AND player = ?');
-        $stmt or exit($db->error);
-        $stmt->bind_param('ds', $event_id, $playername);
-        $stmt->execute();
         $this->ignored = 0;
-        $stmt->bind_result($deckid, $this->medal, $this->ignored, $this->drop_round, $this->initial_byes, $this->initial_seed);
-
-        if ($stmt->fetch() == null) {
+        $sql = '
+            SELECT
+                deck AS deck_id, medal, ignored, drop_round, initial_byes, initial_seed
+            FROM
+                entries
+            WHERE
+                event_id = :event_id AND player = :player';
+        $params = ['event_id' => $event_id, 'player' => $playername];
+        $entry = DB::selectOnlyOrNull($sql, EntryDto::class, $params);
+        if ($entry == null) {
             throw new NotFoundException('Entry for ' . $playername . ' in ' . $event_id . ' not found');
         }
-        $stmt->close();
+        $deck_id = null;
+        foreach (get_object_vars($entry) as $key => $value) {
+            if ($key == 'deck_id') {
+                $deck_id = $value;
+            } else {
+                $this->{$key} = $value;
+            }
+        }
 
         $this->event = new Event($event_id);
         $this->player = new Player($playername);
 
-        if ($deckid != null) {
-            $this->deck = new Deck($deckid);
+        if ($deck_id != null) {
+            $this->deck = new Deck($deck_id);
         } else {
             $this->deck = null;
         }
@@ -132,12 +126,10 @@ class Entry
                 $draws = $draws + 1;
             }
         }
-
         if ($draws == 0) {
             return $wins . '-' . $losses;
-        } else {
-            return $wins . '-' . $losses . '-' . $draws;
         }
+        return $wins . '-' . $losses . '-' . $draws;
     }
 
     /**
@@ -151,7 +143,6 @@ class Entry
     public function canDelete(): bool
     {
         $matches = $this->getMatches();
-
         return count($matches) == 0;
     }
 
@@ -190,57 +181,63 @@ class Entry
 
     public function removeEntry(): bool
     {
-        $db = Database::getConnection();
+        DB::begin('remove_entry');
+
+        // if the player being unreg'd entered a deck list, remove it
         if ($this->deck) {
             $this->deck->delete();
-        } // if the player being unreg'd entered a deck list, remove it
+        }
 
-        $stmt = $db->prepare('DELETE FROM entries WHERE event_id = ? AND player = ?');
-        $stmt->bind_param('ds', $this->event->id, $this->player->name);
-        $stmt->execute();
-        $removed = $stmt->affected_rows > 0;
-        $stmt->close();
+        $sql = 'DELETE FROM entries WHERE event_id = :event_id AND player = :player';
+        $params = [
+            'event_id' => $this->event->id,
+            'player' => $this->player->name,
+        ];
+        $removed = DB::update($sql, $params) > 0;
 
-        $db = Database::getConnection();
-        $stmt = $db->prepare('DELETE FROM standings WHERE event = ? AND player = ?');
-        $stmt->bind_param('ss', $this->event->name, $this->player->name);
-        $stmt->execute();
-        $stmt->close();
+        $sql = 'DELETE FROM standings WHERE event = :event AND player = :player';
+        $params = [
+            'event' => $this->event->name,
+            'player' => $this->player->name,
+        ];
+        DB::execute($sql, $params);
+
+        DB::commit('remove_entry');
 
         return $removed;
     }
 
     public function setInitialByes(int $byeqty): void
     {
-        $db = Database::getConnection();
-        $db->autocommit(false);
-        $stmt = $db->prepare('UPDATE entries SET initial_byes = ? WHERE player = ? AND event_id = ?');
-        $stmt->bind_param('dsd', $byeqty, $this->player->name, $this->event->id);
-        $stmt->execute();
-        if ($stmt->affected_rows < 0) {
-            $db->rollback();
-            $db->autocommit(true);
-
-            throw new Exception('Entry for ' . $this->player->name . ' in ' . $this->event->name . ' not found');
-        }
-        $db->commit();
-        $db->autocommit(true);
+        $sql = '
+            UPDATE
+                entries
+            SET
+                initial_byes = :initial_byes
+            WHERE
+                player = :player AND event_id = :event_id';
+        $params = [
+            'initial_byes' => $byeqty,
+            'player' => $this->player->name,
+            'event_id' => $this->event->id,
+        ];
+        DB::execute($sql, $params);
     }
 
     public function setInitialSeed(int $byeqty): void
     {
-        $db = Database::getConnection();
-        $db->autocommit(false);
-        $stmt = $db->prepare('UPDATE entries SET initial_seed = ? WHERE player = ? AND event_id = ?');
-        $stmt->bind_param('dsd', $byeqty, $this->player->name, $this->event->id);
-        $stmt->execute();
-        if ($stmt->affected_rows < 0) {
-            $db->rollback();
-            $db->autocommit(true);
-
-            throw new Exception('Entry for ' . $this->player->name . ' in ' . $this->event->name . ' not found');
-        }
-        $db->commit();
-        $db->autocommit(true);
+        $sql = '
+            UPDATE
+                entries
+            SET
+                initial_seed = :initial_seed
+            WHERE
+                player = :player AND event_id = :event_id';
+        $params = [
+            'initial_seed' => $byeqty,
+            'player' => $this->player->name,
+            'event_id' => $this->event->id,
+        ];
+        DB::execute($sql, $params);
     }
 }

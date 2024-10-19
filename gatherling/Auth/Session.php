@@ -47,7 +47,7 @@ class Session
             AND
                 expiry >= NOW()';
         $args = ['token' => $token];
-        $details = DB::value($sql, $args, true);
+        $details = DB::optionalString($sql, $args);
         return $details ? json_decode($details, true) : [];
     }
 

@@ -7,7 +7,7 @@ use Gatherling\Models\Player;
 use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\TemplateHelper;
 
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\server;
 
 require_once 'bootstrap.php';
 ob_start();

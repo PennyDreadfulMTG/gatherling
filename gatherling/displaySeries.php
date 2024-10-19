@@ -7,7 +7,7 @@ use Gatherling\Models\Image;
 use Gatherling\Models\ImageDto;
 use Gatherling\Views\ImageResponse;
 
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 

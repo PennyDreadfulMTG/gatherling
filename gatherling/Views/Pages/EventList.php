@@ -10,7 +10,7 @@ use Gatherling\Views\Components\FormatDropMenu;
 use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\SeriesDropMenu;
 
-use function Gatherling\Views\get;
+use function Gatherling\Helpers\get;
 
 class EventList extends Page
 {

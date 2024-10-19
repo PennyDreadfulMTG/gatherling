@@ -6,8 +6,8 @@ use Gatherling\Models\Player;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use Wohali\OAuth2\Client\Provider\Exception\DiscordIdentityProviderException;
 
-use function Gatherling\Views\request;
-use function Gatherling\Views\session;
+use function Gatherling\Helpers\request;
+use function Gatherling\Helpers\session;
 
 require_once __DIR__ . '/lib.php';
 require __DIR__ . '/authlib.php';

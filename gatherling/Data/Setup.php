@@ -170,8 +170,7 @@ class Setup
     private static function version(): int
     {
         try {
-            $v = DB::value('SELECT version FROM db_version LIMIT 1');
-            return is_int($v) ? $v : 0;
+            return DB::int('SELECT version FROM db_version LIMIT 1', []);
         } catch (DatabaseException) {
             Log::debug('No version found in db_version table');
             return 0;

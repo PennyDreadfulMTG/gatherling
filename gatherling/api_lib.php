@@ -13,10 +13,10 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Models\Standings;
 
-use function Gatherling\Views\config;
-use function Gatherling\Views\request;
-use function Gatherling\Views\server;
-use function Gatherling\Views\session;
+use function Gatherling\Helpers\config;
+use function Gatherling\Helpers\request;
+use function Gatherling\Helpers\server;
+use function Gatherling\Helpers\session;
 
 /**
  * @param array<string, mixed> $array

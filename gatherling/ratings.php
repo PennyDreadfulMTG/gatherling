@@ -9,8 +9,8 @@ use Gatherling\Models\PlayerRatingDto;
 use Gatherling\Views\Pages\Ratings;
 use Zebra_Pagination as Pagination;
 
-use function Gatherling\Views\post;
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\post;
+use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 
@@ -105,8 +105,8 @@ function bestEver(string $format): array
 /** @return array{date: DateTime, name: string} */
 function currentThrough(string $format): array
 {
-    $start = DB::value('SELECT MAX(updated) FROM ratings WHERE format = :format', ['format' => $format]);
-    $name = DB::value('SELECT name FROM events WHERE start = :start', ['start' => $start]);
+    $start = DB::string('SELECT MAX(updated) FROM ratings WHERE format = :format', ['format' => $format]);
+    $name = DB::string('SELECT name FROM events WHERE start = :start', ['start' => $start]);
     return ['date' => new DateTime($start), 'name' => $name];
 }
 

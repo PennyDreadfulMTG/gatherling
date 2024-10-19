@@ -5,9 +5,9 @@ declare(strict_types=1);
 use Gatherling\Auth\Registration;
 use Gatherling\Views\Pages\Register;
 
-use function Gatherling\Views\post;
-use function Gatherling\Views\server;
-use function Gatherling\Views\session;
+use function Gatherling\Helpers\post;
+use function Gatherling\Helpers\server;
+use function Gatherling\Helpers\session;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';

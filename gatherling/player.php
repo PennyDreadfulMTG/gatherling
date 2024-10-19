@@ -17,11 +17,11 @@ use Gatherling\Views\Components\PlayerMatches;
 use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\Pages\PlayerControlPanel;
 
-use function Gatherling\Views\config;
-use function Gatherling\Views\get;
-use function Gatherling\Views\post;
-use function Gatherling\Views\request;
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\config;
+use function Gatherling\Helpers\get;
+use function Gatherling\Helpers\post;
+use function Gatherling\Helpers\request;
+use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';

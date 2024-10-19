@@ -19,9 +19,9 @@ use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\Pages\SeriesControlPanel;
 use Gatherling\Views\Redirect;
 
-use function Gatherling\Views\get;
-use function Gatherling\Views\post;
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\get;
+use function Gatherling\Helpers\post;
+use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 include 'lib_form_helper.php';

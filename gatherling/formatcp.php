@@ -23,9 +23,9 @@ use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\Pages\FormatAdmin;
 use Gatherling\Views\Pages\InsufficientPermissions;
 
-use function Gatherling\Views\post;
-use function Gatherling\Views\server;
-use function Gatherling\Views\request;
+use function Gatherling\Helpers\post;
+use function Gatherling\Helpers\server;
+use function Gatherling\Helpers\request;
 
 require_once 'lib.php';
 include 'lib_form_helper.php';

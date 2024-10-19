@@ -7,10 +7,10 @@ use Gatherling\Models\Decksearch;
 use Gatherling\Views\Pages\DeckSearch as DeckSearchPage;
 use Zebra_Pagination as Pagination;
 
-use function Gatherling\Views\get;
-use function Gatherling\Views\post;
-use function Gatherling\Views\server;
-use function Gatherling\Views\session;
+use function Gatherling\Helpers\get;
+use function Gatherling\Helpers\post;
+use function Gatherling\Helpers\server;
+use function Gatherling\Helpers\session;
 
 require_once 'lib.php';
 

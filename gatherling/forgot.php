@@ -7,9 +7,9 @@ use Firebase\JWT\Key;
 use Gatherling\Models\Player;
 use Gatherling\Views\Pages\Forgot;
 
-use function Gatherling\Views\get;
-use function Gatherling\Views\post;
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\get;
+use function Gatherling\Helpers\post;
+use function Gatherling\Helpers\server;
 
 include 'util/email.php';
 require_once 'lib.php';

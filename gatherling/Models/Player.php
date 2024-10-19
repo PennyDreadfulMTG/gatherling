@@ -10,7 +10,7 @@ use Gatherling\Exceptions\NotFoundException;
 use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\PlayerLink;
 
-use function Gatherling\Views\session;
+use function Gatherling\Helpers\session;
 
 class Player
 {
@@ -114,7 +114,7 @@ class Player
             return false;
         }
         $username = self::sanitizeUsername($username);
-        $srvpass = DB::value('SELECT password FROM players WHERE name = :name', ['name' => $username], true);
+        $srvpass = DB::optionalString('SELECT password FROM players WHERE name = :name', ['name' => $username]);
         if ($srvpass === null) {
             return false;
         }

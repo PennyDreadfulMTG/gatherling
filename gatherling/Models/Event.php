@@ -15,11 +15,11 @@ class Event
     public ?int $id;
 
     public ?int $season;
-    public ?int $number;
-    public ?string $format;
+    public ?int $number = null;
+    public ?string $format = null;
 
     public ?string $start;
-    public ?int $kvalue;
+    public ?int $kvalue = null;
     public ?int $active;
     public ?int $finalized;
     public ?int $prereg_allowed;
@@ -32,7 +32,7 @@ class Event
     public ?int $player_editdecks;
 
     // Class associations
-    public ?string $series; // belongs to Series
+    public ?string $series = null; // belongs to Series
     public ?string $host; // has one Player - host
     public ?string $cohost; // has one Player - cohost
 
@@ -58,7 +58,7 @@ class Event
     public ?int $hastrophy;
     private ?bool $new = null;
 
-    public function __construct(int|string $name)
+    public function __construct(int|string $name = '')
     {
         if ($name == '') {
             $this->id = 0;
@@ -92,58 +92,28 @@ class Event
             return;
         }
 
-        $db = Database::getConnection();
-
         if (!$this->new) {
-            $sql = 'SELECT id, name, format, host, cohost, series, season, number,
-                           start, kvalue, finalized, prereg_allowed, threadurl,
-                           metaurl, reporturl, active, current_round, player_reportable, player_editdecks,
-                           prereg_cap, private_decks, private_finals, player_reported_draws, late_entry_limit, `private`, client FROM events WHERE ';
+            $sql = '
+                SELECT
+                    id, name, format, host, cohost, series, season, number,
+                    start, kvalue, finalized, prereg_allowed, threadurl,
+                    metaurl, reporturl, active, current_round, player_reportable, player_editdecks,
+                    prereg_cap, private_decks, private_finals, player_reported_draws, late_entry_limit,
+                    `private`, client
+                FROM
+                    events
+                WHERE ';
             if (is_numeric($name)) {
-                $sql .= 'id = ?';
-                $pt = 'd';
+                $sql .= 'id = :id';
+                $params = ['id' => $name];
             } else {
-                $sql .= 'name = ?';
-                $pt = 's';
+                $sql .= 'name = :name';
+                $params = ['name' => $name];
             }
-            $stmt = $db->prepare($sql);
-            if (!$stmt) {
-                exit($db->error);
+            $event = DB::selectOnly($sql, EventDto::class, $params);
+            foreach (get_object_vars($event) as $property => $value) {
+                $this->$property = $value;
             }
-            $stmt->bind_param($pt, $name);
-            $stmt->execute();
-            $stmt->bind_result(
-                $this->id,
-                $this->name,
-                $this->format,
-                $this->host,
-                $this->cohost,
-                $this->series,
-                $this->season,
-                $this->number,
-                $this->start,
-                $this->kvalue,
-                $this->finalized,
-                $this->prereg_allowed,
-                $this->threadurl,
-                $this->metaurl,
-                $this->reporturl,
-                $this->active,
-                $this->current_round,
-                $this->player_reportable,
-                $this->player_editdecks,
-                $this->prereg_cap,
-                $this->private_decks,
-                $this->private_finals,
-                $this->player_reported_draws,
-                $this->late_entry_limit,
-                $this->private,
-                $this->client
-            );
-            if ($stmt->fetch() == null) {
-                throw new Exception('Event ' . $name . ' not found in DB');
-            }
-            $stmt->close();
         }
 
         $this->standing = new Standings($this->name, '0');
@@ -152,33 +122,32 @@ class Event
         $this->mainid = null;
         $this->mainrounds = '';
         $this->mainstruct = '';
-        $stmt = $db->prepare('SELECT id, rounds, type FROM subevents
-      WHERE parent = ? AND timing = 1');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->bind_result($this->mainid, $this->mainrounds, $this->mainstruct);
-        $stmt->fetch();
-        $stmt->close();
+        $sql = 'SELECT id AS mainid, rounds, type FROM subevents WHERE parent = :parent AND timing = 1';
+        $params = ['parent' => $this->name];
+        $subevent = DB::selectOnlyOrNull($sql, EventSubeventDto::class, $params);
+        if ($subevent) {
+            $this->mainid = $subevent->mainid;
+            $this->mainrounds = $subevent->rounds;
+            $this->mainstruct = $subevent->type;
+        }
 
         // Final rounds
         $this->finalid = null;
         $this->finalrounds = '';
         $this->finalstruct = '';
-        $stmt = $db->prepare('SELECT id, rounds, type FROM subevents
-      WHERE parent = ? AND timing = 2');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->bind_result($this->finalid, $this->finalrounds, $this->finalstruct);
-        $stmt->fetch();
-        $stmt->close();
+        $sql = 'SELECT id AS mainid, rounds, type FROM subevents WHERE parent = :parent AND timing = 2';
+        $params = ['parent' => $this->name];
+        $subevent = DB::selectOnlyOrNull($sql, EventSubeventDto::class, $params);
+        if ($subevent) {
+            $this->finalid = $subevent->mainid;
+            $this->finalrounds = $subevent->rounds;
+            $this->finalstruct = $subevent->type;
+        }
 
         // Trophy count
-        $stmt = $db->prepare('SELECT COUNT(*) as cnt FROM trophies WHERE event = ?');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->bind_result($this->hastrophy);
-        $stmt->fetch();
-        $stmt->close();
+        $sql = 'SELECT COUNT(*) AS cnt FROM trophies WHERE event = :event';
+        $params = ['event' => $this->name];
+        $this->hastrophy = DB::int($sql, $params);
 
         $this->new = false;
     }
@@ -273,8 +242,6 @@ class Event
 
     public function save(): void
     {
-        $db = Database::getConnection();
-
         if ($this->cohost == '') {
             $this->cohost = null;
         }
@@ -286,85 +253,89 @@ class Event
         }
 
         if ($this->new) {
-            $stmt = $db->prepare('INSERT INTO events(name, start, format, host, cohost, kvalue,
-                                               number, season, series, threadurl, reporturl,
-                                               metaurl, prereg_allowed, finalized, player_reportable,
-                                               prereg_cap, player_editdecks, private_decks, private_finals, player_reported_draws, late_entry_limit, `private`, client)
-                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-            $stmt->bind_param(
-                'sssssdddssssdddddddddd',
-                $this->name,
-                $this->start,
-                $this->format,
-                $this->host,
-                $this->cohost,
-                $this->kvalue,
-                $this->number,
-                $this->season,
-                $this->series,
-                $this->threadurl,
-                $this->reporturl,
-                $this->metaurl,
-                $this->prereg_allowed,
-                $this->player_reportable,
-                $this->prereg_cap,
-                $this->player_editdecks,
-                $this->private_decks,
-                $this->private_finals,
-                $this->player_reported_draws,
-                $this->late_entry_limit,
-                $this->private,
-                $this->client
-            );
-            if (!$stmt->execute()) {
-                throw new Exception($stmt->error, 1);
+            if (!$this->series) {
+                throw new \Exception("Series is required for a new event");
             }
-            $stmt->close();
+            $sql = '
+                INSERT INTO
+                    events
+                    (name, start, format, host, cohost, kvalue, number, season, series, threadurl, reporturl,
+                    metaurl, prereg_allowed, finalized, player_reportable, prereg_cap, player_editdecks,
+                    private_decks, private_finals, player_reported_draws, late_entry_limit, `private`, client)
+                VALUES
+                    (:name, :start, :format, :host, :cohost, :kvalue, :number, :season, :series, :threadurl, :reporturl,
+                    :metaurl, :prereg_allowed, 0, :player_reportable, :prereg_cap, :player_editdecks,
+                    :private_decks, :private_finals, :player_reported_draws, :late_entry_limit, :private, :client)';
+            $params = [
+                'name' => $this->name,
+                'start' => $this->start,
+                'format' => $this->format,
+                'host' => $this->host,
+                'cohost' => $this->cohost,
+                'kvalue' => $this->kvalue,
+                'number' => $this->number,
+                'season' => $this->season,
+                'series' => $this->series,
+                'threadurl' => $this->threadurl,
+                'reporturl' => $this->reporturl,
+                'metaurl' => $this->metaurl,
+                'prereg_allowed' => $this->prereg_allowed,
+                'player_reportable' => $this->player_reportable,
+                'prereg_cap' => $this->prereg_cap,
+                'player_editdecks' => $this->player_editdecks,
+                'private_decks' => $this->private_decks,
+                'private_finals' => $this->private_finals,
+                'player_reported_draws' => $this->player_reported_draws,
+                'late_entry_limit' => $this->late_entry_limit,
+                'private' => $this->private,
+                'client' => $this->client,
+            ];
+            DB::execute($sql, $params);
 
             $this->newSubevent((int) $this->mainrounds, 1, $this->mainstruct);
             $this->newSubevent((int) $this->finalrounds, 2, $this->finalstruct);
         } else {
-            $stmt = $db->prepare('UPDATE events SET
-      start = ?, format = ?, host = ?, cohost = ?, kvalue = ?,
-      number = ?, season = ?, series = ?, threadurl = ?, reporturl = ?,
-      metaurl = ?, finalized = ?, prereg_allowed = ?, active = ?,
-      current_round = ?, player_reportable = ?, prereg_cap = ?,
-      player_editdecks = ?, private_decks = ?, private_finals = ?, player_reported_draws = ?, late_entry_limit = ?, `private` = ?, client = ?
-      WHERE name = ?');
-            $stmt or exit($db->error);
-            $stmt->bind_param(
-                'ssssdddssssddddddddddddds',
-                $this->start,
-                $this->format,
-                $this->host,
-                $this->cohost,
-                $this->kvalue,
-                $this->number,
-                $this->season,
-                $this->series,
-                $this->threadurl,
-                $this->reporturl,
-                $this->metaurl,
-                $this->finalized,
-                $this->prereg_allowed,
-                $this->active,
-                $this->current_round,
-                $this->player_reportable,
-                $this->prereg_cap,
-                $this->player_editdecks,
-                $this->private_decks,
-                $this->private_finals,
-                $this->player_reported_draws,
-                $this->late_entry_limit,
-                $this->private,
-                $this->client,
-                $this->name
-            );
-
-            if (!$stmt->execute()) {
-                throw new Exception($stmt->error, 1);
-            }
-            $stmt->close();
+            $sql = '
+                UPDATE
+                    events
+                SET
+                    start = :start, format = :format, host = :host, cohost = :cohost, kvalue = :kvalue,
+                    number = :number, season = :season, series = :series, threadurl = :threadurl, reporturl = :reporturl,
+                    metaurl = :metaurl, finalized = :finalized, prereg_allowed = :prereg_allowed, active = :active,
+                    current_round = :current_round, player_reportable = :player_reportable, prereg_cap = :prereg_cap,
+                    player_editdecks = :player_editdecks, private_decks = :private_decks, private_finals = :private_finals,
+                    player_reported_draws = :player_reported_draws, late_entry_limit = :late_entry_limit,
+                    `private` = :private, client = :client
+                WHERE
+                    name = :name';
+            $params = [
+                'start' => $this->start,
+                'format' => $this->format,
+                'host' => $this->host,
+                'cohost' => $this->cohost,
+                'kvalue' => $this->kvalue,
+                'number' => $this->number,
+                'season' => $this->season,
+                'series' => $this->series,
+                'threadurl' => $this->threadurl,
+                'reporturl' => $this->reporturl,
+                'metaurl' => $this->metaurl,
+                'finalized' => $this->finalized,
+                'prereg_allowed' => $this->prereg_allowed,
+                'active' => $this->active,
+                'current_round' => $this->current_round,
+                'player_reportable' => $this->player_reportable,
+                'prereg_cap' => $this->prereg_cap,
+                'player_editdecks' => $this->player_editdecks,
+                'private_decks' => $this->private_decks,
+                'private_finals' => $this->private_finals,
+                'player_reported_draws' => $this->player_reported_draws,
+                'late_entry_limit' => $this->late_entry_limit,
+                'private' => $this->private,
+                'client' => $this->client,
+                'name' => $this->name,
+            ];
+            DB::execute($sql, $params);
 
             if ($this->mainid == null) {
                 $this->newSubevent($this->mainrounds, 1, $this->mainstruct);
@@ -388,41 +359,51 @@ class Event
 
     private function newSubevent(int $rounds, int $timing, string $type): void
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('INSERT INTO subevents(parent, rounds, timing, type)
-      VALUES(?, ?, ?, ?)');
-        $stmt->bind_param('sdds', $this->name, $rounds, $timing, $type);
-        $stmt->execute();
-        $stmt->close();
+        $sql = '
+            INSERT INTO
+                subevents
+                (parent, rounds, timing, type)
+            VALUES
+                (:name, :rounds, :timing, :type)';
+        $params = [
+            'name' => $this->name,
+            'rounds' => $rounds,
+            'timing' => $timing,
+            'type' => $type,
+        ];
+        DB::execute($sql, $params);
     }
 
     public function getPlaceDeck(string $placing = '1st'): ?Deck
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT n.deck from entries n, events e
-      WHERE n.event_id = e.id AND n.medal = ? AND e.name = ?');
-        $stmt->bind_param('ss', $placing, $this->name);
-        $stmt->execute();
-        $stmt->bind_result($deckid);
-        $result = $stmt->fetch();
-        $stmt->close();
-        if ($result == null) {
-            $deck = null;
-        } else {
-            $deck = new Deck($deckid);
+        $sql = '
+            SELECT
+                n.deck
+            FROM
+                entries n, events e
+            WHERE
+                n.event_id = e.id AND n.medal = :medal AND e.name = :name';
+        $params = ['medal' => $placing, 'name' => $this->name];
+        $deckId = DB::optionalInt($sql, $params);
+        if (!$deckId) {
+            return null;
         }
-
-        return $deck;
+        return new Deck($deckId);
     }
 
     public function getPlacePlayer(string $placing = '1st'): ?string
     {
-        $playername = Database::dbQuerySingle('SELECT n.player from entries n, events e
-                                             WHERE n.event_id = e.id
-                                             AND n.medal = ?
-                                             AND e.name = ?', 'ss', $placing, $this->name);
-
-        return $playername;
+        $sql = '
+            SELECT
+                n.player
+            FROM
+                entries n, events e
+            WHERE
+                n.event_id = e.id
+                AND n.medal = :medal
+                AND e.name = :name';
+        $params = ['medal' => $placing, 'name' => $this->name];
+        return DB::optionalString($sql, $params);
     }
 
     public function decklistsVisible(): bool
@@ -443,25 +424,21 @@ class Event
         return $decks;
     }
 
-    /** @return array<array{medal: string, player: string, deck: Deck}> */
+    /** @return list<array{medal: string, player: string, deck: ?int}> */
     public function getFinalists(): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare("SELECT medal, player, deck FROM entries
-      WHERE event_id = ? AND medal != 'dot' ORDER BY medal, player");
-        $stmt->bind_param('s', $this->id);
-        $stmt->execute();
-        $stmt->bind_result($medal, $player, $deck);
-
-        $finalists = [];
-        while ($stmt->fetch()) {
-            $finalists[] = ['medal'       => $medal,
-                'player'                  => $player,
-                'deck'                    => $deck, ];
-        }
-        $stmt->close();
-
-        return $finalists;
+        $sql = "
+            SELECT
+               medal, player, deck
+            FROM
+                entries
+            WHERE
+                event_id = :event_id AND medal != 'dot'
+            ORDER BY
+                medal, player";
+        $params = ['event_id' => $this->id];
+        $finalists = DB::select($sql, FinalistDto::class, $params);
+        return array_map(fn (FinalistDto $finalist) => (array) $finalist, $finalists);
     }
 
     /**
@@ -470,37 +447,25 @@ class Event
      */
     public function setFinalists(string $win, ?string $sec, ?array $t4 = null, ?array $t8 = null): void
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare("UPDATE entries SET medal = 'dot' WHERE event_id = ?");
-        $stmt->bind_param('d', $this->id);
-        $stmt->execute();
-        $stmt->close();
-        $stmt = $db->prepare('UPDATE entries SET medal = ? WHERE event_id = ? AND player = ?');
-        $medal = '1st';
-        $stmt->bind_param('sds', $medal, $this->id, $win);
-        $stmt->execute();
-        $medal = '2nd';
-        $stmt->bind_param('sds', $medal, $this->id, $sec);
-        $stmt->execute();
+        DB::begin('set_finalists');
+        $sql = "UPDATE entries SET medal = 'dot' WHERE event_id = :event_id";
+        DB::execute($sql, ['event_id' => $this->id]);
+        $sql = 'UPDATE entries SET medal = :medal WHERE event_id = :event_id AND player = :player';
+        DB::execute($sql, ['medal' => '1st', 'event_id' => $this->id, 'player' => $win]);
+        DB::execute($sql, ['medal' => '2nd', 'event_id' => $this->id, 'player' => $sec]);
         if (!is_null($t4)) {
             $medal = 't4';
-            $stmt->bind_param('sds', $medal, $this->id, $t4[0]);
-            $stmt->execute();
-            $stmt->bind_param('sds', $medal, $this->id, $t4[1]);
-            $stmt->execute();
+            DB::execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t4[0]]);
+            DB::execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t4[1]]);
         }
         if (!is_null($t8)) {
             $medal = 't8';
-            $stmt->bind_param('sds', $medal, $this->id, $t8[0]);
-            $stmt->execute();
-            $stmt->bind_param('sds', $medal, $this->id, $t8[1]);
-            $stmt->execute();
-            $stmt->bind_param('sds', $medal, $this->id, $t8[2]);
-            $stmt->execute();
-            $stmt->bind_param('sds', $medal, $this->id, $t8[3]);
-            $stmt->execute();
+            DB::execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[0]]);
+            DB::execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[1]]);
+            DB::execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[2]]);
+            DB::execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[3]]);
         }
-        $stmt->close();
+        DB::commit('set_finalists');
     }
 
     public function getTrophyImageLink(): string
@@ -564,7 +529,8 @@ class Event
     /** @return list<string> */
     public function getPlayers(): array
     {
-        return Database::listResultSingleParam('SELECT player FROM entries WHERE event_id = ? ORDER BY medal, player', 'd', $this->id);
+        $sql = 'SELECT player FROM entries WHERE event_id = :event_id ORDER BY medal, player';
+        return DB::strings($sql, ['event_id' => $this->id]);
     }
 
     /** @return list<string> */
@@ -723,15 +689,13 @@ class Event
         $added = false;
         if (is_null($entry)) {
             $player = Player::findOrCreateByName($playername);
-            $db = Database::getConnection();
-            $stmt = $db->prepare('INSERT INTO entries(event_id, player, registered_at) VALUES(?, ?, NOW())');
-            $stmt->bind_param('ds', $this->id, $player->name);
-            if (!$stmt->execute()) {
-                print_r($stmt->error);
-
-                return false;
-            }
-            $stmt->close();
+            $sql = '
+                INSERT INTO entries
+                    (event_id, player, registered_at)
+                VALUES
+                    (:event_id, :player, NOW())';
+            $params = ['event_id' => $this->id, 'player' => $player->name];
+            DB::execute($sql, $params);
             //For late registration. Check to see if event is active, if so, create entry for player in standings
             if ($this->active == 1) {
                 $standing = new Standings($this->name, $playername);
@@ -815,7 +779,7 @@ class Event
             $params = ['name' => $this->name, 'timing' => $subevnum, 'round' => $roundnum];
         }
 
-        $mids = DB::values($sql, 'int', $params);
+        $mids = DB::ints($sql, $params);
 
         $matches = [];
         foreach ($mids as $mid) {
@@ -860,14 +824,21 @@ class Event
             $id = $this->finalid;
             $round = $round - $this->mainrounds;
         }
-        $db = Database::getConnection();
-        $stmt = $db->prepare('INSERT INTO matches(playera, playerb, round, subevent, result, verification) VALUES(?, ?, ?, ?, ?, ?)');
-        $stmt->bind_param('ssddss', $playera->player, $playerb->player, $round, $id, $result, $verification);
-        $stmt->execute();
-        $newmatch = (int) $stmt->insert_id;
-        $stmt->close();
-
-        return $newmatch;
+        $sql = '
+            INSERT INTO
+                matches
+                (playera, playerb, round, subevent, result, verification)
+            VALUES
+                (:playera, :playerb, :round, :subevent, :result, :verification)';
+        $params = [
+            'playera' => $playera->player,
+            'playerb' => $playerb->player,
+            'round' => $round,
+            'subevent' => $id,
+            'result' => $result,
+            'verification' => $verification,
+        ];
+        return DB::insert($sql, $params);
     }
 
     public function addMatch(Standings $playera, Standings $playerb, string $round = '99', string $result = 'P', string $playera_wins = '0', string $playerb_wins = '0'): void
@@ -1172,7 +1143,7 @@ class Event
     // All this should probably go somewhere else
     // Pairs the round which is currently running.
     // This should probably be in Standings?
-    public function pairCurrentRound(bool $skip_invalid = false): bool
+    public function pairCurrentRound(bool $skip_invalid = false): void
     {
         //Check if all matches in the current round are finished
         if (count($this->unfinishedMatches()) === 0) {
@@ -1190,9 +1161,10 @@ class Event
                     $round = 'main';
                 }
 
-                $lock_db = Database::getLock((string) $subevent_id);
+                $lock_db = DB::getLock((string) $subevent_id);
                 if ($lock_db !== 1) {
-                    return false;
+                    // Someone else is already pairing the round. Ignore.
+                    return;
                 }
 
                 // Run matching function
@@ -1213,7 +1185,7 @@ class Event
                         break;
                 }
 
-                Database::releaseLock((string) $subevent_id);
+                DB::releaseLock((string) $subevent_id);
             } else {
                 $this->active = 0;
                 $this->finalized = 1;
@@ -1225,8 +1197,6 @@ class Event
             $this->current_round++;
             $this->save();
         }
-
-        return true;
     }
 
     // Pairs the current swiss round by using the Blossom method
@@ -1240,55 +1210,59 @@ class Event
         }
         $this->assignInitialByes($active_entries, $this->current_round + 1);
 
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT player, byes, score FROM standings WHERE event = ? AND active = 1 AND matched = 0 ORDER BY RAND()');
-        $stmt or exit($db->error);
-        $stmt->bind_param('s', $this->name);
-        if (!$stmt->execute()) {
-            throw new Exception($stmt->error, 1);
-        }
-        $resultSet = $stmt->get_result();
-        $active_players = $resultSet->fetch_all(MYSQLI_ASSOC);
-        $stmt->close();
+        $sql = '
+            SELECT
+                player,
+                COALESCE(byes, 0) AS byes,
+                COALESCE(score, 0) AS score
+            FROM
+                standings
+            WHERE
+                event = :event  AND active = 1 AND matched = 0
+            ORDER BY
+                RAND()';
+        $activePlayersInfo = DB::select($sql, PairingPlayerDto::class, ['event' => $this->name]);
+        $activePlayers = [];
 
-        if (count($active_players) > 0) {
-            $bye_data = [];
-            if (count($active_players) % 2 != 0) {
+        if (count($activePlayersInfo) > 0) {
+            $bye_data = null;
+            if (count($activePlayersInfo) % 2 != 0) {
                 $bye_data = ['player' => $this->getByeProxyName(), 'score' =>  0, 'opponents' => [], 'paired' => false];
             }
 
-            for ($i = 0; $i < count($active_players); $i++) {
-                $list_opponents = $this->getActiveOpponents($active_players[$i]['player'], $subevent_id);
+            for ($i = 0; $i < count($activePlayersInfo); $i++) {
+                $activePlayers[] = (array) $activePlayersInfo[$i];
+                $list_opponents = $this->getActiveOpponents($activePlayersInfo[$i]->player, $subevent_id);
 
-                $standing = new Standings($this->name, $active_players[$i]['player']);
+                $standing = new Standings($this->name, $activePlayersInfo[$i]->player);
 
-                if (count($bye_data) > 0 && $standing->byes > 0 && count($list_opponents) < (count($active_players) - 1)) {
+                if ($bye_data && $standing->byes > 0 && count($list_opponents) < (count($activePlayersInfo) - 1)) {
                     //This player hasn't played against the remaining active players
                     //So they aren't allowed to get another bye this round
-                    $bye_data['opponents'][] = $active_players[$i]['player'];
+                    $bye_data['opponents'][] = $activePlayersInfo[$i]->player;
                     $list_opponents[] = $bye_data['player'];
                 }
 
-                $active_players[$i]['opponents'] = $list_opponents;
-                $active_players[$i]['paired'] = false;
+                $activePlayers[$i]['opponents'] = $list_opponents;
+                $activePlayers[$i]['paired'] = false;
             }
 
-            $pairings = new Pairings($active_players, $bye_data);
+            $pairings = new Pairings($activePlayers, $bye_data);
             $pairing = $pairings->pairing;
-            if (count($bye_data) > 0) {
-                array_push($active_players, $bye_data);
+            if ($bye_data) {
+                array_push($activePlayers, $bye_data);
             }
             for ($i = 0; $i < count($pairing); $i++) {
-                if ($active_players[$i] != null && !$active_players[$i]['paired']) {
-                    $player1 = new Standings($this->name, $active_players[$i]['player']);
-                    if (count($bye_data) > 0 && $active_players[$pairing[$i]]['player'] == $bye_data['player']) {
+                if ($activePlayers[$i] != null && !$activePlayers[$i]['paired']) {
+                    $player1 = new Standings($this->name, $activePlayers[$i]['player']);
+                    if ($bye_data && $activePlayers[$pairing[$i]]['player'] == $bye_data['player']) {
                         $this->awardBye($player1);
-                    } elseif ($active_players[$pairing[$i]] == null || $active_players[$pairing[$i]]['player'] == null) {
+                    } elseif ($activePlayers[$pairing[$i]] == null || $activePlayers[$pairing[$i]]['player'] == null) {
                         //In a very rare case where a player has played against all remaining players
                         //and the number of active players is even, hence no bye allowed initially
                         $this->awardBye($player1);
                     } else {
-                        $player2 = new Standings($this->name, $active_players[$pairing[$i]]['player']);
+                        $player2 = new Standings($this->name, $activePlayers[$pairing[$i]]['player']);
                         $this->addPairing($player1, $player2, $this->current_round + 1, 'P');
                         $player2->matched = 1;
                         $player2->save();
@@ -1296,8 +1270,8 @@ class Event
 
                     $player1->matched = 1;
                     $player1->save();
-                    $active_players[$i]['paired'] = true;
-                    $active_players[$pairing[$i]]['paired'] = true;
+                    $activePlayers[$i]['paired'] = true;
+                    $activePlayers[$pairing[$i]]['paired'] = true;
                 }
             }
         }
@@ -1824,7 +1798,6 @@ class Event
     {
         $entries = $this->getRegisteredEntries($precheck);
         Standings::startEvent($entries, $this->name);
-        // $this->dropInvalidEntries();
         $this->pairCurrentRound($precheck);
         $this->active = 1;
         $this->save();

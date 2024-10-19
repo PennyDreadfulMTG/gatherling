@@ -21,29 +21,30 @@ class MissingTrophies extends Component
 
         $now = time();
         foreach ($recentEvents as $event) {
-            if (!$event->hastrophy) {
-                $finalists = $event->getFinalists();
-                $winningPlayer = $winningDeck = null;
-                $hasWinner = false;
-                foreach ($finalists as $finalist) {
-                    if ($finalist['medal'] == '1st') {
-                        $winningPlayer = $finalist['player'];
-                        $winningDeck = new Deck($finalist['deck']);
-                        $hasWinner = true;
-                    }
-                }
-                $eventStartTime = $event->start ? strtotime($event->start) : null;
-                $startTime = $eventStartTime ? new Time($eventStartTime, $now) : null;
-                $this->eventsMissingTrophies[] = [
-                    'hasWinner' => $hasWinner,
-                    'eventName' => $event->name ?? '',
-                    'eventLink' => 'event.php?name=' . rawurlencode($event->name ?? ''),
-                    'startTime' => $startTime,
-                    'playerLink' => 'profile.php?player=' . rawurlencode($winningPlayer ?? ''),
-                    'playerName' => $winningPlayer ?? '',
-                    'deckLink' => $winningDeck ? new DeckLink($winningDeck) : null,
-                ];
+            if ($event->hastrophy) {
+                continue;
             }
+            $finalists = $event->getFinalists();
+            $winningPlayer = $winningDeck = null;
+            $hasWinner = false;
+            foreach ($finalists as $finalist) {
+                if ($finalist['medal'] == '1st') {
+                    $winningPlayer = $finalist['player'];
+                    $winningDeck = new Deck($finalist['deck']);
+                    $hasWinner = true;
+                }
+            }
+            $eventStartTime = $event->start ? strtotime($event->start) : null;
+            $startTime = $eventStartTime ? new Time($eventStartTime, $now) : null;
+            $this->eventsMissingTrophies[] = [
+                'hasWinner' => $hasWinner,
+                'eventName' => $event->name ?? '',
+                'eventLink' => 'event.php?name=' . rawurlencode($event->name ?? ''),
+                'startTime' => $startTime,
+                'playerLink' => 'profile.php?player=' . rawurlencode($winningPlayer ?? ''),
+                'playerName' => $winningPlayer ?? '',
+                'deckLink' => $winningDeck ? new DeckLink($winningDeck) : null,
+            ];
         }
     }
 }

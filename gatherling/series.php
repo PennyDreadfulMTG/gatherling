@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Gatherling\Models\Series as SeriesModel;
 use Gatherling\Views\Pages\Series;
 
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 

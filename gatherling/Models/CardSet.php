@@ -185,7 +185,7 @@ class CardSet
     public static function getMissingSets(string $cardSetType, Format $format): array
     {
         $sql = 'SELECT name FROM cardsets WHERE type = :type';
-        $cardSets = DB::values($sql, 'string', ['type' => $cardSetType]);
+        $cardSets = DB::strings($sql, ['type' => $cardSetType]);
 
         $finalList = [];
         foreach ($cardSets as $cardSetName) {

@@ -8,8 +8,8 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 
-use function Gatherling\Views\get;
-use function Gatherling\Views\request;
+use function Gatherling\Helpers\get;
+use function Gatherling\Helpers\request;
 
 require_once 'lib.php';
 require_once 'api_lib.php';

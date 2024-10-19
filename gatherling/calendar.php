@@ -6,7 +6,7 @@ use Gatherling\Data\DB;
 use Gatherling\Models\CalendarEventDto;
 use Gatherling\Views\ICal;
 
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 

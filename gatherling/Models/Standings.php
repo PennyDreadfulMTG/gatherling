@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
+use Gatherling\Data\DB;
 use InvalidArgumentException;
-use Gatherling\Views\TemplateHelper;
-use Gatherling\Views\Components\GameName;
-use Gatherling\Views\Components\EventStandings;
 
 class Standings
 {
     public int $id;
-    public ?string $event;  // belongs_to event
-    public ?string $player; // belongs_to player
+    public ?string $event = null;  // belongs_to event
+    public ?string $player = null; // belongs_to player
     public ?int $active;
     public ?int $score;
     public ?int $matches_played;
@@ -38,25 +36,32 @@ class Standings
 
             return;
         } else {
-            $db = Database::getConnection();
-            $stmt = $db->prepare('SELECT active, matches_played, games_won, games_played, byes, OP_Match, PL_Game, OP_Game, score, seed, matched, matches_won, draws FROM standings WHERE event = ? AND player = ? limit 1');
-            $stmt or exit($db->error);
-            $stmt->bind_param('ss', $eventname, $playername);
-            $stmt->execute();
-            $stmt->bind_result($this->active, $this->matches_played, $this->games_won, $this->games_played, $this->byes, $this->OP_Match, $this->PL_Game, $this->OP_Game, $this->score, $this->seed, $this->matched, $this->matches_won, $this->draws);
+            $sql = '
+                SELECT
+                    active, matches_played, games_won, games_played, byes, OP_Match, PL_Game, OP_Game,
+                    score, seed, matched, matches_won, draws
+                FROM
+                    standings
+                WHERE
+                    event = :event AND player = :player
+                LIMIT 1';
+            $params = ['event' => $eventname, 'player' => $playername];
+            $standings = DB::selectOnlyOrNull($sql, StandingsDto::class, $params);
             $this->player = $playername;
             $this->event = $eventname;
-            if ($stmt->fetch() == null) { // No entry in standings table,
+            if (!$standings) {
                 $this->new = true;
                 $this->seed = $initial_seed;
+                return;
             }
-            $stmt->close();
+            foreach (get_object_vars($standings) as $key => $value) {
+                $this->$key = $value;
+            }
         }
     }
 
     public function save(): void
     {
-        $db = Database::getConnection();
         if (
             !is_null($this->player) && trim($this->player) != ''
             && !is_null($this->event) && trim($this->event) != ''
@@ -75,22 +80,61 @@ class Standings
                 $this->matched = 0;
                 $this->draws = 0;
 
-                $stmt = $db->prepare('INSERT INTO standings(player, event, active,
-            matches_played, draws, games_won, games_played, byes, OP_Match, PL_Game,
-            OP_Game, score, seed, matched)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-                $stmt->bind_param('ssdddddddddddd', $this->player, $this->event, $this->active, $this->matches_played, $this->draws, $this->games_won, $this->games_played, $this->byes, $this->OP_Match, $this->PL_Game, $this->OP_Game, $this->score, $this->seed, $this->matched);
-                $stmt->execute() or exit($stmt->error);
-                $stmt->close();
+                $sql = '
+                    INSERT INTO
+                        standings
+                        (player, event, active, matches_played, draws, games_won, games_played, matches_won, byes, OP_Match, PL_Game,
+                        OP_Game, score, seed, matched)
+                    VALUES
+                        (:player, :event, :active, :matches_played, :draws, :games_won, :games_played, :matches_won, :byes, :OP_Match, :PL_Game,
+                        :OP_Game, :score, :seed, :matched)';
+                $params = [
+                    'player' => $this->player,
+                    'event' => $this->event,
+                    'active' => $this->active,
+                    'matches_played' => $this->matches_played,
+                    'draws' => $this->draws,
+                    'games_won' => $this->games_won,
+                    'games_played' => $this->games_played,
+                    'matches_won' => $this->matches_won,
+                    'byes' => $this->byes,
+                    'OP_Match' => $this->OP_Match,
+                    'PL_Game' => $this->PL_Game,
+                    'OP_Game' => $this->OP_Game,
+                    'score' => $this->score,
+                    'seed' => $this->seed,
+                    'matched' => $this->matched,
+                ];
+                DB::execute($sql, $params);
             } else {
-                $stmt = $db->prepare('UPDATE standings SET
-                                    player = ?, event = ?, active = ?, matches_played = ?, games_won = ?,
-                                    games_played = ?, byes = ?, OP_Match = ?, PL_Game = ?, OP_Game = ?,
-                                    score = ?, seed = ?, matched = ?, matches_won = ?, draws = ? WHERE player = ? AND event = ?');
-                $stmt or exit($db->error);
-                $stmt->bind_param('ssdddddddddddddss', $this->player, $this->event, $this->active, $this->matches_played, $this->games_won, $this->games_played, $this->byes, $this->OP_Match, $this->PL_Game, $this->OP_Game, $this->score, $this->seed, $this->matched, $this->matches_won, $this->draws, $this->player, $this->event);
-                $stmt->execute() or exit($stmt->error);
-                $stmt->close();
+                $sql = '
+                    UPDATE
+                        standings
+                    SET
+                        player = :player, event = :event, active = :active, matches_played = :matches_played,
+                        games_won = :games_won, games_played = :games_played, byes = :byes, OP_Match = :OP_Match,
+                        PL_Game = :PL_Game, OP_Game = :OP_Game, score = :score, seed = :seed, matched = :matched,
+                        matches_won = :matches_won, draws = :draws
+                    WHERE
+                        player = :player AND event = :event';
+                $params = [
+                    'player' => $this->player,
+                    'event' => $this->event,
+                    'active' => $this->active,
+                    'matches_played' => $this->matches_played,
+                    'games_won' => $this->games_won,
+                    'games_played' => $this->games_played,
+                    'byes' => $this->byes,
+                    'OP_Match' => $this->OP_Match,
+                    'PL_Game' => $this->PL_Game,
+                    'OP_Game' => $this->OP_Game,
+                    'score' => $this->score,
+                    'seed' => $this->seed,
+                    'matched' => $this->matched,
+                    'matches_won' => $this->matches_won,
+                    'draws' => $this->draws,
+                ];
+                DB::execute($sql, $params);
             }
         }
     }
@@ -316,11 +360,7 @@ class Standings
 
     public static function resetMatched(string $eventname): void
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('UPDATE standings SET matched = 0 WHERE event = ?');
-        $stmt or exit($db->error);
-        $stmt->bind_param('s', $eventname);
-        $stmt->execute() or exit($stmt->error);
-        $stmt->close();
+        $sql = 'UPDATE standings SET matched = 0 WHERE event = :event';
+        DB::execute($sql, ['event' => $eventname]);
     }
 }

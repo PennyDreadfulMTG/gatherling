@@ -1253,24 +1253,21 @@ class Format
 
     public function isQuantityLegalAgainstMain(string $sideCard, int $sideAmt, string $mainCard, int $mainAmt): bool
     {
-        if ($sideCard == $mainCard) {
-            if (($sideAmt + $mainAmt) <= 4) {
-                return true;
-            }
-
-            if ($sideCard == 'Seven Dwarves' && $sideAmt + $mainAmt <= 7) {
-                return true;
-            }
-
-            if ($this->isCardBasic($sideCard)) {
-                return true;
-            }
-        } else {
-            return true; // mainCard and sideCard don't match so is automatically legal
-            // individual quantity check has already been done. We are only
-            // interested in finding too many of the same card between the side and main
+        // mainCard and sideCard don't match so is automatically legal
+        // individual quantity check has already been done. We are only
+        // interested in finding too many of the same card between the side and main
+        if ($sideCard != $mainCard) {
+            return true;
         }
-
+        if (($sideAmt + $mainAmt) <= 4) {
+            return true;
+        }
+        if ($sideCard == 'Seven Dwarves' && $sideAmt + $mainAmt <= 7) {
+            return true;
+        }
+        if ($this->isCardBasic($sideCard)) {
+            return true;
+        }
         return false;
     }
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Gatherling\Views;
+namespace Gatherling\Helpers;
 
 function request(): Request
 {
@@ -33,4 +33,9 @@ function config(): Request
 {
     global $CONFIG;
     return new Request($CONFIG);
+}
+
+function marshal(mixed $value): Marshaller
+{
+    return new Marshaller($value);
 }

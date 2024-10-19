@@ -275,17 +275,4 @@ class Database
         return $result;
     }
 
-    public static function getLock(string $name = 'lock_db', int $timeout = 0): int
-    {
-        $sql = "SELECT GET_LOCK('{$name}',{$timeout})";
-
-        return self::singleResult($sql);
-    }
-
-    public static function releaseLock(string $name = 'lock_db'): int
-    {
-        $sql = "SELECT RELEASE_LOCK('{$name}')";
-
-        return self::singleResult($sql);
-    }
 }

@@ -18,10 +18,10 @@ use Gatherling\Views\Components\NoDeckSpecified;
 use Gatherling\Views\Components\NullComponent;
 use Gatherling\Views\Pages\Deck as DeckPage;
 
-use function Gatherling\Views\get;
-use function Gatherling\Views\post;
-use function Gatherling\Views\server;
-use function Gatherling\Views\request;
+use function Gatherling\Helpers\get;
+use function Gatherling\Helpers\post;
+use function Gatherling\Helpers\server;
+use function Gatherling\Helpers\request;
 
 require_once 'lib.php';
 require_once 'lib_form_helper.php';

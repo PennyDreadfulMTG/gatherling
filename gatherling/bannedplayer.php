@@ -6,7 +6,7 @@ namespace Gatherling;
 
 use Gatherling\Views\Pages\BannedPlayer;
 
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 

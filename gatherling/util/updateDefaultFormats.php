@@ -9,7 +9,7 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Formats;
 use Gatherling\Exceptions\SetMissingException;
 
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\server;
 
 set_time_limit(0);
 

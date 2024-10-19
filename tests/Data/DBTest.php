@@ -15,10 +15,17 @@ class DBTest extends DatabaseCase
     {
         parent::setUp();
         DB::execute('DROP TABLE IF EXISTS test_table');
-        DB::execute('CREATE TABLE IF NOT EXISTS test_table (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255))');
+        $sql = '
+            CREATE TABLE IF NOT EXISTS
+                test_table
+                (id INT PRIMARY KEY AUTO_INCREMENT,
+                name VARCHAR(255),
+                value DECIMAL(4, 3),
+                is_active BOOLEAN)';
+        DB::execute($sql);
     }
 
-    public function testInsert(): void
+    public function testExecute(): void
     {
         $sql = 'INSERT INTO test_table (name) VALUES (:name)';
         $params = [':name' => 'Test Name'];
@@ -26,6 +33,60 @@ class DBTest extends DatabaseCase
         $rows = DB::select('SELECT name FROM test_table WHERE name = :name', TestDto::class, ['name' => 'Test Name']);
         $this->assertCount(1, $rows);
         $this->assertEquals('Test Name', $rows[0]->name);
+    }
+
+    public function testInsert(): void
+    {
+        $sql = 'INSERT INTO test_table (name) VALUES (:name)';
+        $params = [':name' => 'Test Insert'];
+        $id = DB::insert($sql, $params);
+        $this->assertGreaterThan(0, $id);
+
+        $row = DB::selectOnly('SELECT * FROM test_table WHERE id = :id', TestDto::class, ['id' => $id]);
+        $this->assertEquals('Test Insert', $row->name);
+    }
+
+    public function testInsertMany(): void
+    {
+        $sql = 'INSERT INTO test_table (name) VALUES (:name1), (:name2), (:name3)';
+        $params = [
+            ':name1' => 'Test Insert 1',
+            ':name2' => 'Test Insert 2',
+            ':name3' => 'Test Insert 3'
+        ];
+        $ids = DB::insertMany($sql, $params);
+
+        $this->assertCount(3, $ids);
+        foreach ($ids as $id) {
+            $this->assertGreaterThan(0, $id);
+            $params = ['id' => $id];
+            $rows = DB::select('SELECT * FROM test_table WHERE id = :id', TestDto::class, $params);
+            $this->assertCount(1, $rows);
+        }
+    }
+
+    public function testUpdate(): void
+    {
+        DB::execute("INSERT INTO test_table (name) VALUES ('Initial Name')");
+        $initialId = DB::int('SELECT LAST_INSERT_ID()');
+
+        $sql = 'UPDATE test_table SET name = :name WHERE id = :id';
+        $params = [':name' => 'Updated Name', ':id' => $initialId];
+        $affectedRows = DB::update($sql, $params);
+        $this->assertEquals(1, $affectedRows);
+
+        $updatedRow = DB::selectOnly('SELECT * FROM test_table WHERE id = :id', TestDto::class, ['id' => $initialId]);
+        $this->assertEquals('Updated Name', $updatedRow->name);
+
+        $nonExistentId = $initialId + 1;
+        $sql = 'UPDATE test_table SET name = :name WHERE id = :id';
+        $params = [':name' => 'This Should Not Update', ':id' => $nonExistentId];
+        $affectedRows = DB::update($sql, $params);
+        $this->assertEquals(0, $affectedRows);
+
+        $rows = DB::select('SELECT * FROM test_table', TestDto::class);
+        $this->assertCount(1, $rows);
+        $this->assertEquals('Updated Name', $rows[0]->name);
     }
 
     public function testSelect(): void
@@ -67,26 +128,102 @@ class DBTest extends DatabaseCase
         $this->expectException(DatabaseException::class);
         $row = DB::selectOnlyOrNull('SELECT * FROM test_table', TestDto::class);
     }
-
-    public function testValue(): void
+    public function testInt(): void
     {
-        DB::execute("INSERT INTO test_table (name) VALUES ('Test1')");
-        $value = DB::value('SELECT name FROM test_table WHERE id = 1');
-        $this->assertEquals('Test1', $value);
-        $value = DB::value('SELECT id FROM test_table WHERE id = 1');
-        $this->assertEquals(1, $value);
-        $value = DB::value('SELECT id FROM test_table WHERE id = 9999', [], true);
-        $this->assertNull($value);
+        DB::execute("INSERT INTO test_table (id, name) VALUES (1, 'Test1')");
+        $value = DB::int('SELECT id FROM test_table WHERE id = 1');
+        $this->assertSame(1, $value);
         $this->expectException(DatabaseException::class);
-        DB::value('SELECT id FROM test_table WHERE id = 9999');
+        DB::int('SELECT id FROM test_table WHERE id = 9999');
+    }
+
+    public function testOptionalInt(): void
+    {
+        DB::execute("INSERT INTO test_table (id, name) VALUES (1, 'Test1')");
+        $value = DB::optionalInt('SELECT id FROM test_table WHERE id = 1');
+        $this->assertSame(1, $value);
+        $value = DB::optionalInt('SELECT id FROM test_table WHERE id = 9999');
+        $this->assertNull($value);
+    }
+
+    public function testString(): void
+    {
+        DB::execute("INSERT INTO test_table (id, name) VALUES (1, 'Test1')");
+        $value = DB::string('SELECT name FROM test_table WHERE id = 1');
+        $this->assertSame('Test1', $value);
+        $this->expectException(DatabaseException::class);
+        DB::string('SELECT name FROM test_table WHERE id = 9999');
+    }
+
+    public function testOptionalString(): void
+    {
+        DB::execute("INSERT INTO test_table (id, name) VALUES (1, 'Test1')");
+        $value = DB::optionalString('SELECT name FROM test_table WHERE id = 1');
+        $this->assertSame('Test1', $value);
+        $value = DB::optionalString('SELECT name FROM test_table WHERE id = 9999');
+        $this->assertNull($value);
+    }
+
+    public function testFloat(): void
+    {
+        DB::execute("INSERT INTO test_table (id, value) VALUES (1, 3.14)");
+        $value = DB::float('SELECT value FROM test_table WHERE id = 1');
+        $this->assertSame(3.14, $value);
+        $this->expectException(DatabaseException::class);
+        DB::float('SELECT value FROM test_table WHERE id = 9999');
+    }
+
+    public function testOptionalFloat(): void
+    {
+        DB::execute("INSERT INTO test_table (id, value) VALUES (1, 3.14)");
+        $value = DB::optionalFloat('SELECT value FROM test_table WHERE id = 1');
+        $this->assertSame(3.14, $value);
+        $value = DB::optionalFloat('SELECT value FROM test_table WHERE id = 9999');
+        $this->assertNull($value);
+    }
+
+    public function testBool(): void
+    {
+        DB::execute("INSERT INTO test_table (id, is_active) VALUES (1, true)");
+        $value = DB::bool('SELECT is_active FROM test_table WHERE id = 1');
+        $this->assertSame(true, $value);
+        $this->expectException(DatabaseException::class);
+        DB::bool('SELECT is_active FROM test_table WHERE id = 9999');
+    }
+
+    public function testOptionalBool(): void
+    {
+        DB::execute("INSERT INTO test_table (id, is_active) VALUES (1, true)");
+        $value = DB::optionalBool('SELECT is_active FROM test_table WHERE id = 1');
+        $this->assertSame(true, $value);
+        $value = DB::optionalBool('SELECT is_active FROM test_table WHERE id = 9999');
+        $this->assertNull($value);
     }
 
     public function testValues(): void
     {
         DB::execute("INSERT INTO test_table (name) VALUES ('Test1')");
         DB::execute("INSERT INTO test_table (name) VALUES ('Test2')");
-        $values = DB::values('SELECT name FROM test_table', 'string');
+        $values = DB::strings('SELECT name FROM test_table');
         $this->assertEquals(['Test1', 'Test2'], $values);
+        $values = DB::ints('SELECT id FROM test_table');
+        $this->assertEquals([1, 2], $values);
+    }
+
+    public function testStringsThrowsOnInts(): void
+    {
+        DB::execute("INSERT INTO test_table (name) VALUES ('Test1')");
+        DB::execute("INSERT INTO test_table (name) VALUES ('Test2')");
+        $this->expectException(DatabaseException::class);
+        DB::strings('SELECT id FROM test_table');
+    }
+
+    public function testIntsThrowsOnStrings(): void
+    {
+        DB::execute("INSERT INTO test_table (name) VALUES ('Test1')");
+        DB::execute("INSERT INTO test_table (name) VALUES ('Test2')");
+        $this->expectException(DatabaseException::class);
+        DB::ints('SELECT name FROM test_table');
     }
 
     public function testCommit(): void

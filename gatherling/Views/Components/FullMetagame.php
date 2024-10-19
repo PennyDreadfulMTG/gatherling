@@ -12,7 +12,7 @@ use Gatherling\Models\Player;
 use Gatherling\Models\MetaDto;
 use Gatherling\Models\MetaColorsDto;
 
-use function Gatherling\Views\session;
+use function Gatherling\Helpers\session;
 
 class FullMetagame extends Component
 {

@@ -6,10 +6,10 @@ use Gatherling\Auth\LoginError;
 use Gatherling\Views\Pages\Login;
 use Gatherling\Auth\Login as LoginHelper;
 
-use function Gatherling\Views\post;
-use function Gatherling\Views\request;
-use function Gatherling\Views\server;
-use function Gatherling\Views\session;
+use function Gatherling\Helpers\post;
+use function Gatherling\Helpers\request;
+use function Gatherling\Helpers\server;
+use function Gatherling\Helpers\session;
 
 require_once 'lib.php';
 

@@ -6,11 +6,6 @@ parameters:
 			path: gatherling/Auth/Session.php
 
 		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/Auth/Session.php
-
-		-
 			message: "#^Parameter \\#2 \\$value of function setcookie expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/Auth/Session.php
@@ -91,16 +86,6 @@ parameters:
 			path: gatherling/Models/Database.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Database\\:\\:getLock\\(\\) should return int but returns mixed\\.$#"
-			count: 1
-			path: gatherling/Models/Database.php
-
-		-
-			message: "#^Method Gatherling\\\\Models\\\\Database\\:\\:releaseLock\\(\\) should return int but returns mixed\\.$#"
-			count: 1
-			path: gatherling/Models/Database.php
-
-		-
 			message: "#^Parameter \\#1 \\$query of method mysqli\\:\\:prepare\\(\\) expects string, mixed given\\.$#"
 			count: 2
 			path: gatherling/Models/Database.php
@@ -116,43 +101,33 @@ parameters:
 			path: gatherling/Models/Database.php
 
 		-
-			message: "#^Cannot access property \\$affected_rows on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Cannot access property \\$insert_id on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
 			message: "#^Cannot access property \\$num_rows on mysqli_stmt\\|false\\.$#"
 			count: 1
 			path: gatherling/Models/Deck.php
 
 		-
 			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 19
+			count: 1
 			path: gatherling/Models/Deck.php
 
 		-
 			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 11
+			count: 1
 			path: gatherling/Models/Deck.php
 
 		-
 			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 13
+			count: 2
 			path: gatherling/Models/Deck.php
 
 		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 20
+			count: 2
 			path: gatherling/Models/Deck.php
 
 		-
 			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 11
+			count: 1
 			path: gatherling/Models/Deck.php
 
 		-
@@ -171,52 +146,7 @@ parameters:
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Cannot cast mixed to int\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
 			message: "#^Method Gatherling\\\\Models\\\\Deck\\:\\:getArchetypes\\(\\) should return array\\<string\\> but returns array\\<int, mixed\\>\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Method Gatherling\\\\Models\\\\Deck\\:\\:getTribe\\(\\) should return string\\|null but returns mixed\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$card of method Gatherling\\\\Models\\\\Format\\:\\:isCardOnBanList\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$card of method Gatherling\\\\Models\\\\Format\\:\\:isCardOnLegalList\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$card of method Gatherling\\\\Models\\\\Format\\:\\:isCardOnRestrictedList\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$card of method Gatherling\\\\Models\\\\Format\\:\\:isCardSingletonLegal\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$card of method Gatherling\\\\Models\\\\Format\\:\\:isQuantityLegal\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$cardName of method Gatherling\\\\Models\\\\Format\\:\\:getLegalCard\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$cardName of method Gatherling\\\\Models\\\\Format\\:\\:isCardLegalByRarity\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Deck.php
 
@@ -246,17 +176,7 @@ parameters:
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Format constructor expects string, string\\|null given\\.$#"
-			count: 2
-			path: gatherling/Models/Deck.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$sideCard of method Gatherling\\\\Models\\\\Format\\:\\:isQuantityLegalAgainstMain\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Deck.php
 
@@ -278,21 +198,6 @@ parameters:
 		-
 			message: "#^Parameter \\#2 \\$string2 of function strcasecmp expects string, string\\|null given\\.$#"
 			count: 3
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Deck\\:\\:\\$format \\(string\\|null\\) does not accept mixed\\.$#"
-			count: 2
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Deck\\:\\:\\$maindeck_cards \\(array\\<string, int\\>\\) does not accept array\\<int\\|string, mixed\\>\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Deck\\:\\:\\$sideboard_cards \\(array\\<string, int\\>\\) does not accept array\\<int\\|string, mixed\\>\\.$#"
-			count: 1
 			path: gatherling/Models/Deck.php
 
 		-
@@ -341,43 +246,18 @@ parameters:
 			path: gatherling/Models/Decksearch.php
 
 		-
-			message: "#^Cannot access property \\$affected_rows on mysqli_stmt\\|false\\.$#"
-			count: 3
-			path: gatherling/Models/Entry.php
-
-		-
-			message: "#^Cannot access property \\$num_rows on mysqli_stmt\\|false\\.$#"
-			count: 2
-			path: gatherling/Models/Entry.php
-
-		-
 			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 8
-			path: gatherling/Models/Entry.php
-
-		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
 			count: 1
 			path: gatherling/Models/Entry.php
 
 		-
 			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 6
-			path: gatherling/Models/Entry.php
-
-		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 8
-			path: gatherling/Models/Entry.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
 			count: 1
 			path: gatherling/Models/Entry.php
 
 		-
-			message: "#^Cannot call method store_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 2
+			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
+			count: 1
 			path: gatherling/Models/Entry.php
 
 		-
@@ -436,48 +316,33 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Cannot access property \\$error on mysqli_stmt\\|false\\.$#"
-			count: 2
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Cannot access property \\$insert_id on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Cannot access property \\$num_rows on mysqli_stmt\\|false\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
 
 		-
 			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 39
+			count: 21
 			path: gatherling/Models/Event.php
 
 		-
 			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 17
+			count: 12
 			path: gatherling/Models/Event.php
 
 		-
 			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 32
+			count: 21
 			path: gatherling/Models/Event.php
 
 		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 39
+			count: 21
 			path: gatherling/Models/Event.php
 
 		-
 			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 17
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Cannot call method fetch_all\\(\\) on mysqli_result\\|false\\.$#"
-			count: 1
+			count: 12
 			path: gatherling/Models/Event.php
 
 		-
@@ -506,11 +371,6 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getPlacePlayer\\(\\) should return string\\|null but returns mixed\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getPlayerCount\\(\\) should return int but returns mixed\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
@@ -521,22 +381,7 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getPlayers\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:largestEventNum\\(\\) should return int but returns mixed\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Offset 'player' might not exist on array\\{player\\?\\: string, score\\?\\: 0, opponents\\: non\\-empty\\-list\\<mixed\\>, paired\\?\\: false\\}\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Offset 'player' might not exist on array\\{\\}\\|array\\{player\\?\\: string, score\\?\\: 0, opponents\\?\\: list\\<mixed\\>, paired\\?\\: false\\}\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
 
@@ -623,11 +468,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$win of method Gatherling\\\\Models\\\\Event\\:\\:setFinalists\\(\\) expects string, string\\|null given\\.$#"
 			count: 2
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Parameter \\#2 \\$bye_data of class Gatherling\\\\Models\\\\Pairings constructor expects array\\<string, array\\<int, string\\>\\|int\\|string\\>, array\\<string, array\\<int, mixed\\>\\|bool\\|int\\|string\\> given\\.$#"
-			count: 1
 			path: gatherling/Models/Event.php
 
 		-
@@ -911,36 +751,6 @@ parameters:
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Cannot access property \\$affected_rows on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Matchup.php
-
-		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 6
-			path: gatherling/Models/Matchup.php
-
-		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 4
-			path: gatherling/Models/Matchup.php
-
-		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 6
-			path: gatherling/Models/Matchup.php
-
-		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 6
-			path: gatherling/Models/Matchup.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 4
-			path: gatherling/Models/Matchup.php
-
-		-
 			message: "#^Method Gatherling\\\\Models\\\\Matchup\\:\\:count\\(\\) should return int but returns mixed\\.$#"
 			count: 1
 			path: gatherling/Models/Matchup.php
@@ -1021,22 +831,12 @@ parameters:
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Parameter \\#2 \\$haystack of function in_array expects array, array\\<int, string\\>\\|int\\|string given\\.$#"
-			count: 1
-			path: gatherling/Models/Pairings.php
-
-		-
 			message: "#^Parameter \\#2 \\$player1 of method Gatherling\\\\Models\\\\Pairings\\:\\:weight\\(\\) expects array\\{score\\: int, player\\: string, opponents\\: array\\<int, string\\>\\}, array\\<string, array\\<int, string\\>\\|int\\|string\\> given\\.$#"
 			count: 1
 			path: gatherling/Models/Pairings.php
 
 		-
 			message: "#^Parameter \\#3 \\$player2 of method Gatherling\\\\Models\\\\Pairings\\:\\:weight\\(\\) expects array\\{score\\: int, player\\: string, opponents\\: array\\<int, string\\>\\}, array\\<string, array\\<int, string\\>\\|int\\|string\\> given\\.$#"
-			count: 1
-			path: gatherling/Models/Pairings.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Pairings\\:\\:\\$byeName \\(string\\) does not accept array\\<int, string\\>\\|int\\|string\\.$#"
 			count: 1
 			path: gatherling/Models/Pairings.php
 
@@ -1121,11 +921,6 @@ parameters:
 			path: gatherling/Models/Player.php
 
 		-
-			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/Models/Player.php
-
-		-
 			message: "#^Parameter \\#2 \\$string2 of function strcasecmp expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Player.php
@@ -1196,43 +991,28 @@ parameters:
 			path: gatherling/Models/Series.php
 
 		-
-			message: "#^Cannot access property \\$error on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Series.php
-
-		-
-			message: "#^Cannot access property \\$num_rows on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Series.php
-
-		-
 			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 20
+			count: 10
 			path: gatherling/Models/Series.php
 
 		-
 			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 16
+			count: 12
 			path: gatherling/Models/Series.php
 
 		-
 			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 20
+			count: 10
 			path: gatherling/Models/Series.php
 
 		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 22
+			count: 12
 			path: gatherling/Models/Series.php
 
 		-
 			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 16
-			path: gatherling/Models/Series.php
-
-		-
-			message: "#^Cannot call method store_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 1
+			count: 12
 			path: gatherling/Models/Series.php
 
 		-
@@ -1316,13 +1096,8 @@ parameters:
 			path: gatherling/Models/SetScraper.php
 
 		-
-			message: "#^Cannot access property \\$error on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Standings.php
-
-		-
 			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 3
+			count: 2
 			path: gatherling/Models/Standings.php
 
 		-
@@ -1332,12 +1107,12 @@ parameters:
 
 		-
 			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 3
+			count: 2
 			path: gatherling/Models/Standings.php
 
 		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 3
+			count: 2
 			path: gatherling/Models/Standings.php
 
 		-
@@ -1359,36 +1134,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$initial_seed of class Gatherling\\\\Models\\\\Standings constructor expects int, int\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Standings.php
-
-		-
-			message: "#^Cannot access property \\$error on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Subevent.php
-
-		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 2
-			path: gatherling/Models/Subevent.php
-
-		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Subevent.php
-
-		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Subevent.php
-
-		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 2
-			path: gatherling/Models/Subevent.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Subevent.php
 
 		-
 			message: "#^Property Gatherling\\\\Views\\\\Components\\\\BAndR\\:\\:\\$activeFormatName \\(string\\) does not accept string\\|null\\.$#"
@@ -1694,11 +1439,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$string1 of function strcasecmp expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/MatchList.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\MedalList\\:\\:\\$finalists \\(list\\<array\\<string, mixed\\>\\>\\) does not accept array\\<array\\{medal\\: string, player\\: string, deck\\: Gatherling\\\\Models\\\\Deck\\}\\>\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/MedalList.php
 
 		-
 			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Standings\\:\\:playerActive\\(\\) expects string, string\\|null given\\.$#"
@@ -2289,16 +2029,6 @@ parameters:
 			message: "#^Property Gatherling\\\\Models\\\\Player\\:\\:\\$emailAddress \\(string\\|null\\) does not accept mixed\\.$#"
 			count: 1
 			path: gatherling/profile.php
-
-		-
-			message: "#^Function currentThrough\\(\\) should return array\\{date\\: DateTime, name\\: string\\} but returns array\\{date\\: DateTime, name\\: mixed\\}\\.$#"
-			count: 1
-			path: gatherling/ratings.php
-
-		-
-			message: "#^Parameter \\#1 \\$datetime of class DateTime constructor expects string, mixed given\\.$#"
-			count: 1
-			path: gatherling/ratings.php
 
 		-
 			message: "#^Parameter \\#1 \\$eventname of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"

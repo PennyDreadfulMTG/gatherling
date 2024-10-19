@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
+use Gatherling\Data\DB;
+use Gatherling\Exceptions\NotFoundException;
 
 class Subevent
 {
@@ -16,28 +18,31 @@ class Subevent
 
     public function __construct(int $id)
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT parent, rounds, timing, type
-      FROM subevents WHERE id = ?');
-        $stmt->bind_param('d', $id);
-        $stmt->execute();
-        $stmt->bind_result($this->parent, $this->rounds, $this->timing, $this->type);
-        if ($stmt->fetch()) {
-            $this->id = $id;
-        } else {
-            throw new Exception("Can't instantiate subevent with id $id");
+        $sql = 'SELECT parent, rounds, timing, type FROM subevents WHERE id = :id';
+        $params = ['id' => $id];
+        $subevent = DB::selectOnly($sql, SubeventDto::class, $params);
+        $this->id = $id;
+        foreach (get_object_vars($subevent) as $key => $value) {
+            $this->$key = $value;
         }
     }
 
     public function save(): void
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('UPDATE subevents SET parent = ?, rounds = ?,
-      timing = ?, type = ? WHERE id = ?');
-        $stmt->bind_param('sddss', $this->parent, $this->rounds, $this->timing, $this->type, $this->id);
-        if (!$stmt->execute()) {
-            throw new Exception($stmt->error, 1);
-        }
-        $stmt->close();
+        $sql = '
+            UPDATE
+                subevents
+            SET
+                parent = :parent, rounds = :rounds, timing = :timing, type = :type
+            WHERE
+                id = :id';
+        $params = [
+            'parent' => $this->parent,
+            'rounds' => $this->rounds,
+            'timing' => $this->timing,
+            'type' => $this->type,
+            'id' => $this->id,
+        ];
+        DB::execute($sql, $params);
     }
 }

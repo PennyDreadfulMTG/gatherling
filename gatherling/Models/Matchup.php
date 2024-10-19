@@ -43,45 +43,44 @@ class Matchup
 
     public ?string $verification;
 
-    public static function destroy(int $matchid): int
+    public static function destroy(int $matchid): void
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('DELETE FROM matches WHERE id = ?');
-        $stmt->bind_param('d', $matchid);
-        $stmt->execute();
-        $rows = (int) $stmt->affected_rows;
-        $stmt->close();
-
-        return $rows;
+        $sql = 'DELETE FROM matches WHERE id = :id';
+        DB::execute($sql, ['id' => $matchid]);
     }
 
     public function __construct(int $id)
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT m.subevent, m.round, m.playera, m.playerb, m.result, m.playera_wins, m.playera_losses, m.playera_draws, m.playerb_wins, m.playerb_losses, m.playerb_draws, s.timing, s.type, s.rounds, e.format, e.series, e.season, m.verification, e.name, e.id
-      FROM matches m, subevents s, events e
-      WHERE m.id = ? AND m.subevent = s.id AND e.name = s.parent');
-        $stmt->bind_param('d', $id);
-        $stmt->execute();
-        $stmt->bind_result($this->subevent, $this->round, $this->playera, $this->playerb, $this->result, $this->playera_wins, $this->playera_losses, $this->playera_draws, $this->playerb_wins, $this->playerb_losses, $this->playerb_draws, $this->timing, $this->type, $this->rounds, $this->format, $this->series, $this->season, $this->verification, $this->eventname, $this->event_id);
-        $stmt->fetch();
-        $stmt->close();
+        $sql = '
+            SELECT
+                m.subevent, m.round, m.playera, m.playerb, m.result, m.playera_wins, m.playera_losses,
+                m.playera_draws, m.playerb_wins, m.playerb_losses, m.playerb_draws, s.timing, s.type,
+                s.rounds, e.format, e.series, e.season, m.verification, e.name, e.id AS event_id
+            FROM
+                matches m, subevents s, events e
+            WHERE
+                m.id = :id AND m.subevent = s.id AND e.name = s.parent';
+        $row = DB::selectOnlyOrNull($sql, MatchupDto::class, ['id' => $id]);
+        if ($row === null) {
+            return;
+        }
+        foreach (get_object_vars($row) as $key => $value) {
+            $this->{$key} = $value;
+        }
         $this->id = $id;
     }
 
     // Retuns the event that this Match is a part of.
     public function getEvent(): Event
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT s.parent
-                          FROM subevents s, matches m
-                          WHERE m.id = ? AND m.subevent = s.id');
-        $stmt->bind_param('d', $this->id);
-        $stmt->execute();
-        $stmt->bind_result($eventname);
-        $stmt->fetch();
-        $stmt->close();
-
+        $sql = '
+            SELECT
+                s.parent
+            FROM
+                subevents s, matches m
+            WHERE
+                m.id = :id AND m.subevent = s.id';
+        $eventname = DB::string($sql, ['id' => $this->id]);
         return new Event($eventname);
     }
 
@@ -382,15 +381,14 @@ class Matchup
 
     public static function unresolvedMatchesCheck(int $subevent, int $current_round): int
     {
-        $db = @Database::getConnection();
-        $stmt = $db->prepare("SELECT count(id) FROM matches where subevent = ? AND verification != 'verified' AND round = ?");
-        $stmt->bind_param('sd', $subevent, $current_round);
-        $stmt->execute();
-        $stmt->bind_result($result);
-        $stmt->fetch();
-        $stmt->close();
-
-        return $result;
+        $sql = "
+            SELECT
+                COUNT(id)
+            FROM
+                matches
+            WHERE
+                subevent = :subevent AND verification != 'verified' AND round = :round";
+        return DB::int($sql, ['subevent' => $subevent, 'round' => $current_round]);
     }
 
     // Goes through all matches in this round and updates the "Standing" objects with new scores.
@@ -530,11 +528,8 @@ class Matchup
 
     public function finalizeMatch(string $winner, int $match_id): void
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('UPDATE matches SET result = ? WHERE id = ?');
-        $stmt->bind_param('sd', $winner, $match_id);
-        $stmt->execute();
-        $stmt->close();
+        $sql = 'UPDATE matches SET result = :winner WHERE id = :id';
+        DB::execute($sql, ['winner' => $winner, 'id' => $match_id]);
     }
 
     public function playerReportableCheck(): bool
@@ -545,20 +540,14 @@ class Matchup
 
     public function getEventNamebyMatchid(): string
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT e.name
-                              FROM matches m, subevents s, events e
-                              WHERE m.id = ?
-                              AND m.subevent = s.id
-                              AND e.name = s.parent');
-
-        $stmt->bind_param('d', $this->id);
-        $stmt->execute();
-        $stmt->bind_result($name);
-        $stmt->fetch();
-        $stmt->close();
-
-        return $name;
+        $sql = '
+            SELECT
+                e.name
+            FROM
+                matches m, subevents s, events e
+            WHERE
+                m.id = :id AND m.subevent = s.id AND e.name = s.parent';
+        return DB::string($sql, ['id' => $this->id]);
     }
 
     public function isDraw(): bool

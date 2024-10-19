@@ -6,7 +6,7 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 
-use function Gatherling\Views\get;
+use function Gatherling\Helpers\get;
 
 require_once 'lib.php';
 $prevent_registration = 0;

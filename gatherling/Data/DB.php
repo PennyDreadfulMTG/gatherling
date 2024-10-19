@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Gatherling\Data;
 
+use PDO;
+use TypeError;
+use PDOException;
+use PDOStatement;
 use Gatherling\Log;
+use Gatherling\Models\Dto;
+use function Gatherling\Helpers\marshal;
+use Gatherling\Exceptions\MarshalException;
+
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\ConfigurationException;
-use Gatherling\Models\Dto;
-use PDO;
-use PDOException;
 
 class DB
 {
@@ -70,7 +75,6 @@ class DB
         $dbName = self::quoteIdentifier($rawName);
         self::executeInternal("DROP DATABASE IF EXISTS $dbName", [], function ($sql, $params) {
             $stmt = self::connect(false)->pdo->prepare($sql);
-
             return $stmt->execute($params);
         }, false);
     }
@@ -81,6 +85,43 @@ class DB
         self::executeInternal($sql, $params, function ($sql, $params) {
             $stmt = self::connect()->pdo->prepare($sql);
             $stmt->execute($params);
+        });
+    }
+    /** @param array<string, mixed> $params */
+    public static function insert(string $sql, array $params = []): int
+    {
+        $ids = self::insertMany($sql, $params);
+        if (count($ids) !== 1) {
+            throw new DatabaseException("Expected 1 id, got " . count($ids) . " for query: $sql with params " . json_encode($params));
+        }
+        return $ids[0];
+    }
+
+    /**
+     * @param array<string, mixed> $params
+     * @return list<int>
+     */
+    public static function insertMany(string $sql, array $params = []): array
+    {
+        $sql = $sql . ' RETURNING id';
+        /** @var list<int> */
+        return self::executeInternal($sql, $params, function ($sql, $params) {
+            $stmt = self::connect()->pdo->prepare($sql);
+            $stmt->execute($params);
+            /** @var list<int> */
+            $insertedIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            return array_map(fn (mixed $id) => intval($id), $insertedIds);
+        });
+    }
+
+    /** @param array<string, mixed> $params */
+    public static function update(string $sql, array $params = []): int
+    {
+        /** @var int */
+        return self::executeInternal($sql, $params, function ($sql, $params) {
+            $stmt = self::connect()->pdo->prepare($sql);
+            $stmt->execute($params);
+            return $stmt->rowCount();
         });
     }
 
@@ -95,15 +136,13 @@ class DB
         /** @var list<T> */
         return self::executeInternal($sql, $params, function ($sql, $params) use ($class) {
             $stmt = self::connect()->pdo->prepare($sql);
-            foreach ($params as $key => $value) {
-                if (is_int($value)) {
-                    $stmt->bindValue(':' . $key, $value, PDO::PARAM_INT);
-                } else {
-                    $stmt->bindValue(':' . $key, $value);
-                }
-            }
+            self::bindParams($stmt, $params);
             $stmt->execute();
-            $rows = $stmt->fetchAll(PDO::FETCH_CLASS, $class);
+            try {
+                $rows = $stmt->fetchAll(PDO::FETCH_CLASS, $class);
+            } catch (TypeError $e) {
+                throw new DatabaseException("Failed to fetch class $class for query: $sql with params " . json_encode($params), 0, $e);
+            }
             return $rows;
         });
     }
@@ -118,7 +157,7 @@ class DB
     {
         $result = self::select($sql, $class, $params);
         if (count($result) !== 1) {
-            throw new DatabaseException('Expected 1 row, got ' . count($result) . " for query: $sql");
+            throw new DatabaseException('Expected 1 row, got ' . count($result) . " for query: $sql with params " . json_encode($params));
         }
         return $result[0];
     }
@@ -133,44 +172,142 @@ class DB
     {
         $result = self::select($sql, $class, $params);
         if (count($result) > 1) {
-            throw new DatabaseException('Expected 1 row, got ' . count($result) . " for query: $sql");
+            throw new DatabaseException('Expected 1 row, got ' . count($result) . " for query: $sql with params " . json_encode($params));
         }
         return $result[0] ?? null;
     }
 
-    /**
-     * @param array<string, mixed> $params
-     */
-    public static function value(string $sql, array $params = [], bool $missingOk = false): mixed
+    /** @param array<string, mixed> $params */
+    public static function int(string $sql, array $params = []): int
     {
-        return self::executeInternal($sql, $params, function ($sql, $params) use ($missingOk) {
-            $stmt = self::connect()->pdo->prepare($sql);
-            $stmt->execute($params);
-            $result = $stmt->fetch(PDO::FETCH_NUM);
-            if ($result === false && !$missingOk) {
-                throw new DatabaseException("Failed to fetch value for $sql");
-            }
-            if ($result === false) {
-                return null;
-            }
-            if (!is_array($result)) {
-                throw new DatabaseException("Failed to fetch array for $sql, was " . gettype($result));
-            }
-            return $result[0] ?? null;
-        });
+        try {
+            return marshal(self::value($sql, $params))->int();
+        } catch (MarshalException $e) {
+            throw new DatabaseException("Expected int value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /** @param array<string, mixed> $params */
+    public static function optionalInt(string $sql, array $params = []): ?int
+    {
+        try {
+            return marshal(self::value($sql, $params))->optionalInt();
+        } catch (MarshalException $e) {
+            throw new DatabaseException("Expected int value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /** @param array<string, mixed> $params */
+    public static function string(string $sql, array $params = []): string
+    {
+        try {
+            return marshal(self::value($sql, $params))->string();
+        } catch (MarshalException $e) {
+            throw new DatabaseException("Expected string value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /** @param array<string, mixed> $params */
+    public static function optionalString(string $sql, array $params = []): ?string
+    {
+        try {
+            return marshal(self::value($sql, $params))->optionalString();
+        } catch (MarshalException $e) {
+            throw new DatabaseException("Expected string value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /** @param array<string, mixed> $params */
+    public static function float(string $sql, array $params = []): float
+    {
+        try {
+            $v = marshal(self::value($sql, $params))->float();
+        } catch (MarshalException $e) {
+            throw new DatabaseException("Expected float value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+        }
+        return $v;
+    }
+
+    /** @param array<string, mixed> $params */
+    public static function optionalFloat(string $sql, array $params = []): ?float
+    {
+        try {
+            return marshal(self::value($sql, $params))->optionalFloat();
+        } catch (MarshalException $e) {
+            throw new DatabaseException("Expected float value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /** @param array<string, mixed> $params */
+    public static function bool(string $sql, array $params = []): bool
+    {
+        $v = self::optionalInt($sql, $params);
+        if ($v === null) {
+            throw new DatabaseException("Expected non-null bool value for query: $sql with params " . json_encode($params));
+        }
+        return (bool) $v;
+    }
+
+    /** @param array<string, mixed> $params */
+    public static function optionalBool(string $sql, array $params = []): ?bool
+    {
+        $v = self::optionalInt($sql, $params);
+        if ($v === null) {
+            return null;
+        }
+        return (bool) $v;
+    }
+
+    /** @param array<string, mixed> $params */
+    private static function value(string $sql, array $params = []): mixed
+    {
+        $values = self::values($sql, $params);
+        if (count($values) > 1) {
+            throw new DatabaseException("Expected 1 value, got " . count($values) . " for query: $sql with params " . json_encode($params));
+        }
+        if (count($values) === 0) {
+            return null;
+        }
+        return $values[0];
     }
 
     /**
      * @param array<string, mixed> $params
-     * @param 'bool'|'int'|'float'|'string' $_type
-     * @return list<($_type is 'bool'? bool : ($_type is 'int' ? int : ($_type is 'float' ? float : string)))>
+     * @return list<string>
      */
-    public static function values(string $sql, string $_type, array $params = []): array
+    public static function strings(string $sql, array $params = []): array
     {
-        /** @var list<($_type is 'bool'? bool : ($_type is 'int' ? int : ($_type is 'float' ? float : string)))> */
+        try {
+            return marshal(self::values($sql, $params))->strings();
+        } catch (MarshalException $e) {
+            throw new DatabaseException("Expected strings value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $params
+     * @return list<int>
+     */
+    public static function ints(string $sql, array $params = []): array
+    {
+        try {
+            return marshal(self::values($sql, $params))->ints();
+        } catch (MarshalException $e) {
+            throw new DatabaseException("Expected ints value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $params
+     * @return list<mixed>
+     */
+    private static function values(string $sql, array $params = []): array
+    {
+        /** @var list<mixed> */
         return self::executeInternal($sql, $params, function ($sql, $params) {
             $stmt = self::connect()->pdo->prepare($sql);
-            $stmt->execute($params);
+            self::bindParams($stmt, $params);
+            $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_NUM);
             return array_column($result, 0);
         });
@@ -183,6 +320,8 @@ class DB
         $isOuterTransaction = !self::connect()->transactions;
         self::connect()->transactions[] = $name;
         if ($isOuterTransaction) {
+            // Is there a more PDO-ish way to do tranactions that is less string-y?
+            // Like this in mysqli - $db->autocommit(false);
             self::execute('SET autocommit=0');
             self::execute('BEGIN');
         } else {
@@ -235,6 +374,30 @@ class DB
         array_pop(self::connect()->transactions);
     }
 
+    public static function getLock(string $name = 'lock_db', int $timeout = 0): int
+    {
+        $sql = 'SELECT GET_LOCK(:name, :timeout)';
+        return self::int($sql, ['name' => $name, 'timeout' => $timeout]);
+    }
+
+    public static function releaseLock(string $name = 'lock_db'): void
+    {
+        $sql = 'SELECT RELEASE_LOCK(:name)';
+        self::execute($sql, ['name' => $name]);
+    }
+
+    /** @param array<string, mixed> $params */
+    private static function bindParams(PDOStatement $stmt, array $params): void
+    {
+        foreach ($params as $key => $value) {
+            if (is_int($value)) {
+                $stmt->bindValue(':' . $key, $value, PDO::PARAM_INT);
+            } else {
+                $stmt->bindValue(':' . $key, $value);
+            }
+        }
+    }
+
     /**
      * @param array<string, mixed> $params
      */
@@ -261,7 +424,7 @@ class DB
                 $stmt = self::connect($connectToDatabase)->pdo->prepare($sql);
                 return $stmt->execute($params);
             }
-            $msg = "Failed to execute query: $sql";
+            $msg = "Failed to execute query: $sql with params " . json_encode($params);
             Log::error($msg, $context);
 
             throw new DatabaseException($msg, 0, $e);

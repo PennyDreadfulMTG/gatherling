@@ -6,7 +6,7 @@ namespace Gatherling\Views;
 
 use Gatherling\Log;
 
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\server;
 
 class LoginRedirect extends Redirect
 {
