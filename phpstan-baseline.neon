@@ -11,11 +11,6 @@ parameters:
 			path: gatherling/Auth/Session.php
 
 		-
-			message: "#^Parameter \\#2 \\$params of static method Gatherling\\\\Data\\\\DB\\:\\:executeInternal\\(\\) expects array\\<string, mixed\\>, mixed given\\.$#"
-			count: 1
-			path: gatherling/Data/DB.php
-
-		-
 			message: "#^Cannot access offset 'code' on array\\|false\\|null\\.$#"
 			count: 1
 			path: gatherling/Models/CardSet.php
@@ -712,27 +707,27 @@ parameters:
 
 		-
 			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 42
+			count: 38
 			path: gatherling/Models/Player.php
 
 		-
 			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 34
+			count: 33
 			path: gatherling/Models/Player.php
 
 		-
 			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 40
+			count: 36
 			path: gatherling/Models/Player.php
 
 		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 41
+			count: 37
 			path: gatherling/Models/Player.php
 
 		-
 			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 34
+			count: 33
 			path: gatherling/Models/Player.php
 
 		-
@@ -1497,11 +1492,6 @@ parameters:
 
 		-
 			message: "#^Function card_catalog\\(\\) should return list\\<string\\> but returns list\\<float\\|int\\|string\\|null\\>\\.$#"
-			count: 1
-			path: gatherling/api_lib.php
-
-		-
-			message: "#^Function cardname_from_id\\(\\) should return string but returns mixed\\.$#"
 			count: 1
 			path: gatherling/api_lib.php
 
