@@ -414,14 +414,10 @@ class Event
     /** @return list<Deck> */
     public function getDecks(): array
     {
-        $decks = [];
-        $deckids = Database::listResultSingleParam('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
-
-        foreach ($deckids as $deckid) {
-            $decks[] = new Deck($deckid);
-        }
-
-        return $decks;
+        $sql = 'SELECT deck FROM entries WHERE event_id = :event_id AND deck IS NOT NULL';
+        $params = ['event_id' => $this->id];
+        $deckIds = DB::ints($sql, $params);
+        return array_map(fn (int $deckid) => new Deck($deckid), $deckIds);
     }
 
     /** @return list<array{medal: string, player: string, deck: ?int}> */
@@ -592,27 +588,17 @@ class Event
     /** @return list<string> */
     public function getEntriesByDateTime(): array
     {
-        return Database::listResultSingleParam(
-            'SELECT player
-                                                 FROM entries
-                                                 WHERE event_id = ?
-                                                 AND deck ORDER BY DATE(`registered_at`) ASC',
-            'd',
-            $this->id
-        );
+        $sql = 'SELECT player FROM entries WHERE event_id = :event_id AND deck ORDER BY DATE(`registered_at`) ASC';
+        $params = ['event_id' => $this->id];
+        return DB::strings($sql, $params);
     }
 
     /** @return list<string> */
     public function getEntriesByMedal(): array
     {
-        return Database::listResultSingleParam(
-            'SELECT player
-                                             FROM entries
-                                             WHERE event_id = ?
-                                             AND deck ORDER BY medal, player ',
-            'd',
-            $this->id
-        );
+        $sql = 'SELECT player FROM entries WHERE event_id = :event_id AND deck ORDER BY medal, player';
+        $params = ['event_id' => $this->id];
+        return DB::strings($sql, $params);
     }
 
     /** @return list<Entry> */
@@ -1798,17 +1784,15 @@ class Event
 
     public function updateDecksFormat(string $format): void
     {
-        $deckIDs = Database::listResultSingleParam('SELECT deck FROM entries WHERE event_id = ? AND deck IS NOT NULL', 'd', $this->id);
-
-        if (count($deckIDs)) {
-            $db = Database::getConnection();
-            foreach ($deckIDs as $deckID) {
-                $stmt = $db->prepare('UPDATE decks SET format = ? WHERE id = ?');
-                $stmt->bind_param('ss', $format, $deckID);
-                $stmt->execute();
-                $stmt->close();
-            }
-        }
+        $sql = '
+            UPDATE
+                decks
+            SET
+                format = :format
+            WHERE
+                id IN (SELECT deck FROM entries WHERE event_id = :event_id AND deck IS NOT NULL)
+        ';
+        DB::execute($sql, ['format' => $format, 'event_id' => $this->id]);
     }
 
     public function startEvent(bool $precheck): void

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
+use Gatherling\Data\DB;
+
 class Decksearch
 {
     /**
@@ -102,8 +104,9 @@ class Decksearch
      */
     public function searchByFormat(string $format): void
     {
-        $sql = 'SELECT id FROM decks WHERE format = ?';
-        $results = Database::listResultSingleParam($sql, 's', $format);
+        $sql = 'SELECT id FROM decks WHERE format = :format';
+        $params = ['format' => $format];
+        $results = DB::ints($sql, $params);
         if (count($results) > 0) {
             $this->results['format'] = $results;
         } else {
@@ -118,8 +121,9 @@ class Decksearch
      */
     public function searchByPlayer(string $player): void
     {
-        $sql = 'SELECT id FROM decks WHERE playername LIKE ?';
-        $results = Database::listResultSingleParam($sql, 's', '%' . $player . '%');
+        $sql = 'SELECT id FROM decks WHERE playername LIKE :playername';
+        $params = ['playername' => '%' . DB::likeEscape($player) . '%'];
+        $results = DB::ints($sql, $params);
         if (count($results) > 0) {
             $this->results['player'] = $results;
         } else {
@@ -136,13 +140,19 @@ class Decksearch
      */
     public function searchByMedals(string $medal): void
     {
-        $sql = 'SELECT decks.id
-        FROM decks INNER JOIN entries
-        ON decks.id = entries.deck
-        WHERE entries.medal = ?
-        ORDER BY DATE(`created_date`) DESC';
-
-        $results = Database::listResultSingleParam($sql, 's', $medal);
+        $sql = '
+            SELECT
+                decks.id
+            FROM
+                decks
+            INNER JOIN
+                entries ON decks.id = entries.deck
+            WHERE
+                entries.medal = :medal
+            ORDER BY
+                DATE(`created_date`) DESC';
+        $params = ['medal' => $medal];
+        $results = DB::ints($sql, $params);
         if (count($results) > 0) {
             $this->results['medal'] = $results;
         } else {
@@ -167,8 +177,9 @@ class Decksearch
             $final_color_str .= $value;
         }
 
-        $sql = 'SELECT id FROM decks WHERE deck_colors = ?';
-        $results = Database::listResultSingleParam($sql, 's', $final_color_str);
+        $sql = 'SELECT id FROM decks WHERE deck_colors = :deck_colors';
+        $params = ['deck_colors' => $final_color_str];
+        $results = DB::ints($sql, $params);
         if (count($results) > 0) {
             $this->results['color'] = $results;
         } else {
@@ -183,8 +194,9 @@ class Decksearch
      */
     public function searchByArchetype(string $archetype): void
     {
-        $sql = 'SELECT id FROM decks WHERE archetype = ?';
-        $results = Database::listResultSingleParam($sql, 's', $archetype);
+        $sql = 'SELECT id FROM decks WHERE archetype = :archetype';
+        $params = ['archetype' => $archetype];
+        $results = DB::ints($sql, $params);
         if (count($results) > 0) {
             $this->results['archetype'] = $results;
         } else {
@@ -199,13 +211,16 @@ class Decksearch
      */
     public function searchBySeries(string $series): void
     {
-        $sql = 'SELECT entries.deck
-        FROM entries INNER JOIN events
-        ON entries.event_id = events.id
-        WHERE events.series = ?
-        AND entries.deck ORDER BY DATE(`registered_at`) DESC';
-
-        $results = Database::listResultSingleParam($sql, 's', $series);
+        $sql = '
+            SELECT
+                entries.deck
+            FROM
+                entries
+            INNER JOIN events ON entries.event_id = events.id
+            WHERE events.series = :series
+            ORDER BY DATE(`registered_at`) DESC';
+        $params = ['series' => $series];
+        $results = DB::ints($sql, $params);
         if (count($results) > 0) {
             $this->results['series'] = $results;
         } else {
@@ -220,21 +235,25 @@ class Decksearch
      */
     public function searchByCardName(string $cardname): void
     {
-        if (strlen($cardname) >= 3) {
-            $sql = 'SELECT deckcontents.deck
-            FROM deckcontents INNER JOIN cards
-            on deckcontents.card = cards.id
-            WHERE cards.name LIKE ?';
-            $results = Database::listResultSingleParam($sql, 's', "%$cardname%");
-            if (count($results) > 0) {
-                //Remove Duplicate decks
-                $results = array_unique($results);
-                $this->results['cardname'] = $results;
-            } else {
-                $this->errors[] = "<center><br>No decks found with the card name like: <font color=red>$cardname</font></center>";
-            }
-        } else {
+        if (strlen($cardname) < 3) {
             $this->errors[] = '<center><br>String length is too short must be <font color=red>3</font> characters or greater</center>';
+            return;
+        }
+        $sql = '
+            SELECT
+                DISTINCT deckcontents.deck
+            FROM
+                deckcontents
+            INNER JOIN
+                cards ON deckcontents.card = cards.id
+            WHERE
+                cards.name LIKE :cardname';
+        $params = ['cardname' => '%' . DB::likeEscape($cardname) . '%'];
+        $results = DB::ints($sql, $params);
+        if (count($results) > 0) {
+            $this->results['cardname'] = $results;
+        } else {
+            $this->errors[] = "<center><br>No decks found with the card name like: <font color=red>$cardname</font></center>";
         }
     }
 
