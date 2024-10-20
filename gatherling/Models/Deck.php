@@ -146,7 +146,7 @@ class Deck
                     entries.deck = :id';
             $this->format = DB::optionalString($sql, ['id' => $id]);
             $sql = 'SELECT MIN(id) FROM subevents WHERE parent = :eventname';
-            $this->subeventid = DB::int($sql, ['eventname' => $this->eventname]);
+            $this->subeventid = DB::optionalInt($sql, ['eventname' => $this->eventname]);
         } else {
             $this->format = '';
             $this->subeventid = null;
