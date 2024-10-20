@@ -12,7 +12,7 @@ class Registration
     public const ERROR_PLAYER_EXISTS = -3;
     public const ERROR_PASSWORD_MISMATCH = -1;
 
-    public static function register(string $username, string $pw1, string $pw2, string $email, int $emailStatus, ?float $timezone, ?string $discordId, ?string $discordName): int
+    public static function register(string $username, string $pw1, string $pw2, string $email, int $emailStatus, float $timezone, ?string $discordId, ?string $discordName): int
     {
         $player = Player::findOrCreateByName(trim($username));
         if (!is_null($player->password)) {
