@@ -125,7 +125,6 @@
       <code><![CDATA[getHostedEvents]]></code>
       <code><![CDATA[getIPAddresss]]></code>
       <code><![CDATA[saveIPAddress]]></code>
-      <code><![CDATA[setIgnoreEvent]]></code>
     </PossiblyUnusedMethod>
   </file>
   <file src="gatherling/Models/Ratings.php">
@@ -319,12 +318,6 @@
     </InvalidGlobal>
     <UnusedVariable>
       <code><![CDATA[$provider]]></code>
-    </UnusedVariable>
-  </file>
-  <file src="tests/Data/DBTest.php">
-    <UnusedVariable>
-      <code><![CDATA[$row]]></code>
-      <code><![CDATA[$row]]></code>
     </UnusedVariable>
   </file>
   <file src="tests/Models/DeckTest.php">
