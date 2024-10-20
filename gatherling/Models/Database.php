@@ -110,25 +110,6 @@ class Database
     /**
      * @return list<mixed>
      */
-    public static function listResult(string $sql): array
-    {
-        $db = self::getConnection();
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
-        $stmt->bind_result($result);
-
-        $list = [];
-        while ($stmt->fetch()) {
-            $list[] = $result;
-        }
-        $stmt->close();
-
-        return $list;
-    }
-
-    /**
-     * @return list<mixed>
-     */
     public static function listResultSingleParam(string $sql, string $paramType, mixed $param): array
     {
         $db = self::getConnection();

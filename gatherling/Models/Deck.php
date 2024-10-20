@@ -167,12 +167,10 @@ class Deck
         }
     }
 
-    /**
-     * @return array<string>
-     */
+    /** @return list<string> */
     public static function getArchetypes(): array
     {
-        return Database::listResult('SELECT name FROM archetypes WHERE priority > 0 ORDER BY priority DESC, name');
+        return DB::strings('SELECT name FROM archetypes WHERE priority > 0 ORDER BY priority DESC, name');
     }
 
     public function getEntry(): Entry

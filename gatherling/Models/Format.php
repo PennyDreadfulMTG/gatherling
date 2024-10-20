@@ -160,7 +160,7 @@ class Format
 
         $cardSets = [];
         if ($set == 'All') {
-            $cardSets = Database::listResult('SELECT name FROM cardsets');
+            $cardSets = DB::strings('SELECT name FROM cardsets');
         } else {
             $cardSets[] = $set;
         }
@@ -464,13 +464,13 @@ class Format
     public function getLegalCardsets(): array
     {
         if ($this->eternal) {
-            return Database::listResult('SELECT name FROM cardsets');
+            return DB::strings('SELECT name FROM cardsets');
         }
         if ($this->modern) {
-            return Database::listResult('SELECT name FROM cardsets WHERE modern_legal = 1');
+            return DB::strings('SELECT name FROM cardsets WHERE modern_legal = 1');
         }
         if ($this->standard) {
-            return Database::listResult('SELECT name FROM cardsets WHERE standard_legal = 1');
+            return DB::strings('SELECT name FROM cardsets WHERE standard_legal = 1');
         }
 
         return Database::listResultSingleParam('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
@@ -520,7 +520,7 @@ class Format
     /** @return list<string> */
     public static function getAllFormats(): array
     {
-        return Database::listResult('SELECT name FROM formats');
+        return DB::strings('SELECT name FROM formats');
     }
 
     /** @return list<string> */
@@ -665,13 +665,13 @@ class Format
     /** @return list<string> */
     public function getFormats(): array
     {
-        return Database::listResult('SELECT name FROM formats');
+        return DB::strings('SELECT name FROM formats');
     }
 
     /** @return list<string> */
     public static function getTribesList(): array
     {
-        return Database::listResult('SELECT name FROM tribes ORDER BY name');
+        return DB::strings('SELECT name FROM tribes ORDER BY name');
     }
 
     public function isCardLegalByRarity(string $cardName): bool
