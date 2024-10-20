@@ -1023,12 +1023,12 @@ class Event
 
     public static function count(): int
     {
-        return Database::singleResult('SELECT count(name) FROM events');
+        return DB::int('SELECT COUNT(name) FROM events');
     }
 
     public static function largestEventNum(): int
     {
-        return Database::singleResult('SELECT max(number) FROM events where number != 128'); // 128 is "special"
+        return DB::int('SELECT COALESCE(MAX(number), 0) FROM events WHERE number != 128'); // 128 is "special"
     }
 
     /** @return list<self> */
