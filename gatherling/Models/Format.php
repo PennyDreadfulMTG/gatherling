@@ -1041,13 +1041,12 @@ class Format
 
         if (count($tribesTied) > 1) {
             // Two or more tribes are tied for largest tribe
-            foreach ($tribesTied as $Type => $amt) {
+            foreach ($tribesTied as $type => $amt) {
                 // Checking for tribe size in database for tie breaker
-                // current routine has two logic errors
-                // 1) Cards that have more than one printing should only be counted once
-                // 2) Can't remember what the second one is... blah!
-                $frequency = Database::singleResult("SELECT Count(*) FROM cards WHERE type LIKE '%{$Type}%'");
-                $tribesTied[$Type] = $frequency;
+                $sql = 'SELECT COUNT(DISTINCT name) FROM cards WHERE type LIKE :type';
+                $params = ['type' => '%' . DB::likeEscape($type) . '%'];
+                $frequency = DB::int($sql, $params);
+                $tribesTied[$type] = $frequency;
             }
             asort($tribesTied); // sorts tribe size by value from low to high for tie breaker
             reset($tribesTied);

@@ -31,16 +31,8 @@ class Database
             }
             $db_selected = $instance->select_db($CONFIG['db_database']);
             if (!$db_selected) {
-                // If we couldn't, then it either doesn't exist, or we can't see it.
-                $sql = "CREATE DATABASE {$CONFIG['db_database']}";
-
-                self::singleResult($sql);
-                $db_selected = $instance->select_db($CONFIG['db_database']);
-                if (!$db_selected) {
-                    exit('Error creating database: ' . mysqli_error($instance) . "\n");
-                }
+                throw new \Exception('Error creating database: ' . mysqli_error($instance) . "\n");
             }
-
             $sql = "SET time_zone = 'America/New_York'"; // Ensure EST
             $instance->query($sql);
         }
@@ -62,30 +54,6 @@ class Database
         }
 
         return $pdo_instance;
-    }
-
-    public static function singleResult(string $sql): mixed
-    {
-        $db = self::getConnection();
-        $stmt = $db->prepare($sql);
-
-        if (!$stmt) {
-            return false;
-        }
-
-        $stmt->execute();
-
-        if (stripos(trim($sql), 'SELECT') === 0) {
-            $stmt->bind_result($result);
-            $stmt->fetch();
-            $stmt->close();
-
-            return $result;
-        } else {
-            $stmt->close();
-
-            return true;
-        }
     }
 
     // Does PHP have an arguments[] property that would allow processing of any number of parameters?

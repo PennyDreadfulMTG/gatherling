@@ -409,11 +409,10 @@ class Player
     {
         if ($seriesName == '') {
             return ($this->super == 1) || (count($this->organizersSeries()) > 0);
-        } else {
-            return Database::singleResult("SELECT series
-                                        FROM series_organizers
-                                        WHERE player = '{$this->name}' AND series = '{$seriesName}'") > 0;
         }
+        $sql = 'SELECT series FROM series_organizers WHERE player = :player AND series = :series';
+        $params = ['player' => $this->name, 'series' => $seriesName];
+        return DB::optionalString($sql, $params) !== null;
     }
 
     /** @return list<Event> */
@@ -1319,11 +1318,11 @@ class Player
 
     public static function activeCount(): int
     {
-        return Database::singleResult('SELECT count(name) FROM players where password is not null');
+        return DB::int('SELECT COUNT(name) FROM players WHERE password IS NOT NULL');
     }
 
     public static function verifiedCount(): int
     {
-        return Database::singleResult('SELECT count(name) FROM players where mtgo_confirmed = 1');
+        return DB::int('SELECT COUNT(name) FROM players WHERE mtgo_confirmed = 1');
     }
 }
