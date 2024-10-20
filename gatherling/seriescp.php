@@ -91,7 +91,7 @@ function main(): void
 
     $view = post()->optionalString('view') ?? get()->optionalString('view') ?? 'settings';
 
-    if ($view != 'no_view') {
+    if ($view == 'no_view') {
         $orientationComponent = new NullComponent();
     } elseif (count($playerSeries) > 1) {
         $orientationComponent = new OrganizerSelect(server()->string('PHP_SELF'), $playerSeries, $activeSeriesName);
