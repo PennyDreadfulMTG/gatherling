@@ -1287,18 +1287,8 @@ class Player
         if ($this->isSuper()) {
             return Series::allNames();
         }
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT series FROM series_organizers WHERE player = ? ORDER BY series');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $series = [];
-        $stmt->bind_result($seriesname);
-        while ($stmt->fetch()) {
-            $series[] = $seriesname;
-        }
-        $stmt->close();
-
-        return $series;
+        $sql = 'SELECT series FROM series_organizers WHERE player = :player ORDER BY series';
+        return Db::strings($sql, ['player' => $this->name]);
     }
 
     public function gameName(int|string|null $game = null, bool $html = true): string

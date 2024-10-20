@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Tests\Models;
 
 use Gatherling\Models\Player;
+use Gatherling\Models\Series;
 use Gatherling\Tests\Support\TestCases\DatabaseCase;
 
 final class PlayerTest extends DatabaseCase
@@ -36,5 +37,34 @@ final class PlayerTest extends DatabaseCase
 
         $player2 = Player::findByName('bar');
         $this->assertNull($player2);
+    }
+
+    public function testOrganizersSeries(): void
+    {
+        // BAKERT and test with actual series, and maybe try and test adding an invalid series
+        $player = Player::findOrCreateByName('An Organizer');
+        $this->assertEmpty($player->organizersSeries());
+
+        $player->save();
+        $this->assertEmpty($player->organizersSeries());
+
+        $series = new Series('');
+        $series->name = 'My Test Series';
+        $series->start_day = 'Monday';
+        $series->start_time = '12:00:00';
+        $series->save();
+        $this->assertEmpty($player->organizersSeries());
+
+        $player->super = 1;
+        $player->save();
+        $this->assertContains($series->name, $player->organizersSeries());
+
+        $player->super = 0;
+        $player->save();
+        $this->assertEmpty($player->organizersSeries());
+
+        $this->assertNotEmpty($player->name);
+        $series->addOrganizer($player->name);
+        $this->assertEquals([$series->name], $player->organizersSeries());
     }
 }

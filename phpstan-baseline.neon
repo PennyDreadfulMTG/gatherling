@@ -707,27 +707,27 @@ parameters:
 
 		-
 			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 38
-			path: gatherling/Models/Player.php
-
-		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 33
-			path: gatherling/Models/Player.php
-
-		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 36
-			path: gatherling/Models/Player.php
-
-		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
 			count: 37
 			path: gatherling/Models/Player.php
 
 		-
+			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
+			count: 32
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
+			count: 35
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
+			count: 36
+			path: gatherling/Models/Player.php
+
+		-
 			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 33
+			count: 32
 			path: gatherling/Models/Player.php
 
 		-
@@ -847,22 +847,22 @@ parameters:
 
 		-
 			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 12
-			path: gatherling/Models/Series.php
-
-		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
 			count: 10
 			path: gatherling/Models/Series.php
 
 		-
+			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
+			count: 8
+			path: gatherling/Models/Series.php
+
+		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 12
+			count: 10
 			path: gatherling/Models/Series.php
 
 		-
 			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 12
+			count: 10
 			path: gatherling/Models/Series.php
 
 		-

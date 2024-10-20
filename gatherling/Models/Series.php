@@ -243,45 +243,37 @@ class Series
     /** @return list<string> */
     public static function allNames(): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT series.name
-                          FROM series
-                          LEFT JOIN events
-                          ON events.series = series.name
-                          GROUP BY series.name
-                          ORDER BY series.name');
-        $stmt->execute();
-        $stmt->bind_result($onename);
-        $names = [];
-        while ($stmt->fetch()) {
-            $names[] = $onename;
-        }
-        $stmt->close();
-
-        return $names;
+        $sql = '
+            SELECT
+                series.name
+            FROM
+                series
+            LEFT JOIN
+                events ON events.series = series.name
+            GROUP BY
+                series.name
+            ORDER BY
+                series.name';
+        return Db::strings($sql);
     }
 
     /** @return list<string> */
     public static function activeNames(): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT series.name
-                          FROM series
-                          LEFT JOIN events
-                          ON events.series = series.name
-                          WHERE series.isactive = 1
-                          GROUP BY series.name
-                          ORDER BY count(events.name)
-                          DESC, name');
-        $stmt->execute();
-        $stmt->bind_result($onename);
-        $names = [];
-        while ($stmt->fetch()) {
-            $names[] = $onename;
-        }
-        $stmt->close();
-
-        return $names;
+        $sql = '
+            SELECT
+                series.name
+            FROM
+                series
+            LEFT JOIN
+                events ON events.series = series.name
+            WHERE
+                series.isactive = 1
+            GROUP BY
+                series.name
+            ORDER BY
+                count(events.name) DESC, name';
+        return Db::strings($sql);
     }
 
     public static function logoSrc(string $seriesName): string
