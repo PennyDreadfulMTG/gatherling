@@ -115,7 +115,7 @@ class DbTest extends DatabaseCase
         $row = Db::selectOnly('SELECT name FROM test_table WHERE id = 1', TestDto::class);
         $this->assertEquals('Test1', $row->name);
         $this->expectException(DatabaseException::class);
-        $row = Db::selectOnly('SELECT * FROM test_table', TestDto::class);
+        Db::selectOnly('SELECT * FROM test_table', TestDto::class);
     }
 
     public function testSelectOnlyOrNull(): void
@@ -128,7 +128,7 @@ class DbTest extends DatabaseCase
         $this->assertNotNull($row);
         $this->assertEquals('Test1', $row->name);
         $this->expectException(DatabaseException::class);
-        $row = Db::selectOnlyOrNull('SELECT * FROM test_table', TestDto::class);
+        Db::selectOnlyOrNull('SELECT * FROM test_table', TestDto::class);
     }
     public function testInt(): void
     {
