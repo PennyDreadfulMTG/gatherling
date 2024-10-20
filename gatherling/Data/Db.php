@@ -14,6 +14,7 @@ use PDOException;
 use PDOStatement;
 use TypeError;
 
+use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\marshal;
 
 class Db
@@ -29,25 +30,26 @@ class Db
 
     private static function connect(bool $connectToDatabase = true): Db
     {
-        global $CONFIG;
-
         if (self::$db !== null) {
             return self::$db;
         }
 
-        $requiredKeys = ['db_database', 'db_username', 'db_password'];
-        foreach ($requiredKeys as $key) {
-            if (!isset($CONFIG[$key])) {
-                throw new ConfigurationException("Missing configuration key: $key");
-            }
+        try {
+            $database = config()->string('db_database');
+            $username = config()->string('db_username');
+            $password = config()->string('db_password');
+            $hostname = config()->string('db_hostname');
+        } catch (MarshalException $e) {
+            throw new ConfigurationException('Incorrect database configuration', 0, $e);
         }
-        $dsn = 'mysql:host=' . $CONFIG['db_hostname'] . ';charset=utf8mb4';
+
+        $dsn = 'mysql:host=' . $hostname . ';charset=utf8mb4';
         if ($connectToDatabase) {
-            $dsn .= ';dbname=' . $CONFIG['db_database'];
+            $dsn .= ';dbname=' . $database;
         }
 
         try {
-            $pdo = new PDO($dsn, $CONFIG['db_username'], $CONFIG['db_password']);
+            $pdo = new PDO($dsn, $username, $password);
             // Set explicitly despite being the default in PHP8 because we rely on this
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$db = new self($pdo);
