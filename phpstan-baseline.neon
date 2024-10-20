@@ -396,16 +396,6 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Parameter \\#2 \\$rounds of method Gatherling\\\\Models\\\\Event\\:\\:toEnglish\\(\\) expects int, int\\<1, max\\>\\|string given\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Parameter \\#2 \\$rounds of method Gatherling\\\\Models\\\\Event\\:\\:toEnglish\\(\\) expects int, int\\|string given\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Parameter \\#2 \\$subevent of static method Gatherling\\\\Models\\\\Standings\\:\\:updateStandings\\(\\) expects int, int\\|null given\\.$#"
 			count: 3
 			path: gatherling/Models/Event.php

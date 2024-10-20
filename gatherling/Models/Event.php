@@ -1806,12 +1806,10 @@ class Event
 
     public function structureSummary(): string
     {
-
-        $ret = $this->toEnglish($this->mainstruct, $this->mainrounds, false);
+        $ret = $this->toEnglish($this->mainstruct, (int) $this->mainrounds, false);
         if ($this->finalrounds > 0) {
-            $ret = $ret . ' followed by ' . $this->toEnglish($this->finalstruct, $this->finalrounds, true);
+            $ret = $ret . ' followed by ' . $this->toEnglish($this->finalstruct, (int) $this->finalrounds, true);
         }
-
         return $ret;
     }
 
