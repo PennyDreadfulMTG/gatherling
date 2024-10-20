@@ -205,17 +205,17 @@ class Deck
     {
         $sql = '
             SELECT
-                COALESCE(MAX(isw), 0) AS w,
-                COALESCE(MAX(isu), 0) AS u,
                 COALESCE(MAX(isb), 0) AS b,
+                COALESCE(MAX(isg), 0) AS g,
                 COALESCE(MAX(isr), 0) AS r,
-                COALESCE(MAX(isg), 0) AS g
+                COALESCE(MAX(isu), 0) AS u,
+                COALESCE(MAX(isw), 0) AS w
             FROM
                 cards c, deckcontents d
             WHERE
                 d.deck = :id AND c.id = d.card AND d.issideboard != 1';
         $colors = db()->selectOnly($sql, DeckColorsDto::class, ['id' => $this->id]);
-        $this->deck_color_str = implode('', array_filter(['w', 'u', 'b', 'r', 'g'], fn($c) => $colors->{$c}));
+        $this->deck_color_str = implode('', array_filter(['b', 'g', 'r', 'u', 'w'], fn($c) => $colors->{$c}));
     }
 
     /**
