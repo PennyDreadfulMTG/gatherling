@@ -430,12 +430,16 @@ class Db
     /** @param array<string, mixed> $params */
     private function bindParams(PDOStatement $stmt, array $params): void
     {
-        foreach ($params as $key => $value) {
-            if (is_int($value)) {
-                $stmt->bindValue(':' . $key, $value, PDO::PARAM_INT);
-            } else {
-                $stmt->bindValue(':' . $key, $value);
+        try {
+            foreach ($params as $key => $value) {
+                if (is_int($value)) {
+                    $stmt->bindValue(':' . $key, $value, PDO::PARAM_INT);
+                } else {
+                    $stmt->bindValue(':' . $key, $value);
+                }
             }
+        } catch (PDOException $e) {
+            throw new DatabaseException("Failed to bind params " . json_encode($params), 0, $e);
         }
     }
 
@@ -460,8 +464,12 @@ class Db
         } catch (PDOException $e) {
             if ($e->getCode() === '3D000') {
                 Log::warning('Database connection lost, attempting to reconnect...');
-                $stmt = $this->pdo->prepare($sql);
-                return $stmt->execute($params);
+                try {
+                    $stmt = $this->pdo->prepare($sql);
+                    return $stmt->execute($params);
+                } catch (PDOException $e) {
+                    throw new DatabaseException("Failed to reconnect and execute query: $sql with params " . json_encode($params), 0, $e);
+                }
             }
             $msg = "Failed to execute query: $sql with params " . json_encode($params);
             Log::error($msg, $context);
