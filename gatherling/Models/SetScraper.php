@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-
 use function Gatherling\Helpers\db;
 
 class SetScraper

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-
 use function Gatherling\Helpers\db;
+
 class SeriesDropMenuDS extends DropMenu
 {
     public function __construct(?string $seriesName = null, int $useAll = 0, string $formName = 'series')

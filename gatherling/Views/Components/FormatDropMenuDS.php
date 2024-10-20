@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-
 use function Gatherling\Helpers\db;
 
 class FormatDropMenuDS extends DropMenu
