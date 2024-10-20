@@ -51,7 +51,7 @@ class Db
             // Set explicitly despite being the default in PHP8 because we rely on this
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$db = new self($pdo);
-            self::execute('SET time_zone = ?', ['America/New_York']);
+            self::execute('SET time_zone = :timezone', ['timezone' => 'America/New_York']);
 
             return self::$db;
         } catch (PDOException $e) {
@@ -79,7 +79,8 @@ class Db
         }, false);
     }
 
-    public static function execute(string $sql, mixed $params = []): void
+    /** @param array<string, mixed> $params */
+    public static function execute(string $sql, array $params = []): void
     {
         // No return here because PDO::ERROMODE_EXCEPTION means we'd throw if anything went wrong
         self::executeInternal($sql, $params, function ($sql, $params) {
