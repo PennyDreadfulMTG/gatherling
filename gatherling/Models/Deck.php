@@ -29,7 +29,7 @@ class Deck
     public ?int $subeventid; // Belongs to event
     public ?string $format = null; // Belongs to event..  now held in decks table
     public ?string $tribe = null; // used only for tribal events
-    public ?string $deck_color_str;  // Holds the final string color string
+    public ?string $deck_color_str = null;  // Holds the final string color string
     public ?string $created_date; // Date deck was created
     public ?string $deck_hash;
     public ?string $sideboard_hash;
@@ -771,11 +771,10 @@ class Deck
         }
 
         foreach ($this->errors as $error) {
-            $sql = 'INSERT INTO deckerrors (deck, error) values(:deck, :error)';
+            $sql = 'INSERT INTO deckerrors (deck, error) VALUES (:deck, :error)';
             $params = ['deck' => $this->id, 'error' => $error];
             DB::execute($sql, $params);
         }
-
 
         // Autonamer Function
         if ($this->name == 'Temp') {
