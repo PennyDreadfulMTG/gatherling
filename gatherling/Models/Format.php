@@ -1551,17 +1551,6 @@ class Format
         return true;
     }
 
-    public function insertSubFormat(string $subformat): bool
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('INSERT INTO subformats(parentformat, childformat) VALUES(?, ?)');
-        $stmt->bind_param('ss', $this->name, $subformat);
-        $stmt->execute() or exit($stmt->error);
-        $stmt->close();
-
-        return true;
-    }
-
     public function banAllTribes(): void
     {
         $this->deleteAllBannedTribes();
