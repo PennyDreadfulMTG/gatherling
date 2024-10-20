@@ -320,10 +320,11 @@ class DB
         $isOuterTransaction = !self::connect()->transactions;
         self::connect()->transactions[] = $name;
         if ($isOuterTransaction) {
-            // Is there a more PDO-ish way to do tranactions that is less string-y?
-            // Like this in mysqli - $db->autocommit(false);
-            self::execute('SET autocommit=0');
-            self::execute('BEGIN');
+            try {
+                self::connect()->pdo->beginTransaction();
+            } catch (PDOException $e) {
+                throw new DatabaseException("Failed to begin transaction $rawName", 0, $e);
+            }
         } else {
             self::execute("SAVEPOINT $name");
         }
@@ -339,12 +340,19 @@ class DB
         }
         $latestTransaction = self::connect()->transactions[$numTransactions - 1];
         if ($latestTransaction !== $name) {
-            self::execute('ROLLBACK');
-
+            try {
+                self::connect()->pdo->rollback();
+            } catch (PDOException $e) {
+                throw new DatabaseException("Failed to rollback $latestTransaction while handling mismatch", 0, $e);
+            }
             throw new DatabaseException("Asked to commit $name, but $latestTransaction is open. ROLLBACK issued.");
         }
         if (count(self::connect()->transactions) === 1) {
-            self::execute('COMMIT');
+            try {
+                self::connect()->pdo->commit();
+            } catch (PDOException $e) {
+                throw new DatabaseException("Failed to commit $name", 0, $e);
+            }
         }
         array_pop(self::connect()->transactions);
     }
@@ -355,19 +363,29 @@ class DB
         Log::debug("[DB] ROLLBACK $rawName ($name)");
         $numTransactions = count(self::connect()->transactions);
         if ($numTransactions === 0) {
-            DB::execute('ROLLBACK');
+            try {
+                self::connect()->pdo->rollback();
+            } catch (PDOException $e) {
+                throw new DatabaseException("Failed to rollback $name while handling faulty rollback call", 0, $e);
+            }
             throw new DatabaseException("Asked to rollback $name, but no transaction is open. ROLLBACK issued.");
         }
         $latestTransaction = self::connect()->transactions[$numTransactions - 1];
         if ($latestTransaction !== $name) {
-            DB::execute('ROLLBACK');
-
+            try {
+                self::connect()->pdo->rollback();
+            } catch (PDOException $e) {
+                throw new DatabaseException("Failed to rollback while handling incorrect rollback", 0, $e);
+            }
             throw new DatabaseException("Asked to rollback $name, but $latestTransaction is open. ROLLBACK issued.");
         }
         $isOuterTransaction = count(self::connect()->transactions) === 1;
         if ($isOuterTransaction) {
-            self::execute('ROLLBACK'); // Rollback the whole transaction
-            self::execute('SET autocommit=1');
+            try {
+                self::connect()->pdo->rollback();
+            } catch (PDOException $e) {
+                throw new DatabaseException("Failed to rollback $name", 0, $e);
+            }
         } else {
             self::execute("ROLLBACK TO SAVEPOINT $name"); // Rollback to the savepoint
         }

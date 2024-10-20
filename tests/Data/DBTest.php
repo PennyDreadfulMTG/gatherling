@@ -13,7 +13,6 @@ class DBTest extends DatabaseCase
 {
     protected function setUp(): void
     {
-        parent::setUp();
         DB::execute('DROP TABLE IF EXISTS test_table');
         $sql = '
             CREATE TABLE IF NOT EXISTS
@@ -23,6 +22,9 @@ class DBTest extends DatabaseCase
                 value DECIMAL(4, 3),
                 is_active BOOLEAN)';
         DB::execute($sql);
+        // Don't start the transaction until after we've created the table, because mariadb will COMMIT
+        // when given DDL.
+        parent::setUp();
     }
 
     public function testExecute(): void

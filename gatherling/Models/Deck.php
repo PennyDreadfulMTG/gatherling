@@ -153,23 +153,11 @@ class Deck
         }
 
         // Retrieve medal
-        $sql = '
-            SELECT
-                n.medal
-            FROM
-                entries n
-            WHERE
-                n.deck = :id';
+        $sql = 'SELECT n.medal FROM entries n WHERE n.deck = :id';
         $this->medal = DB::optionalString($sql, ['id' => $id]) ?? 'dot';
 
         // Retrieve errors
-        $sql = '
-            SELECT
-                error
-            FROM
-                deckerrors
-            WHERE
-                deck = :id';
+        $sql = 'SELECT error FROM deckerrors WHERE deck = :id';
         $this->errors = DB::strings($sql, ['id' => $id]);
 
         // if there isnt a color string get one, must execute
@@ -344,19 +332,8 @@ class Deck
      */
     public function getErrors(): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('Select error FROM deckerrors WHERE deck = ?');
-        $stmt->bind_param('d', $this->id);
-        $stmt->execute();
-        $stmt->bind_result($error);
-
-        $errors = [];
-        while ($stmt->fetch()) {
-            $errors[] = $error;
-        }
-        $stmt->close();
-
-        return $errors;
+        $sql = 'SELECT error FROM deckerrors WHERE deck = :deck_id';
+        return DB::strings($sql, ['deck_id' => $this->id]);
     }
 
     // find a way to list the id as a param
