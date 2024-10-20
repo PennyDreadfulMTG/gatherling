@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
+use Gatherling\Data\DB;
+
 class SetScraper
 {
     /** @return array<string, string> */

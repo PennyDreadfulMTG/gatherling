@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Gatherling\Models;
 
 class EntryDto extends Dto
@@ -11,4 +13,3 @@ class EntryDto extends Dto
     public int $initial_byes;
     public ?int $initial_seed;
 }
-

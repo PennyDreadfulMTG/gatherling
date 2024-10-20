@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Gatherling\Data;
 
-use PDO;
-use TypeError;
-use PDOException;
-use PDOStatement;
+use Gatherling\Exceptions\ConfigurationException;
+use Gatherling\Exceptions\DatabaseException;
+use Gatherling\Exceptions\MarshalException;
 use Gatherling\Log;
 use Gatherling\Models\Dto;
-use function Gatherling\Helpers\marshal;
-use Gatherling\Exceptions\MarshalException;
+use PDO;
+use PDOException;
+use PDOStatement;
+use TypeError;
 
-use Gatherling\Exceptions\DatabaseException;
-use Gatherling\Exceptions\ConfigurationException;
+use function Gatherling\Helpers\marshal;
 
 class DB
 {
