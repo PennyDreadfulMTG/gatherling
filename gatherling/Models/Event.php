@@ -802,11 +802,16 @@ class Event
             $subevnum = 1;
             $roundnum = $this->current_round;
         }
-        $count = Database::dbQuerySingle('SELECT COUNT(m.id) FROM matches m, subevents s, events e
-            WHERE m.subevent = s.id AND s.parent = e.name AND e.name = ? AND
-            s.timing = ? AND m.round = ? AND (m.playera = ? OR m.playerb = ?)', 'sddss', $this->name, $subevnum, $roundnum, $player_name, $player_name);
-
-        return $count;
+        $sql = '
+            SELECT
+                COUNT(m.id)
+            FROM
+                matches m, subevents s, events e
+            WHERE
+                m.subevent = s.id AND s.parent = e.name AND e.name = :name AND
+                s.timing = :timing AND m.round = :round AND (m.playera = :player OR m.playerb = :player)';
+        $params = ['name' => $this->name, 'timing' => $subevnum, 'round' => $roundnum, 'player' => $player_name];
+        return DB::int($sql, $params);
     }
 
     // In preparation for automating the pairings this function will add match the next pairing

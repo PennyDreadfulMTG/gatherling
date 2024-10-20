@@ -87,17 +87,12 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$query of method mysqli\\:\\:prepare\\(\\) expects string, mixed given\\.$#"
-			count: 2
+			count: 1
 			path: gatherling/Models/Database.php
 
 		-
 			message: "#^Parameter \\#1 \\$types of method mysqli_stmt\\:\\:bind_param\\(\\) expects string, mixed given\\.$#"
-			count: 20
-			path: gatherling/Models/Database.php
-
-		-
-			message: "#^Part \\$query \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 1
+			count: 10
 			path: gatherling/Models/Database.php
 
 		-
@@ -106,27 +101,12 @@ parameters:
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
 			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 2
+			count: 1
 			path: gatherling/Models/Deck.php
 
 		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 2
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
 			count: 1
 			path: gatherling/Models/Deck.php
 
@@ -372,11 +352,6 @@ parameters:
 
 		-
 			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getPlayerCount\\(\\) should return int but returns mixed\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getPlayerLeagueMatchCount\\(\\) should return int but returns mixed\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
 
@@ -1058,11 +1033,6 @@ parameters:
 		-
 			message: "#^Method Gatherling\\\\Models\\\\Series\\:\\:seasonPointsTable\\(\\) should return array\\<string, array\\<string, array\\<string, int\\|string\\>\\|int\\>\\> but returns array\\<int\\|string, array\\>\\.$#"
 			count: 1
-			path: gatherling/Models/Series.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, mixed given\\.$#"
-			count: 2
 			path: gatherling/Models/Series.php
 
 		-

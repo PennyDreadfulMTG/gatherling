@@ -291,14 +291,20 @@ class Series
 
     public function mostRecentEvent(): ?Event
     {
-        $result = Database::dbQuerySingle('SELECT events.name
-                                         FROM events
-                                         JOIN series
-                                         ON series.name = events.series
-                                         WHERE series.name = ?
-                                         AND events.start < NOW()
-                                         ORDER BY events.start
-                                         DESC LIMIT 1', 's', $this->name);
+        $sql = '
+            SELECT
+                events.name
+            FROM
+                events
+            JOIN
+                series ON series.name = events.series
+            WHERE
+                series.name = :series AND events.start < NOW()
+            ORDER BY
+                events.start DESC
+            LIMIT 1';
+        $params = ['series' => $this->name];
+        $result = DB::optionalString($sql, $params);
         if ($result) {
             return new Event($result);
         }
@@ -307,14 +313,20 @@ class Series
 
     public function nextEvent(): ?Event
     {
-        $result = Database::dbQuerySingle('SELECT events.name
-                                         FROM events
-                                         JOIN series
-                                         ON series.name = events.series
-                                         WHERE series.name = ?
-                                         AND events.start > NOW()
-                                         ORDER BY events.start
-                                         LIMIT 1', 's', $this->name);
+        $sql = '
+            SELECT
+                events.name
+            FROM
+                events
+            JOIN
+                series ON series.name = events.series
+            WHERE
+                series.name = :series AND events.start > NOW()
+            ORDER BY
+                events.start
+            LIMIT 1';
+        $params = ['series' => $this->name];
+        $result = DB::optionalString($sql, $params);
         if ($result) {
             return new Event($result);
         }
