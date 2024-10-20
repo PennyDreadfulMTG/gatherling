@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
+  <file src="gatherling/Helpers/Request.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[optionalFloat]]></code>
+    </PossiblyUnusedMethod>
+  </file>
   <file src="gatherling/Log.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[alert]]></code>
@@ -18,23 +23,11 @@
       <code><![CDATA[global $CONFIG;]]></code>
       <code><![CDATA[global $CONFIG;]]></code>
     </InvalidGlobal>
-    <PossiblyUnusedReturnValue>
-      <code><![CDATA[int]]></code>
-    </PossiblyUnusedReturnValue>
   </file>
   <file src="gatherling/Models/Deck.php">
-    <EmptyArrayAccess>
-      <code><![CDATA[$color[$c]]]></code>
-    </EmptyArrayAccess>
     <PossiblyUnusedMethod>
       <code><![CDATA[getPlayer]]></code>
     </PossiblyUnusedMethod>
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$subeventid]]></code>
-    </PossiblyUnusedProperty>
-    <PossiblyUnusedReturnValue>
-      <code><![CDATA[bool]]></code>
-    </PossiblyUnusedReturnValue>
     <UndefinedFunction>
       <code><![CDATA[image_tag("mana{$color}.png")]]></code>
     </UndefinedFunction>
@@ -55,9 +48,6 @@
   </file>
   <file src="gatherling/Models/Event.php">
     <InvalidArgument>
-      <code><![CDATA[$active_players]]></code>
-      <code><![CDATA[$active_players[$i]['player']]]></code>
-      <code><![CDATA[$active_players[$pairing[$i]]['player']]]></code>
       <code><![CDATA[$bye_data]]></code>
     </InvalidArgument>
     <InvalidReturnStatement>
@@ -70,9 +60,6 @@
       <code><![CDATA[getTrophyImageLink]]></code>
       <code><![CDATA[isFinalized]]></code>
     </PossiblyUnusedMethod>
-    <PossiblyUnusedReturnValue>
-      <code><![CDATA[bool]]></code>
-    </PossiblyUnusedReturnValue>
     <UnusedVariable>
       <code><![CDATA[$removed]]></code>
       <code><![CDATA[$removed]]></code>
@@ -132,9 +119,6 @@
       <code><![CDATA[getPlayerResult]]></code>
       <code><![CDATA[isReportable]]></code>
     </PossiblyUnusedMethod>
-    <PossiblyUnusedReturnValue>
-      <code><![CDATA[int]]></code>
-    </PossiblyUnusedReturnValue>
   </file>
   <file src="gatherling/Models/Player.php">
     <PossiblyUnusedMethod>
@@ -146,22 +130,9 @@
     </PossiblyUnusedMethod>
   </file>
   <file src="gatherling/Models/Ratings.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$format]]></code>
-      <code><![CDATA[$losses]]></code>
-      <code><![CDATA[$player]]></code>
-      <code><![CDATA[$rating]]></code>
-      <code><![CDATA[$updated]]></code>
-      <code><![CDATA[$wins]]></code>
-    </PossiblyUnusedProperty>
     <PossiblyUnusedReturnValue>
       <code><![CDATA[bool]]></code>
     </PossiblyUnusedReturnValue>
-  </file>
-  <file src="gatherling/Models/RatingsDto.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$deck_id]]></code>
-    </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Models/Series.php">
     <PossiblyUnusedMethod>
@@ -184,948 +155,54 @@
       <code><![CDATA[addPlayerToEvent]]></code>
       <code><![CDATA[dropPlayer]]></code>
     </PossiblyUnusedMethod>
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$id]]></code>
-    </PossiblyUnusedProperty>
     <UnusedVariable>
       <code><![CDATA[$allPlayers]]></code>
       <code><![CDATA[$opponent_names]]></code>
     </UnusedVariable>
   </file>
-  <file src="gatherling/Views/Components/ActiveEvents.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$events]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/AddCardSetForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$cardSetFileInput]]></code>
-      <code><![CDATA[$missingSetSelectInput]]></code>
-      <code><![CDATA[$submitButton]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/AllDecks.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$upPlayer]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/AllMatchForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$formatDropMenuP]]></code>
-      <code><![CDATA[$oppDropMenu]]></code>
-      <code><![CDATA[$seasonDropMenuP]]></code>
-      <code><![CDATA[$seriesDropMenuP]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/AllRatings.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$formatDropMenu]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/ArchetypeDropMenu.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$archetypeName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/BAndR.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$activeFormatName]]></code>
-      <code><![CDATA[$bannedCards]]></code>
-      <code><![CDATA[$legalCards]]></code>
-      <code><![CDATA[$noBannedCards]]></code>
-      <code><![CDATA[$noLegalCards]]></code>
-      <code><![CDATA[$noRestrictedCards]]></code>
-      <code><![CDATA[$restrictedCards]]></code>
-      <code><![CDATA[$seriesName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/BestDecksTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$playerName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/CalcRatingsForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$formatDropMenuR]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/CardCounts.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$numCardsMaindeck]]></code>
-      <code><![CDATA[$numCardsSideboard]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/CardLink.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$cardName]]></code>
-      <code><![CDATA[$gathererLink]]></code>
-      <code><![CDATA[$imageSrc]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/CardSets.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$activeFormatName]]></code>
-      <code><![CDATA[$blockCardSetsDropMenu]]></code>
-      <code><![CDATA[$coreCardSetsDropMenu]]></code>
-      <code><![CDATA[$extraCardSetsDropMenu]]></code>
-      <code><![CDATA[$noBlockCardSets]]></code>
-      <code><![CDATA[$noCoreCardSets]]></code>
-      <code><![CDATA[$noExtraCardSets]]></code>
-      <code><![CDATA[$seriesName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/CardsetDropMenu.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$cardsetType]]></code>
-      <code><![CDATA[$cardsets]]></code>
-      <code><![CDATA[$hasMany]]></code>
-      <code><![CDATA[$isDisabled]]></code>
-      <code><![CDATA[$options]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/CcTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$avgCmc]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/ChangePassForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$tooShort]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/ChangePasswordForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$newPasswordTextInput]]></code>
-      <code><![CDATA[$submitButton]]></code>
-      <code><![CDATA[$usernameTextInput]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/CheckboxInput.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$isChecked]]></code>
-      <code><![CDATA[$label]]></code>
-      <code><![CDATA[$name]]></code>
-      <code><![CDATA[$reminderText]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/ColorCheckboxMenu.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$bChecked]]></code>
-      <code><![CDATA[$gChecked]]></code>
-      <code><![CDATA[$rChecked]]></code>
-      <code><![CDATA[$uChecked]]></code>
-      <code><![CDATA[$wChecked]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/CommentsTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$notes]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/CreateDeckLink.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$createDeckLink]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/CreateNewSeriesForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$dayDropMenu]]></code>
-      <code><![CDATA[$timeDropMenu]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/CurrentMatchesTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$leagueMatches]]></code>
-      <code><![CDATA[$tournamentMatches]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/DeckErrorTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$deckErrors]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/DeckForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$deckArchetypeDropMenu]]></code>
-      <code><![CDATA[$deckId]]></code>
-      <code><![CDATA[$desc]]></code>
-      <code><![CDATA[$errors]]></code>
-      <code><![CDATA[$eventId]]></code>
-      <code><![CDATA[$fileInput]]></code>
-      <code><![CDATA[$nameTextInput]]></code>
-      <code><![CDATA[$playerName]]></code>
-      <code><![CDATA[$showErrors]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/DeckInfo.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$archetype]]></code>
-      <code><![CDATA[$colorImagesSafe]]></code>
-      <code><![CDATA[$formatName]]></code>
-      <code><![CDATA[$tribe]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/DeckInfoCell.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$cardCounts]]></code>
-      <code><![CDATA[$deckId]]></code>
-      <code><![CDATA[$deckInfo]]></code>
-      <code><![CDATA[$isValid]]></code>
-      <code><![CDATA[$name]]></code>
-      <code><![CDATA[$placing]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/DeckLink.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$deckLink]]></code>
-      <code><![CDATA[$isValid]]></code>
-      <code><![CDATA[$name]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/DeckProfile.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$canEdit]]></code>
-      <code><![CDATA[$ccTable]]></code>
-      <code><![CDATA[$commentsTable]]></code>
-      <code><![CDATA[$deckErrorTable]]></code>
-      <code><![CDATA[$deckId]]></code>
-      <code><![CDATA[$deckInfoCell]]></code>
-      <code><![CDATA[$deckTrophyCell]]></code>
-      <code><![CDATA[$exactMatchTable]]></code>
-      <code><![CDATA[$maindeckTable]]></code>
-      <code><![CDATA[$matchupTable]]></code>
-      <code><![CDATA[$sideboardTable]]></code>
-      <code><![CDATA[$symbolTable]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/DeckRegisterForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$deckArchetypeDropMenu]]></code>
-      <code><![CDATA[$eventName]]></code>
-      <code><![CDATA[$playerName]]></code>
-      <code><![CDATA[$recentDecks]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/DeckTrophyCell.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$showTrophy]]></code>
-      <code><![CDATA[$trophy]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/DisplayDecks.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$deckIds]]></code>
-      <code><![CDATA[$paginationSafe]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/DropConfirm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$eventName]]></code>
-      <code><![CDATA[$playerName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/DropMenu.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$default]]></code>
-      <code><![CDATA[$id]]></code>
-      <code><![CDATA[$name]]></code>
-      <code><![CDATA[$options]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/EditAccountsForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$mtgaUsernameTextInput]]></code>
-      <code><![CDATA[$mtgoUsernameTextInput]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/EditCard.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$cardSet]]></code>
-      <code><![CDATA[$creatureType]]></code>
-      <code><![CDATA[$isChangelingInput]]></code>
-      <code><![CDATA[$nameInput]]></code>
-      <code><![CDATA[$rarityInput]]></code>
-      <code><![CDATA[$scryfallIdInput]]></code>
-      <code><![CDATA[$typelineInput]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/EditEmailForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$emailAddress]]></code>
-      <code><![CDATA[$emailPrivacy]]></code>
-    </PossiblyUnusedProperty>
-  </file>
   <file src="gatherling/Views/Components/EditSet.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$cardSetName]]></code>
-      <code><![CDATA[$modernLegalInput]]></code>
-      <code><![CDATA[$releaseDateInput]]></code>
-      <code><![CDATA[$setCodeInput]]></code>
-      <code><![CDATA[$standardLegalInput]]></code>
-    </PossiblyUnusedProperty>
     <UnusedVariable>
       <code><![CDATA[$names]]></code>
     </UnusedVariable>
   </file>
-  <file src="gatherling/Views/Components/EditTimeZoneForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$playerName]]></code>
-      <code><![CDATA[$timeZone]]></code>
-      <code><![CDATA[$timeZoneDropMenu]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/ErrorMessage.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$errors]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/EventStandings.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$eventName]]></code>
-      <code><![CDATA[$standings]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/FileInput.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$label]]></code>
-      <code><![CDATA[$name]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/Finalists.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$numFinalists]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/FormatCPMenu.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$activeFormatName]]></code>
-      <code><![CDATA[$bAndRLink]]></code>
-      <code><![CDATA[$cardsetsLink]]></code>
-      <code><![CDATA[$formatSettingsLink]]></code>
-      <code><![CDATA[$restrictedTooltip]]></code>
-      <code><![CDATA[$seriesName]]></code>
-      <code><![CDATA[$tribalLink]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/FormatDeleteForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$formatsDropMenu]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/FormatDropMenuDS.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$formatName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/FormatDropMenuR.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$format]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/FormatError.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$formatName]]></code>
-      <code><![CDATA[$message]]></code>
-      <code><![CDATA[$view]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/FormatRenameForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$formatsDropMenu]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/FormatSaveAsForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$oldFormatName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
   <file src="gatherling/Views/Components/FormatSettings.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$activeFormat]]></code>
-      <code><![CDATA[$activeFormatName]]></code>
-      <code><![CDATA[$eternalTooltip]]></code>
-      <code><![CDATA[$maxMainStringField]]></code>
-      <code><![CDATA[$maxSideStringField]]></code>
-      <code><![CDATA[$minMainStringField]]></code>
-      <code><![CDATA[$minSideStringField]]></code>
-      <code><![CDATA[$modernTooltip]]></code>
-      <code><![CDATA[$pureTooltip]]></code>
-      <code><![CDATA[$seriesName]]></code>
-      <code><![CDATA[$showMaxMainWarning]]></code>
-      <code><![CDATA[$showMinMainWarning]]></code>
-      <code><![CDATA[$showRarityWarning]]></code>
-      <code><![CDATA[$standardTooltip]]></code>
-      <code><![CDATA[$underdogTooltip]]></code>
-    </PossiblyUnusedProperty>
     <UndefinedFunction>
       <code><![CDATA[getObjectVarsCamelCase($activeFormat)]]></code>
     </UndefinedFunction>
   </file>
-  <file src="gatherling/Views/Components/FormatSuccess.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$formatName]]></code>
-      <code><![CDATA[$message]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/FormatsDropMenu.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$formatNames]]></code>
-      <code><![CDATA[$formatType]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/FullMetagame.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$eventStandings]]></code>
-    </PossiblyUnusedProperty>
-  </file>
   <file src="gatherling/Views/Components/GameName.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$iconClass]]></code>
-      <code><![CDATA[$name]]></code>
-    </PossiblyUnusedProperty>
     <UndefinedConstant>
       <code><![CDATA[MTGA]]></code>
       <code><![CDATA[MTGO]]></code>
       <code><![CDATA[PAPER]]></code>
     </UndefinedConstant>
   </file>
-  <file src="gatherling/Views/Components/InfoCell.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$eventDate]]></code>
-      <code><![CDATA[$eventFormat]]></code>
-      <code><![CDATA[$eventName]]></code>
-      <code><![CDATA[$hostLink]]></code>
-      <code><![CDATA[$isActive]]></code>
-      <code><![CDATA[$percentReported]]></code>
-      <code><![CDATA[$reportLink]]></code>
-      <code><![CDATA[$seasonLeaderboardLink]]></code>
-      <code><![CDATA[$threadLink]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/InfoTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$discordHandle]]></code>
-      <code><![CDATA[$email]]></code>
-      <code><![CDATA[$emailIsPublic]]></code>
-      <code><![CDATA[$favF]]></code>
-      <code><![CDATA[$favS]]></code>
-      <code><![CDATA[$hosted]]></code>
-      <code><![CDATA[$lastEventName]]></code>
-      <code><![CDATA[$lastEventTime]]></code>
-      <code><![CDATA[$line1]]></code>
-      <code><![CDATA[$mtgaUsername]]></code>
-      <code><![CDATA[$mtgoUsername]]></code>
-      <code><![CDATA[$numMatches]]></code>
-      <code><![CDATA[$pcgF]]></code>
-      <code><![CDATA[$pcgS]]></code>
-      <code><![CDATA[$rating]]></code>
-      <code><![CDATA[$record]]></code>
-      <code><![CDATA[$timeZone]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/LeagueOpponentDropMenu.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$eventName]]></code>
-      <code><![CDATA[$player]]></code>
-      <code><![CDATA[$round]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/LoadFormatForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$formatsDropMenu]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/LogoForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$logoSrc]]></code>
-      <code><![CDATA[$seriesName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/MainPlayerControlPanel.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$activeEvents]]></code>
-      <code><![CDATA[$currentMatchesTable]]></code>
-      <code><![CDATA[$discordHandle]]></code>
-      <code><![CDATA[$emailAddress]]></code>
-      <code><![CDATA[$mtgaUsername]]></code>
-      <code><![CDATA[$mtgoUsername]]></code>
-      <code><![CDATA[$preregistration]]></code>
-      <code><![CDATA[$promptToLinkDiscord]]></code>
-      <code><![CDATA[$ratingsTableSmall]]></code>
-      <code><![CDATA[$recentDecksTable]]></code>
-      <code><![CDATA[$recentMatchTable]]></code>
-      <code><![CDATA[$statsTable]]></code>
-      <code><![CDATA[$unlinkedDiscordName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/MaindeckTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$creaturesCount]]></code>
-      <code><![CDATA[$landsCount]]></code>
-      <code><![CDATA[$numMaindeckCards]]></code>
-      <code><![CDATA[$otherSpellsCount]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/ManualVerificationForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$submitButton]]></code>
-      <code><![CDATA[$usernameInput]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/ManualVerifyMtgoForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$isVerified]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/MatchupTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$hasMatches]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/Medal.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$medal]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/MedalTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$medalStats]]></code>
-      <code><![CDATA[$playerName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/MissingTrophies.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$noRecentEvents]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/NewFormatForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$action]]></code>
-      <code><![CDATA[$seriesName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/NotAllowed.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$reason]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/OrganizerSelect.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$action]]></code>
-      <code><![CDATA[$seriesDropMenu]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/PasswordInput.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$label]]></code>
-      <code><![CDATA[$name]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/Placing.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$day]]></code>
-      <code><![CDATA[$eventLink]]></code>
-      <code><![CDATA[$eventName]]></code>
-      <code><![CDATA[$medal]]></code>
-      <code><![CDATA[$placing]]></code>
-      <code><![CDATA[$playerLink]]></code>
-      <code><![CDATA[$recordString]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/PlayerBanForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$series]]></code>
-      <code><![CDATA[$seriesName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/PlayerLink.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$gameName]]></code>
-      <code><![CDATA[$playerLink]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/PlayerMatches.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$allMatchForm]]></code>
-      <code><![CDATA[$matchTable]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/PlayerSearchForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$playerName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/PointsForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$rules]]></code>
-      <code><![CDATA[$season]]></code>
-      <code><![CDATA[$seasonDropMenu]]></code>
-      <code><![CDATA[$series]]></code>
-      <code><![CDATA[$seriesName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/PointsRule.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$formatDropMenu]]></code>
-      <code><![CDATA[$isChecked]]></code>
-      <code><![CDATA[$rule]]></code>
-      <code><![CDATA[$size]]></code>
-      <code><![CDATA[$value]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/Prereg.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$event]]></code>
-      <code><![CDATA[$eventName]]></code>
-      <code><![CDATA[$registerLink]]></code>
-      <code><![CDATA[$showFull]]></code>
-      <code><![CDATA[$showRegister]]></code>
-      <code><![CDATA[$showRegistered]]></code>
-      <code><![CDATA[$showSignIn]]></code>
-      <code><![CDATA[$start]]></code>
-      <code><![CDATA[$unregisterLink]]></code>
-    </PossiblyUnusedProperty>
-  </file>
   <file src="gatherling/Views/Components/Preregistration.php">
     <InvalidPropertyAssignmentValue>
       <code><![CDATA[$this->availableEvents]]></code>
     </InvalidPropertyAssignmentValue>
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$hasUpcomingEvents]]></code>
-      <code><![CDATA[$promptToLinkMtga]]></code>
-      <code><![CDATA[$promptToLinkMtgo]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/ProfileEditForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$email]]></code>
-      <code><![CDATA[$emailPrivacy]]></code>
-      <code><![CDATA[$timezoneDropMenu]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/ProfileTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$bestDecksTable]]></code>
-      <code><![CDATA[$infoTable]]></code>
-      <code><![CDATA[$medalTable]]></code>
-      <code><![CDATA[$trophyTable]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/RatingsTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$minMatches]]></code>
-      <code><![CDATA[$playerLink]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/RatingsTableSmall.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$ratings]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/RecentEventsTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$series]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/ReportLink.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$reportLink]]></code>
-      <code><![CDATA[$text]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/SearchForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$archetypeDropMenu]]></code>
-      <code><![CDATA[$cardName]]></code>
-      <code><![CDATA[$colorCheckboxMenu]]></code>
-      <code><![CDATA[$formatDropMenuDS]]></code>
-      <code><![CDATA[$medalsDropMenu]]></code>
-      <code><![CDATA[$numSearchResults]]></code>
-      <code><![CDATA[$playerName]]></code>
-      <code><![CDATA[$searchLink]]></code>
-      <code><![CDATA[$seriesDropMenuDS]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/SeasonSelect.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$seasonDropMenu]]></code>
-      <code><![CDATA[$seriesDropMenu]]></code>
-    </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Components/SeasonStandings.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$players]]></code>
-      <code><![CDATA[$season]]></code>
-      <code><![CDATA[$seasonEvents]]></code>
-      <code><![CDATA[$seriesName]]></code>
-    </PossiblyUnusedProperty>
     <PossiblyUnusedReturnValue>
       <code><![CDATA[int]]></code>
     </PossiblyUnusedReturnValue>
   </file>
-  <file src="gatherling/Views/Components/SelectInput.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$id]]></code>
-      <code><![CDATA[$label]]></code>
-      <code><![CDATA[$name]]></code>
-      <code><![CDATA[$select]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/SeriesAndLogoForms.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$logoForm]]></code>
-      <code><![CDATA[$seriesForm]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/SeriesControlPanelMenu.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$series]]></code>
-      <code><![CDATA[$seriesName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/SeriesForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$dayDropMenu]]></code>
-      <code><![CDATA[$isActive]]></code>
-      <code><![CDATA[$mtgoRoomTextInput]]></code>
-      <code><![CDATA[$preregDefault]]></code>
-      <code><![CDATA[$series]]></code>
-      <code><![CDATA[$seriesName]]></code>
-      <code><![CDATA[$timeDropMenu]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/SeriesOrganizersForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$seriesName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/SideboardTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$numSideboardCards]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/StatsTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$eventLink]]></code>
-      <code><![CDATA[$eventsWon]]></code>
-      <code><![CDATA[$favoriteLand]]></code>
-      <code><![CDATA[$favoriteNonLand]]></code>
-      <code><![CDATA[$hasRival]]></code>
-      <code><![CDATA[$longestLosingStreak]]></code>
-      <code><![CDATA[$longestWinningStreak]]></code>
-      <code><![CDATA[$medalsWon]]></code>
-      <code><![CDATA[$mostRecentTrophySrc]]></code>
-      <code><![CDATA[$record]]></code>
-      <code><![CDATA[$rivalLink]]></code>
-      <code><![CDATA[$rivalRecord]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/StringField.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$def]]></code>
-      <code><![CDATA[$field]]></code>
-      <code><![CDATA[$len]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/Submit.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$label]]></code>
-      <code><![CDATA[$name]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/SubmitLeagueResultForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$eventName]]></code>
-      <code><![CDATA[$leagueOpponentDropMenu]]></code>
-      <code><![CDATA[$playerName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/SubmitResultForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$allowsPlayerReportedDraws]]></code>
-      <code><![CDATA[$currentRound]]></code>
-      <code><![CDATA[$drop]]></code>
-      <code><![CDATA[$dropCheckboxInput]]></code>
-      <code><![CDATA[$isSingleElimination]]></code>
-      <code><![CDATA[$matchId]]></code>
-      <code><![CDATA[$opponentGameName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/SymbolTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$sum]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/TextComponent.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$text]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/TextInput.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$id]]></code>
-      <code><![CDATA[$label]]></code>
-      <code><![CDATA[$reminderText]]></code>
-      <code><![CDATA[$size]]></code>
-      <code><![CDATA[$value]]></code>
-    </PossiblyUnusedProperty>
-  </file>
   <file src="gatherling/Views/Components/Time.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$datetime]]></code>
-      <code><![CDATA[$long]]></code>
-      <code><![CDATA[$text]]></code>
-    </PossiblyUnusedProperty>
     <UndefinedFunction>
       <code><![CDATA[human_date($time, $now)]]></code>
     </UndefinedFunction>
   </file>
-  <file src="gatherling/Views/Components/TimeZoneDropMenu.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$selected]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/Tooltip.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$text]]></code>
-      <code><![CDATA[$tooltip]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/TribalBAndR.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$activeFormatName]]></code>
-      <code><![CDATA[$noRestrictedToTribeCreatures]]></code>
-      <code><![CDATA[$noSubTypesBanned]]></code>
-      <code><![CDATA[$noTribesBanned]]></code>
-      <code><![CDATA[$restrictedToTribe]]></code>
-      <code><![CDATA[$seriesName]]></code>
-      <code><![CDATA[$subTypeBanDropMenu]]></code>
-      <code><![CDATA[$tribeBanDropMenu]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/Trophy.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$eventLink]]></code>
-      <code><![CDATA[$trophySrc]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/TrophyCell.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$trophySrc]]></code>
-      <code><![CDATA[$winner]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/TrophyTable.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$playerName]]></code>
-      <code><![CDATA[$trophies]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/VerifyMtgoForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$infobotPrefix]]></code>
-      <code><![CDATA[$isVerified]]></code>
-      <code><![CDATA[$playerName]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Components/VerifyResultForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$drop]]></code>
-      <code><![CDATA[$eventName]]></code>
-      <code><![CDATA[$isDrop]]></code>
-      <code><![CDATA[$matchId]]></code>
-      <code><![CDATA[$opponent]]></code>
-      <code><![CDATA[$playerName]]></code>
-      <code><![CDATA[$report]]></code>
-      <code><![CDATA[$resultText]]></code>
-      <code><![CDATA[$showOpponent]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/ICal.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$description]]></code>
-      <code><![CDATA[$name]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Pages/AdminControlPanel.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$result]]></code>
-      <code><![CDATA[$viewSafe]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Pages/CardsAdmin.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$viewSafe]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Pages/Deck.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$viewSafe]]></code>
-    </PossiblyUnusedProperty>
-  </file>
   <file src="gatherling/Views/Pages/DeckDownload.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$maindeckCards]]></code>
-      <code><![CDATA[$sideboardCards]]></code>
-    </PossiblyUnusedProperty>
     <UndefinedFunction>
       <code><![CDATA[normaliseCardName($card)]]></code>
     </UndefinedFunction>
   </file>
-  <file src="gatherling/Views/Pages/DeckSearch.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$displayDecks]]></code>
-      <code><![CDATA[$mostPlayedDecks]]></code>
-      <code><![CDATA[$searchForm]]></code>
-    </PossiblyUnusedProperty>
-  </file>
   <file src="gatherling/Views/Pages/EventForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$clientDropMenu]]></code>
-      <code><![CDATA[$cohostField]]></code>
-      <code><![CDATA[$currentRoundDropMenu]]></code>
-      <code><![CDATA[$currentlyEditing]]></code>
-      <code><![CDATA[$dayDropMenu]]></code>
-      <code><![CDATA[$deckPrivacyCheckbox]]></code>
-      <code><![CDATA[$eventActiveCheckbox]]></code>
-      <code><![CDATA[$eventThreadUrlField]]></code>
-      <code><![CDATA[$finalRoundsNumDropMenu]]></code>
-      <code><![CDATA[$finalRoundsStructDropMenu]]></code>
-      <code><![CDATA[$finalizeEventCheckbox]]></code>
-      <code><![CDATA[$finalsListPrivacyCheckbox]]></code>
-      <code><![CDATA[$formatDropMenu]]></code>
-      <code><![CDATA[$hostField]]></code>
-      <code><![CDATA[$kValueDropMenu]]></code>
-      <code><![CDATA[$lateEntryLimitField]]></code>
-      <code><![CDATA[$mainRoundsNumDropMenu]]></code>
-      <code><![CDATA[$mainRoundsStructDropMenu]]></code>
-      <code><![CDATA[$metagameUrlField]]></code>
-      <code><![CDATA[$monthDropMenu]]></code>
-      <code><![CDATA[$navLinks]]></code>
-      <code><![CDATA[$numberDropMenu]]></code>
-      <code><![CDATA[$playerReportedDrawsCheckbox]]></code>
-      <code><![CDATA[$playerReportedResultsCheckbox]]></code>
-      <code><![CDATA[$preregistrationAllowedCheckbox]]></code>
-      <code><![CDATA[$privateEventCheckbox]]></code>
-      <code><![CDATA[$registrationCapField]]></code>
-      <code><![CDATA[$reportUrlField]]></code>
-      <code><![CDATA[$seasonDropMenu]]></code>
-      <code><![CDATA[$seriesDropMenu]]></code>
-      <code><![CDATA[$showCreateNextEvent]]></code>
-      <code><![CDATA[$showCreateNextSeason]]></code>
-      <code><![CDATA[$timeDropMenu]]></code>
-      <code><![CDATA[$trophyField]]></code>
-      <code><![CDATA[$yearDropMenu]]></code>
-    </PossiblyUnusedProperty>
     <UndefinedFunction>
       <code><![CDATA[getObjectVarsCamelCase($event)]]></code>
     </UndefinedFunction>
   </file>
   <file src="gatherling/Views/Pages/EventFrame.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$controlPanelLinks]]></code>
-      <code><![CDATA[$event]]></code>
-    </PossiblyUnusedProperty>
     <UndefinedFunction>
       <code><![CDATA[getObjectVarsCamelCase($event)]]></code>
     </UndefinedFunction>
@@ -1134,241 +211,44 @@
     <InvalidPropertyAssignmentValue>
       <code><![CDATA[$results]]></code>
     </InvalidPropertyAssignmentValue>
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$formatDropMenu]]></code>
-      <code><![CDATA[$hasMore]]></code>
-      <code><![CDATA[$hasPlayerSeries]]></code>
-      <code><![CDATA[$results]]></code>
-      <code><![CDATA[$seasonDropMenu]]></code>
-      <code><![CDATA[$seriesDropMenu]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Pages/EventReport.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$finalists]]></code>
-      <code><![CDATA[$fullMetagame]]></code>
-      <code><![CDATA[$hasStarted]]></code>
-      <code><![CDATA[$infoCell]]></code>
-      <code><![CDATA[$isFinalized]]></code>
-      <code><![CDATA[$isRegistrationOpen]]></code>
-      <code><![CDATA[$metaStats]]></code>
-      <code><![CDATA[$prereg]]></code>
-      <code><![CDATA[$seriesLogoSrc]]></code>
-      <code><![CDATA[$trophyCell]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Pages/Forgot.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$cantFindPlayer]]></code>
-      <code><![CDATA[$cantSendLoginLink]]></code>
-      <code><![CDATA[$email]]></code>
-      <code><![CDATA[$hasResetPassword]]></code>
-      <code><![CDATA[$identifierInput]]></code>
-      <code><![CDATA[$newPasswordInput]]></code>
-      <code><![CDATA[$passwordResetFailed]]></code>
-      <code><![CDATA[$resetPassword]]></code>
-      <code><![CDATA[$sendLoginLink]]></code>
-      <code><![CDATA[$sentLoginLink]]></code>
-      <code><![CDATA[$token]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Pages/FormatAdmin.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$formatCPMenu]]></code>
-      <code><![CDATA[$organizerSelect]]></code>
-      <code><![CDATA[$viewSafe]]></code>
-    </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Pages/Home.php">
     <InvalidPropertyAssignmentValue>
       <code><![CDATA[$this->recentWinners]]></code>
     </InvalidPropertyAssignmentValue>
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$hasActiveEvents]]></code>
-      <code><![CDATA[$hasRecentWinners]]></code>
-      <code><![CDATA[$hasUpcomingEvents]]></code>
-      <code><![CDATA[$mostRecentHostedEvent]]></code>
-      <code><![CDATA[$playerInfo]]></code>
-      <code><![CDATA[$stats]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Pages/InsufficientPermissions.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$errorMsg]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Pages/Login.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$discordId]]></code>
-      <code><![CDATA[$ipAddressChanged]]></code>
-      <code><![CDATA[$loginFailed]]></code>
-      <code><![CDATA[$message]]></code>
-      <code><![CDATA[$target]]></code>
-      <code><![CDATA[$username]]></code>
-    </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Pages/MatchList.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$hasMatches]]></code>
-      <code><![CDATA[$isBeforeRoundTwo]]></code>
-      <code><![CDATA[$isLeague]]></code>
-      <code><![CDATA[$lastRound]]></code>
-      <code><![CDATA[$playerADropMenu]]></code>
-      <code><![CDATA[$playerBDropMenu]]></code>
-      <code><![CDATA[$playerByeMenu]]></code>
-      <code><![CDATA[$resultDropMenu]]></code>
-      <code><![CDATA[$roundDropMenu]]></code>
-      <code><![CDATA[$roundLinks]]></code>
-      <code><![CDATA[$rounds]]></code>
-      <code><![CDATA[$structureSummary]]></code>
-    </PossiblyUnusedProperty>
     <UndefinedFunction>
       <code><![CDATA[getObjectVarsCamelCase($match)]]></code>
     </UndefinedFunction>
   </file>
-  <file src="gatherling/Views/Pages/MedalList.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$finalists]]></code>
-    </PossiblyUnusedProperty>
-  </file>
   <file src="gatherling/Views/Pages/Page.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$contentSafe]]></code>
-      <code><![CDATA[$cssLink]]></code>
-      <code><![CDATA[$enableVue]]></code>
-      <code><![CDATA[$headerLogoSrc]]></code>
-      <code><![CDATA[$includeSorttable]]></code>
-      <code><![CDATA[$js]]></code>
-      <code><![CDATA[$jsLink]]></code>
-      <code><![CDATA[$siteName]]></code>
-      <code><![CDATA[$tabs]]></code>
-      <code><![CDATA[$title]]></code>
-      <code><![CDATA[$versionTagline]]></code>
-    </PossiblyUnusedProperty>
     <UndefinedFunction>
       <code><![CDATA[git_hash()]]></code>
       <code><![CDATA[git_hash()]]></code>
       <code><![CDATA[version_tagline()]]></code>
     </UndefinedFunction>
   </file>
-  <file src="gatherling/Views/Pages/PlayerControlPanel.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$result]]></code>
-      <code><![CDATA[$viewSafe]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Pages/PlayerEventList.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$formatDropMenu]]></code>
-      <code><![CDATA[$hasMore]]></code>
-      <code><![CDATA[$seasonDropMenu]]></code>
-      <code><![CDATA[$seriesDropMenu]]></code>
-    </PossiblyUnusedProperty>
-  </file>
   <file src="gatherling/Views/Pages/PlayerList.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$deckless]]></code>
-      <code><![CDATA[$entries]]></code>
-      <code><![CDATA[$format]]></code>
-      <code><![CDATA[$hasEntries]]></code>
-      <code><![CDATA[$hasStarted]]></code>
-      <code><![CDATA[$isActive]]></code>
-      <code><![CDATA[$isFinished]]></code>
-      <code><![CDATA[$isNeitherSwissNorSingleElim]]></code>
-      <code><![CDATA[$isOngoing]]></code>
-      <code><![CDATA[$isSingleElim]]></code>
-      <code><![CDATA[$isSwiss]]></code>
-      <code><![CDATA[$newEntry]]></code>
-      <code><![CDATA[$notYetStarted]]></code>
-      <code><![CDATA[$numEntries]]></code>
-      <code><![CDATA[$showCreateNextEvent]]></code>
-      <code><![CDATA[$showCreateNextSeason]]></code>
-    </PossiblyUnusedProperty>
     <UndefinedFunction>
       <code><![CDATA[getObjectVarsCamelCase($entry)]]></code>
     </UndefinedFunction>
   </file>
   <file src="gatherling/Views/Pages/PointsAdjustmentForm.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$entries]]></code>
-    </PossiblyUnusedProperty>
     <UndefinedFunction>
       <code><![CDATA[getObjectVarsCamelCase($entry)]]></code>
     </UndefinedFunction>
-  </file>
-  <file src="gatherling/Views/Pages/Profile.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$isLoggedOut]]></code>
-      <code><![CDATA[$notFound]]></code>
-      <code><![CDATA[$playerName]]></code>
-      <code><![CDATA[$playerSearchForm]]></code>
-      <code><![CDATA[$profileEdit]]></code>
-      <code><![CDATA[$profileEditForm]]></code>
-      <code><![CDATA[$profileTable]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Pages/Ratings.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$formatDropMenuR]]></code>
-      <code><![CDATA[$highestRatedPlayer]]></code>
-      <code><![CDATA[$highestRating]]></code>
-      <code><![CDATA[$highestRatingDate]]></code>
-      <code><![CDATA[$lastTournamentDate]]></code>
-      <code><![CDATA[$lastTournamentName]]></code>
-      <code><![CDATA[$minMatches]]></code>
-      <code><![CDATA[$paginationSafe]]></code>
-      <code><![CDATA[$ratingsTable]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Pages/Register.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$emailStatusDropMenu]]></code>
-      <code><![CDATA[$message]]></code>
-      <code><![CDATA[$showRegForm]]></code>
-      <code><![CDATA[$timeZoneDropMenu]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Pages/Report.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$result]]></code>
-      <code><![CDATA[$viewComponent]]></code>
-      <code><![CDATA[$viewSafe]]></code>
-    </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Pages/ReportsForm.php">
     <InvalidPropertyAssignmentValue>
       <code><![CDATA[$assembleEntries($entriesByDateTime)]]></code>
       <code><![CDATA[$assembleEntries($entriesByMedal)]]></code>
     </InvalidPropertyAssignmentValue>
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$hasEntries]]></code>
-      <code><![CDATA[$registrants]]></code>
-      <code><![CDATA[$standings]]></code>
-    </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Views/Pages/Series.php">
     <InvalidPropertyAssignmentValue>
       <code><![CDATA[$this->activeSeries]]></code>
     </InvalidPropertyAssignmentValue>
-  </file>
-  <file src="gatherling/Views/Pages/SeriesControlPanel.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$errorMsg]]></code>
-      <code><![CDATA[$orientationSafe]]></code>
-      <code><![CDATA[$seriesControlPanelMenu]]></code>
-      <code><![CDATA[$viewSafe]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Pages/SeriesReport.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$seasonSelect]]></code>
-      <code><![CDATA[$seasonStandings]]></code>
-    </PossiblyUnusedProperty>
-  </file>
-  <file src="gatherling/Views/Pages/StandingsList.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$eventStandings]]></code>
-    </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/admincp.php">
     <UnusedVariable>
