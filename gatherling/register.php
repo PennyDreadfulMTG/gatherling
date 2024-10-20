@@ -21,7 +21,7 @@ function main(): void
         $pw2 = post()->string('pw2', '');
         $email = post()->string('email', '');
         $emailStatus = post()->int('emailstatus', 0);
-        $timezone = (float) post()->string('timezone', '');
+        $timezone = post()->float('timezone', -5.0);
         $discordId = session()->optionalString('DISCORD_ID');
         $discordName = session()->optionalString('DISCORD_NAME');
         $code = Registration::register($username, $pw1, $pw2, $email, $emailStatus, $timezone, $discordId, $discordName);
