@@ -141,7 +141,7 @@ class Player
 
     public static function findByName(string $playerName): ?self
     {
-        $sanitizedName= self::sanitizeUsername($playerName);
+        $sanitizedName = self::sanitizeUsername($playerName);
         $sql = 'SELECT name FROM players WHERE name = :name';
         $params = ['name' => $sanitizedName];
         $name = Db::optionalString($sql, $params);
