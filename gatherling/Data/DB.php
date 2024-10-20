@@ -404,6 +404,11 @@ class DB
         self::execute($sql, ['name' => $name]);
     }
 
+    public static function likeEscape(string $value): string
+    {
+        return str_replace(['%', '_'], ['\\%', '\\_'], $value);
+    }
+
     /** @param array<string, mixed> $params */
     private static function bindParams(PDOStatement $stmt, array $params): void
     {

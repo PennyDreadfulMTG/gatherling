@@ -260,4 +260,18 @@ class DBTest extends DatabaseCase
         $rows = DB::select("SELECT * FROM test_table WHERE name = 'Test for Nested Transaction'", TestDto::class);
         $this->assertCount(1, $rows);
     }
+
+    public function testLikeEscape(): void
+    {
+        $this->assertEquals('\\%', DB::likeEscape('%'));
+        $this->assertEquals('\\_', DB::likeEscape('_'));
+        $this->assertEquals('\\%\\_\\%', DB::likeEscape('%_%'));
+        $this->assertEquals('\\%StartMiddle\\_End', DB::likeEscape('%StartMiddle_End'));
+        $this->assertEquals('Test!@#$^&*()', DB::likeEscape('Test!@#$^&*()'));
+        $this->assertEquals('Complex\\%Test\\_Case!', DB::likeEscape('Complex%Test_Case!'));
+        $this->assertEquals('', DB::likeEscape(''));
+        $longString = str_repeat('%_', 100);
+        $expectedLongString = str_repeat('\\%\\_', 100);
+        $this->assertEquals($expectedLongString, DB::likeEscape($longString));
+    }
 }
