@@ -55,7 +55,7 @@ class Matchup
             SELECT
                 m.subevent, m.round, m.playera, m.playerb, m.result, m.playera_wins, m.playera_losses,
                 m.playera_draws, m.playerb_wins, m.playerb_losses, m.playerb_draws, s.timing, s.type,
-                s.rounds, e.format, e.series, e.season, m.verification, e.name, e.id AS event_id
+                s.rounds, e.format, e.series, e.season, m.verification, e.name AS eventname, e.id AS event_id
             FROM
                 matches m, subevents s, events e
             WHERE

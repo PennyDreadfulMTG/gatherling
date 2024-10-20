@@ -12,7 +12,7 @@ class Standings
     public int $id;
     public ?string $event = null;  // belongs_to event
     public ?string $player = null; // belongs_to player
-    public ?int $active;
+    public ?int $active = null;
     public ?int $score;
     public ?int $matches_played;
     public ?int $matches_won;

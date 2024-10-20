@@ -54,7 +54,7 @@ class Deck
         $sql = '
             SELECT
                 id, name, playername, archetype, format, tribe, notes, deck_hash,
-                sideboard_hash, whole_hash, created_date, deck_colors
+                sideboard_hash, whole_hash, created_date, deck_colors AS deck_color_str
             FROM
                 decks d
             WHERE
@@ -238,11 +238,11 @@ class Deck
     {
         $sql = '
             SELECT
-                SUM(isw * d.qty) AS w,
-                SUM(isu * d.qty) AS u,
-                SUM(isb * d.qty) AS b,
-                SUM(isr * d.qty) AS r,
-                SUM(isg * d.qty) AS g
+                COALESCE(SUM(isw * d.qty), 0) AS w,
+                COALESCE(SUM(isu * d.qty), 0) AS u,
+                COALESCE(SUM(isb * d.qty), 0) AS b,
+                COALESCE(SUM(isr * d.qty), 0) AS r,
+                COALESCE(SUM(isg * d.qty), 0) AS g
             FROM
                 cards c, deckcontents d
             WHERE

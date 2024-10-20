@@ -17,5 +17,5 @@ class DeckDto extends Dto
     public ?string $sideboard_hash;
     public ?string $whole_hash;
     public ?string $created_date;
-    public ?string $deck_colors;
+    public ?string $deck_color_str;
 }
