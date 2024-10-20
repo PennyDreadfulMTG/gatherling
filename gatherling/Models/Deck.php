@@ -566,24 +566,16 @@ class Deck
             $cardar = $format->getLegalCard($testcard);
             if (is_null($cardar)) {
                 $this->errors[] = "Could not find maindeck card: {$amt} {$card} in legal sets";
-
-                if (!isset($this->unparsed_cards[$card])) {
-                    $this->unparsed_cards[$card] = 0;
-                }
-                $this->unparsed_cards[$card] += $amt;
+                $this->unparsed_cards[$card] = ($this->unparsed_cards[$card] ?? 0) + $amt;
                 continue;
-            } else {
-                $card = $testcard;
             }
+            $card = $testcard;
 
             // Restricted Card list. Only one of these cards is alowed in a deck
             if ($format->isCardOnRestrictedList($card) && $amt > 1) {
                 $this->errors[] = "Maindeck card: {$amt} {$card} is on the restricted list.
                              Only one of this card may be in a deck list.";
-                if (!isset($this->unparsed_cards[$card])) {
-                    $this->unparsed_cards[$card] = 0;
-                }
-                $this->unparsed_cards[$card] += $amt;
+                $this->unparsed_cards[$card] = ($this->unparsed_cards[$card] ?? 0) + $amt;
                 continue;
             }
 
@@ -601,28 +593,19 @@ class Deck
 
             if ($format->isCardOnBanList($card)) {
                 $this->errors[] = "Maindeck card: {$amt} {$card} is banned in {$format->name}";
-                if (!isset($this->unparsed_cards[$card])) {
-                    $this->unparsed_cards[$card] = 0;
-                }
-                $this->unparsed_cards[$card] += $amt;
+                $this->unparsed_cards[$card] = ($this->unparsed_cards[$card] ?? 0) + $amt;
                 continue;
             }
             if (count($legalCards)) {
                 if (!$format->isCardOnLegalList($card)) {
                     $this->errors[] = "Maindeck card: {$amt} {$card} is not on the legal card list";
-                    if (!isset($this->unparsed_cards[$card])) {
-                        $this->unparsed_cards[$card] = 0;
-                    }
-                    $this->unparsed_cards[$card] += $amt;
+                    $this->unparsed_cards[$card] = ($this->unparsed_cards[$card] ?? 0) + $amt;
                     continue;
                 }
             }
             if (!$format->isCardLegalByRarity($card)) {
                 $this->errors[] = "Maindeck card : {$amt} {$card} is illegal by rarity.";
-                if (!isset($this->unparsed_cards[$card])) {
-                    $this->unparsed_cards[$card] = 0;
-                }
-                $this->unparsed_cards[$card] += $amt;
+                $this->unparsed_cards[$card] = ($this->unparsed_cards[$card] ?? 0) + $amt;
                 continue;
             }
             $this->maindeck_cardcount += $amt;
@@ -652,11 +635,7 @@ class Deck
             $cardar = $format->getLegalCard($testcard);
             if (is_null($cardar)) {
                 $this->errors[] = "Could not find sideboard card: {$amt} {$card} in legal sets";
-
-                if (!isset($this->unparsed_side[$card])) {
-                    $this->unparsed_side[$card] = 0;
-                }
-                $this->unparsed_side[$card] += $amt;
+                $this->unparsed_side[$card] = ($this->unparsed_side[$card] ?? 0) + $amt;
                 continue;
             } else {
                 $card = $testcard;
@@ -677,10 +656,7 @@ class Deck
                 if ($restrictedError) {
                     $this->errors[] = "Sideboard card: {$amt} {$card} is on the restricted list.
                                  Only one of this card may be in a deck list.";
-                    if (!isset($this->unparsed_side[$card])) {
-                        $this->unparsed_side[$card] = 0;
-                    }
-                    $this->unparsed_side[$card] += $amt;
+                    $this->unparsed_side[$card] = ($this->unparsed_side[$card] ?? 0) + $amt;
                     continue;
                 }
             }
@@ -716,28 +692,19 @@ class Deck
 
             if ($format->isCardOnBanList($card)) {
                 $this->errors[] = "Sideboard card: {$amt} {$card} is banned in {$format->name}";
-                if (!isset($this->unparsed_side[$card])) {
-                    $this->unparsed_side[$card] = 0;
-                }
-                $this->unparsed_side[$card] += $amt;
+                $this->unparsed_side[$card] = ($this->unparsed_side[$card] ?? 0) + $amt;
                 continue;
             }
             if (count($legalCards)) {
                 if (!$format->isCardOnLegalList($card)) {
                     $this->errors[] = "Sideboard card: {$amt} {$card} is not on the legal card list";
-                    if (!isset($this->unparsed_side[$card])) {
-                        $this->unparsed_side[$card] = 0;
-                    }
-                    $this->unparsed_side[$card] += $amt;
+                    $this->unparsed_side[$card] = ($this->unparsed_side[$card] ?? 0) + $amt;
                     continue;
                 }
             }
             if (!$format->isCardLegalByRarity($card)) {
                 $this->errors[] = "Sideboard card : {$amt} {$card} is illegal by rarity.";
-                if (!isset($this->unparsed_side[$card])) {
-                    $this->unparsed_side[$card] = 0;
-                }
-                $this->unparsed_side[$card] += $amt;
+                $this->unparsed_side[$card] = ($this->unparsed_side[$card] ?? 0) + $amt;
                 continue;
             }
 
