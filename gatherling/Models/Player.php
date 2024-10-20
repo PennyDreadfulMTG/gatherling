@@ -55,12 +55,11 @@ class Player
         $params = ['name' => $name];
         try {
             $result = Db::selectOnly($sql, PlayerDto::class, $params);
-            // BAKERT move out of try block
-            foreach (get_object_vars($result) as $key => $value) {
-                $this->{$key} = $value;
-            }
         } catch (DatabaseException $e) {
             throw new NotFoundException("Player $name is not found.", 0, $e);
+        }
+        foreach (get_object_vars($result) as $key => $value) {
+            $this->{$key} = $value;
         }
     }
 
