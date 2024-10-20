@@ -70,7 +70,7 @@ class Setup
         global $CONFIG;
 
         Log::info('Dropping test database');
-        DB::dropDatabase($CONFIG['db_test_database']);
+        Db::dropDatabase($CONFIG['db_test_database']);
     }
 
     private static function activateTestDatabase(): void
@@ -99,7 +99,7 @@ class Setup
         global $CONFIG;
 
         Log::info('Creating database if necessary');
-        DB::createDatabase($CONFIG['db_database']);
+        Db::createDatabase($CONFIG['db_database']);
     }
 
     private static function restoreDump(string $path): void
@@ -115,7 +115,7 @@ class Setup
         }
         $commands = explode(';', $s);
         foreach ($commands as $sql) {
-            DB::execute($sql);
+            Db::execute($sql);
         }
         Log::info('Database restored from dump.');
     }
@@ -162,15 +162,15 @@ class Setup
         Log::info('Found ' . count($migrations) . ' pending migrations');
         foreach ($migrations as $migration) {
             Log::info("Migration {$migration->version}: {$migration->sql}");
-            DB::execute($migration->sql);
-            DB::execute("UPDATE db_version SET version = :version", ['version' => $migration->version]);
+            Db::execute($migration->sql);
+            Db::execute("UPDATE db_version SET version = :version", ['version' => $migration->version]);
         }
     }
 
     private static function version(): int
     {
         try {
-            return DB::int('SELECT version FROM db_version LIMIT 1', []);
+            return Db::int('SELECT version FROM db_version LIMIT 1', []);
         } catch (DatabaseException) {
             Log::debug('No version found in db_version table');
             return 0;

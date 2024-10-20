@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
-use Gatherling\Data\DB;
+use Gatherling\Data\Db;
 use Gatherling\Exceptions\DatabaseException;
 use InvalidArgumentException;
 
@@ -46,7 +46,7 @@ class Matchup
     public static function destroy(int $matchid): void
     {
         $sql = 'DELETE FROM matches WHERE id = :id';
-        DB::execute($sql, ['id' => $matchid]);
+        Db::execute($sql, ['id' => $matchid]);
     }
 
     public function __construct(int $id)
@@ -60,7 +60,7 @@ class Matchup
                 matches m, subevents s, events e
             WHERE
                 m.id = :id AND m.subevent = s.id AND e.name = s.parent';
-        $row = DB::selectOnlyOrNull($sql, MatchupDto::class, ['id' => $id]);
+        $row = Db::selectOnlyOrNull($sql, MatchupDto::class, ['id' => $id]);
         if ($row === null) {
             return;
         }
@@ -80,7 +80,7 @@ class Matchup
                 subevents s, matches m
             WHERE
                 m.id = :id AND m.subevent = s.id';
-        $eventname = DB::string($sql, ['id' => $this->id]);
+        $eventname = Db::string($sql, ['id' => $this->id]);
         return new Event($eventname);
     }
 
@@ -285,7 +285,7 @@ class Matchup
     // Returns a count of how many matches there are total.
     public static function count(): int
     {
-        return DB::int('SELECT COUNT(id) FROM matches');
+        return Db::int('SELECT COUNT(id) FROM matches');
     }
 
     // Saves a report from a player on their match results.
@@ -326,7 +326,7 @@ class Matchup
             default:
                 throw new InvalidArgumentException("Invalid result: $result");
         }
-        DB::execute($sql, ['wins' => $wins, 'losses' => $losses, 'id' => $match_id]);
+        Db::execute($sql, ['wins' => $wins, 'losses' => $losses, 'id' => $match_id]);
         self::validateReport($match_id);
     }
 
@@ -348,7 +348,7 @@ class Matchup
     {
         // get and compare reports
         $sql = 'SELECT subevent, playera_wins, playerb_wins, playera_losses, playerb_losses FROM matches WHERE id = :id';
-        $report = DB::selectOnly($sql, ReportDto::class, ['id' => $match_id]);
+        $report = Db::selectOnly($sql, ReportDto::class, ['id' => $match_id]);
 
         if (($report->playera_wins + $report->playera_losses) == 0 or ($report->playerb_wins + $report->playerb_losses) == 0) {
             //No second report, quit
@@ -370,13 +370,13 @@ class Matchup
     public static function flagVerified(int $match_id): void
     {
         $sql = "UPDATE matches SET verification = 'verified' WHERE id = :id";
-        DB::execute($sql, ['id' => $match_id]);
+        Db::execute($sql, ['id' => $match_id]);
     }
 
     public static function flagFailed(int $match_id): void
     {
         $sql = "UPDATE matches SET verification = 'failed' WHERE id = :id";
-        DB::execute($sql, ['id' => $match_id]);
+        Db::execute($sql, ['id' => $match_id]);
     }
 
     public static function unresolvedMatchesCheck(int $subevent, int $current_round): int
@@ -388,7 +388,7 @@ class Matchup
                 matches
             WHERE
                 subevent = :subevent AND verification != 'verified' AND round = :round";
-        return DB::int($sql, ['subevent' => $subevent, 'round' => $current_round]);
+        return Db::int($sql, ['subevent' => $subevent, 'round' => $current_round]);
     }
 
     // Goes through all matches in this round and updates the "Standing" objects with new scores.
@@ -529,7 +529,7 @@ class Matchup
     public function finalizeMatch(string $winner, int $match_id): void
     {
         $sql = 'UPDATE matches SET result = :winner WHERE id = :id';
-        DB::execute($sql, ['winner' => $winner, 'id' => $match_id]);
+        Db::execute($sql, ['winner' => $winner, 'id' => $match_id]);
     }
 
     public function playerReportableCheck(): bool
@@ -547,7 +547,7 @@ class Matchup
                 matches m, subevents s, events e
             WHERE
                 m.id = :id AND m.subevent = s.id AND e.name = s.parent';
-        return DB::string($sql, ['id' => $this->id]);
+        return Db::string($sql, ['id' => $this->id]);
     }
 
     public function isDraw(): bool

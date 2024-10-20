@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
-use Gatherling\Data\DB;
+use Gatherling\Data\Db;
 use Gatherling\Exceptions\NotFoundException;
 use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\PlayerLink;
@@ -114,7 +114,7 @@ class Player
             return false;
         }
         $username = self::sanitizeUsername($username);
-        $srvpass = DB::optionalString('SELECT password FROM players WHERE name = :name', ['name' => $username]);
+        $srvpass = Db::optionalString('SELECT password FROM players WHERE name = :name', ['name' => $username]);
         if ($srvpass === null) {
             return false;
         }
@@ -412,7 +412,7 @@ class Player
         }
         $sql = 'SELECT series FROM series_organizers WHERE player = :player AND series = :series';
         $params = ['player' => $this->name, 'series' => $seriesName];
-        return DB::optionalString($sql, $params) !== null;
+        return Db::optionalString($sql, $params) !== null;
     }
 
     /** @return list<Event> */
@@ -1318,11 +1318,11 @@ class Player
 
     public static function activeCount(): int
     {
-        return DB::int('SELECT COUNT(name) FROM players WHERE password IS NOT NULL');
+        return Db::int('SELECT COUNT(name) FROM players WHERE password IS NOT NULL');
     }
 
     public static function verifiedCount(): int
     {
-        return DB::int('SELECT COUNT(name) FROM players WHERE mtgo_confirmed = 1');
+        return Db::int('SELECT COUNT(name) FROM players WHERE mtgo_confirmed = 1');
     }
 }

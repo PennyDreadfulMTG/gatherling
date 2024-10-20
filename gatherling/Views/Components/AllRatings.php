@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-use Gatherling\Data\DB;
+use Gatherling\Data\Db;
 use Gatherling\Models\Entry;
 use Gatherling\Models\Player;
 use Gatherling\Models\Ratings;
@@ -70,7 +70,7 @@ class AllRatings extends Component
                 e.start = r.updated AND n.player = r.player AND n.event_id = e.id
             ORDER BY
                 e.start DESC';
-        $ratings = array_reverse(DB::select($sql, RatingsDto::class, ['format' => $formatName, 'player' => $player->name]));
+        $ratings = array_reverse(Db::select($sql, RatingsDto::class, ['format' => $formatName, 'player' => $player->name]));
 
         $prevRating = 1600;
         foreach ($ratings as $rating) {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-use Gatherling\Data\DB;
+use Gatherling\Data\Db;
 use Gatherling\Models\CardDto;
 use Gatherling\Models\CardSetDto;
 
@@ -28,7 +28,7 @@ class EditSet extends Component
                 `cardsets`
             WHERE
                 `name` = :name';
-        $set = DB::selectOnly($sql, CardSetDto::class, ['name' => $cardSetName]);
+        $set = Db::selectOnly($sql, CardSetDto::class, ['name' => $cardSetName]);
 
         $this->setCodeInput = new TextInput('Set Code', 'code', $set->code);
         $this->releaseDateInput = new TextInput('Release Date', 'released', $set->released);
@@ -44,7 +44,7 @@ class EditSet extends Component
                 `deckcontents` ON `cards`.`id` = `deckcontents`.`card`
             WHERE
                 `cardset` = :cardset';
-        $cards = DB::select($sql, CardDto::class, ['cardset' => $cardSetName]);
+        $cards = Db::select($sql, CardDto::class, ['cardset' => $cardSetName]);
 
         $names = [];
         foreach ($cards as $card) {

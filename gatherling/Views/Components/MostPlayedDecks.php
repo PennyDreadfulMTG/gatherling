@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-use Gatherling\Data\DB;
+use Gatherling\Data\Db;
 use Gatherling\Models\DeckDto;
 use Gatherling\Models\MostPlayedDeckDto;
 
@@ -15,7 +15,7 @@ class MostPlayedDecks extends Component
 
     public function __construct()
     {
-        DB::execute("set session sql_mode='';"); // Disable ONLY_FULL_GROUP_BY
+        Db::execute("set session sql_mode='';"); // Disable ONLY_FULL_GROUP_BY
         $sql = '
             SELECT
                 COUNT(d.deck_hash) as cnt,
@@ -45,7 +45,7 @@ class MostPlayedDecks extends Component
                 cnt DESC
             LIMIT 20';
 
-        $decks = DB::select($sql, MostPlayedDeckDto::class);
+        $decks = Db::select($sql, MostPlayedDeckDto::class);
         foreach ($decks as $deck) {
             $created = $deck->created_date ? strtotime($deck->created_date) : null;
             $createdTime = $created ? new Time($created, time()) : null;

@@ -6,7 +6,7 @@ require_once 'lib.php';
 
 //## Helper Functions
 
-use Gatherling\Data\DB;
+use Gatherling\Data\Db;
 use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
@@ -452,6 +452,6 @@ function card_catalog(): array
 function cardname_from_id(string $id): string
 {
     $sql = 'SELECT c.name FROM cards c WHERE c.scryfallId = :scryfall_id';
-    $name = DB::string($sql, ['scryfall_id' => $id]);
+    $name = Db::string($sql, ['scryfall_id' => $id]);
     return $name;
 }

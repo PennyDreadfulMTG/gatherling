@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Gatherling\Data\DB;
+use Gatherling\Data\Db;
 use Gatherling\Models\Image;
 use Gatherling\Models\ImageDto;
 use Gatherling\Views\ImageResponse;
@@ -15,7 +15,7 @@ function main(): void
 {
     $sql = 'SELECT logo AS image, imgtype AS type, imgsize AS size FROM series WHERE name = :series';
     $args = ['series' => $_GET['series']];
-    $values = DB::selectOnlyOrNull($sql, ImageDto::class, $args);
+    $values = Db::selectOnlyOrNull($sql, ImageDto::class, $args);
     $image = Image::fromValues($values);
     $response = new ImageResponse($image);
     $response->send();

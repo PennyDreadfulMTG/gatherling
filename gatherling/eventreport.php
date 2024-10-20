@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Gatherling\Data\DB;
+use Gatherling\Data\Db;
 use Gatherling\Models\Event;
 use Gatherling\Models\EventListEntryDto;
 use Gatherling\Views\Pages\EventReport;
@@ -18,7 +18,7 @@ function main(): void
     $eventName = get()->optionalString('event') ?? get()->optionalString('name');
     if ($eventName && Event::exists($eventName)) {
         $event = new Event($eventName);
-        $notYetStarted = DB::bool('SELECT `start` > NOW() AS okay FROM events WHERE `name` = :name', ['name' => $event->name]);
+        $notYetStarted = Db::bool('SELECT `start` > NOW() AS okay FROM events WHERE `name` = :name', ['name' => $event->name]);
         $canPrereg = $event->prereg_allowed && $notYetStarted;
         $page = new EventReport($event, $canPrereg);
     } else {
@@ -72,7 +72,7 @@ function eventList(string $format, string $series, string $season): array
             e.start DESC
         LIMIT 100';
 
-    return DB::select($sql, EventListEntryDto::class, $params);
+    return Db::select($sql, EventListEntryDto::class, $params);
 }
 
 if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {

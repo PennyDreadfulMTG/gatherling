@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Gatherling\Log;
-use Gatherling\Data\DB;
+use Gatherling\Data\Db;
 use Gatherling\Exceptions\SetMissingException;
 
 class Formats
@@ -71,13 +71,13 @@ class Formats
         foreach ($fmt->getLegalCardsets() as $setName) {
             if (!in_array($setName, $expected, true)) {
                 Log::info("{$setName} is no longer Standard Legal.");
-                DB::execute('UPDATE cardsets SET standard_legal = 0 WHERE `name` = :set_name', ['set_name' => $setName]);
+                Db::execute('UPDATE cardsets SET standard_legal = 0 WHERE `name` = :set_name', ['set_name' => $setName]);
             }
         }
         foreach ($expected as $setName) {
             if (!$fmt->isCardSetLegal($setName)) {
                 Log::info("{$setName} is now Standard Legal.");
-                DB::execute('UPDATE cardsets SET standard_legal = 1 WHERE `name` = :set_name', ['set_name' => $setName]);
+                Db::execute('UPDATE cardsets SET standard_legal = 1 WHERE `name` = :set_name', ['set_name' => $setName]);
             }
         }
     }
@@ -109,7 +109,7 @@ class Formats
             if ($release > $cutoff) {
                 if (!$fmt->isCardSetLegal($setName)) {
                     Log::info("{$setName} is Modern Legal.");
-                    DB::execute('UPDATE cardsets SET modern_legal = 1 WHERE `name` = :set_name', ['set_name' => $setName]);
+                    Db::execute('UPDATE cardsets SET modern_legal = 1 WHERE `name` = :set_name', ['set_name' => $setName]);
                 }
             }
         }

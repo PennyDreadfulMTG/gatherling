@@ -16,9 +16,9 @@ use TypeError;
 
 use function Gatherling\Helpers\marshal;
 
-class DB
+class Db
 {
-    private static ?DB $db = null;
+    private static ?Db $db = null;
 
     /**
      * @param list<string> $transactions
@@ -27,7 +27,7 @@ class DB
     {
     }
 
-    private static function connect(bool $connectToDatabase = true): DB
+    private static function connect(bool $connectToDatabase = true): Db
     {
         global $CONFIG;
 

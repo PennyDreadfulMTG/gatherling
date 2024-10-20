@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Gatherling\Data\DB;
+use Gatherling\Data\Db;
 use Gatherling\Models\CalendarEventDto;
 use Gatherling\Views\ICal;
 
@@ -59,7 +59,7 @@ function events(string $where, int $limit = 0): array
         $sql .= ' ORDER BY start DESC LIMIT :limit';
         $params['limit'] = $limit;
     }
-    return DB::select($sql, CalendarEventDto::class, $params);
+    return Db::select($sql, CalendarEventDto::class, $params);
 }
 
 if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {

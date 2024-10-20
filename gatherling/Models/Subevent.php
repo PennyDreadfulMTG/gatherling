@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
-use Gatherling\Data\DB;
+use Gatherling\Data\Db;
 use Gatherling\Exceptions\NotFoundException;
 
 class Subevent
@@ -20,7 +20,7 @@ class Subevent
     {
         $sql = 'SELECT parent, rounds, timing, type FROM subevents WHERE id = :id';
         $params = ['id' => $id];
-        $subevent = DB::selectOnly($sql, SubeventDto::class, $params);
+        $subevent = Db::selectOnly($sql, SubeventDto::class, $params);
         $this->id = $id;
         foreach (get_object_vars($subevent) as $key => $value) {
             $this->$key = $value;
@@ -43,6 +43,6 @@ class Subevent
             'type' => $this->type,
             'id' => $this->id,
         ];
-        DB::execute($sql, $params);
+        Db::execute($sql, $params);
     }
 }

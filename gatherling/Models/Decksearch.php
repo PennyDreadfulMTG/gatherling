@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use Gatherling\Data\DB;
+use Gatherling\Data\Db;
 
 class Decksearch
 {
@@ -85,7 +85,7 @@ class Decksearch
                     decks d, entries n, events e
                 WHERE
                     d.id = :deck_id AND d.id = n.deck AND n.event_id = e.id';
-            $finalized = DB::optionalInt($sql, ['deck_id' => $value]);
+            $finalized = Db::optionalInt($sql, ['deck_id' => $value]);
             if ($finalized === null || $finalized) {
                 array_push($this->finalResults, $value);
             }
@@ -102,7 +102,7 @@ class Decksearch
     {
         $sql = 'SELECT id FROM decks WHERE format = :format';
         $params = ['format' => $format];
-        $results = DB::ints($sql, $params);
+        $results = Db::ints($sql, $params);
         if (count($results) > 0) {
             $this->results['format'] = $results;
         } else {
@@ -118,8 +118,8 @@ class Decksearch
     public function searchByPlayer(string $player): void
     {
         $sql = 'SELECT id FROM decks WHERE playername LIKE :playername';
-        $params = ['playername' => '%' . DB::likeEscape($player) . '%'];
-        $results = DB::ints($sql, $params);
+        $params = ['playername' => '%' . Db::likeEscape($player) . '%'];
+        $results = Db::ints($sql, $params);
         if (count($results) > 0) {
             $this->results['player'] = $results;
         } else {
@@ -148,7 +148,7 @@ class Decksearch
             ORDER BY
                 DATE(`created_date`) DESC';
         $params = ['medal' => $medal];
-        $results = DB::ints($sql, $params);
+        $results = Db::ints($sql, $params);
         if (count($results) > 0) {
             $this->results['medal'] = $results;
         } else {
@@ -175,7 +175,7 @@ class Decksearch
 
         $sql = 'SELECT id FROM decks WHERE deck_colors = :deck_colors';
         $params = ['deck_colors' => $final_color_str];
-        $results = DB::ints($sql, $params);
+        $results = Db::ints($sql, $params);
         if (count($results) > 0) {
             $this->results['color'] = $results;
         } else {
@@ -192,7 +192,7 @@ class Decksearch
     {
         $sql = 'SELECT id FROM decks WHERE archetype = :archetype';
         $params = ['archetype' => $archetype];
-        $results = DB::ints($sql, $params);
+        $results = Db::ints($sql, $params);
         if (count($results) > 0) {
             $this->results['archetype'] = $results;
         } else {
@@ -216,7 +216,7 @@ class Decksearch
             WHERE events.series = :series
             ORDER BY DATE(`registered_at`) DESC';
         $params = ['series' => $series];
-        $results = DB::ints($sql, $params);
+        $results = Db::ints($sql, $params);
         if (count($results) > 0) {
             $this->results['series'] = $results;
         } else {
@@ -244,8 +244,8 @@ class Decksearch
                 cards ON deckcontents.card = cards.id
             WHERE
                 cards.name LIKE :cardname';
-        $params = ['cardname' => '%' . DB::likeEscape($cardname) . '%'];
-        $results = DB::ints($sql, $params);
+        $params = ['cardname' => '%' . Db::likeEscape($cardname) . '%'];
+        $results = Db::ints($sql, $params);
         if (count($results) > 0) {
             $this->results['cardname'] = $results;
         } else {
