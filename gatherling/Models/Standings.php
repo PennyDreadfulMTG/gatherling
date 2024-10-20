@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use Gatherling\Data\Db;
 use InvalidArgumentException;
+
+use function Gatherling\Helpers\db;
 
 class Standings
 {
@@ -46,7 +47,7 @@ class Standings
                     event = :event AND player = :player
                 LIMIT 1';
             $params = ['event' => $eventname, 'player' => $playername];
-            $standings = Db::selectOnlyOrNull($sql, StandingsDto::class, $params);
+            $standings = db()->selectOnlyOrNull($sql, StandingsDto::class, $params);
             $this->player = $playername;
             $this->event = $eventname;
             if (!$standings) {
@@ -105,7 +106,7 @@ class Standings
                     'seed' => $this->seed,
                     'matched' => $this->matched,
                 ];
-                Db::execute($sql, $params);
+                db()->execute($sql, $params);
             } else {
                 $sql = '
                     UPDATE
@@ -134,7 +135,7 @@ class Standings
                     'matches_won' => $this->matches_won,
                     'draws' => $this->draws,
                 ];
-                Db::execute($sql, $params);
+                db()->execute($sql, $params);
             }
         }
     }
@@ -311,7 +312,7 @@ class Standings
         // Get all opponents who haven't dropped from event and exclude myself
         $sql = 'SELECT player FROM standings WHERE event = :event AND active = 1 AND player <> :player ORDER BY player';
         $params = ['event' => $this->event, 'player' => $this->player];
-        $allPlayers = Db::strings($sql, $params);
+        $allPlayers = db()->strings($sql, $params);
         // prune all opponents by opponents I have already played
         $opponentNames = array_diff($allPlayers, $opponentsAlreadyFaced);
         return array_values($opponentNames);
@@ -356,6 +357,6 @@ class Standings
     public static function resetMatched(string $eventname): void
     {
         $sql = 'UPDATE standings SET matched = 0 WHERE event = :event';
-        Db::execute($sql, ['event' => $eventname]);
+        db()->execute($sql, ['event' => $eventname]);
     }
 }

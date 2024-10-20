@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Gatherling\Data\Db;
 use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
@@ -11,6 +10,7 @@ use Gatherling\Models\RecentWinnerDto;
 use Gatherling\Models\UpcomingEventDto;
 use Gatherling\Views\Pages\Home;
 
+use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
@@ -43,7 +43,7 @@ function getUpcomingEvents(): array
         ORDER BY
             start ASC
         LIMIT 20';
-    return Db::select($sql, UpcomingEventDto::class);
+    return db()->select($sql, UpcomingEventDto::class);
 }
 
 /** @return array<string, int> */
@@ -71,7 +71,7 @@ function recentWinners(): array
         ORDER BY
             e.start DESC
         LIMIT 10";
-    $winners = Db::select($sql, RecentWinnerDto::class);
+    $winners = db()->select($sql, RecentWinnerDto::class);
     $results = [];
     foreach ($winners as $winner) {
         $deck = new Deck($winner->id);

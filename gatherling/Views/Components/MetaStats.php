@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-use Gatherling\Data\Db;
 use Gatherling\Models\Event;
 use Gatherling\Models\ArchetypeDto;
+
+use function Gatherling\Helpers\db;
 
 class MetaStats extends Component
 {
@@ -57,7 +58,7 @@ class MetaStats extends Component
     /** @return array<string, int> */
     private function initArchetypeCount(): array
     {
-        $archetypes = Db::select('SELECT name FROM archetypes ORDER BY priority DESC', ArchetypeDto::class);
+        $archetypes = db()->select('SELECT name FROM archetypes ORDER BY priority DESC', ArchetypeDto::class);
         return array_fill_keys(array_column($archetypes, 'name'), 0);
     }
 }

@@ -41,7 +41,6 @@ final class PlayerTest extends DatabaseCase
 
     public function testOrganizersSeries(): void
     {
-        // BAKERT and test with actual series, and maybe try and test adding an invalid series
         $player = Player::findOrCreateByName('An Organizer');
         $this->assertEmpty($player->organizersSeries());
 

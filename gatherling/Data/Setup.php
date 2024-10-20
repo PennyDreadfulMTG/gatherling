@@ -9,6 +9,8 @@ use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\FileNotFoundException;
 use Gatherling\Log;
 
+use function Gatherling\Helpers\db;
+
 require_once __DIR__ . '/../lib.php';
 
 // Handles getting the database into the right state.
@@ -70,7 +72,7 @@ class Setup
         global $CONFIG;
 
         Log::info('Dropping test database');
-        Db::dropDatabase($CONFIG['db_test_database']);
+        db()->dropDatabase($CONFIG['db_test_database']);
     }
 
     private static function activateTestDatabase(): void
@@ -99,7 +101,7 @@ class Setup
         global $CONFIG;
 
         Log::info('Creating database if necessary');
-        Db::createDatabase($CONFIG['db_database']);
+        db()->createDatabase($CONFIG['db_database']);
     }
 
     private static function restoreDump(string $path): void
@@ -115,7 +117,7 @@ class Setup
         }
         $commands = explode(';', $s);
         foreach ($commands as $sql) {
-            Db::execute($sql);
+            db()->execute($sql);
         }
         Log::info('Database restored from dump.');
     }
@@ -162,15 +164,15 @@ class Setup
         Log::info('Found ' . count($migrations) . ' pending migrations');
         foreach ($migrations as $migration) {
             Log::info("Migration {$migration->version}: {$migration->sql}");
-            Db::execute($migration->sql);
-            Db::execute("UPDATE db_version SET version = :version", ['version' => $migration->version]);
+            db()->execute($migration->sql);
+            db()->execute("UPDATE db_version SET version = :version", ['version' => $migration->version]);
         }
     }
 
     private static function version(): int
     {
         try {
-            return Db::int('SELECT version FROM db_version LIMIT 1', []);
+            return db()->int('SELECT version FROM db_version LIMIT 1', []);
         } catch (DatabaseException) {
             Log::debug('No version found in db_version table');
             return 0;

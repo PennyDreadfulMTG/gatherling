@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Auth;
 
-use Gatherling\Data\Db;
+use function Gatherling\Helpers\db;
 
 class Session
 {
@@ -47,7 +47,7 @@ class Session
             AND
                 expiry >= NOW()';
         $args = ['token' => $token];
-        $details = Db::optionalString($sql, $args);
+        $details = db()->optionalString($sql, $args);
         return $details ? json_decode($details, true) : [];
     }
 
@@ -79,7 +79,7 @@ class Session
             'details' => $details,
             'expiry' => $expiry,
         ];
-        Db::execute($sql, $args);
+        db()->execute($sql, $args);
         setcookie('remember_me', $token, $expiry, '/');
     }
 
@@ -88,7 +88,7 @@ class Session
         // We take the opportunity to delete expired sessions here, too
         $sql = 'DELETE FROM sessions WHERE token = :token OR expiry < NOW()';
         $args = ['token' => $token];
-        Db::execute($sql, $args);
+        db()->execute($sql, $args);
         setcookie('remember_me', '', time() - 60 * 60, '/');
     }
 }

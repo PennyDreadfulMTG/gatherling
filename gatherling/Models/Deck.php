@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
-use Gatherling\Data\Db;
 use InvalidArgumentException;
 use Gatherling\Views\Components\DeckLink;
+
+use function Gatherling\Helpers\db;
 
 class Deck
 {
@@ -59,7 +60,7 @@ class Deck
                 decks d
             WHERE
                 id = :id';
-        $deck = Db::selectOnlyOrNull($sql, DeckDto::class, ['id' => $id]);
+        $deck = db()->selectOnlyOrNull($sql, DeckDto::class, ['id' => $id]);
         if (!$deck) {
             $this->id = 0;
             $this->new = true;
@@ -78,13 +79,13 @@ class Deck
                     players p, entries e, decks d
                 WHERE
                     p.name = e.player AND d.id = e.deck AND d.id = :id';
-            $this->playername = Db::optionalString($sql, ['id' => $id]);
+            $this->playername = db()->optionalString($sql, ['id' => $id]);
         }
 
         // Check for created date in entries if it isn't in the decks table
         if (is_null($this->created_date)) {
             $sql = 'SELECT registered_at FROM entries where deck = :id';
-            $this->created_date = Db::optionalString($sql, ['id' => $id]);
+            $this->created_date = db()->optionalString($sql, ['id' => $id]);
         }
 
         // Retrieve cards.
@@ -99,7 +100,7 @@ class Deck
                 AND d.id = :id
             ORDER BY
                 c.name';
-        $cards = Db::select($sql, DeckCardDto::class, ['id' => $id]);
+        $cards = db()->select($sql, DeckCardDto::class, ['id' => $id]);
 
         $this->maindeck_cardcount = 0;
         $this->sideboard_cardcount = 0;
@@ -123,7 +124,7 @@ class Deck
                 d.id = :id
                 AND d.id = n.deck
                 AND n.event_id = e.id';
-        $event = Db::selectOnlyOrNull($sql, DeckEventDto::class, ['id' => $id]);
+        $event = db()->selectOnlyOrNull($sql, DeckEventDto::class, ['id' => $id]);
         if ($event) {
             $this->eventname = $event->name;
             $this->event_id = $event->id;
@@ -144,9 +145,9 @@ class Deck
                     events ON entries.event_id = events.id
                 WHERE
                     entries.deck = :id';
-            $this->format = Db::optionalString($sql, ['id' => $id]);
+            $this->format = db()->optionalString($sql, ['id' => $id]);
             $sql = 'SELECT MIN(id) FROM subevents WHERE parent = :eventname';
-            $this->subeventid = Db::optionalInt($sql, ['eventname' => $this->eventname]);
+            $this->subeventid = db()->optionalInt($sql, ['eventname' => $this->eventname]);
         } else {
             $this->format = '';
             $this->subeventid = null;
@@ -154,11 +155,11 @@ class Deck
 
         // Retrieve medal
         $sql = 'SELECT n.medal FROM entries n WHERE n.deck = :id';
-        $this->medal = Db::optionalString($sql, ['id' => $id]) ?? 'dot';
+        $this->medal = db()->optionalString($sql, ['id' => $id]) ?? 'dot';
 
         // Retrieve errors
         $sql = 'SELECT error FROM deckerrors WHERE deck = :id';
-        $this->errors = Db::strings($sql, ['id' => $id]);
+        $this->errors = db()->strings($sql, ['id' => $id]);
 
         // if there isnt a color string get one, must execute
         // after card retrival
@@ -170,7 +171,7 @@ class Deck
     /** @return list<string> */
     public static function getArchetypes(): array
     {
-        return Db::strings('SELECT name FROM archetypes WHERE priority > 0 ORDER BY priority DESC, name');
+        return db()->strings('SELECT name FROM archetypes WHERE priority > 0 ORDER BY priority DESC, name');
     }
 
     public function getEntry(): Entry
@@ -213,7 +214,7 @@ class Deck
                 cards c, deckcontents d
             WHERE
                 d.deck = :id AND c.id = d.card AND d.issideboard != 1';
-        $colors = Db::selectOnly($sql, DeckColorsDto::class, ['id' => $this->id]);
+        $colors = db()->selectOnly($sql, DeckColorsDto::class, ['id' => $this->id]);
         $this->deck_color_str = implode('', array_filter(['w', 'u', 'b', 'r', 'g'], fn($c) => $colors->{$c}));
     }
 
@@ -235,7 +236,7 @@ class Deck
                 d.deck = :id
                 AND c.id = d.card
                 AND d.issideboard != 1';
-        $count = Db::selectOnly($sql, DeckColorsDto::class, ['id' => $this->id]);
+        $count = db()->selectOnly($sql, DeckColorsDto::class, ['id' => $this->id]);
         return (array) $count;
     }
 
@@ -331,7 +332,7 @@ class Deck
     public function getErrors(): array
     {
         $sql = 'SELECT error FROM deckerrors WHERE deck = :deck_id';
-        return Db::strings($sql, ['deck_id' => $this->id]);
+        return db()->strings($sql, ['deck_id' => $this->id]);
     }
 
     // find a way to list the id as a param
@@ -435,18 +436,18 @@ class Deck
         $this->errors = [];
         // Checks to see if any matches have been played by the deck, if not deletes the deck
         if (count($this->getMatches()) == 0) {
-            Db::begin('delete_deck');
-            Db::execute('DELETE FROM entries WHERE deck = :deck', ['deck' => $this->id]);
-            Db::execute('DELETE FROM deckerrors WHERE deck = :deck', ['deck' => $this->id]);
-            Db::execute('DELETE FROM deckcontents WHERE deck = :deck', ['deck' => $this->id]);
-            Db::execute('DELETE FROM decks WHERE id = :deck', ['deck' => $this->id]);
-            Db::commit('delete_deck');
+            db()->begin('delete_deck');
+            db()->execute('DELETE FROM entries WHERE deck = :deck', ['deck' => $this->id]);
+            db()->execute('DELETE FROM deckerrors WHERE deck = :deck', ['deck' => $this->id]);
+            db()->execute('DELETE FROM deckcontents WHERE deck = :deck', ['deck' => $this->id]);
+            db()->execute('DELETE FROM decks WHERE id = :deck', ['deck' => $this->id]);
+            db()->commit('delete_deck');
         }
     }
 
     public function save(): void
     {
-        Db::begin('save_deck');
+        db()->begin('save_deck');
         $this->errors = [];
 
         $this->name = $this->name ?: 'Temp';
@@ -456,7 +457,7 @@ class Deck
 
         // had to put this here since the constructor doesn't run entirely when a new deck is created
         if (!is_null($this->event_id) && is_null($this->format)) {
-            $this->format = Db::string('SELECT format FROM events WHERE id = :event_id', ['event_id' => $this->event_id]);
+            $this->format = db()->string('SELECT format FROM events WHERE id = :event_id', ['event_id' => $this->event_id]);
         }
         if (!$this->format) {
             throw new InvalidArgumentException('Format is required');
@@ -487,13 +488,13 @@ class Deck
                 'tribe' => $this->tribe,
                 'notes' => $this->notes,
             ];
-            $this->id = Db::insert($sql, $params);
+            $this->id = db()->insert($sql, $params);
 
             $sql = 'UPDATE entries SET deck = :deck WHERE player = :player AND event_id = :event_id';
             $params = ['deck' => $this->id, 'player' => $this->playername, 'event_id' => $this->event_id];
-            $affectedRows = Db::update($sql, $params);
+            $affectedRows = db()->update($sql, $params);
             if ($affectedRows != 1) {
-                Db::rollback('save_deck');
+                db()->rollback('save_deck');
                 throw new Exception('Entry for ' . $this->playername . ' in ' . $this->eventname . ' not found');
             }
         } else {
@@ -507,17 +508,17 @@ class Deck
                 'notes' => $this->notes,
                 'id' => $this->id,
             ];
-            Db::update($sql, $params);
+            db()->update($sql, $params);
             $format = new Format($this->format);
         }
 
         $sql = 'DELETE FROM deckcontents WHERE deck = :id';
         $params = ['id' => $this->id];
-        Db::execute($sql, $params);
+        db()->execute($sql, $params);
 
         $sql = 'DELETE FROM deckerrors WHERE deck = :id';
         $params = ['id' => $this->id];
-        Db::execute($sql, $params);
+        db()->execute($sql, $params);
 
         //////
         /// parsing start
@@ -586,7 +587,7 @@ class Deck
             $this->maindeck_cardcount += $amt;
             $sql = 'INSERT INTO deckcontents (deck, card, issideboard, qty) values(:deck, :card, 0, :qty)';
             $params = ['deck' => $this->id, 'card' => $cardar['id'], 'qty' => $amt];
-            Db::execute($sql, $params);
+            db()->execute($sql, $params);
             $newmaindeck[$cardar['name']] = $amt;
         }
 
@@ -686,7 +687,7 @@ class Deck
             $this->sideboard_cardcount += $amt;
             $sql = 'INSERT INTO deckcontents (deck, card, issideboard, qty) values(:deck, :card, 1, :qty)';
             $params = ['deck' => $this->id, 'card' => $cardar['id'], 'qty' => $amt];
-            Db::execute($sql, $params);
+            db()->execute($sql, $params);
             $newsideboard[$cardar['name']] = $amt;
         }
 
@@ -698,7 +699,7 @@ class Deck
 
         $sql = 'UPDATE decks SET notes = :notes, deck_colors = :deck_colors WHERE id = :id';
         $params = ['notes' => $this->notes, 'deck_colors' => $this->deck_color_str, 'id' => $this->id];
-        Db::update($sql, $params);
+        db()->update($sql, $params);
 
         $this->deck_contents_cache = implode('|', array_merge(
             array_keys($this->maindeck_cards),
@@ -707,9 +708,9 @@ class Deck
 
         $sql = 'UPDATE decks set deck_contents_cache = :deck_contents_cache WHERE id = :id';
         $params = ['deck_contents_cache' => $this->deck_contents_cache, 'id' => $this->id];
-        Db::execute($sql, $params);
+        db()->execute($sql, $params);
 
-        Db::commit('save_deck');
+        db()->commit('save_deck');
         $this->calculateHashes();
 
         if ($this->maindeck_cardcount < $format->min_main_cards_allowed) {
@@ -748,7 +749,7 @@ class Deck
         foreach ($this->errors as $error) {
             $sql = 'INSERT INTO deckerrors (deck, error) VALUES (:deck, :error)';
             $params = ['deck' => $this->id, 'error' => $error];
-            Db::execute($sql, $params);
+            db()->execute($sql, $params);
         }
 
         // Autonamer Function
@@ -760,13 +761,13 @@ class Deck
             }
             $sql = 'UPDATE decks set name = :name WHERE id = :id';
             $params = ['name' => $this->name, 'id' => $this->id];
-            Db::execute($sql, $params);
+            db()->execute($sql, $params);
         }
     }
 
     public function getTribe(): ?string
     {
-        return Db::string('SELECT tribe FROM decks WHERE id = :id', ['id' => $this->id]);
+        return db()->string('SELECT tribe FROM decks WHERE id = :id', ['id' => $this->id]);
     }
 
     /**
@@ -793,7 +794,7 @@ class Deck
             ORDER BY
                 e.start DESC';
         $params = ['deck_hash' => $this->deck_hash, 'id' => $this->id];
-        $deckIds = Db::ints($sql, $params);
+        $deckIds = db()->ints($sql, $params);
         $decks = [];
         foreach ($deckIds as $deckId) {
             $deck = new self($deckId);
@@ -842,7 +843,7 @@ class Deck
                 deck_hash = :deck_hash,
                 whole_hash = :whole_hash
             WHERE id = :id';
-        Db::execute($sql, [
+        db()->execute($sql, [
             'sideboard_hash' => $this->sideboard_hash,
             'deck_hash' => $this->deck_hash,
             'whole_hash' => $this->whole_hash,

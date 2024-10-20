@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
-use Gatherling\Data\Db;
 use Gatherling\Views\TemplateHelper;
 use Gatherling\Exceptions\NotFoundException;
+
+use function Gatherling\Helpers\db;
 
 class Entry
 {
@@ -24,7 +25,7 @@ class Entry
     {
         $sql = 'SELECT deck FROM entries WHERE event_id = :event_id AND player = :player';
         $params = ['event_id' => $event_id, 'player' => $playername];
-        $deckId = Db::optionalInt($sql, $params);
+        $deckId = db()->optionalInt($sql, $params);
         if (!$deckId) {
             return null;
         }
@@ -51,7 +52,7 @@ class Entry
                 s.active = 1
             GROUP BY
                 player';
-        $playernames = Db::strings($sql, ['eventid' => $eventid]);
+        $playernames = db()->strings($sql, ['eventid' => $eventid]);
         return array_map(fn (string $name) => new Entry($eventid, $name), $playernames);
     }
 
@@ -69,7 +70,7 @@ class Entry
             GROUP BY
                 player';
         $params = ['event_id' => $eventid, 'player' => $playername];
-        return Db::optionalString($sql, $params) !== null;
+        return db()->optionalString($sql, $params) !== null;
     }
 
     // TODO: remove ignore functionality
@@ -84,7 +85,7 @@ class Entry
             WHERE
                 event_id = :event_id AND player = :player';
         $params = ['event_id' => $event_id, 'player' => $playername];
-        $entry = Db::selectOnlyOrNull($sql, EntryDto::class, $params);
+        $entry = db()->selectOnlyOrNull($sql, EntryDto::class, $params);
         if ($entry == null) {
             throw new NotFoundException('Entry for ' . $playername . ' in ' . $event_id . ' not found');
         }
@@ -181,7 +182,7 @@ class Entry
 
     public function removeEntry(): bool
     {
-        Db::begin('remove_entry');
+        db()->begin('remove_entry');
 
         // if the player being unreg'd entered a deck list, remove it
         if ($this->deck) {
@@ -193,16 +194,16 @@ class Entry
             'event_id' => $this->event->id,
             'player' => $this->player->name,
         ];
-        $removed = Db::update($sql, $params) > 0;
+        $removed = db()->update($sql, $params) > 0;
 
         $sql = 'DELETE FROM standings WHERE event = :event AND player = :player';
         $params = [
             'event' => $this->event->name,
             'player' => $this->player->name,
         ];
-        Db::execute($sql, $params);
+        db()->execute($sql, $params);
 
-        Db::commit('remove_entry');
+        db()->commit('remove_entry');
 
         return $removed;
     }
@@ -221,7 +222,7 @@ class Entry
             'player' => $this->player->name,
             'event_id' => $this->event->id,
         ];
-        Db::execute($sql, $params);
+        db()->execute($sql, $params);
     }
 
     public function setInitialSeed(int $byeqty): void
@@ -238,6 +239,6 @@ class Entry
             'player' => $this->player->name,
             'event_id' => $this->event->id,
         ];
-        Db::execute($sql, $params);
+        db()->execute($sql, $params);
     }
 }

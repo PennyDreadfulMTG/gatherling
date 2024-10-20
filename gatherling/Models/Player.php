@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use Gatherling\Data\Db;
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\NotFoundException;
 use Gatherling\Models\PlayerDto;
 use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\PlayerLink;
 
+use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\session;
 
 class Player
@@ -54,7 +54,7 @@ class Player
                 name = :name';
         $params = ['name' => $name];
         try {
-            $result = Db::selectOnly($sql, PlayerDto::class, $params);
+            $result = db()->selectOnly($sql, PlayerDto::class, $params);
         } catch (DatabaseException $e) {
             throw new NotFoundException("Player $name is not found.", 0, $e);
         }
@@ -103,7 +103,7 @@ class Player
             return false;
         }
         $username = self::sanitizeUsername($username);
-        $srvpass = Db::optionalString('SELECT password FROM players WHERE name = :name', ['name' => $username]);
+        $srvpass = db()->optionalString('SELECT password FROM players WHERE name = :name', ['name' => $username]);
         if ($srvpass === null) {
             return false;
         }
@@ -143,7 +143,7 @@ class Player
         $sanitizedName = self::sanitizeUsername($playerName);
         $sql = 'SELECT name FROM players WHERE name = :name';
         $params = ['name' => $sanitizedName];
-        $name = Db::optionalString($sql, $params);
+        $name = db()->optionalString($sql, $params);
         if ($name === null) {
             return null;
         }
@@ -251,7 +251,7 @@ class Player
     {
         $sql = 'INSERT INTO players (name) VALUES (:player_name)';
         $params = ['player_name' => $playername];
-        Db::execute($sql, $params);
+        db()->execute($sql, $params);
 
         $newPlayer = self::findByName($playername);
         if (!$newPlayer) {
@@ -303,7 +303,7 @@ class Player
             'mtgo_username' => $this->mtgo_username,
             'name' => $this->name,
         ];
-        Db::execute($sql, $params);
+        db()->execute($sql, $params);
     }
 
     public function getIPAddresss(): ?string
@@ -417,7 +417,7 @@ class Player
         }
         $sql = 'SELECT series FROM series_organizers WHERE player = :player AND series = :series';
         $params = ['player' => $this->name, 'series' => $seriesName];
-        return Db::optionalString($sql, $params) !== null;
+        return db()->optionalString($sql, $params) !== null;
     }
 
     /** @return list<Event> */
@@ -1288,7 +1288,7 @@ class Player
             return Series::allNames();
         }
         $sql = 'SELECT series FROM series_organizers WHERE player = :player ORDER BY series';
-        return Db::strings($sql, ['player' => $this->name]);
+        return db()->strings($sql, ['player' => $this->name]);
     }
 
     public function gameName(int|string|null $game = null, bool $html = true): string
@@ -1303,11 +1303,11 @@ class Player
 
     public static function activeCount(): int
     {
-        return Db::int('SELECT COUNT(name) FROM players WHERE password IS NOT NULL');
+        return db()->int('SELECT COUNT(name) FROM players WHERE password IS NOT NULL');
     }
 
     public static function verifiedCount(): int
     {
-        return Db::int('SELECT COUNT(name) FROM players WHERE mtgo_confirmed = 1');
+        return db()->int('SELECT COUNT(name) FROM players WHERE mtgo_confirmed = 1');
     }
 }

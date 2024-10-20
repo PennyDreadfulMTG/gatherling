@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Gatherling\Tests\Support\TestCases;
 
-use Gatherling\Data\Db;
 use PHPUnit\Framework\TestCase;
+
+use function Gatherling\Helpers\db;
 
 // Slightly odd name because PHPUnit issues a warning if "Test" is in the name.
 abstract class DatabaseCase extends TestCase
@@ -16,7 +17,7 @@ abstract class DatabaseCase extends TestCase
         if (!empty($this->requires())) {
             return;
         }
-        Db::begin($this->transactionName());
+        db()->begin($this->transactionName());
     }
 
     protected function tearDown(): void
@@ -25,7 +26,7 @@ abstract class DatabaseCase extends TestCase
         if (!empty($this->requires())) {
             return;
         }
-        Db::rollback($this->transactionName());
+        db()->rollback($this->transactionName());
     }
 
     private function transactionName(): string

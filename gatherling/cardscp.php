@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Gatherling;
 
-use Gatherling\Data\Db;
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Models\Database;
 use Gatherling\Models\Player;
@@ -15,6 +14,7 @@ use Gatherling\Views\Components\SetList;
 use Gatherling\Views\Pages\CardsAdmin;
 use Gatherling\Views\Redirect;
 
+use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\get;
 use function Gatherling\Helpers\post;
 use function Gatherling\Helpers\request;
@@ -63,7 +63,7 @@ function deleteCards(array $cardIds): void
 {
     $sql = 'DELETE FROM `cards` WHERE `id` = :id';
     foreach ($cardIds as $id) {
-        Db::execute($sql, ['id' => $id]);
+        db()->execute($sql, ['id' => $id]);
     }
 }
 

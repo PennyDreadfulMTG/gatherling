@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
-use Gatherling\Data\Db;
+
+use function Gatherling\Helpers\db;
 
 class Format
 {
@@ -160,7 +161,7 @@ class Format
 
         $cardSets = [];
         if ($set == 'All') {
-            $cardSets = Db::strings('SELECT name FROM cardsets');
+            $cardSets = db()->strings('SELECT name FROM cardsets');
         } else {
             $cardSets[] = $set;
         }
@@ -464,13 +465,13 @@ class Format
     public function getLegalCardsets(): array
     {
         if ($this->eternal) {
-            return Db::strings('SELECT name FROM cardsets');
+            return db()->strings('SELECT name FROM cardsets');
         }
         if ($this->modern) {
-            return Db::strings('SELECT name FROM cardsets WHERE modern_legal = 1');
+            return db()->strings('SELECT name FROM cardsets WHERE modern_legal = 1');
         }
         if ($this->standard) {
-            return Db::strings('SELECT name FROM cardsets WHERE standard_legal = 1');
+            return db()->strings('SELECT name FROM cardsets WHERE standard_legal = 1');
         }
 
         return Database::listResultSingleParam('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
@@ -514,13 +515,13 @@ class Format
     public static function getPrivateFormats(string $seriesName): array
     {
         $sql = "SELECT name FROM formats WHERE type = 'Private' AND series_name = :series_name";
-        return Db::strings($sql, ['series_name' => $seriesName]);
+        return db()->strings($sql, ['series_name' => $seriesName]);
     }
 
     /** @return list<string> */
     public static function getAllFormats(): array
     {
-        return Db::strings('SELECT name FROM formats');
+        return db()->strings('SELECT name FROM formats');
     }
 
     /** @return list<string> */
@@ -665,13 +666,13 @@ class Format
     /** @return list<string> */
     public function getFormats(): array
     {
-        return Db::strings('SELECT name FROM formats');
+        return db()->strings('SELECT name FROM formats');
     }
 
     /** @return list<string> */
     public static function getTribesList(): array
     {
-        return Db::strings('SELECT name FROM tribes ORDER BY name');
+        return db()->strings('SELECT name FROM tribes ORDER BY name');
     }
 
     public function isCardLegalByRarity(string $cardName): bool
@@ -745,25 +746,25 @@ class Format
     public function isCardOnBanList(string $card): bool
     {
         $sql = 'SELECT card_name FROM bans WHERE (format = :format AND card_name = :card AND allowed = 0)';
-        return count(Db::strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
+        return count(db()->strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
     }
 
     public function isCardOnLegalList(string $card): bool
     {
         $sql = 'SELECT card_name FROM bans WHERE (format = :format AND card_name = :card AND allowed = 1)';
-        return count(Db::strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
+        return count(db()->strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
     }
 
     public function isCardOnRestrictedList(string $card): bool
     {
         $sql = 'SELECT card_name FROM restricted WHERE (format = :format AND card_name = :card)';
-        return count(Db::strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
+        return count(db()->strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
     }
 
     public function isCardOnRestrictedToTribeList(string $card): bool
     {
         $sql = 'SELECT card_name FROM restrictedtotribe WHERE (format = :format AND card_name = :card)';
-        return count(Db::strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
+        return count(db()->strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
     }
 
     public function isCardSetLegal(string $setName): bool
@@ -952,8 +953,8 @@ class Format
             foreach ($tribesTied as $type => $amt) {
                 // Checking for tribe size in database for tie breaker
                 $sql = 'SELECT COUNT(DISTINCT name) FROM cards WHERE type LIKE :type';
-                $params = ['type' => '%' . Db::likeEscape($type) . '%'];
-                $frequency = Db::int($sql, $params);
+                $params = ['type' => '%' . db()->likeEscape($type) . '%'];
+                $frequency = db()->int($sql, $params);
                 $tribesTied[$type] = $frequency;
             }
             asort($tribesTied); // sorts tribe size by value from low to high for tie breaker
@@ -980,8 +981,8 @@ class Format
             echo "Tribe is: $underdogKey<br />";
             if ($underdogKey && $underdogKey != 'Shapeshifter') {
                 $sql = 'SELECT COUNT(*) FROM cards WHERE type LIKE :type';
-                $params = ['type' => '%' . Db::likeEscape($underdogKey) . '%'];
-                $frequency = Db::int($sql, $params);
+                $params = ['type' => '%' . db()->likeEscape($underdogKey) . '%'];
+                $frequency = db()->int($sql, $params);
                 if ($frequency < 4) {
                     echo "$underdogKey is a 3 card tribe<br />";
                     if ($subTypeChangeling > 8) {
@@ -1044,8 +1045,8 @@ class Format
             foreach ($tribesTied as $type => $amt) {
                 // Checking for tribe size in database for tie breaker
                 $sql = 'SELECT COUNT(DISTINCT name) FROM cards WHERE type LIKE :type';
-                $params = ['type' => '%' . Db::likeEscape($type) . '%'];
-                $frequency = Db::int($sql, $params);
+                $params = ['type' => '%' . db()->likeEscape($type) . '%'];
+                $frequency = db()->int($sql, $params);
                 $tribesTied[$type] = $frequency;
             }
             asort($tribesTied); // sorts tribe size by value from low to high for tie breaker

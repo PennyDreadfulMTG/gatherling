@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-use Gatherling\Data\Db;
 use Gatherling\Models\CardSetDto;
+
+use function Gatherling\Helpers\db;
 
 class SetList extends Component
 {
@@ -25,7 +26,7 @@ class SetList extends Component
                 cs.name
             ORDER BY
                 cs.name';
-        $sets = Db::select($sql, CardSetDto::class);
+        $sets = db()->select($sql, CardSetDto::class);
         foreach ($sets as $set) {
             $this->sets[] = [
                 'name' => $set->name,

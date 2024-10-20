@@ -17,21 +17,27 @@ use TypeError;
 use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\marshal;
 
+// Do not access this directly, use Gatherling\Helpers\db() instead
 class Db
 {
-    private static ?Db $db = null;
+    private PDO $pdo;
+    private bool $connected = false;
+    /** @var list<string> */
+    private array $transactions = [];
 
-    /**
-     * @param list<string> $transactions
-     */
-    public function __construct(private PDO $pdo, private array $transactions = [])
+    public function __construct()
     {
+        $this->connect();
     }
 
-    private static function connect(bool $connectToDatabase = true): Db
+    private function connect(bool $connectToDatabase = false): void
     {
-        if (self::$db !== null) {
-            return self::$db;
+        if (isset($this->pdo) && ($this->connected || !$connectToDatabase)) {
+            return;
+        }
+        if (isset($this->pdo)) {
+            $this->use();
+            return;
         }
 
         try {
@@ -49,51 +55,60 @@ class Db
         }
 
         try {
-            $pdo = new PDO($dsn, $username, $password);
+            $this->pdo = new PDO($dsn, $username, $password);
             // Set explicitly despite being the default in PHP8 because we rely on this
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            self::$db = new self($pdo);
-            self::execute('SET time_zone = :timezone', ['timezone' => 'America/New_York']);
-
-            return self::$db;
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->exec("SET time_zone = 'America/New_York'");
         } catch (PDOException $e) {
-            throw new DatabaseException('Failed to connect to database', 0, $e);
+            throw new DatabaseException('Failed to connect to database: ' . $e->getMessage(), 0, $e);
         }
     }
 
-    public static function createDatabase(string $rawName): void
+    private function use(): void
     {
-        $dbName = self::quoteIdentifier($rawName);
-        self::executeInternal("CREATE DATABASE IF NOT EXISTS $dbName", [], function ($sql, $params) use ($dbName) {
-            $stmt = self::connect(false)->pdo->prepare($sql);
-            $stmt->execute($params);
-            $stmt = self::connect(false)->pdo->prepare("USE $dbName");
-            $stmt->execute();
+        try {
+            $database = config()->string('db_database');
+        } catch (MarshalException $e) {
+            throw new ConfigurationException('No database name configured', 0, $e);
+        }
+        try {
+            $this->pdo->exec('USE ' . $this->quoteIdentifier($database));
+        } catch (PDOException $e) {
+            throw new DatabaseException('Failed to connect to database: ' . $e->getMessage(), 0, $e);
+        }
+        $this->connected = true;
+        return;
+    }
+
+    public function createDatabase(string $rawName): void
+    {
+        $dbName = $this->quoteIdentifier($rawName);
+        $this->executeInternal("CREATE DATABASE IF NOT EXISTS $dbName", [], function ($sql, $_params) {
+            $this->pdo->query($sql);
         }, false);
     }
 
-    public static function dropDatabase(string $rawName): void
+    public function dropDatabase(string $rawName): void
     {
-        $dbName = self::quoteIdentifier($rawName);
-        self::executeInternal("DROP DATABASE IF EXISTS $dbName", [], function ($sql, $params) {
-            $stmt = self::connect(false)->pdo->prepare($sql);
-            return $stmt->execute($params);
+        $dbName = $this->quoteIdentifier($rawName);
+        $this->executeInternal("DROP DATABASE IF EXISTS $dbName", [], function ($sql, $_params) {
+            return $this->pdo->exec($sql);
         }, false);
     }
 
     /** @param array<string, mixed> $params */
-    public static function execute(string $sql, array $params = []): void
+    public function execute(string $sql, array $params = []): void
     {
         // No return here because PDO::ERROMODE_EXCEPTION means we'd throw if anything went wrong
-        self::executeInternal($sql, $params, function ($sql, $params) {
-            $stmt = self::connect()->pdo->prepare($sql);
+        $this->executeInternal($sql, $params, function ($sql, $params) {
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute($params);
         });
     }
     /** @param array<string, mixed> $params */
-    public static function insert(string $sql, array $params = []): int
+    public function insert(string $sql, array $params = []): int
     {
-        $ids = self::insertMany($sql, $params);
+        $ids = $this->insertMany($sql, $params);
         if (count($ids) !== 1) {
             throw new DatabaseException("Expected 1 id, got " . count($ids) . " for query: $sql with params " . json_encode($params));
         }
@@ -104,12 +119,12 @@ class Db
      * @param array<string, mixed> $params
      * @return list<int>
      */
-    public static function insertMany(string $sql, array $params = []): array
+    public function insertMany(string $sql, array $params = []): array
     {
         $sql = $sql . ' RETURNING id';
         /** @var list<int> */
-        return self::executeInternal($sql, $params, function ($sql, $params) {
-            $stmt = self::connect()->pdo->prepare($sql);
+        return $this->executeInternal($sql, $params, function ($sql, $params) {
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute($params);
             /** @var list<int> */
             $insertedIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
@@ -118,11 +133,11 @@ class Db
     }
 
     /** @param array<string, mixed> $params */
-    public static function update(string $sql, array $params = []): int
+    public function update(string $sql, array $params = []): int
     {
         /** @var int */
-        return self::executeInternal($sql, $params, function ($sql, $params) {
-            $stmt = self::connect()->pdo->prepare($sql);
+        return $this->executeInternal($sql, $params, function ($sql, $params) {
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute($params);
             return $stmt->rowCount();
         });
@@ -134,12 +149,12 @@ class Db
      * @param array<string, mixed> $params
      * @return list<T>
      */
-    public static function select(string $sql, string $class, array $params = []): array
+    public function select(string $sql, string $class, array $params = []): array
     {
         /** @var list<T> */
-        return self::executeInternal($sql, $params, function ($sql, $params) use ($class) {
-            $stmt = self::connect()->pdo->prepare($sql);
-            self::bindParams($stmt, $params);
+        return $this->executeInternal($sql, $params, function ($sql, $params) use ($class) {
+            $stmt = $this->pdo->prepare($sql);
+            $this->bindParams($stmt, $params);
             $stmt->execute();
             try {
                 $rows = $stmt->fetchAll(PDO::FETCH_CLASS, $class);
@@ -156,9 +171,9 @@ class Db
      * @param array<string, mixed> $params
      * @return T
      */
-    public static function selectOnly(string $sql, string $class, array $params = []): Dto
+    public function selectOnly(string $sql, string $class, array $params = []): Dto
     {
-        $result = self::select($sql, $class, $params);
+        $result = $this->select($sql, $class, $params);
         if (count($result) !== 1) {
             throw new DatabaseException('Expected 1 row, got ' . count($result) . " for query: $sql with params " . json_encode($params));
         }
@@ -171,9 +186,9 @@ class Db
      * @param array<string, mixed> $params
      * @return T|null
      */
-    public static function selectOnlyOrNull(string $sql, string $class, array $params = []): ?Dto
+    public function selectOnlyOrNull(string $sql, string $class, array $params = []): ?Dto
     {
-        $result = self::select($sql, $class, $params);
+        $result = $this->select($sql, $class, $params);
         if (count($result) > 1) {
             throw new DatabaseException('Expected 1 row, got ' . count($result) . " for query: $sql with params " . json_encode($params));
         }
@@ -181,50 +196,50 @@ class Db
     }
 
     /** @param array<string, mixed> $params */
-    public static function int(string $sql, array $params = []): int
+    public function int(string $sql, array $params = []): int
     {
         try {
-            return marshal(self::value($sql, $params))->int();
+            return marshal($this->value($sql, $params))->int();
         } catch (MarshalException $e) {
             throw new DatabaseException("Expected int value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
         }
     }
 
     /** @param array<string, mixed> $params */
-    public static function optionalInt(string $sql, array $params = []): ?int
+    public function optionalInt(string $sql, array $params = []): ?int
     {
         try {
-            return marshal(self::value($sql, $params))->optionalInt();
+            return marshal($this->value($sql, $params))->optionalInt();
         } catch (MarshalException $e) {
             throw new DatabaseException("Expected int value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
         }
     }
 
     /** @param array<string, mixed> $params */
-    public static function string(string $sql, array $params = []): string
+    public function string(string $sql, array $params = []): string
     {
         try {
-            return marshal(self::value($sql, $params))->string();
+            return marshal($this->value($sql, $params))->string();
         } catch (MarshalException $e) {
             throw new DatabaseException("Expected string value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
         }
     }
 
     /** @param array<string, mixed> $params */
-    public static function optionalString(string $sql, array $params = []): ?string
+    public function optionalString(string $sql, array $params = []): ?string
     {
         try {
-            return marshal(self::value($sql, $params))->optionalString();
+            return marshal($this->value($sql, $params))->optionalString();
         } catch (MarshalException $e) {
             throw new DatabaseException("Expected string value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
         }
     }
 
     /** @param array<string, mixed> $params */
-    public static function float(string $sql, array $params = []): float
+    public function float(string $sql, array $params = []): float
     {
         try {
-            $v = marshal(self::value($sql, $params))->float();
+            $v = marshal($this->value($sql, $params))->float();
         } catch (MarshalException $e) {
             throw new DatabaseException("Expected float value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
         }
@@ -232,19 +247,19 @@ class Db
     }
 
     /** @param array<string, mixed> $params */
-    public static function optionalFloat(string $sql, array $params = []): ?float
+    public function optionalFloat(string $sql, array $params = []): ?float
     {
         try {
-            return marshal(self::value($sql, $params))->optionalFloat();
+            return marshal($this->value($sql, $params))->optionalFloat();
         } catch (MarshalException $e) {
             throw new DatabaseException("Expected float value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
         }
     }
 
     /** @param array<string, mixed> $params */
-    public static function bool(string $sql, array $params = []): bool
+    public function bool(string $sql, array $params = []): bool
     {
-        $v = self::optionalInt($sql, $params);
+        $v = $this->optionalInt($sql, $params);
         if ($v === null) {
             throw new DatabaseException("Expected non-null bool value for query: $sql with params " . json_encode($params));
         }
@@ -252,9 +267,9 @@ class Db
     }
 
     /** @param array<string, mixed> $params */
-    public static function optionalBool(string $sql, array $params = []): ?bool
+    public function optionalBool(string $sql, array $params = []): ?bool
     {
-        $v = self::optionalInt($sql, $params);
+        $v = $this->optionalInt($sql, $params);
         if ($v === null) {
             return null;
         }
@@ -262,9 +277,9 @@ class Db
     }
 
     /** @param array<string, mixed> $params */
-    private static function value(string $sql, array $params = []): mixed
+    private function value(string $sql, array $params = []): mixed
     {
-        $values = self::values($sql, $params);
+        $values = $this->values($sql, $params);
         if (count($values) > 1) {
             throw new DatabaseException("Expected 1 value, got " . count($values) . " for query: $sql with params " . json_encode($params));
         }
@@ -278,10 +293,10 @@ class Db
      * @param array<string, mixed> $params
      * @return list<string>
      */
-    public static function strings(string $sql, array $params = []): array
+    public function strings(string $sql, array $params = []): array
     {
         try {
-            return marshal(self::values($sql, $params))->strings();
+            return marshal($this->values($sql, $params))->strings();
         } catch (MarshalException $e) {
             throw new DatabaseException("Expected strings value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
         }
@@ -291,10 +306,10 @@ class Db
      * @param array<string, mixed> $params
      * @return list<int>
      */
-    public static function ints(string $sql, array $params = []): array
+    public function ints(string $sql, array $params = []): array
     {
         try {
-            return marshal(self::values($sql, $params))->ints();
+            return marshal($this->values($sql, $params))->ints();
         } catch (MarshalException $e) {
             throw new DatabaseException("Expected ints value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
         }
@@ -304,116 +319,116 @@ class Db
      * @param array<string, mixed> $params
      * @return list<mixed>
      */
-    private static function values(string $sql, array $params = []): array
+    private function values(string $sql, array $params = []): array
     {
         /** @var list<mixed> */
-        return self::executeInternal($sql, $params, function ($sql, $params) {
-            $stmt = self::connect()->pdo->prepare($sql);
-            self::bindParams($stmt, $params);
+        return $this->executeInternal($sql, $params, function ($sql, $params) {
+            $stmt = $this->pdo->prepare($sql);
+            $this->bindParams($stmt, $params);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_NUM);
             return array_column($result, 0);
         });
     }
 
-    public static function begin(string $rawName): void
+    public function begin(string $rawName): void
     {
-        $name = self::safeName($rawName);
+        $name = $this->safeName($rawName);
         Log::debug("[DB] BEGIN $rawName ($name)");
-        $isOuterTransaction = !self::connect()->transactions;
-        self::connect()->transactions[] = $name;
+        $isOuterTransaction = !$this->transactions;
+        $this->transactions[] = $name;
         if ($isOuterTransaction) {
             try {
-                self::connect()->pdo->beginTransaction();
+                $this->pdo->beginTransaction();
             } catch (PDOException $e) {
                 throw new DatabaseException("Failed to begin transaction $rawName", 0, $e);
             }
         } else {
-            self::execute("SAVEPOINT $name");
+            $this->execute("SAVEPOINT $name");
         }
     }
 
-    public static function commit(string $rawName): void
+    public function commit(string $rawName): void
     {
-        $name = self::safeName($rawName);
+        $name = $this->safeName($rawName);
         Log::debug("[DB] COMMIT $rawName ($name)");
-        $numTransactions = count(self::connect()->transactions);
+        $numTransactions = count($this->transactions);
         if ($numTransactions === 0) {
             throw new DatabaseException("Asked to commit $name, but no transaction is open");
         }
-        $latestTransaction = self::connect()->transactions[$numTransactions - 1];
+        $latestTransaction = $this->transactions[$numTransactions - 1];
         if ($latestTransaction !== $name) {
             try {
-                self::connect()->pdo->rollback();
+                $this->pdo->rollback();
             } catch (PDOException $e) {
                 throw new DatabaseException("Failed to rollback $latestTransaction while handling mismatch", 0, $e);
             }
             throw new DatabaseException("Asked to commit $name, but $latestTransaction is open. ROLLBACK issued.");
         }
-        if (count(self::connect()->transactions) === 1) {
+        if (count($this->transactions) === 1) {
             try {
-                self::connect()->pdo->commit();
+                $this->pdo->commit();
             } catch (PDOException $e) {
                 throw new DatabaseException("Failed to commit $name", 0, $e);
             }
         }
-        array_pop(self::connect()->transactions);
+        array_pop($this->transactions);
     }
 
-    public static function rollback(string $rawName): void
+    public function rollback(string $rawName): void
     {
-        $name = self::safeName($rawName);
+        $name = $this->safeName($rawName);
         Log::debug("[DB] ROLLBACK $rawName ($name)");
-        $numTransactions = count(self::connect()->transactions);
+        $numTransactions = count($this->transactions);
         if ($numTransactions === 0) {
             try {
-                self::connect()->pdo->rollback();
+                $this->pdo->rollback();
             } catch (PDOException $e) {
                 throw new DatabaseException("Failed to rollback $name while handling faulty rollback call", 0, $e);
             }
             throw new DatabaseException("Asked to rollback $name, but no transaction is open. ROLLBACK issued.");
         }
-        $latestTransaction = self::connect()->transactions[$numTransactions - 1];
+        $latestTransaction = $this->transactions[$numTransactions - 1];
         if ($latestTransaction !== $name) {
             try {
-                self::connect()->pdo->rollback();
+                $this->pdo->rollback();
             } catch (PDOException $e) {
                 throw new DatabaseException("Failed to rollback while handling incorrect rollback", 0, $e);
             }
             throw new DatabaseException("Asked to rollback $name, but $latestTransaction is open. ROLLBACK issued.");
         }
-        $isOuterTransaction = count(self::connect()->transactions) === 1;
+        $isOuterTransaction = count($this->transactions) === 1;
         if ($isOuterTransaction) {
             try {
-                self::connect()->pdo->rollback();
+                $this->pdo->rollback();
             } catch (PDOException $e) {
                 throw new DatabaseException("Failed to rollback $name", 0, $e);
             }
         } else {
-            self::execute("ROLLBACK TO SAVEPOINT $name"); // Rollback to the savepoint
+            $this->execute("ROLLBACK TO SAVEPOINT $name"); // Rollback to the savepoint
         }
-        array_pop(self::connect()->transactions);
+        array_pop($this->transactions);
     }
 
-    public static function getLock(string $name = 'lock_db', int $timeout = 0): int
+    public function getLock(string $name = 'lock_db', int $timeout = 0): int
     {
         $sql = 'SELECT GET_LOCK(:name, :timeout)';
-        return self::int($sql, ['name' => $name, 'timeout' => $timeout]);
+        return $this->int($sql, ['name' => $name, 'timeout' => $timeout]);
     }
 
-    public static function releaseLock(string $name = 'lock_db'): void
+    public function releaseLock(string $name = 'lock_db'): void
     {
         $sql = 'SELECT RELEASE_LOCK(:name)';
-        self::execute($sql, ['name' => $name]);
+        $this->execute($sql, ['name' => $name]);
     }
 
-    public static function likeEscape(string $value): string
+    public function likeEscape(string $value): string
     {
         return str_replace(['%', '_'], ['\\%', '\\_'], $value);
     }
 
     /** @param array<string, mixed> $params */
-    private static function bindParams(PDOStatement $stmt, array $params): void
+    private function bindParams(PDOStatement $stmt, array $params): void
     {
         foreach ($params as $key => $value) {
             if (is_int($value)) {
@@ -424,21 +439,19 @@ class Db
         }
     }
 
-    /**
-     * @param array<string, mixed> $params
-     */
-    private static function executeInternal(string $sql, array $params, callable $operation, bool $connectToDatabase = true): mixed
+    /** @param array<string, mixed> $params */
+    private function executeInternal(string $sql, array $params, callable $operation, bool $connectToDatabase = true): mixed
     {
+        $this->connect($connectToDatabase);
         $context = [];
         if ($params) {
             $context['params'] = $params;
         }
-        $transactions = self::connect($connectToDatabase)->transactions;
-        if ($transactions) {
-            $context['transactions'] = $transactions;
+        if ($this->transactions) {
+            $context['transactions'] = $this->transactions;
         }
         Log::debug("[DB] $sql", $context);
-        if ($transactions && self::isDdl($sql)) {
+        if ($this->transactions && $this->isDdl($sql)) {
             Log::warning('[DB] DDL statement issued within transaction, this may cause issues.');
         }
 
@@ -447,7 +460,7 @@ class Db
         } catch (PDOException $e) {
             if ($e->getCode() === '3D000') {
                 Log::warning('Database connection lost, attempting to reconnect...');
-                $stmt = self::connect($connectToDatabase)->pdo->prepare($sql);
+                $stmt = $this->pdo->prepare($sql);
                 return $stmt->execute($params);
             }
             $msg = "Failed to execute query: $sql with params " . json_encode($params);
@@ -457,7 +470,7 @@ class Db
         }
     }
 
-    private static function safeName(string $name): string
+    private function safeName(string $name): string
     {
         $safeName = preg_replace('/[^a-zA-Z0-9_]/', '_', $name);
         if ($safeName === null) {
@@ -471,14 +484,14 @@ class Db
         return $safeName;
     }
 
-    private static function quoteIdentifier(string $name): string
+    private function quoteIdentifier(string $name): string
     {
         $escapedName = str_replace('`', '``', $name);
 
         return "`$escapedName`";
     }
 
-    private static function isDdl(string $sql): bool
+    private function isDdl(string $sql): bool
     {
         $ddlPatterns = [
             '/^\s*CREATE\s+(TABLE|DATABASE|INDEX|VIEW|PROCEDURE|FUNCTION|TRIGGER)/i',

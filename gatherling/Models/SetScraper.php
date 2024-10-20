@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use Gatherling\Data\Db;
+
+use function Gatherling\Helpers\db;
 
 class SetScraper
 {
@@ -30,7 +31,7 @@ class SetScraper
         }
         $sets = $sets->data;
 
-        $knowncodes = Db::strings('SELECT code FROM cardsets;');
+        $knowncodes = db()->strings('SELECT code FROM cardsets;');
 
         // Turn this into a dict for faster lookup
         $knowncodesDict = [];

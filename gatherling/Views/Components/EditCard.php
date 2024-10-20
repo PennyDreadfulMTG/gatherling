@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-use Gatherling\Data\Db;
 use Gatherling\Models\Format;
 use Gatherling\Models\CardDto;
 use Gatherling\Views\Components\CheckboxInput;
+
+use function Gatherling\Helpers\db;
 
 class EditCard extends Component
 {
@@ -28,7 +29,7 @@ class EditCard extends Component
                 `cards`
             WHERE
                 `id` = :id';
-        $card = Db::selectOnly($sql, CardDto::class, ['id' => $this->id]);
+        $card = db()->selectOnly($sql, CardDto::class, ['id' => $this->id]);
 
         $this->cardSet = $card->cardset;
 

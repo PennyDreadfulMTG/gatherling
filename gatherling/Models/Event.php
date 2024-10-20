@@ -6,8 +6,9 @@ namespace Gatherling\Models;
 
 use Exception;
 use Gatherling\Log;
-use Gatherling\Data\Db;
 use Gatherling\Exceptions\NotFoundException;
+
+use function Gatherling\Helpers\db;
 
 class Event
 {
@@ -110,7 +111,7 @@ class Event
                 $sql .= 'name = :name';
                 $params = ['name' => $name];
             }
-            $event = Db::selectOnly($sql, EventDto::class, $params);
+            $event = db()->selectOnly($sql, EventDto::class, $params);
             foreach (get_object_vars($event) as $property => $value) {
                 $this->$property = $value;
             }
@@ -124,7 +125,7 @@ class Event
         $this->mainstruct = '';
         $sql = 'SELECT id AS mainid, rounds, type FROM subevents WHERE parent = :parent AND timing = 1';
         $params = ['parent' => $this->name];
-        $subevent = Db::selectOnlyOrNull($sql, EventSubeventDto::class, $params);
+        $subevent = db()->selectOnlyOrNull($sql, EventSubeventDto::class, $params);
         if ($subevent) {
             $this->mainid = $subevent->mainid;
             $this->mainrounds = $subevent->rounds;
@@ -137,7 +138,7 @@ class Event
         $this->finalstruct = '';
         $sql = 'SELECT id AS mainid, rounds, type FROM subevents WHERE parent = :parent AND timing = 2';
         $params = ['parent' => $this->name];
-        $subevent = Db::selectOnlyOrNull($sql, EventSubeventDto::class, $params);
+        $subevent = db()->selectOnlyOrNull($sql, EventSubeventDto::class, $params);
         if ($subevent) {
             $this->finalid = $subevent->mainid;
             $this->finalrounds = $subevent->rounds;
@@ -147,7 +148,7 @@ class Event
         // Trophy count
         $sql = 'SELECT COUNT(*) AS cnt FROM trophies WHERE event = :event';
         $params = ['event' => $this->name];
-        $this->hastrophy = Db::int($sql, $params);
+        $this->hastrophy = db()->int($sql, $params);
 
         $this->new = false;
     }
@@ -290,7 +291,7 @@ class Event
                 'private' => $this->private,
                 'client' => $this->client,
             ];
-            Db::execute($sql, $params);
+            db()->execute($sql, $params);
 
             $this->newSubevent((int) $this->mainrounds, 1, $this->mainstruct);
             $this->newSubevent((int) $this->finalrounds, 2, $this->finalstruct);
@@ -335,7 +336,7 @@ class Event
                 'client' => $this->client,
                 'name' => $this->name,
             ];
-            Db::execute($sql, $params);
+            db()->execute($sql, $params);
 
             if ($this->mainid == null) {
                 $this->newSubevent($this->mainrounds, 1, $this->mainstruct);
@@ -371,7 +372,7 @@ class Event
             'timing' => $timing,
             'type' => $type,
         ];
-        Db::execute($sql, $params);
+        db()->execute($sql, $params);
     }
 
     public function getPlaceDeck(string $placing = '1st'): ?Deck
@@ -384,7 +385,7 @@ class Event
             WHERE
                 n.event_id = e.id AND n.medal = :medal AND e.name = :name';
         $params = ['medal' => $placing, 'name' => $this->name];
-        $deckId = Db::optionalInt($sql, $params);
+        $deckId = db()->optionalInt($sql, $params);
         if (!$deckId) {
             return null;
         }
@@ -403,7 +404,7 @@ class Event
                 AND n.medal = :medal
                 AND e.name = :name';
         $params = ['medal' => $placing, 'name' => $this->name];
-        return Db::optionalString($sql, $params);
+        return db()->optionalString($sql, $params);
     }
 
     public function decklistsVisible(): bool
@@ -416,7 +417,7 @@ class Event
     {
         $sql = 'SELECT deck FROM entries WHERE event_id = :event_id AND deck IS NOT NULL';
         $params = ['event_id' => $this->id];
-        $deckIds = Db::ints($sql, $params);
+        $deckIds = db()->ints($sql, $params);
         return array_map(fn (int $deckid) => new Deck($deckid), $deckIds);
     }
 
@@ -433,7 +434,7 @@ class Event
             ORDER BY
                 medal, player";
         $params = ['event_id' => $this->id];
-        $finalists = Db::select($sql, FinalistDto::class, $params);
+        $finalists = db()->select($sql, FinalistDto::class, $params);
         return array_map(fn (FinalistDto $finalist) => (array) $finalist, $finalists);
     }
 
@@ -443,25 +444,25 @@ class Event
      */
     public function setFinalists(string $win, ?string $sec, ?array $t4 = null, ?array $t8 = null): void
     {
-        Db::begin('set_finalists');
+        db()->begin('set_finalists');
         $sql = "UPDATE entries SET medal = 'dot' WHERE event_id = :event_id";
-        Db::execute($sql, ['event_id' => $this->id]);
+        db()->execute($sql, ['event_id' => $this->id]);
         $sql = 'UPDATE entries SET medal = :medal WHERE event_id = :event_id AND player = :player';
-        Db::execute($sql, ['medal' => '1st', 'event_id' => $this->id, 'player' => $win]);
-        Db::execute($sql, ['medal' => '2nd', 'event_id' => $this->id, 'player' => $sec]);
+        db()->execute($sql, ['medal' => '1st', 'event_id' => $this->id, 'player' => $win]);
+        db()->execute($sql, ['medal' => '2nd', 'event_id' => $this->id, 'player' => $sec]);
         if (!is_null($t4)) {
             $medal = 't4';
-            Db::execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t4[0]]);
-            Db::execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t4[1]]);
+            db()->execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t4[0]]);
+            db()->execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t4[1]]);
         }
         if (!is_null($t8)) {
             $medal = 't8';
-            Db::execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[0]]);
-            Db::execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[1]]);
-            Db::execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[2]]);
-            Db::execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[3]]);
+            db()->execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[0]]);
+            db()->execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[1]]);
+            db()->execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[2]]);
+            db()->execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[3]]);
         }
-        Db::commit('set_finalists');
+        db()->commit('set_finalists');
     }
 
     public function getTrophyImageLink(): string
@@ -526,7 +527,7 @@ class Event
     public function getPlayers(): array
     {
         $sql = 'SELECT player FROM entries WHERE event_id = :event_id ORDER BY medal, player';
-        return Db::strings($sql, ['event_id' => $this->id]);
+        return db()->strings($sql, ['event_id' => $this->id]);
     }
 
     /** @return list<string> */
@@ -590,7 +591,7 @@ class Event
     {
         $sql = 'SELECT player FROM entries WHERE event_id = :event_id AND deck ORDER BY DATE(`registered_at`) ASC';
         $params = ['event_id' => $this->id];
-        return Db::strings($sql, $params);
+        return db()->strings($sql, $params);
     }
 
     /** @return list<string> */
@@ -598,7 +599,7 @@ class Event
     {
         $sql = 'SELECT player FROM entries WHERE event_id = :event_id AND deck ORDER BY medal, player';
         $params = ['event_id' => $this->id];
-        return Db::strings($sql, $params);
+        return db()->strings($sql, $params);
     }
 
     /** @return list<Entry> */
@@ -681,7 +682,7 @@ class Event
                 VALUES
                     (:event_id, :player, NOW())';
             $params = ['event_id' => $this->id, 'player' => $player->name];
-            Db::execute($sql, $params);
+            db()->execute($sql, $params);
             //For late registration. Check to see if event is active, if so, create entry for player in standings
             if ($this->active == 1) {
                 $standing = new Standings($this->name, $playername);
@@ -698,26 +699,26 @@ class Event
         if ($round == -1) {
             $round = $this->current_round;
         }
-        Db::begin('drop_player');
+        db()->begin('drop_player');
         $sql = 'UPDATE entries SET drop_round = :round WHERE event_id = :event_id AND player = :player';
         $params = ['round' => $round, 'event_id' => $this->id, 'player' => $playername];
-        Db::execute($sql, $params);
+        db()->execute($sql, $params);
         $sql = 'UPDATE standings SET active = 0 WHERE event = :event AND player = :player';
         $params = ['event' => $this->name, 'player' => $playername];
-        Db::execute($sql, $params);
-        Db::commit('drop_player');
+        db()->execute($sql, $params);
+        db()->commit('drop_player');
     }
 
     public function undropPlayer(string $playername): void
     {
-        Db::begin('undrop_player');
+        db()->begin('undrop_player');
         $sql = 'UPDATE entries SET drop_round = 0 WHERE event_id = :event_id AND player = :player';
         $params = ['event_id' => $this->id, 'player' => $playername];
-        Db::execute($sql, $params);
+        db()->execute($sql, $params);
         $sql = 'UPDATE standings SET active = 1 WHERE event = :event AND player = :player';
         $params = ['event' => $this->name, 'player' => $playername];
-        Db::execute($sql, $params);
-        Db::commit('undrop_player');
+        db()->execute($sql, $params);
+        db()->commit('undrop_player');
     }
 
     /** @return list<Matchup> */
@@ -777,7 +778,7 @@ class Event
             $params = ['name' => $this->name, 'timing' => $subevnum, 'round' => $roundnum];
         }
 
-        $mids = Db::ints($sql, $params);
+        $mids = db()->ints($sql, $params);
 
         $matches = [];
         foreach ($mids as $mid) {
@@ -809,7 +810,7 @@ class Event
                 m.subevent = s.id AND s.parent = e.name AND e.name = :name AND
                 s.timing = :timing AND m.round = :round AND (m.playera = :player OR m.playerb = :player)';
         $params = ['name' => $this->name, 'timing' => $subevnum, 'round' => $roundnum, 'player' => $player_name];
-        return Db::int($sql, $params);
+        return db()->int($sql, $params);
     }
 
     // In preparation for automating the pairings this function will add match the next pairing
@@ -841,7 +842,7 @@ class Event
             'result' => $result,
             'verification' => $verification,
         ];
-        return Db::insert($sql, $params);
+        return db()->insert($sql, $params);
     }
 
     public function addMatch(Standings $playera, Standings $playerb, string $round = '99', string $result = 'P', string $playera_wins = '0', string $playerb_wins = '0'): void
@@ -1023,12 +1024,12 @@ class Event
 
     public static function count(): int
     {
-        return Db::int('SELECT COUNT(name) FROM events');
+        return db()->int('SELECT COUNT(name) FROM events');
     }
 
     public static function largestEventNum(): int
     {
-        return Db::int('SELECT COALESCE(MAX(number), 0) FROM events WHERE number != 128'); // 128 is "special"
+        return db()->int('SELECT COALESCE(MAX(number), 0) FROM events WHERE number != 128'); // 128 is "special"
     }
 
     /** @return list<self> */
@@ -1164,7 +1165,7 @@ class Event
                     $round = 'main';
                 }
 
-                $lock_db = Db::getLock((string) $subevent_id);
+                $lock_db = db()->getLock((string) $subevent_id);
                 if ($lock_db !== 1) {
                     // Someone else is already pairing the round. Ignore.
                     return;
@@ -1188,7 +1189,7 @@ class Event
                         break;
                 }
 
-                Db::releaseLock((string) $subevent_id);
+                db()->releaseLock((string) $subevent_id);
             } else {
                 $this->active = 0;
                 $this->finalized = 1;
@@ -1224,7 +1225,7 @@ class Event
                 event = :event  AND active = 1 AND matched = 0
             ORDER BY
                 RAND()';
-        $activePlayersInfo = Db::select($sql, PairingPlayerDto::class, ['event' => $this->name]);
+        $activePlayersInfo = db()->select($sql, PairingPlayerDto::class, ['event' => $this->name]);
         $activePlayers = [];
 
         if (count($activePlayersInfo) > 0) {
@@ -1792,7 +1793,7 @@ class Event
             WHERE
                 id IN (SELECT deck FROM entries WHERE event_id = :event_id AND deck IS NOT NULL)
         ';
-        Db::execute($sql, ['format' => $format, 'event_id' => $this->id]);
+        db()->execute($sql, ['format' => $format, 'event_id' => $this->id]);
     }
 
     public function startEvent(bool $precheck): void

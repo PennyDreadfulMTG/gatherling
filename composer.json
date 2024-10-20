@@ -42,7 +42,8 @@
             "Gatherling\\Tests\\": "tests/"
         },
         "files": [
-            "gatherling/Helpers/helpers.php"
+            "gatherling/Helpers/helpers.php",
+            "gatherling/Helpers/database.php"
         ]
     }
 }

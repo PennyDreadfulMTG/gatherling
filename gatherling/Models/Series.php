@@ -6,8 +6,9 @@ namespace Gatherling\Models;
 
 use PDO;
 use Exception;
-use Gatherling\Data\Db;
 use InvalidArgumentException;
+
+use function Gatherling\Helpers\db;
 
 class Series
 {
@@ -65,7 +66,7 @@ class Series
             WHERE
                 name = :name';
         $params = ['name' => $name];
-        $series = Db::selectOnly($sql, SeriesDto::class, $params);
+        $series = db()->selectOnly($sql, SeriesDto::class, $params);
         foreach (get_object_vars($series) as $key => $value) {
             $this->$key = $value;
         }
@@ -74,18 +75,18 @@ class Series
 
         // Organizers
         $sql = 'SELECT player FROM series_organizers WHERE series = :series';
-        $this->organizers = Db::strings($sql, ['series' => $this->name]);
+        $this->organizers = db()->strings($sql, ['series' => $this->name]);
 
         // banned players
         $sql = 'SELECT player FROM playerbans WHERE series = :series';
-        $this->bannedplayers = Db::strings($sql, ['series' => $this->name]);
+        $this->bannedplayers = db()->strings($sql, ['series' => $this->name]);
 
         // Most recent season
         $mostRecentEvent = $this->mostRecentEvent();
         $this->this_season_season = $mostRecentEvent->season ?? 0;
         $sql = 'SELECT format, master_link FROM series_seasons WHERE series = :series AND season <= :season ORDER BY season DESC LIMIT 1';
         $params = ['series' => $this->name, 'season' => $this->this_season_season];
-        $season = Db::selectOnlyOrNull($sql, SeriesSeasonDto::class, $params);
+        $season = db()->selectOnlyOrNull($sql, SeriesSeasonDto::class, $params);
         if ($season) {
             $this->this_season_format = $season->format;
             $this->this_season_master_link = $season->master_link;
@@ -114,7 +115,7 @@ class Series
                 'prereg_default' => $this->prereg_default,
                 'mtgo_room' => $this->mtgo_room,
             ];
-            Db::execute($sql, $params);
+            db()->execute($sql, $params);
         } else {
             $sql = '
                 UPDATE series
@@ -128,7 +129,7 @@ class Series
                 'mtgo_room' => $this->mtgo_room,
                 'name' => $this->name,
             ];
-            Db::execute($sql, $params);
+            db()->execute($sql, $params);
         }
     }
 
@@ -148,7 +149,7 @@ class Series
             return;
         }
         $sql = 'INSERT INTO series_organizers(series, player) VALUES(:series, :player)';
-        Db::execute($sql, ['series' => $this->name, 'player' => $name]);
+        db()->execute($sql, ['series' => $this->name, 'player' => $name]);
     }
 
     public function addBannedPlayer(string $name, string $reason): void
@@ -157,19 +158,19 @@ class Series
             return;
         }
         $sql = 'INSERT INTO playerbans(series, player, date, reason) VALUES(:series, :player, CURRENT_DATE(), :reason)';
-        Db::execute($sql, ['series' => $this->name, 'player' => $name, 'reason' => $reason]);
+        db()->execute($sql, ['series' => $this->name, 'player' => $name, 'reason' => $reason]);
     }
 
     public function removeOrganizer(string $name): void
     {
         $sql = 'DELETE FROM series_organizers WHERE series = :series AND player = :player';
-        Db::execute($sql, ['series' => $this->name, 'player' => $name]);
+        db()->execute($sql, ['series' => $this->name, 'player' => $name]);
     }
 
     public function removeBannedPlayer(string $name): void
     {
         $sql = 'DELETE FROM playerbans WHERE series = :series AND player = :player';
-        Db::execute($sql, ['series' => $this->name, 'player' => $name]);
+        db()->execute($sql, ['series' => $this->name, 'player' => $name]);
     }
 
     public function getBannedPlayerDate(string $name): ?string
@@ -229,7 +230,7 @@ class Series
             LIMIT
                 :limit';
         $params = ['series' => $this->name, 'limit' => $number];
-        $eventnames = Db::strings($sql, $params);
+        $eventnames = db()->strings($sql, $params);
         return array_map(fn (string $name) => new Event($name), $eventnames);
     }
 
@@ -237,7 +238,7 @@ class Series
     {
         $sql = 'SELECT name FROM series WHERE name = :name';
         $params = ['name' => $name];
-        return Db::optionalString($sql, $params) !== null;
+        return db()->optionalString($sql, $params) !== null;
     }
 
     /** @return list<string> */
@@ -254,7 +255,7 @@ class Series
                 series.name
             ORDER BY
                 series.name';
-        return Db::strings($sql);
+        return db()->strings($sql);
     }
 
     /** @return list<string> */
@@ -273,7 +274,7 @@ class Series
                 series.name
             ORDER BY
                 count(events.name) DESC, name';
-        return Db::strings($sql);
+        return db()->strings($sql);
     }
 
     public static function logoSrc(string $seriesName): string
@@ -296,7 +297,7 @@ class Series
                 events.start DESC
             LIMIT 1';
         $params = ['series' => $this->name];
-        $result = Db::optionalString($sql, $params);
+        $result = db()->optionalString($sql, $params);
         if ($result) {
             return new Event($result);
         }
@@ -318,7 +319,7 @@ class Series
                 events.start
             LIMIT 1';
         $params = ['series' => $this->name];
-        $result = Db::optionalString($sql, $params);
+        $result = db()->optionalString($sql, $params);
         if ($result) {
             return new Event($result);
         }

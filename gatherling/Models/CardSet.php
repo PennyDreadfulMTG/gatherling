@@ -7,9 +7,10 @@ namespace Gatherling\Models;
 use stdClass;
 use mysqli_stmt;
 use Gatherling\Log;
-use Gatherling\Data\Db;
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\FileNotFoundException;
+
+use function Gatherling\Helpers\db;
 
 class CardSet
 {
@@ -185,7 +186,7 @@ class CardSet
     public static function getMissingSets(string $cardSetType, Format $format): array
     {
         $sql = 'SELECT name FROM cardsets WHERE type = :type';
-        $cardSets = Db::strings($sql, ['type' => $cardSetType]);
+        $cardSets = db()->strings($sql, ['type' => $cardSetType]);
 
         $finalList = [];
         foreach ($cardSets as $cardSetName) {

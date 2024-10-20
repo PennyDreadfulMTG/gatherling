@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-use Gatherling\Data\Db;
 use Gatherling\Models\FormatDto;
+
+use function Gatherling\Helpers\db;
 
 class FormatDropMenu extends DropMenu
 {
     public function __construct(?string $format, bool $useAll = false, string $formName = 'format')
     {
         $sql = 'SELECT name FROM formats ORDER BY priority desc, name';
-        $formats = Db::select($sql, FormatDto::class);
+        $formats = db()->select($sql, FormatDto::class);
 
         $options = [];
         foreach ($formats as $f) {

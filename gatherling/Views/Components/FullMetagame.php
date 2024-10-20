@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-use Gatherling\Data\Db;
 use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Format;
@@ -12,6 +11,7 @@ use Gatherling\Models\Player;
 use Gatherling\Models\MetaDto;
 use Gatherling\Models\MetaColorsDto;
 
+use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\session;
 
 class FullMetagame extends Component
@@ -55,19 +55,19 @@ class FullMetagame extends Component
                     id BIGINT UNSIGNED,
                     srtordr TINYINT UNSIGNED DEFAULT 0
                 )';
-        Db::execute($sql);
+        db()->execute($sql);
         $sql = '
             INSERT INTO meta
                 (player, deckname, archetype, colors, medal, id)
             VALUES
                 (:player, :deckname, :archetype, :colors, :medal, :id)';
         foreach ($players as $player) {
-            Db::execute($sql, $player);
+            db()->execute($sql, $player);
         }
-        $result = Db::select('SELECT colors, COUNT(player) AS cnt FROM meta GROUP BY(colors)', MetaColorsDto::class);
+        $result = db()->select('SELECT colors, COUNT(player) AS cnt FROM meta GROUP BY(colors)', MetaColorsDto::class);
         $sql = 'UPDATE meta SET srtordr = :cnt WHERE colors = :colors';
         foreach ($result as $row) {
-            Db::execute($sql, (array) $row);
+            db()->execute($sql, (array) $row);
         }
         $sql = '
             SELECT
@@ -76,7 +76,7 @@ class FullMetagame extends Component
                 meta
             ORDER BY
                 srtordr DESC, colors, medal, player';
-        $result = Db::select($sql, MetaDto::class);
+        $result = db()->select($sql, MetaDto::class);
         $this->decklistsAreVisible = $event->decklistsVisible();
         $this->meta = $this->players = [];
         $color = null;
