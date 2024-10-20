@@ -76,21 +76,17 @@ class Decksearch
             $this->errors[] = '<center><br>Your search query did not have any matches';
             return false;
         }
-        // check if there was matches, if not set error and return
-        // filter decks in events that are current active
-        // Only decks that has a field in entries will be filtered
-        // will allow for creation and searching of decks without entries
+        // Filter out decks in events that haven't been finalized (and should remain secret for now)
         foreach ($tmp_results as $value) {
-            // check if there is a record in entries
-            $sql = 'select Count(*) FROM entries where deck = ?';
-            $result = Database::singleResultSingleParam($sql, 'd', $value);
-            if ($result) {
-                $sql = 'SELECT d.id FROM decks d, entries n, events e WHERE d.id = ? AND d.id = n.deck AND n.event_id = e.id AND e.finalized = 1';
-                $arr_tmp = Database::singleResultSingleParam($sql, 'd', $value);
-                if (!empty($arr_tmp)) {
-                    array_push($this->finalResults, $arr_tmp);
-                }
-            } else {
+            $sql = '
+                SELECT
+                    e.finalized
+                FROM
+                    decks d, entries n, events e
+                WHERE
+                    d.id = :deck_id AND d.id = n.deck AND n.event_id = e.id';
+            $finalized = DB::optionalInt($sql, ['deck_id' => $value]);
+            if ($finalized === null || $finalized) {
                 array_push($this->finalResults, $value);
             }
         }
