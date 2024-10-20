@@ -76,7 +76,6 @@
     <PossiblyUnusedMethod>
       <code><![CDATA[getFormats]]></code>
       <code><![CDATA[getTribesAllowed]]></code>
-      <code><![CDATA[insertSubFormat]]></code>
       <code><![CDATA[noFormatLoaded]]></code>
       <code><![CDATA[saveAndDeleteAuthorization]]></code>
       <code><![CDATA[viewAuthorization]]></code>

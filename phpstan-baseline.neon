@@ -517,12 +517,12 @@ parameters:
 
 		-
 			message: "#^Cannot access property \\$error on mysqli_stmt\\|false\\.$#"
-			count: 10
+			count: 9
 			path: gatherling/Models/Format.php
 
 		-
 			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 28
+			count: 27
 			path: gatherling/Models/Format.php
 
 		-
@@ -532,12 +532,12 @@ parameters:
 
 		-
 			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 28
+			count: 27
 			path: gatherling/Models/Format.php
 
 		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 28
+			count: 27
 			path: gatherling/Models/Format.php
 
 		-
