@@ -6,8 +6,6 @@ namespace Gatherling\Models;
 
 class MetaColorsDto extends Dto
 {
-    /** @psalm-suppress PossiblyUnusedProperty */
     public string $colors;
-    /** @psalm-suppress PossiblyUnusedProperty */
     public int $cnt;
 }
