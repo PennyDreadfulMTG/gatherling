@@ -978,15 +978,16 @@ class Format
         // underdog allows only 4 changelings per deck list
         if ($this->underdog) {
             echo "Tribe is: $underdogKey<br />";
-            if ($underdogKey != 'Shapeshifter') {
-                $frequency = Database::singleResult("SELECT Count(*) FROM cards WHERE type LIKE '%{$underdogKey}%'");
+            if ($underdogKey && $underdogKey != 'Shapeshifter') {
+                $sql = 'SELECT COUNT(*) FROM cards WHERE type LIKE :type';
+                $params = ['type' => '%' . DB::likeEscape($underdogKey) . '%'];
+                $frequency = DB::int($sql, $params);
                 if ($frequency < 4) {
                     echo "$underdogKey is a 3 card tribe<br />";
                     if ($subTypeChangeling > 8) {
                         $this->error[] = "Tribe $underdogKey is allowed a maximum of 8 changeling's per deck in underdog format";
                     }
                 } else {
-                    // echo "I am not a 3 card tribe<br />";
                     if ($subTypeChangeling > 4) {
                         $this->error[] = "This tribe can't include more than 4 Changeling creatures because it's not a 3-member tribe.";
                     }

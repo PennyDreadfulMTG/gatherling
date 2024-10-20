@@ -281,22 +281,12 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:count\\(\\) should return int but returns mixed\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getActiveOpponents\\(\\) should return list\\<string\\> but returns list\\<string\\|null\\>\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
 
 		-
 			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getPlayerCount\\(\\) should return int but returns mixed\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:largestEventNum\\(\\) should return int but returns mixed\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
 
