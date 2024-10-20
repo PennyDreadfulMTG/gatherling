@@ -532,11 +532,7 @@ class Deck
                 'notes' => $this->notes,
                 'id' => $this->id,
             ];
-            $affectedRows = DB::update($sql, $params);
-            if ($affectedRows != 1) {
-                DB::rollback('save_deck');
-                throw new Exception('Can\'t update deck ' . $this->id);
-            }
+            DB::update($sql, $params);
             $format = new Format($this->format);
         }
 
@@ -760,11 +756,7 @@ class Deck
 
         $sql = 'UPDATE decks SET notes = :notes, deck_colors = :deck_colors WHERE id = :id';
         $params = ['notes' => $this->notes, 'deck_colors' => $this->deck_color_str, 'id' => $this->id];
-        $rowsAffected = DB::update($sql, $params);
-        if (!$rowsAffected) {
-            DB::rollback('save_deck');
-            throw new Exception('Can\'t update deck ' . $this->id);
-        }
+        DB::update($sql, $params);
 
         $this->deck_contents_cache = implode('|', array_merge(
             array_keys($this->maindeck_cards),
