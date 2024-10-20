@@ -1212,16 +1212,6 @@ class Player
         return $seasons;
     }
 
-    // TODO: Is this part of the deck ignore functionality? If so remove it.
-    public function setIgnoreEvent(int $eventid, bool $ignored): void
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('UPDATE entries SET ignored = ? WHERE event_id = ? AND player = ?');
-        $stmt->bind_param('ids', $ignored, $eventid, $this->name);
-        $stmt->execute();
-        $stmt->close();
-    }
-
     public function setPassword(string $new_password): void
     {
         $db = Database::getConnection();
