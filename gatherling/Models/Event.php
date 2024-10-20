@@ -712,14 +712,26 @@ class Event
         if ($round == -1) {
             $round = $this->current_round;
         }
-        Database::dbQuery('UPDATE entries SET drop_round = ? WHERE event_id = ? AND player = ?', 'dds', $round, $this->id, $playername);
-        Database::dbQuery('UPDATE standings SET active = 0 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
+        DB::begin('drop_player');
+        $sql = 'UPDATE entries SET drop_round = :round WHERE event_id = :event_id AND player = :player';
+        $params = ['round' => $round, 'event_id' => $this->id, 'player' => $playername];
+        DB::execute($sql, $params);
+        $sql = 'UPDATE standings SET active = 0 WHERE event = :event AND player = :player';
+        $params = ['event' => $this->name, 'player' => $playername];
+        DB::execute($sql, $params);
+        DB::commit('drop_player');
     }
 
     public function undropPlayer(string $playername): void
     {
-        Database::dbQuery('UPDATE entries SET drop_round = 0 WHERE event_id = ? AND player = ?', 'ds', $this->id, $playername);
-        Database::dbQuery('UPDATE standings SET active = 1 WHERE event = ? AND player = ?', 'ss', $this->name, $playername);
+        DB::begin('undrop_player');
+        $sql = 'UPDATE entries SET drop_round = 0 WHERE event_id = :event_id AND player = :player';
+        $params = ['event_id' => $this->id, 'player' => $playername];
+        DB::execute($sql, $params);
+        $sql = 'UPDATE standings SET active = 1 WHERE event = :event AND player = :player';
+        $params = ['event' => $this->name, 'player' => $playername];
+        DB::execute($sql, $params);
+        DB::commit('undrop_player');
     }
 
     /** @return list<Matchup> */
