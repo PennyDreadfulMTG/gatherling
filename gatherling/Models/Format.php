@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
+use Gatherling\Data\DB;
 
 class Format
 {
@@ -512,12 +513,8 @@ class Format
     /** @return list<string> */
     public static function getPrivateFormats(string $seriesName): array
     {
-        return Database::listResultDoubleParam(
-            'SELECT name FROM formats WHERE type = ? AND series_name = ?',
-            'ss',
-            'Private',
-            $seriesName
-        );
+        $sql = "SELECT name FROM formats WHERE type = 'Private' AND series_name = :series_name";
+        return DB::strings($sql, ['series_name' => $seriesName]);
     }
 
     /** @return list<string> */
@@ -747,56 +744,26 @@ class Format
 
     public function isCardOnBanList(string $card): bool
     {
-        return count(Database::listResultDoubleParam(
-            'SELECT card_name
-                                                         FROM bans
-                                                         WHERE (format = ?
-                                                         AND card_name = ?
-                                                         AND allowed = 0)',
-            'ss',
-            $this->name,
-            $card
-        )) > 0;
+        $sql = 'SELECT card_name FROM bans WHERE (format = :format AND card_name = :card AND allowed = 0)';
+        return count(DB::strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
     }
 
     public function isCardOnLegalList(string $card): bool
     {
-        return count(Database::listResultDoubleParam(
-            'SELECT card_name
-                                                         FROM bans
-                                                         WHERE (format = ?
-                                                         AND card_name = ?
-                                                         AND allowed = 1)',
-            'ss',
-            $this->name,
-            $card
-        )) > 0;
+        $sql = 'SELECT card_name FROM bans WHERE (format = :format AND card_name = :card AND allowed = 1)';
+        return count(DB::strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
     }
 
     public function isCardOnRestrictedList(string $card): bool
     {
-        return count(Database::listResultDoubleParam(
-            'SELECT card_name
-                                                         FROM restricted
-                                                         WHERE (format = ?
-                                                         AND card_name = ?)',
-            'ss',
-            $this->name,
-            $card
-        )) > 0;
+        $sql = 'SELECT card_name FROM restricted WHERE (format = :format AND card_name = :card)';
+        return count(DB::strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
     }
 
     public function isCardOnRestrictedToTribeList(string $card): bool
     {
-        return count(Database::listResultDoubleParam(
-            'SELECT card_name
-                                                         FROM restrictedtotribe
-                                                         WHERE (format = ?
-                                                         AND card_name = ?)',
-            'ss',
-            $this->name,
-            $card
-        )) > 0;
+        $sql = 'SELECT card_name FROM restrictedtotribe WHERE (format = :format AND card_name = :card)';
+        return count(DB::strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
     }
 
     public function isCardSetLegal(string $setName): bool

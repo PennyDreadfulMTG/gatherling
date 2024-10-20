@@ -148,24 +148,4 @@ class Database
 
         return $list;
     }
-
-    /**
-     * @return list<mixed>
-     */
-    public static function listResultDoubleParam(string $sql, string $paramTypes, mixed $param1, mixed $param2): array
-    {
-        $db = self::getConnection();
-        $stmt = $db->prepare($sql);
-        $stmt->bind_param($paramTypes, $param1, $param2);
-        $stmt->execute();
-        $stmt->bind_result($result);
-
-        $list = [];
-        while ($stmt->fetch()) {
-            $list[] = $result;
-        }
-        $stmt->close();
-
-        return $list;
-    }
 }

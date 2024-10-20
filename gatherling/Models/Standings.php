@@ -309,17 +309,12 @@ class Standings
             return [];
         }
         // Get all opponents who haven't dropped from event and exclude myself
-        $allPlayers = Database::listResultDoubleParam('SELECT player
-                                                          FROM standings
-                                                          WHERE event = ?
-                                                          AND active = 1
-                                                          AND player <> ?
-                                                          ORDER BY player', 'ss', $this->event, $this->player);
-
+        $sql = 'SELECT player FROM standings WHERE event = :event AND active = 1 AND player <> :player ORDER BY player';
+        $params = ['event' => $this->event, 'player' => $this->player];
+        $allPlayers = DB::strings($sql, $params);
         // prune all opponents by opponents I have already played
-        $opponent_names = array_diff($allPlayers, $opponentsAlreadyFaced);
-
-        return $opponent_names;
+        $opponentNames = array_diff($allPlayers, $opponentsAlreadyFaced);
+        return array_values($opponentNames);
     }
 
     /** @param list<Entry> $entries */
