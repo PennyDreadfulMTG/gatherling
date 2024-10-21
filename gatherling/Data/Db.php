@@ -8,11 +8,11 @@ use Gatherling\Exceptions\ConfigurationException;
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\MarshalException;
 use Gatherling\Log;
-use Gatherling\Models\Dto;
-use PDO;
 use PDOException;
 use PDOStatement;
+use PDO;
 use TypeError;
+use Gatherling\Models\Dto;
 
 use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\marshal;

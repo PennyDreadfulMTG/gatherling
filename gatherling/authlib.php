@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
+use function Gatherling\Helpers\config;
+
 require_once __DIR__ . '/lib.php';
 
-global $CONFIG;
-
 $provider = new \Wohali\OAuth2\Client\Provider\Discord([
-    'clientId'     => $CONFIG['DISCORD_CLIENT_ID'],
-    'clientSecret' => $CONFIG['DISCORD_CLIENT_SECRET'],
-    'redirectUri'  => $CONFIG['base_url'] . 'auth.php',
+    'clientId'     => config()->string('DISCORD_CLIENT_ID'),
+    'clientSecret' => config()->string('DISCORD_CLIENT_SECRET'),
+    'redirectUri'  => config()->string('base_url') . 'auth.php',
 ]);
 
 function load_cached_token(): \League\OAuth2\Client\Token\AccessToken

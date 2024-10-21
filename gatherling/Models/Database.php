@@ -8,6 +8,8 @@ use Exception;
 use mysqli;
 use PDO;
 
+use function Gatherling\Helpers\config;
+
 // Use PHP7 default error reporting to avoid a complex refactor
 mysqli_report(MYSQLI_REPORT_OFF);
 
@@ -20,16 +22,15 @@ class Database
         static $instance;
 
         if (!isset($instance)) {
-            global $CONFIG;
             $instance = new mysqli(
-                $CONFIG['db_hostname'],
-                $CONFIG['db_username'],
-                $CONFIG['db_password']
+                config()->string('db_hostname'),
+                config()->string('db_username'),
+                config()->string('db_password')
             );
             if (mysqli_connect_errno()) {
                 throw new Exception((string) mysqli_connect_error());
             }
-            $db_selected = $instance->select_db($CONFIG['db_database']);
+            $db_selected = $instance->select_db(config()->string('db_database'));
             if (!$db_selected) {
                 throw new \Exception('Error creating database: ' . mysqli_error($instance) . "\n");
             }
@@ -45,11 +46,10 @@ class Database
         static $pdo_instance;
 
         if (!isset($pdo_instance)) {
-            global $CONFIG;
             $pdo_instance = new PDO(
-                'mysql:hostname=' . $CONFIG['db_hostname'] . ';port=3306;dbname=' . $CONFIG['db_database'],
-                $CONFIG['db_username'],
-                $CONFIG['db_password']
+                'mysql:hostname=' . config()->string('db_hostname') . ';port=3306;dbname=' . config()->string('db_database'),
+                config()->string('db_username'),
+                config()->string('db_password')
             );
         }
 

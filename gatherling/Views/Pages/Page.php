@@ -8,6 +8,8 @@ use Gatherling\Models\Player;
 use Gatherling\Views\TemplateHelper;
 use Gatherling\Views\TemplateResponse;
 
+use function Gatherling\Helpers\config;
+
 abstract class Page extends TemplateResponse
 {
     public bool $enableVue = false;
@@ -29,9 +31,7 @@ abstract class Page extends TemplateResponse
 
     public function __construct()
     {
-        global $CONFIG;
-
-        $this->siteName = $CONFIG['site_name'];
+        $this->siteName = config()->string('site_name', 'Gatherling');
         $this->gitHash = git_hash();
         $this->cssLink = 'styles/css/stylesheet.css?v=' . rawurlencode($this->gitHash);
         $this->headerLogoSrc = 'styles/images/header_logo.png';

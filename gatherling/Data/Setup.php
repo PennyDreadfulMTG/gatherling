@@ -9,6 +9,7 @@ use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\FileNotFoundException;
 use Gatherling\Log;
 
+use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\db;
 
 require_once __DIR__ . '/../lib.php';
@@ -69,10 +70,8 @@ class Setup
 
     public static function dropTestDatabase(): void
     {
-        global $CONFIG;
-
         Log::info('Dropping test database');
-        db()->dropDatabase($CONFIG['db_test_database']);
+        db()->dropDatabase(config()->string('db_test_database'));
     }
 
     private static function activateTestDatabase(): void
@@ -87,7 +86,7 @@ class Setup
         ];
         Log::info('Activating test database. Future db calls will be made against the test database.');
         foreach ($toCopy as $from => $to) {
-            if (!isset($CONFIG[$from])) {
+            if (!config()->optionalString($from)) {
                 $msg = 'Test database is not configured. See config.php.example';
                 throw new ConfigurationException($msg);
             }
@@ -98,17 +97,13 @@ class Setup
     // Creates the database if it doesn't exist.
     private static function create(): void
     {
-        global $CONFIG;
-
         Log::info('Creating database if necessary');
-        db()->createDatabase($CONFIG['db_database']);
+        db()->createDatabase(config()->string('db_database'));
     }
 
     private static function restoreDump(string $path): void
     {
-        global $CONFIG;
-
-        if ($CONFIG['env'] === 'prod') {
+        if (config()->string('env') === 'prod') {
             throw new DatabaseException('Refusing to restore dump in production environment');
         }
         $s = file_get_contents($path);

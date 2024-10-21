@@ -7,6 +7,7 @@ use Firebase\JWT\Key;
 use Gatherling\Models\Player;
 use Gatherling\Views\Pages\Forgot;
 
+use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\get;
 use function Gatherling\Helpers\post;
 use function Gatherling\Helpers\server;
@@ -73,28 +74,24 @@ function sendLoginLink(Player $player): bool
 
 function generateSecureResetLink(string $name): string
 {
-    global $CONFIG;
-
-    $key = $CONFIG['password_reset_key'];
+    $key = config()->string('password_reset_key');
     $issuedAt = time();
     $expirationTime = $issuedAt + 3600; // Token expires in 1 hour
     $payload = [
-        'iss' => $CONFIG['base_url'], // Issuer
-        'aud' => $CONFIG['base_url'], // Audience
+        'iss' => config()->string('base_url'), // Issuer
+        'aud' => config()->string('base_url'), // Audience
         'iat' => $issuedAt, // Issued at
         'exp' => $expirationTime, // Expiration time
         'name' => $name // Also embed the player name, so we don't need to look up anything
     ];
     $token = JWT::encode($payload, $key, 'HS256');
-    return $CONFIG['base_url'] . "/forgot.php?token=$token";
+    return config()->string('base_url') . "/forgot.php?token=$token";
 }
 
 function resetPassword(string $token, string $newPassword): bool
 {
-    global $CONFIG;
-
     try {
-        $payload = JWT::decode($token, new Key($CONFIG['password_reset_key'], 'HS256'));
+        $payload = JWT::decode($token, new Key(config()->string('password_reset_key'), 'HS256'));
     } catch (Exception $e) {
         return false;
     }

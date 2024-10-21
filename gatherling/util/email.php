@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use function Gatherling\Helpers\config;
+
 // Use Brevo to send an email from us to a single recipient. Brevo supports multiple recipients, attachments, etc. but we don't need that yet.
 function sendEmail(string $to, string $subj, string $msg): bool
 {
-    global $CONFIG;
-
     $body = [
         'sender'      => ['name' => 'Gatherling', 'email' => 'no-reply@gatherling.com'],
         'to'          => [['name' => $to, 'email' => $to]],
@@ -23,7 +23,7 @@ function sendEmail(string $to, string $subj, string $msg): bool
 
     $headers = [];
     $headers[] = 'Accept: application/json';
-    $headers[] = 'Api-Key: ' . $CONFIG['brevo_api_key'];
+    $headers[] = 'Api-Key: ' . config()->string('brevo_api_key');
     $headers[] = 'Content-Type: application/json';
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 

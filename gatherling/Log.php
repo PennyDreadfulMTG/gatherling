@@ -13,14 +13,14 @@ use Monolog\Level;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
+use function Gatherling\Helpers\config;
+
 class Log
 {
     private static ?LoggerInterface $logger = null;
 
     private static function getLogger(): LoggerInterface
     {
-        global $CONFIG;
-
         if (self::$logger !== null) {
             return self::$logger;
         }
@@ -45,7 +45,7 @@ class Log
             return self::$logger;
         }
         self::$logger->pushHandler(new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Level::Warning));
-        $environment = $CONFIG['env'] ?? null;
+        $environment = config()->optionalString('env');
         if (!$environment) {
             throw new ConfigurationException('Environment configuration missing');
         }

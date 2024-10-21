@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Gatherling\Models\CardSet;
 use Gatherling\Models\Player;
 
+use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\server;
 
@@ -16,7 +17,6 @@ require_once __DIR__ . '/../lib.php';
 function main(): void
 {
     global $argv;
-    global $CONFIG;
 
     if (PHP_SAPI == 'cli') {
         if (!isset($argv[1])) {
@@ -50,9 +50,11 @@ function main(): void
             $args = $_REQUEST['ret_args'];
         }
 
-        echo "Return to <a href='{$CONFIG['base_url']}{$_REQUEST['return']}?{$args}'>{$_REQUEST['return']}</a><br/>";
+        $baseUrl = config()->string('base_url');
+        $return = request()->string('return');
+        echo "Return to <a href='{$baseUrl}{$return}?{$args}'>{$return}</a><br/>";
         echo '<script>';
-        echo "  window.setTimeout(() => { location.href = \"{$CONFIG['base_url']}{$_REQUEST['return']}?{$args}\"}, 5000);";
+        echo "  window.setTimeout(() => { location.href = \"{$baseUrl}{$return}?{$args}\"}, 5000);";
         echo '</script>';
     }
 }

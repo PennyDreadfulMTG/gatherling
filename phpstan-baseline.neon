@@ -1936,11 +1936,6 @@ parameters:
 			path: gatherling/util/insertcardset.php
 
 		-
-			message: "#^Part \\$_REQUEST\\['return'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 3
-			path: gatherling/util/insertcardset.php
-
-		-
 			message: "#^Part \\$args \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
 			count: 2
 			path: gatherling/util/insertcardset.php

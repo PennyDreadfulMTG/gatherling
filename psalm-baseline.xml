@@ -18,12 +18,6 @@
       <code><![CDATA[normaliseCardName($card->name)]]></code>
     </UndefinedFunction>
   </file>
-  <file src="gatherling/Models/Database.php">
-    <InvalidGlobal>
-      <code><![CDATA[global $CONFIG;]]></code>
-      <code><![CDATA[global $CONFIG;]]></code>
-    </InvalidGlobal>
-  </file>
   <file src="gatherling/Models/Deck.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[getPlayer]]></code>
@@ -266,20 +260,17 @@
   </file>
   <file src="gatherling/auth.php">
     <InvalidGlobal>
-      <code><![CDATA[global $CONFIG;]]></code>
       <code><![CDATA[global $provider;]]></code>
       <code><![CDATA[global $provider;]]></code>
     </InvalidGlobal>
   </file>
   <file src="gatherling/authdebug.php">
     <InvalidGlobal>
-      <code><![CDATA[global $CONFIG;]]></code>
       <code><![CDATA[global $provider;]]></code>
     </InvalidGlobal>
   </file>
   <file src="gatherling/authlib.php">
     <InvalidGlobal>
-      <code><![CDATA[global $CONFIG;]]></code>
       <code><![CDATA[global $provider;]]></code>
     </InvalidGlobal>
   </file>

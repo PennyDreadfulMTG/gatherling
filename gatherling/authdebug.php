@@ -5,7 +5,6 @@ declare(strict_types=1);
 require_once __DIR__ . '/lib.php';
 require __DIR__ . '/authlib.php';
 
-global $CONFIG;
 global $provider;
 
 if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {

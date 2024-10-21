@@ -7,7 +7,7 @@ use Gatherling\Models\Player;
 use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\TemplateHelper;
 
-use function Gatherling\Helpers\server;
+use function Gatherling\Helpers\config;
 
 require_once 'bootstrap.php';
 ob_start();
@@ -32,8 +32,6 @@ const PAPER = 3;
 
 function print_header(string $title, bool $enable_vue = false): void
 {
-    global $CONFIG;
-
     $player = Player::getSessionPlayer();
     if (!$player) {
         $isHost = $isOrganizer = $isSuper = false;
@@ -44,7 +42,7 @@ function print_header(string $title, bool $enable_vue = false): void
     }
 
     echo TemplateHelper::render('partials/header', [
-        'siteName' => $CONFIG['site_name'],
+        'siteName' => config()->string('site_name'),
         'title' => $title,
         'cssLink' => 'styles/css/stylesheet.css?v=' . rawurlencode(git_hash()),
         'enableVue' => $enable_vue,
@@ -105,11 +103,8 @@ function json_headers(): void
 
 function git_hash(): string
 {
-    global $CONFIG;
-    if (!is_null($hash = $CONFIG['GIT_HASH'])) {
-        return substr($hash, 0, 7);
-    }
-    return '';
+    $hash = config()->string('GIT_HASH', '');
+    return substr($hash, 0, 7);
 }
 
 function version_tagline(): string
@@ -159,8 +154,7 @@ function version_tagline(): string
 
 function redirect(string $page): void
 {
-    global $CONFIG;
-    header("Location: {$CONFIG['base_url']}{$page}");
+    header("Location: " . config()->string('base_url') . $page);
     exit(0);
 }
 
