@@ -47,8 +47,8 @@ jobs:
       run: composer install --prefer-dist --no-progress
     - run: cp gatherling/config.php.github gatherling/config.php
     - run: php gatherling/admin/db-upgrade.php
-    - run: php gatherling/util/insertcardset.php M10
-    - run: php gatherling/util/insertcardset.php ELD
+    - run: php gatherling/insertcardset.php M10
+    - run: php gatherling/insertcardset.php ELD
     - run: php gatherling/util/updateDefaultFormats.php
     - run: vendor/bin/phpunit tests/
 

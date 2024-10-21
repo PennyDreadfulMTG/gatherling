@@ -30,7 +30,7 @@ class SetScraper
         }
         $sets = $sets->data;
 
-        $knowncodes = db()->strings('SELECT code FROM cardsets;');
+        $knowncodes = db()->strings('SELECT code FROM cardsets WHERE code IS NOT NULL');
 
         // Turn this into a dict for faster lookup
         $knowncodesDict = [];

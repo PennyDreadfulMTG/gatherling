@@ -6,7 +6,6 @@ namespace Gatherling\Models;
 
 use stdClass;
 use mysqli_stmt;
-use Gatherling\Log;
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\FileNotFoundException;
 
@@ -14,14 +13,19 @@ use function Gatherling\Helpers\db;
 
 class CardSet
 {
-    public static function insert(string $code): void
+    /** @return list<string> */
+    public static function insert(string $code): array
     {
         $url = "https://mtgjson.com/api/v5/{$code}.json";
-        self::insertFromLocation($url);
+        $messages = ["Inserting $code from $url"];
+        $messages = self::insertFromLocation($url);
+        return $messages;
     }
 
-    public static function insertFromLocation(string $filename): void
+    /** @return list<string> */
+    public static function insertFromLocation(string $filename): array
     {
+        $messages = [];
         $file = file_get_contents($filename);
 
         if (!$file) {
@@ -66,7 +70,7 @@ class CardSet
 
             $row = $result->fetch_array();
             if (is_null($row['code'])) {
-                Log::info("$set is missing code ($data->code) in db.");
+                $messages[] = "$set is missing code ($data->code) in db.";
                 $stmt = $database->prepare('UPDATE cardsets SET code = ? WHERE name = ?');
                 $stmt->bind_param('ss', $data->code, $row['name']);
                 if (!$stmt->execute()) {
@@ -76,7 +80,7 @@ class CardSet
         }
 
         if (!$set_already_in) {
-            Log::info("Inserting card set ($set, $releaseDate, $setType)...");
+            $messages[] = "Inserting card set ($set, $releaseDate, $setType)...";
 
             // Insert the card set
             $stmt = $database->prepare('INSERT INTO cardsets(released, name, type, code, standard_legal, modern_legal) values(?, ?, ?, ?, 0, 0)');
@@ -85,7 +89,7 @@ class CardSet
             if (!$stmt->execute()) {
                 throw new \Exception($stmt->error);
             } else {
-                Log::info("Inserted new set {$set}!");
+                $messages[] = "Inserted new set {$set}!";
             }
             $stmt->close();
         }
@@ -98,31 +102,26 @@ class CardSet
 
         foreach ($data->cards as $card) {
             $numCardsParsed++;
-            self::insertCard($card, $set, $card->rarity, $stmt);
+            $messages[] = self::insertCard($card, $set, $card->rarity, $stmt);
             $numCardsInserted++;
         }
 
-        Log::info('End of File Reached');
-        Log::info("Total Cards Parsed: {$numCardsParsed}");
-        Log::info("Total Cards Inserted: {$numCardsInserted}");
+        $messages[] = 'End of File Reached';
+        $messages[] = "Total Cards Parsed: {$numCardsParsed}";
+        $messages[] = "Total Cards Inserted: {$numCardsInserted}";
         $stmt->close();
 
         Format::constructTribes($set);
+        return $messages;
     }
 
-    public static function insertCard(stdClass $card, string $set, string $rarity, mysqli_stmt $stmt): void
+    public static function insertCard(stdClass $card, string $set, string $rarity, mysqli_stmt $stmt): string
     {
         $typeline = implode(' ', $card->types);
         if (isset($card->subtypes) && count($card->subtypes) > 0) {
             $typeline = $typeline . ' - ' . implode(' ', $card->subtypes);
         }
         $name = normaliseCardName($card->name);
-        Log::info("Inserting $name");
-        foreach (['manaCost', 'convertedManaCost', 'type', 'rarity'] as $attr) {
-            if (isset($card->{$attr})) {
-                Log::info("{$attr}: {$card->{$attr}}");
-            }
-        }
         $isw = $isu = $isb = $isr = $isg = $isp = 0;
         $colors = [];
         if (isset($card->manaCost)) {
@@ -151,7 +150,6 @@ class CardSet
                 $colors[] = 'Phyrexian';
             }
         }
-        Log::info("Colors: " . implode(', ', $colors));
 
         $changeling = 0;
         if (isset($card->text) && preg_match('/is every creature type/', $card->text)) {
@@ -160,21 +158,18 @@ class CardSet
 
         $online = in_array('mtgo', $card->availability);
 
-        $empty_string = '';
-        $zero = 0;
-
         if (property_exists($card, 'manaCost')) {
             $stmt->bind_param('sdsssddddddssdd', $card->manaCost, $card->convertedManaCost, $name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity, $card->scryfallId, $changeling, $online);
         } else {
+            $empty_string = '';
+            $zero = 0;
             $stmt->bind_param('sdsssddddddssdd', $empty_string, $zero, $name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity, $card->scryfallId, $changeling, $online);
         }
 
         if (!$stmt->execute()) {
-            Log::error("Card Insertion Error: {$stmt->error}");
-            exit($stmt->error);
-        } else {
-            Log::info('Card Inserted Successfully');
+            return "CARD INSERTION ERROR: {$name} - {$stmt->error}";
         }
+        return "{$name} - Card Inserted Successfully";
     }
 
     /**
