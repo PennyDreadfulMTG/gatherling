@@ -8,7 +8,7 @@ use Gatherling\Models\Deck;
 
 class CcTable extends Component
 {
-    /** @var list<array{cost: int, amt: int}> */
+    /** @var list<array{cost: int, amt: int, imgSrc: string}> */
     public array $castingCosts;
     public string $avgCmc;
 
