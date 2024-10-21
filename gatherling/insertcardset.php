@@ -17,8 +17,8 @@ require_once __DIR__ . '/lib.php';
 
 function main(): void
 {
+    global $argv;
     if (PHP_SAPI == 'cli') {
-        global $argv;
         if (!isset($argv[1])) {
             throw new \Exception('No set provided');
         }
