@@ -429,7 +429,7 @@ function create_pairing(Event $event, int $round, ?string $a, ?string $b, ?strin
     if ($res == 'P') {
         $event->addPairing($playerA, $playerB, $round, $res);
     } else {
-        $event->addMatch($playerA, $playerB, (string) $round, $res, (string) $pAWins, (string) $pBWins);
+        $event->addMatch($playerA, $playerB, $round, $res, $pAWins ?? 0, $pBWins ?? 0);
     }
 }
 

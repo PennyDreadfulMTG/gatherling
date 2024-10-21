@@ -22,6 +22,7 @@ use Gatherling\Views\Pages\PlayerList;
 use Gatherling\Views\Pages\PointsAdjustmentForm;
 use Gatherling\Views\Pages\ReportsForm;
 use Gatherling\Views\Pages\StandingsList;
+use InvalidArgumentException;
 
 use function Gatherling\Helpers\get;
 use function Gatherling\Helpers\post;
@@ -497,7 +498,6 @@ function updateMatches(): void
     $pA = post()->string('newmatchplayerA', '');
     $pB = post()->string('newmatchplayerB', '');
     $res = post()->string('newmatchresult', '');
-    $pAWins = $pBWins = null;
     if ($res == '2-0') {
         $pAWins = 2;
         $pBWins = 0;
@@ -518,6 +518,8 @@ function updateMatches(): void
         $pAWins = 1;
         $pBWins = 1;
         $res = 'D';
+    } elseif ($res != 'P') {
+        throw new InvalidArgumentException('Invalid result for match: $res');
     }
     $rnd = post()->int('newmatchround');
 
@@ -528,15 +530,15 @@ function updateMatches(): void
         $playerA = new Standings($event->name, $pA);
         $playerB = new Standings($event->name, $pB);
         if ($res == 'P') {
-            $event->addPairing($playerA, $playerB, (int) $rnd, $res);
+            $event->addPairing($playerA, $playerB, $rnd, $res);
         } else {
-            $event->addMatch($playerA, $playerB, (string) $rnd, $res, (string) $pAWins, (string) $pBWins);
+            $event->addMatch($playerA, $playerB, $rnd, $res, $pAWins, $pBWins);
         }
     }
 
     if (strcmp(post()->string('newbyeplayer', ''), '') != 0) {
         $playerBye = new Standings($event->name, post()->string('newbyeplayer'));
-        $event->addMatch($playerBye, $playerBye, (string) $rnd, 'BYE');
+        $event->addMatch($playerBye, $playerBye, $rnd, 'BYE');
     }
 }
 

@@ -845,17 +845,17 @@ class Event
         return db()->insert($sql, $params);
     }
 
-    public function addMatch(Standings $playera, Standings $playerb, string $round = '99', string $result = 'P', string $playera_wins = '0', string $playerb_wins = '0'): void
+    public function addMatch(Standings $playera, Standings $playerb, int $round = -99, string $result = 'P', int $playera_wins = 0, int $playerb_wins = 0): void
     {
         $draws = 0;
         $id = $this->mainid;
 
-        if ($round > $this->mainrounds) {
+        if ($round > (int) $this->mainrounds) {
             $id = $this->finalid;
-            $round = (int) $round - (int) $this->mainrounds;
+            $round = $round - (int) $this->mainrounds;
         }
 
-        if ($round == 99) {
+        if ($round == -99) {
             $round = $this->current_round;
         }
 
