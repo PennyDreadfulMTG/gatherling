@@ -17,9 +17,8 @@ class CardSet
     public static function insert(string $code): array
     {
         $url = "https://mtgjson.com/api/v5/{$code}.json";
-        $messages = ["Inserting $code from $url"];
         $messages = self::insertFromLocation($url);
-        return $messages;
+        return array_merge(["Inserting $code from $url"], $messages);
     }
 
     /** @return list<string> */
@@ -123,31 +122,24 @@ class CardSet
         }
         $name = normaliseCardName($card->name);
         $isw = $isu = $isb = $isr = $isg = $isp = 0;
-        $colors = [];
         if (isset($card->manaCost)) {
             if (preg_match('/W/', $card->manaCost)) {
                 $isw = 1;
-                $colors[] = 'White';
             }
             if (preg_match('/U/', $card->manaCost)) {
                 $isu = 1;
-                $colors[] = 'Blue';
             }
             if (preg_match('/B/', $card->manaCost)) {
                 $isb = 1;
-                $colors[] = 'Black';
             }
             if (preg_match('/R/', $card->manaCost)) {
                 $isr = 1;
-                $colors[] = 'Red';
             }
             if (preg_match('/G/', $card->manaCost)) {
                 $isg = 1;
-                $colors[] = 'Green';
             }
             if (preg_match('/P/', $card->manaCost)) {
                 $isp = 1;
-                $colors[] = 'Phyrexian';
             }
         }
 
