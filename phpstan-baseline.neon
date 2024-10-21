@@ -1601,21 +1601,6 @@ parameters:
 			path: gatherling/deckXmlParser.php
 
 		-
-			message: "#^Cannot access offset 'size' on mixed\\.$#"
-			count: 2
-			path: gatherling/event.php
-
-		-
-			message: "#^Cannot access offset 'tmp_name' on mixed\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
-			message: "#^Cannot access offset 'type' on mixed\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
 			message: "#^Cannot access offset int\\<0, max\\> on mixed\\.$#"
 			count: 2
 			path: gatherling/event.php
@@ -1886,21 +1871,6 @@ parameters:
 			path: gatherling/seriescp.php
 
 		-
-			message: "#^Cannot access offset 'size' on mixed\\.$#"
-			count: 2
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Cannot access offset 'tmp_name' on mixed\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Cannot access offset 'type' on mixed\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
 			message: "#^Cannot access property \\$super on Gatherling\\\\Models\\\\Player\\|null\\.$#"
 			count: 1
 			path: gatherling/seriescp.php
@@ -1929,16 +1899,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$value of function curl_setopt expects array\\|string, string\\|false given\\.$#"
 			count: 1
 			path: gatherling/util/email.php
-
-		-
-			message: "#^Cannot access offset 'tmp_name' on mixed\\.$#"
-			count: 1
-			path: gatherling/util/insertcardset.php
-
-		-
-			message: "#^Part \\$args \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 2
-			path: gatherling/util/insertcardset.php
 
 		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, string\\|null given\\.$#"

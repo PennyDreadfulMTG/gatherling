@@ -39,3 +39,8 @@ function marshal(mixed $value): Marshaller
 {
     return new Marshaller($value);
 }
+
+function files(): Files
+{
+    return new Files($_FILES);
+}

@@ -24,6 +24,7 @@ use Gatherling\Views\Pages\ReportsForm;
 use Gatherling\Views\Pages\StandingsList;
 use InvalidArgumentException;
 
+use function Gatherling\Helpers\files;
 use function Gatherling\Helpers\get;
 use function Gatherling\Helpers\post;
 use function Gatherling\Helpers\request;
@@ -366,16 +367,15 @@ function updateEvent(): Event
 
 function insertTrophy(): bool
 {
-    if ($_FILES['trophy']['size'] <= 0) {
+    $file = files()->optionalFile('trophy');
+    if ($file === null || $file->size <= 0) {
         return false;
     }
-    $file = $_FILES['trophy'];
     $event = $_POST['name'];
 
-    $tmp = $file['tmp_name'];
-    $size = $file['size'];
-    $type = $file['type'];
-    assert(is_string($tmp) && is_string($type) && is_int($size));
+    $tmp = $file->tmp_name;
+    $size = $file->size;
+    $type = $file->type;
     $f = fopen($tmp, 'rb');
 
     $db = Database::getPDOConnection();

@@ -7,6 +7,7 @@ use Gatherling\Models\Player;
 use Gatherling\Views\Pages\InsertCardSet;
 use Gatherling\Views\Redirect;
 
+use function Gatherling\Helpers\files;
 use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\server;
 
@@ -41,9 +42,8 @@ function main(): void
         // Due to an ancient bug in MS-DOS, Windows-based computers can't handle Conflux correctly.
         $code = $cardSetCode == 'CON' ? 'CON_' : $cardSetCode;
         $messages = CardSet::insert($code);
-    } elseif (isset($_FILES['cardsetfile'])) {
-        $tmp_name = $_FILES['cardsetfile']['tmp_name'];
-        assert(is_string($tmp_name));
+    } elseif ($file = files()->optionalFile('cardsetfile')) {
+        $tmp_name = $file->tmp_name;
         $messages = CardSet::insertFromLocation($tmp_name);
     } else {
         throw new \Exception('No set provided');
