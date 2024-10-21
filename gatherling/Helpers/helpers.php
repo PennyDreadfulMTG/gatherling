@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Gatherling\Helpers;
 
+use Gatherling\Logger;
+use Psr\Log\LoggerInterface;
+
 function request(): Request
 {
     return new Request($_REQUEST);
@@ -43,4 +46,15 @@ function marshal(mixed $value): Marshaller
 function files(): Files
 {
     return new Files($_FILES);
+}
+
+function logger(): Logger
+{
+    static $logger;
+
+    if (!$logger) {
+        $logger = new Logger();
+    }
+
+    return $logger;
 }

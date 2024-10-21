@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Views;
 
-use Gatherling\Log;
-
+use function Gatherling\Helpers\logger;
 use function Gatherling\Helpers\server;
 
 class LoginRedirect extends Redirect
@@ -17,7 +16,7 @@ class LoginRedirect extends Redirect
         }
         // We sometimes seem to get in an infinite redirect loop. Let's avoid that and log something to help diagnose why.
         if (str_contains($redirect, 'login.php')) {
-            Log::error('LoginRedirect: login.php in redirect, referer: ' . server()->string('HTTP_REFERER', ''));
+            logger()->error('LoginRedirect: login.php in redirect, referer: ' . server()->string('HTTP_REFERER', ''));
             $redirect = 'player.php';
         }
         parent::__construct('login.php?target=' . rawurlencode($redirect) . '&message=' . rawurlencode($message) . '&username=' . rawurlencode($username));

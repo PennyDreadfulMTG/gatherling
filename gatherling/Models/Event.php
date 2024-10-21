@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
-use Gatherling\Log;
 use Gatherling\Exceptions\NotFoundException;
 
 use function Gatherling\Helpers\db;
+use function Gatherling\Helpers\logger;
 
 class Event
 {
@@ -656,7 +656,7 @@ class Event
             $entry = new Entry($this->id, $playername);
             return $entry->removeEntry();
         } catch (NotFoundException $e) {
-            Log::info("Tried to remove $playername from {$this->name} but no entry was found.");
+            logger()->info("Tried to remove $playername from {$this->name} but no entry was found.");
             return true;
         }
     }

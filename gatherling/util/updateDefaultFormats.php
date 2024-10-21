@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Gatherling;
 
-use Gatherling\Log;
 use Gatherling\Models\Player;
 use Gatherling\Models\Formats;
 use Gatherling\Exceptions\SetMissingException;
 
+use function Gatherling\Helpers\logger;
 use function Gatherling\Helpers\server;
 
 set_time_limit(0);
@@ -26,7 +26,7 @@ function main(): void
         Formats::updateDefaultFormats();
         echo "done";
     } catch (SetMissingException $e) {
-        Log::warning($e->getMessage());
+        logger()->warning($e->getMessage());
         echo $e->getMessage();
         exit(0);
     }

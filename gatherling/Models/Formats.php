@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use Gatherling\Log;
 use Gatherling\Exceptions\SetMissingException;
 
 use function Gatherling\Helpers\db;
+use function Gatherling\Helpers\logger;
 
 class Formats
 {
@@ -41,7 +41,7 @@ class Formats
         }
         $legal = json_decode(file_get_contents('https://whatsinstandard.com/api/v5/sets.json'));
         if (!$legal) {
-            Log::info('Unable to load WhatsInStandard API.  Aborting.');
+            logger()->info('Unable to load WhatsInStandard API.  Aborting.');
 
             return;
         }
@@ -71,13 +71,13 @@ class Formats
         }
         foreach ($fmt->getLegalCardsets() as $setName) {
             if (!in_array($setName, $expected, true)) {
-                Log::info("{$setName} is no longer Standard Legal.");
+                logger()->info("{$setName} is no longer Standard Legal.");
                 db()->execute('UPDATE cardsets SET standard_legal = 0 WHERE `name` = :set_name', ['set_name' => $setName]);
             }
         }
         foreach ($expected as $setName) {
             if (!$fmt->isCardSetLegal($setName)) {
-                Log::info("{$setName} is now Standard Legal.");
+                logger()->info("{$setName} is now Standard Legal.");
                 db()->execute('UPDATE cardsets SET standard_legal = 1 WHERE `name` = :set_name', ['set_name' => $setName]);
             }
         }
@@ -85,7 +85,7 @@ class Formats
 
     private static function updateModern(): void
     {
-        Log::info('Updating Modern...');
+        logger()->info('Updating Modern...');
         $fmt = self::loadFormat('Modern');
         if (!$fmt->modern) {
             $fmt->modern = 1;
@@ -109,7 +109,7 @@ class Formats
             $release = strtotime($set[2]);
             if ($release > $cutoff) {
                 if (!$fmt->isCardSetLegal($setName)) {
-                    Log::info("{$setName} is Modern Legal.");
+                    logger()->info("{$setName} is Modern Legal.");
                     db()->execute('UPDATE cardsets SET modern_legal = 1 WHERE `name` = :set_name', ['set_name' => $setName]);
                 }
             }
@@ -118,13 +118,13 @@ class Formats
 
     private static function updatePennyDreadful(): void
     {
-        Log::info('Updating Penny Dreadful...');
+        logger()->info('Updating Penny Dreadful...');
         $fmt = self::loadFormat('Penny Dreadful');
 
         $url = 'https://pennydreadfulmtg.github.io/legal_cards.txt';
         $legal_cards = parseCards(file_get_contents($url));
         if (!$legal_cards) {
-            Log::error('Unable to fetch Penny Dreadful legal cards');
+            logger()->error('Unable to fetch Penny Dreadful legal cards');
 
             return;
         }
@@ -132,30 +132,30 @@ class Formats
         foreach ($fmt->card_legallist as $card) {
             if (!in_array($card, $legal_cards, true)) {
                 $fmt->deleteCardFromLegallist($card);
-                Log::info("{$card} is no longer Penny Dreadful Legal.");
+                logger()->info("{$card} is no longer Penny Dreadful Legal.");
             }
 
             if (++$i % 200 == 0) {
-                Log::info("Deleted $i cards");
+                logger()->info("Deleted $i cards");
             }
         }
         $i = 0;
         foreach ($legal_cards as $card) {
             if (!in_array($card, $fmt->card_legallist)) {
                 if ($fmt->isCardOnBanList($card)) {
-                    Log::info("{$card} is banned");
+                    logger()->info("{$card} is banned");
                     continue;
                 }
                 $success = $fmt->insertCardIntoLegallist($card);
                 if (!$success) {
-                    Log::error("Can't add {$card} to Penny Dreadful Legal list, it is not in the database.");
+                    logger()->error("Can't add {$card} to Penny Dreadful Legal list, it is not in the database.");
                     $setCode = self::findSetForCard($card);
                     throw new SetMissingException("Did not find set with code {$setCode} please add it to the database");
                 }
             }
 
             if (++$i % 200 == 0) {
-                Log::info("Added $i cards");
+                logger()->info("Added $i cards");
             }
         }
     }

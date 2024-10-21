@@ -7,10 +7,10 @@ namespace Gatherling\Data;
 use Gatherling\Exceptions\ConfigurationException;
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\FileNotFoundException;
-use Gatherling\Log;
 
 use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\db;
+use function Gatherling\Helpers\logger;
 
 require_once __DIR__ . '/../lib.php';
 
@@ -48,7 +48,7 @@ class Setup
 {
     public static function setupDatabase(): void
     {
-        Log::info('Initializing database');
+        logger()->info('Initializing database');
         self::create();
         if (self::version() === 0) {
             self::restoreDump(__DIR__ . '/sql/schema.sql');
@@ -60,7 +60,7 @@ class Setup
     // test db for all future db queries in this request.
     public static function setupTestDatabase(): void
     {
-        Log::info('Setting up test database');
+        logger()->info('Setting up test database');
         self::activateTestDatabase();
         self::dropTestDatabase();
         self::create();
@@ -70,7 +70,7 @@ class Setup
 
     public static function dropTestDatabase(): void
     {
-        Log::info('Dropping test database');
+        logger()->info('Dropping test database');
         db()->dropDatabase(config()->string('db_test_database'));
     }
 
@@ -84,7 +84,7 @@ class Setup
             'db_test_password' => 'db_password',
             'db_test_database' => 'db_database',
         ];
-        Log::info('Activating test database. Future db calls will be made against the test database.');
+        logger()->info('Activating test database. Future db calls will be made against the test database.');
         foreach ($toCopy as $from => $to) {
             if (!config()->optionalString($from)) {
                 $msg = 'Test database is not configured. See config.php.example';
@@ -97,7 +97,7 @@ class Setup
     // Creates the database if it doesn't exist.
     private static function create(): void
     {
-        Log::info('Creating database if necessary');
+        logger()->info('Creating database if necessary');
         db()->createDatabase(config()->string('db_database'));
     }
 
@@ -114,7 +114,7 @@ class Setup
         foreach ($commands as $sql) {
             db()->execute($sql);
         }
-        Log::info('Database restored from dump.');
+        logger()->info('Database restored from dump.');
     }
 
     /**
@@ -138,7 +138,7 @@ class Setup
             }
             if ($fileVersion > $version) {
                 $path = $migrationDirectory . DIRECTORY_SEPARATOR . $file;
-                Log::debug("Loading migration $fileVersion from $path");
+                logger()->debug("Loading migration $fileVersion from $path");
                 $sql = file_get_contents($path);
                 if (!$sql) {
                     throw new FileNotFoundException("Failed to read migration file: $path");
@@ -156,9 +156,9 @@ class Setup
     {
         $version = self::version();
         $migrations = self::findMigrations($version);
-        Log::info('Found ' . count($migrations) . ' pending migrations');
+        logger()->info('Found ' . count($migrations) . ' pending migrations');
         foreach ($migrations as $migration) {
-            Log::info("Migration {$migration->version}: {$migration->sql}");
+            logger()->info("Migration {$migration->version}: {$migration->sql}");
             db()->execute($migration->sql);
             db()->execute("UPDATE db_version SET version = :version", ['version' => $migration->version]);
         }
@@ -169,7 +169,7 @@ class Setup
         try {
             return db()->int('SELECT version FROM db_version LIMIT 1', []);
         } catch (DatabaseException) {
-            Log::debug('No version found in db_version table');
+            logger()->debug('No version found in db_version table');
             return 0;
         }
     }

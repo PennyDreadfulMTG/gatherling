@@ -7,7 +7,7 @@ namespace Gatherling\Data;
 use Gatherling\Exceptions\ConfigurationException;
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\MarshalException;
-use Gatherling\Log;
+use Gatherling\Logger;
 use PDOException;
 use PDOStatement;
 use PDO;
@@ -15,6 +15,7 @@ use TypeError;
 use Gatherling\Models\Dto;
 
 use function Gatherling\Helpers\config;
+use function Gatherling\Helpers\logger;
 use function Gatherling\Helpers\marshal;
 
 // Do not access this directly, use Gatherling\Helpers\db() instead
@@ -334,7 +335,7 @@ class Db
     public function begin(string $rawName): void
     {
         $name = $this->safeName($rawName);
-        Log::debug("[DB] BEGIN $rawName ($name)");
+        logger()->debug("[DB] BEGIN $rawName ($name)");
         $isOuterTransaction = !$this->transactions;
         $this->transactions[] = $name;
         if ($isOuterTransaction) {
@@ -351,7 +352,7 @@ class Db
     public function commit(string $rawName): void
     {
         $name = $this->safeName($rawName);
-        Log::debug("[DB] COMMIT $rawName ($name)");
+        logger()->debug("[DB] COMMIT $rawName ($name)");
         $numTransactions = count($this->transactions);
         if ($numTransactions === 0) {
             throw new DatabaseException("Asked to commit $name, but no transaction is open");
@@ -378,7 +379,7 @@ class Db
     public function rollback(string $rawName): void
     {
         $name = $this->safeName($rawName);
-        Log::debug("[DB] ROLLBACK $rawName ($name)");
+        logger()->debug("[DB] ROLLBACK $rawName ($name)");
         $numTransactions = count($this->transactions);
         if ($numTransactions === 0) {
             try {
@@ -454,16 +455,16 @@ class Db
         if ($this->transactions) {
             $context['transactions'] = $this->transactions;
         }
-        Log::debug("[DB] $sql", $context);
+        logger()->debug("[DB] $sql", $context);
         if ($this->transactions && $this->isDdl($sql)) {
-            Log::warning('[DB] DDL statement issued within transaction, this may cause issues.');
+            logger()->warning('[DB] DDL statement issued within transaction, this may cause issues.');
         }
 
         try {
             return $operation($sql, $params);
         } catch (PDOException $e) {
             if ($e->getCode() === '3D000') {
-                Log::warning('Database connection lost, attempting to reconnect...');
+                logger()->warning('Database connection lost, attempting to reconnect...');
                 try {
                     $stmt = $this->pdo->prepare($sql);
                     return $stmt->execute($params);
@@ -472,7 +473,7 @@ class Db
                 }
             }
             $msg = "Failed to execute query: $sql with params " . json_encode($params);
-            Log::error($msg, $context);
+            logger()->error($msg, $context);
 
             throw new DatabaseException($msg, 0, $e);
         }

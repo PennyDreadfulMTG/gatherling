@@ -5,14 +5,6 @@
       <code><![CDATA[optionalFloat]]></code>
     </PossiblyUnusedMethod>
   </file>
-  <file src="gatherling/Log.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[alert]]></code>
-      <code><![CDATA[critical]]></code>
-      <code><![CDATA[emergency]]></code>
-      <code><![CDATA[notice]]></code>
-    </PossiblyUnusedMethod>
-  </file>
   <file src="gatherling/Models/CardSet.php">
     <UndefinedFunction>
       <code><![CDATA[normaliseCardName($card->name)]]></code>
