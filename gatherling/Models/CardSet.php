@@ -85,7 +85,7 @@ class CardSet
             if (!$stmt->execute()) {
                 throw new \Exception($stmt->error);
             } else {
-                echo "Inserted new set {$set}!<br /><br />";
+                Log::info("Inserted new set {$set}!");
             }
             $stmt->close();
         }
@@ -102,9 +102,9 @@ class CardSet
             $numCardsInserted++;
         }
 
-        echo 'End of File Reached<br />';
-        echo "Total Cards Parsed: {$numCardsParsed}<br />";
-        echo "Total Cards Inserted: {$numCardsInserted}<br />";
+        Log::info('End of File Reached');
+        Log::info("Total Cards Parsed: {$numCardsParsed}");
+        Log::info("Total Cards Inserted: {$numCardsInserted}");
         $stmt->close();
 
         Format::constructTribes($set);
@@ -117,42 +117,41 @@ class CardSet
             $typeline = $typeline . ' - ' . implode(' ', $card->subtypes);
         }
         $name = normaliseCardName($card->name);
-        echo '<table class="new_card">';
-        echo '<tr><th>Name:</th><td>' . $name . '</td></tr>';
+        Log::info("Inserting $name");
         foreach (['manaCost', 'convertedManaCost', 'type', 'rarity'] as $attr) {
             if (isset($card->{$attr})) {
-                echo "<tr><th>{$attr}:</th><td>" . $card->{$attr} . '</td></tr>';
+                Log::info("{$attr}: {$card->{$attr}}");
             }
         }
-        echo '<tr><th>Card Colors:</th><td>';
         $isw = $isu = $isb = $isr = $isg = $isp = 0;
+        $colors = [];
         if (isset($card->manaCost)) {
             if (preg_match('/W/', $card->manaCost)) {
                 $isw = 1;
-                echo 'White ';
+                $colors[] = 'White';
             }
             if (preg_match('/U/', $card->manaCost)) {
                 $isu = 1;
-                echo 'Blue ';
+                $colors[] = 'Blue';
             }
             if (preg_match('/B/', $card->manaCost)) {
                 $isb = 1;
-                echo 'Black ';
+                $colors[] = 'Black';
             }
             if (preg_match('/R/', $card->manaCost)) {
                 $isr = 1;
-                echo 'Red ';
+                $colors[] = 'Red';
             }
             if (preg_match('/G/', $card->manaCost)) {
                 $isg = 1;
-                echo 'Green ';
+                $colors[] = 'Green';
             }
             if (preg_match('/P/', $card->manaCost)) {
                 $isp = 1;
-                echo 'Phyrexian ';
+                $colors[] = 'Phyrexian';
             }
         }
-        echo '</td></tr>';
+        Log::info("Colors: " . implode(', ', $colors));
 
         $changeling = 0;
         if (isset($card->text) && preg_match('/is every creature type/', $card->text)) {
@@ -171,12 +170,10 @@ class CardSet
         }
 
         if (!$stmt->execute()) {
-            echo '<tr><td colspan="2" style="background-color: LightRed;">!!!!!!!!!! Card Insertion Error !!!!!!!!!</td></tr>';
-            echo '</table>';
+            Log::error("Card Insertion Error: {$stmt->error}");
             exit($stmt->error);
         } else {
-            echo '<tr><th colspan="2" style="background-color: LightGreen;">Card Inserted Successfully</th></tr>';
-            echo '</table>';
+            Log::info('Card Inserted Successfully');
         }
     }
 

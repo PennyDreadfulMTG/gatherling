@@ -31,6 +31,7 @@ function main(): void
         if (!(Player::getSessionPlayer()?->isSuper() ?? false)) {
             redirect('index.php');
         }
+        echo "<p>Look in the console log for ouput.</p>";
         if (isset($_REQUEST['cardsetcode'])) {
             // Due to an ancient bug in MS-DOS, Windows-based computers can't handle Conflux correctly.
             $code = request()->string('cardsetcode') == 'CON' ? 'CON_' : request()->string('cardsetcode');
