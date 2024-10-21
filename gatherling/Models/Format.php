@@ -167,7 +167,6 @@ class Format
         }
 
         foreach ($cardSets as $cardSet) {
-            echo "Processing $cardSet<br />";
             $cardTypes = Database::listResultSingleParam("SELECT type
                                                              FROM cards
                                                              WHERE type
