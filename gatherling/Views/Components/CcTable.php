@@ -20,6 +20,7 @@ class CcTable extends Component
         foreach ($convertedCosts as $cost => $amt) {
             $this->castingCosts[] = [
                 'cost' => $cost,
+                'imgSrc' => "styles/images/mana{$cost}.png",
                 'amt' => $amt,
             ];
             $total += $cost * $amt;
