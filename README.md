@@ -26,7 +26,7 @@ You can change the ports in docker-composer.yml.
 
 ## Dev
 
-- Run `composer check` to run tests, lint, both static type checkers and javasscript tests.
+- Run `composer qa` to run tests, lint, both static type checkers and javasscript tests.
 
 ## Tests
 
