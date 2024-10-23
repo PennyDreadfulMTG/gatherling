@@ -160,7 +160,7 @@ function redirect(string $page): void
 
 /**
  * @param string|array<string> $cards
- * @return array<string>
+ * @return list<string>
  */
 function parseCards(string|array $cards): array
 {

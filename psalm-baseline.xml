@@ -151,6 +151,11 @@
       <code><![CDATA[$opponent_names]]></code>
     </UnusedVariable>
   </file>
+  <file src="gatherling/Views/Components/AuthDebugInfo.php">
+    <UndefinedFunction>
+      <code><![CDATA[get_user_guilds($token)]]></code>
+    </UndefinedFunction>
+  </file>
   <file src="gatherling/Views/Components/EditSet.php">
     <UnusedVariable>
       <code><![CDATA[$names]]></code>
@@ -264,11 +269,6 @@
     </InvalidGlobal>
   </file>
   <file src="gatherling/authdebug.php">
-    <InvalidGlobal>
-      <code><![CDATA[global $provider;]]></code>
-    </InvalidGlobal>
-  </file>
-  <file src="gatherling/authlib.php">
     <InvalidGlobal>
       <code><![CDATA[global $provider;]]></code>
     </InvalidGlobal>

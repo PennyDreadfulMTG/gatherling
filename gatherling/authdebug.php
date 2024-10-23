@@ -2,55 +2,64 @@
 
 declare(strict_types=1);
 
+namespace Gatherling;
+
+use Gatherling\Views\Pages\AuthDebug;
+use Gatherling\Views\Redirect;
+use League\OAuth2\Client\Token\AccessTokenInterface;
+use Wohali\OAuth2\Client\Provider\Discord;
+
+use function Gatherling\Helpers\get;
+use function Gatherling\Helpers\server;
+use function Gatherling\Helpers\session;
+
 require_once __DIR__ . '/lib.php';
 require __DIR__ . '/authlib.php';
 
-global $provider;
+function main(): void
+{
+    global $provider;
 
-if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
-    $token = load_cached_token();
+    $code = get()->optionalString('code');
+    $token = session()->optionalString('DISCORD_TOKEN');
 
-    if ($token->hasExpired()) {
-        $newAccessToken = $provider->getAccessToken('refresh_token', [
-            'refresh_token' => $token->getRefreshToken(),
+    if ($code === null && $token !== null) {
+        $token = load_cached_token();
+        if ($token->hasExpired()) {
+            $token = refreshAccessToken($provider, $token);
+        }
+    } elseif ($code === null) {
+        // Step 1. Get authorization code
+        global $provider;
+        $options = ['scope' => ['identify', 'email']];
+        $authUrl = $provider->getAuthorizationUrl($options);
+        $_SESSION['oauth2state'] = $provider->getState();
+        (new Redirect($authUrl))->send();
+    // Check given state against previously stored one to mitigate CSRF attack
+    } elseif (get()->optionalString('state') !== session()->string('oauth2state')) {
+        unset($_SESSION['oauth2state']);
+        exit('Invalid state');
+    } else {
+        // Step 2. Get an access token using the provided authorization code
+        $token = $provider->getAccessToken('authorization_code', [
+            'code' => $code,
         ]);
-
-        store_token($newAccessToken);
-        $token = $newAccessToken;
+        store_token($token);
     }
 
-    debug_info($token);
-} elseif (!isset($_GET['code'])) {
-    send_to_discord_debug();
+    $page = new AuthDebug($token);
+    $page->send();
+}
 
-// Check given state against previously stored one to mitigate CSRF attack
-} elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
-    unset($_SESSION['oauth2state']);
-    exit('Invalid state');
-} else {
-    // Step 2. Get an access token using the provided authorization code
-    $token = $provider->getAccessToken('authorization_code', [
-        'code' => $_GET['code'],
+function refreshAccessToken(Discord $provider, AccessTokenInterface $token): AccessTokenInterface
+{
+    $newAccessToken = $provider->getAccessToken('refresh_token', [
+        'refresh_token' => $token->getRefreshToken(),
     ]);
-
-    store_token($token);
-    debug_info($token);
+    store_token($newAccessToken);
+    return $newAccessToken;
 }
 
-function send_to_discord_debug(): void
-{
-    // Step 1. Get authorization code
-    global $provider;
-    $options = ['scope' => ['identify', 'email']];
-    $authUrl = $provider->getAuthorizationUrl($options);
-    $_SESSION['oauth2state'] = $provider->getState();
-    header('Location: ' . $authUrl);
-}
-
-function store_token(\League\OAuth2\Client\Token\AccessToken $token): void
-{
-    $_SESSION['DISCORD_TOKEN'] = $token->getToken();
-    $_SESSION['DISCORD_REFRESH_TOKEN'] = $token->getRefreshToken();
-    $_SESSION['DISCORD_EXPIRES'] = $token->getExpires();
-    $_SESSION['DISCORD_SCOPES'] = $token->getValues()['scope'];
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
+    main();
 }

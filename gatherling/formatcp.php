@@ -203,7 +203,7 @@ function updateBanlist(string $activeFormat, string|array $addBanCards, array $d
 }
 
 /**
- * @param string|array<string> $addLegalCards
+ * @param string|list<string> $addLegalCards
  * @param list<string> $delLegalCards
  */
 function updateLegalList(string $formatName, array|string $addLegalCards, array $delLegalCards): Component

@@ -15,8 +15,7 @@ global $provider;
 
 if (isset($_GET['debug']) && isset($_SESSION['DISCORD_TOKEN'])) {
     $token = load_cached_token();
-    debug_info($token);
-
+    echo debug_info($token);
     return;
 }
 
@@ -86,14 +85,6 @@ function send_to_discord(mixed $scope = null): void
     $authUrl = $provider->getAuthorizationUrl($options);
     $_SESSION['oauth2state'] = $provider->getState();
     header('Location: ' . $authUrl);
-}
-
-function store_token(\League\OAuth2\Client\Token\AccessTokenInterface $token): void
-{
-    $_SESSION['DISCORD_TOKEN'] = $token->getToken();
-    $_SESSION['DISCORD_REFRESH_TOKEN'] = $token->getRefreshToken();
-    $_SESSION['DISCORD_EXPIRES'] = $token->getExpires();
-    $_SESSION['DISCORD_SCOPES'] = $token->getValues()['scope'];
 }
 
 function do_login(\League\OAuth2\Client\Token\AccessTokenInterface $token): void

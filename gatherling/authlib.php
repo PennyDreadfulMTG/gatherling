@@ -2,19 +2,24 @@
 
 declare(strict_types=1);
 
+use Gatherling\Views\Components\AuthDebugInfo;
+use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Token\AccessTokenInterface;
+use Wohali\OAuth2\Client\Provider\Discord;
+
 use function Gatherling\Helpers\config;
 
 require_once __DIR__ . '/lib.php';
 
-$provider = new \Wohali\OAuth2\Client\Provider\Discord([
+$provider = new Discord([
     'clientId'     => config()->string('DISCORD_CLIENT_ID'),
     'clientSecret' => config()->string('DISCORD_CLIENT_SECRET'),
     'redirectUri'  => config()->string('base_url') . 'auth.php',
 ]);
 
-function load_cached_token(): \League\OAuth2\Client\Token\AccessToken
+function load_cached_token(): AccessToken
 {
-    return new \League\OAuth2\Client\Token\AccessToken([
+    return new AccessToken([
         'access_token'  => $_SESSION['DISCORD_TOKEN'],
         'refresh_token' => $_SESSION['DISCORD_REFRESH_TOKEN'],
         'expires'       => $_SESSION['DISCORD_EXPIRES'],
@@ -22,8 +27,16 @@ function load_cached_token(): \League\OAuth2\Client\Token\AccessToken
     ]);
 }
 
+function store_token(AccessTokenInterface $token): void
+{
+    $_SESSION['DISCORD_TOKEN'] = $token->getToken();
+    $_SESSION['DISCORD_REFRESH_TOKEN'] = $token->getRefreshToken();
+    $_SESSION['DISCORD_EXPIRES'] = $token->getExpires();
+    $_SESSION['DISCORD_SCOPES'] = $token->getValues()['scope'];
+}
+
 /** @return list<array{id: string, name: string, icon: string, owner: bool, permissions: int}> */
-function get_user_guilds(\League\OAuth2\Client\Token\AccessToken $token): array
+function get_user_guilds(AccessToken $token): array
 {
     global $provider;
 
@@ -32,37 +45,7 @@ function get_user_guilds(\League\OAuth2\Client\Token\AccessToken $token): array
     return $provider->getParsedResponse($guildsRequest);
 }
 
-function debug_info(\League\OAuth2\Client\Token\AccessToken $token): void
+function debug_info(\League\OAuth2\Client\Token\AccessToken $token): string
 {
-    // Show some token details
-    echo '<h2>Token details:</h2>';
-    echo 'Token: ' . $token->getToken() . '<br/>';
-    echo 'Refresh token: ' . $token->getRefreshToken() . '<br/>';
-    echo 'Expires: ' . $token->getExpires() . ' - ';
-    echo($token->hasExpired() ? 'expired' : 'not expired') . '<br/>';
-    echo 'Values: <br/>';
-    foreach ($token->getValues() as $key => $value) {
-        echo "$key=$value<br/>";
-    }
-
-    // Step 3. (Optional) Look up the user's profile with the provided token
-    try {
-        global $provider;
-        $user = $provider->getResourceOwner($token);
-
-        echo '<h2>Resource owner details:</h2>';
-        printf('Hello %s#%s!<br/><br/>', $user->getUsername(), $user->getDiscriminator());
-        var_export($user->toArray());
-    } catch (Exception $e) {
-        // Failed to get user details
-        exit($e->getMessage());
-    }
-    echo '<h2>Guilds:</h2>';
-    $guilds = get_user_guilds($token);
-
-    // var_dump($guilds);
-    foreach ($guilds as $g) {
-        var_dump($g);
-        echo '<p/>';
-    }
+    return (new AuthDebugInfo($token))->render();
 }
