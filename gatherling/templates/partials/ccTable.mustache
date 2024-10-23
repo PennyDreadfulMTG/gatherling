@@ -5,7 +5,12 @@
     {{#castingCosts}}
         <tr>
             <td align="right" width="75">
-                <img src="{{imgSrc}}" alt="{{cost}}">
+                {{#imgSrc}}
+                    <img src="{{imgSrc}}" alt="{{cost}}">
+                {{/imgSrc}}
+                {{^imgSrc}}
+                    {{cost}}
+                {{/imgSrc}}
                 &nbsp;
             </td>
            <td width="75" align="left">x {{amt}}</td>

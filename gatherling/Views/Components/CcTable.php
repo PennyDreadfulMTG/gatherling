@@ -18,9 +18,10 @@ class CcTable extends Component
 
         $total = $cards = 0;
         foreach ($convertedCosts as $cost => $amt) {
+            $imgSrc = $cost <= 9 ? "styles/images/mana{$cost}.png" : '';
             $this->castingCosts[] = [
                 'cost' => $cost,
-                'imgSrc' => "styles/images/mana{$cost}.png",
+                'imgSrc' => $imgSrc,
                 'amt' => $amt,
             ];
             $total += $cost * $amt;
