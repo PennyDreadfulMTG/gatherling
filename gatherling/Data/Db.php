@@ -428,6 +428,52 @@ class Db
         return str_replace(['%', '_'], ['\\%', '\\_'], $value);
     }
 
+    // Debugging code, don't use for anything else, probably bad.
+    // See: https://stackoverflow.com/questions/210564/getting-raw-sql-query-string-from-pdo-prepared-statements, from
+    /** @param array<int|string, mixed> $params */
+    public function interpolateQuery(string $query, array $params): string
+    {
+        $s = chr(2); // Escape sequence for start of placeholder
+        $e = chr(3); // Escape sequence for end of placeholder
+        $keys = [];
+        $values = [];
+
+        foreach ($params as $key => $value) {
+            // Build a regular expression for each parameter
+            $keys[] = is_string($key) ? "/$s:$key$e/" : "/$s\?$e/";
+
+            // Treat each value depending on what type it is.
+            // While PDO::quote() has a second parameter for type hinting,
+            // it doesn't seem reliable (at least for the SQLite driver).
+            if (is_null($value)) {
+                $values[$key] = 'NULL';
+            } elseif (is_int($value) || is_float($value)) {
+                $values[$key] = $value;
+            } elseif (is_bool($value)) {
+                $values[$key] = $value ? 'true' : 'false';
+            } elseif (is_string($value)) {
+                $value = str_replace('\\', '\\\\', $value);
+                $values[$key] = $this->pdo->quote((string)$value);
+            } else {
+                throw new DatabaseException("Unsupported value type for $key: " . gettype($value));
+            }
+        }
+
+        // Surround placehodlers with escape sequence, so we don't accidentally match
+        // "?" or ":foo" inside any of the values.
+        $query = preg_replace(['/\?/', '/(:[a-zA-Z0-9_]+)/'], ["$s?$e", "$s$1$e"], $query);
+        if ($query === null) {
+            throw new DatabaseException("Failed to interpolate query: $query");
+        }
+        // Replace placeholders with actual values
+        $query = preg_replace($keys, $values, $query, -1, $count);
+        if ($query === null) {
+            throw new DatabaseException("Failed to interpolate query: $query");
+        }
+
+        return $query;
+    }
+
     /** @param array<string, mixed> $params */
     private function bindParams(PDOStatement $stmt, array $params): void
     {
