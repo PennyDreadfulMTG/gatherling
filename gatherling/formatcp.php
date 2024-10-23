@@ -204,35 +204,37 @@ function updateBanlist(string $activeFormat, string|array $addBanCards, array $d
 
 /**
  * @param string|array<string> $addLegalCards
- * @param array<string> $delLegalCards
+ * @param list<string> $delLegalCards
  */
 function updateLegalList(string $formatName, array|string $addLegalCards, array $delLegalCards): Component
 {
-    $errors = [];
     $format = new Format($formatName);
 
-    if ($addLegalCards) {
-        $cards = parseCards($addLegalCards);
-        if (count($cards) > 0) {
-            foreach ($cards as $card) {
-                if (!in_array($card, $format->card_legallist)) {
-                    $success = $format->insertCardIntoLegallist($card);
-                    if (!$success) {
-                        $errors[] = "Can't add {$card} to Legal list, it is either not in the database or on the ban list.";
-                    }
-                }
-            }
-        }
+    $cards = parseCards($addLegalCards);
+    $results = $format->updateLegalList($cards, $delLegalCards);
+    $added = count($results['added']);
+    $removed = count($results['removed']);
+    $errors = [
+        "Added {$added} cards to the legal list.",
+        "Removed {$removed} cards from the legal list.",
+    ];
+    $unchanged = count($results['unchanged']);
+    if ($unchanged > 0) {
+        $errors[] = "{$unchanged} cards were unchanged.";
     }
-
-    foreach ($delLegalCards as $cardName) {
-        $success = $format->deleteCardFromLegallist($cardName);
-        if (!$success) {
-            $errors[] = "Can't delete {$cardName} from legal list.";
-        }
+    foreach ($results['banned'] as $card) {
+        $errors[] = "Can't add {$card} to Legal list, it is on the ban list.";
     }
-
-    return $errors ? new ErrorMessage($errors) : new NullComponent();
+    foreach ($results['missing_add'] as $card) {
+        $errors[] = "Can't add {$card} to Legal list, it is not in the database.";
+    }
+    foreach ($results['missing_remove'] as $card) {
+        $errors[] = "Can't remove {$card} from Legal list, it is not in the database.";
+    }
+    foreach ($results['both'] as $card) {
+        $errors[] = "You asked me to both add and remove {$card} from the legal list so I chose to make it legal.";
+    }
+    return new ErrorMessage($errors);
 }
 
 /**

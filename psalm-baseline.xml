@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
+  <file src="gatherling/Data/Db.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[interpolateQuery]]></code>
+    </PossiblyUnusedMethod>
+  </file>
   <file src="gatherling/Helpers/Request.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[optionalFloat]]></code>
@@ -73,6 +78,8 @@
       <code><![CDATA[bool]]></code>
     </PossiblyUnusedReturnValue>
     <UndefinedFunction>
+      <code><![CDATA[normaliseCardName($card)]]></code>
+      <code><![CDATA[normaliseCardName($card)]]></code>
       <code><![CDATA[normaliseCardName($card)]]></code>
       <code><![CDATA[normaliseCardName($card)]]></code>
       <code><![CDATA[normaliseCardName($card)]]></code>

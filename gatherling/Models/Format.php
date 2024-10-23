@@ -1262,6 +1262,141 @@ class Format
         }
     }
 
+    /**
+     * @param list<string> $addCards
+     * @param list<string> $delCards
+     * @return array{
+     *     missing_add: list<string>,
+     *     missing_remove: list<string>,
+     *     removed: list<string>,
+     *     added: list<string>,
+     *     banned: list<string>,
+     *     unchanged: list<string>,
+     *     both: list<string>,
+     * }
+     */
+    public function updateLegalList(array $addCards, array $delCards): array
+    {
+        $delCards = array_map(fn (string $card) => normaliseCardName($card), $delCards);
+        $addCards = array_map(fn (string $card) => normaliseCardName($card), $addCards);
+        $cards = array_merge($addCards, $delCards);
+
+        $results = $this->getCurrentLegalityOfCards($cards);
+
+        $missingAdd = $missingRemove = $banned = $unchanged = $toAdd = $toRemove = $both = [];
+        foreach ($results as $card) {
+            $shouldAdd = in_array($card->original_name, $addCards);
+            $shouldRemove = in_array($card->original_name, $delCards);
+            if ($card->name === null) {
+                if ($shouldAdd) {
+                    $missingAdd[] = $card->original_name;
+                } else {
+                    $missingRemove[] = $card->original_name;
+                }
+                continue;
+            }
+            if ($shouldAdd && $shouldRemove) {
+                $both[] = $card->name;
+            }
+            if ($card->allowed === 0) {
+                $banned[] = $card->name;
+            } elseif ($card->allowed === 1 && !$shouldAdd) {
+                $toRemove[] = $card;
+            } elseif ($card->allowed === null && $shouldAdd) {
+                $toAdd[] = $card;
+            } else {
+                $unchanged[] = $card->name;
+            }
+        }
+
+        $this->removeFromLegalList($toRemove);
+        $this->addToLegalList($toAdd);
+
+        return [
+            'missing_add' => $missingAdd,
+            'missing_remove' => $missingRemove,
+            'both' => $both,
+            'banned' => $banned,
+            'removed' => array_map(fn (LegalCardDto $card) => $card->name ?? $card->original_name, $toRemove),
+            'added' => array_map(fn (LegalCardDto $card) => $card->name ?? $card->original_name, $toAdd),
+            'unchanged' => $unchanged,
+        ];
+    }
+
+    /**
+     * @param list<string> $cards
+     * @return list<LegalCardDto>
+     */
+    private function getCurrentLegalityOfCards(array $cards): array
+    {
+        $sql = "CREATE TEMPORARY TABLE input_cards (original_name VARCHAR(160))";
+        db()->execute($sql);
+
+        $placeholders = $params = [];
+        foreach ($cards as $index => $card) {
+            $placeholders[] = ':card_' . ($index + 1);
+            $params['card_' . ($index + 1)] = $card;
+        }
+        $sql = "INSERT INTO input_cards (original_name) VALUES (" . implode('), (', $placeholders) . ")";
+        db()->execute($sql, $params);
+
+        // The UNION ALL here is to find dfcs that we store with both names that we didn't find under just the front face name.
+        // It's a separate query because doing the JOIN on a LIKE for thousands of cards is too slow (many seconds).
+        // If you input thousands of invalid cards this will still be slow, but that's on you :)
+        $sql = "SELECT DISTINCT ic.original_name, c.id, c.name, b.allowed
+                  FROM input_cards AS ic
+             LEFT JOIN cards AS c ON c.name = ic.original_name
+             LEFT JOIN bans AS b ON c.name = b.card_name AND b.format = :format
+                 WHERE c.name IS NOT NULL
+              GROUP BY ic.original_name
+             UNION ALL
+                SELECT ic.original_name, c.id, c.name, b.allowed
+                  FROM input_cards AS ic
+             LEFT JOIN cards AS c ON c.name LIKE CONCAT(ic.original_name, '/%')
+             LEFT JOIN bans AS b ON c.name = b.card_name AND b.format = :format
+                 WHERE NOT EXISTS (SELECT 1 FROM cards c2 WHERE c2.name = ic.original_name)
+              GROUP BY ic.original_name";
+        $params = ['format' => $this->name];
+        return db()->select($sql, LegalCardDto::class, $params);
+    }
+
+    /** @param list<LegalCardDto> $cards */
+    private function removeFromLegalList(array $cards): void
+    {
+        if (empty($cards)) {
+            return;
+        }
+        $placeholders = [];
+        $params = ['format' => $this->name];
+        foreach ($cards as $index => $card) {
+            $placeholders[] = ":card_name_$index";
+            $params["card_name_$index"] = $card->name;
+        }
+        $sql = 'DELETE
+                    FROM bans
+                    WHERE format = :format AND card_name IN ';
+        $sql .= '(' . implode(', ', $placeholders) . ')';
+        db()->execute($sql, $params);
+    }
+
+    /** @param list<LegalCardDto> $cards */
+    private function addToLegalList(array $cards): void
+    {
+        if (empty($cards)) {
+            return;
+        }
+        $params = ['format' => $this->name];
+        $placeholders = [];
+        foreach ($cards as $n => $card) {
+            $placeholders[] = "(:card_name_{$n}, :card_id_{$n}, :format, 1)";
+            $params["card_name_{$n}"] = $card->name;
+            $params["card_id_{$n}"] = $card->id;
+        }
+        $sql = 'INSERT INTO bans (card_name, card, format, allowed) VALUES ';
+        $sql .= implode(', ', $placeholders);
+        db()->execute($sql, $params);
+    }
+
     public function insertCardIntoLegallist(string $card): bool
     {
         $card = stripslashes($card);
@@ -1506,15 +1641,13 @@ class Format
         return true;
     }
 
-    public function insertNewTribeBan(string $tribeBanned): bool
+    public function insertNewTribeBan(string $tribeBanned): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO tribe_bans(name, format, allowed) VALUES(?, ?, 0)');
         $stmt->bind_param('ss', $tribeBanned, $this->name);
         $stmt->execute() or exit($stmt->error);
         $stmt->close();
-
-        return true;
     }
 
     public function banAllTribes(): void
