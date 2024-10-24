@@ -51,10 +51,6 @@ class EventList extends Page
             $seriesShown = array_unique($seriesShown);
         }
 
-        if (!isset($_GET['format'])) {
-            $_GET['format'] = '';
-        }
-
         $kvalueMap = [
             0  => 'none',
             8  => 'Casual',
