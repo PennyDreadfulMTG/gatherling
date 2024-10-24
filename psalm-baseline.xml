@@ -298,9 +298,6 @@
     <InvalidReturnType>
       <code><![CDATA[array<string, int>]]></code>
     </InvalidReturnType>
-    <UnusedVariable>
-      <code><![CDATA[$R1]]></code>
-    </UnusedVariable>
   </file>
   <file src="gatherling/prereg.php">
     <InvalidGlobal>

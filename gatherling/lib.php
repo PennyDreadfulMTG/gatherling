@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 use Gatherling\Auth\Session;
 use Gatherling\Models\Player;
-use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\TemplateHelper;
 
 use function Gatherling\Helpers\config;
 
 require_once 'bootstrap.php';
+
 ob_start();
+
 header('Strict-Transport-Security: max-age=63072000; includeSubDomains; preload');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 
@@ -18,10 +19,6 @@ if (php_sapi_name() !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
     Session::start();
 }
 
-$HC = '#DDDDDD';
-$R1 = '#EEEEEE';
-$R2 = '#FFFFFF';
-$CC = $R1;
 date_default_timezone_set('US/Eastern'); // force time functions to use US/Eastern time
 
 require_once 'util/time.php';
@@ -63,19 +60,6 @@ function print_footer(): string
         'gitHash' => git_hash(),
         'jsLink' => 'gatherling.js?v=' . rawurlencode(git_hash()),
     ]);
-}
-
-function headerColor(): string
-{
-    global $HC, $CC, $R1, $R2;
-    $CC = $R2;
-
-    return $HC;
-}
-
-function linkToLogin(string $_pagename = null, ?string $redirect = null, ?string $message = null, ?string $username = null): never
-{
-    (new LoginRedirect($redirect ?? '', $message ?? '', $username ?? ''))->send();
 }
 
 /** @param array<string, string|int> $extra_attr */

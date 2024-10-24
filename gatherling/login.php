@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Gatherling\Auth\LoginError;
 use Gatherling\Views\Pages\Login;
 use Gatherling\Auth\Login as LoginHelper;
+use Gatherling\Views\Redirect;
 
 use function Gatherling\Helpers\post;
 use function Gatherling\Helpers\request;
@@ -18,7 +19,7 @@ function main(): void
     $mode = $_REQUEST['mode'] ?? null;
 
     if ($mode == 'Log In with Discord') {
-        redirect('auth.php');
+        (new Redirect('auth.php'))->send();
     }
 
     $username = post()->optionalString('username');

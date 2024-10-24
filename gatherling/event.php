@@ -11,6 +11,7 @@ use Gatherling\Models\Matchup;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Models\Standings;
+use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\Pages\AuthFailed;
 use Gatherling\Views\Pages\EventForm;
 use Gatherling\Views\Pages\EventFrame;
@@ -36,7 +37,7 @@ include 'lib_form_helper.php';
 function main(): void
 {
     if (!Player::isLoggedIn()) {
-        linkToLogin('Host Control Panel');
+        (new LoginRedirect())->send();
     }
 
     $getSeriesName = get()->string('series', '');

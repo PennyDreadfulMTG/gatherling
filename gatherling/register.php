@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Gatherling\Auth\Registration;
+use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\Pages\Register;
 
 use function Gatherling\Helpers\post;
@@ -31,7 +32,7 @@ function main(): void
             $message = "Passwords don't match. Please go back and try again.";
         } elseif ($code == -3) {
             $message = 'A password has already been created for this account.';
-            linkToLogin('your Player Control Panel', 'player.php', $message, trim($username));
+            (new LoginRedirect('player.php', $message, trim($username)))->send();
         }
     }
     $showRegForm = !isset($_POST['pw1']);
