@@ -155,7 +155,8 @@ function checkDeckAuth(Event $event, string|false $player, ?Deck $deck = null): 
     if (is_null($deck) && $event->id > 0) {
         // Creating a deck.
         $entry = new Entry($event->id, $player);
-        return $entry->canCreateDeck(Player::loginName());
+        $playerName = Player::loginName();
+        return $playerName !== false && $entry->canCreateDeck($playerName);
     }
     // Updating a deck.
     return $deck->canEdit(Player::loginName());
