@@ -11,6 +11,7 @@ use Wohali\OAuth2\Client\Provider\Exception\DiscordIdentityProviderException;
 use League\OAuth2\Client\Token\AccessTokenInterface;
 
 use function Gatherling\Helpers\request;
+use function Gatherling\Helpers\server;
 use function Gatherling\Helpers\session;
 
 require_once __DIR__ . '/lib.php';
@@ -141,4 +142,8 @@ function findPlayer(DiscordResourceOwner $user): ?Player
         $player = Player::findByEmail($email);
     }
     return $player;
+}
+
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
+    main();
 }
