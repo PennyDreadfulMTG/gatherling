@@ -45,6 +45,8 @@ jobs:
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress
+    - name: Regenerate Autoloader
+      run: composer dump-autoload
     - run: cp gatherling/config.php.github gatherling/config.php
     - run: php gatherling/admin/db-upgrade.php
     - run: php gatherling/insertcardset.php M10
