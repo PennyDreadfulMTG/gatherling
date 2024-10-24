@@ -23,7 +23,7 @@ class Series
     public ?string $mtgo_room;
 
     public ?string $this_season_format;
-    public ?string $this_season_master_link;
+    public ?string $this_season_master_link = null;
     public int $this_season_season;
 
     public ?int $prereg_default;
