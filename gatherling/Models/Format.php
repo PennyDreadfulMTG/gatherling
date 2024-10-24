@@ -7,6 +7,7 @@ namespace Gatherling\Models;
 use Exception;
 
 use function Gatherling\Helpers\db;
+use function Gatherling\Helpers\logger;
 
 class Format
 {
@@ -184,7 +185,7 @@ class Format
                         continue;
                     } else {
                         // type is not in database, so insert it
-                        echo "New Tribe Found! Inserting: <pre>$subtype</pre><br />";
+                        logger()->notice("New Tribe Found! Inserting: $subtype");
                         $db = Database::getConnection();
                         $stmt = $db->prepare('INSERT INTO tribes(name) VALUES(?)');
                         $stmt->bind_param('s', $subtype);
@@ -925,10 +926,6 @@ class Format
             }
         }
 
-        foreach ($subTypeCount as $type => $amt) {
-            echo "$type: $amt<br />";
-        }
-
         arsort($subTypeCount); // sorts by value from high to low.
 
         $count = 0;
@@ -977,13 +974,11 @@ class Format
         // underdog format allows Tribes with only 3 members to
         // underdog allows only 4 changelings per deck list
         if ($this->underdog) {
-            echo "Tribe is: $underdogKey<br />";
             if ($underdogKey && $underdogKey != 'Shapeshifter') {
                 $sql = 'SELECT COUNT(*) FROM cards WHERE type LIKE :type';
                 $params = ['type' => '%' . db()->likeEscape($underdogKey) . '%'];
                 $frequency = db()->int($sql, $params);
                 if ($frequency < 4) {
-                    echo "$underdogKey is a 3 card tribe<br />";
                     if ($subTypeChangeling > 8) {
                         $this->error[] = "Tribe $underdogKey is allowed a maximum of 8 changeling's per deck in underdog format";
                     }
