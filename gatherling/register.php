@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Gatherling\Auth\Registration;
 use Gatherling\Views\LoginRedirect;
+use Gatherling\Views\Redirect;
 use Gatherling\Views\Pages\Register;
 
 use function Gatherling\Helpers\post;
@@ -11,7 +12,6 @@ use function Gatherling\Helpers\server;
 use function Gatherling\Helpers\session;
 
 require_once 'lib.php';
-require_once 'lib_form_helper.php';
 
 function main(): void
 {
@@ -27,7 +27,7 @@ function main(): void
         $discordName = session()->optionalString('DISCORD_NAME');
         $code = Registration::register($username, $pw1, $pw2, $email, $emailStatus, $timezone, $discordId, $discordName);
         if ($code == 0) {
-            redirect('player.php');
+            (new Redirect('player.php'))->send();
         } elseif ($code == -1) {
             $message = "Passwords don't match. Please go back and try again.";
         } elseif ($code == -3) {

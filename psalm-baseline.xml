@@ -262,12 +262,6 @@
       <code><![CDATA[return error("Missing argument '$key'");]]></code>
     </NoValue>
   </file>
-  <file src="gatherling/auth.php">
-    <InvalidGlobal>
-      <code><![CDATA[global $provider;]]></code>
-      <code><![CDATA[global $provider;]]></code>
-    </InvalidGlobal>
-  </file>
   <file src="gatherling/authdebug.php">
     <InvalidGlobal>
       <code><![CDATA[global $provider;]]></code>

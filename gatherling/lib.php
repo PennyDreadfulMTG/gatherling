@@ -27,41 +27,6 @@ const MTGO = 1;
 const MTGA = 2;
 const PAPER = 3;
 
-function print_header(string $title, bool $enable_vue = false): string
-{
-    $player = Player::getSessionPlayer();
-    if (!$player) {
-        $isHost = $isOrganizer = $isSuper = false;
-    } else {
-        $isSuper = $player->isSuper();
-        $isHost = $isSuper || $player->isHost();
-        $isOrganizer = count($player->organizersSeries()) > 0;
-    }
-
-    return TemplateHelper::render('partials/header', [
-        'siteName' => config()->string('site_name'),
-        'title' => $title,
-        'cssLink' => 'styles/css/stylesheet.css?v=' . rawurlencode(git_hash()),
-        'enableVue' => $enable_vue,
-        'gitHash' => git_hash(),
-        'headerLogoSrc' => 'styles/images/header_logo.png',
-        'player' => $player,
-        'isHost' => $isHost,
-        'isOrganizer' => $isOrganizer,
-        'isSuper' => $isSuper,
-        'versionTagline' => version_tagline(),
-    ]);
-}
-
-function print_footer(): string
-{
-    return TemplateHelper::render('partials/footer', [
-        'versionTagline' => version_tagline(),
-        'gitHash' => git_hash(),
-        'jsLink' => 'gatherling.js?v=' . rawurlencode(git_hash()),
-    ]);
-}
-
 /** @param array<string, string|int> $extra_attr */
 function image_tag(string $filename, ?array $extra_attr = null): string
 {
@@ -134,12 +99,6 @@ function version_tagline(): string
     // "Gatherling version 1.9.2 (\"So now you're the boss. You're the King of Bob.\")";
     // "Gatherling version 1.9.1 (\"It's the United States of Don't Touch That Thing Right in Front of You.\")";
     // "Gatherling version 1.9 (\"It's funny 'cause the squirrel got dead\")";
-}
-
-function redirect(string $page): void
-{
-    header("Location: " . config()->string('base_url') . $page);
-    exit(0);
 }
 
 /**
