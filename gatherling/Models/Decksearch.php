@@ -137,16 +137,11 @@ class Decksearch
     public function searchByMedals(string $medal): void
     {
         $sql = '
-            SELECT
-                decks.id
-            FROM
-                decks
-            INNER JOIN
-                entries ON decks.id = entries.deck
-            WHERE
-                entries.medal = :medal
-            ORDER BY
-                DATE(`created_date`) DESC';
+            SELECT decks.id
+              FROM decks
+        INNER JOIN entries ON decks.id = entries.deck
+             WHERE entries.medal = :medal
+          ORDER BY DATE(`created_date`) DESC';
         $params = ['medal' => $medal];
         $results = db()->ints($sql, $params);
         if (count($results) > 0) {
@@ -208,13 +203,11 @@ class Decksearch
     public function searchBySeries(string $series): void
     {
         $sql = '
-            SELECT
-                entries.deck
-            FROM
-                entries
-            INNER JOIN events ON entries.event_id = events.id
-            WHERE events.series = :series
-            ORDER BY DATE(`registered_at`) DESC';
+            SELECT entries.deck
+              FROM entries
+        INNER JOIN events ON entries.event_id = events.id
+             WHERE events.series = :series AND entries.deck IS NOT NULL
+          ORDER BY DATE(`registered_at`) DESC';
         $params = ['series' => $series];
         $results = db()->ints($sql, $params);
         if (count($results) > 0) {
@@ -236,14 +229,10 @@ class Decksearch
             return;
         }
         $sql = '
-            SELECT
-                DISTINCT deckcontents.deck
-            FROM
-                deckcontents
-            INNER JOIN
-                cards ON deckcontents.card = cards.id
-            WHERE
-                cards.name LIKE :cardname';
+            SELECT DISTINCT deckcontents.deck
+              FROM deckcontents
+        INNER JOIN cards ON deckcontents.card = cards.id
+             WHERE cards.name LIKE :cardname';
         $params = ['cardname' => '%' . db()->likeEscape($cardname) . '%'];
         $results = db()->ints($sql, $params);
         if (count($results) > 0) {
