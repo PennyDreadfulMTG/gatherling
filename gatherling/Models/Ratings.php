@@ -71,11 +71,9 @@ class Ratings
         $db = Database::getConnection();
 
         $result = $db->query("SELECT name, start FROM events WHERE finalized = '1' ORDER BY start") or exit($db->error);
-        echo '<h3>Calculating Composite Ratings</h3>';
 
         while ($row = $result->fetch_assoc()) {
             $event = $row['name'];
-            echo "Calculating for Event: $event <br /><br />";
             $players = $this->calcPostEventRatings($event, 'Composite');
             $this->insertRatings($event, $players, 'Composite', $row['start']);
         }
@@ -101,13 +99,7 @@ class Ratings
         }
         $stmt->close();
 
-        echo "<h3>Calculating $format Ratings</h3>";
-
         for ($index = 1, $size = count($eventar); $index <= $size; $index += 2) {
-            echo "Format: $format<br />";
-            echo "Event: {$eventar[$index]}<br />";
-            echo "Start: {$eventar[$index + 1]}<br /><br />";
-            echo "Calculating for Event: {$eventar[$index]}<br />";
             $players = $this->calcPostEventRatings($eventar[$index], $format);
             $this->insertRatings($eventar[$index], $players, $format, $eventar[$index + 1]);
         }
@@ -127,11 +119,9 @@ class Ratings
                               WHERE finalized = '1'
                               $notlike
                               ORDER BY start") or exit($db->error);
-        echo '<h3>Calculating Other Formats Ratings</h3>';
 
         while ($row = $result->fetch_assoc()) {
             $event = $row['name'];
-            echo "Calculating for Event: $event <br />";
             $players = $this->calcPostEventRatings($event, 'Other Formats');
             $this->insertRatings($event, $players, 'Other Formats', $row['start']);
         }
