@@ -92,7 +92,7 @@ class Marshaller
         $result = [];
         foreach ($this->value as $value) {
             if (!is_numeric($value)) {
-                throw new MarshalException($value, 'listInt');
+                throw new MarshalException($value, 'listIntEntry');
             }
             $this->strictIntCheck($value);
             $result[] = (int) $value;
@@ -113,7 +113,7 @@ class Marshaller
         $result = [];
         foreach ($this->value as $value) {
             if (!is_string($value)) {
-                throw new MarshalException($value, 'listString');
+                throw new MarshalException($value, 'listStringEntry');
             }
             $result[] = $value;
         }
@@ -136,7 +136,7 @@ class Marshaller
             } elseif (is_string($value)) {
                 $result[$key] = (string) $value;
             } else {
-                throw new MarshalException($value, 'dictIntOrString');
+                throw new MarshalException($value, 'dictIntOrStringEntry');
             }
         }
         return $result;
