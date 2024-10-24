@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 require_once 'lib.php';
-print_header('Home'); ?>
+echo print_header('Home'); ?>
 
 <div id="maincolumn" class="grid_8">
     <div class="gatherling_news box">
@@ -253,4 +253,4 @@ print_header('Home'); ?>
 
 <?php
 
-print_footer();
+echo print_footer();

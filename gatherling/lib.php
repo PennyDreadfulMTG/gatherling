@@ -30,7 +30,7 @@ const MTGO = 1;
 const MTGA = 2;
 const PAPER = 3;
 
-function print_header(string $title, bool $enable_vue = false): void
+function print_header(string $title, bool $enable_vue = false): string
 {
     $player = Player::getSessionPlayer();
     if (!$player) {
@@ -41,7 +41,7 @@ function print_header(string $title, bool $enable_vue = false): void
         $isOrganizer = count($player->organizersSeries()) > 0;
     }
 
-    echo TemplateHelper::render('partials/header', [
+    return TemplateHelper::render('partials/header', [
         'siteName' => config()->string('site_name'),
         'title' => $title,
         'cssLink' => 'styles/css/stylesheet.css?v=' . rawurlencode(git_hash()),
@@ -56,9 +56,9 @@ function print_header(string $title, bool $enable_vue = false): void
     ]);
 }
 
-function print_footer(): void
+function print_footer(): string
 {
-    echo TemplateHelper::render('partials/footer', [
+    return TemplateHelper::render('partials/footer', [
         'versionTagline' => version_tagline(),
         'gitHash' => git_hash(),
         'jsLink' => 'gatherling.js?v=' . rawurlencode(git_hash()),

@@ -133,7 +133,7 @@ function do_login(\League\OAuth2\Client\Token\AccessTokenInterface $token): void
 
 function prompt_link_account(mixed $user): void
 {
-    print_header('Login'); ?>
+    echo print_header('Login'); ?>
     <div class="grid_10 suffix_1 prefix_1">
         <div id="gatherling_main" class="box">
             <div class="uppertitle"> Link Discord Account </div>
@@ -171,5 +171,5 @@ function prompt_link_account(mixed $user): void
 
     <?php
 
-    print_footer();
+    echo print_footer();
 }
