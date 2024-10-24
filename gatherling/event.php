@@ -32,7 +32,6 @@ use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
-include 'lib_form_helper.php';
 
 function main(): void
 {
