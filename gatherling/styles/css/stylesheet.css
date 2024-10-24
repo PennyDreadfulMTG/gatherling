@@ -348,7 +348,6 @@ a.create_deck_link {
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;
-    font-family: Arial,"Bitstream Vera Sans",Helvetica,Verdana,sans-serif;
     color: #333;
 }
 #table-decksearch td, #table-decksearch th {
@@ -565,7 +564,6 @@ a.create_deck_link {
 .discordlogin {
     background: #7289DA;
     color: #fff;
-    font-family: 'Helvetica', 'Arial', sans-serif;
     text-decoration: none;
 }
 
