@@ -9,14 +9,64 @@
 
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
 
+:root {
+    --black: #000;
+    --night: #161616;
+    --eerie-black: #262626;
+    --jet: #353535;
+    --onyx: #454545;
+
+    --silver: #ccc;
+    --persian-orange: #D88F6D;
+    --flame: #D45E28;
+    --red: #f00;
+    --yellow: #ff0;
+    --green: #008000;
+    --dim-gray: #666;
+
+    --main-text-color: var(--silver);
+    --link-text-color: var(--persian-orange);
+    --link-emphasis-text-color: var(--flame);
+    --emphasis-text-color: var(--flame);
+    --deemphasized-text-color: var(--dim-gray);
+    --error-text-color: var(--red);
+    --notice-text-color: var(--red);
+    --self-text-color: var(--green);
+    --verified-text-color: var(--green);
+    --pending-text-color: var(--yellow);
+
+    --base-background-color: var(--night);
+    --main-background-color: var(--eerie-black);
+    --highlight-background-color: var(--jet);
+
+    --title-border-color: var(--flame);
+
+    --link-border-color: var(--flame);
+
+    --divider-border-color: var(--onyx);
+
+    --control-border-color: var(--black);
+    --control-background-color: var(--eerie-black);
+
+    --disabled-control-color: var(--black);
+    --disabled-control-background-color: var(--night);
+    --disabled-control-border-color: var(--night);
+
+    --focused-control-color: var(--black);
+    --focused-control-background-color: var(--night);
+
+    --discord-brand-color: #fff;
+    --discord-brand-background-color: #7289DA;
+
+    --current-pagination-background-color: var(--flame);
+    --current-pagination-border-color: var(--black);
+    --current-pagination-text-color: var(--black);
+}
+
 /* Text */
 
-table,
-tr,
-th,
-td,
-ul {
-    color: #ccc;
+table, tr, th, td, ul {
+    color: var(--main-text-color);
     margin: 0;
     padding: 0;
     border: 0;
@@ -29,7 +79,7 @@ body {
     font: 14px/1.45 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
 }
 hr {
-    border: 0 white solid;
+    border: 0 var(--main-text-color) solid;
     border-top-width: 1px;
     clear: both;
     height: 0;
@@ -61,21 +111,7 @@ ul {
 li {
     margin-left: 30px;
 }
-p,
-dl,
-hr,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-ol,
-ul,
-pre,
-table,
-address,
-fieldset {
+p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
     margin: 0;
 }
 
@@ -87,12 +123,12 @@ fieldset {
 }
 
 .warning {
-    color: red;
+    color: var(--error-text-color);
 }
 
 #gatherling_main td.box.round-header {
-    background-color: grey;
-    color: black;
+    background-color: var(--highlight-background-color);
+    color: var(--main-text-color);
     padding-left: 8px;
 }
 
@@ -117,24 +153,24 @@ See: https://bluebones.net/2024/09/avoid-trailing-comma-when-emitting-lists-in-m
 }
 
 .highlight td {
-    color: green;
+    color: var(--highlight-color);
 }
 
 span.notallowed {
     font-size: larger;
-    color: red;
+    color: var(--error-text-color);
 }
 table.scoreboard span {
-    border-bottom: 1px dotted #E25912;
+    border-bottom: 1px dotted var(--notice-text-color);
 }
 table.scoreboard tr.odd {
-    background-color: #353535;
+    background-color: var(--highlight-background-color);
 }
 table.scoreboard tr.even {
-    background-color: #262626;
+    background-color: var(--main-background-color);
 }
 table.scoreboard tr.cutoff {
-    border-bottom: 3px double #E25912;
+    border-bottom: 3px double var(--notice-text-color);
 }
 table.scoreboard td, table.scoreboard th {
     text-align: center;
@@ -143,37 +179,12 @@ table.scoreboard td, table.scoreboard th {
 table.scoreboard .playername {
     text-align: left;
 }
-table.bracket {
-    border: 1px solid Black;
-    color: #CCCCCC;
-    background-color: #353535;
-    text-align: center;
-    border-radius: 5px;
-    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
-    -moz-border-radius: 5px;
-    /* border radius is specified different ways for different legacy browsers. */
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
-}
-table.bracket td.brackettext {
-    border: 1px solid Black;
-    background-color: #D45E28;
-    color: Black;
-}
-table.bracket td.odd {
-    background-color: #262626;
-    vertical-align: middle;
-}
-table.bracket td.even {
-    background-color: #353535;
-    vertical-align: middle;
-}
 .series {
-    background: #262626;
+    background-color: var(--main-background-color);
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    border-bottom: 1px solid #4F4F4F;
+    border-bottom: 1px solid var(--divider-border-color);
     min-height: 200px;
     margin-bottom: 20px;
     padding-bottom: 20px;
@@ -195,19 +206,6 @@ table.bracket td.even {
     max-width: 280px;
     max-height: 200px;
 }
-.series-organizers ul {
-    display: inline-block;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-.series-organizers ul li {
-    display: inline-block;
-    font-weight: bold;
-    width: 100px;
-    height: 20px;
-    margin-left: 0;
-}
 .series .series-info table {
     margin: 0;
     padding: 0;
@@ -223,7 +221,7 @@ table.bracket td.even {
 }
 a.create_deck_link {
     font-size: 13px;
-    color: #D28950;
+    color: var(--link-emphasis-text-color);
 }
 /* autocard */
 .cardHoverImageWrapper {
@@ -243,121 +241,78 @@ a.create_deck_link {
     display: block;
 }
 .crop {
-    float:left;
-    overflow:hidden;
-    /* this is important */
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
+    float: left;
+    overflow:  hidden;
     border-radius: 10px;
-    -webkit-box-shadow: #D45E28 0 2px 30px;
-    -moz-box-shadow: #D45E28 0 2px 30px;
-    box-shadow: #D45E28 0 2px 30px;
+    box-shadow: var(--link-border-color) 0 2px 30px;
 }
 /* input values to crop the image: top, right, bottom, left */
 .crop img {
-    margin:-2px -6px -6px -6px;
-}
-#birthday {
-    display: block;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    margin-right: auto;
-    margin-left: auto;
-    opacity:0.75;
-    filter:alpha(opacity=75);
-    /* For IE8 and earlier */
+    margin: -2px -6px -6px -6px;
 }
 .inputbox {
-    border: 1px solid Black;
-    color: #CCCCCC;
-    background-color: #353535;
+    border: 1px solid var(--control-border-color);
+    color: var(--main-text-color);
+    background-color: var(--highlight-background-color);
     padding: 3px;
     border-radius: 5px;
-    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
-    -moz-border-radius: 5px;
-    /* border radius is specified different ways for different legacy browsers. */
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
 }
 .inputbox:hover {
-    border-color: #D45E28;
+    border-color: var(--link-emphasis-text-color);
 }
 .inputbox:focus {
     border: 1px solid rgb(234, 234, 234);
-    border-color: #D45E28;
+    border-color: var(--link-border-color);
 }
 .inputbox:disabled {
-    border: 1px solid Black;
-    background-color: #161616;
-    color: black;
+    border: 1px solid var(--control-border-color);
+    background-color: var(--disabled-control-background-color);
+    color: var(--disabled-control-color);
     padding: 3px;
     border-radius: 5px;
-    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
-    -moz-border-radius: 5px;
-    /* border radius is specified different ways for different legacy browsers. */
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
 }
 .inputbutton {
-    border: 1px solid Black;
-    color: #CCCCCC;
-    background-color: #262626;
+    border: 1px solid var(--control-border-color);
+    color: var(--main-text-color);
+    background-color: var(--control-background-color);
     padding: 3px;
     margin: 5px;
     border-radius: 5px;
-    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
-    -moz-border-radius: 5px;
-    /* border radius is specified different ways for different legacy browsers. */
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
-    -webkit-box-shadow: #000 0 2px 5px;
-    -moz-box-shadow: #000 0 2px 5px;
-    box-shadow: #000 0 2px 5px;
+    box-shadow: var(--control-border-color) 0 2px 5px;
 }
 .inputbutton:not(.discordlogin):hover {
-    border-color: #D45E28;
-    background-color: #353535;
-    color: #D45E28;
-    -webkit-box-shadow: #D45E28 0 2px 5px;
-    -moz-box-shadow: #D45E28 0 2px 5px;
-    box-shadow: #D45E28 0 2px 5px;
+    border-color: var(--link-border-color);
+    background-color: var(--highlight-background-color);
+    color: var(--link-emphasis-text-color);
+    box-shadow: var(--link-border-color) 0 2px 5px;
 }
 .inputbutton:focus {
-    border: 1px solid #000;
-    background-color: #161616;
-    color: #000;
-    -webkit-box-shadow: #000 0 0px 0px;
-    -moz-box-shadow: #000 0 0px 0px;
-    box-shadow: #000 0 0px 0px;
+    border: 1px solid var(--control-border-color);
+    background-color: var(--focused-control-background-color);
+    color: var(--focused-control-color);
+    box-shadow: var(--control-border-color) 0px 0px;
 }
 .inputbutton:disabled {
-    border: 1px solid #000;
-    background-color: #161616;
-    color: #000;
-    -webkit-box-shadow: #000 0 0px 0px;
-    -moz-box-shadow: #000 0 0px 0px;
-    box-shadow: #000 0 0px 0px;
+    border: 1px solid var(--disabled-control-border-color);
+    background-color: var(--disabled-control-background-color);
+    color: var(--disabled-control-color);
+    box-shadow: var(--disabled-control-border-color) 0 0px 0px;
 }
 /* Some formating stuff for the search form and results table */
 #table-decksearch {
-    color: #CCCCCC;
-    background-color: #353535;
+    color: var(--main-text-color);
+    background-color: var(--highlight-background-color);
     padding: 3px;
     border-radius: 5px;
     width: 100%;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
     border-radius: 3px;
-    color: #333;
 }
 #table-decksearch td, #table-decksearch th {
-    border-top-color: #454545;
-    border-bottom: 1px solid #454545;
-    color: #CCCCCC;
+    border-top-color: var(--divider-border-color);
+    border-bottom: 1px solid var(--divider-border-color);
+    color: var(--main-text-color);
 }
 #table-decksearch th {
-    color: white;
-    font-weight: normal;
     padding: 7px 7px 8px;
     text-align: left;
     line-height: 1.3em;
@@ -371,26 +326,21 @@ a.create_deck_link {
 .ds_inputbox {
     margin: auto;
     width: 750px;
-    border: 1px solid Black;
-    color: #CCCCCC;
-    background-color: #353535;
+    border: 1px solid var(--control-border-color);
+    color: var(--main-text-color);
+    background-color: var(--highlight-background-color);
     padding: 3px;
     border-radius: 5px;
-    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
-    -moz-border-radius: 5px;
-    /* border radius is specified different ways for different legacy browsers. */
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
 }
 .ds_left {
     width: 605px;
-    background-color: #353535;
+    background-color: var(--highlight-background-color);
     float: left;
     padding: 3px;
 }
 .ds_right {
     width: 125px;
-    background-color: #353535;
+    background-color: var(--highlight-background-color);
     padding: 3px;
     float: left;
 }
@@ -406,9 +356,9 @@ a.create_deck_link {
     font-size: 13px;
 }
 .ds_input {
-    border: 1px solid Black;
-    color: #CCCCCC;
-    background-color: #353535;
+    border: 1px solid var(--control-border-color);
+    color: var(--main-text-color);
+    background-color: var(--highlight-background-color);
     border-radius: 5px;
     width: 450px;
     padding: 5px;
@@ -416,28 +366,23 @@ a.create_deck_link {
     float:right;
 }
 .ds_input:hover {
-    border-color: #D45E28;
+    border-color: var(--link-border-color);
 }
 .ds_input:focus {
     border: 1px solid rgb(234, 234, 234);
-    border-color: #D45E28;
+    border-color: var(--link-border-color);
 }
 .ds_input:disabled {
-    border: 1px solid Black;
-    background-color: #161616;
-    color: black;
+    border: 1px solid var(--control-border-color);
+    background-color: var(--disabled-control-background-color);
+    color: var(--disabled-control-color);
     padding: 3px;
     border-radius: 5px;
-    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
-    -moz-border-radius: 5px;
-    /* border radius is specified different ways for different legacy browsers. */
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
 }
 .ds_submit {
     border-radius: 5px;
-    color: #CCCCCC;
-    background-color: #262626;
+    color: var(--main-text-color);
+    background-color: var(--control-background-color);
     margin: auto;
     margin-top: 13px;
     font-size: 13px;
@@ -446,43 +391,30 @@ a.create_deck_link {
     display: block;
     clear: both;
     padding: 6px 28px;
-    border: 1px solid Black;
+    border: 1px solid var(--control-border-color);
     border-radius: 5px;
-    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
-    -moz-border-radius: 5px;
-    /* border radius is specified different ways for different legacy browsers. */
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
-    -webkit-box-shadow: #000 0 2px 5px;
-    -moz-box-shadow: #000 0 2px 5px;
-    box-shadow: #000 0 2px 5px;
+    box-shadow: var(--control-border-color) 0 2px 5px;
 }
 .ds_submit:hover {
-    border-color: #D45E28;
-    background-color: #353535;
-    color: #D45E28;
-    -webkit-box-shadow: #D45E28 0 2px 5px;
-    -moz-box-shadow: #D45E28 0 2px 5px;
-    box-shadow: #D45E28 0 2px 5px;
+    border-color: var(--link-border-color);
+    background-color: var(--highlight-background-color);
+    color: var(--link-emphasis-text-color);
+    box-shadow: var(--link-border-color) 0 2px 5px;
 }
 .ds_submit:focus {
-    border: 1px solid #000;
-    background-color: #161616;
-    color: #000;
-    -webkit-box-shadow: #000 0 0px 0px;
-    -moz-box-shadow: #000 0 0px 0px;
-    box-shadow: #000 0 0px 0px;
+    border: 1px solid var(--control-border-color);
+    background-color: var(--focused-control-background-color);
+    color: var(--focused-control-color);
+    box-shadow: var(--control-border-color) 0px 0px;
 }
 .ds_submit:disabled {
-    border: 1px solid #000;
-    background-color: #161616;
-    color: #000;
-    -webkit-box-shadow: #000 0 0px 0px;
-    -moz-box-shadow: #000 0 0px 0px;
-    box-shadow: #000 0 0px 0px;
+    border: 1px solid var(--disabled-control-border-color);
+    background-color: var(--disabled-control-background-color);
+    color: var(--disabled-control-color);
+    box-shadow: var(--disabled-control-border-color) 0px 0px;
 }
 .ds_results {
-    color: #fff;
+    font-weight: bold;;
     margin: auto;
     margin-top: 10px;
     font-size: 13px;
@@ -492,13 +424,10 @@ a.create_deck_link {
     border: none;
 }
 .ds_color {
-    -webkit-appearence: none;
-    -moz-appearannce: none;
+    appearance: none;
     font-size: 15px;
     border: none;
     border-radius: 0;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
     padding: 5px;
     margin-left: 85px;
     margin-top: 5px;
@@ -506,17 +435,12 @@ a.create_deck_link {
 .ds_checkbox {
     padding:10px;
     margin: 5px;
-    border: 1px solid black;
+    border: 1px solid var(--control-border-color);
     border-radius: 5px;
-    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
-    -moz-border-radius: 5px;
-    /* border radius is specified different ways for different legacy browsers. */
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
-    background: #262626;
+    background-color: var(--control-background-color);
 }
 .ds_checkbox:hover {
-    border-color: #D45E28;
+    border-color: var(--link-border-color);
 }
 .ds_mana_image {
     vertical-align: middle;
@@ -529,19 +453,15 @@ a.create_deck_link {
     width: 140px;
     height: 27px;
     outline: solid transparent;
-    border: 1px solid Black;
-    color: #CCCCCC;
-    background-color: #353535;
+    border: 1px solid var(--control-border-color);
+    color: var(--main-text-color);
+    background-color: var(--highlight-background-color);
     padding: 3px;
     border-radius: 5px;
-    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
-    -moz-border-radius: 5px;
-    /* border radius is specified different ways for different legacy browsers. */
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
+}
 }
 #ds_select:hover {
-    border-color: #D45E28;
+    border-color: var(--link-border-color);
 }
 .group:before, .group:after {
     content: "\0020";
@@ -555,15 +475,16 @@ a.create_deck_link {
 .group {
     zoom: 1;
 }
+
 .banner_alert {
-    background: black;
-    border: red dotted;
+    background: var(--base-background-color);
+    border: var(--notice-text-color) dotted;
     padding: 10px;
 }
 
 .discordlogin {
-    background: #7289DA;
-    color: #fff;
+    background: var(--discord-brand-background-color);;
+    color: var(--discord-brand-color);
     text-decoration: none;
 }
 
@@ -581,36 +502,24 @@ a.create_deck_link {
 /* Style tab links */
 .tablink {
     border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -webkit-box-shadow: #000 0 2px 10px;
-    -moz-box-shadow: #000 0 2px 10px;
-    box-shadow: #000 0 2px 10px;
-    background: #262626;
-    border: 1px solid black;
-    /*margin-top: 1px;*/
-    /*margin-bottom: 1px;*/
-    background-color: #262626;
-    color: #D88F6D;
+    box-shadow: var(--control-border-color) 0 2px 10px;
+    border: 1px solid var(--control-border-color);
+    background-color: var(--control-background-color);
+    color: var(--link-text-color);
     float: left;
-    /*border: none;*/
-    /*outline: none;*/
-    /*cursor: pointer;*/
     padding: 8px 8px;
     margin: 1px 0px;
-    /*font-size: 15px;*/
     width: 25%;
 }
 
 .tablink:hover {
-    color: #D45E28;
+    color: var(--link-emphasis-text-color);
     /*text color of selected and active item*/
-    background: #353535;
-    border: 1px solid #D45E28;
+    background: var(--highlight-background-color);
+    border: 1px solid var(--link-border-color);
 }
 
 .tabcontent {
-    color: white;
     display: none;
     padding: 50px 20px;
     height: 100%;
@@ -634,47 +543,17 @@ table.events  td:last-child {
 .winners {
     border-collapse: collapse;
 }
+.winners .event-name {
+    padding-top: 24px;
+}
 .winners tr.player-deck td {
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid var(--divider-border-color);
     padding-bottom: 24px;
 }
 .score, .player {
     white-space: nowrap;
 }
 
-.mtgodeck {
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-bottom: 10px;
-    border-right: black 1px solid;
-    border-top: black 1px solid;
-    border-left: black 1px solid;
-    width: 600px;
-    border-bottom: black 1px solid;
-    position: relative;
-    background-color: rgb(204,204,204);
-}
-.deckheader {
-    padding-bottom: 10px;
-    background-repeat: no-repeat;
-    position: relative;
-    height: 40px
-}
-.deckname {
-    font-size: 25px;
-    left: 3px;
-    position: absolute;
-    top: 3px
-}
-.deckformat {
-    font-size: 14px;
-    left: 5px;
-    position: absolute;
-    top: 28px
-}
-.deckssideboard {
-    background-color: rgb(170,170,170)
-}
 body {
     vertical-align:baseline;
     background:transparent;
@@ -682,21 +561,21 @@ body {
     padding:0;
     border:0;
     outline:0;
-    background: #161616;
+    background: var(--base-background-color);
     padding: 20px 0px 0px 0px;
-    color: rgb(204,204,204);
+    color: var(--main-text-color);
 }
 td {
     vertical-align:baseline;
 }
 a {
-    border-bottom: 1px dotted #D88F6D;
+    border-bottom: 1px dotted var(--link-text-color);
     text-decoration: none;
     font-weight: bold;
     padding: 1px;
 }
 a.emailPop {
-    color: green;
+    color: var(--verified-text-color);
     border: none;
 }
 .borderless {
@@ -704,81 +583,77 @@ a.emailPop {
     /* removes borders from img anchors */
 }
 .borderless:hover {
-    border: 1px solid #262626;
+    border: 1px solid var(--main-background-color);
     /* colors border on img anchors so border matches background and is unseen */
 }
 a:link {
-    color: #D88F6D;
+    color: var(--link-text-color);
 }
 a:visited {
-    color: #D88F6D;
+    color: var(--link-text-color);
 }
 a:active {
-    color: #D45E28;
+    color: var(--link-emphasis-text-color);
 }
 a:hover {
-    color: #D45E28;
-    border: 1px solid #D45E28;
+    color: var(--link-emphasis-text-color);
+    border: 1px solid var(--link-border-color);
     padding: 0px;
     border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
 }
 a.emailPop:hover {
-    color: green;
-    border: 1px solid green;
+    color: var(--verified-text-color);
+    border: 1px solid var(--verified-text-color);
     padding: 0px;
     border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
 }
 .match_verified {
-    color: green;
+    color: var(--verified-text-color);
     border: none;
     padding: 0;
     font-weight: normal;
 }
 .match_unverified {
-    color: yellow;
+    color: var(--pending-text-color);
     border: none;
     padding: 0;
     font-weight: normal;
 }
 .match_failed {
-    color: red;
+    color: var(--error-text-color);
     border: none;
     padding: 0;
     font-weight: normal;
 }
 a.deckverified {
-    color: green;
-    border-bottom: 1px dotted green;
+    color: var(--verified-text-color);
+    border-bottom: 1px dotted var(--verified-text-color);
 }
 a.deckverified:hover {
-    color: green;
-    border: 1px solid green;
+    color: var(--verified-text-color);
+    border: 1px solid var(--verified-text-color);
     padding: 0px;
 }
 a.createlink {
-    color: yellow;
-    border-bottom: 1px dotted yellow;
+    color: var(--pending-text-color);
+    border-bottom: 1px dotted var(--pending-text-color);
 }
 a.createlink:hover {
-    color: yellow;
-    border: 1px solid yellow;
+    color: var(--pending-text-color);
+    border: 1px solid var(--pending-text-color);
     padding: 0px;
 }
 a.deckunverified {
-    color: red;
-    border-bottom: 1px dotted red;
+    color: var(--error-text-color);
+    border-bottom: 1px dotted var(--error-text-color);
 }
 a.deckunverified:hover {
-    color: red;
-    border: 1px solid red;
+    color: var(--error-text-color);
+    border: 1px solid var(--error-text-color);
     padding: 0px;
 }
 em {
-    color: #D45E28;
+    color: var(--emphasis-text-color);
 }
 del {
     text-decoration:line-through
@@ -801,40 +676,12 @@ del {
     margin-right: 312px;
     padding-top: 26px;
 }
-#header_text {
-    color: white;
-    text-align: center;
-    padding-top: 25px;
-}
-#sub_text {
-    font-weight: normal;
-    font-size: medium;
-}
-.roundedbox, .toprowbox {
-    background: #454545;
-    padding: 10px;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    background: #eeeeee;
-}
-.toprowbox {
-    height: 90px;
-    border: 1px solid gray;
-}
 .box {
     border-radius: 5px;
-    /* modern browsers only need this. IE9 needs the meta tag that is in lib.php */
-    -moz-border-radius: 5px;
-    /* border radius is specified different ways for different legacy browsers. */
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
-    -webkit-box-shadow: #000 0 2px 5px;
-    -moz-box-shadow: #000 0 2px 5px;
-    box-shadow: #000 0 2px 5px;
+    box-shadow: var(--control-border-color) 0 2px 5px;
     margin-top: 15px;
-    background: #262626;
-    border: 1px solid black;
+    background: var(--main-background-color);
+    border: 1px solid var(--control-border-color);
     padding-bottom: 10px;
 }
 .box p, .box ul, .box .uppertitle, .box table, .box form,
@@ -843,16 +690,12 @@ del {
     padding: 5px 10px;
 }
 .uppertitle {
-    -moz-border-radius-topright: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    -webkit-border-top-left-radius: 5px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    background: #353535;
+    background: var(--highlight-background-color);
     font-size: 15px;
     font-weight: bold;
-    border-bottom: 2px solid #D45E28;
+    border-bottom: 2px solid var(--title-border-color);
     margin-bottom: 10px;
 }
 .uppertitle h2 {
@@ -860,44 +703,34 @@ del {
 }
 .menubar {
     border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -webkit-box-shadow: #000 0 2px 10px;
-    -moz-box-shadow: #000 0 2px 10px;
-    box-shadow: #000 0 2px 10px;
-    background: #262626;
-    border: 1px solid black;
+    box-shadow: var(--control-border-color) 0 2px 10px;
+    background: var(--main-background-color);
+    border: 1px solid var(--control-border-color);
     margin-top: 1px;
     margin-bottom: 1px;
 }
 .menubar:hover {
-    border-color: #D45E28;
+    border-color: var(--link-border-color);
 }
 #mainmenu, #mainmenu_submenu, #submenu {
     font-weight: bold;
 }
 #mainmenu ul, #submenu ul, #mainmenu_submenu ul {
-    color: #D88F6D;
+    color: var(--link-text-color);
     /* menu font color */
     margin: 0px;
     margin-top: 1px;
     float: left;
-    background: #262626;
+    background: var(--main-background-color);
     padding: 0px;
     padding-top: 5px;
     border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
 }
 #mainmenu ul li, #mainmenu_submenu ul li, #submenu ul li {
     display: inline-block;
-    border: 1px solid black;
+    border: 1px solid var(--control-border-color);
     border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -webkit-box-shadow: #000 0 2px 5px;
-    -moz-box-shadow: #000 0 2px 5px;
-    box-shadow: #000 0 2px 5px;
+    box-shadow: var(--control-border-color) 0 2px 5px;
 }
 #mainmenu ul li a, #mainmenu_submenu ul li a, #submenu ul li a {
     float: left;
@@ -905,8 +738,6 @@ del {
     text-align: center;
     border-bottom: none;
     border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
 }
 #submenu ul li a {
     width: 145px;
@@ -917,67 +748,14 @@ del {
 #mainmenu ul li.last a, #mainmenu_submenu ul li.last a {
     width: 115px;
 }
-#mainmenu ul li a:visited, #mainmenu_submenu ul li a:visited, #submenu ul li a:visited {
-    color: #D87D49;
-}
 #mainmenu ul li a:hover, #mainmenu ul li .current, #mainmenu_submenu ul li a:hover, #submenu ul li a:hover, #submenu ul li .current, #mainmenu_submenu ul li.open a:hover, #mainmenu_submenu ul li.current a {
-    color: #D45E28;
+    color: var(--link-emphasis-text-color);
     /*text color of selected and active item*/
-    background: #353535;
-    border: 1px solid #D45E28;
-}
-#faq, #joinpdc {
-    text-align: center;
-}
-#upcomingevents hr {
-    margin-bottom: 10px;
-}
-.uptourneylogo, .uptourneystuff {
-    margin-top: 0;
-    text-align: center;
-}
-.uptourneylogo img {
-    height: 50px;
-    width: 75px;
-}
-.newsarticle, #readmorearticles {
-    border-bottom: 1px dashed black;
-    padding: 10px;
-}
-#readmorearticles {
-    border-bottom: none;
-}
-.newsarticle:last-child {
-    border-bottom: none;
-}
-.newstitle {
-    font-size: 20px;
-    font-weight: bold;
-    float: left;
-}
-.newsauthor {
-    float: right;
-    font-size: 12px;
-    padding-top: 8px;
-    height: 20px;
-}
-.newslinks {
-    text-align: right;
-}
-#bottom div {
-    text-align: center;
-    background: #87cbff;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    padding: 5px;
-    font-weight: bold;
-}
-#bottom div a {
-    color: black;
+    background: var(--highlight-background-color);
+    border: 1px solid var(--link-border-color);
 }
 #maincontainer {
-    background: #161616;
+    background: var(--base-background-color);
 }
 .deck {
     width: 100%;
@@ -1015,9 +793,6 @@ table.center {
     margin-right: auto;
     width: 90%;
 }
-.pad10 {
-    height: 10px;
-}
 /* Gatherling Entries */
 #gatherling_main table {
     margin-left: auto;
@@ -1034,7 +809,7 @@ table.center {
     text-align: center;
 }
 #gatherling_main .error {
-    color: red;
+    color: var(--error-text-color);
     font-weight: bolder;
 }
 #gatherling_full table {
@@ -1050,8 +825,8 @@ table.center {
     margin-left: inherit;
 }
 #gatherling_footer {
-    background-color: #262626;
-    color: #666;
+    background-color: var(--main-background-color);
+    color: var(--dim-gray);
     text-align: center;
     padding: 20px;
     margin-bottom: 30px;
@@ -1066,30 +841,6 @@ table.center {
 }
 #gatherling_main table th.top {
     text-align: center;
-}
-.spacer {
-    margin-top: 15px;
-}
-.innertube {
-    background-color: #262626;
-    padding-bottom: 1px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    margin-bottom: 15px;
-}
-.cardinsert_news {
-    padding-left: 5px;
-    padding-right: 5px;
-    margin-bottom: 1em;
-    clear: left;
-    margin-bottom: 10px;
-}
-.gatherling_news {
-    clear: both;
-    margin-bottom: 10px;
-}
-.extra_margin {
-    margin: 10px;
 }
 #EventReport table td {
     border-width: 0px;
@@ -1112,6 +863,7 @@ Enjoy.
 */
 
 /* zebra_pagination.css copy and pasted in from v2.4 of Zebra_Pagination */
+
 .Zebra_Pagination {
     clear: both;
     width: 100%;
@@ -1182,12 +934,108 @@ Enjoy.
 }
 
 /* Our old customized version of Zebra Pagination CSS from when we copy and pasted it rather than having it as a dependency. */
-/* ATTRIBUTES FOR THE CONTAINER (THIS HOW WE CENTER EVERYTHING)----------------------------------------------------------------------------------------------------------------------*/.Zebra_Pagination                       { clear: both; width: 100%; }.Zebra_Pagination ul                    { position: relative; left: 50%; list-style-type: none; margin: 0; padding: 0; float: left }.Zebra_Pagination li                    { position: relative; float: left; right: 50%; margin: 6px; }/* COMMON ATTRIBUTES FOR ALL THE LINKS----------------------------------------------------------------------------------------------------------------------*/.Zebra_Pagination a                     { padding: 4px; border: 1px solid Black; color: #CCCCCC; background-color: #262626; text-decoration: none; margin: 0 2px; display: block; float: left; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: #000 0 2px 5px; -moz-box-shadow: #000 0 2px 5px; box-shadow: #000 0 2px 5px }.Zebra_Pagination a:hover               { border-color: #D45E28; background-color: #353535; color: #D45E28; -webkit-box-shadow: #D45E28 0 2px 5px; -moz-box-shadow: #D45E28 0 2px 5px; box-shadow: #D45E28 0 2px 5px; }/* "NEXT PAGE" AND "PREVIOUS PAGE" LINKS----------------------------------------------------------------------------------------------------------------------*/.Zebra_Pagination a.navigation          { border: 1px solid Black; background-repeat: no-repeat }.Zebra_Pagination a.navigation:hover    { border-color: #D45E28; }.Zebra_Pagination a.previous            { background-image: url(../images/larrow.png); background-position: left center; padding-left: 45px }.Zebra_Pagination a.next                { background-image: url(../images/rarrow.png); background-position: right center; padding-right: 45px }.Zebra_Pagination a.disabled            { filter: alpha(opacity=20); -khtml-opacity: 0.2; -moz-opacity: 0.2; opacity: 0.2; -webkit-box-shadow: #000 0 0px 0px; -moz-box-shadow: #000 0 0px 0px; box-shadow: #000 0 0px 0px; }.Zebra_Pagination a.disabled:hover      { background-color: #262626; border: 1px solid Black; color: inherit }/* hack for transparent borders in IE6 */*html .Zebra_Pagination a.navigation    { border-color: #000001; filter: chroma(color=#000001) }/* CURRENT PAGE----------------------------------------------------------------------------------------------------------------------*/.Zebra_Pagination a.current,.Zebra_Pagination a.current:hover       { background: #D45E28; border-color: Black; color: Black }/* THE "..." SEPARATOR----------------------------------------------------------------------------------------------------------------------*/.Zebra_Pagination span                  { color: #667; margin-right: 2px; display: block; float: left; padding: 8px 4px }
+
+/* ATTRIBUTES FOR THE CONTAINER (THIS HOW WE CENTER EVERYTHING)----------------------------------------------------------------------------------------------------------------------*/
+.Zebra_Pagination {
+    clear: both;
+    width: 100%;
+}
+
+.Zebra_Pagination ul {
+    position: relative;
+    left: 50%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    float: left
+}
+
+.Zebra_Pagination li {
+    position: relative;
+    float: left;
+    right: 50%;
+    margin: 6px;
+}
+
+/* COMMON ATTRIBUTES FOR ALL THE LINKS----------------------------------------------------------------------------------------------------------------------*/
+.Zebra_Pagination a {
+    padding: 4px;
+    border: 1px solid Black;
+    color: var(--main-text-color);
+    background-color: var(--main-background-color);
+    text-decoration: none;
+    margin: 0 2px;
+    display: block;
+    float: left;
+    border-radius: 6px;
+    box-shadow: var(--control-border-color) 0 2px 5px
+}
+
+.Zebra_Pagination a:hover {
+    border-color: var(--link-border-color);
+    background-color: var(--hightlight-background-color);
+    color: var(--link-emphasis-text-color);
+    box-shadow: var(--link-border-color) 0 2px 5px;
+}
+
+/* "NEXT PAGE" AND "PREVIOUS PAGE" LINKS----------------------------------------------------------------------------------------------------------------------*/
+.Zebra_Pagination a.navigation {
+    border: 1px solid var(--control-border-color);
+    background-repeat: no-repeat
+}
+
+.Zebra_Pagination a.navigation:hover {
+    border-color: var(--link-border-color);
+}
+
+.Zebra_Pagination a.previous {
+    background-image: url(../images/larrow.png);
+    background-position: left center;
+    padding-left: 45px
+}
+
+.Zebra_Pagination a.next {
+    background-image: url(../images/rarrow.png);
+    background-position: right center;
+    padding-right: 45px
+}
+
+.Zebra_Pagination a.disabled {
+    filter: alpha(opacity=20);
+    opacity: 0.2;
+    box-shadow: var(--disabled-control-border-color) 0 0px 0px;
+}
+
+/* Arrows that can't be used and the elipsis should not change on hover. */
+.Zebra_Pagination a.disabled:hover,
+.Zebra_Pagination li span:hover {
+    background-color: inherit;
+    color: inherit;
+    border: inherit;
+}
+
+/* CURRENT PAGE----------------------------------------------------------------------------------------------------------------------*/
+.Zebra_Pagination a.current,
+.Zebra_Pagination a.current:hover {
+    background: var(--current-pagination-background-color);
+    border-color: var(--current-pagination-border-color);
+    color: var(--current-pagination-text-color);
+}
+
+/* THE "..." SEPARATOR----------------------------------------------------------------------------------------------------------------------*/
+.Zebra_Pagination span {
+    color: var(--main-text-color);
+    margin-right: 2px;
+    display: block;
+    float: left;
+    padding: 8px 4px
+}
 
 /* A little extra CSS that overrides some colors in the zebra_pagination.css that aren't set in the old CSS. */
+
 .Zebra_Pagination li.active a {
-    background-color: #D45E28;
-    color: #000;
+    background-color: var(--current-pagination-background-color);
+    color: var(--current-pagination-text-color);
 }
 
 .Zebra_Pagination span {
