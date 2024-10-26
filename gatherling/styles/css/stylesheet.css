@@ -128,6 +128,7 @@ p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
 .grid_5,
 .grid_6,
 .grid_7,
+.grid_8,
 .grid_10,
 .grid_12 {
     display: inline;
@@ -167,6 +168,10 @@ p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
 
 .container_12 .grid_7 {
     width: 540px
+}
+
+.container_12 .grid_8 {
+    width: 620px
 }
 
 .container_12 .grid_10 {
