@@ -24,7 +24,6 @@ abstract class Page extends TemplateResponse
     public string $js;
     public ?Player $player;
     public string $siteName;
-    public int $tabs;
     public string $title;
     public string $versionTagline;
     public string $jsLink;
@@ -39,7 +38,6 @@ abstract class Page extends TemplateResponse
         $this->isHost = $this->player?->isHost() ?? false;
         $this->isOrganizer = count($this->player?->organizersSeries() ?? []) > 0;
         $this->isSuper = $this->player?->isSuper() ?? false;
-        $this->tabs = 5 + (int) $this->isHost + (int) $this->isOrganizer + (int) $this->isSuper;
         $this->versionTagline = version_tagline();
         $this->jsLink = 'gatherling.js?v=' . rawurlencode(git_hash());
     }
