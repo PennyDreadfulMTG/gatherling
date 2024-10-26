@@ -10,19 +10,19 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
 
 :root {
-    --black: #000;
-    --night: #161616;
-    --eerie-black: #262626;
-    --jet: #353535;
-    --onyx: #454545;
+    --black: oklch(0 0 0);
+    --night: oklch(20.02% 0 0);
+    --eerie-black: oklch(26.86% 0 0);
+    --jet: oklch(32.9% 0 0);
+    --onyx: oklch(39.04% 0 0);
 
-    --silver: #ccc;
-    --persian-orange: #D88F6D;
-    --flame: #D45E28;
-    --red: #f00;
-    --yellow: #ff0;
-    --green: #008000;
-    --dim-gray: #666;
+    --silver: oklch(84.52% 0 0);
+    --persian-orange: oklch(71.61% 0.1009 45.65);
+    --flame: oklch(62.15% 0.1627 42.49);
+    --red: oklch(62.8% 0.25768330773615683 29.2338851923426);
+    --yellow: oklch(96.8% 0.21095439261133309 109.76923207652135);
+    --green: oklch(51.98% 0.1768 142.5);
+    --dim-gray: oklch(51.03% 0 0);
 
     --main-text-color: var(--silver);
     --link-text-color: var(--persian-orange);
