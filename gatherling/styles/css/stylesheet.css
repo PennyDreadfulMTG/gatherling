@@ -901,7 +901,7 @@ table.center {
 }
 #gatherling_footer {
     background-color: var(--main-background-color);
-    color: var(--dim-gray);
+    color: var(--deemphasized-text-color);
     text-align: center;
     padding: 20px;
     margin-bottom: 30px;
