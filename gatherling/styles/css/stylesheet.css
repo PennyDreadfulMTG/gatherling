@@ -37,7 +37,7 @@
 
     --base-background-color: var(--night);
     --main-background-color: var(--eerie-black);
-    --highlight-background-color: var(--jet);
+    --hover-background-color: var(--jet);
 
     --title-border-color: var(--flame);
 
@@ -1053,7 +1053,7 @@ Enjoy.
 
 .Zebra_Pagination a:hover {
     border-color: var(--link-border-color);
-    background-color: var(--hightlight-background-color);
+    background-color: var(--hover-background-color);
     color: var(--link-emphasis-text-color);
     box-shadow: var(--link-border-color) 0 2px 5px;
 }
