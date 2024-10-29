@@ -49,49 +49,20 @@ class CardSet
         $numCardsParsed = 0;
         $numCardsInserted = 0;
 
+        $sql = "SELECT COALESCE(code, '') FROM cardsets where name = :set";
+        $codes = db()->strings($sql, ['set' => $set]);
+        if (count($codes) === 1 && $codes[0] === '') {
+            $sql = 'UPDATE cardsets SET code = :code WHERE name = :set';
+            db()->update($sql, ['code' => $data->code, 'set' => $set]);
+            $messages[] = "$set was missing code ($data->code) in db, updated.";
+        } elseif (count($codes) === 0) {
+            $sql = 'INSERT INTO cardsets (released, name, type, code, standard_legal, modern_legal)
+                         VALUES (:released, :name, :type, :code, 0, 0)';
+            db()->execute($sql, ['released' => $releaseDate, 'name' => $set, 'type' => $setType, 'code' => $data->code]);
+            $messages[] = "Inserted new set ($set, $releaseDate, $setType)...";
+        }
+
         $database = Database::getConnection();
-
-        $stmt = $database->prepare('SELECT * FROM cardsets where name = ?');
-        if (!$stmt) {
-            throw new DatabaseException($database->error);
-        }
-
-        $stmt->bind_param('s', $set);
-
-        $set_already_in = false;
-
-        if (!$stmt->execute()) {
-            throw new \Exception($stmt->error);
-        }
-        $result = $stmt->get_result();
-        if ($result->num_rows === 1) {
-            $set_already_in = true;
-
-            $row = $result->fetch_array();
-            if (is_null($row['code'])) {
-                $messages[] = "$set is missing code ($data->code) in db.";
-                $stmt = $database->prepare('UPDATE cardsets SET code = ? WHERE name = ?');
-                $stmt->bind_param('ss', $data->code, $row['name']);
-                if (!$stmt->execute()) {
-                    throw new \Exception($stmt->error);
-                }
-            }
-        }
-
-        if (!$set_already_in) {
-            $messages[] = "Inserting card set ($set, $releaseDate, $setType)...";
-
-            // Insert the card set
-            $stmt = $database->prepare('INSERT INTO cardsets(released, name, type, code, standard_legal, modern_legal) values(?, ?, ?, ?, 0, 0)');
-            $stmt->bind_param('ssss', $releaseDate, $set, $setType, $data->code);
-
-            if (!$stmt->execute()) {
-                throw new \Exception($stmt->error);
-            } else {
-                $messages[] = "Inserted new set {$set}!";
-            }
-            $stmt->close();
-        }
 
         $stmt = $database->prepare('INSERT INTO cards(cost, convertedcost, name, cardset, type,
   isw, isu, isb, isr, isg, isp, rarity, scryfallId, is_changeling, is_online) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)

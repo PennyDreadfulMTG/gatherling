@@ -11,42 +11,12 @@ parameters:
 			path: gatherling/Auth/Session.php
 
 		-
-			message: "#^Cannot access offset 'code' on array\\|false\\|null\\.$#"
-			count: 1
-			path: gatherling/Models/CardSet.php
-
-		-
 			message: "#^Cannot access property \\$data on mixed\\.$#"
 			count: 1
 			path: gatherling/Models/CardSet.php
 
 		-
-			message: "#^Cannot access property \\$error on mysqli_stmt\\|false\\.$#"
-			count: 2
-			path: gatherling/Models/CardSet.php
-
-		-
-			message: "#^Cannot access property \\$num_rows on mysqli_result\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/CardSet.php
-
-		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 2
-			path: gatherling/Models/CardSet.php
-
-		-
 			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 2
-			path: gatherling/Models/CardSet.php
-
-		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 2
-			path: gatherling/Models/CardSet.php
-
-		-
-			message: "#^Cannot call method fetch_array\\(\\) on mysqli_result\\|false\\.$#"
 			count: 1
 			path: gatherling/Models/CardSet.php
 
