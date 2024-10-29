@@ -35,7 +35,8 @@ class Prereg extends Component
             $this->registerLink = 'prereg.php?action=reg&event=' . rawurlencode($event->name);
         }
         if ($event->start) {
-            $this->start = new Time(strtotime($event->start), time(), true);
+            $start = strtotime($event->start);
+            $this->start = $start ? new Time($start, time(), true) : null;
         }
     }
 }

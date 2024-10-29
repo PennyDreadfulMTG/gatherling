@@ -339,7 +339,7 @@ class Event
             db()->execute($sql, $params);
 
             if ($this->mainid == null) {
-                $this->newSubevent($this->mainrounds, 1, $this->mainstruct);
+                $this->newSubevent((int) $this->mainrounds, 1, $this->mainstruct);
             } else {
                 $main = new Subevent($this->mainid);
                 $main->rounds = (int) $this->mainrounds;
@@ -348,7 +348,7 @@ class Event
             }
 
             if ($this->finalid == null) {
-                $this->newSubevent($this->finalrounds, 2, $this->finalstruct);
+                $this->newSubevent((int) $this->finalrounds, 2, $this->finalstruct);
             } else {
                 $final = new Subevent($this->finalid);
                 $final->rounds = (int) $this->finalrounds;
