@@ -7,7 +7,6 @@ namespace Gatherling\Data;
 use Gatherling\Exceptions\ConfigurationException;
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\MarshalException;
-use Gatherling\Logger;
 use PDOException;
 use PDOStatement;
 use PDO;
@@ -106,6 +105,7 @@ class Db
             $stmt->execute($params);
         });
     }
+
     /** @param array<string, mixed> $params */
     public function insert(string $sql, array $params = []): int
     {
@@ -491,7 +491,6 @@ class Db
     }
 
     /**
-     * Expands array parameters into multiple placeholders
      * @param array<string, mixed> $params
      * @return array{0: string, 1: array<string, mixed>}
      */
