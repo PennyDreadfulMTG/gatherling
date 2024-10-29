@@ -11,7 +11,7 @@ final class FormatTest extends DatabaseCase
 {
     private Format $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->model = new Format('Test Format');
