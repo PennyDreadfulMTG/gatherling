@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-use Gatherling\Data\DB;
+use function Gatherling\Helpers\db;
 
 class FormatDropMenuDS extends DropMenu
 {
     public function __construct(public string $formatName, int $useAll = 0, string $formName = 'format')
     {
         $sql = 'SELECT name FROM formats ORDER BY priority desc, name';
-        $formatNames = DB::values($sql, 'string');
+        $formatNames = db()->strings($sql);
         $title = ($useAll == 0) ? '- Format -' : 'All';
         $options = [];
         foreach ($formatNames as $name) {

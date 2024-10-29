@@ -8,7 +8,7 @@ use Gatherling\Models\Deck;
 
 class CcTable extends Component
 {
-    /** @var list<array{cost: int, amt: int}> */
+    /** @var list<array{cost: int, amt: int, imgSrc: string}> */
     public array $castingCosts;
     public string $avgCmc;
 
@@ -18,8 +18,10 @@ class CcTable extends Component
 
         $total = $cards = 0;
         foreach ($convertedCosts as $cost => $amt) {
+            $imgSrc = $cost <= 9 ? "styles/images/mana{$cost}.png" : '';
             $this->castingCosts[] = [
                 'cost' => $cost,
+                'imgSrc' => $imgSrc,
                 'amt' => $amt,
             ];
             $total += $cost * $amt;

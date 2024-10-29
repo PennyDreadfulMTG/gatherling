@@ -8,10 +8,12 @@ use PDO;
 use Exception;
 use InvalidArgumentException;
 
+use function Gatherling\Helpers\db;
+
 class Series
 {
     public string $name;
-    public ?int $active;
+    public ?int $active = null;
     public ?string $start_day;
     public ?string $start_time;
     /** @var list<string> */
@@ -21,7 +23,7 @@ class Series
     public ?string $mtgo_room;
 
     public ?string $this_season_format;
-    public ?string $this_season_master_link;
+    public ?string $this_season_master_link = null;
     public int $this_season_season;
 
     public ?int $prereg_default;
@@ -55,161 +57,120 @@ class Series
             return;
         }
 
-        $db = Database::getConnection();
-        $sql = 'SELECT isactive, day, normalstart, prereg_default, mtgo_room, discord_guild_id, discord_channel_id, discord_channel_name, discord_guild_name, discord_guild_invite, discord_require_membership FROM series WHERE name = ?';
-        $stmt = $db->prepare($sql);
-        $stmt or exit($db->error);
-        $stmt->bind_param('s', $name);
-        $stmt->execute();
-        $stmt->bind_result(
-            $this->active,
-            $this->start_day,
-            $this->start_time,
-            $this->prereg_default,
-            $this->mtgo_room,
-            $this->discord_guild_id,
-            $this->discord_channel_id,
-            $this->discord_channel_name,
-            $this->discord_guild_name,
-            $this->discord_guild_invite,
-            $this->discord_require_membership
-        );
-        if ($stmt->fetch() == null) {
-            throw new Exception('Series ' . $name . ' not found in DB');
+        $sql = '
+            SELECT
+                isactive AS active, day AS start_day, normalstart AS start_time, prereg_default, mtgo_room, discord_guild_id, discord_channel_id,
+                discord_channel_name, discord_guild_name, discord_guild_invite, discord_require_membership
+            FROM
+                series
+            WHERE
+                name = :name';
+        $params = ['name' => $name];
+        $series = db()->selectOnly($sql, SeriesDto::class, $params);
+        foreach (get_object_vars($series) as $key => $value) {
+            $this->$key = $value;
         }
-
-        $stmt->close();
 
         $this->name = $name;
 
         // Organizers
-        $stmt = $db->prepare('SELECT player FROM series_organizers WHERE series = ?');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->bind_result($one_player);
-        $this->organizers = [];
-        while ($stmt->fetch()) {
-            $this->organizers[] = $one_player;
-        }
-        $stmt->close();
+        $sql = 'SELECT player FROM series_organizers WHERE series = :series';
+        $this->organizers = db()->strings($sql, ['series' => $this->name]);
 
         // banned players
-        $stmt = $db->prepare('SELECT player FROM playerbans WHERE series = ?');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->bind_result($one_player);
-        $this->bannedplayers = [];
-        while ($stmt->fetch()) {
-            $this->bannedplayers[] = $one_player;
-        }
-        $stmt->close();
+        $sql = 'SELECT player FROM playerbans WHERE series = :series';
+        $this->bannedplayers = db()->strings($sql, ['series' => $this->name]);
 
         // Most recent season
         $mostRecentEvent = $this->mostRecentEvent();
-        $this_season = $mostRecentEvent->season ?? 0;
-        $stmt = $db->prepare('SELECT format, master_link FROM series_seasons WHERE series = ? AND season <= ?
-                              ORDER BY season DESC
-                              LIMIT 1');
-        $stmt->bind_param('sd', $this->name, $this_season);
-        $stmt->execute();
-        $stmt->bind_result($this->this_season_format, $this->this_season_master_link);
-        $stmt->fetch();
-        $stmt->close();
-        $this->this_season_season = $this_season;
+        $this->this_season_season = $mostRecentEvent->season ?? 0;
+        $sql = 'SELECT format, master_link FROM series_seasons WHERE series = :series AND season <= :season ORDER BY season DESC LIMIT 1';
+        $params = ['series' => $this->name, 'season' => $this->this_season_season];
+        $season = db()->selectOnlyOrNull($sql, SeriesSeasonDto::class, $params);
+        if ($season) {
+            $this->this_season_format = $season->format;
+            $this->this_season_master_link = $season->master_link;
+        }
 
         $this->new = false;
     }
 
     public function save(): void
     {
-        $db = Database::getConnection();
         if (strncmp($this->mtgo_room, '#', 1) == 0) {
             $this->mtgo_room = substr($this->mtgo_room, 1);
         }
         if ($this->new) {
-            $stmt = $db->prepare('INSERT INTO series(name, day, normalstart, isactive, prereg_default, mtgo_room) values(?, ?, ?, ?, ?, ?)');
-            $stmt->bind_param('sssdds', $this->name, $this->start_day, $this->start_time, $this->active, $this->prereg_default, $this->mtgo_room);
-            $stmt->execute() or exit($stmt->error);
-            $stmt->close();
+            $sql = '
+                INSERT INTO
+                    series
+                    (name, day, normalstart, isactive, prereg_default, mtgo_room)
+                VALUES
+                    (:name, :day, :normalstart, :isactive, :prereg_default, :mtgo_room)';
+            $params = [
+                'name' => $this->name,
+                'day' => $this->start_day,
+                'normalstart' => $this->start_time,
+                'isactive' => $this->active,
+                'prereg_default' => $this->prereg_default,
+                'mtgo_room' => $this->mtgo_room,
+            ];
+            db()->execute($sql, $params);
         } else {
-            $stmt = $db->prepare('UPDATE series
-                            SET day = ?, normalstart = ?, isactive = ?, prereg_default = ?, mtgo_room = ?
-                            WHERE name = ?');
-            $stmt or exit($db->error);
-            $stmt->bind_param('ssddss', $this->start_day, $this->start_time, $this->active, $this->prereg_default, $this->mtgo_room, $this->name);
-            $stmt->execute() or exit($stmt->error);
-            $stmt->close();
+            $sql = '
+                UPDATE series
+                SET day = :day, normalstart = :normalstart, isactive = :isactive, prereg_default = :prereg_default, mtgo_room = :mtgo_room
+                WHERE name = :name';
+            $params = [
+                'day' => $this->start_day,
+                'normalstart' => $this->start_time,
+                'isactive' => $this->active,
+                'prereg_default' => $this->prereg_default,
+                'mtgo_room' => $this->mtgo_room,
+                'name' => $this->name,
+            ];
+            db()->execute($sql, $params);
         }
     }
 
-    /**
-     * @param string $name
-     */
     public function isOrganizer(string $name): bool
     {
         return in_array(strtolower($name), array_map('strtolower', $this->organizers));
     }
 
-    /**
-     * @param string $name
-     */
     public function isPlayerBanned(string $name): bool
     {
         return in_array(strtolower($name), array_map('strtolower', $this->bannedplayers));
     }
 
-    /**
-     * @param string $name
-     */
     public function addOrganizer(string $name): void
     {
         if (empty($name)) {
             return;
         }
-        $db = Database::getConnection();
-        $stmt = $db->prepare('INSERT INTO series_organizers(series, player) VALUES(?, ?)');
-        $stmt->bind_param('ss', $this->name, $name);
-        $stmt->execute();
-        $stmt->close();
+        $sql = 'INSERT INTO series_organizers(series, player) VALUES(:series, :player)';
+        db()->execute($sql, ['series' => $this->name, 'player' => $name]);
     }
 
-    /**
-     * @param string $name
-     */
     public function addBannedPlayer(string $name, string $reason): void
     {
         if (empty($name)) {
             return;
         }
-        $db = Database::getConnection();
-        $stmt = $db->prepare('INSERT INTO playerbans(series, player, date, reason) VALUES(?, ?, CURRENT_DATE(), ?)');
-        $stmt->bind_param('sss', $this->name, $name, $reason);
-        $stmt->execute();
-        $stmt->close();
+        $sql = 'INSERT INTO playerbans(series, player, date, reason) VALUES(:series, :player, CURRENT_DATE(), :reason)';
+        db()->execute($sql, ['series' => $this->name, 'player' => $name, 'reason' => $reason]);
     }
 
-    /**
-     * @param string $name
-     */
     public function removeOrganizer(string $name): void
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('DELETE FROM series_organizers WHERE series = ? AND player = ?');
-        $stmt->bind_param('ss', $this->name, $name);
-        $stmt->execute();
-        $stmt->close();
+        $sql = 'DELETE FROM series_organizers WHERE series = :series AND player = :player';
+        db()->execute($sql, ['series' => $this->name, 'player' => $name]);
     }
 
-    /**
-     * @param string $name
-     */
     public function removeBannedPlayer(string $name): void
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('DELETE FROM playerbans WHERE series = ? AND player = ?');
-        $stmt->bind_param('ss', $this->name, $name);
-        $stmt->execute();
-        $stmt->close();
+        $sql = 'DELETE FROM playerbans WHERE series = :series AND player = :player';
+        db()->execute($sql, ['series' => $this->name, 'player' => $name]);
     }
 
     public function getBannedPlayerDate(string $name): ?string
@@ -257,81 +218,63 @@ class Series
     /** @return list<Event> */
     public function getRecentEvents(int $number = 10): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE series = ? ORDER BY start DESC LIMIT ?');
-        $stmt->bind_param('sd', $this->name, $number);
-        $stmt->execute();
-        $stmt->bind_result($eventname);
-
-        $eventnames = [];
-        while ($stmt->fetch()) {
-            $eventnames[] = $eventname;
-        }
-        $stmt->close();
-
-        $events = [];
-        foreach ($eventnames as $name) {
-            $events[] = new Event($name);
-        }
-
-        return $events;
+        $sql = '
+            SELECT
+                name
+            FROM
+                events
+            WHERE
+                series = :series
+            ORDER BY
+                start DESC
+            LIMIT
+                :limit';
+        $params = ['series' => $this->name, 'limit' => $number];
+        $eventnames = db()->strings($sql, $params);
+        return array_map(fn (string $name) => new Event($name), $eventnames);
     }
 
     public static function exists(string $name): bool
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM series WHERE name = ?');
-        $stmt->bind_param('s', $name);
-        $stmt->execute();
-        $stmt->store_result();
-        $series_exists = $stmt->num_rows > 0;
-        $stmt->close();
-
-        return $series_exists;
+        $sql = 'SELECT name FROM series WHERE name = :name';
+        $params = ['name' => $name];
+        return db()->optionalString($sql, $params) !== null;
     }
 
     /** @return list<string> */
     public static function allNames(): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT series.name
-                          FROM series
-                          LEFT JOIN events
-                          ON events.series = series.name
-                          GROUP BY series.name
-                          ORDER BY series.name');
-        $stmt->execute();
-        $stmt->bind_result($onename);
-        $names = [];
-        while ($stmt->fetch()) {
-            $names[] = $onename;
-        }
-        $stmt->close();
-
-        return $names;
+        $sql = '
+            SELECT
+                series.name
+            FROM
+                series
+            LEFT JOIN
+                events ON events.series = series.name
+            GROUP BY
+                series.name
+            ORDER BY
+                series.name';
+        return db()->strings($sql);
     }
 
     /** @return list<string> */
     public static function activeNames(): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT series.name
-                          FROM series
-                          LEFT JOIN events
-                          ON events.series = series.name
-                          WHERE series.isactive = 1
-                          GROUP BY series.name
-                          ORDER BY count(events.name)
-                          DESC, name');
-        $stmt->execute();
-        $stmt->bind_result($onename);
-        $names = [];
-        while ($stmt->fetch()) {
-            $names[] = $onename;
-        }
-        $stmt->close();
-
-        return $names;
+        $sql = '
+            SELECT
+                series.name
+            FROM
+                series
+            LEFT JOIN
+                events ON events.series = series.name
+            WHERE
+                series.isactive = 1
+            GROUP BY
+                series.name
+            ORDER BY
+                count(events.name) DESC, name';
+        return db()->strings($sql);
     }
 
     public static function logoSrc(string $seriesName): string
@@ -341,14 +284,20 @@ class Series
 
     public function mostRecentEvent(): ?Event
     {
-        $result = Database::dbQuerySingle('SELECT events.name
-                                         FROM events
-                                         JOIN series
-                                         ON series.name = events.series
-                                         WHERE series.name = ?
-                                         AND events.start < NOW()
-                                         ORDER BY events.start
-                                         DESC LIMIT 1', 's', $this->name);
+        $sql = '
+            SELECT
+                events.name
+            FROM
+                events
+            JOIN
+                series ON series.name = events.series
+            WHERE
+                series.name = :series AND events.start < NOW()
+            ORDER BY
+                events.start DESC
+            LIMIT 1';
+        $params = ['series' => $this->name];
+        $result = db()->optionalString($sql, $params);
         if ($result) {
             return new Event($result);
         }
@@ -357,14 +306,20 @@ class Series
 
     public function nextEvent(): ?Event
     {
-        $result = Database::dbQuerySingle('SELECT events.name
-                                         FROM events
-                                         JOIN series
-                                         ON series.name = events.series
-                                         WHERE series.name = ?
-                                         AND events.start > NOW()
-                                         ORDER BY events.start
-                                         LIMIT 1', 's', $this->name);
+        $sql = '
+            SELECT
+                events.name
+            FROM
+                events
+            JOIN
+                series ON series.name = events.series
+            WHERE
+                series.name = :series AND events.start > NOW()
+            ORDER BY
+                events.start
+            LIMIT 1';
+        $params = ['series' => $this->name];
+        $result = db()->optionalString($sql, $params);
         if ($result) {
             return new Event($result);
         }

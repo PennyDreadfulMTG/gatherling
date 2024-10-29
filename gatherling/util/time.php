@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 use Gatherling\Views\Components\Time;
 
-function time_element(int $datetime, int $now, bool $long = false): string
-{
-    return (new Time($datetime, $now, $long))->render();
-}
-
 function human_date(int $datetime, int $now): string
 {
     $elapsed = abs($now - $datetime);

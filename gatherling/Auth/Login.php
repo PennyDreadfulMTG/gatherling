@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Auth;
 
-use Gatherling\Log;
+use Gatherling\Logger;
 use Gatherling\Models\Player;
 
 class Login

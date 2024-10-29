@@ -9,8 +9,8 @@ ini_set('memory_limit', '512M');
 
 use Gatherling\Views\Pages\SeriesReport;
 
-use function Gatherling\Views\get;
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\get;
+use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 

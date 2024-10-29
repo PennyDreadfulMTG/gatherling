@@ -18,13 +18,12 @@ use Gatherling\Views\Components\NoDeckSpecified;
 use Gatherling\Views\Components\NullComponent;
 use Gatherling\Views\Pages\Deck as DeckPage;
 
-use function Gatherling\Views\get;
-use function Gatherling\Views\post;
-use function Gatherling\Views\server;
-use function Gatherling\Views\request;
+use function Gatherling\Helpers\get;
+use function Gatherling\Helpers\post;
+use function Gatherling\Helpers\server;
+use function Gatherling\Helpers\request;
 
 require_once 'lib.php';
-require_once 'lib_form_helper.php';
 
 function main(): void
 {
@@ -155,7 +154,8 @@ function checkDeckAuth(Event $event, string|false $player, ?Deck $deck = null): 
     if (is_null($deck) && $event->id > 0) {
         // Creating a deck.
         $entry = new Entry($event->id, $player);
-        return $entry->canCreateDeck(Player::loginName());
+        $playerName = Player::loginName();
+        return $playerName !== false && $entry->canCreateDeck($playerName);
     }
     // Updating a deck.
     return $deck->canEdit(Player::loginName());

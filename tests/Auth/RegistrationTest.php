@@ -15,7 +15,7 @@ final class RegistrationTest extends DatabaseCase
         $this->assertEquals(Registration::SUCCESS, Registration::register('newuser1', 'password123', 'password123', 'newuser1@example.com', 1, -5.0, '123456789', 'NewUser1#1234'));
 
         // Test registration with minimum required fields
-        $this->assertEquals(Registration::SUCCESS, Registration::register('newuser2', 'password456', 'password456', 'newuser2@example.com', 0, null, null, null));
+        $this->assertEquals(Registration::SUCCESS, Registration::register('newuser2', 'password456', 'password456', 'newuser2@example.com', 0, 5.5, null, null));
 
         // Test registration with Discord ID but no password
         $this->assertEquals(Registration::SUCCESS, Registration::register('discorduser', '', '', 'discorduser@example.com', 2, 3.5, '987654321', 'DiscordUser#5678'));

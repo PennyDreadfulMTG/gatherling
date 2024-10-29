@@ -4,32 +4,33 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use Exception;
-use Gatherling\Data\DB;
+use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\NotFoundException;
+use Gatherling\Models\PlayerDto;
 use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\PlayerLink;
 
-use function Gatherling\Views\session;
+use function Gatherling\Helpers\db;
+use function Gatherling\Helpers\session;
 
 class Player
 {
     public ?string $name;
     public ?string $password;
-    public ?string $host;
+    public ?int $host = 0;
     public ?int $super;
     public ?int $rememberMe; // if selected will record IP address. Gatherling will automatically log players in of known IP addresses.
     public ?string $ipAddress;
-    public ?string $emailAddress;
-    public ?int $emailPrivacy;
-    public ?float $timezone;
+    public ?string $emailAddress = null;
+    public ?int $emailPrivacy = 0;
+    public ?float $timezone = -5.0;
     public ?int $verified;
-    public ?string $theme; // DEPRECATED. Always null.
-    public ?string $discord_id;
-    public ?string $discord_handle;
+    public ?string $theme = null; // DEPRECATED. Always null.
+    public ?string $discord_id = null;
+    public ?string $discord_handle = null;
     public ?string $api_key;
-    public ?string $mtga_username;
-    public ?string $mtgo_username;
+    public ?string $mtga_username = null;
+    public ?string $mtgo_username = null;
 
     public function __construct(string $name)
     {
@@ -40,38 +41,26 @@ class Player
             $this->rememberMe = 0;
             $this->verified = 0;
             $this->theme = null;
-
             return;
         }
-        $database = Database::getConnection();
-        $stmt = $database->prepare('SELECT name, password, rememberme, INET_NTOA(ipaddress), host, super,
-                mtgo_confirmed, email, email_privacy, timezone, theme, discord_id, discord_handle, api_key, mtga_username, mtgo_username FROM players WHERE name = ?');
-        $stmt or exit($database->error);
-
-        $stmt->bind_param('s', $name);
-        $stmt->execute();
-        $stmt->bind_result(
-            $this->name,
-            $this->password,
-            $this->rememberMe,
-            $this->ipAddress,
-            $this->host,
-            $this->super,
-            $this->verified,
-            $this->emailAddress,
-            $this->emailPrivacy,
-            $this->timezone,
-            $this->theme,
-            $this->discord_id,
-            $this->discord_handle,
-            $this->api_key,
-            $this->mtga_username,
-            $this->mtgo_username
-        );
-        if ($stmt->fetch() == null) {
-            throw new NotFoundException('Player ' . $name . ' is not found.');
+        $sql = '
+            SELECT
+                name, password, rememberme AS rememberMe, INET_NTOA(ipaddress) AS ipAddress, host, super,
+                mtgo_confirmed AS verified, email AS emailAddress, email_privacy as emailPrivacy, timezone,
+                theme, discord_id, discord_handle, api_key, mtga_username, mtgo_username
+            FROM
+                players
+            WHERE
+                name = :name';
+        $params = ['name' => $name];
+        try {
+            $result = db()->selectOnly($sql, PlayerDto::class, $params);
+        } catch (DatabaseException $e) {
+            throw new NotFoundException("Player $name is not found.", 0, $e);
         }
-        $stmt->close();
+        foreach (get_object_vars($result) as $key => $value) {
+            $this->{$key} = $value;
+        }
     }
 
     public static function isLoggedIn(): bool
@@ -114,7 +103,7 @@ class Player
             return false;
         }
         $username = self::sanitizeUsername($username);
-        $srvpass = DB::value('SELECT password FROM players WHERE name = :name', ['name' => $username], true);
+        $srvpass = db()->optionalString('SELECT password FROM players WHERE name = :name', ['name' => $username]);
         if ($srvpass === null) {
             return false;
         }
@@ -149,23 +138,16 @@ class Player
         $stmt->close();
     }
 
-    public static function findByName(string $playername): ?self
+    public static function findByName(string $playerName): ?self
     {
-        $playername = self::sanitizeUsername($playername);
-        $database = Database::getConnection();
-        $stmt = $database->prepare('SELECT name FROM players WHERE name = ?');
-        $stmt->bind_param('s', $playername);
-        $stmt->execute();
-        $stmt->bind_result($resname);
-        $good = false;
-        if ($stmt->fetch()) {
-            $good = true;
+        $sanitizedName = self::sanitizeUsername($playerName);
+        $sql = 'SELECT name FROM players WHERE name = :name';
+        $params = ['name' => $sanitizedName];
+        $name = db()->optionalString($sql, $params);
+        if ($name === null) {
+            return null;
         }
-        $stmt->close();
-        if ($good) {
-            return new self($resname);
-        }
-        return null;
+        return new self($name);
     }
 
     public static function findByDiscordID(string $playername): ?self
@@ -260,24 +242,20 @@ class Player
         return null;
     }
 
-    public static function sanitizeUsername(string $playername): string
+    public static function sanitizeUsername(string $playerName): string
     {
-        $playername = str_replace('’', "'", $playername);
-
-        return $playername;
+        return str_replace('’', "'", $playerName);
     }
 
     public static function createByName(string $playername): self
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('INSERT INTO players(name) VALUES(?)');
-        $stmt->bind_param('s', $playername);
-        $stmt->execute();
-        $stmt->close();
+        $sql = 'INSERT INTO players (name) VALUES (:player_name)';
+        $params = ['player_name' => $playername];
+        db()->execute($sql, $params);
 
         $newPlayer = self::findByName($playername);
         if (!$newPlayer) {
-            throw new \RuntimeException("Failed to retrieve player we just created: {$playername}");
+            throw new NotFoundException("Failed to retrieve player we just created: {$playername}");
         }
         return $newPlayer;
     }
@@ -286,7 +264,7 @@ class Player
     {
         $playerName = self::sanitizeUsername($playerName);
         $found = self::findByName($playerName);
-        if (is_null($found)) {
+        if ($found === null) {
             return self::createByName($playerName);
         }
         return $found;
@@ -294,11 +272,38 @@ class Player
 
     public function save(): void
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('UPDATE players SET password = ?, rememberme = ?, host = ?, super = ?, email = ?, email_privacy = ?, timezone = ?, discord_id = ?, discord_handle = ?, mtga_username = ?, mtgo_username = ? WHERE name = ?');
-        $stmt->bind_param('sdddsddsssss', $this->password, $this->rememberMe, $this->host, $this->super, $this->emailAddress, $this->emailPrivacy, $this->timezone, $this->discord_id, $this->discord_handle, $this->mtga_username, $this->mtgo_username, $this->name);
-        $stmt->execute();
-        $stmt->close();
+        $sql = '
+            UPDATE
+                players
+            SET
+                password = :password,
+                rememberme = :remember_me,
+                host = :host,
+                super = :super,
+                email = :email_address,
+                email_privacy = :email_privacy,
+                timezone = :timezone,
+                discord_id = :discord_id,
+                discord_handle = :discord_handle,
+                mtga_username = :mtga_username,
+                mtgo_username = :mtgo_username
+            WHERE
+                name = :name';
+        $params = [
+            'password' => $this->password,
+            'remember_me' => $this->rememberMe,
+            'host' => $this->host,
+            'super' => $this->super,
+            'email_address' => $this->emailAddress,
+            'email_privacy' => $this->emailPrivacy,
+            'timezone' => $this->timezone,
+            'discord_id' => $this->discord_id,
+            'discord_handle' => $this->discord_handle,
+            'mtga_username' => $this->mtga_username,
+            'mtgo_username' => $this->mtgo_username,
+            'name' => $this->name,
+        ];
+        db()->execute($sql, $params);
     }
 
     public function getIPAddresss(): ?string
@@ -409,11 +414,10 @@ class Player
     {
         if ($seriesName == '') {
             return ($this->super == 1) || (count($this->organizersSeries()) > 0);
-        } else {
-            return Database::singleResult("SELECT series
-                                        FROM series_organizers
-                                        WHERE player = '{$this->name}' AND series = '{$seriesName}'") > 0;
         }
+        $sql = 'SELECT series FROM series_organizers WHERE player = :player AND series = :series';
+        $params = ['player' => $this->name, 'series' => $seriesName];
+        return db()->optionalString($sql, $params) !== null;
     }
 
     /** @return list<Event> */
@@ -1213,16 +1217,6 @@ class Player
         return $seasons;
     }
 
-    // TODO: Is this part of the deck ignore functionality? If so remove it.
-    public function setIgnoreEvent(int $eventid, bool $ignored): void
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('UPDATE entries SET ignored = ? WHERE event_id = ? AND player = ?');
-        $stmt->bind_param('ids', $ignored, $eventid, $this->name);
-        $stmt->execute();
-        $stmt->close();
-    }
-
     public function setPassword(string $new_password): void
     {
         $db = Database::getConnection();
@@ -1293,18 +1287,8 @@ class Player
         if ($this->isSuper()) {
             return Series::allNames();
         }
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT series FROM series_organizers WHERE player = ? ORDER BY series');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $series = [];
-        $stmt->bind_result($seriesname);
-        while ($stmt->fetch()) {
-            $series[] = $seriesname;
-        }
-        $stmt->close();
-
-        return $series;
+        $sql = 'SELECT series FROM series_organizers WHERE player = :player ORDER BY series';
+        return db()->strings($sql, ['player' => $this->name]);
     }
 
     public function gameName(int|string|null $game = null, bool $html = true): string
@@ -1319,11 +1303,11 @@ class Player
 
     public static function activeCount(): int
     {
-        return Database::singleResult('SELECT count(name) FROM players where password is not null');
+        return db()->int('SELECT COUNT(name) FROM players WHERE password IS NOT NULL');
     }
 
     public static function verifiedCount(): int
     {
-        return Database::singleResult('SELECT count(name) FROM players where mtgo_confirmed = 1');
+        return db()->int('SELECT COUNT(name) FROM players WHERE mtgo_confirmed = 1');
     }
 }

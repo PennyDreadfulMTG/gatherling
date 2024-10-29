@@ -11,6 +11,7 @@ use Gatherling\Models\Matchup;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Models\Standings;
+use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\Pages\AuthFailed;
 use Gatherling\Views\Pages\EventForm;
 use Gatherling\Views\Pages\EventFrame;
@@ -22,19 +23,20 @@ use Gatherling\Views\Pages\PlayerList;
 use Gatherling\Views\Pages\PointsAdjustmentForm;
 use Gatherling\Views\Pages\ReportsForm;
 use Gatherling\Views\Pages\StandingsList;
+use InvalidArgumentException;
 
-use function Gatherling\Views\get;
-use function Gatherling\Views\post;
-use function Gatherling\Views\request;
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\files;
+use function Gatherling\Helpers\get;
+use function Gatherling\Helpers\post;
+use function Gatherling\Helpers\request;
+use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
-include 'lib_form_helper.php';
 
 function main(): void
 {
     if (!Player::isLoggedIn()) {
-        linkToLogin('Host Control Panel');
+        (new LoginRedirect())->send();
     }
 
     $getSeriesName = get()->string('series', '');
@@ -365,16 +367,15 @@ function updateEvent(): Event
 
 function insertTrophy(): bool
 {
-    if ($_FILES['trophy']['size'] <= 0) {
+    $file = files()->optionalFile('trophy');
+    if ($file === null || $file->size <= 0) {
         return false;
     }
-    $file = $_FILES['trophy'];
     $event = $_POST['name'];
 
-    $tmp = $file['tmp_name'];
-    $size = $file['size'];
-    $type = $file['type'];
-    assert(is_string($tmp) && is_string($type) && is_int($size));
+    $tmp = $file->tmp_name;
+    $size = $file->size;
+    $type = $file->type;
     $f = fopen($tmp, 'rb');
 
     $db = Database::getPDOConnection();
@@ -497,7 +498,6 @@ function updateMatches(): void
     $pA = post()->string('newmatchplayerA', '');
     $pB = post()->string('newmatchplayerB', '');
     $res = post()->string('newmatchresult', '');
-    $pAWins = $pBWins = null;
     if ($res == '2-0') {
         $pAWins = 2;
         $pBWins = 0;
@@ -518,6 +518,8 @@ function updateMatches(): void
         $pAWins = 1;
         $pBWins = 1;
         $res = 'D';
+    } elseif ($res != 'P') {
+        throw new InvalidArgumentException('Invalid result for match: $res');
     }
     $rnd = post()->int('newmatchround');
 
@@ -528,15 +530,15 @@ function updateMatches(): void
         $playerA = new Standings($event->name, $pA);
         $playerB = new Standings($event->name, $pB);
         if ($res == 'P') {
-            $event->addPairing($playerA, $playerB, (int) $rnd, $res);
+            $event->addPairing($playerA, $playerB, $rnd, $res);
         } else {
-            $event->addMatch($playerA, $playerB, (string) $rnd, $res, (string) $pAWins, (string) $pBWins);
+            $event->addMatch($playerA, $playerB, $rnd, $res, $pAWins, $pBWins);
         }
     }
 
     if (strcmp(post()->string('newbyeplayer', ''), '') != 0) {
         $playerBye = new Standings($event->name, post()->string('newbyeplayer'));
-        $event->addMatch($playerBye, $playerBye, (string) $rnd, 'BYE');
+        $event->addMatch($playerBye, $playerBye, $rnd, 'BYE');
     }
 }
 

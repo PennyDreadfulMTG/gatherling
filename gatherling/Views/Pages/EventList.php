@@ -10,7 +10,7 @@ use Gatherling\Views\Components\FormatDropMenu;
 use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\SeriesDropMenu;
 
-use function Gatherling\Views\get;
+use function Gatherling\Helpers\get;
 
 class EventList extends Page
 {
@@ -49,10 +49,6 @@ class EventList extends Page
             $seriesShown = $playerSeries;
         } else {
             $seriesShown = array_unique($seriesShown);
-        }
-
-        if (!isset($_GET['format'])) {
-            $_GET['format'] = '';
         }
 
         $kvalueMap = [

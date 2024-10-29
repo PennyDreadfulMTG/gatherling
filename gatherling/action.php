@@ -9,10 +9,18 @@ use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
+use Gatherling\Views\WireResponse;
+
+use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
-$player = Player::getSessionPlayer();
-if (!is_null($player)) {
+
+function main(): void
+{
+    $player = Player::getSessionPlayer();
+    if (is_null($player)) {
+        return;
+    }
     $message = null;
     if ($player->emailAddress == '') {
         $message = '<a href="player.php?mode=edit_email">Add an Email Address</a> to your account.';
@@ -22,6 +30,7 @@ if (!is_null($player)) {
     } elseif (empty($player->discord_id)) {
         $message = '<a href="auth.php">Link your account to <i class="fab fa-discord"></i> Discord</a>';
     }
+
     foreach ($player->organizersSeries() as $player_series) {
         $series = new Series($player_series);
         if ($series->active) {
@@ -50,13 +59,6 @@ if (!is_null($player)) {
     foreach ($active_events as $event) {
         if ($event->authCheck($player->name) && !$event->private && !$event->isLeague()) {
             $message = "Your event <a href=\"event.php?event={$event->id}\">{$event->name}</a> is currently active.";
-            // if ($event->current_round > ($event->mainrounds)) {
-            //     $subevent_id = $event->finalid;
-            // } else {
-            //     $subevent_id = $event->mainid;
-            // }
-            // $matches_remaining = Matchup::unresolvedMatchesCheck($subevent_id, $event->current_round);
-            // $message = $message . "There are $matches_remaining unreported matches.";
         }
     }
 
@@ -113,8 +115,11 @@ if (!is_null($player)) {
     }
 
     if (!is_null($message)) {
-        echo '<div class="banner_alert">';
-        echo $message;
-        echo '</div>';
+        $response = new WireResponse('<div class="banner_alert">' . $message . '</div>');
+        $response->send();
     }
+}
+
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
+    main();
 }

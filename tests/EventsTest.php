@@ -87,7 +87,7 @@ final class EventsTest extends DatabaseCase
         for ($i = 0; $i < 10; $i++) {
             $event->addPlayer('testplayer' . $i);
         }
-        // 8 players have expressed interest in the event.
+        // 10 players have expressed interest in the event.
         $this->assertEquals(10, count($event->getEntries()));
         // No players have filled out decklists.
         $this->assertEquals(0, count($event->getRegisteredEntries(false, true)));
@@ -108,8 +108,11 @@ final class EventsTest extends DatabaseCase
         $this->assertNotEmpty($deck->errors, json_encode($deck->errors));
         $deck = insertDeck('testplayer7', $event, "55 Mountain\n5 Seven Dwarves", '5 Seven Dwarves');
         $this->assertNotEmpty($deck->errors, json_encode($deck->errors));
-        // 5 Valid decks (0, 1, 2, and 4, 5), 3 invalid deck (3, 6, 7), and 3 not submitted decks.
-        $this->assertEquals(5, count($event->getRegisteredEntries(false, true)));
+        // None of this changes entry status.
+        $this->assertEquals(10, count($event->getEntries()));
+        // 5 Valid decks (0, 1, 3, 4, 5), 3 invalid decks (2, 6, 7), and 2 not submitted decks (8, 9).
+        $registeredEntries = $event->getRegisteredEntries(false, true);
+        $this->assertEquals(5, count($registeredEntries));
 
         return $event;
     }
@@ -120,11 +123,20 @@ final class EventsTest extends DatabaseCase
         $this->assertEquals($event->active, 0);
         $this->assertEquals($event->current_round, 0);
 
+        $this->assertEquals(10, count($event->getEntries()));
         $event->startEvent(true);
+        // The five invalid or unentered decks are pruned at start time.
+        $this->assertEquals(5, count($event->getEntries()));
+        $this->assertEquals(3, count($event->getRoundMatches(1)));
 
         $event = new Event($event->name);
         $this->assertEquals($event->active, 1);
         $this->assertEquals($event->current_round, 1);
+
+        $matches = $event->getRoundMatches(1);
+        $this->assertEquals(count($matches), 3);
+        $this->assertNotEmpty($matches[0]->playera);
+        $this->assertNotEmpty($matches[0]->playerb);
 
         return $event;
     }
@@ -144,7 +156,6 @@ final class EventsTest extends DatabaseCase
         Matchup::saveReport('L20', $matches[1]->id, 'b');
         $matches = $event->getRoundMatches(1);
         $this->assertEquals('verified', $matches[1]->verification);
-
         return $event;
     }
 }

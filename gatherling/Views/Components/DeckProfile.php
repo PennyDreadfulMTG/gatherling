@@ -46,7 +46,7 @@ class DeckProfile extends Component
                 $this->exactMatchTable = new ExactMatchTable($decks);
             }
         }
-        $this->commentsTable = new CommentsTable($deck);
+        $this->commentsTable = new CommentsTable($deck->notes ?? '');
         $this->canEdit = $deck->canEdit(Player::loginName());
     }
 }

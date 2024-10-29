@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use Gatherling\Data\DB;
 use Gatherling\Models\Player;
 use Gatherling\Models\BestEverDto;
 use Gatherling\Models\PlayerRatingDto;
 use Gatherling\Views\Pages\Ratings;
 use Zebra_Pagination as Pagination;
 
-use function Gatherling\Views\post;
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\db;
+use function Gatherling\Helpers\post;
+use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 
@@ -47,7 +47,7 @@ function ratingsData(string $format, int $minMatches): array
             r.format = :format AND p.name = r.player AND q.qplayer = r.player AND q.qmax = r.updated AND r.wins + r.losses >= :min_matches
         ORDER BY
             r.rating DESC";
-    $ratings_data = DB::select($sql, PlayerRatingDto::class, ['format' => $format, 'min_matches' => $minMatches]);
+    $ratings_data = db()->select($sql, PlayerRatingDto::class, ['format' => $format, 'min_matches' => $minMatches]);
     $rank = 0;
     $results = [];
     foreach ($ratings_data as $data) {
@@ -94,7 +94,7 @@ function bestEver(string $format): array
             ) AS q
         WHERE
             format = :format AND p.name = r.player AND q.qmax = r.rating';
-    $bestEver = DB::select($sql, BestEverDto::class, ['format' => $format])[0];
+    $bestEver = db()->select($sql, BestEverDto::class, ['format' => $format])[0];
     return [
         'player' => $bestEver->player,
         'rating' => $bestEver->rating,
@@ -105,8 +105,8 @@ function bestEver(string $format): array
 /** @return array{date: DateTime, name: string} */
 function currentThrough(string $format): array
 {
-    $start = DB::value('SELECT MAX(updated) FROM ratings WHERE format = :format', ['format' => $format]);
-    $name = DB::value('SELECT name FROM events WHERE start = :start', ['start' => $start]);
+    $start = db()->string('SELECT MAX(updated) FROM ratings WHERE format = :format', ['format' => $format]);
+    $name = db()->string('SELECT name FROM events WHERE start = :start', ['start' => $start]);
     return ['date' => new DateTime($start), 'name' => $name];
 }
 

@@ -13,7 +13,7 @@ class Finalists extends Component
     /** @var list<array{medalSrc: string, medalText: string, manaSrc: string, deckLink: DeckLink, deckIsValid: bool, playerLink: PlayerLink}> */
     public array $finalists;
 
-    /** @param array<array{medal: string, player: string, deck: Deck}> $finalists */
+    /** @param array<array{medal: string, player: string, deck: ?int}> $finalists */
     public function __construct(array $finalists)
     {
         $this->numFinalists = count($finalists);

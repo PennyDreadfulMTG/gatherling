@@ -41,4 +41,8 @@ $CONFIG['infobot_passkey'] = "";
 # Put your unique key here
 $CONFIG['infobot_prefix'] = "";
 
+# Discord OAuth
+$CONFIG['DISCORD_CLIENT_ID'] = '';
+$CONFIG['DISCORD_CLIENT_SECRET'] = '';
+
 # THAT'S ALL FOLKS!

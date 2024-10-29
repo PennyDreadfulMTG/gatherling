@@ -19,12 +19,12 @@ use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\Pages\SeriesControlPanel;
 use Gatherling\Views\Redirect;
 
-use function Gatherling\Views\get;
-use function Gatherling\Views\post;
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\files;
+use function Gatherling\Helpers\get;
+use function Gatherling\Helpers\post;
+use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
-include 'lib_form_helper.php';
 
 function main(): void
 {
@@ -69,12 +69,11 @@ function main(): void
                     $series->save();
                 }
             } elseif ($_POST['action'] == 'Change Logo') {
-                if ($_FILES['logo']['size'] > 0) {
-                    $file = $_FILES['logo'];
-                    $tmp = $file['tmp_name'];
-                    $size = $file['size'];
-                    $type = $file['type'];
-                    assert(is_string($tmp) && is_string($type) && is_int($size));
+                $file = files()->file('logo');
+                if ($file->size > 0) {
+                    $tmp = $file->tmp_name;
+                    $size = $file->size;
+                    $type = $file->type;
                     $series->setLogo($tmp, $type, $size);
                 }
             } elseif ($_POST['action'] == 'Update Organizers') {

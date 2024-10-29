@@ -7,7 +7,7 @@ use Gatherling\Models\Player;
 use Gatherling\Views\Redirect;
 use Gatherling\Views\Pages\DeckDownload;
 
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 

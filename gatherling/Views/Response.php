@@ -24,7 +24,7 @@ class Response
         return '';
     }
 
-    public function send(): void
+    public function send(): never
     {
         foreach ($this->headers as $header => $value) {
             header("$header: $value");

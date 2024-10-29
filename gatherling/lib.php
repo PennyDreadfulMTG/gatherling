@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 use Gatherling\Auth\Session;
 use Gatherling\Models\Player;
-use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\TemplateHelper;
 
-use function Gatherling\Views\server;
+use function Gatherling\Helpers\config;
 
 require_once 'bootstrap.php';
+
 ob_start();
+
 header('Strict-Transport-Security: max-age=63072000; includeSubDomains; preload');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 
@@ -18,10 +19,6 @@ if (php_sapi_name() !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
     Session::start();
 }
 
-$HC = '#DDDDDD';
-$R1 = '#EEEEEE';
-$R2 = '#FFFFFF';
-$CC = $R1;
 date_default_timezone_set('US/Eastern'); // force time functions to use US/Eastern time
 
 require_once 'util/time.php';
@@ -29,56 +26,6 @@ require_once 'util/time.php';
 const MTGO = 1;
 const MTGA = 2;
 const PAPER = 3;
-
-function print_header(string $title, bool $enable_vue = false): void
-{
-    global $CONFIG;
-
-    $player = Player::getSessionPlayer();
-    if (!$player) {
-        $isHost = $isOrganizer = $isSuper = false;
-    } else {
-        $isSuper = $player->isSuper();
-        $isHost = $isSuper || $player->isHost();
-        $isOrganizer = count($player->organizersSeries()) > 0;
-    }
-
-    echo TemplateHelper::render('partials/header', [
-        'siteName' => $CONFIG['site_name'],
-        'title' => $title,
-        'cssLink' => 'styles/css/stylesheet.css?v=' . rawurlencode(git_hash()),
-        'enableVue' => $enable_vue,
-        'gitHash' => git_hash(),
-        'headerLogoSrc' => 'styles/images/header_logo.png',
-        'player' => $player,
-        'isHost' => $isHost,
-        'isOrganizer' => $isOrganizer,
-        'isSuper' => $isSuper,
-        'versionTagline' => version_tagline(),
-    ]);
-}
-
-function print_footer(): void
-{
-    echo TemplateHelper::render('partials/footer', [
-        'versionTagline' => version_tagline(),
-        'gitHash' => git_hash(),
-        'jsLink' => 'gatherling.js?v=' . rawurlencode(git_hash()),
-    ]);
-}
-
-function headerColor(): string
-{
-    global $HC, $CC, $R1, $R2;
-    $CC = $R2;
-
-    return $HC;
-}
-
-function linkToLogin(string $_pagename = null, ?string $redirect = null, ?string $message = null, ?string $username = null): never
-{
-    (new LoginRedirect($redirect ?? '', $message ?? '', $username ?? ''))->send();
-}
 
 /** @param array<string, string|int> $extra_attr */
 function image_tag(string $filename, ?array $extra_attr = null): string
@@ -105,16 +52,14 @@ function json_headers(): void
 
 function git_hash(): string
 {
-    global $CONFIG;
-    if (!is_null($hash = $CONFIG['GIT_HASH'])) {
-        return substr($hash, 0, 7);
-    }
-    return '';
+    $hash = config()->string('GIT_HASH', '');
+    return substr($hash, 0, 7);
 }
 
 function version_tagline(): string
 {
-    return 'Gatherling version 6.0.1 ("A guilty system recognizes no innocents.")';
+    return 'Gatherling version 6.0.2 ("Nixon was normalizing relations with China. I figured that if he could normalize relations, then so could I.")';
+    // return 'Gatherling version 6.0.1 ("A guilty system recognizes no innocents.")';
     // return 'Gatherling version 6.0.0 ("A foolish consistency is the hobgoblin of little minds")';
     // return 'Gatherling version 5.2.0 ("I mustache you a question...")';
     // return 'Gatherling version 5.1.0 ("Have no fear of perfection – you’ll never reach it.")';
@@ -156,16 +101,9 @@ function version_tagline(): string
     // "Gatherling version 1.9 (\"It's funny 'cause the squirrel got dead\")";
 }
 
-function redirect(string $page): void
-{
-    global $CONFIG;
-    header("Location: {$CONFIG['base_url']}{$page}");
-    exit(0);
-}
-
 /**
  * @param string|array<string> $cards
- * @return array<string>
+ * @return list<string>
  */
 function parseCards(string|array $cards): array
 {

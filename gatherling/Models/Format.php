@@ -6,6 +6,9 @@ namespace Gatherling\Models;
 
 use Exception;
 
+use function Gatherling\Helpers\db;
+use function Gatherling\Helpers\logger;
+
 class Format
 {
     public ?string $name;
@@ -159,13 +162,12 @@ class Format
 
         $cardSets = [];
         if ($set == 'All') {
-            $cardSets = Database::listResult('SELECT name FROM cardsets');
+            $cardSets = db()->strings('SELECT name FROM cardsets');
         } else {
             $cardSets[] = $set;
         }
 
         foreach ($cardSets as $cardSet) {
-            echo "Processing $cardSet<br />";
             $cardTypes = Database::listResultSingleParam("SELECT type
                                                              FROM cards
                                                              WHERE type
@@ -183,7 +185,7 @@ class Format
                         continue;
                     } else {
                         // type is not in database, so insert it
-                        echo "New Tribe Found! Inserting: <pre>$subtype</pre><br />";
+                        logger()->notice("New Tribe Found! Inserting: $subtype");
                         $db = Database::getConnection();
                         $stmt = $db->prepare('INSERT INTO tribes(name) VALUES(?)');
                         $stmt->bind_param('s', $subtype);
@@ -463,13 +465,13 @@ class Format
     public function getLegalCardsets(): array
     {
         if ($this->eternal) {
-            return Database::listResult('SELECT name FROM cardsets');
+            return db()->strings('SELECT name FROM cardsets');
         }
         if ($this->modern) {
-            return Database::listResult('SELECT name FROM cardsets WHERE modern_legal = 1');
+            return db()->strings('SELECT name FROM cardsets WHERE modern_legal = 1');
         }
         if ($this->standard) {
-            return Database::listResult('SELECT name FROM cardsets WHERE standard_legal = 1');
+            return db()->strings('SELECT name FROM cardsets WHERE standard_legal = 1');
         }
 
         return Database::listResultSingleParam('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name);
@@ -512,18 +514,14 @@ class Format
     /** @return list<string> */
     public static function getPrivateFormats(string $seriesName): array
     {
-        return Database::listResultDoubleParam(
-            'SELECT name FROM formats WHERE type = ? AND series_name = ?',
-            'ss',
-            'Private',
-            $seriesName
-        );
+        $sql = "SELECT name FROM formats WHERE type = 'Private' AND series_name = :series_name";
+        return db()->strings($sql, ['series_name' => $seriesName]);
     }
 
     /** @return list<string> */
     public static function getAllFormats(): array
     {
-        return Database::listResult('SELECT name FROM formats');
+        return db()->strings('SELECT name FROM formats');
     }
 
     /** @return list<string> */
@@ -668,13 +666,13 @@ class Format
     /** @return list<string> */
     public function getFormats(): array
     {
-        return Database::listResult('SELECT name FROM formats');
+        return db()->strings('SELECT name FROM formats');
     }
 
     /** @return list<string> */
     public static function getTribesList(): array
     {
-        return Database::listResult('SELECT name FROM tribes ORDER BY name');
+        return db()->strings('SELECT name FROM tribes ORDER BY name');
     }
 
     public function isCardLegalByRarity(string $cardName): bool
@@ -747,56 +745,26 @@ class Format
 
     public function isCardOnBanList(string $card): bool
     {
-        return count(Database::listResultDoubleParam(
-            'SELECT card_name
-                                                         FROM bans
-                                                         WHERE (format = ?
-                                                         AND card_name = ?
-                                                         AND allowed = 0)',
-            'ss',
-            $this->name,
-            $card
-        )) > 0;
+        $sql = 'SELECT card_name FROM bans WHERE (format = :format AND card_name = :card AND allowed = 0)';
+        return count(db()->strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
     }
 
     public function isCardOnLegalList(string $card): bool
     {
-        return count(Database::listResultDoubleParam(
-            'SELECT card_name
-                                                         FROM bans
-                                                         WHERE (format = ?
-                                                         AND card_name = ?
-                                                         AND allowed = 1)',
-            'ss',
-            $this->name,
-            $card
-        )) > 0;
+        $sql = 'SELECT card_name FROM bans WHERE (format = :format AND card_name = :card AND allowed = 1)';
+        return count(db()->strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
     }
 
     public function isCardOnRestrictedList(string $card): bool
     {
-        return count(Database::listResultDoubleParam(
-            'SELECT card_name
-                                                         FROM restricted
-                                                         WHERE (format = ?
-                                                         AND card_name = ?)',
-            'ss',
-            $this->name,
-            $card
-        )) > 0;
+        $sql = 'SELECT card_name FROM restricted WHERE (format = :format AND card_name = :card)';
+        return count(db()->strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
     }
 
     public function isCardOnRestrictedToTribeList(string $card): bool
     {
-        return count(Database::listResultDoubleParam(
-            'SELECT card_name
-                                                         FROM restrictedtotribe
-                                                         WHERE (format = ?
-                                                         AND card_name = ?)',
-            'ss',
-            $this->name,
-            $card
-        )) > 0;
+        $sql = 'SELECT card_name FROM restrictedtotribe WHERE (format = :format AND card_name = :card)';
+        return count(db()->strings($sql, ['format' => $this->name, 'card' => $card])) > 0;
     }
 
     public function isCardSetLegal(string $setName): bool
@@ -958,10 +926,6 @@ class Format
             }
         }
 
-        foreach ($subTypeCount as $type => $amt) {
-            echo "$type: $amt<br />";
-        }
-
         arsort($subTypeCount); // sorts by value from high to low.
 
         $count = 0;
@@ -982,13 +946,12 @@ class Format
 
         if (count($tribesTied) > 1) {
             // Two or more tribes are tied for largest tribe
-            foreach ($tribesTied as $Type => $amt) {
+            foreach ($tribesTied as $type => $amt) {
                 // Checking for tribe size in database for tie breaker
-                // current routine has two logic errors
-                // 1) Cards that have more than one printing should only be counted once
-                // 2) Can't remember what the second one is... blah!
-                $frequency = Database::singleResult("SELECT Count(*) FROM cards WHERE type LIKE '%{$Type}%'");
-                $tribesTied[$Type] = $frequency;
+                $sql = 'SELECT COUNT(DISTINCT name) FROM cards WHERE type LIKE :type';
+                $params = ['type' => '%' . db()->likeEscape($type) . '%'];
+                $frequency = db()->int($sql, $params);
+                $tribesTied[$type] = $frequency;
             }
             asort($tribesTied); // sorts tribe size by value from low to high for tie breaker
             reset($tribesTied);
@@ -1011,16 +974,15 @@ class Format
         // underdog format allows Tribes with only 3 members to
         // underdog allows only 4 changelings per deck list
         if ($this->underdog) {
-            echo "Tribe is: $underdogKey<br />";
-            if ($underdogKey != 'Shapeshifter') {
-                $frequency = Database::singleResult("SELECT Count(*) FROM cards WHERE type LIKE '%{$underdogKey}%'");
+            if ($underdogKey && $underdogKey != 'Shapeshifter') {
+                $sql = 'SELECT COUNT(*) FROM cards WHERE type LIKE :type';
+                $params = ['type' => '%' . db()->likeEscape($underdogKey) . '%'];
+                $frequency = db()->int($sql, $params);
                 if ($frequency < 4) {
-                    echo "$underdogKey is a 3 card tribe<br />";
                     if ($subTypeChangeling > 8) {
                         $this->error[] = "Tribe $underdogKey is allowed a maximum of 8 changeling's per deck in underdog format";
                     }
                 } else {
-                    // echo "I am not a 3 card tribe<br />";
                     if ($subTypeChangeling > 4) {
                         $this->error[] = "This tribe can't include more than 4 Changeling creatures because it's not a 3-member tribe.";
                     }
@@ -1074,13 +1036,12 @@ class Format
 
         if (count($tribesTied) > 1) {
             // Two or more tribes are tied for largest tribe
-            foreach ($tribesTied as $Type => $amt) {
+            foreach ($tribesTied as $type => $amt) {
                 // Checking for tribe size in database for tie breaker
-                // current routine has two logic errors
-                // 1) Cards that have more than one printing should only be counted once
-                // 2) Can't remember what the second one is... blah!
-                $frequency = Database::singleResult("SELECT Count(*) FROM cards WHERE type LIKE '%{$Type}%'");
-                $tribesTied[$Type] = $frequency;
+                $sql = 'SELECT COUNT(DISTINCT name) FROM cards WHERE type LIKE :type';
+                $params = ['type' => '%' . db()->likeEscape($type) . '%'];
+                $frequency = db()->int($sql, $params);
+                $tribesTied[$type] = $frequency;
             }
             asort($tribesTied); // sorts tribe size by value from low to high for tie breaker
             reset($tribesTied);
@@ -1253,24 +1214,21 @@ class Format
 
     public function isQuantityLegalAgainstMain(string $sideCard, int $sideAmt, string $mainCard, int $mainAmt): bool
     {
-        if ($sideCard == $mainCard) {
-            if (($sideAmt + $mainAmt) <= 4) {
-                return true;
-            }
-
-            if ($sideCard == 'Seven Dwarves' && $sideAmt + $mainAmt <= 7) {
-                return true;
-            }
-
-            if ($this->isCardBasic($sideCard)) {
-                return true;
-            }
-        } else {
-            return true; // mainCard and sideCard don't match so is automatically legal
-            // individual quantity check has already been done. We are only
-            // interested in finding too many of the same card between the side and main
+        // mainCard and sideCard don't match so is automatically legal
+        // individual quantity check has already been done. We are only
+        // interested in finding too many of the same card between the side and main
+        if ($sideCard != $mainCard) {
+            return true;
         }
-
+        if (($sideAmt + $mainAmt) <= 4) {
+            return true;
+        }
+        if ($sideCard == 'Seven Dwarves' && $sideAmt + $mainAmt <= 7) {
+            return true;
+        }
+        if ($this->isCardBasic($sideCard)) {
+            return true;
+        }
         return false;
     }
 
@@ -1297,6 +1255,141 @@ class Format
 
             return true;
         }
+    }
+
+    /**
+     * @param list<string> $addCards
+     * @param list<string> $delCards
+     * @return array{
+     *     missing_add: list<string>,
+     *     missing_remove: list<string>,
+     *     removed: list<string>,
+     *     added: list<string>,
+     *     banned: list<string>,
+     *     unchanged: list<string>,
+     *     both: list<string>,
+     * }
+     */
+    public function updateLegalList(array $addCards, array $delCards): array
+    {
+        $delCards = array_map(fn (string $card) => normaliseCardName($card), $delCards);
+        $addCards = array_map(fn (string $card) => normaliseCardName($card), $addCards);
+        $cards = array_merge($addCards, $delCards);
+
+        $results = $this->getCurrentLegalityOfCards($cards);
+
+        $missingAdd = $missingRemove = $banned = $unchanged = $toAdd = $toRemove = $both = [];
+        foreach ($results as $card) {
+            $shouldAdd = in_array($card->original_name, $addCards);
+            $shouldRemove = in_array($card->original_name, $delCards);
+            if ($card->name === null) {
+                if ($shouldAdd) {
+                    $missingAdd[] = $card->original_name;
+                } else {
+                    $missingRemove[] = $card->original_name;
+                }
+                continue;
+            }
+            if ($shouldAdd && $shouldRemove) {
+                $both[] = $card->name;
+            }
+            if ($card->allowed === 0) {
+                $banned[] = $card->name;
+            } elseif ($card->allowed === 1 && !$shouldAdd) {
+                $toRemove[] = $card;
+            } elseif ($card->allowed === null && $shouldAdd) {
+                $toAdd[] = $card;
+            } else {
+                $unchanged[] = $card->name;
+            }
+        }
+
+        $this->removeFromLegalList($toRemove);
+        $this->addToLegalList($toAdd);
+
+        return [
+            'missing_add' => $missingAdd,
+            'missing_remove' => $missingRemove,
+            'both' => $both,
+            'banned' => $banned,
+            'removed' => array_map(fn (LegalCardDto $card) => $card->name ?? $card->original_name, $toRemove),
+            'added' => array_map(fn (LegalCardDto $card) => $card->name ?? $card->original_name, $toAdd),
+            'unchanged' => $unchanged,
+        ];
+    }
+
+    /**
+     * @param list<string> $cards
+     * @return list<LegalCardDto>
+     */
+    private function getCurrentLegalityOfCards(array $cards): array
+    {
+        $sql = "CREATE TEMPORARY TABLE input_cards (original_name VARCHAR(160))";
+        db()->execute($sql);
+
+        $placeholders = $params = [];
+        foreach ($cards as $index => $card) {
+            $placeholders[] = ':card_' . ($index + 1);
+            $params['card_' . ($index + 1)] = $card;
+        }
+        $sql = "INSERT INTO input_cards (original_name) VALUES (" . implode('), (', $placeholders) . ")";
+        db()->execute($sql, $params);
+
+        // The UNION ALL here is to find dfcs that we store with both names that we didn't find under just the front face name.
+        // It's a separate query because doing the JOIN on a LIKE for thousands of cards is too slow (many seconds).
+        // If you input thousands of invalid cards this will still be slow, but that's on you :)
+        $sql = "SELECT DISTINCT ic.original_name, c.id, c.name, b.allowed
+                  FROM input_cards AS ic
+             LEFT JOIN cards AS c ON c.name = ic.original_name
+             LEFT JOIN bans AS b ON c.name = b.card_name AND b.format = :format
+                 WHERE c.name IS NOT NULL
+              GROUP BY ic.original_name
+             UNION ALL
+                SELECT ic.original_name, c.id, c.name, b.allowed
+                  FROM input_cards AS ic
+             LEFT JOIN cards AS c ON c.name LIKE CONCAT(ic.original_name, '/%')
+             LEFT JOIN bans AS b ON c.name = b.card_name AND b.format = :format
+                 WHERE NOT EXISTS (SELECT 1 FROM cards c2 WHERE c2.name = ic.original_name)
+              GROUP BY ic.original_name";
+        $params = ['format' => $this->name];
+        return db()->select($sql, LegalCardDto::class, $params);
+    }
+
+    /** @param list<LegalCardDto> $cards */
+    private function removeFromLegalList(array $cards): void
+    {
+        if (empty($cards)) {
+            return;
+        }
+        $placeholders = [];
+        $params = ['format' => $this->name];
+        foreach ($cards as $index => $card) {
+            $placeholders[] = ":card_name_$index";
+            $params["card_name_$index"] = $card->name;
+        }
+        $sql = 'DELETE
+                    FROM bans
+                    WHERE format = :format AND card_name IN ';
+        $sql .= '(' . implode(', ', $placeholders) . ')';
+        db()->execute($sql, $params);
+    }
+
+    /** @param list<LegalCardDto> $cards */
+    private function addToLegalList(array $cards): void
+    {
+        if (empty($cards)) {
+            return;
+        }
+        $params = ['format' => $this->name];
+        $placeholders = [];
+        foreach ($cards as $n => $card) {
+            $placeholders[] = "(:card_name_{$n}, :card_id_{$n}, :format, 1)";
+            $params["card_name_{$n}"] = $card->name;
+            $params["card_id_{$n}"] = $card->id;
+        }
+        $sql = 'INSERT INTO bans (card_name, card, format, allowed) VALUES ';
+        $sql .= implode(', ', $placeholders);
+        db()->execute($sql, $params);
     }
 
     public function insertCardIntoLegallist(string $card): bool
@@ -1543,26 +1636,13 @@ class Format
         return true;
     }
 
-    public function insertNewTribeBan(string $tribeBanned): bool
+    public function insertNewTribeBan(string $tribeBanned): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO tribe_bans(name, format, allowed) VALUES(?, ?, 0)');
         $stmt->bind_param('ss', $tribeBanned, $this->name);
         $stmt->execute() or exit($stmt->error);
         $stmt->close();
-
-        return true;
-    }
-
-    public function insertSubFormat(string $subformat): bool
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('INSERT INTO subformats(parentformat, childformat) VALUES(?, ?)');
-        $stmt->bind_param('ss', $this->name, $subformat);
-        $stmt->execute() or exit($stmt->error);
-        $stmt->close();
-
-        return true;
     }
 
     public function banAllTribes(): void

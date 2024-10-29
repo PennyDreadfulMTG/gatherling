@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-use Gatherling\Data\DB;
+use function Gatherling\Helpers\db;
 
 class SeriesDropMenuDS extends DropMenu
 {
     public function __construct(?string $seriesName = null, int $useAll = 0, string $formName = 'series')
     {
         $sql = 'SELECT name FROM series ORDER BY name';
-        $result = DB::values($sql, 'string');
+        $result = db()->strings($sql);
         $title = ($useAll == 0) ? '- Series -' : 'All';
 
         $options = [];

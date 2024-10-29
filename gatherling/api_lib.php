@@ -6,17 +6,18 @@ require_once 'lib.php';
 
 //## Helper Functions
 
-use Gatherling\Models\Database;
 use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
+use Gatherling\Models\Database;
 use Gatherling\Models\Standings;
 
-use function Gatherling\Views\config;
-use function Gatherling\Views\request;
-use function Gatherling\Views\server;
-use function Gatherling\Views\session;
+use function Gatherling\Helpers\db;
+use function Gatherling\Helpers\config;
+use function Gatherling\Helpers\server;
+use function Gatherling\Helpers\request;
+use function Gatherling\Helpers\session;
 
 /**
  * @param array<string, mixed> $array
@@ -428,7 +429,7 @@ function create_pairing(Event $event, int $round, ?string $a, ?string $b, ?strin
     if ($res == 'P') {
         $event->addPairing($playerA, $playerB, $round, $res);
     } else {
-        $event->addMatch($playerA, $playerB, (string) $round, $res, (string) $pAWins, (string) $pBWins);
+        $event->addMatch($playerA, $playerB, $round, $res, $pAWins ?? 0, $pBWins ?? 0);
     }
 }
 
@@ -450,8 +451,7 @@ function card_catalog(): array
 
 function cardname_from_id(string $id): string
 {
-    $sql = 'SELECT c.name as name FROM cards c WHERE c.scryfallId = ?';
-    $name = Database::singleResultSingleParam($sql, 's', $id);
-
+    $sql = 'SELECT c.name FROM cards c WHERE c.scryfallId = :scryfall_id';
+    $name = db()->string($sql, ['scryfall_id' => $id]);
     return $name;
 }

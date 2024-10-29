@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-use Gatherling\Log;
 use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Exceptions\NotFoundException;
+
+use function Gatherling\Helpers\logger;
 
 class RecentDecksTable extends Component
 {
@@ -32,7 +33,7 @@ class RecentDecksTable extends Component
         }
         foreach ($decks as $deck) {
             if (!$deck->eventname) {
-                Log::warning("I was looking at recent decks for {$player->name} and found a deck with no event name");
+                logger()->warning("I was looking at recent decks for {$player->name} and found a deck with no event name");
                 continue;
             }
             $event = new Event($deck->eventname);

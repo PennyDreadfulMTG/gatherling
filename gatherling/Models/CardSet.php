@@ -6,21 +6,25 @@ namespace Gatherling\Models;
 
 use stdClass;
 use mysqli_stmt;
-use Gatherling\Log;
-use Gatherling\Data\DB;
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\FileNotFoundException;
 
+use function Gatherling\Helpers\db;
+
 class CardSet
 {
-    public static function insert(string $code): void
+    /** @return list<string> */
+    public static function insert(string $code): array
     {
         $url = "https://mtgjson.com/api/v5/{$code}.json";
-        self::insertFromLocation($url);
+        $messages = self::insertFromLocation($url);
+        return array_merge(["Inserting $code from $url"], $messages);
     }
 
-    public static function insertFromLocation(string $filename): void
+    /** @return list<string> */
+    public static function insertFromLocation(string $filename): array
     {
+        $messages = [];
         $file = file_get_contents($filename);
 
         if (!$file) {
@@ -65,7 +69,7 @@ class CardSet
 
             $row = $result->fetch_array();
             if (is_null($row['code'])) {
-                Log::info("$set is missing code ($data->code) in db.");
+                $messages[] = "$set is missing code ($data->code) in db.";
                 $stmt = $database->prepare('UPDATE cardsets SET code = ? WHERE name = ?');
                 $stmt->bind_param('ss', $data->code, $row['name']);
                 if (!$stmt->execute()) {
@@ -75,7 +79,7 @@ class CardSet
         }
 
         if (!$set_already_in) {
-            Log::info("Inserting card set ($set, $releaseDate, $setType)...");
+            $messages[] = "Inserting card set ($set, $releaseDate, $setType)...";
 
             // Insert the card set
             $stmt = $database->prepare('INSERT INTO cardsets(released, name, type, code, standard_legal, modern_legal) values(?, ?, ?, ?, 0, 0)');
@@ -84,7 +88,7 @@ class CardSet
             if (!$stmt->execute()) {
                 throw new \Exception($stmt->error);
             } else {
-                echo "Inserted new set {$set}!<br /><br />";
+                $messages[] = "Inserted new set {$set}!";
             }
             $stmt->close();
         }
@@ -97,61 +101,47 @@ class CardSet
 
         foreach ($data->cards as $card) {
             $numCardsParsed++;
-            self::insertCard($card, $set, $card->rarity, $stmt);
+            $messages[] = self::insertCard($card, $set, $card->rarity, $stmt);
             $numCardsInserted++;
         }
 
-        echo 'End of File Reached<br />';
-        echo "Total Cards Parsed: {$numCardsParsed}<br />";
-        echo "Total Cards Inserted: {$numCardsInserted}<br />";
+        $messages[] = 'End of File Reached';
+        $messages[] = "Total Cards Parsed: {$numCardsParsed}";
+        $messages[] = "Total Cards Inserted: {$numCardsInserted}";
         $stmt->close();
 
         Format::constructTribes($set);
+        return $messages;
     }
 
-    public static function insertCard(stdClass $card, string $set, string $rarity, mysqli_stmt $stmt): void
+    public static function insertCard(stdClass $card, string $set, string $rarity, mysqli_stmt $stmt): string
     {
         $typeline = implode(' ', $card->types);
         if (isset($card->subtypes) && count($card->subtypes) > 0) {
             $typeline = $typeline . ' - ' . implode(' ', $card->subtypes);
         }
         $name = normaliseCardName($card->name);
-        echo '<table class="new_card">';
-        echo '<tr><th>Name:</th><td>' . $name . '</td></tr>';
-        foreach (['manaCost', 'convertedManaCost', 'type', 'rarity'] as $attr) {
-            if (isset($card->{$attr})) {
-                echo "<tr><th>{$attr}:</th><td>" . $card->{$attr} . '</td></tr>';
-            }
-        }
-        echo '<tr><th>Card Colors:</th><td>';
         $isw = $isu = $isb = $isr = $isg = $isp = 0;
         if (isset($card->manaCost)) {
             if (preg_match('/W/', $card->manaCost)) {
                 $isw = 1;
-                echo 'White ';
             }
             if (preg_match('/U/', $card->manaCost)) {
                 $isu = 1;
-                echo 'Blue ';
             }
             if (preg_match('/B/', $card->manaCost)) {
                 $isb = 1;
-                echo 'Black ';
             }
             if (preg_match('/R/', $card->manaCost)) {
                 $isr = 1;
-                echo 'Red ';
             }
             if (preg_match('/G/', $card->manaCost)) {
                 $isg = 1;
-                echo 'Green ';
             }
             if (preg_match('/P/', $card->manaCost)) {
                 $isp = 1;
-                echo 'Phyrexian ';
             }
         }
-        echo '</td></tr>';
 
         $changeling = 0;
         if (isset($card->text) && preg_match('/is every creature type/', $card->text)) {
@@ -160,23 +150,18 @@ class CardSet
 
         $online = in_array('mtgo', $card->availability);
 
-        $empty_string = '';
-        $zero = 0;
-
         if (property_exists($card, 'manaCost')) {
             $stmt->bind_param('sdsssddddddssdd', $card->manaCost, $card->convertedManaCost, $name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity, $card->scryfallId, $changeling, $online);
         } else {
+            $empty_string = '';
+            $zero = 0;
             $stmt->bind_param('sdsssddddddssdd', $empty_string, $zero, $name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity, $card->scryfallId, $changeling, $online);
         }
 
         if (!$stmt->execute()) {
-            echo '<tr><td colspan="2" style="background-color: LightRed;">!!!!!!!!!! Card Insertion Error !!!!!!!!!</td></tr>';
-            echo '</table>';
-            exit($stmt->error);
-        } else {
-            echo '<tr><th colspan="2" style="background-color: LightGreen;">Card Inserted Successfully</th></tr>';
-            echo '</table>';
+            return "CARD INSERTION ERROR: {$name} - {$stmt->error}";
         }
+        return "{$name} - Card Inserted Successfully";
     }
 
     /**
@@ -185,7 +170,7 @@ class CardSet
     public static function getMissingSets(string $cardSetType, Format $format): array
     {
         $sql = 'SELECT name FROM cardsets WHERE type = :type';
-        $cardSets = DB::values($sql, 'string', ['type' => $cardSetType]);
+        $cardSets = db()->strings($sql, ['type' => $cardSetType]);
 
         $finalList = [];
         foreach ($cardSets as $cardSetName) {

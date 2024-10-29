@@ -18,7 +18,7 @@ class InfoCell extends Component
     public bool $isActive;
     public float $percentReported;
     /** @var list<string> */
-    public array $subEvents;
+    public array $subevents;
     public PlayerLink $hostLink;
     public string $reportLink;
     public string $seasonLeaderboardLink;
@@ -35,13 +35,13 @@ class InfoCell extends Component
         if ($event->active) {
             $this->percentReported = $this->playerCount === 0 ? 0 : round($this->deckCount * 100 / $this->playerCount);
         }
-        $this->subEvents = [];
+        $this->subevents = [];
         foreach ($event->getSubevents() as $subevent) {
             if ($subevent->type != 'Single Elimination') {
-                $this->subEvents[] = "{$subevent->rounds} rounds {$subevent->type}";
+                $this->subevents[] = "{$subevent->rounds} rounds {$subevent->type}";
             } else {
                 $finalists = pow(2, $subevent->rounds);
-                $this->subEvents[] = "Top $finalists playoff";
+                $this->subevents[] = "Top $finalists playoff";
             }
         }
         if ($event->host) {

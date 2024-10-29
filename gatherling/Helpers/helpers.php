@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Gatherling\Views;
+namespace Gatherling\Helpers;
+
+use Gatherling\Logger;
+use Psr\Log\LoggerInterface;
 
 function request(): Request
 {
@@ -33,4 +36,25 @@ function config(): Request
 {
     global $CONFIG;
     return new Request($CONFIG);
+}
+
+function marshal(mixed $value): Marshaller
+{
+    return new Marshaller($value);
+}
+
+function files(): Files
+{
+    return new Files($_FILES);
+}
+
+function logger(): Logger
+{
+    static $logger;
+
+    if (!$logger) {
+        $logger = new Logger();
+    }
+
+    return $logger;
 }

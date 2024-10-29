@@ -19,4 +19,11 @@
 	<plugins>
 		<pluginClass class="Psalm\PhpUnitPlugin\Plugin" />
 	</plugins>
+	<issueHandlers>
+		<!-- Both Components (which use the properties invisibly in the Mustache
+             templates) and Dtos (which aren't so thoroughly wired up as to be
+			 obvious to Psalm) trigger this one so rather than having hundreds
+             of them in the baseline I'll just suppress it entirely. -->
+        <PossiblyUnusedProperty errorLevel="suppress" />
+    </issueHandlers>
 </psalm>

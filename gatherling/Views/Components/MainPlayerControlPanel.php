@@ -15,7 +15,7 @@ use Gatherling\Views\Components\RecentDecksTable;
 use Gatherling\Views\Components\RecentMatchTable;
 use Gatherling\Views\Components\StatsTable;
 
-use function Gatherling\Views\session;
+use function Gatherling\Helpers\session;
 
 class MainPlayerControlPanel extends Component
 {

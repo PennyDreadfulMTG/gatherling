@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Gatherling\Tests\Views;
+namespace Gatherling\Tests\Helpers;
 
-use Gatherling\Views\Request;
+use Gatherling\Exceptions\MarshalException;
+use Gatherling\Helpers\Request;
 use PHPUnit\Framework\TestCase;
 
 class RequestTest extends TestCase
@@ -13,14 +14,14 @@ class RequestTest extends TestCase
     {
         $request = new Request(['foo' => '123', 'bar' => '123.4']);
         $this->assertEquals(123, $request->int('foo'));
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(MarshalException::class);
         $request->int('bar');
     }
 
     public function testIntMissing(): void
     {
         $request = new Request(['foo' => '123', 'bar' => '123.4']);
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(MarshalException::class);
         $request->int('baz');
     }
 
@@ -29,7 +30,7 @@ class RequestTest extends TestCase
         $request = new Request(['foo' => '123', 'bar' => '123.4']);
         $this->assertEquals(123, $request->optionalInt('foo'));
         $this->assertNull($request->optionalInt('baz'));
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(MarshalException::class);
         $request->optionalInt('bar');
     }
 
@@ -45,7 +46,7 @@ class RequestTest extends TestCase
         $this->assertEquals('hello', $request->string('foo'));
         $this->assertEquals('hello', $request->string('foo', 'other'));
         $this->assertEquals('hello', $request->string('bar', 'hello'));
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(MarshalException::class);
         $request->string('bar');
     }
 
@@ -61,7 +62,7 @@ class RequestTest extends TestCase
         $request = new Request(['foo' => ['1', '2', '3'], 'bar' => ['a', 'b', 'c']]);
         $this->assertEquals([1, 2, 3], $request->listInt('foo'));
         $this->assertEquals([], $request->listInt('baz'));
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(MarshalException::class);
         $request->listInt('bar');
     }
 

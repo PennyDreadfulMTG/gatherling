@@ -1,0 +1,22 @@
+<h2>Token details:</h2>
+Token: {{token}}<br>
+Refresh token: {{refreshToken}}<br>
+Expires: {{expires}} - {{^hasExpired}}not{{/hasExpired}} expired<br>
+Values:<br>
+{{#values}}
+    {{key}}={{value}}<br/>
+{{/values}}
+
+{{#username}}
+    <h2>Resource owner details:</h2>
+    Hello {{username}}#{{discriminator}}!<br><br>
+    {{details}}
+    <h2>Guilds:</h2>
+    {{#guilds}}
+        <p>{{.}}</p>
+    {{/guilds}}
+{{/username}}
+
+{{^username}}
+    {{errorMessage}}
+{{/username}}

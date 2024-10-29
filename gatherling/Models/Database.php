@@ -8,6 +8,8 @@ use Exception;
 use mysqli;
 use PDO;
 
+use function Gatherling\Helpers\config;
+
 // Use PHP7 default error reporting to avoid a complex refactor
 mysqli_report(MYSQLI_REPORT_OFF);
 
@@ -20,27 +22,18 @@ class Database
         static $instance;
 
         if (!isset($instance)) {
-            global $CONFIG;
             $instance = new mysqli(
-                $CONFIG['db_hostname'],
-                $CONFIG['db_username'],
-                $CONFIG['db_password']
+                config()->string('db_hostname'),
+                config()->string('db_username'),
+                config()->string('db_password')
             );
             if (mysqli_connect_errno()) {
                 throw new Exception((string) mysqli_connect_error());
             }
-            $db_selected = $instance->select_db($CONFIG['db_database']);
+            $db_selected = $instance->select_db(config()->string('db_database'));
             if (!$db_selected) {
-                // If we couldn't, then it either doesn't exist, or we can't see it.
-                $sql = "CREATE DATABASE {$CONFIG['db_database']}";
-
-                self::singleResult($sql);
-                $db_selected = $instance->select_db($CONFIG['db_database']);
-                if (!$db_selected) {
-                    exit('Error creating database: ' . mysqli_error($instance) . "\n");
-                }
+                throw new \Exception('Error creating database: ' . mysqli_error($instance) . "\n");
             }
-
             $sql = "SET time_zone = 'America/New_York'"; // Ensure EST
             $instance->query($sql);
         }
@@ -53,39 +46,14 @@ class Database
         static $pdo_instance;
 
         if (!isset($pdo_instance)) {
-            global $CONFIG;
             $pdo_instance = new PDO(
-                'mysql:hostname=' . $CONFIG['db_hostname'] . ';port=3306;dbname=' . $CONFIG['db_database'],
-                $CONFIG['db_username'],
-                $CONFIG['db_password']
+                'mysql:hostname=' . config()->string('db_hostname') . ';port=3306;dbname=' . config()->string('db_database'),
+                config()->string('db_username'),
+                config()->string('db_password')
             );
         }
 
         return $pdo_instance;
-    }
-
-    public static function singleResult(string $sql): mixed
-    {
-        $db = self::getConnection();
-        $stmt = $db->prepare($sql);
-
-        if (!$stmt) {
-            return false;
-        }
-
-        $stmt->execute();
-
-        if (stripos(trim($sql), 'SELECT') === 0) {
-            $stmt->bind_result($result);
-            $stmt->fetch();
-            $stmt->close();
-
-            return $result;
-        } else {
-            $stmt->close();
-
-            return true;
-        }
     }
 
     // Does PHP have an arguments[] property that would allow processing of any number of parameters?
@@ -110,25 +78,6 @@ class Database
     /**
      * @return list<mixed>
      */
-    public static function listResult(string $sql): array
-    {
-        $db = self::getConnection();
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
-        $stmt->bind_result($result);
-
-        $list = [];
-        while ($stmt->fetch()) {
-            $list[] = $result;
-        }
-        $stmt->close();
-
-        return $list;
-    }
-
-    /**
-     * @return list<mixed>
-     */
     public static function listResultSingleParam(string $sql, string $paramType, mixed $param): array
     {
         $db = self::getConnection();
@@ -147,145 +96,5 @@ class Database
         $stmt->close();
 
         return $list;
-    }
-
-    /**
-     * @return list<mixed>
-     */
-    public static function listResultDoubleParam(string $sql, string $paramTypes, mixed $param1, mixed $param2): array
-    {
-        $db = self::getConnection();
-        $stmt = $db->prepare($sql);
-        $stmt->bind_param($paramTypes, $param1, $param2);
-        $stmt->execute();
-        $stmt->bind_result($result);
-
-        $list = [];
-        while ($stmt->fetch()) {
-            $list[] = $result;
-        }
-        $stmt->close();
-
-        return $list;
-    }
-
-    public static function dbQuery(): void
-    {
-        $params = func_get_args();
-        $query = array_shift($params);
-        $paramspec = array_shift($params);
-
-        $db = self::getConnection();
-        $stmt = $db->prepare($query);
-        if (!$stmt) {
-            throw new Exception($db->error, 1);
-        }
-        if (count($params) == 1) {
-            list($one) = $params;
-            $stmt->bind_param($paramspec, $one);
-        } elseif (count($params) == 2) {
-            list($one, $two) = $params;
-            $stmt->bind_param($paramspec, $one, $two);
-        } elseif (count($params) == 3) {
-            list($one, $two, $three) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three);
-        } elseif (count($params) == 4) {
-            list($one, $two, $three, $four) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three, $four);
-        } elseif (count($params) == 5) {
-            list($one, $two, $three, $four, $five) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three, $four, $five);
-        } elseif (count($params) == 6) {
-            list($one, $two, $three, $four, $five, $six) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six);
-        } elseif (count($params) == 7) {
-            list($one, $two, $three, $four, $five, $six, $seven) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven);
-        } elseif (count($params) == 8) {
-            list($one, $two, $three, $four, $five, $six, $seven, $eight) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven, $eight);
-        } elseif (count($params) == 9) {
-            list($one, $two, $three, $four, $five, $six, $seven, $eight, $nine) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven, $eight, $nine);
-        } elseif (count($params) == 10) {
-            list($one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten);
-        }
-        if (!$stmt->execute()) {
-            throw new Exception($stmt->error, 1);
-        }
-        $stmt->close();
-    }
-
-    public static function dbQuerySingle(): mixed
-    {
-        $params = func_get_args();
-        $query = array_shift($params);
-        $paramspec = array_shift($params);
-
-        $db = self::getConnection();
-        $stmt = $db->prepare($query);
-        if (!$stmt) {
-            throw new Exception($db->error, 1);
-        }
-        if (count($params) == 1) {
-            list($one) = $params;
-            $stmt->bind_param($paramspec, $one);
-        } elseif (count($params) == 2) {
-            list($one, $two) = $params;
-            $stmt->bind_param($paramspec, $one, $two);
-        } elseif (count($params) == 3) {
-            list($one, $two, $three) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three);
-        } elseif (count($params) == 4) {
-            list($one, $two, $three, $four) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three, $four);
-        } elseif (count($params) == 5) {
-            list($one, $two, $three, $four, $five) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three, $four, $five);
-        } elseif (count($params) == 6) {
-            list($one, $two, $three, $four, $five, $six) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six);
-        } elseif (count($params) == 7) {
-            list($one, $two, $three, $four, $five, $six, $seven) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven);
-        } elseif (count($params) == 8) {
-            list($one, $two, $three, $four, $five, $six, $seven, $eight) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven, $eight);
-        } elseif (count($params) == 9) {
-            list($one, $two, $three, $four, $five, $six, $seven, $eight, $nine) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven, $eight, $nine);
-        } elseif (count($params) == 10) {
-            list($one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten) = $params;
-            $stmt->bind_param($paramspec, $one, $two, $three, $four, $five, $six, $seven, $eight, $nine, $ten);
-        }
-        $start = microtime(true);
-        if (!$stmt->execute()) {
-            throw new Exception($stmt->error, 1);
-        }
-        $duration = microtime(true) - $start;
-        if ($duration * 1000 > SLOW_QUERY_MS) {
-            $display_duration = round($duration / 1000, 1);
-            error_log("Slow query ({$display_duration}s) – $query");
-        }
-        $stmt->bind_result($result);
-        $stmt->fetch();
-        $stmt->close();
-
-        return $result;
-    }
-
-    public static function getLock(string $name = 'lock_db', int $timeout = 0): int
-    {
-        $sql = "SELECT GET_LOCK('{$name}',{$timeout})";
-
-        return self::singleResult($sql);
-    }
-
-    public static function releaseLock(string $name = 'lock_db'): int
-    {
-        $sql = "SELECT RELEASE_LOCK('{$name}')";
-
-        return self::singleResult($sql);
     }
 }
