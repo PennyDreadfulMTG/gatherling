@@ -20,6 +20,8 @@ use function Gatherling\Helpers\marshal;
 // Do not access this directly, use Gatherling\Helpers\db() instead
 class Db
 {
+    private const SLOW_QUERY_THRESHOLD = 1.0;
+
     private PDO $pdo;
     private bool $connected = false;
     /** @var list<string> */
@@ -537,7 +539,13 @@ class Db
         [$sql, $params] = $this->expandArrayParams($sql, $params);
 
         try {
-            return $operation($sql, $params);
+            $startTime = microtime(true);
+            $result = $operation($sql, $params);
+            $duration = microtime(true) - $startTime;
+            if ($duration > self::SLOW_QUERY_THRESHOLD) {
+                logger()->warning("[DB] Query took " . number_format($duration, 3) . "s: $sql", $context);
+            }
+            return $result;
         } catch (PDOException $e) {
             if ($e->getCode() === '3D000') {
                 logger()->warning('Database connection lost, attempting to reconnect...');
