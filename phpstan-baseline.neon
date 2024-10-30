@@ -1071,16 +1071,6 @@ parameters:
 			path: gatherling/Views/Components/TextInput.php
 
 		-
-			message: "#^Cannot call method manaSrc\\(\\) on Gatherling\\\\Models\\\\Deck\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Components/TrophyCell.php
-
-		-
-			message: "#^Parameter \\#1 \\$deck of class Gatherling\\\\Views\\\\Components\\\\DeckLink constructor expects Gatherling\\\\Models\\\\Deck, Gatherling\\\\Models\\\\Deck\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Components/TrophyCell.php
-
-		-
 			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Event\\:\\:trophySrc\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Components/TrophyCell.php
@@ -1136,42 +1126,7 @@ parameters:
 			path: gatherling/Views/Pages/EventForm.php
 
 		-
-			message: "#^Cannot access property \\$num_rows on bool\\|mysqli_result\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventList.php
-
-		-
-			message: "#^Cannot call method close\\(\\) on bool\\|mysqli_result\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventList.php
-
-		-
-			message: "#^Cannot call method fetch_assoc\\(\\) on bool\\|mysqli_result\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventList.php
-
-		-
 			message: "#^Parameter \\#1 \\$player of function Gatherling\\\\Views\\\\Pages\\\\queryEvents expects Gatherling\\\\Models\\\\Player, Gatherling\\\\Models\\\\Player\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventList.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, float\\|int\\|string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventList.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of method mysqli\\:\\:escape_string\\(\\) expects string, string\\|null given\\.$#"
-			count: 2
-			path: gatherling/Views/Pages/EventList.php
-
-		-
-			message: "#^Parameter \\#3 \\$limitTo of class Gatherling\\\\Views\\\\Components\\\\SeriesDropMenu constructor expects list\\<string\\>, array\\<int\\<0, max\\>, float\\|int\\|string\\|null\\> given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventList.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\EventList\\:\\:\\$results \\(list\\<array\\{name\\: string, format\\: string, players\\: int, host\\: string, start\\: string, active\\: int, finalized\\: int, cohost\\: string, \\.\\.\\.\\}\\>\\) does not accept list\\<non\\-empty\\-array\\<string, float\\|int\\|string\\|null\\>\\>\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventList.php
 
