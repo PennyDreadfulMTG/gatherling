@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use Exception;
 use Gatherling\Exceptions\NotFoundException;
 use InvalidArgumentException;
 use Gatherling\Views\Components\DeckLink;
