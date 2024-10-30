@@ -13,8 +13,7 @@ class PlayerControlPanel extends Page
 
     public function __construct(string $result, Component $viewComponent)
     {
-        parent::__construct();
-        $this->title = 'Player Control Panel';
+        parent::__construct('Player Control Panel');
         $this->result = $result;
         $this->viewSafe = $viewComponent->render();
     }

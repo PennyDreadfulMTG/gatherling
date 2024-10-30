@@ -10,7 +10,6 @@ use Gatherling\Models\Event;
 
 abstract class EventFrame extends Page
 {
-    public string $title = 'Event Host Control Panel';
     /** @var array<string, mixed> */
     public array $event;
     /** @var list<array{link: string, text: string}> */
@@ -18,7 +17,7 @@ abstract class EventFrame extends Page
 
     public function __construct(Event $event)
     {
-        parent::__construct();
+        parent::__construct('Event Host Control Panel');
         $this->event = getObjectVarsCamelCase($event);
         $this->controlPanelLinks = $this->getControlPanelLinks($event);
     }

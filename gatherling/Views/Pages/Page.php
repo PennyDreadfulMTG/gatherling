@@ -24,11 +24,10 @@ abstract class Page extends TemplateResponse
     public string $js;
     public ?Player $player;
     public string $siteName;
-    public string $title;
     public string $versionTagline;
     public string $jsLink;
 
-    public function __construct()
+    public function __construct(public string $title)
     {
         $this->siteName = config()->string('site_name', 'Gatherling');
         $this->gitHash = git_hash();

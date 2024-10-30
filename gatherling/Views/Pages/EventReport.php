@@ -27,8 +27,7 @@ class EventReport extends Page
 
     public function __construct(Event $event, bool $canPrereg)
     {
-        parent::__construct();
-        $this->title = 'Event Report';
+        parent::__construct('Event Report');
         $this->seriesLogoSrc = 'displaySeries.php?series=' . rawurlencode($event->series);
         $this->infoCell = new InfoCell($event);
         if ($event->finalized) {

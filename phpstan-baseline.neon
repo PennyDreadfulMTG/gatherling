@@ -286,11 +286,6 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Event\\:\\:trophyImageTag\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Standings\\:\\:getEventStandings\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php

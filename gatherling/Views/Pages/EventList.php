@@ -17,7 +17,6 @@ use function Gatherling\Helpers\get;
 
 class EventList extends Page
 {
-    public string $title = 'Event Host Control Panel';
     public ?HostActiveEvents $hostActiveEvents;
     public FormatDropMenu $formatDropMenu;
     public SeriesDropMenu $seriesDropMenu;
@@ -29,7 +28,7 @@ class EventList extends Page
 
     public function __construct(string $seriesName, string $format, ?int $season)
     {
-        parent::__construct();
+        parent::__construct('Event Host Control Panel');
         $player = Player::getSessionPlayer();
         $playerSeries = $player?->organizersSeries() ?? [];
 

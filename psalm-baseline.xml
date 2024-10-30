@@ -16,9 +16,6 @@
     </UndefinedFunction>
   </file>
   <file src="gatherling/Models/Deck.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[getPlayer]]></code>
-    </PossiblyUnusedMethod>
     <UnusedForeachValue>
       <code><![CDATA[$mainamt]]></code>
     </UnusedForeachValue>
@@ -45,7 +42,6 @@
       <code><![CDATA[list<string>]]></code>
     </InvalidReturnType>
     <PossiblyUnusedMethod>
-      <code><![CDATA[getTrophyImageLink]]></code>
       <code><![CDATA[isFinalized]]></code>
     </PossiblyUnusedMethod>
     <UnusedVariable>
@@ -169,6 +165,11 @@
       <code><![CDATA[MTGO]]></code>
       <code><![CDATA[PAPER]]></code>
     </UndefinedConstant>
+  </file>
+  <file src="gatherling/Views/Components/PlayerSearchForm.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
   </file>
   <file src="gatherling/Views/Components/Preregistration.php">
     <InvalidPropertyAssignmentValue>

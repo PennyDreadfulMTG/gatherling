@@ -12,8 +12,7 @@ class Deck extends Page
 
     public function __construct(public string $title, Component $viewComponent)
     {
-        parent::__construct();
-        $this->title = 'Deck Database';
+        parent::__construct('Deck Database');
         $this->viewSafe = $viewComponent->render();
     }
 }

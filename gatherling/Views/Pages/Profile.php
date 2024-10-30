@@ -19,10 +19,7 @@ class Profile extends Page
 
     public function __construct(public string $playerName, ?Player $player, public int $profileEdit)
     {
-        parent::__construct();
-        $this->title = 'Player Profile';
-
-        $this->playerSearchForm = new PlayerSearchForm($playerName);
+        parent::__construct('Player Profile');
 
         if (rtrim($playerName) === '') {
             $this->isLoggedOut = true;

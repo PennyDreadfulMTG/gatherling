@@ -16,8 +16,7 @@ class Series extends Page
     /** @param list<string> $activeSeriesNames */
     public function __construct(array $activeSeriesNames)
     {
-        parent::__construct();
-        $this->title = 'Event Information';
+        parent::__construct('Event Information');
         $this->activeSeries = [];
         foreach ($activeSeriesNames as $seriesName) {
             $series = new SeriesModel($seriesName);

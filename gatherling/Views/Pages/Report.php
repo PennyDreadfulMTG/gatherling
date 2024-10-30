@@ -12,8 +12,7 @@ class Report extends Page
 
     public function __construct(public string $result, public Component $viewComponent)
     {
-        parent::__construct();
-        $this->title = 'Player Control Panel';
+        parent::__construct('Player Control Panel');
         $this->viewSafe = $viewComponent->render();
     }
 }
