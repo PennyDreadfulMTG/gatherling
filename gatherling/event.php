@@ -40,7 +40,7 @@ function main(): void
     }
 
     $getSeriesName = get()->string('series', '');
-    $season = get()->string('season', '');
+    $season = get()->optionalInt('season');
     $requestEventName = request()->string('name', '');
     $getEventName = get()->optionalString('name') ?? get()->optionalString('event');
     $postEventName = post()->optionalString('name');

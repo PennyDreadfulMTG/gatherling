@@ -24,7 +24,7 @@ function main(): void
     } else {
         $format = get()->string('format', '');
         $series = get()->string('series', '');
-        $season = get()->string('season', '');
+        $season = get()->optionalInt('season');
         $events = eventList($format, $series, $season);
         $page = new PlayerEventList($format, $series, $season, $events);
     }
@@ -32,7 +32,7 @@ function main(): void
 }
 
 /** @return list<EventListEntryDto> */
-function eventList(string $format, string $series, string $season): array
+function eventList(string $format, string $series, ?int $season): array
 {
     $sql = '
         SELECT

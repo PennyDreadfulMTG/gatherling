@@ -27,7 +27,7 @@ class EventList extends Page
     public array $events = [];
     public bool $hasMore;
 
-    public function __construct(string $seriesName, string $format, string $season)
+    public function __construct(string $seriesName, string $format, ?int $season)
     {
         parent::__construct();
         $player = Player::getSessionPlayer();
@@ -93,7 +93,7 @@ class EventList extends Page
  * @param list<string> $playerSeries
  * @return list<HostedEventDto>
  */
-function queryEvents(Player $player, array $playerSeries, string $seriesName, string $format, string $season): array
+function queryEvents(Player $player, array $playerSeries, string $seriesName, string $format, ?int $season): array
 {
     $sql = '
         SELECT e.name, e.format, COUNT(DISTINCT n.player) AS players, e.host, e.start,
@@ -110,7 +110,7 @@ function queryEvents(Player $player, array $playerSeries, string $seriesName, st
         $sql .= ' AND e.series = :series_name';
         $params['series_name'] = $seriesName;
     }
-    if ($season) {
+    if ($season !== null) {
         $sql .= ' AND e.season = :season';
         $params['season'] = $season;
     }
