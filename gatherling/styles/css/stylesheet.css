@@ -817,7 +817,7 @@ del {
 .box .series-logo img {
     padding: 5px 10px;
 }
-.uppertitle {
+.uppertitle, h2.uppertitle {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     background: var(--highlight-background-color);
