@@ -134,7 +134,7 @@ class Db
     }
 
     /** @param array<string, mixed> $params */
-    public function update(string $sql, array $params = []): int
+    public function modify(string $sql, array $params = []): int
     {
         /** @var int */
         return $this->executeInternal($sql, $params, function ($sql, $params) {

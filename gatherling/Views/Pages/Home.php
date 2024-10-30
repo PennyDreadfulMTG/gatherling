@@ -6,6 +6,7 @@ namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
+use Gatherling\Views\Components\ColorImages;
 use Gatherling\Views\Components\Time;
 use Gatherling\Models\UpcomingEventDto;
 
@@ -21,7 +22,7 @@ class Home extends Page
     public ?array $playerInfo = null;
     /** @var ?array{name: string, link: string} */
     public ?array $mostRecentHostedEvent = null;
-    /** @var list<array<string, string>> */
+    /** @var list<array{eventName: string, reportLink: string, playerLink: string, deckLink: string, playerName: string, deckName: string, colorImages: ColorImages}> */
     public array $recentWinners;
     public bool $hasRecentWinners;
 
@@ -29,11 +30,12 @@ class Home extends Page
      * @param list<Event> $activeEvents
      * @param list<UpcomingEventDto> $upcomingEvents
      * @param array<string, int> $stats
-     * @param list<array<string, int|string>> $recentWinners
+     * @param list<array{event: string, player: string, name: string, id: int, colorImages: ColorImages}> $recentWinners
      */
     public function __construct(array $activeEvents, array $upcomingEvents, public array $stats, ?Player $player, ?Event $mostRecentHostedEvent, array $recentWinners)
     {
         parent::__construct();
+        $this->title = 'Home';
         foreach ($activeEvents as $event) {
             $this->activeEvents[] = [
                 'name' => $event->name,
@@ -72,7 +74,7 @@ class Home extends Page
                 'deckLink' => 'deck.php?mode=view&event=' . rawurlencode($winner['event']),
                 'playerName' => $winner['player'],
                 'deckName' => $winner['name'],
-                'manaSymbolSafe' => $winner['manaSymbolSafe'],
+                'colorImages' => $winner['colorImages'],
             ];
         }
         $this->hasRecentWinners = count($recentWinners) > 0;

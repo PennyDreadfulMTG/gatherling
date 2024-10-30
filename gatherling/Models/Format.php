@@ -1234,7 +1234,6 @@ class Format
 
     public function insertCardIntoBanlist(string $card): bool
     {
-        $card = stripslashes($card);
         $card = normaliseCardName($card);
         $card = $this->getCardName($card);
         $cardID = $this->getCardID($card);
@@ -1394,7 +1393,6 @@ class Format
 
     public function insertCardIntoLegallist(string $card): bool
     {
-        $card = stripslashes($card);
         $card = normaliseCardName($card);
         $testcard = $this->getCardName($card);
         if (is_null($testcard)) {
@@ -1423,7 +1421,6 @@ class Format
 
     public function insertCardIntoRestrictedlist(string $card): bool
     {
-        $card = stripslashes($card);
         $card = normaliseCardName($card);
         $card = $this->getCardName($card);
         $cardID = $this->getCardID($card);
@@ -1448,7 +1445,6 @@ class Format
 
     public function insertCardIntoRestrictedToTribeList(string $card): bool
     {
-        $card = stripslashes($card);
         $card = $this->getCardName($card);
         $cardID = $this->getCardID($card);
         if (is_null($cardID)) {

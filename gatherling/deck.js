@@ -58,9 +58,8 @@ $('input[type=file]').on("change", function (e) {
                     data:e.target.result
                 },
                 success: function (result) {
-                    deckData = JSON.parse(result);
-                    $("#deck-contents").val(deckData.main.join("\n"));
-                    $("#deck-sideboard").val(deckData.side.join("\n"));
+                    $("#deck-contents").val(result.main.join("\n"));
+                    $("#deck-sideboard").val(result.side.join("\n"));
 
                 }
             });

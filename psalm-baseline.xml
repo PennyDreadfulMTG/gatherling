@@ -19,9 +19,6 @@
     <PossiblyUnusedMethod>
       <code><![CDATA[getPlayer]]></code>
     </PossiblyUnusedMethod>
-    <UndefinedFunction>
-      <code><![CDATA[image_tag("mana{$color}.png")]]></code>
-    </UndefinedFunction>
     <UnusedForeachValue>
       <code><![CDATA[$mainamt]]></code>
     </UnusedForeachValue>
@@ -202,16 +199,6 @@
     <UndefinedFunction>
       <code><![CDATA[getObjectVarsCamelCase($event)]]></code>
     </UndefinedFunction>
-  </file>
-  <file src="gatherling/Views/Pages/EventList.php">
-    <InvalidPropertyAssignmentValue>
-      <code><![CDATA[$results]]></code>
-    </InvalidPropertyAssignmentValue>
-  </file>
-  <file src="gatherling/Views/Pages/Home.php">
-    <InvalidPropertyAssignmentValue>
-      <code><![CDATA[$this->recentWinners]]></code>
-    </InvalidPropertyAssignmentValue>
   </file>
   <file src="gatherling/Views/Pages/MatchList.php">
     <UndefinedFunction>

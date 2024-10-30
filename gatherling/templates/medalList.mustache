@@ -1,6 +1,6 @@
 <div class="grid_10 suffix_1 prefix_1">
     <div id="gatherling_main" class="box">
-        <div class="uppertitle">Host Control Panel</div>
+        <h1 class="uppertitle">Host Control Panel</h1>
         {{> controlPanel}}
         <form action="event.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="name" value="{{event.name}}">
@@ -36,7 +36,7 @@
                             </tr>
                             <tr>
                                 <td colspan="2" class="c">
-                                    <input class="inputbutton" type="submit" name="mode" value="Update Medals">
+                                    <input class="inputbutton btn-primary" type="submit" name="mode" value="Update Medals">
                                 </td>
                             </tr>
                         </table>

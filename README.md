@@ -43,3 +43,8 @@ $ composer static # phpstan and psalm
 
 - Install bun and run `bun install`.
 - $ bun test
+
+## Icons
+The first time you set up in a new env or add a new icon you need to run the following :
+$ php/vendor/php-icons scan
+Until you do this icons will show up as {?} glyph.

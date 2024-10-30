@@ -8,5 +8,8 @@ use Gatherling\Models\Dto;
 
 class TestDto extends Dto
 {
+    public ?int $id;
     public string $name;
+    public ?float $value;
+    public ?bool $is_active;
 }

@@ -30,7 +30,7 @@ class MissingTrophies extends Component
             foreach ($finalists as $finalist) {
                 if ($finalist['medal'] == '1st') {
                     $winningPlayer = $finalist['player'];
-                    $winningDeck = new Deck($finalist['deck']);
+                    $winningDeck = $finalist['deck'] !== null ? new Deck($finalist['deck']) : null;
                     $hasWinner = true;
                 }
             }

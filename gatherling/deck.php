@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Gatherling\Exceptions\NotFoundException;
 use Gatherling\Models\Deck;
 use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
@@ -48,7 +49,7 @@ function main(): void
         if (isset($_GET['event'])) {
             $deck = $event->getPlaceDeck('1st');
         } elseif (isset($_GET['id'])) {
-            $deck = new Deck($_GET['id']);
+            $deck = new Deck(get()->int('id'));
         }
         $viewComponent = deckProfile($deck);
     } else {
@@ -56,7 +57,7 @@ function main(): void
         if (!isset($_POST['player']) and isset($_GET['player'])) {
             $_POST['player'] = $_GET['player'];
         }
-        $deck = isset($_POST['id']) ? new Deck($_POST['id']) : null;
+        $deck = isset($_POST['id']) ? new Deck(post()->int('id')) : null;
         if (!isset($_POST['event'])) {
             if (!isset($_GET['event'])) {
                 $_GET['event'] = '';
@@ -93,6 +94,9 @@ function main(): void
                 }
             } elseif (strcmp($postMode, 'Update Deck') == 0) {
                 $deck = updateDeck($deck, post()->string('archetype'), post()->string('name'), post()->string('notes'), post()->string('contents', ''), post()->string('sideboard', ''));
+                if ($deck->id === null) {
+                    throw new NotFoundException('Trying to update a deck with null id, which is not possible');
+                }
                 $deck = new Deck($deck->id); // had to do this to get the constructor to run, otherwise errors weren't loading
                 if ($deck->isValid()) {
                     $viewComponent = deckProfile($deck);

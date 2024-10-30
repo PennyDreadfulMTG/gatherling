@@ -9,7 +9,7 @@
                 {{medalText}}
             </td>
             <td>
-                <img src="{{manaSrc}}" alt="Deck Colors" />
+                {{#manaSrc}}<img src="{{manaSrc}}" alt="Deck Colors" />{{/manaSrc}}
             </td>
             <td width="250">
                 {{#deckLink}}{{> deckLink}}{{/deckLink}}{{^deckIsValid}}<span class="warning">*</span>{{/deckIsValid}}

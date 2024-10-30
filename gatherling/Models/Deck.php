@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
+use Gatherling\Exceptions\NotFoundException;
 use InvalidArgumentException;
 use Gatherling\Views\Components\DeckLink;
 
@@ -45,7 +46,7 @@ class Deck
     public ?string $medal = null; // has a medal
     public bool $new; // is new
 
-    public function __construct(mixed $id)
+    public function __construct(int $id)
     {
         if ($id == 0) {
             $this->id = 0;
@@ -188,19 +189,6 @@ class Deck
         return $this->getEntry()->recordString();
     }
 
-    public function getColorImages(): string
-    {
-        $count = $this->getColorCounts();
-        $str = '';
-        foreach ($count as $color => $n) {
-            if ($n > 0) {
-                $str = $str . image_tag("mana{$color}.png");
-            }
-        }
-
-        return $str;
-    }
-
     public function getDeckColors(): void
     {
         $sql = '
@@ -275,91 +263,41 @@ class Deck
         return array_sum($cards);
     }
 
-    /**
-     * @return array<string, int>
-     */
+    /** @return array<string, int> */
+    private function getCards(string $condition): array
+    {
+        $sql = "
+            SELECT dc.qty, c.name, dc.issideboard
+              FROM deckcontents dc, cards c
+             WHERE c.id = dc.card AND dc.deck = :deck_id AND ({$condition}) AND dc.issideboard = 0
+          ORDER BY dc.qty DESC, c.name";
+        $results = db()->select($sql, DeckCardDto::class, ['deck_id' => $this->id]);
+        return array_column($results, 'qty', 'name');
+    }
+
+    /** @return array<string, int> */
     public function getCreatureCards(): array
     {
-        $db = Database::getConnection();
-        $result = $db->query("SELECT dc.qty, c.name
-                          FROM deckcontents dc, cards c
-                          WHERE c.id = dc.card
-                          AND dc.deck = {$this->id}
-                          AND c.type
-                          LIKE '%Creature%'
-                          AND dc.issideboard = 0
-                          ORDER BY dc.qty
-                          DESC, c.name");
-        if (!$result) {
-            throw new Exception($db->error, 1);
-        }
-        $cards = [];
-        while ($res = $result->fetch_assoc()) {
-            $cards[(string) $res['name']] = (int) $res['qty'];
-        }
-
-        return $cards;
+        return $this->getCards("c.type LIKE '%Creature%'");
     }
 
-    // find a way to list the id as a param
-    /**
-     * @return array<string, int>
-     */
+    /** @return array<string, int> */
     public function getLandCards(): array
     {
-        $db = Database::getConnection();
-        $result = $db->query("SELECT dc.qty, c.name
-                          FROM deckcontents dc, cards c
-                          WHERE c.id = dc.card
-                          AND dc.deck = {$this->id}
-                          AND c.type
-                          LIKE '%Land%'
-                          AND dc.issideboard = 0
-                          ORDER BY dc.qty
-                          DESC, c.name");
-
-        $cards = [];
-        while ($res = $result->fetch_assoc()) {
-            $cards[(string) $res['name']] = (int) $res['qty'];
-        }
-
-        return $cards;
+        return $this->getCards("c.type LIKE '%Land%'");
     }
 
-    /**
-     * @return list<string>
-     */
+    /** @return array<string, int> */
+    public function getOtherCards(): array
+    {
+        return $this->getCards("c.type NOT LIKE '%Creature%' AND c.type NOT LIKE '%Land%'");
+    }
+
+    /** @return list<string> */
     public function getErrors(): array
     {
         $sql = 'SELECT error FROM deckerrors WHERE deck = :deck_id';
         return db()->strings($sql, ['deck_id' => $this->id]);
-    }
-
-    // find a way to list the id as a param
-    /**
-     * @return array<string, int>
-     */
-    public function getOtherCards(): array
-    {
-        $db = Database::getConnection();
-        $result = $db->query("SELECT dc.qty, c.name
-                         FROM deckcontents dc, cards c
-                         WHERE c.id = dc.card
-                         AND dc.deck = {$this->id}
-                         AND c.type
-                         NOT LIKE '%Creature%'
-                         AND c.type
-                         NOT LIKE '%Land%'
-                         AND dc.issideboard = 0
-                         ORDER BY dc.qty
-                         DESC, c.name");
-
-        $cards = [];
-        while ($res = $result->fetch_assoc()) {
-            $cards[(string) $res['name']] = (int)$res['qty'];
-        }
-
-        return $cards;
     }
 
     /**
@@ -436,18 +374,20 @@ class Deck
         $this->errors = [];
         // Checks to see if any matches have been played by the deck, if not deletes the deck
         if (count($this->getMatches()) == 0) {
-            db()->begin('delete_deck');
+            $transactionName = 'delete_deck_' . $this->id;
+            db()->begin($transactionName);
             db()->execute('DELETE FROM entries WHERE deck = :deck', ['deck' => $this->id]);
             db()->execute('DELETE FROM deckerrors WHERE deck = :deck', ['deck' => $this->id]);
             db()->execute('DELETE FROM deckcontents WHERE deck = :deck', ['deck' => $this->id]);
             db()->execute('DELETE FROM decks WHERE id = :deck', ['deck' => $this->id]);
-            db()->commit('delete_deck');
+            db()->commit($transactionName);
         }
     }
 
     public function save(): void
     {
-        db()->begin('save_deck');
+        $transactionName = 'save_deck_' . $this->id;
+        db()->begin($transactionName);
         $this->errors = [];
 
         $this->name = $this->name ?: 'Temp';
@@ -492,10 +432,10 @@ class Deck
 
             $sql = 'UPDATE entries SET deck = :deck WHERE player = :player AND event_id = :event_id';
             $params = ['deck' => $this->id, 'player' => $this->playername, 'event_id' => $this->event_id];
-            $affectedRows = db()->update($sql, $params);
+            $affectedRows = db()->modify($sql, $params);
             if ($affectedRows != 1) {
-                db()->rollback('save_deck');
-                throw new Exception('Entry for ' . $this->playername . ' in ' . $this->eventname . ' not found');
+                db()->rollback($transactionName);
+                throw new NotFoundException('Entry for ' . $this->playername . ' in ' . $this->eventname . ' not found');
             }
         } else {
             $sql = 'UPDATE decks SET archetype = :archetype, name = :name, format = :format, tribe = :tribe, deck_colors = :deck_colors, notes = :notes WHERE id = :id';
@@ -508,7 +448,7 @@ class Deck
                 'notes' => $this->notes,
                 'id' => $this->id,
             ];
-            db()->update($sql, $params);
+            db()->modify($sql, $params);
             $format = new Format($this->format);
         }
 
@@ -530,7 +470,6 @@ class Deck
 
         foreach ($this->maindeck_cards as $card => $amt) {
             $amt = (int) $amt;
-            $card = stripslashes($card);
             $testcard = Format::getCardName($card);
             if (is_null($testcard)) {
                 $testcard = Format::getCardNameFromPartialDFC($card);
@@ -599,7 +538,6 @@ class Deck
 
         foreach ($this->sideboard_cards as $card => $amt) {
             $amt = (int) $amt;
-            $card = stripslashes($card);
             $testcard = Format::getCardName($card);
             if (is_null($testcard)) {
                 $testcard = Format::getCardNameFromPartialDFC($card);
@@ -699,7 +637,7 @@ class Deck
 
         $sql = 'UPDATE decks SET notes = :notes, deck_colors = :deck_colors WHERE id = :id';
         $params = ['notes' => $this->notes, 'deck_colors' => $this->deck_color_str, 'id' => $this->id];
-        db()->update($sql, $params);
+        db()->modify($sql, $params);
 
         $this->deck_contents_cache = implode('|', array_merge(
             array_keys($this->maindeck_cards),
@@ -710,7 +648,7 @@ class Deck
         $params = ['deck_contents_cache' => $this->deck_contents_cache, 'id' => $this->id];
         db()->execute($sql, $params);
 
-        db()->commit('save_deck');
+        db()->commit($transactionName);
         $this->calculateHashes();
 
         if ($this->maindeck_cardcount < $format->min_main_cards_allowed) {

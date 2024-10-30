@@ -23,7 +23,7 @@ $result = [];
 switch ($action) {
     case 'deckinfo':
     case 'deck_info':
-        $deckid = $_REQUEST['deck'];
+        $deckid = request()->int('deck');
         $deck = new Deck($deckid);
         $result = repr_json_deck($deck);
         break;

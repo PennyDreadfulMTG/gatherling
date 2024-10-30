@@ -7,13 +7,15 @@ use Gatherling\Models\Player;
 use Gatherling\Views\Redirect;
 use Gatherling\Views\Pages\DeckDownload;
 
+use function Gatherling\Helpers\get;
+use function Gatherling\Helpers\post;
 use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 
 function main(): void
 {
-    $id = $_GET['id'] ?? $_POST['id'] ?? null;
+    $id = get()->optionalInt('id') ?? post()->optionalInt('id') ?? null;
     if (!$id) {
         (new Redirect('player.php'))->send();
     }

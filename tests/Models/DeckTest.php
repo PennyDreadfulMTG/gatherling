@@ -23,6 +23,7 @@ class DeckTest extends DatabaseCase
         $series->name = 'Test Series';
         $series->start_day = 'Monday';
         $series->start_time = '12:00:00';
+        $series->active = 1;
         $series->save();
 
         $host = Player::findOrCreateByName('JimmyTheHost');
@@ -38,6 +39,9 @@ class DeckTest extends DatabaseCase
         $event->number = 1;
         $event->mainstruct = 'Swiss';
         $event->finalstruct = 'Single Elimination';
+        $event->threadurl = '';
+        $event->reporturl = '';
+        $event->metaurl = '';
         $event->save();
 
         $this->event = new Event($event->name);
@@ -74,6 +78,8 @@ class DeckTest extends DatabaseCase
         $deck->eventname = $this->event->name;
         $deck->event_id = $this->event->id;
         $deck->save();
+
+        $this->assertNotNull($deck->id);
 
         $deck = new Deck($deck->id);
         $this->assertFalse($deck->new);
