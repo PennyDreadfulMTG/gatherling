@@ -1,6 +1,13 @@
 <div class="grid_10 suffix_1 prefix_1">
     <div id="gatherling_main" class="box">
         <h1 class="uppertitle">Host Control Panel</h1>
+        {{#hasPlayerSeries}}
+            <div class="r">
+                <form action="event.php" method="get">
+                    <input class="inputbutton btn-primary" type="submit" name="mode" value="Create A New Event" />
+                </form>
+            </div>
+        {{/hasPlayerSeries}}
         {{#hostActiveEvents}}
             {{> hostActiveEvents}}
         {{/hostActiveEvents}}
@@ -36,9 +43,6 @@
                 </tr>
                 <tr>
                     <td colspan="2" class="buttons">
-                        {{#hasPlayerSeries}}
-                            <input class="inputbutton" type="submit" name="mode" value="Create A New Event" />
-                        {{/hasPlayerSeries}}
                         <input class="inputbutton" type="submit" name="mode" value="Filter Events" />
                     </td>
                 </tr>

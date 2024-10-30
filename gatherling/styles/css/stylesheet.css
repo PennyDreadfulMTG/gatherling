@@ -19,18 +19,24 @@
     --onyx: oklch(39.04% 0 0);
 
     --silver: oklch(84.52% 0 0);
+    --dim-gray: oklch(51.03% 0 0);
+
     --persian-orange: oklch(71.61% 0.1009 45.65);
+    --ut-orange: oklch(75.98% 0.1620909518888169 52.94742844820851);
     --flame: oklch(62.15% 0.1627 42.49);
+
     --red: oklch(62.8% 0.25768330773615683 29.2338851923426);
     --yellow: oklch(96.8% 0.21095439261133309 109.76923207652135);
     --green: oklch(51.98% 0.1768 142.5);
-    --dim-gray: oklch(51.03% 0 0);
 
     --main-text-color: var(--silver);
+
     --link-text-color: var(--persian-orange);
+    --link-noticeable-text-color: var(--ut-orange);
     --link-emphasis-text-color: var(--flame);
     --emphasis-text-color: var(--flame);
     --deemphasized-text-color: var(--dim-gray);
+
     --error-text-color: var(--red);
     --notice-text-color: var(--red);
     --self-text-color: var(--green);
@@ -45,6 +51,7 @@
 
     --title-border-color: var(--flame);
 
+    --link-noticeable-border-color: var(--ut-orange);
     --link-border-color: var(--flame);
 
     --divider-border-color: var(--onyx);
@@ -245,6 +252,10 @@ p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
     text-align: center;
 }
 
+.n, .r {
+    text-align: right;
+}
+
 .warning {
     color: var(--error-text-color);
 }
@@ -377,6 +388,9 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
 .crop img {
     margin: -2px -6px -6px -6px;
 }
+
+/* Forms */
+
 .inputbox {
     border: 1px solid var(--control-border-color);
     color: var(--main-text-color);
@@ -425,6 +439,30 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     color: var(--disabled-control-color);
     box-shadow: var(--disabled-control-border-color) 0 0px 0px;
 }
+
+/* Buttons */
+
+.inputbutton {
+    display: inline-block;
+    padding: var(--spacing-10-static) var(--spacing-20-static);
+    border-radius: var(--spacing-5-static);
+    font-size: var(--font-size-14);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: transparent;
+    color: var(--link-noticeable-text-color);
+    border: 1px solid var(--link-noticeable-border-color);
+}
+
+.btn-primary:hover {
+    background: rgba(255, 107, 26, 0.1);
+    border-color: var(--link-border-color);
+    color: var(--link-emphasis-text-color);
+}
+
 /* Some formating stuff for the search form and results table */
 #table-decksearch {
     color: var(--main-text-color);
