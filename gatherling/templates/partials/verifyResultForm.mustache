@@ -1,20 +1,18 @@
 <center>
-    <h3>
-        <br>Confirm Game Results
-    </h3>
+    <h2>Confirm Game Results</h2>
 </center>
 <center style="color: red; font-weight: bold;">
     <p>Please confirm your entry.</p>
 </center>
 
 <center>
-    <h4>
+    <p>
         {{#showOpponent}}Opponent: {{opponent}}{{/showOpponent}}
         {{resultText}}
         {{#isDrop}}
             <center style="color: red; font-weight: bold;"><p>I want to drop out of this event.</p></center>
         {{/isDrop}}
-    </h4>
+    </p>
 </center>
 
 <table class="form">
@@ -30,7 +28,7 @@
                 <input name="opponent" type="hidden" value="{{opponent}}" />
                 <input name="player" type="hidden" value="{{playerName}}" />
                 <input name="event" type="hidden" value="{{eventName}}" />
-                <input name="submit" type="submit" value="Verify Match Report" />
+                <input class="inputbutton" name="submit" type="submit" value="Verify Match Report" />
             </form>
         </th>
         <td>
@@ -41,7 +39,7 @@
                     <input name="match_id" type="hidden" value="{{matchId}}" />
                     <input name="player" type="hidden" value="{{playerName}}" />
                     <input name="mode" type="hidden" value="submit_result" />
-                        <input name="submit" type="submit" value="Go Back and Correct" />
+                    <input class="inputbutton" name="submit" type="submit" value="Go Back and Correct" />
                 </form>
             {{/matchId}}
         </td>
