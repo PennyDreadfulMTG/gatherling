@@ -51,6 +51,7 @@ final class PlayerTest extends DatabaseCase
         $series->name = 'My Test Series';
         $series->start_day = 'Monday';
         $series->start_time = '12:00:00';
+        $series->active = 1;
         $series->save();
         $this->assertEmpty($player->organizersSeries());
 

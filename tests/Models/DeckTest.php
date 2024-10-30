@@ -23,6 +23,7 @@ class DeckTest extends DatabaseCase
         $series->name = 'Test Series';
         $series->start_day = 'Monday';
         $series->start_time = '12:00:00';
+        $series->active = 1;
         $series->save();
 
         $host = Player::findOrCreateByName('JimmyTheHost');
