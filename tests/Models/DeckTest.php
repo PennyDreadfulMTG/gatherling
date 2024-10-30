@@ -79,6 +79,8 @@ class DeckTest extends DatabaseCase
         $deck->event_id = $this->event->id;
         $deck->save();
 
+        $this->assertNotNull($deck->id);
+
         $deck = new Deck($deck->id);
         $this->assertFalse($deck->new);
         $this->assertEquals($deck->playername, $this->player->name);

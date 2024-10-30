@@ -46,7 +46,7 @@ class Deck
     public ?string $medal = null; // has a medal
     public bool $new; // is new
 
-    public function __construct(mixed $id)
+    public function __construct(int $id)
     {
         if ($id == 0) {
             $this->id = 0;

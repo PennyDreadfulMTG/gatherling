@@ -10,7 +10,7 @@ use Gatherling\Models\Player;
 class Finalists extends Component
 {
     public int $numFinalists;
-    /** @var list<array{medalSrc: string, medalText: string, manaSrc: string, deckLink: DeckLink, deckIsValid: bool, playerLink: PlayerLink}> */
+    /** @var list<array{medalSrc: string, medalText: string, manaSrc: ?string, deckLink: ?DeckLink, deckIsValid: bool, playerLink: PlayerLink}> */
     public array $finalists;
 
     /** @param array<array{medal: string, player: string, deck: ?int}> $finalists */
@@ -21,7 +21,7 @@ class Finalists extends Component
 
         foreach ($finalists as $finalist) {
             $player = new Player($finalist['player']);
-            $deck = new Deck($finalist['deck']);
+            $deck = $finalist['deck'] !== null ? new Deck($finalist['deck']) : null;
 
             $medalText = $finalist['medal'];
             if ($finalist['medal'] == 't8' || $finalist['medal'] == 't4') {
@@ -31,9 +31,9 @@ class Finalists extends Component
             $this->finalists[] = [
                 'medalSrc' => 'styles/images/' . rawurlencode($finalist['medal']) . '.png',
                 'medalText' => $medalText,
-                'manaSrc' => $deck->manaSrc(),
-                'deckLink' => new DeckLink($deck),
-                'deckIsValid' => $deck->isValid(),
+                'manaSrc' => $deck?->manaSrc(),
+                'deckLink' => $deck ? new DeckLink($deck) : null,
+                'deckIsValid' => $deck?->isValid() ?? false,
                 'playerLink' => new PlayerLink($player),
             ];
         }

@@ -203,11 +203,6 @@
       <code><![CDATA[getObjectVarsCamelCase($event)]]></code>
     </UndefinedFunction>
   </file>
-  <file src="gatherling/Views/Pages/EventList.php">
-    <InvalidPropertyAssignmentValue>
-      <code><![CDATA[$results]]></code>
-    </InvalidPropertyAssignmentValue>
-  </file>
   <file src="gatherling/Views/Pages/Home.php">
     <InvalidPropertyAssignmentValue>
       <code><![CDATA[$this->recentWinners]]></code>

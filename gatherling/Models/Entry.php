@@ -89,23 +89,20 @@ class Entry
         if ($entry == null) {
             throw new NotFoundException('Entry for ' . $playername . ' in ' . $event_id . ' not found');
         }
-        $deck_id = null;
-        foreach (get_object_vars($entry) as $key => $value) {
-            if ($key == 'deck_id') {
-                $deck_id = $value;
-            } else {
-                $this->{$key} = $value;
-            }
+        $this->medal = $entry->medal;
+        $this->ignored = $entry->ignored;
+        $this->drop_round = $entry->drop_round;
+        $this->initial_byes = $entry->initial_byes;
+        $this->initial_seed = $entry->initial_seed;
+
+        if ($entry->deck_id != null) {
+            $this->deck = new Deck($entry->deck_id);
+        } else {
+            $this->deck = null;
         }
 
         $this->event = new Event($event_id);
         $this->player = new Player($playername);
-
-        if ($deck_id != null) {
-            $this->deck = new Deck($deck_id);
-        } else {
-            $this->deck = null;
-        }
     }
 
     public function recordString(): string
