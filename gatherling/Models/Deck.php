@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Exception;
+use Gatherling\Exceptions\NotFoundException;
 use InvalidArgumentException;
 use Gatherling\Views\Components\DeckLink;
 
@@ -495,7 +496,7 @@ class Deck
             $affectedRows = db()->modify($sql, $params);
             if ($affectedRows != 1) {
                 db()->rollback('save_deck');
-                throw new Exception('Entry for ' . $this->playername . ' in ' . $this->eventname . ' not found');
+                throw new NotFoundException('Entry for ' . $this->playername . ' in ' . $this->eventname . ' not found');
             }
         } else {
             $sql = 'UPDATE decks SET archetype = :archetype, name = :name, format = :format, tribe = :tribe, deck_colors = :deck_colors, notes = :notes WHERE id = :id';
