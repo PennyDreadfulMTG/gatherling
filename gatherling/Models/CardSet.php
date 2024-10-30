@@ -53,7 +53,7 @@ class CardSet
         $codes = db()->strings($sql, ['set' => $set]);
         if (count($codes) === 1 && $codes[0] === '') {
             $sql = 'UPDATE cardsets SET code = :code WHERE name = :set';
-            db()->update($sql, ['code' => $data->code, 'set' => $set]);
+            db()->modify($sql, ['code' => $data->code, 'set' => $set]);
             $messages[] = "$set was missing code ($data->code) in db, updated.";
         } elseif (count($codes) === 0) {
             $sql = 'INSERT INTO cardsets (released, name, type, code, standard_legal, modern_legal)

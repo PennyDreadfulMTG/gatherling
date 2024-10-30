@@ -492,7 +492,7 @@ class Deck
 
             $sql = 'UPDATE entries SET deck = :deck WHERE player = :player AND event_id = :event_id';
             $params = ['deck' => $this->id, 'player' => $this->playername, 'event_id' => $this->event_id];
-            $affectedRows = db()->update($sql, $params);
+            $affectedRows = db()->modify($sql, $params);
             if ($affectedRows != 1) {
                 db()->rollback('save_deck');
                 throw new Exception('Entry for ' . $this->playername . ' in ' . $this->eventname . ' not found');
@@ -508,7 +508,7 @@ class Deck
                 'notes' => $this->notes,
                 'id' => $this->id,
             ];
-            db()->update($sql, $params);
+            db()->modify($sql, $params);
             $format = new Format($this->format);
         }
 
@@ -699,7 +699,7 @@ class Deck
 
         $sql = 'UPDATE decks SET notes = :notes, deck_colors = :deck_colors WHERE id = :id';
         $params = ['notes' => $this->notes, 'deck_colors' => $this->deck_color_str, 'id' => $this->id];
-        db()->update($sql, $params);
+        db()->modify($sql, $params);
 
         $this->deck_contents_cache = implode('|', array_merge(
             array_keys($this->maindeck_cards),

@@ -75,7 +75,7 @@ class DbTest extends DatabaseCase
 
         $sql = 'UPDATE test_table SET name = :name WHERE id = :id';
         $params = [':name' => 'Updated Name', ':id' => $initialId];
-        $affectedRows = db()->update($sql, $params);
+        $affectedRows = db()->modify($sql, $params);
         $this->assertEquals(1, $affectedRows);
 
         $updatedRow = db()->selectOnly('SELECT * FROM test_table WHERE id = :id', TestDto::class, ['id' => $initialId]);
@@ -84,7 +84,7 @@ class DbTest extends DatabaseCase
         $nonExistentId = $initialId + 1;
         $sql = 'UPDATE test_table SET name = :name WHERE id = :id';
         $params = [':name' => 'This Should Not Update', ':id' => $nonExistentId];
-        $affectedRows = db()->update($sql, $params);
+        $affectedRows = db()->modify($sql, $params);
         $this->assertEquals(0, $affectedRows);
 
         $rows = db()->select('SELECT * FROM test_table', TestDto::class);
@@ -291,5 +291,23 @@ class DbTest extends DatabaseCase
 
         $ids = db()->ints("SELECT id FROM test_table WHERE name IN (:names)", ['names' => ['Test2', "Smith, John"]]);
         $this->assertEquals([2], $ids);
+    }
+
+    public function testModify(): void
+    {
+        db()->execute("INSERT INTO test_table (name) VALUES ('Test1')");
+        db()->execute("INSERT INTO test_table (name) VALUES ('Test2')");
+
+        $affectedRows = db()->modify('UPDATE test_table SET name = :name WHERE id = :id', ['name' => 'Test Modify', 'id' => 1]);
+        $this->assertEquals(1, $affectedRows);
+
+        $affectedRows = db()->modify('DELETE FROM test_table WHERE id = :id', ['id' => 99]);
+        $this->assertEquals(0, $affectedRows);
+
+        $affectedRows = db()->modify('DELETE FROM test_table WHERE id = :id', ['id' => 1]);
+        $this->assertEquals(1, $affectedRows);
+
+        $affectedRows = db()->modify('UPDATE test_table SET name = :name WHERE id = :id', ['name' => 'Test Modify', 'id' => 1]);
+        $this->assertEquals(0, $affectedRows);
     }
 }

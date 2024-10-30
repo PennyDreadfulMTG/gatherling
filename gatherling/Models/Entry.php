@@ -194,7 +194,7 @@ class Entry
             'event_id' => $this->event->id,
             'player' => $this->player->name,
         ];
-        $removed = db()->update($sql, $params) > 0;
+        $removed = db()->modify($sql, $params) > 0;
 
         $sql = 'DELETE FROM standings WHERE event = :event AND player = :player';
         $params = [
