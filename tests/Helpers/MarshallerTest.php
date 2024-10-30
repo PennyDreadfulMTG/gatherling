@@ -6,6 +6,7 @@ namespace Gatherling\Tests\Helpers;
 
 use Gatherling\Exceptions\MarshalException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 use function Gatherling\Helpers\marshal;
 
@@ -114,5 +115,11 @@ class MarshallerTest extends TestCase
         marshal('not an array')->dictString();
         $this->expectException(MarshalException::class);
         marshal(['a' => 'hello', 'b' => 123])->dictString();
+    }
+
+    public function testStringThrowsOnObject(): void
+    {
+        $this->expectException(MarshalException::class);
+        marshal(new stdClass())->string();
     }
 }
