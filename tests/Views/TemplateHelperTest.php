@@ -54,8 +54,8 @@ class TemplateHelperTest extends TestCase
 
         $expected = "<h1>Fun &amp; Games</h1>"
             . "<ul>"
-            . '        <li><img alt="icon1 icon" src="src1" /> Stick</li>'
-            . '        <li><img alt="icon2 icon" src="src2" /> Bat &amp; Ball</li>'
+            . '        <li><img alt="icon1 icon" src="src1"> Stick</li>'
+            . '        <li><img alt="icon2 icon" src="src2"> Bat &amp; Ball</li>'
             . '        <li>Crossbow</li>'
             . "</ul>";
         $this->assertEquals($expected, str_replace("\n", '', $actual));
