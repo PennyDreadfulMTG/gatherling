@@ -12,7 +12,7 @@ use InvalidArgumentException;
 class DeckInfo extends Component
 {
     public string $formatName;
-    public string $colorImagesSafe;
+    public ColorImages $colorImages;
     public string $tribe = '';
     public string $archetype;
 
@@ -23,7 +23,7 @@ class DeckInfo extends Component
         }
 
         $this->formatName = $event->format;
-        $this->colorImagesSafe = $deck->getColorImages();
+        $this->colorImages = new ColorImages($deck);
 
         $format = new Format($event->format);
         if ($format->tribal > 0) {

@@ -189,19 +189,6 @@ class Deck
         return $this->getEntry()->recordString();
     }
 
-    public function getColorImages(): string
-    {
-        $count = $this->getColorCounts();
-        $str = '';
-        foreach ($count as $color => $n) {
-            if ($n > 0) {
-                $str = $str . image_tag("mana{$color}.png");
-            }
-        }
-
-        return $str;
-    }
-
     public function getDeckColors(): void
     {
         $sql = '

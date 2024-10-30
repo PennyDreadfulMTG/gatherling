@@ -27,20 +27,6 @@ const MTGO = 1;
 const MTGA = 2;
 const PAPER = 3;
 
-/** @param array<string, string|int> $extra_attr */
-function image_tag(string $filename, ?array $extra_attr = null): string
-{
-    $tag = '<img ';
-    if (is_array($extra_attr)) {
-        foreach ($extra_attr as $key => $value) {
-            $tag .= "{$key}=\"{$value}\" ";
-        }
-    }
-    $tag .= 'src="styles/images/' . rawurlencode($filename) . '" />';
-
-    return $tag;
-}
-
 function json_headers(): void
 {
     header('Content-type: application/json');

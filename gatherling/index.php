@@ -8,6 +8,7 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Matchup;
 use Gatherling\Models\RecentWinnerDto;
 use Gatherling\Models\UpcomingEventDto;
+use Gatherling\Views\Components\ColorImages;
 use Gatherling\Views\Pages\Home;
 
 use function Gatherling\Helpers\db;
@@ -58,7 +59,7 @@ function stats(): array
     ];
 }
 
-/** @return list<array<string, int|string>> */
+/** @return list<array{event: string, player: string, name: string, id: int, colorImages: ColorImages}> */
 function recentWinners(): array
 {
     $sql = "
@@ -80,7 +81,7 @@ function recentWinners(): array
             'player' => $winner->player,
             'name' => $winner->name,
             'id' => $winner->id,
-            'manaSymbolSafe' => $deck->getColorImages(),
+            'colorImages' => new ColorImages($deck),
         ];
     }
     return $results;

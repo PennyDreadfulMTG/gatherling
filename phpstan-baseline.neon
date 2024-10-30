@@ -1131,11 +1131,6 @@ parameters:
 			path: gatherling/Views/Pages/EventReport.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, int\\|string given\\.$#"
-			count: 3
-			path: gatherling/Views/Pages/Home.php
-
-		-
 			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, string\\|null given\\.$#"
 			count: 3
 			path: gatherling/Views/Pages/Home.php
@@ -1152,11 +1147,6 @@ parameters:
 
 		-
 			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\Home\\:\\:\\$playerInfo \\(array\\{name\\: string, link\\: string\\}\\|null\\) does not accept array\\{name\\: string\\|null, link\\: non\\-falsy\\-string\\}\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/Home.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\Home\\:\\:\\$recentWinners \\(list\\<array\\<string, string\\>\\>\\) does not accept non\\-empty\\-list\\<array\\<string, int\\|string\\>\\>\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/Home.php
 
