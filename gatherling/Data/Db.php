@@ -7,7 +7,6 @@ namespace Gatherling\Data;
 use Gatherling\Exceptions\ConfigurationException;
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\MarshalException;
-use Gatherling\Logger;
 use PDOException;
 use PDOStatement;
 use PDO;
@@ -106,6 +105,7 @@ class Db
             $stmt->execute($params);
         });
     }
+
     /** @param array<string, mixed> $params */
     public function insert(string $sql, array $params = []): int
     {
@@ -490,6 +490,34 @@ class Db
         }
     }
 
+    /**
+     * @param array<string, mixed> $params
+     * @return array{0: string, 1: array<string, mixed>}
+     */
+    private function expandArrayParams(string $sql, array $params): array
+    {
+        $expandedParams = [];
+        foreach ($params as $key => $value) {
+            if (is_array($value)) {
+                if (empty($value)) {
+                    // Handle empty arrays by replacing with a FALSE condition
+                    $sql = str_replace(":$key", 'FALSE', $sql);
+                    continue;
+                }
+                $placeholders = [];
+                foreach ($value as $i => $item) {
+                    $newKey = $key . '_' . $i;
+                    $placeholders[] = ':' . $newKey;
+                    $expandedParams[$newKey] = $item;
+                }
+                $sql = str_replace(":$key", implode(',', $placeholders), $sql);
+            } else {
+                $expandedParams[$key] = $value;
+            }
+        }
+        return [$sql, $expandedParams];
+    }
+
     /** @param array<string, mixed> $params */
     private function executeInternal(string $sql, array $params, callable $operation, bool $connectToDatabase = true): mixed
     {
@@ -505,6 +533,8 @@ class Db
         if ($this->transactions && $this->isDdl($sql)) {
             logger()->warning('[DB] DDL statement issued within transaction, this may cause issues.');
         }
+
+        [$sql, $params] = $this->expandArrayParams($sql, $params);
 
         try {
             return $operation($sql, $params);

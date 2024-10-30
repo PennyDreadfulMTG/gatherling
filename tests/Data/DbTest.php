@@ -275,4 +275,21 @@ class DbTest extends DatabaseCase
         $expectedLongString = str_repeat('\\%\\_', 100);
         $this->assertEquals($expectedLongString, db()->likeEscape($longString));
     }
+
+    public function testIn(): void
+    {
+        db()->execute("INSERT INTO test_table (name) VALUES ('Test1')");
+        db()->execute("INSERT INTO test_table (name) VALUES ('Test2')");
+        db()->execute("INSERT INTO test_table (name) VALUES ('Test3')");
+
+        $ids = db()->ints("SELECT id FROM test_table WHERE name IN (:names)", ['names' => ['Test2', 'Test3', 'Test99', "O'Leary"]]);
+        $this->assertEquals([2, 3], $ids);
+
+        db()->execute("UPDATE test_table SET name = 'Test4' WHERE id IN (:ids)", ['ids' => [1, 3]]);
+        $results = db()->select("SELECT name FROM test_table WHERE id IN (:ids)", TestDto::class, ['ids' => [1, 2, 3, 99]]);
+        $this->assertEquals(['Test4', 'Test2', 'Test4'], array_map(fn (TestDto $dto) => $dto->name, $results));
+
+        $ids = db()->ints("SELECT id FROM test_table WHERE name IN (:names)", ['names' => ['Test2', "Smith, John"]]);
+        $this->assertEquals([2], $ids);
+    }
 }
