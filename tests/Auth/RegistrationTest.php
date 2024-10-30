@@ -24,7 +24,7 @@ final class RegistrationTest extends DatabaseCase
         $this->assertEquals(Registration::ERROR_PASSWORD_MISMATCH, Registration::register('failuser1', 'password1', 'password2', 'failuser1@example.com', 0, 0, null, null));
 
         // Test registration with empty password and no Discord ID
-        $this->assertEquals(Registration::ERROR_PASSWORD_MISMATCH, Registration::register('failuser2', '', '', 'failuser2@example.com', 0, 0, null, null));
+        $this->assertEquals(Registration::ERROR_PASSWORD_EMPTY, Registration::register('failuser2', '', '', 'failuser2@example.com', 0, 0, null, null));
 
         // Test registration with existing username
         $this->assertEquals(Registration::SUCCESS, Registration::register('existinguser', 'testpass', 'testpass', 'existinguser@example.com', 0, 0, null, null));
