@@ -830,9 +830,6 @@ del {
     border-bottom: 2px solid var(--title-border-color);
     margin-bottom: 10px;
 }
-.uppertitle h2 {
-    margin-bottom: 0;
-}
 .menubar {
     border-radius: 5px;
     box-shadow: var(--control-border-color) 0 2px 10px;
