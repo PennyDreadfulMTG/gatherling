@@ -35,6 +35,7 @@ class Home extends Page
     public function __construct(array $activeEvents, array $upcomingEvents, public array $stats, ?Player $player, ?Event $mostRecentHostedEvent, array $recentWinners)
     {
         parent::__construct();
+        $this->title = 'Home';
         foreach ($activeEvents as $event) {
             $this->activeEvents[] = [
                 'name' => $event->name,
