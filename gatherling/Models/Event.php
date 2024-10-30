@@ -450,12 +450,6 @@ class Event
         db()->commit('set_finalists');
     }
 
-    public function getTrophyImageLink(): string
-    {
-        return "<a href=\"deck.php?mode=view&event={$this->id}\" class=\"borderless\">\n"
-           . self::trophyImageTag($this->name) . "\n</a>\n";
-    }
-
     public function isHost(string $name): bool
     {
         $ishost = !is_null($this->host) && strcasecmp($name, $this->host) == 0;
@@ -1096,11 +1090,6 @@ class Event
         }
         $stmt->execute();
         $stmt->close();
-    }
-
-    public static function trophyImageTag(string $eventname): string
-    {
-        return "<img style=\"border-width: 0px; max-width: 260px\" src=\"{self::trophySrc($eventname)}\" />";
     }
 
     public static function trophySrc(string $eventname): string
