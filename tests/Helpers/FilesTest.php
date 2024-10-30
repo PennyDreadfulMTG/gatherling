@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Helpers;
+namespace Gatherling\Tests\Helpers;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
