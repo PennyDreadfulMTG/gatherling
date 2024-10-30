@@ -9,6 +9,8 @@
 
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
 
+/* Colors */
+
 :root {
     --black: oklch(0 0 0);
     --night: oklch(20.02% 0 0);
@@ -37,7 +39,9 @@
 
     --base-background-color: var(--night);
     --main-background-color: var(--eerie-black);
+    --card-background-color: var(--jet);
     --hover-background-color: var(--jet);
+    --top-background-color: var(--onyx);
 
     --title-border-color: var(--flame);
 
@@ -63,6 +67,44 @@
     --current-pagination-text-color: var(--black);
 }
 
+/* Spacing */
+
+:root {
+    --spacing-1-static: 1px;
+    --spacing-5-static: 5px;
+    --spacing-10-static: 10px;
+    --spacing-20-static: 20px;
+    --spacing-40-static: 40px;
+    --spacing-80-static: 80px;
+    --spacing-160-static: 160px;
+    --spacing-320-static: 320px;
+
+    --spacing-1-dynamic: calc(1rem / 16);
+    --spacing-5-dynamic: calc(5rem / 16);
+    --spacing-10-dynamic: calc(10rem / 16);
+    --spacing-20-dynamic: calc(20rem / 16);
+    --spacing-40-dynamic: calc(40rem / 16);
+    --spacing-80-dynamic: calc(80rem / 16);
+    --spacing-160-dynamic: calc(160rem / 16);
+    --spacing-320-dynamic: calc(320rem / 16);
+
+    --card-grid-gap: var(--spacing-20-static);
+
+    --card-internal-gap: var(--spacing-10-static);
+}
+
+/* Typography */
+
+:root {
+    /* Set font sizes in rem but use px numbers for ease of use */
+    --font-size-12: calc(12rem / 16);
+    --font-size-14: calc(14rem / 16);
+    --font-size-16: calc(16rem / 16);
+    --font-size-18: calc(18rem / 16);
+    --font-size-20: calc(20rem / 16);
+    --font-size-24: calc(24rem / 16);
+}
+
 /* Text */
 
 table, tr, th, td, ul {
@@ -76,7 +118,7 @@ table, tr, th, td, ul {
     background: transparent;
 }
 body {
-    font: 14px/1.45 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
+    font: var(--font-size-14) / 1.45 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
 }
 hr {
     border: 0 var(--main-text-color) solid;
@@ -85,22 +127,23 @@ hr {
     height: 0;
 }
 h1 {
-    font-size: 28px;
+    font-size: 14px;
 }
-h2 {
-    font-size: 26px;
+h2, .box h2 {
+    font-size: var(--font-size-24);
+    margin-bottom: var(--spacing-20-static);
 }
 h3 {
-    font-size: 24px;
+    font-size: var(--font-size-20);
 }
 h4 {
-    font-size: 22px;
+    font-size: var(--font-size-16);
 }
 h5 {
-    font-size: 20px;
+    font-size: var(--font-size-14);
 }
 h6 {
-    font-size: 18px;
+    font-size: var(--font-size-12);
 }
 ol {
     list-style: decimal;
@@ -134,8 +177,8 @@ p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
     display: inline;
     float: left;
     position: relative;
-    margin-left: 10px;
-    margin-right: 10px
+    margin-left: var(--spacing-10-static);
+    margin-right: var(--spacing-10-static);
 }
 
 .container_12 .grid_6 {
@@ -317,7 +360,7 @@ a.create_deck_link {
 .cardHoverImageWrapper .linkCardHoverImage {
     display: none;
 }
-.cardHoverImageWrapper a:hover .linkCardHoverImage {
+ecardHoverImageWrapper a:hover .linkCardHoverImage {
     display: block;
 }
 .crop {
@@ -681,6 +724,11 @@ a:hover {
     padding: 0px;
     border-radius: 5px;
 }
+a:has(h1), a:has(h2), a:has(h3), a:has(h4), a:has(h5), a:has(h6),
+a:has(h1):visited, a:has(h2):visited, a:has(h3):visited, a:has(h4):visited, a:has(h5):visited, a:has(h6):visited {
+    color: var(--main-text-color);
+    padding: inherit;
+}
 a.emailPop:hover {
     color: var(--verified-text-color);
     border: 1px solid var(--verified-text-color);
@@ -925,6 +973,81 @@ table.center {
 #EventReport table td {
     border-width: 0px;
     vertical-align: top;
+}
+
+
+/* Event List */
+
+.event-grid {
+    display: grid;
+    gap: var(--card-grid-gap);
+    margin-bottom: var(--spacing-20-dynamic);
+    margin-left: var(--spacing-10-static);
+    margin-right: var(--spacing-10-static);
+}
+
+@media (min-width: 40rem) {
+    .event-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.event-card {
+    background-color: var(--card-background-color);
+    border-radius: var(--spacing-10-static);
+    padding: var(--spacing-20-static);
+    box-shadow: 0 var(--spacing-5-static) var(--spacing-5-static) -1px rgba(0, 0, 0, 0.1);
+}
+
+.event-card a, .event-card a:hover {
+    border: none;
+    padding: inherit;
+}
+
+.event-card a:hover {
+    color: var(--link-emphasis-text-color);
+}
+
+.event-card h2, .event-card h3, .event-card h4, .event-card h5, .event-card h6, .event-card p {
+    padding-left: 0;
+}
+
+.card-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5-static);
+    padding-bottom: var(--spacing-20-dynamic);
+    border-bottom: 1px solid var(--divider-border-color);
+}
+
+@media (min-width: 40rem) {
+    .card-header {
+        flex-direction: row;
+        gap: var(--spacing-10-static);
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+/* Align text with icon */
+.event-type, .player-count, .view-standings {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-5-static);
+}
+
+a.player-count, a.event-type {
+    color: var(--deemphasized-text-color);
+}
+
+.round-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--top-background-color);
+    padding: var(--spacing-10-static);
+    border-radius: var(--spacing-5-static);
+    margin: var(--spacing-20-static) 0;
 }
 
 /* Pagination

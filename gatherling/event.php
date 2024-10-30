@@ -47,10 +47,11 @@ function main(): void
     $action = get()->optionalString('action');
     $eventId = get()->optionalString('event_id');
     $player = get()->optionalString('player');
+    $format = get()->string('format', '');
 
     if (mode_is('Create New Event')) {
         $event = createNewEvent();
-        $page = $event === false ? new AuthFailed() : new EventList($getSeriesName, $season);
+        $page = $event === false ? new AuthFailed() : new EventList($getSeriesName, $format, $season);
     } elseif (mode_is('Create A New Event')) {
         $page = eventFrame(null, true);
     } elseif (mode_is('Create Next Event') || mode_is('Create Next Season')) {
@@ -61,7 +62,7 @@ function main(): void
     } elseif (isset($postEventName)) {
         $page = postEvent($postEventName);
     } else {
-        $page = new EventList($getSeriesName, $season);
+        $page = new EventList($getSeriesName, $format, $season);
     }
     $page->send();
 }
