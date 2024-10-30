@@ -276,91 +276,41 @@ class Deck
         return array_sum($cards);
     }
 
-    /**
-     * @return array<string, int>
-     */
+    /** @return array<string, int> */
+    private function getCards(string $condition): array
+    {
+        $sql = "
+            SELECT dc.qty, c.name, dc.issideboard
+              FROM deckcontents dc, cards c
+             WHERE c.id = dc.card AND dc.deck = :deck_id AND ({$condition}) AND dc.issideboard = 0
+          ORDER BY dc.qty DESC, c.name";
+        $results = db()->select($sql, DeckCardDto::class, ['deck_id' => $this->id]);
+        return array_column($results, 'qty', 'name');
+    }
+
+    /** @return array<string, int> */
     public function getCreatureCards(): array
     {
-        $db = Database::getConnection();
-        $result = $db->query("SELECT dc.qty, c.name
-                          FROM deckcontents dc, cards c
-                          WHERE c.id = dc.card
-                          AND dc.deck = {$this->id}
-                          AND c.type
-                          LIKE '%Creature%'
-                          AND dc.issideboard = 0
-                          ORDER BY dc.qty
-                          DESC, c.name");
-        if (!$result) {
-            throw new Exception($db->error, 1);
-        }
-        $cards = [];
-        while ($res = $result->fetch_assoc()) {
-            $cards[(string) $res['name']] = (int) $res['qty'];
-        }
-
-        return $cards;
+        return $this->getCards("c.type LIKE '%Creature%'");
     }
 
-    // find a way to list the id as a param
-    /**
-     * @return array<string, int>
-     */
+    /** @return array<string, int> */
     public function getLandCards(): array
     {
-        $db = Database::getConnection();
-        $result = $db->query("SELECT dc.qty, c.name
-                          FROM deckcontents dc, cards c
-                          WHERE c.id = dc.card
-                          AND dc.deck = {$this->id}
-                          AND c.type
-                          LIKE '%Land%'
-                          AND dc.issideboard = 0
-                          ORDER BY dc.qty
-                          DESC, c.name");
-
-        $cards = [];
-        while ($res = $result->fetch_assoc()) {
-            $cards[(string) $res['name']] = (int) $res['qty'];
-        }
-
-        return $cards;
+        return $this->getCards("c.type LIKE '%Land%'");
     }
 
-    /**
-     * @return list<string>
-     */
+    /** @return array<string, int> */
+    public function getOtherCards(): array
+    {
+        return $this->getCards("c.type NOT LIKE '%Creature%' AND c.type NOT LIKE '%Land%'");
+    }
+
+    /** @return list<string> */
     public function getErrors(): array
     {
         $sql = 'SELECT error FROM deckerrors WHERE deck = :deck_id';
         return db()->strings($sql, ['deck_id' => $this->id]);
-    }
-
-    // find a way to list the id as a param
-    /**
-     * @return array<string, int>
-     */
-    public function getOtherCards(): array
-    {
-        $db = Database::getConnection();
-        $result = $db->query("SELECT dc.qty, c.name
-                         FROM deckcontents dc, cards c
-                         WHERE c.id = dc.card
-                         AND dc.deck = {$this->id}
-                         AND c.type
-                         NOT LIKE '%Creature%'
-                         AND c.type
-                         NOT LIKE '%Land%'
-                         AND dc.issideboard = 0
-                         ORDER BY dc.qty
-                         DESC, c.name");
-
-        $cards = [];
-        while ($res = $result->fetch_assoc()) {
-            $cards[(string) $res['name']] = (int)$res['qty'];
-        }
-
-        return $cards;
     }
 
     /**
