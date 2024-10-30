@@ -2,44 +2,34 @@
 
 declare(strict_types=1);
 
-$data = filter_input(INPUT_POST, 'data');
-$xml = simplexml_load_string($data) or exit('Error: Cannot create object');
-$maindeck = [];
-$sideboard = [];
-$noOfRows = count($xml->Cards);
-for ($x = 0; $x < $noOfRows; $x++) {
-    $nameToAdd = strval($xml->Cards[$x]['Name']);
-    $quantityToAdd = intval($xml->Cards[$x]['Quantity']);
-    if ($xml->Cards[$x]['Sideboard'] == 'false') { //Maindeck
-        if ($x < $noOfRows - 1) { //Not the last line
-            if (($nameToAdd == strval($xml->Cards[$x + 1]['Name'])) && ($xml->Cards[$x + 1]['Sideboard'] == 'false')) { //This card name has multiple rows
-                for ($y = $x + 1; $y < count($xml->Cards); $y++) {
-                    if ($nameToAdd == strval($xml->Cards[$y]['Name'])) {
-                        $quantityToAdd += intval($xml->Cards[$y]['Quantity']);
-                    } else {
-                        break;
-                    }
-                }
+use Gatherling\Views\JsonResponse;
 
-                $x = $y - 1;
-            }
-        }
-        $maindeck[] = "$quantityToAdd $nameToAdd";
-    } else { //Sideboard
-        if ($x < $noOfRows - 1) { //Not the last line
-            if (($nameToAdd == strval($xml->Cards[$x + 1]['Name'])) && ($xml->Cards[$x + 1]['Sideboard'] == 'true')) { //This card name has multiple rows
-                for ($y = $x + 1; $y < count($xml->Cards); $y++) {
-                    if ($nameToAdd == strval($xml->Cards[$y]['Name'])) {
-                        $quantityToAdd += intval($xml->Cards[$y]['Quantity']);
-                    } else {
-                        break;
-                    }
-                }
+use function Gatherling\Helpers\server;
 
-                $x = $y - 1;
-            }
-        }
-        $sideboard[] = "$quantityToAdd $nameToAdd";
+require_once 'lib.php';
+
+function main(): void
+{
+    $data = filter_input(INPUT_POST, 'data');
+    $xml = simplexml_load_string($data) or exit('Error: Cannot create object');
+    $quantities = ['main' => [], 'side' => []];
+    $deck = ['main' => [], 'side' => []];
+
+    for ($i = 0; $i < count($xml->Cards); $i++) {
+        $section = $xml->Cards[$i]['Sideboard'] == 'false' ? 'main' : 'side';
+        $name = strval($xml->Cards[$i]['Name']);
+        $quantities[$section][$name] = ($quantities[$section][$name] ?? 0) + intval($xml->Cards[$i]['Quantity']);
     }
+
+    foreach ($quantities as $section => $cards) {
+        foreach ($cards as $name => $qty) {
+            $deck[$section][] = "$qty $name";
+        }
+    }
+
+    (new JsonResponse($deck))->send();
 }
-echo json_encode(['main' => $maindeck, 'side' => $sideboard]);
+
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
+    main();
+}
