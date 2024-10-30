@@ -387,18 +387,20 @@ class Deck
         $this->errors = [];
         // Checks to see if any matches have been played by the deck, if not deletes the deck
         if (count($this->getMatches()) == 0) {
-            db()->begin('delete_deck');
+            $transactionName = 'delete_deck_' . $this->id;
+            db()->begin($transactionName);
             db()->execute('DELETE FROM entries WHERE deck = :deck', ['deck' => $this->id]);
             db()->execute('DELETE FROM deckerrors WHERE deck = :deck', ['deck' => $this->id]);
             db()->execute('DELETE FROM deckcontents WHERE deck = :deck', ['deck' => $this->id]);
             db()->execute('DELETE FROM decks WHERE id = :deck', ['deck' => $this->id]);
-            db()->commit('delete_deck');
+            db()->commit($transactionName);
         }
     }
 
     public function save(): void
     {
-        db()->begin('save_deck');
+        $transactionName = 'save_deck_' . $this->id;
+        db()->begin($transactionName);
         $this->errors = [];
 
         $this->name = $this->name ?: 'Temp';
@@ -445,7 +447,7 @@ class Deck
             $params = ['deck' => $this->id, 'player' => $this->playername, 'event_id' => $this->event_id];
             $affectedRows = db()->modify($sql, $params);
             if ($affectedRows != 1) {
-                db()->rollback('save_deck');
+                db()->rollback($transactionName);
                 throw new NotFoundException('Entry for ' . $this->playername . ' in ' . $this->eventname . ' not found');
             }
         } else {
@@ -661,7 +663,7 @@ class Deck
         $params = ['deck_contents_cache' => $this->deck_contents_cache, 'id' => $this->id];
         db()->execute($sql, $params);
 
-        db()->commit('save_deck');
+        db()->commit($transactionName);
         $this->calculateHashes();
 
         if ($this->maindeck_cardcount < $format->min_main_cards_allowed) {
