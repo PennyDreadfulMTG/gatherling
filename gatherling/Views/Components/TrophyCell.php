@@ -19,13 +19,12 @@ class TrophyCell extends Component
             $this->trophySrc = Event::trophySrc($event->name);
         }
         $deck = $event->getPlaceDeck('1st');
-        $winnerName = $event->getPlacePlayer('1st');
-        if ($winnerName) {
-            $winner = new Player($winnerName);
+        $winner = $deck?->getPlayer();
+        if ($winner) {
             $this->winner = [
                 'playerLink' => new PlayerLink($winner),
-                'manaSrc' => $deck?->manaSrc() ?? '',
-                'deckLink' => $deck ? new DeckLink($deck) : null,
+                'manaSrc' => $deck->manaSrc(),
+                'deckLink' => new DeckLink($deck),
             ];
         }
     }

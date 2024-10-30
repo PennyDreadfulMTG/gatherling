@@ -392,21 +392,6 @@ class Event
         return new Deck($deckId);
     }
 
-    public function getPlacePlayer(string $placing = '1st'): ?string
-    {
-        $sql = '
-            SELECT
-                n.player
-            FROM
-                entries n, events e
-            WHERE
-                n.event_id = e.id
-                AND n.medal = :medal
-                AND e.name = :name';
-        $params = ['medal' => $placing, 'name' => $this->name];
-        return db()->optionalString($sql, $params);
-    }
-
     public function decklistsVisible(): bool
     {
         return ($this->finalized && !$this->active) || $this->private_decks == 0 || ($this->current_round > $this->mainrounds && !$this->private_finals);
