@@ -42,11 +42,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method fetch_assoc\\(\\) on bool\\|mysqli_result\\.$#"
-			count: 3
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Cannot call method fetch_assoc\\(\\) on mysqli_result\\|true\\.$#"
 			count: 1
 			path: gatherling/Models/Deck.php
 
