@@ -382,7 +382,7 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     float: left;
     overflow:  hidden;
     border-radius: 10px;
-    box-shadow: var(--link-border-color) 0 2px 30px;
+    box-shadow: 0 2px 30px var(--link-border-color);
 }
 /* input values to crop the image: top, right, bottom, left */
 .crop img {
@@ -419,25 +419,25 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     padding: 3px;
     margin: 5px;
     border-radius: 5px;
-    box-shadow: var(--control-border-color) 0 2px 5px;
+    box-shadow: 0 2px 5px var(--control-border-color);
 }
 .inputbutton:not(.discordlogin):hover {
     border-color: var(--link-border-color);
     background-color: var(--highlight-background-color);
     color: var(--link-emphasis-text-color);
-    box-shadow: var(--link-border-color) 0 2px 5px;
+    box-shadow: 0 2px 5px var(--link-border-color);
 }
 .inputbutton:focus {
     border: 1px solid var(--control-border-color);
     background-color: var(--focused-control-background-color);
     color: var(--focused-control-color);
-    box-shadow: var(--control-border-color) 0px 0px;
+    box-shadow: 0 0 0 var(--control-border-color);
 }
 .inputbutton:disabled {
     border: 1px solid var(--disabled-control-border-color);
     background-color: var(--disabled-control-background-color);
     color: var(--disabled-control-color);
-    box-shadow: var(--disabled-control-border-color) 0 0px 0px;
+    box-shadow: 0 0 0 var(--disabled-control-border-color);
 }
 
 /* Buttons */
@@ -558,25 +558,25 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     padding: 6px 28px;
     border: 1px solid var(--control-border-color);
     border-radius: 5px;
-    box-shadow: var(--control-border-color) 0 2px 5px;
+    box-shadow: 0 2px 5px var(--control-border-color);
 }
 .ds_submit:hover {
     border-color: var(--link-border-color);
     background-color: var(--highlight-background-color);
     color: var(--link-emphasis-text-color);
-    box-shadow: var(--link-border-color) 0 2px 5px;
+    box-shadow: 0 2px 5px var(--link-border-color);
 }
 .ds_submit:focus {
     border: 1px solid var(--control-border-color);
     background-color: var(--focused-control-background-color);
     color: var(--focused-control-color);
-    box-shadow: var(--control-border-color) 0px 0px;
+    box-shadow: 0 0 0 var(--control-border-color);
 }
 .ds_submit:disabled {
     border: 1px solid var(--disabled-control-border-color);
     background-color: var(--disabled-control-background-color);
     color: var(--disabled-control-color);
-    box-shadow: var(--disabled-control-border-color) 0px 0px;
+    box-shadow: 0 0 0 var(--disabled-control-border-color);
 }
 .ds_results {
     font-weight: bold;;
@@ -667,7 +667,7 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
 /* Style tab links */
 .tablink {
     border-radius: 5px;
-    box-shadow: var(--control-border-color) 0 2px 10px;
+    box-shadow: 0 2px 10px var(--control-border-color);
     border: 1px solid var(--control-border-color);
     background-color: var(--control-background-color);
     color: var(--link-text-color);
@@ -848,7 +848,7 @@ del {
 }
 .box {
     border-radius: 5px;
-    box-shadow: var(--control-border-color) 0 2px 5px;
+    box-shadow: 0 2px 5px var(--control-border-color);
     margin-top: 15px;
     background: var(--main-background-color);
     border: 1px solid var(--control-border-color);
@@ -870,7 +870,7 @@ del {
 }
 .menubar {
     border-radius: 5px;
-    box-shadow: var(--control-border-color) 0 2px 10px;
+    box-shadow: 0 2px 10px var(--control-border-color);
     background: var(--main-background-color);
     border: 1px solid var(--control-border-color);
     margin-top: 1px;
@@ -897,7 +897,7 @@ del {
     display: inline-block;
     border: 1px solid var(--control-border-color);
     border-radius: 5px;
-    box-shadow: var(--control-border-color) 0 2px 5px;
+    box-shadow: 0 2px 5px var(--control-border-color);
 }
 #mainmenu ul li a, #mainmenu_submenu ul li a, #submenu ul li a {
     float: left;
@@ -1210,14 +1210,14 @@ Enjoy.
     display: block;
     float: left;
     border-radius: 6px;
-    box-shadow: var(--control-border-color) 0 2px 5px
+    box-shadow: 0 2px 5px var(--control-border-color);
 }
 
 .Zebra_Pagination a:hover {
     border-color: var(--link-border-color);
     background-color: var(--hover-background-color);
     color: var(--link-emphasis-text-color);
-    box-shadow: var(--link-border-color) 0 2px 5px;
+    box-shadow: 0 2px 5px var(--link-border-color);
 }
 
 /* "NEXT PAGE" AND "PREVIOUS PAGE" LINKS----------------------------------------------------------------------------------------------------------------------*/

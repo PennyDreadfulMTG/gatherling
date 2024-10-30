@@ -69,7 +69,7 @@ class EventList extends Page
                 'structureSummary' => (new Event($event->name))->structureSummary(),
             ];
             $this->events[] = $eventInfo;
-            if ($event->active == 1) {
+            if ($event->active == 1 || (!$event->finalized && strtotime($event->start) <= strtotime('+1 day'))) {
                 $activeEvents[] = $eventInfo;
             }
         }
