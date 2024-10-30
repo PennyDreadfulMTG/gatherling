@@ -39,6 +39,9 @@ class DeckTest extends DatabaseCase
         $event->number = 1;
         $event->mainstruct = 'Swiss';
         $event->finalstruct = 'Single Elimination';
+        $event->threadurl = '';
+        $event->reporturl = '';
+        $event->metaurl = '';
         $event->save();
 
         $this->event = new Event($event->name);
