@@ -249,6 +249,10 @@ p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
     color: var(--error-text-color);
 }
 
+.disabled {
+    color: var(--deemphasized-text-color);
+}
+
 #gatherling_main td.box.round-header {
     background-color: var(--highlight-background-color);
     color: var(--main-text-color);
