@@ -35,7 +35,7 @@ function main(): void
         $series = new Series($player_series);
         if ($series->active) {
             if (is_null($series->nextEvent())) {
-                $message = "Your series <a href=\"seriescp.php?series=$player_series\">$player_series</a> doesn't have an upcoming event.<br/>";
+                $message = "Your series <a href=\"seriescp.php?series=$player_series\">$player_series</a> doesn't have an upcoming event.<br>";
                 $mostRecentEvent = $series->mostRecentEvent();
                 $nameMostRecent = $mostRecentEvent ? $mostRecentEvent->name : null;
                 if (is_null($nameMostRecent) || $nameMostRecent == '') {
@@ -48,7 +48,7 @@ function main(): void
         }
         $recent = $series->mostRecentEvent();
         if ($recent && !$recent->finalized && !$recent->active && !empty($recent->name)) {
-            $message = "Your event <a href=\"event.php?event={$recent->id}\">{$recent->name}</a> is ready to start. <br />";
+            $message = "Your event <a href=\"event.php?event={$recent->id}\">{$recent->name}</a> is ready to start. <br>";
             $reg = count($recent->getPlayers());
             $valid = count($recent->getRegisteredPlayers());
             $message .= "It has $reg entries, of whom $valid have valid decklists.";
