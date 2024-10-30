@@ -23,6 +23,7 @@ class FullMetagame extends Component
     public array $players;
     public bool $showTribes = false;
     public EventStandings $eventStandings;
+    public bool $showRegisteredPlayers;
 
     public function __construct(Event $event)
     {
@@ -109,6 +110,7 @@ class FullMetagame extends Component
                 $this->players[] = $info;
             }
         }
+        $this->showRegisteredPlayers = !$this->decklistsAreVisible && count($this->players) > 0;
         if ($event->active || $event->finalized) {
             $this->eventStandings = new EventStandings($event->name, session()->optionalString('username'));
         }
