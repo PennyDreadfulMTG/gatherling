@@ -10,7 +10,7 @@ use Gatherling\Models\Player;
 class TrophyCell extends Component
 {
     public ?string $trophySrc;
-    /** @var array{playerLink: PlayerLink, manaSrc: string, deckLink: DeckLink}|null */
+    /** @var array{playerLink: PlayerLink, manaSrc: string, deckLink: ?DeckLink}|null */
     public ?array $winner;
 
     public function __construct(Event $event)
@@ -24,8 +24,8 @@ class TrophyCell extends Component
             $winner = new Player($winnerName);
             $this->winner = [
                 'playerLink' => new PlayerLink($winner),
-                'manaSrc' => $deck->manaSrc(),
-                'deckLink' => new DeckLink($deck),
+                'manaSrc' => $deck?->manaSrc() ?? '',
+                'deckLink' => $deck ? new DeckLink($deck) : null,
             ];
         }
     }
