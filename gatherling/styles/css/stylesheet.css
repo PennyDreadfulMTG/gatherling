@@ -456,7 +456,7 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     border-radius: 5px;
 }
 .ds_left {
-    width: 605px;
+    width: 590px;
     background-color: var(--highlight-background-color);
     float: left;
     padding: 3px;
