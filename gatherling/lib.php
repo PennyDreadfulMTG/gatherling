@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Gatherling\Auth\Session;
 use Gatherling\Models\Player;
-use Gatherling\Views\TemplateHelper;
 
 use function Gatherling\Helpers\config;
 
