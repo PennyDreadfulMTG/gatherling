@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Gatherling\Helpers;
 
 use Gatherling\Logger;
-use Psr\Log\LoggerInterface;
 
 function request(): Request
 {
