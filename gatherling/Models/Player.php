@@ -26,7 +26,6 @@ class Player
     public ?int $emailPrivacy = 0;
     public ?float $timezone = -5.0;
     public ?int $verified;
-    public ?string $theme = null; // DEPRECATED. Always null.
     public ?string $discord_id = null;
     public ?string $discord_handle = null;
     public ?string $api_key;
@@ -41,14 +40,13 @@ class Player
             $this->super = 0;
             $this->rememberMe = 0;
             $this->verified = 0;
-            $this->theme = null;
             return;
         }
         $sql = '
             SELECT
                 name, password, rememberme AS rememberMe, INET_NTOA(ipaddress) AS ipAddress, host, super,
                 mtgo_confirmed AS verified, email AS emailAddress, email_privacy as emailPrivacy, timezone,
-                theme, discord_id, discord_handle, api_key, mtga_username, mtgo_username
+                discord_id, discord_handle, api_key, mtga_username, mtgo_username
             FROM
                 players
             WHERE
