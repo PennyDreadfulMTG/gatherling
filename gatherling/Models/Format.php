@@ -382,10 +382,10 @@ class Format
 
     public function delete(): bool
     {
-        $success = $this->deleteEntireLegallist();
-        $success = $this->deleteEntireBanlist();
-        $success = $this->deleteEntireRestrictedlist();
-        $success = $this->deleteAllLegalSets();
+        $this->deleteEntireLegallist();
+        $this->deleteEntireBanlist();
+        $this->deleteEntireRestrictedlist();
+        $this->deleteAllLegalSets();
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM formats WHERE name = ? AND series_name = ?');
         $stmt->bind_param('ss', $this->name, $this->series_name);
