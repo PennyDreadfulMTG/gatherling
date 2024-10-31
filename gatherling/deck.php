@@ -36,7 +36,7 @@ function main(): never
             unset($_GET['event']);
         } else {
             $event = new Event(get()->string('event'));
-            $title = $event->name ?? 'Deck Database';
+            $title = $event->name;
         }
     }
 
