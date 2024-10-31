@@ -156,11 +156,6 @@
       <code><![CDATA[PAPER]]></code>
     </UndefinedConstant>
   </file>
-  <file src="gatherling/Views/Components/PlayerSearchForm.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[__construct]]></code>
-    </PossiblyUnusedMethod>
-  </file>
   <file src="gatherling/Views/Components/Preregistration.php">
     <InvalidPropertyAssignmentValue>
       <code><![CDATA[$this->availableEvents]]></code>
