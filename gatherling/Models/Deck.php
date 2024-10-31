@@ -577,12 +577,12 @@ class Deck
             if ($format->singleton) {
                 if (!$format->isCardSingletonLegal($card, $amt)) {
                     $this->errors[] = "Singleton formats allow only one of any card, except basic lands.
-                                 You entered {$amt} {$card} on your sideboard.";
+                                 You entered {$amt} {$card} in your sideboard.";
                 }
                 foreach ($this->maindeck_cards as $singletonCard => $mainamt) {
                     if ($singletonCard == $card) {
                         $this->errors[] = "Singleton formats allow only one of any card, except basic lands.
-                                     You entered {$amt} {$card} on your sideboard
+                                     You entered {$amt} {$card} in your sideboard
                                      and {$mainamt} {$card} in your mainboard.";
                         break;
                     }
@@ -590,12 +590,12 @@ class Deck
             } else {
                 if (!$format->isQuantityLegal($card, $amt)) {
                     $this->errors[] = "No more than four of any card is allowed in this format, except basic lands.
-                                 You entered {$amt} {$card} on your sideboard.";
+                                 You entered {$amt} {$card} in your sideboard.";
                 } else {
                     foreach ($this->maindeck_cards as $quantityCard => $mainamt) {
                         if (!$format->isQuantityLegalAgainstMain($card, $amt, $quantityCard, $mainamt)) {
                             $this->errors[] = "No more than four of any card is allowed in this format, except basic lands.
-                                         You entered {$amt} {$card} on your sideboard
+                                         You entered {$amt} {$card} in your sideboard
                                          and {$mainamt} {$card} in your mainboard.";
                             break;
                         }
