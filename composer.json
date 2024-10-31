@@ -7,7 +7,7 @@
         "tests": "vendor/bin/phpunit --stop-on-defect tests",
         "lint": "vendor/bin/phpcs -d memory_limit=2G --runtime-set testVersion 8.1 .",
         "autofix": "vendor/bin/phpcbf -d memory_limit=2G --runtime-set testVersion 8.1 .",
-        "analyze": "vendor/bin/phpstan --memory-limit=2G && vendor/bin/psalm --no-cache",
+        "analyze": "vendor/bin/phpstan --memory-limit=2G && vendor/bin/psalm --no-cache --threads=1",
         "jstests": "bun test"
     },
     "require": {
