@@ -24,24 +24,22 @@ function main(): never
         (new InfobotError('Wrong passkey'))->send();
     }
 
-    $siteName = config()->string('site_name');
-
     // generate a user passkey for verification
     $random_num = mt_rand();
     $key = sha1((string) $random_num);
     $challenge = substr($key, 0, 5);
     $player = Player::findByName(get()->optionalString('username') ?? '');
     if (!$player) {
-        (new InfobotReply("You're not registered on {$siteName}!"))->send();
+        (new InfobotReply("You're not registered on Gatherling!"))->send();
     }
 
     $mode = request()->string('mode', '');
     if ($mode === 'verify') {
         $player->setChallenge($challenge);
-        (new InfobotReply("Your verification code for {$siteName} is $challenge"))->send();
+        (new InfobotReply("Your verification code for Gatherling is $challenge"))->send();
     } elseif ($mode === 'reset') {
         $player->setPassword($challenge);
-        (new InfobotReply("Your temporary password for {$siteName} is $challenge"))->send();
+        (new InfobotReply("Your temporary password for Gatherling is $challenge"))->send();
     } else {
         (new InfobotError("Unknown Action {$mode}"))->send();
     }

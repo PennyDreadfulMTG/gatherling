@@ -31,6 +31,6 @@ if (file_exists('../.git/HEAD')) {
 
 Sentry\init([
     'dsn'         => 'https://ed7243cbdd9e47c8bc2205d4ac36b764@sentry.redpoint.games/16',
-    'environment' => $CONFIG['site_name'],
+    'environment' => 'Gatherling',
     'release'     => $CONFIG['GIT_HASH'],
 ]);

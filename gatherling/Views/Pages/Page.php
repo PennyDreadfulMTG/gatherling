@@ -23,13 +23,11 @@ abstract class Page extends TemplateResponse
     public bool $isSuper;
     public string $js;
     public ?Player $player;
-    public string $siteName;
     public string $versionTagline;
     public string $jsLink;
 
     public function __construct(public string $title)
     {
-        $this->siteName = config()->string('site_name', 'Gatherling');
         $this->gitHash = git_hash();
         $this->cssLink = 'styles/css/stylesheet.css?v=' . rawurlencode($this->gitHash);
         $this->headerLogoSrc = 'styles/images/header_logo.png';
