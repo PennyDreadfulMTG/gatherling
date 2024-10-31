@@ -153,11 +153,7 @@ function parseCardsWithQuantity(string|array $cards): array
 function getObjectVarsCamelCase(object $obj): array
 {
     $vars = get_object_vars($obj);
-    // Force phpstan to understand that an object never has a property that could be coerced to int
-    // when used as an array key.
-    /** @var array<string, mixed> */
-    $result = arrayMapRecursive(fn(string $key) => toCamel($key), $vars);
-    return $result;
+    return arrayMapRecursive(fn($key) => is_string($key) ? toCamel($key) : $key, $vars);
 }
 
 // https://stackoverflow.com/a/45440841/375262
@@ -197,7 +193,7 @@ function toCamel(string $string): string
 
 /**
  * @param array<string, mixed> $arr
- * @return array<int|string, mixed>
+ * @return array<string, mixed>
  */
 function arrayMapRecursive(callable $func, array $arr): array
 {

@@ -1591,6 +1591,11 @@ parameters:
 			path: gatherling/index.php
 
 		-
+			message: "#^Function arrayMapRecursive\\(\\) should return array\\<string, mixed\\> but returns array\\<int\\|string, mixed\\>\\.$#"
+			count: 1
+			path: gatherling/lib.php
+
+		-
 			message: "#^Parameter \\#1 \\$string of function strtolower expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/lib.php
