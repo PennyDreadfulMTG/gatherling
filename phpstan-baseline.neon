@@ -411,11 +411,6 @@ parameters:
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Parameter \\#1 \\$seriesName of method Gatherling\\\\Models\\\\Player\\:\\:isOrganizer\\(\\) expects string, string\\|null given\\.$#"
-			count: 3
-			path: gatherling/Models/Format.php
-
-		-
 			message: "#^Parameter \\#1 \\$string1 of function strcasecmp expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/Models/Format.php
@@ -776,11 +771,6 @@ parameters:
 			path: gatherling/Models/Standings.php
 
 		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\BAndR\\:\\:\\$activeFormatName \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Components/BAndR.php
-
-		-
 			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Components/CardLink.php
@@ -789,11 +779,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Components/EventStandings.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Components/FormatCPMenu.php
 
 		-
 			message: "#^Parameter \\#1 \\$event_id of class Gatherling\\\\Models\\\\Entry constructor expects int, int\\|null given\\.$#"
@@ -1229,11 +1214,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$to of function sendEmail expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/forgot.php
-
-		-
-			message: "#^Parameter \\#1 \\$oldFormatName of class Gatherling\\\\Views\\\\Components\\\\FormatSaveAsForm constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/formatcp.php
 
 		-
 			message: "#^Parameter \\#1 \\$values of function updateFormat expects array\\<string, string\\>, array given\\.$#"

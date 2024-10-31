@@ -11,11 +11,11 @@ use function Gatherling\Helpers\logger;
 
 class Format
 {
-    public ?string $name;
-    public ?string $description;
-    public ?string $type;        // who has access to filter: public, private, system
-    public ?string $series_name; // filter owner
-    public ?int $priority;
+    public string $name;
+    public string $description;
+    public string $type;        // who has access to filter: public, private, system
+    public string $series_name; // filter owner
+    public int $priority;
     public ?bool $new = null;
 
     // card set construction
@@ -27,36 +27,36 @@ class Format
     public array $card_legallist = [];
     /** @var list<string> */
     public array $legal_sets = [];
-    public ?int $eternal;
-    public ?int $modern;
-    public ?int $standard;
+    public int $eternal;
+    public int $modern;
+    public int $standard;
 
     // deck construction switches
-    public ?int $singleton;
-    public ?int $commander;
-    public ?int $planechase;
-    public ?int $vanguard;
-    public ?int $prismatic;
-    public ?int $tribal;
-    public ?int $pure;
-    public ?int $underdog;
-    public ?int $limitless;
+    public int $singleton;
+    public int $commander;
+    public int $planechase;
+    public int $vanguard;
+    public int $prismatic;
+    public int $tribal;
+    public int $pure;
+    public int $underdog;
+    public int $limitless;
 
     // rarities allowed switches
-    public ?int $allow_commons;
-    public ?int $allow_uncommons;
-    public ?int $allow_rares;
-    public ?int $allow_mythics;
-    public ?int $allow_timeshifted;
+    public int $allow_commons;
+    public int $allow_uncommons;
+    public int $allow_rares;
+    public int $allow_mythics;
+    public int $allow_timeshifted;
 
     // deck limits
-    public ?int $min_main_cards_allowed;
-    public ?int $max_main_cards_allowed;
-    public ?int $min_side_cards_allowed;
-    public ?int $max_side_cards_allowed;
+    public int $min_main_cards_allowed;
+    public int $max_main_cards_allowed;
+    public int $min_side_cards_allowed;
+    public int $max_side_cards_allowed;
 
     // Meta Formats
-    public ?int $is_meta_format;
+    public int $is_meta_format;
 
     /** @var list<string> */
     private array $error = [];
@@ -84,6 +84,7 @@ class Format
             $this->tribal = 0;
             $this->pure = 0;
             $this->underdog = 0;
+            $this->limitless = 0;
             $this->allow_commons = 1;
             $this->allow_uncommons = 1;
             $this->allow_rares = 1;
@@ -105,49 +106,44 @@ class Format
             $this->insertNewFormat();
             return;
         } else {
-            $db = Database::getConnection();
-            $stmt = $db->prepare('SELECT name, description, type, series_name, singleton, commander, planechase, vanguard,
-                                         prismatic, tribal, pure, underdog, limitless, allow_commons, allow_uncommons, allow_rares, allow_mythics,
-                                         allow_timeshifted, priority, min_main_cards_allowed, max_main_cards_allowed,
-                                         min_side_cards_allowed, max_side_cards_allowed, eternal, modern, `standard`, is_meta_format
-                                  FROM formats
-                                  WHERE name = ?');
-            $stmt or exit($db->error);
-            $stmt->bind_param('s', $name);
-            $stmt->execute();
-            $stmt->bind_result(
-                $this->name,
-                $this->description,
-                $this->type,
-                $this->series_name,
-                $this->singleton,
-                $this->commander,
-                $this->planechase,
-                $this->vanguard,
-                $this->prismatic,
-                $this->tribal,
-                $this->pure,
-                $this->underdog,
-                $this->limitless,
-                $this->allow_commons,
-                $this->allow_uncommons,
-                $this->allow_rares,
-                $this->allow_mythics,
-                $this->allow_timeshifted,
-                $this->priority,
-                $this->min_main_cards_allowed,
-                $this->max_main_cards_allowed,
-                $this->min_side_cards_allowed,
-                $this->max_side_cards_allowed,
-                $this->eternal,
-                $this->modern,
-                $this->standard,
-                $this->is_meta_format
-            );
-            if ($stmt->fetch() == null) {
-                throw new Exception('Format ' . $name . ' not found in DB');
-            }
-            $stmt->close();
+            $sql = '
+                SELECT name, description, type, series_name, singleton, commander, planechase, vanguard,
+                      prismatic, tribal, pure, underdog, limitless, allow_commons, allow_uncommons,
+                      allow_rares, allow_mythics, allow_timeshifted, priority, min_main_cards_allowed,
+                      max_main_cards_allowed, min_side_cards_allowed, max_side_cards_allowed, eternal,
+                      modern, `standard`, is_meta_format
+                 FROM formats
+                WHERE name = :name';
+            $result = db()->selectOnly($sql, FormatDto::class, ['name' => $name]);
+
+            $this->name = $result->name;
+            $this->description = $result->description;
+            $this->type = $result->type;
+            $this->series_name = $result->series_name;
+            $this->singleton = $result->singleton;
+            $this->commander = $result->commander;
+            $this->planechase = $result->planechase;
+            $this->vanguard = $result->vanguard;
+            $this->prismatic = $result->prismatic;
+            $this->tribal = $result->tribal;
+            $this->pure = $result->pure;
+            $this->underdog = $result->underdog;
+            $this->limitless = $result->limitless;
+            $this->allow_commons = $result->allow_commons;
+            $this->allow_uncommons = $result->allow_uncommons;
+            $this->allow_rares = $result->allow_rares;
+            $this->allow_mythics = $result->allow_mythics;
+            $this->allow_timeshifted = $result->allow_timeshifted;
+            $this->priority = $result->priority;
+            $this->min_main_cards_allowed = $result->min_main_cards_allowed;
+            $this->max_main_cards_allowed = $result->max_main_cards_allowed;
+            $this->min_side_cards_allowed = $result->min_side_cards_allowed;
+            $this->max_side_cards_allowed = $result->max_side_cards_allowed;
+            $this->eternal = $result->eternal;
+            $this->modern = $result->modern;
+            $this->standard = $result->standard;
+            $this->is_meta_format = $result->is_meta_format;
+
             $this->card_banlist = $this->getBanList();
             $this->card_legallist = $this->getLegalList();
             $this->card_restrictedlist = $this->getRestrictedList();
@@ -458,7 +454,7 @@ class Format
 
     public function noFormatLoaded(): bool
     {
-        return ($this->name == '') || is_null($this->name);
+        return $this->name == '';
     }
 
     /** @return list<string> */
