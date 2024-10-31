@@ -1215,7 +1215,7 @@ class Event
                 $activePlayers[$i]['paired'] = false;
             }
 
-            $pairings = new Pairings($activePlayers, $bye_data);
+            $pairings = new Pairings(array_values($activePlayers), $bye_data);
             $pairing = $pairings->pairing;
             if ($bye_data) {
                 array_push($activePlayers, $bye_data);

@@ -516,16 +516,6 @@ parameters:
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Parameter \\#2 \\$player1 of method Gatherling\\\\Models\\\\Pairings\\:\\:weight\\(\\) expects array\\{score\\: int, player\\: string, opponents\\: array\\<int, string\\>\\}, array\\<string, array\\<int, string\\>\\|int\\|string\\> given\\.$#"
-			count: 1
-			path: gatherling/Models/Pairings.php
-
-		-
-			message: "#^Parameter \\#3 \\$player2 of method Gatherling\\\\Models\\\\Pairings\\:\\:weight\\(\\) expects array\\{score\\: int, player\\: string, opponents\\: array\\<int, string\\>\\}, array\\<string, array\\<int, string\\>\\|int\\|string\\> given\\.$#"
-			count: 1
-			path: gatherling/Models/Pairings.php
-
-		-
 			message: "#^Cannot access property \\$num_rows on mysqli_stmt\\|false\\.$#"
 			count: 1
 			path: gatherling/Models/Player.php
