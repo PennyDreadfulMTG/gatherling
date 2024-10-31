@@ -93,21 +93,21 @@ final class EventsTest extends DatabaseCase
         $this->assertEquals(0, count($event->getRegisteredEntries(false, true)));
 
         $deck = insertDeck('testplayer0', $event, '60 Plains', '');
-        $this->assertEmpty($deck->errors, json_encode($deck->errors));
+        $this->assertEmpty($deck->errors, (string) json_encode($deck->errors));
         $deck = insertDeck('testplayer1', $event, '60 Island', '');
-        $this->assertEmpty($deck->errors, json_encode($deck->errors));
+        $this->assertEmpty($deck->errors, (string) json_encode($deck->errors));
         $deck = insertDeck('testplayer2', $event, '40 Swamp', '');
         $this->assertNotEmpty($deck->errors, 'No errors for a 40 card deck.');
         $deck = insertDeck('testplayer3', $event, "60 Swamp\n100 Relentless Rats", '15 Swamp');
-        $this->assertEmpty($deck->errors, json_encode($deck->errors));
+        $this->assertEmpty($deck->errors, (string) json_encode($deck->errors));
         $deck = insertDeck('testplayer4', $event, "20 Mountain\n20 Forest\n\n\n\n\n\n\n\n\n\n\n\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n\n\n", '');
-        $this->assertEmpty($deck->errors, json_encode($deck->errors));
+        $this->assertEmpty($deck->errors, (string) json_encode($deck->errors));
         $deck = insertDeck('testplayer5', $event, "54 Mountain\n6 Seven Dwarves", '1 Seven Dwarves');
-        $this->assertEmpty($deck->errors, json_encode($deck->errors));
+        $this->assertEmpty($deck->errors, (string) json_encode($deck->errors));
         $deck = insertDeck('testplayer6', $event, "50 Mountain\n10 Seven Dwarves", '');
-        $this->assertNotEmpty($deck->errors, json_encode($deck->errors));
+        $this->assertNotEmpty($deck->errors, (string) json_encode($deck->errors));
         $deck = insertDeck('testplayer7', $event, "55 Mountain\n5 Seven Dwarves", '5 Seven Dwarves');
-        $this->assertNotEmpty($deck->errors, json_encode($deck->errors));
+        $this->assertNotEmpty($deck->errors, (string) json_encode($deck->errors));
         // None of this changes entry status.
         $this->assertEquals(10, count($event->getEntries()));
         // 5 Valid decks (0, 1, 3, 4, 5), 3 invalid decks (2, 6, 7), and 2 not submitted decks (8, 9).
