@@ -136,6 +136,8 @@ function main(): never
                 $viewComponent = new SubmitResultForm($match->id, true);
             }
             break;
+        default:
+            (new Redirect('player.php'))->send();
     }
     $page = new Report($result, $viewComponent);
     $page->send();
