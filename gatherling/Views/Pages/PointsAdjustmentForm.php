@@ -6,6 +6,8 @@ namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Event;
 
+use function Gatherling\Helpers\getObjectVarsCamelCase;
+
 class PointsAdjustmentForm extends EventFrame
 {
     /** @var list<array<string, mixed>> */

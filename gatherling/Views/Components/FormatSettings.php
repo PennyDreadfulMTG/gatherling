@@ -6,6 +6,8 @@ namespace Gatherling\Views\Components;
 
 use Gatherling\Models\Format;
 
+use function Gatherling\Helpers\getObjectVarsCamelCase;
+
 class FormatSettings extends Component
 {
     public string $activeFormatName;

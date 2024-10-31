@@ -8,6 +8,8 @@ namespace Gatherling\Views\Pages;
 // Also handles setting event and title properties.
 use Gatherling\Models\Event;
 
+use function Gatherling\Helpers\getObjectVarsCamelCase;
+
 abstract class EventFrame extends Page
 {
     /** @var array<string, mixed> */

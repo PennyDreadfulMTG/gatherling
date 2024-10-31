@@ -16,6 +16,8 @@ use Gatherling\Views\Components\StringField;
 use Gatherling\Views\Components\InitialByesDropMenu;
 use Gatherling\Views\Components\InitialSeedDropMenu;
 
+use function Gatherling\Helpers\getObjectVarsCamelCase;
+
 class PlayerList extends EventFrame
 {
     public bool $isActive;

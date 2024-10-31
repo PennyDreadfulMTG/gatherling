@@ -11,6 +11,8 @@ use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\RoundDropMenu;
 use Gatherling\Views\Components\PlayerDropMenu;
 
+use function Gatherling\Helpers\getObjectVarsCamelCase;
+
 class MatchList extends EventFrame
 {
     /** @var list<array<string, string>> */

@@ -6,11 +6,8 @@ use Gatherling\Auth\Session;
 use Gatherling\Models\Player;
 
 use function Gatherling\Helpers\config;
-use function Safe\iconv;
 use function Safe\ob_start;
 use function Safe\php_sapi_name;
-use function Safe\preg_replace;
-use function Safe\preg_split;
 
 require_once 'bootstrap.php';
 
@@ -90,69 +87,4 @@ function version_tagline(): string
     // "Gatherling version 1.9.2 (\"So now you're the boss. You're the King of Bob.\")";
     // "Gatherling version 1.9.1 (\"It's the United States of Don't Touch That Thing Right in Front of You.\")";
     // "Gatherling version 1.9 (\"It's funny 'cause the squirrel got dead\")";
-}
-
-// Our standard template variable naming is camelCase.
-// Some of our objects have properties named in snake_case.
-// So when we grab the values from an object to pass into
-// a template with get_object_vars let's also preserve the
-// naming standard by transforming the case.
-/** @return array<string, mixed> */
-function getObjectVarsCamelCase(object $obj): array
-{
-    $vars = get_object_vars($obj);
-    return arrayMapRecursive(fn($key) => is_string($key) ? toCamel($key) : $key, $vars);
-}
-
-// https://stackoverflow.com/a/45440841/375262
-function toCamel(string $string): string
-{
-    // Convert to ASCII, remove apostrophes, and split into words
-    $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
-    $string = str_replace("'", "", $string);
-    $words = preg_split('/[^a-zA-Z0-9]+/', $string);
-
-    // Convert each word to camel case
-    $camelCase = array_map(function ($word) {
-        // Split words that are already in camel case
-        $word = preg_replace('/(?<=\p{Ll})(?=\p{Lu})/u', ' ', $word);
-        /** @var string $word */
-        $word = preg_replace('/(?<=\p{Lu})(?=\p{Lu}\p{Ll})/u', ' ', $word);
-        $subWords = explode(' ', $word);
-
-        // Lowercase each subword
-        $subWords = array_map('strtolower', $subWords);
-        // Capitalize each subword
-        $subWords = array_map('ucfirst', $subWords);
-
-        return implode('', $subWords);
-    }, $words);
-
-    // Join words and lowercase the first character
-    $result = implode('', $camelCase);
-    $result = lcfirst($result);
-    return $result;
-}
-
-/**
- * @param array<string, mixed> $arr
- * @return array<string, mixed>
- */
-function arrayMapRecursive(callable $func, array $arr): array
-{
-    $result = [];
-
-    foreach ($arr as $key => $value) {
-        $newKey = $func($key);
-
-        if (is_array($value)) {
-            $result[$newKey] = arrayMapRecursive($func, $value);
-        } elseif (is_object($value)) {
-            $result[$newKey] = getObjectVarsCamelCase($value);
-        } else {
-            $result[$newKey] = $value;
-        }
-    }
-
-    return $result;
 }

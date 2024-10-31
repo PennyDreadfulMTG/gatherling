@@ -48,7 +48,8 @@
         "files": [
             "gatherling/Helpers/cards.php",
             "gatherling/Helpers/database.php",
-            "gatherling/Helpers/helpers.php"
+            "gatherling/Helpers/helpers.php",
+            "gatherling/Helpers/templates.php"
         ]
     }
 }
