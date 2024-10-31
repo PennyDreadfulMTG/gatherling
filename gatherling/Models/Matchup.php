@@ -19,12 +19,12 @@ class Matchup
     public ?string $playerb;
     public ?string $result;
     // We keep both players wins and losses, so that they can independently report their scores.
-    public ?int $playera_wins;
-    public ?int $playera_losses;
-    public ?int $playera_draws;
-    public ?int $playerb_wins;
-    public ?int $playerb_losses;
-    public ?int $playerb_draws;
+    public int $playera_wins = 0;
+    public int $playera_losses = 0;
+    public int $playera_draws = 0;
+    public int $playerb_wins = 0;
+    public int $playerb_losses = 0;
+    public int $playerb_draws = 0;
 
     // Inherited from subevent
 
@@ -53,14 +53,11 @@ class Matchup
     public function __construct(int $id)
     {
         $sql = '
-            SELECT
-                m.subevent, m.round, m.playera, m.playerb, m.result, m.playera_wins, m.playera_losses,
-                m.playera_draws, m.playerb_wins, m.playerb_losses, m.playerb_draws, s.timing, s.type,
-                s.rounds, e.format, e.series, e.season, m.verification, e.name AS eventname, e.id AS event_id
-            FROM
-                matches m, subevents s, events e
-            WHERE
-                m.id = :id AND m.subevent = s.id AND e.name = s.parent';
+            SELECT m.subevent, m.round, m.playera, m.playerb, m.result, m.playera_wins, m.playera_losses,
+                   m.playera_draws, m.playerb_wins, m.playerb_losses, m.playerb_draws, s.timing, s.type,
+                   s.rounds, e.format, e.series, e.season, m.verification, e.name AS eventname, e.id AS event_id
+              FROM matches m, subevents s, events e
+             WHERE m.id = :id AND m.subevent = s.id AND e.name = s.parent';
         $row = db()->selectOnlyOrNull($sql, MatchupDto::class, ['id' => $id]);
         if ($row === null) {
             return;
