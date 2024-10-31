@@ -44,12 +44,6 @@ class Decksearch
      * </code>
      *
      * will return an array of deck id's matching the set search terms
-     *
-     *
-     *
-     * @version 1.0
-     *
-     * @category Deck
      */
     public function __construct()
     {
