@@ -60,13 +60,8 @@ class Decksearch
         if (count($this->results) <= 0 || count($this->errors) > 0) {
             return false;
         }
-        $array_keys = array_keys($this->results);
-        $first_key = array_shift($array_keys);
-        $tmp_results = $this->results[$first_key];
-        foreach ($this->results as $key => $value) {
-            $tmp_results = array_intersect($tmp_results, $this->results[$key]);
-        }
-        if (count($tmp_results) == 0) {
+        $tmp_results = array_intersect(...array_values($this->results));
+        if (empty($tmp_results)) {
             $this->errors[] = 'Your search query did not have any matches';
             return false;
         }
