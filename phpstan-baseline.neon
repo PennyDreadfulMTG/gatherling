@@ -151,11 +151,6 @@ parameters:
 			path: gatherling/Models/Entry.php
 
 		-
-			message: "#^Parameter \\#1 \\$eventname of method Gatherling\\\\Models\\\\Player\\:\\:getMatchesEvent\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Entry.php
-
-		-
 			message: "#^Parameter \\#2 \\$string2 of function strcasecmp expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Entry.php
@@ -251,11 +246,6 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Parameter \\#1 \\$event of method Gatherling\\\\Models\\\\Ratings\\:\\:calcFinalizedEventRatings\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Parameter \\#1 \\$event_id of class Gatherling\\\\Models\\\\Entry constructor expects int, int\\|null given\\.$#"
 			count: 5
 			path: gatherling/Models/Event.php
@@ -271,47 +261,7 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Parameter \\#1 \\$eventname of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"
-			count: 9
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventname of method Gatherling\\\\Models\\\\Standings\\:\\:getEventStandings\\(\\) expects string, string\\|null given\\.$#"
-			count: 6
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventname of method Gatherling\\\\Models\\\\Standings\\:\\:getOpponents\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Standings\\:\\:getEventStandings\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Standings\\:\\:resetMatched\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Standings\\:\\:updateStandings\\(\\) expects string, string\\|null given\\.$#"
-			count: 3
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Standings\\:\\:writeSeed\\(\\) expects string, string\\|null given\\.$#"
-			count: 17
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Parameter \\#1 \\$roundnum of method Gatherling\\\\Models\\\\Event\\:\\:getRoundMatches\\(\\) expects int\\|string, int\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
 
@@ -323,11 +273,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$win of method Gatherling\\\\Models\\\\Event\\:\\:setFinalists\\(\\) expects string, string\\|null given\\.$#"
 			count: 2
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Parameter \\#2 \\$event_name of static method Gatherling\\\\Models\\\\Standings\\:\\:startEvent\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
 			path: gatherling/Models/Event.php
 
 		-
@@ -573,11 +518,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$event_id of class Gatherling\\\\Models\\\\Entry constructor expects int, int\\|null given\\.$#"
 			count: 1
-			path: gatherling/Models/Matchup.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventname of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"
-			count: 4
 			path: gatherling/Models/Matchup.php
 
 		-
@@ -971,11 +911,6 @@ parameters:
 			path: gatherling/Views/Components/FormatCPMenu.php
 
 		-
-			message: "#^Parameter \\#1 \\$eventName of class Gatherling\\\\Views\\\\Components\\\\EventStandings constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Components/FullMetagame.php
-
-		-
 			message: "#^Parameter \\#1 \\$event_id of class Gatherling\\\\Models\\\\Entry constructor expects int, int\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Components/FullMetagame.php
@@ -1026,11 +961,6 @@ parameters:
 			path: gatherling/Views/Components/Prereg.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, string\\|null given\\.$#"
-			count: 2
-			path: gatherling/Views/Components/Prereg.php
-
-		-
 			message: "#^Binary operation \"\\+\" between float\\|int\\|string\\|null and 1 results in an error\\.$#"
 			count: 1
 			path: gatherling/Views/Components/SeasonDropMenu.php
@@ -1059,11 +989,6 @@ parameters:
 			message: "#^Cannot cast mixed to string\\.$#"
 			count: 1
 			path: gatherling/Views/Components/TextInput.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Event\\:\\:trophySrc\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Components/TrophyCell.php
 
 		-
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
@@ -1096,11 +1021,6 @@ parameters:
 			path: gatherling/Views/Pages/EventForm.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventForm.php
-
-		-
 			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, int\\|string given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventForm.php
@@ -1127,16 +1047,11 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, string\\|null given\\.$#"
-			count: 3
-			path: gatherling/Views/Pages/Home.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\Home\\:\\:\\$activeEvents \\(list\\<array\\{name\\: string, format\\: string, currentRound\\: int, eventReportLink\\: string\\}\\>\\) does not accept non\\-empty\\-list\\<array\\{name\\: string\\|null, format\\: string\\|null, currentRound\\: int\\|null, eventReportLink\\: string\\}\\>\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/Home.php
 
 		-
-			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\Home\\:\\:\\$mostRecentHostedEvent \\(array\\{name\\: string, link\\: string\\}\\|null\\) does not accept array\\{name\\: string\\|null, link\\: non\\-falsy\\-string\\}\\.$#"
+			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\Home\\:\\:\\$activeEvents \\(list\\<array\\{name\\: string, format\\: string, currentRound\\: int, eventReportLink\\: string\\}\\>\\) does not accept non\\-empty\\-list\\<array\\{name\\: string, format\\: string\\|null, currentRound\\: int\\|null, eventReportLink\\: string\\}\\>\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/Home.php
 
@@ -1166,19 +1081,9 @@ parameters:
 			path: gatherling/Views/Pages/MatchList.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/MatchList.php
-
-		-
 			message: "#^Parameter \\#1 \\$string1 of function strcasecmp expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/MatchList.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Standings\\:\\:playerActive\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/PlayerList.php
 
 		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Format constructor expects string, string\\|null given\\.$#"
@@ -1256,11 +1161,6 @@ parameters:
 			path: gatherling/Views/Pages/Series.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Views\\\\Components\\\\EventReportLink constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/Series.php
-
-		-
 			message: "#^Parameter \\#1 \\$time of class Gatherling\\\\Views\\\\Components\\\\Time constructor expects int, int\\|false given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/Series.php
@@ -1274,11 +1174,6 @@ parameters:
 			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\Series\\:\\:\\$activeSeries \\(array\\<string, mixed\\>\\) does not accept array\\<int\\|string, mixed\\>\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/Series.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventName of class Gatherling\\\\Views\\\\Components\\\\EventStandings constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/StandingsList.php
 
 		-
 			message: "#^Cannot access property \\$deck on Gatherling\\\\Models\\\\Entry\\|null\\.$#"
@@ -1354,16 +1249,6 @@ parameters:
 			message: "#^Part \\$action \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
 			count: 1
 			path: gatherling/api.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventname of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"
-			count: 2
-			path: gatherling/api_lib.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Standings\\:\\:getEventStandings\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/api_lib.php
 
 		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
@@ -1457,16 +1342,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$event_id of class Gatherling\\\\Models\\\\Entry constructor expects int, int\\|null given\\.$#"
-			count: 2
-			path: gatherling/event.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventname of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"
-			count: 3
-			path: gatherling/event.php
-
-		-
-			message: "#^Parameter \\#1 \\$eventname of static method Gatherling\\\\Models\\\\Standings\\:\\:updateStandings\\(\\) expects string, string\\|null given\\.$#"
 			count: 2
 			path: gatherling/event.php
 
@@ -1651,11 +1526,6 @@ parameters:
 			path: gatherling/profile.php
 
 		-
-			message: "#^Parameter \\#1 \\$eventname of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"
-			count: 2
-			path: gatherling/report.php
-
-		-
 			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:dropPlayer\\(\\) expects string, string\\|null given\\.$#"
 			count: 2
 			path: gatherling/report.php
@@ -1689,16 +1559,6 @@ parameters:
 			message: "#^Property Gatherling\\\\Models\\\\Series\\:\\:\\$start_day \\(string\\|null\\) does not accept mixed\\.$#"
 			count: 1
 			path: gatherling/seriescp.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, string\\|null given\\.$#"
-			count: 1
-			path: tests/EventsTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, string\\|null given\\.$#"
-			count: 1
-			path: tests/Models/DeckTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:addPlayer\\(\\) expects string, string\\|null given\\.$#"
