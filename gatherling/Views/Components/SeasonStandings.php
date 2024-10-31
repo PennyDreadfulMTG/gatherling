@@ -24,7 +24,7 @@ class SeasonStandings extends Component
         $seasonEventNames = $series->getSeasonEventNames($season);
         $points = $series->seasonPointsTable($season);
         $cutoff = $series->getSeasonCutoff($season);
-        uasort($points, [self::class, 'reverseTotalSort']);
+        uasort($points, fn($a, $b) => self::reverseTotalSort($a, $b));
 
         $seasonEvents = [];
         foreach ($seasonEventNames as $eventName) {
