@@ -100,7 +100,7 @@ function bestEver(string $format): array
 function currentThrough(string $format): array
 {
     $start = db()->string('SELECT MAX(updated) FROM ratings WHERE format = :format', ['format' => $format]);
-    $name = db()->string('SELECT name FROM events WHERE start = :start', ['start' => $start]);
+    $name = db()->string('SELECT name FROM events WHERE start = :start ORDER BY name LIMIT 1', ['start' => $start]);
     return ['date' => new DateTime($start), 'name' => $name];
 }
 
