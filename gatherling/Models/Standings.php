@@ -327,19 +327,6 @@ class Standings
         }
     }
 
-    public static function addPlayerToEvent(string $event_name, string $entry): void
-    {
-        $standing = new self($event_name, $entry);
-        $standing->save();
-    }
-
-    public static function dropPlayer(string $eventname, string $playername): void
-    {
-        $standing = new self($eventname, $playername);
-        $standing->active = 0;
-        $standing->save();
-    }
-
     public static function playerActive(string $eventname, string $playername): bool
     {
         $standing = new self($eventname, $playername);
