@@ -191,11 +191,6 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Cannot access property \\$affected_rows on mysqli_stmt\\|false\\.$#"
-			count: 2
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Cannot access property \\$num_rows on mysqli_stmt\\|false\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
