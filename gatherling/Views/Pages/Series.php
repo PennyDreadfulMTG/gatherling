@@ -12,7 +12,7 @@ use function Safe\strtotime;
 
 class Series extends Page
 {
-    /** @var array<string, mixed> */
+    /** @var array<array{seriesName: string, logoSrc: string, formatName: ?string, hosts: string, regularTime: string, masterDocumentLink: string, season: int|string|null, eventReportLink: EventReportLink|null, nextEventStart: Time|null}> */
     public array $activeSeries;
 
     /** @param list<string> $activeSeriesNames */
