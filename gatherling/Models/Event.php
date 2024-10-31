@@ -12,7 +12,7 @@ use function Gatherling\Helpers\logger;
 
 class Event
 {
-    public ?string $name;
+    public string $name;
     public ?int $id;
 
     public ?int $season;
