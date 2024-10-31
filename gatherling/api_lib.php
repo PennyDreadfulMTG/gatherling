@@ -11,6 +11,7 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Models\Standings;
+use Gatherling\Views\JsonResponse;
 
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\config;
@@ -18,7 +19,6 @@ use function Gatherling\Helpers\parseCardsWithQuantity;
 use function Gatherling\Helpers\server;
 use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\session;
-use function Safe\json_encode;
 
 /**
  * @param array<string, mixed> $array
@@ -100,8 +100,8 @@ function error(string $msg, mixed $extra = null): never
     }
     $result['error'] = $msg;
     $result['success'] = false;
-    json_headers();
-    exit(json_encode($result));
+    $page = new JsonResponse($result, true);
+    $page->send();
 }
 
 function argStr(string $key, string|false $default = false): string

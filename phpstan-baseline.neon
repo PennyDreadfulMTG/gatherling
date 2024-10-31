@@ -936,11 +936,6 @@ parameters:
 			path: gatherling/api.php
 
 		-
-			message: "#^Part \\$action \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 1
-			path: gatherling/api.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
 			count: 2
 			path: gatherling/api_lib.php
