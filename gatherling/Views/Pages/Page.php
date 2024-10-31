@@ -45,7 +45,7 @@ abstract class Page extends TemplateResponse
         return TemplateHelper::render('page', $this);
     }
 
-    function versionTagline(): string
+    private function versionTagline(): string
     {
         return 'Gatherling version 6.0.3 ("Nothing is so painful to the human mind as a great and sudden change.")';
         // return 'Gatherling version 6.0.2 ("Nixon was normalizing relations with China. I figured that if he could normalize relations, then so could I.")';

@@ -8,9 +8,9 @@ use Gatherling\Models\Player;
 
 class GameName extends Component
 {
-    const MTGO = 1;
-    const MTGA = 2;
-    const PAPER = 3;
+    private const MTGO = 1;
+    private const MTGA = 2;
+    private const PAPER = 3;
 
     public string $name;
     public ?string $iconClass;
