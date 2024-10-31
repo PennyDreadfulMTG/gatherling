@@ -124,11 +124,6 @@ class Entry
         return count($matches) == 0;
     }
 
-    public function dropped(): bool
-    {
-        return $this->drop_round > 0;
-    }
-
     public function canCreateDeck(string $username): bool
     {
         $player = new Player($username);
