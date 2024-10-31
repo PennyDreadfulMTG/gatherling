@@ -25,7 +25,7 @@ class Player
     public ?string $emailAddress = null;
     public ?int $emailPrivacy = 0;
     public ?float $timezone = -5.0;
-    public int $verified;
+    public ?int $verified;
     public ?string $theme = null; // DEPRECATED. Always null.
     public ?string $discord_id = null;
     public ?string $discord_handle = null;
