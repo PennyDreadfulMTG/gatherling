@@ -807,7 +807,6 @@ class Format
         $changelingCreatures = [];
         $restrictedToTribeCreatures = [];
         $tribesTied = [];
-        $tribeKey = '';
 
         foreach ($creatures as $card => $amt) {
             // Begin processing tribe subtypes
@@ -862,7 +861,7 @@ class Format
 
         if (count($tribesTied) > 1) {
             // Two or more tribes are tied for largest tribe
-            foreach ($tribesTied as $type => $amt) {
+            foreach (array_keys($tribesTied) as $type) {
                 // Checking for tribe size in database for tie breaker
                 $sql = 'SELECT COUNT(DISTINCT name) FROM cards WHERE type LIKE :type';
                 $params = ['type' => '%' . db()->likeEscape($type) . '%'];
@@ -911,8 +910,8 @@ class Format
         // so that this changeling feature can be turned on or off.
         // here we add the changeling numbers to each of the other subtypes
         if (!$this->pure) {
-            foreach ($subTypeCount as $Type => $amt) {
-                $subTypeCount[$Type] += $subTypeChangeling;
+            foreach (array_keys($subTypeCount) as $type) {
+                $subTypeCount[$type] += $subTypeChangeling;
             }
         }
 
@@ -920,11 +919,11 @@ class Format
         // prevent duplicate adding
         // here we check to see if the changeling's type is already counted for
         // if not we add it to the list of types
-        foreach ($changelingCreatures as $Type => $amt) {
-            if (array_key_exists($Type, $subTypeCount)) {
+        foreach ($changelingCreatures as $type => $amt) {
+            if (array_key_exists($type, $subTypeCount)) {
                 continue;
             } else {
-                $subTypeCount[$Type] = $amt;
+                $subTypeCount[$type] = $amt;
             }
         }
 
