@@ -258,63 +258,6 @@ class Format
         return true;
     }
 
-    public function saveAndDeleteAuthorization(string $playerName): bool
-    {
-        // this will be used to determine if the save and delete buttons will appear on the format editor
-        // there are 3 different format types: system, public, private
-
-        $player = new Player($playerName); // to access isOrganizer and isSuper functions
-        $authorized = false;
-
-        switch ($this->type) {
-            case 'System':
-                // Only supers can save or delete system formats
-                if ($player->isSuper()) {
-                    $authorized = true;
-                }
-                break;
-            case 'Public':
-                // Only Series Organizer of the series that created the format
-                // and Supers can save or delete Public formats
-                if ($player->isOrganizer($this->series_name) || $player->isSuper()) {
-                    $authorized = true;
-                }
-                break;
-            case 'Private':
-                // The only difference in access between a public and private format is that private formats can be
-                // viewed only by the series organizers of the series it belongs to
-                // the save and delete access is the same
-                if ($player->isOrganizer($this->series_name) || $player->isSuper()) {
-                    $authorized = true;
-                }
-                break;
-        }
-
-        return $authorized;
-    }
-
-    public function viewAuthorization(string $playerName): bool
-    {
-        // this will be used to determine if a format will appear in the drop down to load in the format filter
-        // there are 3 different format types: system, public, private
-
-        $player = new Player($playerName); // to access isOrganizer and isSuper functions
-
-        switch ($this->type) {
-            case 'System':
-            case 'Public':
-                return true; // anyone can view a system and public format
-            case 'Private':
-                // Only supers and organizers can view private formats
-                if ($player->isOrganizer($this->series_name) || $player->isSuper()) {
-                    return true;
-                }
-                break;
-        }
-
-        return false;
-    }
-
     public function save(): bool
     {
         if ($this->new) {
