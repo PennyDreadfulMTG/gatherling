@@ -245,7 +245,7 @@ class Decksearch
         $db = Database::getConnection();
 
         //sanitize the id_arr to protect against sql injection.
-        $id_arr = array_filter(array_map('intval', $id_arr));
+        $id_arr = array_filter(array_map(fn($id) => intval($id), $id_arr));
 
         $query = 'SELECT id, archetype, name, playername, format, created_date from decks WHERE id IN (' . implode(',', $id_arr) . ') ORDER BY DATE(`created_date`) DESC';
         $stmt = $db->prepare($query);
