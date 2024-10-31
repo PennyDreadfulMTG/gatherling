@@ -556,17 +556,7 @@ class Deck
 
             // Restricted Card list. Only one of these cards is alowed in a deck
             if ($format->isCardOnRestrictedList($card)) {
-                $restrictedError = false;
-                if ($amt > 1) {
-                    $restrictedError = true;
-                }
-                foreach ($this->maindeck_cards as $restrictedCard => $mainamt) {
-                    if ($restrictedCard == $card) {
-                        $restrictedError = true;
-                        break;
-                    }
-                }
-                if ($restrictedError) {
+                if ($amt > 1 || array_key_exists($card, $this->maindeck_cards)) {
                     $this->errors[] = "Sideboard card: {$amt} {$card} is on the restricted list.
                                  Only one of this card may be in a deck list.";
                     $this->unparsed_side[$card] = ($this->unparsed_side[$card] ?? 0) + $amt;
