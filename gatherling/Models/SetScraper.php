@@ -35,13 +35,7 @@ class SetScraper
         $knowncodes = db()->strings('SELECT code FROM cardsets WHERE code IS NOT NULL');
 
         // Turn this into a dict for faster lookup
-        $knowncodesDict = [];
-        foreach ($knowncodes as $k => $v) {
-            // Some codes are NULL in the db, including for Alara Reborn, Ninth Edition and others. I'm not solving that now.
-            if ($v) {
-                $knowncodesDict[$v] = true;
-            }
-        }
+        $knowncodesDict = array_fill_keys($knowncodes, true);
 
         $unknownSets = array_filter($sets, function ($set) use ($knowncodesDict) {
             return !isset($knowncodesDict[$set->code]);

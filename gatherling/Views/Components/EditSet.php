@@ -20,8 +20,6 @@ class EditSet extends Component
 
     public function __construct(public string $cardSetName)
     {
-        $names = [];
-
         $sql = '
             SELECT
                 `code`, `released`, `standard_legal`, `modern_legal`

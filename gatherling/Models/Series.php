@@ -831,7 +831,7 @@ class Series
         // Make totals
         foreach ($total_pointarray as $player => $eventarray) {
             $total_pointarray[$player]['.total'] = 0;
-            foreach ($eventarray as $event => $points) {
+            foreach (array_values($eventarray) as $points) {
                 if (is_array($points)) {
                     if (is_int($points['points'])) {
                         $total_pointarray[$player]['.total'] += $points['points'];
