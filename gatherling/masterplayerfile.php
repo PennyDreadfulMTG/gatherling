@@ -7,7 +7,7 @@ use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     header('Content-type: text/plain');
     $sql = 'SELECT name FROM players ORDER BY name';
@@ -17,6 +17,7 @@ function main(): void
         printf("%08d\tx\t%s\tUS\n", $n, $name);
         $n++;
     }
+    exit;
 }
 
 if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {

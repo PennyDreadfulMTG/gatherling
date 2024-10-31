@@ -13,7 +13,7 @@ use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     $eventName = get()->optionalString('event') ?? get()->optionalString('name');
     if ($eventName && Event::exists($eventName)) {

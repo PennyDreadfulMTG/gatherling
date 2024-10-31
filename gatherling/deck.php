@@ -26,7 +26,7 @@ use function Gatherling\Helpers\request;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     $event = null;
 

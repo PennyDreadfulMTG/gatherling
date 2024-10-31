@@ -13,7 +13,7 @@ use function Gatherling\Helpers\session;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     $playerName = post()->optionalString('player') ?? get()->optionalString('player') ?? session()->optionalString('username') ?? '';
     $profileEdit = request()->int('profile_edit', 0);

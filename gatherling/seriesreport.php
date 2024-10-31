@@ -14,7 +14,7 @@ use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     $seriesName = get()->optionalString('series');
     $season = get()->int('season', 0);

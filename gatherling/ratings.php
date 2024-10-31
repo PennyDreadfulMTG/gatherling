@@ -14,7 +14,7 @@ use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     $format = post()->string('format', 'Composite');
     ['date' => $lastTournamentDate, 'name' => $lastTournamentName] = currentThrough($format);

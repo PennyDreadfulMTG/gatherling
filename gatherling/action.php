@@ -15,13 +15,13 @@ use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     $player = Player::getSessionPlayer();
     if (is_null($player)) {
-        return;
+        exit;
     }
-    $message = null;
+    $message = '';
     if ($player->emailAddress == '') {
         $message = '<a href="player.php?mode=edit_email">Add an Email Address</a> to your account.';
     }
@@ -114,10 +114,11 @@ function main(): void
         }
     }
 
-    if (!is_null($message)) {
-        $response = new WireResponse('<div class="banner_alert">' . $message . '</div>');
-        $response->send();
+    if ($message !== '') {
+        $message = '<div class="banner_alert">' . $message . '</div>';
     }
+    $response = new WireResponse($message);
+    $response->send();
 }
 
 if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {

@@ -17,7 +17,7 @@ set_time_limit(0);
 
 require_once __DIR__ . '/../lib.php';
 
-function main(): void
+function main(): never
 {
     if (PHP_SAPI != 'cli' && $_SERVER['REQUEST_METHOD'] == 'GET') { // unauthorized POST is okay
         if (!(Player::getSessionPlayer()?->isSuper() ?? false)) {

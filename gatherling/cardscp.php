@@ -22,7 +22,7 @@ use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     if (!(Player::getSessionPlayer()?->isSuper() ?? false)) {
         (new Redirect('index.php'))->send();

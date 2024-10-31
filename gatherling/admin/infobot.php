@@ -13,7 +13,7 @@ use function Gatherling\Helpers\server;
 
 require_once __DIR__ . '/../lib.php';
 
-function main(): void
+function main(): never
 {
     if (strncmp(server()->string('HTTP_USER_AGENT', ''), 'infobot', 7) != 0) {
         (new InfobotError("You're not infobot!"))->send();

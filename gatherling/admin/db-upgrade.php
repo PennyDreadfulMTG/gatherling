@@ -12,10 +12,11 @@ set_time_limit(0);
 
 require_once __DIR__ . '/../lib.php';
 
-function main(): void
+function main(): never
 {
     Setup::setupDatabase();
     echo 'done';
+    exit;
 }
 
 if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {

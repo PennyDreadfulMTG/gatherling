@@ -14,7 +14,7 @@ use function Gatherling\Helpers\session;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     if (count($_POST) > 0) {
         unset($_SESSION['search_results']);

@@ -10,7 +10,7 @@ use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     $name = 'Gatherling Tournament Schedule';
     $description = 'Magic Player Run Events on Magic: The Gathering Online';

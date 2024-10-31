@@ -16,7 +16,7 @@ use function Gatherling\Helpers\session;
 require_once __DIR__ . '/lib.php';
 require __DIR__ . '/authlib.php';
 
-function main(): void
+function main(): never
 {
     global $provider;
 

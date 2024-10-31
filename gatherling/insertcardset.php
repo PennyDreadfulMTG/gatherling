@@ -16,7 +16,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 require_once __DIR__ . '/lib.php';
 
-function main(): void
+function main(): never
 {
     global $argv;
     if (PHP_SAPI == 'cli') {
@@ -31,7 +31,7 @@ function main(): void
         foreach ($messages as $message) {
             print("$message\n");
         }
-        return;
+        exit;
     }
 
     if (!(Player::getSessionPlayer()?->isSuper() ?? false)) {
