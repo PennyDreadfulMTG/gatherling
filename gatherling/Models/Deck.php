@@ -722,14 +722,10 @@ class Deck
     private function findIdenticalDecksInternal(): array
     {
         $sql = '
-            SELECT
-                d.id
-            FROM
-                decks d, entries n, events e
-            WHERE
-                deck_hash = :deck_hash AND d.id != :id AND n.deck = d.id AND e.id = n.event_id AND e.finalized = 1
-            ORDER BY
-                e.start DESC';
+            SELECT d.id
+              FROM decks d, entries n, events e
+             WHERE deck_hash = :deck_hash AND d.id != :id AND n.deck = d.id AND e.id = n.event_id AND e.finalized = 1
+          ORDER BY e.start DESC';
         $params = ['deck_hash' => $this->deck_hash, 'id' => $this->id];
         $deckIds = db()->ints($sql, $params);
         $decks = [];
