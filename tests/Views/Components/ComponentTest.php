@@ -7,7 +7,7 @@ namespace Gatherling\Tests\Views;
 use Gatherling\Views\Components\Component;
 use PHPUnit\Framework\TestCase;
 
-class TemplateHelperTest extends TestCase
+class ComponentTest extends TestCase
 {
     public function testRenderComponent(): void
     {
