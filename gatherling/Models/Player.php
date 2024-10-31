@@ -279,11 +279,6 @@ class Player
         db()->execute($sql, $params);
     }
 
-    public function getIPAddresss(): ?string
-    {
-        return $this->ipAddress;
-    }
-
     public function emailIsPublic(): bool
     {
         return (bool) $this->emailPrivacy;
