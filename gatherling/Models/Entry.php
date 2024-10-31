@@ -15,10 +15,10 @@ class Entry
     public Event $event;
     public Player $player;
     public ?Deck $deck;
-    public ?string $medal;
-    public ?int $drop_round;
-    public ?int $initial_byes;
-    public ?int $initial_seed;
+    public string $medal;
+    public int $drop_round;
+    public int $initial_byes;
+    public int $initial_seed;
 
     public function __construct(int $event_id, string $playername)
     {

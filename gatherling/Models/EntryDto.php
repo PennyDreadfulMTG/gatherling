@@ -10,5 +10,5 @@ class EntryDto extends Dto
     public string $medal;
     public int $drop_round;
     public int $initial_byes;
-    public ?int $initial_seed;
+    public int $initial_seed;
 }
