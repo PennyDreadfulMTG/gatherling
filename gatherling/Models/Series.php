@@ -198,24 +198,6 @@ class Series
         return false;
     }
 
-    /** @return list<string> */
-    public function getEvents(): array
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE series = ?');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->bind_result($eventname);
-
-        $events = [];
-        while ($stmt->fetch()) {
-            $events[] = $eventname;
-        }
-        $stmt->close();
-
-        return $events;
-    }
-
     /** @return list<Event> */
     public function getRecentEvents(int $number = 10): array
     {

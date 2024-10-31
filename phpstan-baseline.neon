@@ -647,27 +647,27 @@ parameters:
 
 		-
 			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 10
+			count: 9
 			path: gatherling/Models/Series.php
 
 		-
 			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 10
+			count: 9
 			path: gatherling/Models/Series.php
 
 		-
 			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 8
+			count: 7
 			path: gatherling/Models/Series.php
 
 		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 10
+			count: 9
 			path: gatherling/Models/Series.php
 
 		-
 			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 10
+			count: 9
 			path: gatherling/Models/Series.php
 
 		-
