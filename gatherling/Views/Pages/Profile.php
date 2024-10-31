@@ -21,6 +21,7 @@ class Profile extends Page
     {
         parent::__construct('Player Profile');
 
+        $this->playerSearchForm = new PlayerSearchForm($playerName);
         if (rtrim($playerName) === '') {
             $this->isLoggedOut = true;
             return;
