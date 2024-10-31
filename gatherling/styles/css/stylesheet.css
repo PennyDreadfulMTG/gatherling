@@ -1069,7 +1069,7 @@ table.center {
 }
 
 /* Align text with icon */
-.event-type, .player-count, .view-standings {
+.event-type, .player-count, .event-action {
     display: flex;
     align-items: center;
     gap: var(--spacing-5-static);

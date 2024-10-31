@@ -23,13 +23,19 @@
             <div class="round-status">
                 {{#active}}
                     <a href="{{matchesLink}}">Round {{currentRound}}</a>
-                    <a href="{{standingsLink}}" class="view-standings">
+                    <a href="{{standingsLink}}" class="event-action">
                         View Standings
                         {{#standingsIcon}}{{> icon}}{{/standingsIcon}}
                     </a>
                 {{/active}}
                 {{^active}}
-                    <a href="{{settingsLink}}">Not Yet Started</a>
+                    <a href="{{settingsLink}}" class="event-action">
+                        {{#startTime}}{{> time}}{{/startTime}}
+                    </a>
+                    <a href="{{registrationLink}}" class="event-action">
+                        Start Event
+                        {{#standingsIcon}}{{> icon}}{{/standingsIcon}}
+                    </a>
                 {{/active}}
             </div>
 
