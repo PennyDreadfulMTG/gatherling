@@ -18,14 +18,14 @@ class Player
 {
     public string $name;
     public ?string $password;
-    public ?int $host = 0;
-    public ?int $super;
-    public ?int $rememberMe; // if selected will record IP address. Gatherling will automatically log players in of known IP addresses.
+    public int $host = 0;
+    public int $super;
+    public int $rememberMe; // if selected will record IP address. Gatherling will automatically log players in of known IP addresses.
     public ?string $ipAddress;
     public ?string $emailAddress = null;
     public ?int $emailPrivacy = 0;
     public ?float $timezone = -5.0;
-    public ?int $verified;
+    public int $verified;
     public ?string $theme = null; // DEPRECATED. Always null.
     public ?string $discord_id = null;
     public ?string $discord_handle = null;
