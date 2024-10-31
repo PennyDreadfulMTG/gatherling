@@ -8,9 +8,10 @@ use Gatherling\Data\Setup;
 
 use function Gatherling\Helpers\server;
 use function Safe\set_time_limit;
-set_time_limit(0);
 
 require_once __DIR__ . '/../lib.php';
+
+set_time_limit(0);
 
 function main(): never
 {
