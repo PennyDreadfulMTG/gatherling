@@ -458,11 +458,6 @@ class Event
         return $ishost || $iscohost;
     }
 
-    public function isFinalized(): bool
-    {
-        return $this->finalized != 0;
-    }
-
     public function isOrganizer(string $name): bool
     {
         $isOrganizer = false;
