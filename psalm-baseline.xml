@@ -1,228 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
-  <file src="gatherling/Helpers/Request.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[optionalFloat]]></code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="gatherling/Models/CardSet.php">
-    <UndefinedFunction>
-      <code><![CDATA[normaliseCardName($card->name)]]></code>
-    </UndefinedFunction>
-  </file>
-  <file src="gatherling/Models/Deck.php">
-    <UnusedForeachValue>
-      <code><![CDATA[$mainamt]]></code>
-    </UnusedForeachValue>
-  </file>
-  <file src="gatherling/Models/Decksearch.php">
-    <UnusedForeachValue>
-      <code><![CDATA[$value]]></code>
-    </UnusedForeachValue>
-  </file>
-  <file src="gatherling/Models/Entry.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[dropped]]></code>
-    </PossiblyUnusedMethod>
-  </file>
   <file src="gatherling/Models/Event.php">
-    <InvalidArgument>
-      <code><![CDATA[$bye_data]]></code>
-    </InvalidArgument>
-    <InvalidReturnStatement>
-      <code><![CDATA[$list_opponents]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[list<string>]]></code>
-    </InvalidReturnType>
-    <PossiblyUnusedMethod>
-      <code><![CDATA[isFinalized]]></code>
-    </PossiblyUnusedMethod>
     <UnusedVariable>
-      <code><![CDATA[$removed]]></code>
-      <code><![CDATA[$removed]]></code>
-      <code><![CDATA[$round]]></code>
-      <code><![CDATA[$round]]></code>
-      <code><![CDATA[$sec]]></code>
-      <code><![CDATA[$subevent_id]]></code>
-      <code><![CDATA[$subevent_id]]></code>
       <code><![CDATA[$win]]></code>
-      <code><![CDATA[$win]]></code>
-    </UnusedVariable>
-  </file>
-  <file src="gatherling/Models/Format.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[getFormats]]></code>
-      <code><![CDATA[getTribesAllowed]]></code>
-      <code><![CDATA[noFormatLoaded]]></code>
-      <code><![CDATA[saveAndDeleteAuthorization]]></code>
-      <code><![CDATA[viewAuthorization]]></code>
-    </PossiblyUnusedMethod>
-    <PossiblyUnusedReturnValue>
-      <code><![CDATA[bool]]></code>
-      <code><![CDATA[bool]]></code>
-      <code><![CDATA[bool]]></code>
-      <code><![CDATA[bool]]></code>
-    </PossiblyUnusedReturnValue>
-    <UndefinedFunction>
-      <code><![CDATA[normaliseCardName($card)]]></code>
-      <code><![CDATA[normaliseCardName($card)]]></code>
-      <code><![CDATA[normaliseCardName($card)]]></code>
-      <code><![CDATA[normaliseCardName($card)]]></code>
-      <code><![CDATA[normaliseCardName($card)]]></code>
-    </UndefinedFunction>
-    <UnusedForeachValue>
-      <code><![CDATA[$amt]]></code>
-      <code><![CDATA[$amt]]></code>
-      <code><![CDATA[$amt]]></code>
-      <code><![CDATA[$amt]]></code>
-      <code><![CDATA[$amt]]></code>
-    </UnusedForeachValue>
-    <UnusedVariable>
-      <code><![CDATA[$commanderColors]]></code>
-      <code><![CDATA[$success]]></code>
-      <code><![CDATA[$success]]></code>
-      <code><![CDATA[$success]]></code>
-      <code><![CDATA[$success]]></code>
-      <code><![CDATA[$tribeKey]]></code>
-      <code><![CDATA[$type]]></code>
-    </UnusedVariable>
-  </file>
-  <file src="gatherling/Models/Formats.php">
-    <UndefinedFunction>
-      <code><![CDATA[parseCards(file_get_contents($url))]]></code>
-    </UndefinedFunction>
-  </file>
-  <file src="gatherling/Models/Matchup.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[getPlayerResult]]></code>
-      <code><![CDATA[isReportable]]></code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="gatherling/Models/Player.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[getClientIPAddress]]></code>
-      <code><![CDATA[getHostedEvents]]></code>
-      <code><![CDATA[getIPAddresss]]></code>
-      <code><![CDATA[saveIPAddress]]></code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="gatherling/Models/Ratings.php">
-    <PossiblyUnusedReturnValue>
-      <code><![CDATA[bool]]></code>
-    </PossiblyUnusedReturnValue>
-  </file>
-  <file src="gatherling/Models/Series.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[getEvents]]></code>
-    </PossiblyUnusedMethod>
-    <PossiblyUnusedReturnValue>
-      <code><![CDATA[array<string, int|string>]]></code>
-    </PossiblyUnusedReturnValue>
-    <UnusedVariable>
-      <code><![CDATA[$event]]></code>
-    </UnusedVariable>
-  </file>
-  <file src="gatherling/Models/SetScraper.php">
-    <UnusedVariable>
-      <code><![CDATA[$k]]></code>
-    </UnusedVariable>
-  </file>
-  <file src="gatherling/Models/Standings.php">
-    <UnusedVariable>
-      <code><![CDATA[$allPlayers]]></code>
-      <code><![CDATA[$opponent_names]]></code>
     </UnusedVariable>
   </file>
   <file src="gatherling/Views/Components/AuthDebugInfo.php">
     <UndefinedFunction>
       <code><![CDATA[get_user_guilds($token)]]></code>
     </UndefinedFunction>
-  </file>
-  <file src="gatherling/Views/Components/EditSet.php">
-    <UnusedVariable>
-      <code><![CDATA[$names]]></code>
-    </UnusedVariable>
-  </file>
-  <file src="gatherling/Views/Components/FormatSettings.php">
-    <UndefinedFunction>
-      <code><![CDATA[getObjectVarsCamelCase($activeFormat)]]></code>
-    </UndefinedFunction>
-  </file>
-  <file src="gatherling/Views/Components/GameName.php">
-    <UndefinedConstant>
-      <code><![CDATA[MTGA]]></code>
-      <code><![CDATA[MTGO]]></code>
-      <code><![CDATA[PAPER]]></code>
-    </UndefinedConstant>
-  </file>
-  <file src="gatherling/Views/Components/Preregistration.php">
-    <InvalidPropertyAssignmentValue>
-      <code><![CDATA[$this->availableEvents]]></code>
-    </InvalidPropertyAssignmentValue>
-  </file>
-  <file src="gatherling/Views/Components/SeasonStandings.php">
-    <PossiblyUnusedReturnValue>
-      <code><![CDATA[int]]></code>
-    </PossiblyUnusedReturnValue>
-  </file>
-  <file src="gatherling/Views/Components/Time.php">
-    <UndefinedFunction>
-      <code><![CDATA[human_date($time, $now)]]></code>
-    </UndefinedFunction>
-  </file>
-  <file src="gatherling/Views/Pages/DeckDownload.php">
-    <UndefinedFunction>
-      <code><![CDATA[normaliseCardName($card)]]></code>
-    </UndefinedFunction>
-  </file>
-  <file src="gatherling/Views/Pages/EventForm.php">
-    <UndefinedFunction>
-      <code><![CDATA[getObjectVarsCamelCase($event)]]></code>
-    </UndefinedFunction>
-  </file>
-  <file src="gatherling/Views/Pages/EventFrame.php">
-    <UndefinedFunction>
-      <code><![CDATA[getObjectVarsCamelCase($event)]]></code>
-    </UndefinedFunction>
-  </file>
-  <file src="gatherling/Views/Pages/MatchList.php">
-    <UndefinedFunction>
-      <code><![CDATA[getObjectVarsCamelCase($match)]]></code>
-    </UndefinedFunction>
-  </file>
-  <file src="gatherling/Views/Pages/Page.php">
-    <UndefinedFunction>
-      <code><![CDATA[git_hash()]]></code>
-      <code><![CDATA[git_hash()]]></code>
-      <code><![CDATA[version_tagline()]]></code>
-    </UndefinedFunction>
-  </file>
-  <file src="gatherling/Views/Pages/PlayerList.php">
-    <UndefinedFunction>
-      <code><![CDATA[getObjectVarsCamelCase($entry)]]></code>
-    </UndefinedFunction>
-  </file>
-  <file src="gatherling/Views/Pages/PointsAdjustmentForm.php">
-    <UndefinedFunction>
-      <code><![CDATA[getObjectVarsCamelCase($entry)]]></code>
-    </UndefinedFunction>
-  </file>
-  <file src="gatherling/Views/Pages/ReportsForm.php">
-    <InvalidPropertyAssignmentValue>
-      <code><![CDATA[$assembleEntries($entriesByDateTime)]]></code>
-      <code><![CDATA[$assembleEntries($entriesByMedal)]]></code>
-    </InvalidPropertyAssignmentValue>
-  </file>
-  <file src="gatherling/Views/Pages/Series.php">
-    <InvalidPropertyAssignmentValue>
-      <code><![CDATA[$this->activeSeries]]></code>
-    </InvalidPropertyAssignmentValue>
-  </file>
-  <file src="gatherling/admincp.php">
-    <UnusedVariable>
-      <code><![CDATA[$prereg]]></code>
-    </UnusedVariable>
   </file>
   <file src="gatherling/api_lib.php">
     <NoValue>
@@ -248,9 +34,6 @@
     <InvalidArgument>
       <code><![CDATA[$_POST]]></code>
     </InvalidArgument>
-    <UnusedParam>
-      <code><![CDATA[$formatName]]></code>
-    </UnusedParam>
   </file>
   <file src="gatherling/prereg.php">
     <InvalidGlobal>
@@ -259,12 +42,6 @@
     <UnusedVariable>
       <code><![CDATA[$provider]]></code>
     </UnusedVariable>
-  </file>
-  <file src="tests/Models/DeckTest.php">
-    <UndefinedFunction>
-      <code><![CDATA[parseCardsWithQuantity("4 Torbran, Thane of Red Fell\n56 Mountain")]]></code>
-      <code><![CDATA[parseCardsWithQuantity("4 Yarus, Roar of the Old Gods\n11 Forest")]]></code>
-    </UndefinedFunction>
   </file>
   <file src="tests/Support/Listeners/DatabaseTestListener.php">
     <UnusedClass>
