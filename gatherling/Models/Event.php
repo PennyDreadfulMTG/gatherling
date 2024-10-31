@@ -1151,9 +1151,6 @@ class Event
                         //$this->current_round ++;
                         //$this->save();
                         break;
-                    case 'Round Robin':
-                        //Do later
-                        break;
                 }
 
                 db()->releaseLock((string) $subevent_id);
@@ -1622,31 +1619,12 @@ class Event
 
     public function assignMedals(): void
     {
-        if ($this->current_round > $this->mainrounds) {
-            $structure = $this->finalstruct;
-            $subevent_id = $this->finalid;
-            $round = 'final';
-        } else {
-            $structure = $this->mainstruct;
-            $subevent_id = $this->mainid;
-            $round = 'main';
-        }
+        $structure = $this->current_round > $this->mainrounds ? $this->finalstruct : $this->mainstruct;
 
-        switch ($structure) {
-            case 'Swiss':
-            case 'Swiss (Blossom)':
-                $this->AssignMedalsbyStandings();
-                break;
-            case 'Single Elimination':
-                $this->assignTropiesFromMatches();
-                break;
-            case 'League':
-            case 'League Match':
-                $this->AssignMedalsbyStandings();
-                break;
-            case 'Round Robin':
-                //Do later
-                break;
+        if (in_array($structure, ['Swiss', 'Swiss (Blossom)', 'League', 'League Match'])) {
+            $this->AssignMedalsbyStandings();
+        } elseif ($structure === 'Single Elimination') {
+            $this->assignTropiesFromMatches();
         }
     }
 

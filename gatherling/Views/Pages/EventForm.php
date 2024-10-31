@@ -254,9 +254,6 @@ function structDropMenuArgs(string $field, string $def): array
     if ($def == 'Swiss (Blossom)') {
         $def = 'Swiss';
     }
-    if ($def == 'Round Robin') {
-        $names[] = 'Round Robin';
-    }
     $options = [];
     foreach ($names as $name) {
         $options[] = [
