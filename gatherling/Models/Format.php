@@ -174,7 +174,7 @@ class Format
                 $type = self::removeTypeCrap($type);
                 $types = explode(' ', $type);
                 foreach ($types as $subtype) {
-                    $type = trim($subtype);
+                    $subtype = trim($subtype);
                     if ($subtype == '') {
                         continue;
                     }
