@@ -337,14 +337,14 @@ function updateEvent(): Event
     $event->series = $_POST['series'];
     $event->season = (int) $_POST['season'];
     $event->number = (int) $_POST['number'];
-    $event->threadurl = $_POST['threadurl'];
-    $event->metaurl = $_POST['metaurl'];
-    $event->reporturl = $_POST['reporturl'];
+    $event->threadurl = post()->string('threadurl');
+    $event->metaurl = post()->string('metaurl');
+    $event->reporturl = post()->string('reporturl');
 
-    if ($_POST['mainrounds'] == '') {
-        $_POST['mainrounds'] = 3;
+    if (post()->string('mainrounds') == '') {
+        post()->string('mainrounds', '3');
     }
-    if ($_POST['mainstruct'] == '') {
+    if (post()->string('mainstruct') == '') {
         $_POST['mainstruct'] = 'Swiss';
     }
     if ($_POST['mainrounds'] >= $event->current_round) {

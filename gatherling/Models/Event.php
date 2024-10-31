@@ -21,16 +21,16 @@ class Event
 
     public ?string $start;
     public ?int $kvalue = null;
-    public ?int $active;
-    public ?int $finalized;
-    public ?int $prereg_allowed;
-    public ?string $threadurl;
-    public ?string $reporturl;
-    public ?string $metaurl;
+    public int $active;
+    public int $finalized;
+    public int $prereg_allowed;
+    public string $threadurl;
+    public string $reporturl;
+    public string $metaurl;
     public ?int $private;
-    public ?int $client;
+    public int $client;
 
-    public ?int $player_editdecks;
+    public int $player_editdecks;
 
     // Class associations
     public ?string $series = null; // belongs to Series
@@ -48,13 +48,13 @@ class Event
     // Pairing/event related
     public int $current_round;
     public Standings $standing;
-    public ?int $player_reportable;
-    public ?int $player_reported_draws;
-    public ?int $prereg_cap; // Cap on player initiated registration
-    public ?int $late_entry_limit; // How many rounds we let people perform late entries
+    public int $player_reportable;
+    public int $player_reported_draws;
+    public int $prereg_cap; // Cap on player initiated registration
+    public int $late_entry_limit; // How many rounds we let people perform late entries
 
-    public ?int $private_decks; // Toggle to disable deck privacy for active events. Allows the metagame page to display during an active event and lets deck lists be viewed if disabled.
-    public ?int $private_finals; // As above, but for finals
+    public int $private_decks; // Toggle to disable deck privacy for active events. Allows the metagame page to display during an active event and lets deck lists be viewed if disabled.
+    public int $private_finals; // As above, but for finals
 
     public ?int $hastrophy;
     private ?bool $new = null;
@@ -70,9 +70,9 @@ class Event
             $this->finalstruct = '';
             $this->host = null;
             $this->cohost = null;
-            $this->threadurl = null;
-            $this->reporturl = null;
-            $this->metaurl = null;
+            $this->threadurl = '';
+            $this->reporturl = '';
+            $this->metaurl = '';
             $this->start = null;
             $this->finalized = 0;
             $this->prereg_allowed = 0;

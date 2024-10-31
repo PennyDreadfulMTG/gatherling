@@ -1011,11 +1011,6 @@ parameters:
 			path: gatherling/Views/Pages/EventForm.php
 
 		-
-			message: "#^Parameter \\#2 \\$def of function Gatherling\\\\Views\\\\Pages\\\\clientDropMenuArgs expects int, int\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventForm.php
-
-		-
 			message: "#^Parameter \\#3 \\$limitTo of class Gatherling\\\\Views\\\\Components\\\\SeriesDropMenu constructor expects list\\<string\\>, array\\<int\\<0, max\\>, string\\> given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventForm.php
@@ -1401,22 +1396,7 @@ parameters:
 			path: gatherling/event.php
 
 		-
-			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$metaurl \\(string\\|null\\) does not accept mixed\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$reporturl \\(string\\|null\\) does not accept mixed\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
 			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$series \\(string\\|null\\) does not accept mixed\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$threadurl \\(string\\|null\\) does not accept mixed\\.$#"
 			count: 1
 			path: gatherling/event.php
 
