@@ -11,6 +11,9 @@ require_once 'lib.php';
 function main(): void
 {
     $data = filter_input(INPUT_POST, 'data');
+    if ($data === false || $data === null) {
+        throw new \RuntimeException('No data provided');
+    }
     $xml = simplexml_load_string($data) or exit('Error: Cannot create object');
     $quantities = ['main' => [], 'side' => []];
     $deck = ['main' => [], 'side' => []];

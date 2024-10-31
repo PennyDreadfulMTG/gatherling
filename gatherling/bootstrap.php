@@ -19,7 +19,11 @@ if (file_exists(__DIR__ . '/config.php')) {
 
 $CONFIG['GIT_HASH'] = null;
 if (file_exists('../.git/HEAD')) {
-    $branch = trim(substr(file_get_contents('../.git/HEAD'), 5));
+    $s = file_get_contents('../.git/HEAD');
+    if ($s === false) {
+        throw new \RuntimeException('Failed to read .git/HEAD');
+    }
+    $branch = trim(substr($s, 5));
     if ($hash = file_get_contents(sprintf('../.git/%s', $branch))) {
         $CONFIG['GIT_HASH'] = $hash;
     }

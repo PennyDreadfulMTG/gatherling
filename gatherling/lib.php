@@ -131,7 +131,7 @@ function parseCardsWithQuantity(string|array $cards): array
     foreach ($cards as $line) {
         $chopped = rtrim($line);
         if (preg_match("/^[ \t]*([0-9]+)x?[ \t]+(.*?)( \(\w+\) \d+)?$/i", $chopped, $m)) {
-            $qty = $m[1];
+            $qty = (int) $m[1];
             $card = rtrim($m[2]);
             if (isset($cardarr[$card])) {
                 $cardarr[$card] += $qty;
@@ -153,7 +153,11 @@ function parseCardsWithQuantity(string|array $cards): array
 function getObjectVarsCamelCase(object $obj): array
 {
     $vars = get_object_vars($obj);
-    return arrayMapRecursive(fn($key) => is_string($key) ? toCamel($key) : $key, $vars);
+    // Force phpstan to understand that an object never has a property that could be coerced to int
+    // when used as an array key.
+    /** @var array<string, mixed> */
+    $result = arrayMapRecursive(fn(string $key) => toCamel($key), $vars);
+    return $result;
 }
 
 // https://stackoverflow.com/a/45440841/375262
@@ -161,8 +165,14 @@ function toCamel(string $string): string
 {
     // Convert to ASCII, remove apostrophes, and split into words
     $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+    if ($string === false) {
+        throw new \RuntimeException("Failed to convert string to ASCII: $string");
+    }
     $string = str_replace("'", "", $string);
     $words = preg_split('/[^a-zA-Z0-9]+/', $string);
+    if ($words === false) {
+        throw new \RuntimeException("Failed to split string into words: $string");
+    }
 
     // Convert each word to camel case
     $camelCase = array_map(function ($word) {
@@ -187,7 +197,7 @@ function toCamel(string $string): string
 
 /**
  * @param array<string, mixed> $arr
- * @return array<string, mixed>
+ * @return array<int|string, mixed>
  */
 function arrayMapRecursive(callable $func, array $arr): array
 {

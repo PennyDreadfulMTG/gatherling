@@ -436,17 +436,8 @@ function create_pairing(Event $event, int $round, ?string $a, ?string $b, ?strin
 /** @return list<string> */
 function card_catalog(): array
 {
-    $result = [];
-    $db = Database::getConnection();
-    $query = $db->query('SELECT c.name as name FROM cards c');
-    while ($row = $query->fetch_assoc()) {
-        if (!in_array($row['name'], $result)) {
-            $result[] = $row['name'];
-        }
-    }
-    $query->close();
-
-    return $result;
+    $sql = 'SELECT DISTINCT name FROM cards';
+    return db()->strings($sql);
 }
 
 function cardname_from_id(string $id): string

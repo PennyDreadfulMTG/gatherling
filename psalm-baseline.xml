@@ -240,12 +240,6 @@
     </UnusedVariable>
   </file>
   <file src="gatherling/api_lib.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[$result]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[list<string>]]></code>
-    </InvalidReturnType>
     <NoValue>
       <code><![CDATA[return error("Missing argument '$key'");]]></code>
     </NoValue>
@@ -272,14 +266,6 @@
     <UnusedParam>
       <code><![CDATA[$formatName]]></code>
     </UnusedParam>
-  </file>
-  <file src="gatherling/lib.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[$cardarr]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[array<string, int>]]></code>
-    </InvalidReturnType>
   </file>
   <file src="gatherling/prereg.php">
     <InvalidGlobal>

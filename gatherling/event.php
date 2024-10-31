@@ -76,10 +76,10 @@ function mode_is(string $str): bool
 function createNewEvent(): Event|bool
 {
     $series = new Series(post()->optionalString('series'));
-    if ($series->authCheck(Player::loginName()) && isset($_POST['insert'])) {
+    $playerName = Player::loginName();
+    if ($playerName !== false && $series->authCheck($playerName) && isset($_POST['insert'])) {
         return insertEvent();
     }
-
     return false;
 }
 
@@ -125,7 +125,8 @@ function newEventFromEventName(string $eventName, bool $newSeason = false): Even
 function getEvent(string $eventName, ?string $action, ?string $eventId, ?string $player): Page
 {
     $event = new Event($eventName);
-    if (!$event->authCheck(Player::loginName())) {
+    $playerName = Player::loginName();
+    if ($playerName !== false && !$event->authCheck($playerName)) {
         return new AuthFailed();
     }
     if ($action && strcmp($action, 'undrop') == 0) {
@@ -144,7 +145,8 @@ function postEvent(string $eventName): Page
 {
     $event = new Event($eventName);
 
-    if (!$event->authCheck(Player::loginName())) {
+    $playerName = Player::loginName();
+    if ($playerName !== false && !$event->authCheck($playerName)) {
         return new AuthFailed();
     }
 
@@ -214,7 +216,7 @@ function eventFrame(Event $event = null, bool $forceNew = false): EventFrame
         }
         return new MatchList($event, post()->optionalString('newmatchround'));
     } elseif (strcmp($view, 'standings') == 0) {
-        return new StandingsList($event, Player::loginName());
+        return new StandingsList($event, Player::loginName() ?: null);
     } elseif (strcmp($view, 'medal') == 0) {
         return new MedalList($event);
     } elseif (strcmp($view, 'points_adj') == 0) {

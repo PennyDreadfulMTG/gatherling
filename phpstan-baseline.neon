@@ -1281,11 +1281,6 @@ parameters:
 			path: gatherling/Views/Pages/StandingsList.php
 
 		-
-			message: "#^Parameter \\#2 \\$playerName of class Gatherling\\\\Views\\\\Components\\\\EventStandings constructor expects string\\|null, bool\\|string given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/StandingsList.php
-
-		-
 			message: "#^Cannot access property \\$deck on Gatherling\\\\Models\\\\Entry\\|null\\.$#"
 			count: 1
 			path: gatherling/action.php
@@ -1351,44 +1346,14 @@ parameters:
 			path: gatherling/api.php
 
 		-
-			message: "#^Cannot call method close\\(\\) on bool\\|mysqli_result\\.$#"
-			count: 2
-			path: gatherling/api.php
-
-		-
-			message: "#^Cannot call method fetch_assoc\\(\\) on bool\\|mysqli_result\\.$#"
-			count: 2
-			path: gatherling/api.php
-
-		-
 			message: "#^Cannot call method setApiKey\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
 			count: 1
-			path: gatherling/api.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, float\\|int\\|string\\|null given\\.$#"
-			count: 2
 			path: gatherling/api.php
 
 		-
 			message: "#^Part \\$action \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
 			count: 1
 			path: gatherling/api.php
-
-		-
-			message: "#^Cannot call method close\\(\\) on bool\\|mysqli_result\\.$#"
-			count: 1
-			path: gatherling/api_lib.php
-
-		-
-			message: "#^Cannot call method fetch_assoc\\(\\) on bool\\|mysqli_result\\.$#"
-			count: 1
-			path: gatherling/api_lib.php
-
-		-
-			message: "#^Function card_catalog\\(\\) should return list\\<string\\> but returns list\\<float\\|int\\|string\\|null\\>\\.$#"
-			count: 1
-			path: gatherling/api_lib.php
 
 		-
 			message: "#^Parameter \\#1 \\$eventname of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"
@@ -1441,11 +1406,6 @@ parameters:
 			path: gatherling/auth.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, string\\|false given\\.$#"
-			count: 1
-			path: gatherling/bootstrap.php
-
-		-
 			message: "#^Cannot access property \\$name on Gatherling\\\\Models\\\\Event\\|null\\.$#"
 			count: 1
 			path: gatherling/deck.php
@@ -1481,11 +1441,6 @@ parameters:
 			path: gatherling/deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$data of function simplexml_load_string expects string, string\\|false\\|null given\\.$#"
-			count: 1
-			path: gatherling/deckXmlParser.php
-
-		-
 			message: "#^Cannot access offset int\\<0, max\\> on mixed\\.$#"
 			count: 2
 			path: gatherling/event.php
@@ -1516,17 +1471,7 @@ parameters:
 			path: gatherling/event.php
 
 		-
-			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:authCheck\\(\\) expects string\\|null, string\\|false given\\.$#"
-			count: 2
-			path: gatherling/event.php
-
-		-
 			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:undropPlayer\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
-			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Series\\:\\:authCheck\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: gatherling/event.php
 
@@ -1646,16 +1591,6 @@ parameters:
 			path: gatherling/index.php
 
 		-
-			message: "#^Function arrayMapRecursive\\(\\) should return array\\<string, mixed\\> but returns array\\<int\\|string, mixed\\>\\.$#"
-			count: 1
-			path: gatherling/lib.php
-
-		-
-			message: "#^Function parseCardsWithQuantity\\(\\) should return array\\<string, int\\> but returns array\\<string, float\\|int\\|string\\>\\.$#"
-			count: 1
-			path: gatherling/lib.php
-
-		-
 			message: "#^Parameter \\#1 \\$string of function strtolower expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/lib.php
@@ -1671,11 +1606,6 @@ parameters:
 			path: gatherling/lib.php
 
 		-
-			message: "#^Parameter \\#2 \\$array of function array_map expects array, array\\<int, string\\>\\|false given\\.$#"
-			count: 1
-			path: gatherling/lib.php
-
-		-
 			message: "#^Parameter \\#2 \\$string of function explode expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/lib.php
@@ -1684,26 +1614,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
 			count: 3
 			path: gatherling/lib.php
-
-		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
-			count: 1
-			path: gatherling/lib.php
-
-		-
-			message: "#^Cannot call method close\\(\\) on bool\\|mysqli_result\\.$#"
-			count: 1
-			path: gatherling/masterplayerfile.php
-
-		-
-			message: "#^Cannot call method fetch_assoc\\(\\) on bool\\|mysqli_result\\.$#"
-			count: 1
-			path: gatherling/masterplayerfile.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function rtrim expects string, float\\|int\\|string\\|null given\\.$#"
-			count: 1
-			path: gatherling/masterplayerfile.php
 
 		-
 			message: "#^Parameter \\#1 \\$username of static method Gatherling\\\\Models\\\\Player\\:\\:checkPassword\\(\\) expects string, string\\|null given\\.$#"
@@ -1766,11 +1676,6 @@ parameters:
 			path: gatherling/seriescp.php
 
 		-
-			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Series\\:\\:authCheck\\(\\) expects string, string\\|false given\\.$#"
-			count: 3
-			path: gatherling/seriescp.php
-
-		-
 			message: "#^Property Gatherling\\\\Models\\\\Series\\:\\:\\$mtgo_room \\(string\\|null\\) does not accept mixed\\.$#"
 			count: 1
 			path: gatherling/seriescp.php
@@ -1781,23 +1686,8 @@ parameters:
 			path: gatherling/seriescp.php
 
 		-
-			message: "#^Parameter \\#3 \\$value of function curl_setopt expects array\\|string, string\\|false given\\.$#"
-			count: 1
-			path: gatherling/util/email.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, string\\|null given\\.$#"
 			count: 1
-			path: tests/EventsTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$message of method PHPUnit\\\\Framework\\\\Assert\\:\\:assertEmpty\\(\\) expects string, string\\|false given\\.$#"
-			count: 5
-			path: tests/EventsTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$message of method PHPUnit\\\\Framework\\\\Assert\\:\\:assertNotEmpty\\(\\) expects string, string\\|false given\\.$#"
-			count: 2
 			path: tests/EventsTest.php
 
 		-
