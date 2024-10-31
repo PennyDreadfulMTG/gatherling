@@ -22,8 +22,6 @@ if (php_sapi_name() !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
 
 date_default_timezone_set('US/Eastern'); // force time functions to use US/Eastern time
 
-require_once 'util/time.php';
-
 const MTGO = 1;
 const MTGA = 2;
 const PAPER = 3;
