@@ -221,7 +221,7 @@ function kValueSelectInput(int $kvalue): SelectInput
 /** @return array{name: string, default: string, options: array<int, array{isSelected: bool, value: int, text: string}>} */
 function monthDropMenuArgs(string|int $month): array
 {
-    if (strcmp($month, '') == 0) {
+    if ($month === '') {
         $month = -1;
     }
     $names = [
@@ -259,7 +259,7 @@ function structDropMenuArgs(string $field, string $def): array
         $options[] = [
             'value'      => $name,
             'text'       => $name,
-            'isSelected' => strcmp($def, $name) == 0,
+            'isSelected' => $def === $name,
         ];
     }
 

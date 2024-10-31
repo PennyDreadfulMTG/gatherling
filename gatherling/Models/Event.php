@@ -195,7 +195,7 @@ class Event
             $number = $mostRecentEvent ? $mostRecentEvent->number + 1 : 1;
         }
 
-        if (strcmp($naming, 'auto') == 0) {
+        if ($naming === 'auto') {
             $event->name = sprintf('%s %d.%02d', $series, $season, $number);
         } else {
             $event->name = $name;
@@ -643,7 +643,7 @@ class Event
     public function addPlayer(string $playername): bool
     {
         $playername = trim($playername);
-        if (strcmp($playername, '') == 0) {
+        if ($playername === '') {
             return false;
         }
         $series = new Series($this->series);

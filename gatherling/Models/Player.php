@@ -109,7 +109,7 @@ class Player
             return false;
         }
         $hashpwd = hash('sha256', $password);
-        return strcmp($srvpass, $hashpwd) == 0;
+        return $srvpass === $hashpwd;
     }
 
     public static function getClientIPAddress(): string

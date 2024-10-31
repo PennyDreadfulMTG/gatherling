@@ -19,7 +19,7 @@ class SeriesDropMenuDS extends DropMenu
             $options[] = [
                 'text'       => $name,
                 'value'      => $name,
-                'isSelected' => $seriesName && strcmp($name, $seriesName) == 0,
+                'isSelected' => $name === $seriesName,
             ];
         }
         parent::__construct($formName, $options, $title, 'ds_select');

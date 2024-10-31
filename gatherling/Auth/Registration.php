@@ -19,7 +19,7 @@ class Registration
         if (!is_null($player->password)) {
             return self::ERROR_PLAYER_EXISTS;
         }
-        if (strcmp($pw1, $pw2) != 0) {
+        if ($pw1 !== $pw2) {
             return self::ERROR_PASSWORD_MISMATCH;
         }
         if (empty($pw1) && !isset($discordId)) {

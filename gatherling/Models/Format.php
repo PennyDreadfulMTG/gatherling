@@ -528,7 +528,7 @@ class Format
         $legalCoreSets = [];
         foreach ($legalSets as $legalSet) {
             $setType = Database::singleResultSingleParam('SELECT type FROM cardsets WHERE name = ?', 's', $legalSet);
-            if (strcmp($setType, 'Core') == 0) {
+            if ($setType === 'Core') {
                 $legalCoreSets[] = $legalSet;
             }
         }
@@ -544,7 +544,7 @@ class Format
         $legalBlockSets = [];
         foreach ($legalSets as $legalSet) {
             $setType = Database::singleResultSingleParam('SELECT type FROM cardsets WHERE name = ?', 's', $legalSet);
-            if (strcmp($setType, 'Block') == 0) {
+            if ($setType === 'Block') {
                 $legalBlockSets[] = $legalSet;
             }
         }
@@ -560,7 +560,7 @@ class Format
         $legalExtraSets = [];
         foreach ($legalSets as $legalSet) {
             $setType = Database::singleResultSingleParam('SELECT type FROM cardsets WHERE name = ?', 's', $legalSet);
-            if (strcmp($setType, 'Extra') == 0) {
+            if ($setType === 'Extra') {
                 $legalExtraSets[] = $legalSet;
             }
         }
@@ -770,7 +770,7 @@ class Format
         }
         $legal = $this->getLegalCardsets();
         foreach ($legal as $legalsetName) {
-            if (strcmp($setName, $legalsetName) == 0) {
+            if ($setName === $legalsetName) {
                 return true;
             }
         }

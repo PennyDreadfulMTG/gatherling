@@ -416,11 +416,6 @@ parameters:
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, mixed given\\.$#"
-			count: 3
-			path: gatherling/Models/Format.php
-
-		-
 			message: "#^Parameter \\#1 \\$typeString of static method Gatherling\\\\Models\\\\Format\\:\\:removeTypeCrap\\(\\) expects string, mixed given\\.$#"
 			count: 1
 			path: gatherling/Models/Format.php
@@ -501,11 +496,6 @@ parameters:
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, string\\|null given\\.$#"
-			count: 2
-			path: gatherling/Models/Matchup.php
-
-		-
 			message: "#^Parameter \\#1 \\$subevent of static method Gatherling\\\\Models\\\\Event\\:\\:getEventBySubevent\\(\\) expects int, int\\|null given\\.$#"
 			count: 2
 			path: gatherling/Models/Matchup.php
@@ -522,11 +512,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$string2 of function strcasecmp expects string, string\\|null given\\.$#"
-			count: 2
-			path: gatherling/Models/Matchup.php
-
-		-
-			message: "#^Parameter \\#2 \\$string2 of function strcmp expects string, string\\|null given\\.$#"
 			count: 2
 			path: gatherling/Models/Matchup.php
 
@@ -872,11 +857,6 @@ parameters:
 
 		-
 			message: "#^Offset 5 might not exist on array\\{0\\?\\: string, 1\\?\\: numeric\\-string, 2\\?\\: numeric\\-string, 3\\?\\: numeric\\-string, 4\\?\\: numeric\\-string, 5\\?\\: numeric\\-string\\}\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventForm.php
-
-		-
-			message: "#^Parameter \\#1 \\$string1 of function strcmp expects string, int\\|string given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventForm.php
 

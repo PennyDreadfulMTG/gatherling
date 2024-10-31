@@ -35,14 +35,14 @@ function main(): void
         (new InfobotReply("You're not registered on {$siteName}!"))->send();
     }
 
-    if (strcmp(request()->string('mode', ''), 'verify') == 0) {
+    $mode = request()->string('mode', '');
+    if ($mode === 'verify') {
         $player->setChallenge($challenge);
         (new InfobotReply("Your verification code for {$siteName} is $challenge"))->send();
-    } elseif (strcmp(request()->string('mode', ''), 'reset') == 0) {
+    } elseif ($mode === 'reset') {
         $player->setPassword($challenge);
         (new InfobotReply("Your temporary password for {$siteName} is $challenge"))->send();
     } else {
-        $mode = request()->string('mode', '');
         (new InfobotError("Unknown Action {$mode}"))->send();
     }
 }

@@ -15,11 +15,11 @@ class PlayerDropMenu extends DropMenu
         $playerNames = $event->getRegisteredPlayers((bool) $event->active);
         sort($playerNames, SORT_STRING | SORT_NATURAL | SORT_FLAG_CASE);
 
-        $default = strcmp("\n", $def) == 0 ? "- Player $letter -" : '- None -';
+        $default = $def === "\n" ? "- Player $letter -" : '- None -';
         $options = [];
         foreach ($playerNames as $player) {
             $options[] = [
-                'isSelected' => strcmp($player, $def) == 0,
+                'isSelected' => $player === $def,
                 'value'      => $player,
                 'text'       => $player,
             ];

@@ -433,7 +433,7 @@ class Matchup
                 $this->result = 'B';
             }
         }
-        if (strcmp($playera_standing->player, $playerb_standing->player) == 0) {
+        if ($playera_standing->player === $playerb_standing->player) {
             // Moved to above
         } else {
             if ($structure !== 'Single Elimination') {
@@ -510,7 +510,7 @@ class Matchup
                 $this->result = 'B';
             }
         }
-        if (strcmp($playera_standing->player, $playerb_standing->player) == 0) {
+        if ($playera_standing->player === $playerb_standing->player) {
             //Might need this later if I want to rebuild bye score with standings $playera_standing->byes++;
         } else {
             $playera_standing->matches_played++;

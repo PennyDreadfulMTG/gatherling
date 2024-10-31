@@ -105,7 +105,7 @@ function queryEvents(Player $player, array $playerSeries, string $seriesName, st
         $sql .= ' AND e.format = :format';
         $params['format'] = $format;
     }
-    if (strcmp($seriesName, '') != 0) {
+    if ($seriesName !== '') {
         $sql .= ' AND e.series = :series_name';
         $params['series_name'] = $seriesName;
     }

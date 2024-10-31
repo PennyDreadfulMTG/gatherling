@@ -18,7 +18,7 @@ class ArchetypeDropMenu extends DropMenu
             $options[] = [
                 'value' => $archetype,
                 'text' => $archetype,
-                'isSelected' => strcmp($archetype, $archetypeName) == 0,
+                'isSelected' => $archetype === $archetypeName,
             ];
         }
         parent::__construct($formName, $options, $title, 'ds_select');

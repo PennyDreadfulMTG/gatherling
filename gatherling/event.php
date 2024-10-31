@@ -128,7 +128,7 @@ function getEvent(string $eventName, ?string $action, ?string $eventId, ?string 
     if ($playerName !== false && !$event->authCheck($playerName)) {
         return new AuthFailed();
     }
-    if ($action && strcmp($action, 'undrop') == 0) {
+    if ($action === 'undrop') {
         $entry = new Entry((int) $eventId, $player);
         if ($entry->deck && $entry->deck->isValid()) {
             $event->undropPlayer($player);
@@ -206,21 +206,21 @@ function eventFrame(Event $event = null, bool $forceNew = false): EventFrame
         $view = 'edit';
     }
 
-    if (strcmp($view, 'reg') == 0) {
+    if ($view === 'reg') {
         return new PlayerList($event);
-    } elseif (strcmp($view, 'match') == 0) {
+    } elseif ($view === 'match') {
         // Prevent warnings in php output.  TODO: make this not needed.
         if (!isset($_POST['newmatchround'])) {
             $_POST['newmatchround'] = '';
         }
         return new MatchList($event, post()->optionalString('newmatchround'));
-    } elseif (strcmp($view, 'standings') == 0) {
+    } elseif ($view === 'standings') {
         return new StandingsList($event, Player::loginName() ?: null);
-    } elseif (strcmp($view, 'medal') == 0) {
+    } elseif ($view === 'medal') {
         return new MedalList($event);
-    } elseif (strcmp($view, 'points_adj') == 0) {
+    } elseif ($view === 'points_adj') {
         return new PointsAdjustmentForm($event);
-    } elseif (strcmp($view, 'reports') == 0) {
+    } elseif ($view === 'reports') {
         return new ReportsForm($event);
     }
 
@@ -525,10 +525,7 @@ function updateMatches(): void
     }
     $rnd = post()->int('newmatchround');
 
-    if (
-        strcmp($pA, '') != 0 && strcmp($pB, '') != 0
-        && strcmp($res, '') != 0 && $rnd
-    ) {
+    if ($rnd) {
         $playerA = new Standings($event->name, $pA);
         $playerB = new Standings($event->name, $pB);
         if ($res == 'P') {
@@ -538,7 +535,7 @@ function updateMatches(): void
         }
     }
 
-    if (strcmp(post()->string('newbyeplayer', ''), '') != 0) {
+    if (post()->string('newbyeplayer', '') !== '') {
         $playerBye = new Standings($event->name, post()->string('newbyeplayer'));
         $event->addMatch($playerBye, $playerBye, $rnd, 'BYE');
     }
