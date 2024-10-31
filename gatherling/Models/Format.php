@@ -396,11 +396,6 @@ class Format
         return $success;
     }
 
-    public function noFormatLoaded(): bool
-    {
-        return $this->name == '';
-    }
-
     /** @return list<string> */
     public function getLegalCardsets(): array
     {
@@ -556,19 +551,6 @@ class Format
     }
 
     /** @return list<string> */
-    public function getTribesAllowed(): array
-    {
-        return Database::listResultSingleParam(
-            'SELECT name
-                                                   FROM tribe_bans
-                                                   WHERE format = ? AND allowed = 1
-                                                   ORDER BY name',
-            's',
-            $this->name
-        );
-    }
-
-    /** @return list<string> */
     public function getRestrictedList(): array
     {
         return Database::listResultSingleParam(
@@ -601,12 +583,6 @@ class Format
         $this->error = [];
 
         return $currentErrors;
-    }
-
-    /** @return list<string> */
-    public function getFormats(): array
-    {
-        return db()->strings('SELECT name FROM formats');
     }
 
     /** @return list<string> */

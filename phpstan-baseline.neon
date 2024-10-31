@@ -396,11 +396,6 @@ parameters:
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getTribesAllowed\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
-			count: 1
-			path: gatherling/Models/Format.php
-
-		-
 			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getTribesBanned\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
 			count: 1
 			path: gatherling/Models/Format.php
