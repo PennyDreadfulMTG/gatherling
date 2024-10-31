@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Gatherling\Tests\Views;
+namespace Gatherling\Tests\Views\Components;
 
 use Gatherling\Views\Components\Component;
 use PHPUnit\Framework\TestCase;
