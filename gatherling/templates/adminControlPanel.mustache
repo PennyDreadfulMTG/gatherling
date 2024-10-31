@@ -1,22 +1,24 @@
 <div class="grid_10 suffix_1 prefix_1">
     <div id="gatherling_main" class="box">
         <h1 class="uppertitle">Admin Control Panel</h1>
-        <center>
-            <table><tr><td colspan="2" align="center">
-                <a href="admincp.php?view=change_password">Change Player Password</a>
-                | <a href="admincp.php?view=verify_player">Manually Verify Player</a>
-                | <a href="admincp.php?view=create_series">Create New Series</a>
-                | <a href="admincp.php?view=calc_ratings">Maintenance Tasks</a>
-                | <a href="admincp.php?view=add_cardset">Add New Cardset</a>
-            </td></tr></table>
+        <table>
+            <tr>
+                <td colspan="2" align="center">
+                    <a href="admincp.php?view=change_password">Change Player Password</a>
+                    | <a href="admincp.php?view=verify_player">Manually Verify Player</a>
+                    | <a href="admincp.php?view=create_series">Create New Series</a>
+                    | <a href="admincp.php?view=calc_ratings">Maintenance Tasks</a>
+                    | <a href="admincp.php?view=add_cardset">Add New Cardset</a>
+                </td>
+            </tr>
+        </table>
 
-            {{#result}}
-                <div class="error">{{result}}</div>
-            {{/result}}
+        {{#result}}
+            <div class="error">{{result}}</div>
+        {{/result}}
 
-            {{{viewSafe}}}
+        {{{viewSafe}}}
 
-        </center>
         <div class="clear"></div>
     </div>
 </div>
