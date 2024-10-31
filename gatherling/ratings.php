@@ -79,21 +79,15 @@ function ratingsData(string $format, int $minMatches): array
 function bestEver(string $format): array
 {
     $sql = '
-        SELECT
-            p.name AS player, r.rating, UNIX_TIMESTAMP(r.updated) AS t
-        FROM
-            ratings AS r,
-            players AS p,
-            (
-                SELECT
-                    MAX(qr.rating) AS qmax
-                FROM
-                    ratings AS qr
-                WHERE
-                    qr.format = :format
-            ) AS q
-        WHERE
-            format = :format AND p.name = r.player AND q.qmax = r.rating';
+        SELECT p.name AS player, r.rating, UNIX_TIMESTAMP(r.updated) AS t
+          FROM ratings AS r,
+               players AS p,
+               (
+                   SELECT MAX(qr.rating) AS qmax
+                     FROM ratings AS qr
+                    WHERE qr.format = :format
+               ) AS q
+        WHERE format = :format AND p.name = r.player AND q.qmax = r.rating';
     $bestEver = db()->select($sql, BestEverDto::class, ['format' => $format])[0];
     return [
         'player' => $bestEver->player,
