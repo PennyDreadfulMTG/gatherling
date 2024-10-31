@@ -16,7 +16,7 @@ class Preregistration extends Component
     public bool $hasUpcomingEvents = false;
     /** @var array<array{eventLink: string, eventName: string, startingSoon: bool, startTime: Time, createDeckLink: CreateDeckLink|null, deckLink: DeckLink|null, unregLink: string}> */
     public array $upcomingEvents = [];
-    /** @var array<array{eventReportLink: string, eventName: string, startTime: Time, isFull: bool, requiresMtgo: bool, requiresMtga: bool, isOpen: bool}> */
+    /** @var array<array{eventReportLink: string, eventName: string, startTime: Time, isFull: bool, requiresMtgo: bool, requiresMtga: bool, isOpen: bool, registerLink: string}> */
     public array $availableEvents = [];
     public bool $promptToLinkMtgo = false;
     public bool $promptToLinkMtga = false;

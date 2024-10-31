@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Gatherling\Auth\Session;
 use Gatherling\Models\Player;
 
-use function Gatherling\Helpers\config;
 use function Safe\ob_start;
 use function Safe\php_sapi_name;
 

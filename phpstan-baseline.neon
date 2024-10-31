@@ -226,11 +226,6 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getActiveOpponents\\(\\) should return list\\<string\\> but returns list\\<string\\|null\\>\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getPlayerCount\\(\\) should return int but returns mixed\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
@@ -874,16 +869,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$emailPrivacy of class Gatherling\\\\Views\\\\Components\\\\ProfileEditForm constructor expects int, int\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/Profile.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\ReportsForm\\:\\:\\$registrants \\(list\\<array\\<string, int\\|string\\>\\>\\) does not accept list\\<array\\{n\\: int\\<1, max\\>, entryName\\: mixed, emailAd\\: string\\|null\\}\\>\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/ReportsForm.php
-
-		-
-			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\ReportsForm\\:\\:\\$standings \\(list\\<array\\<string, int\\|string\\>\\>\\) does not accept list\\<array\\{n\\: int\\<1, max\\>, entryName\\: mixed, emailAd\\: string\\|null\\}\\>\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/ReportsForm.php
 
 		-
 			message: "#^Parameter \\#1 \\$datetime of function Safe\\\\strtotime expects string, string\\|null given\\.$#"
