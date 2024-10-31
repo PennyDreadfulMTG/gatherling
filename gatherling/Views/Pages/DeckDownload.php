@@ -7,6 +7,8 @@ namespace Gatherling\Views\Pages;
 use Gatherling\Models\Deck;
 use Gatherling\Views\TextFileDownload;
 
+use function Gatherling\Helpers\normaliseCardName;
+
 class DeckDownload extends TextFileDownload
 {
     /** @var list<array{qty: int, card: string}> */

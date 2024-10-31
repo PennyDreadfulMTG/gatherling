@@ -8,7 +8,7 @@ use Gatherling\Exceptions\SetMissingException;
 
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\logger;
-
+use function Gatherling\Helpers\parseCards;
 class Formats
 {
     public static function updateDefaultFormats(): void

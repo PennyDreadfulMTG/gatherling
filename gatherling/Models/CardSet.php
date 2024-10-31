@@ -6,10 +6,10 @@ namespace Gatherling\Models;
 
 use stdClass;
 use mysqli_stmt;
-use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\FileNotFoundException;
 
 use function Gatherling\Helpers\db;
+use function Gatherling\Helpers\normaliseCardName;
 
 class CardSet
 {

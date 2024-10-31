@@ -23,6 +23,7 @@ use Gatherling\Views\LoginRedirect;
 use Gatherling\Views\Pages\FormatAdmin;
 use Gatherling\Views\Pages\InsufficientPermissions;
 
+use function Gatherling\Helpers\parseCards;
 use function Gatherling\Helpers\post;
 use function Gatherling\Helpers\server;
 use function Gatherling\Helpers\request;

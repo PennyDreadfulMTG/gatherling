@@ -8,6 +8,7 @@ use Exception;
 
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\logger;
+use function Gatherling\Helpers\normaliseCardName;
 
 class Format
 {

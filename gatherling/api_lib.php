@@ -10,11 +10,11 @@ use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
-use Gatherling\Models\Database;
 use Gatherling\Models\Standings;
 
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\config;
+use function Gatherling\Helpers\parseCardsWithQuantity;
 use function Gatherling\Helpers\server;
 use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\session;

@@ -13,6 +13,8 @@ use Gatherling\Models\Series;
 use Gatherling\Models\Matchup;
 use Gatherling\Tests\Support\TestCases\DatabaseCase;
 
+use function Gatherling\Helpers\parseCardsWithQuantity;
+
 final class EventsTest extends DatabaseCase
 {
     public function testSeriesCreation(): Series

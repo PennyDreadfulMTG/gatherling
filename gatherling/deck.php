@@ -20,6 +20,7 @@ use Gatherling\Views\Components\NullComponent;
 use Gatherling\Views\Pages\Deck as DeckPage;
 
 use function Gatherling\Helpers\get;
+use function Gatherling\Helpers\parseCardsWithQuantity;
 use function Gatherling\Helpers\post;
 use function Gatherling\Helpers\server;
 use function Gatherling\Helpers\request;
