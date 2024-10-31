@@ -167,12 +167,7 @@ parameters:
 
 		-
 			message: "#^Binary operation \"\\-\" between int and int\\|string results in an error\\.$#"
-			count: 2
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Binary operation \"\\-\" between int\\|null and int\\|string results in an error\\.$#"
-			count: 4
+			count: 6
 			path: gatherling/Models/Event.php
 
 		-
@@ -186,12 +181,12 @@ parameters:
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Binary operation \"\\-\" between int\\|string and int\\|null results in an error\\.$#"
+			message: "#^Binary operation \"\\-\" between int\\|string and int\\<min, \\-1\\>\\|int\\<1, max\\> results in an error\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Binary operation \"\\-\\=\" between int\\|null and int\\|string results in an error\\.$#"
+			message: "#^Binary operation \"\\-\\=\" between int and int\\|string results in an error\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
 
@@ -257,11 +252,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$eventid of static method Gatherling\\\\Models\\\\Entry\\:\\:getActivePlayers\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Parameter \\#1 \\$roundnum of method Gatherling\\\\Models\\\\Event\\:\\:getRoundMatches\\(\\) expects int\\|string, int\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php
 
@@ -562,11 +552,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$winner of method Gatherling\\\\Models\\\\Matchup\\:\\:finalizeMatch\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Matchup.php
-
-		-
-			message: "#^Parameter \\#2 \\$current_round of method Gatherling\\\\Models\\\\Event\\:\\:resolveRound\\(\\) expects int, int\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Matchup.php
 
@@ -1051,7 +1036,7 @@ parameters:
 			path: gatherling/Views/Pages/Home.php
 
 		-
-			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\Home\\:\\:\\$activeEvents \\(list\\<array\\{name\\: string, format\\: string, currentRound\\: int, eventReportLink\\: string\\}\\>\\) does not accept non\\-empty\\-list\\<array\\{name\\: string, format\\: string\\|null, currentRound\\: int\\|null, eventReportLink\\: string\\}\\>\\.$#"
+			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\Home\\:\\:\\$activeEvents \\(list\\<array\\{name\\: string, format\\: string, currentRound\\: int, eventReportLink\\: string\\}\\>\\) does not accept non\\-empty\\-list\\<array\\{name\\: string, format\\: string\\|null, currentRound\\: int, eventReportLink\\: string\\}\\>\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/Home.php
 
@@ -1528,11 +1513,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:dropPlayer\\(\\) expects string, string\\|null given\\.$#"
 			count: 2
-			path: gatherling/report.php
-
-		-
-			message: "#^Parameter \\#3 \\$round of method Gatherling\\\\Models\\\\Event\\:\\:addPairing\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
 			path: gatherling/report.php
 
 		-

@@ -46,7 +46,7 @@ class Event
     public ?int $finalid; // Has one final subevent
 
     // Pairing/event related
-    public ?int $current_round;
+    public int $current_round;
     public Standings $standing;
     public ?int $player_reportable;
     public ?int $player_reported_draws;
