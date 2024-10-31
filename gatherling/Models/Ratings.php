@@ -42,7 +42,7 @@ class Ratings
         $db->query('DELETE FROM ratings') or exit($db->error);
     }
 
-    public function deleteRatingByFormat(string $format): bool
+    public function deleteRatingByFormat(string $format): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('Delete FROM ratings WHERE format = ?');
@@ -51,10 +51,7 @@ class Ratings
         }
         $stmt->bind_param('s', $format);
         $stmt->execute();
-        $removed = $stmt->affected_rows > 0;
         $stmt->close();
-
-        return $removed;
     }
 
     public function calcAllRatings(): void

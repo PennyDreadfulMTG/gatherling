@@ -388,11 +388,8 @@ class Series
         return $season_rules;
     }
 
-    /**
-     * @param array<string, int|string> $new_rules
-     * @return array<string, int|string>
-     */
-    public function setSeasonRules(int $season_number, array $new_rules): array
+    /** @param array<string, int|string> $new_rules */
+    public function setSeasonRules(int $season_number, array $new_rules): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO series_seasons(series, season, first_pts, second_pts, semi_pts, quarter_pts,
@@ -441,8 +438,6 @@ class Series
         );
         $stmt->execute();
         $stmt->close();
-
-        return $new_rules;
     }
 
     // SCORE HELPER FUNCTIONS:
