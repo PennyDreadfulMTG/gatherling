@@ -556,7 +556,7 @@ class Db
                     throw new DatabaseException("Failed to reconnect and execute query: $sql with params " . json_encode($params), 0, $e);
                 }
             }
-            $msg = "Failed to execute query: $sql with params " . json_encode($params);
+            $msg = "Failed to execute query: " . $this->interpolateQuery($sql, $params);
             logger()->error($msg, $context);
 
             throw new DatabaseException($msg, 0, $e);
