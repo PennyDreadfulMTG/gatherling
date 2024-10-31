@@ -171,36 +171,6 @@ class Matchup
         return false;
     }
 
-    public function getPlayerResult(string|Player $player): string
-    {
-        $playername = $this->toName($player);
-        if ($this->playerA($playername)) {
-            if ($this->isBYE()) {
-                return 'BYE';
-            }
-            if ($this->result == 'A') {
-                return 'Won';
-            }
-            if ($this->result == 'B') {
-                return 'Loss';
-            }
-
-            return 'Draw';
-        }
-        if ($this->playerB($playername)) {
-            if ($this->result == 'A') {
-                return 'Loss';
-            }
-            if ($this->result == 'B') {
-                return 'Won';
-            }
-
-            return 'Draw';
-        }
-
-        throw new Exception("Player $playername is not in match {$this->id}");
-    }
-
     public function playerDropped(string $player): bool
     {
         $entry = new Entry($this->event_id, $player);
@@ -551,13 +521,6 @@ class Matchup
     public function isDraw(): bool
     {
         return $this->playera_wins == $this->playerb_wins;
-    }
-
-    public function isReportable(): bool
-    {
-        $event = $this->getEvent();
-
-        return $event->player_reportable == 1;
     }
 
     public function allowsPlayerReportedDraws(): int

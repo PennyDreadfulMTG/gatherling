@@ -111,33 +111,6 @@ class Player
         return $srvpass === $hashpwd;
     }
 
-    public static function getClientIPAddress(): string
-    {
-        // this is used with the rememberMe feature to keep players logged in
-        // Test if it is a shared client
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        //Is it a proxy address
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
-
-        return $ip;
-    }
-
-    public static function saveIPAddress(string $ipAddress, string $player): void
-    {
-        $ipAddress = ip2long($ipAddress);
-        $db = Database::getConnection();
-        $stmt = $db->prepare('UPDATE players SET ipaddress = ? WHERE name = ?');
-        $stmt or exit($db->error);
-        $stmt->bind_param('ds', $ipAddress, $player);
-        $stmt->execute();
-        $stmt->close();
-    }
-
     public static function findByName(string $playerName): ?self
     {
         $sanitizedName = self::sanitizeUsername($playerName);
@@ -418,29 +391,6 @@ class Player
         $sql = 'SELECT series FROM series_organizers WHERE player = :player AND series = :series';
         $params = ['player' => $this->name, 'series' => $seriesName];
         return db()->optionalString($sql, $params) !== null;
-    }
-
-    /** @return list<Event> */
-    public function getHostedEvents(): array
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE host = ? OR cohost = ?');
-        $stmt->bind_param('ss', $this->name, $this->name);
-        $stmt->execute();
-        $stmt->bind_result($evname);
-
-        $evnames = [];
-        while ($stmt->fetch()) {
-            $evnames[] = $evname;
-        }
-        $stmt->close();
-
-        $evs = [];
-        foreach ($evnames as $evname) {
-            $evs[] = new Event($evname);
-        }
-
-        return $evs;
     }
 
     public function getHostedEventsCount(): int

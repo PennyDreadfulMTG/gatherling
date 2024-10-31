@@ -951,7 +951,7 @@ class Format
 
         if (count($tribesTied) > 1) {
             // Two or more tribes are tied for largest tribe
-            foreach ($tribesTied as $type => $amt) {
+            foreach (array_keys($tribesTied) as $type) {
                 // Checking for tribe size in database for tie breaker
                 $sql = 'SELECT COUNT(DISTINCT name) FROM cards WHERE type LIKE :type';
                 $params = ['type' => '%' . db()->likeEscape($type) . '%'];
@@ -1048,18 +1048,15 @@ class Format
     {
         $isLegal = true;
         $deck = new Deck($deckID);
-        $commanderColors = [];
         $commanderCard = self::getCommanderCard($deck);
 
         if (is_null($commanderCard)) {
             $this->error[] = 'Cannot find a Commander in your deck. There must be a Legendary Creature on the sideboard to serve as the Commander.';
-
             return false;
-        } else {
-            $commanderColors = self::getCardColors($commanderCard);
         }
 
-        foreach ($deck->maindeck_cards as $card => $amt) {
+        $commanderColors = self::getCardColors($commanderCard);
+        foreach (array_keys($deck->maindeck_cards) as $card) {
             $colors = self::getCardColors($card);
             foreach ($colors as $color => $num) {
                 if ($num > 0) {
@@ -1093,7 +1090,7 @@ class Format
 
     public static function getCommanderCard(Deck $deck): ?string
     {
-        foreach ($deck->sideboard_cards as $card => $amt) {
+        foreach (array_keys($deck->sideboard_cards) as $card) {
             if (self::isCardLegendary($card)) {
                 return $card;
             }
@@ -1403,40 +1400,31 @@ class Format
         return $removed;
     }
 
-    public function deleteAllLegalSets(): bool
+    public function deleteAllLegalSets(): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM setlegality WHERE format = ?');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $removed = $stmt->affected_rows > 0;
         $stmt->close();
-
-        return $removed;
     }
 
-    public function deleteAllBannedTribes(): bool
+    public function deleteAllBannedTribes(): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM tribe_bans WHERE format = ?');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $removed = $stmt->affected_rows > 0;
         $stmt->close();
-
-        return $removed;
     }
 
-    public function deleteCardFromLegallist(string $cardName): bool
+    public function deleteCardFromLegallist(string $cardName): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM bans WHERE format = ? AND card_name = ? AND allowed = 1');
         $stmt->bind_param('ss', $this->name, $cardName);
         $stmt->execute();
-        $removed = $stmt->affected_rows > 0;
         $stmt->close();
-
-        return $removed;
     }
 
     public function deleteEntireLegallist(): bool
@@ -1525,26 +1513,22 @@ class Format
         return Database::singleResultSingleParam('SELECT name FROM cards WHERE name LIKE ?', 's', $cardname . '/%');
     }
 
-    public function insertNewLegalSet(string $cardsetName): bool
+    public function insertNewLegalSet(string $cardsetName): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO setlegality(format, cardset)VALUES(?, ?)');
         $stmt->bind_param('ss', $this->name, $cardsetName);
         $stmt->execute() or exit($stmt->error);
         $stmt->close();
-
-        return true;
     }
 
-    public function insertNewSubTypeBan(string $subTypeBanned): bool
+    public function insertNewSubTypeBan(string $subTypeBanned): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO subtype_bans(name, format, allowed) VALUES(?, ?, 0)');
         $stmt->bind_param('ss', $subTypeBanned, $this->name);
         $stmt->execute() or exit($stmt->error);
         $stmt->close();
-
-        return true;
     }
 
     public function insertNewTribeBan(string $tribeBanned): void
