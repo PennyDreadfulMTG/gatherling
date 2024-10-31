@@ -876,11 +876,6 @@ parameters:
 			path: gatherling/Views/Pages/Series.php
 
 		-
-			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\Series\\:\\:\\$activeSeries \\(array\\<string, mixed\\>\\) does not accept array\\<int\\|string, mixed\\>\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/Series.php
-
-		-
 			message: "#^Cannot access property \\$deck on Gatherling\\\\Models\\\\Entry\\|null\\.$#"
 			count: 1
 			path: gatherling/action.php

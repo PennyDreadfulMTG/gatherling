@@ -150,7 +150,7 @@ function handleAction(string $seriesName): Component
         return renameFormat($seriesName, post()->string('newformat'), post()->string('format'));
     }
     if ($_POST['action'] == 'Delete') {
-        return deleteForm($seriesName, post()->string('format'));
+        return deleteForm($seriesName);
     }
     if ($_POST['action'] == 'Delete Format') {
         return deleteFormat(post()->string('format'));
@@ -480,7 +480,7 @@ function renameFormat(string $seriesName, string $newFormatName, string $formatN
     return new FormatError("Format {$formatName} Could Not Be Renamed :-(", $formatName);
 }
 
-function deleteForm(string $seriesName, string $formatName): Component
+function deleteForm(string $seriesName): Component
 {
     return new FormatDeleteForm($seriesName);
 }
