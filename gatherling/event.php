@@ -69,8 +69,7 @@ function main(): void
 
 function mode_is(string $str): bool
 {
-    $mode = request()->string('mode', '');
-    return strcmp($mode, $str) == 0;
+    return request()->string('mode', '') === $str;
 }
 
 function createNewEvent(): Event|bool
