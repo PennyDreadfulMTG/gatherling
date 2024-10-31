@@ -849,10 +849,8 @@ class Event
     // Assigns trophies based on the finals matches which are entered.
     public function assignTropiesFromMatches(): void
     {
-        $t8 = [];
         $t4 = [];
-        $sec = '';
-        $win = '';
+        $t8 = [];
         if ($this->finalrounds > 0) {
             $quarter_finals = $this->finalrounds >= 3;
             if ($quarter_finals) {
