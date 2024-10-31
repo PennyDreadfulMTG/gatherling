@@ -16,7 +16,7 @@ use function Gatherling\Helpers\session;
 
 class Player
 {
-    public ?string $name;
+    public string $name;
     public ?string $password;
     public ?int $host = 0;
     public ?int $super;

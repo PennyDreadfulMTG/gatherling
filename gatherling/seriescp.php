@@ -169,7 +169,6 @@ function updateBannedPlayers(Series $series, array $removeBannedPlayers, string 
     if ($addplayer == null) {
         return "Can't add {$addition} to Banned Players, they don't exist!";
     }
-    assert($addplayer->name !== null); // Else we would not have found them
     $series->addBannedPlayer($addplayer->name, $reason);
     return '';
 }

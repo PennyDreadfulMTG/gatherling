@@ -98,7 +98,6 @@ class MainPlayerControlPanel extends Component
             $dropLink = $joinLink = $joinLinkText = '';
             $createDeckLink = null;
             if ($playerActive) {
-                assert($player->name !== null); // You can't be active if you don't exist
                 $entry = new Entry($event->id, $player->name);
                 if (is_null($entry->deck) || !$entry->deck->isValid()) {
                     $createDeckLink = new CreateDeckLink($entry);

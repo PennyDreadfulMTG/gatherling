@@ -101,7 +101,7 @@ class Matchup
         return strcasecmp($this->playerb, $name) == 0;
     }
 
-    private function toName(string|Player $player_or_name): ?string
+    private function toName(string|Player $player_or_name): string
     {
         if (is_object($player_or_name)) {
             return $player_or_name->name;
