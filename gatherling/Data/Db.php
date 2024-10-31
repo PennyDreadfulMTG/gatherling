@@ -468,6 +468,7 @@ class Db
         // "?" or ":foo" inside any of the values.
         $query = preg_replace(['/\?/', '/(:[a-zA-Z0-9_]+)/'], ["$s?$e", "$s$1$e"], $query);
         // Replace placeholders with actual values
+        /** @var string $query */
         $query = preg_replace($keys, $values, $query, -1, $count);
         return $query;
     }
