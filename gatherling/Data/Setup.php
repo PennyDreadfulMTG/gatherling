@@ -6,7 +6,6 @@ namespace Gatherling\Data;
 
 use Gatherling\Exceptions\ConfigurationException;
 use Gatherling\Exceptions\DatabaseException;
-use Gatherling\Exceptions\FileNotFoundException;
 
 use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\db;
