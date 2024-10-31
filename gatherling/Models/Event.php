@@ -1577,7 +1577,6 @@ class Event
         $stmt = $db->prepare('DELETE FROM matches WHERE subevent = ? OR subevent = ?');
         $stmt->bind_param('ss', $this->mainid, $this->finalid);
         $stmt->execute();
-        $removed = $stmt->affected_rows > 0;
         $stmt->close();
 
         $db = Database::getConnection();
@@ -1607,7 +1606,6 @@ class Event
         $stmt = $db->prepare('DELETE FROM matches WHERE subevent = ? AND round = ?');
         $stmt->bind_param('dd', $subevent, $round);
         $stmt->execute();
-        $removed = $stmt->affected_rows > 0;
         $stmt->close();
 
         $this->current_round--;
