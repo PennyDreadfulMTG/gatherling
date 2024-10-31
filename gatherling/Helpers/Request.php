@@ -36,6 +36,7 @@ class Request
         return marshal($this->vars[$key] ?? null)->float($default);
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function optionalFloat(string $key): ?float
     {
         return marshal($this->vars[$key] ?? null)->optionalFloat();
