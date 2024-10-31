@@ -49,13 +49,6 @@ function main(): never
         $newactive = (int) $_POST['isactive'];
         $newtime = $_POST['hour'];
         $newday = $_POST['start_day'];
-        $prereg = 0;
-
-        if (isset($_POST['preregdefault'])) {
-            $prereg = $_POST['preregdefault'];
-        } else {
-            $prereg = 0;
-        }
 
         $series = new Series('');
         $newseries = $_POST['seriesname'];
@@ -65,7 +58,7 @@ function main(): never
             $series->active = $newactive;
             $series->start_time = $newtime . ':00';
             $series->start_day = $newday;
-            $series->prereg_default = (int) $prereg;
+            $series->prereg_default = post()->int('preregdefault');
             $series->save();
         }
         $result = "New series $series->name was created!";
