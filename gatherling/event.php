@@ -315,28 +315,28 @@ function updateEvent(): Event
 
     $event = new Event(post()->string('name'));
     $event->start = "{$_POST['year']}-{$_POST['month']}-{$_POST['day']} {$_POST['hour']}:00";
-    $event->finalized = (int) $_POST['finalized'];
-    $event->active = (int) $_POST['active'];
-    $event->current_round = (int) $_POST['newmatchround'];
-    $event->prereg_allowed = (int) $_POST['prereg_allowed'];
-    $event->player_reportable = (int) $_POST['player_reportable'];
-    $event->prereg_cap = (int) $_POST['prereg_cap'];
-    $event->private_decks = (int) $_POST['private_decks'];
-    $event->private_finals = (int) $_POST['private_finals'];
-    $event->player_reported_draws = (int) $_POST['player_reported_draws'];
-    $event->late_entry_limit = (int) $_POST['late_entry_limit'];
+    $event->finalized = post()->int('finalized');
+    $event->active = post()->int('active');
+    $event->current_round = post()->int('newmatchround');
+    $event->prereg_allowed = post()->int('prereg_allowed');
+    $event->player_reportable = post()->int('player_reportable');
+    $event->prereg_cap = post()->int('prereg_cap');
+    $event->private_decks = post()->int('private_decks');
+    $event->private_finals = post()->int('private_finals');
+    $event->player_reported_draws = post()->int('player_reported_draws');
+    $event->late_entry_limit = post()->int('late_entry_limit');
 
-    if ($event->format != $_POST['format']) {
-        $event->format = $_POST['format'];
+    if ($event->format != post()->string('format')) {
+        $event->format = post()->string('format');
         $event->updateDecksFormat(post()->string('format'));
     }
 
-    $event->host = $_POST['host'];
-    $event->cohost = $_POST['cohost'];
-    $event->kvalue = (int) $_POST['kvalue'];
-    $event->series = $_POST['series'];
-    $event->season = (int) $_POST['season'];
-    $event->number = (int) $_POST['number'];
+    $event->host = post()->string('host');
+    $event->cohost = post()->string('cohost');
+    $event->kvalue = post()->int('kvalue');
+    $event->series = post()->string('series');
+    $event->season = post()->int('season');
+    $event->number = post()->int('number');
     $event->threadurl = post()->string('threadurl');
     $event->metaurl = post()->string('metaurl');
     $event->reporturl = post()->string('reporturl');
@@ -347,21 +347,21 @@ function updateEvent(): Event
     if (post()->string('mainstruct') == '') {
         $_POST['mainstruct'] = 'Swiss';
     }
-    if ($_POST['mainrounds'] >= $event->current_round) {
-        $event->mainrounds = $_POST['mainrounds'];
-        $event->mainstruct = $_POST['mainstruct'];
+    if (post()->int('mainrounds') >= $event->current_round) {
+        $event->mainrounds = post()->int('mainrounds');
+        $event->mainstruct = post()->string('mainstruct');
     }
 
-    if ($_POST['finalrounds'] == '') {
+    if (post()->string('finalrounds') == '') {
         $_POST['finalrounds'] = 0;
     }
-    if ($_POST['finalstruct'] == '') {
+    if (post()->string('finalstruct') == '') {
         $_POST['finalstruct'] = 'Single Elimination';
     }
-    $event->finalrounds = $_POST['finalrounds'];
-    $event->finalstruct = $_POST['finalstruct'];
-    $event->private = (int) $_POST['private'];
-    $event->client = (int) $_POST['client'];
+    $event->finalrounds = post()->int('finalrounds');
+    $event->finalstruct = post()->string('finalstruct');
+    $event->private = post()->int('private');
+    $event->client = post()->int('client');
 
     $event->save();
 

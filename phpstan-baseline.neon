@@ -1122,7 +1122,7 @@ parameters:
 
 		-
 			message: "#^Cannot cast mixed to int\\.$#"
-			count: 16
+			count: 1
 			path: gatherling/event.php
 
 		-
@@ -1167,46 +1167,6 @@ parameters:
 
 		-
 			message: "#^Part \\$_POST\\['year'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$cohost \\(string\\|null\\) does not accept mixed\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$finalrounds \\(int\\|string\\) does not accept mixed\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$finalstruct \\(string\\) does not accept mixed\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$format \\(string\\|null\\) does not accept mixed\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$host \\(string\\|null\\) does not accept mixed\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$mainrounds \\(int\\|string\\) does not accept mixed\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$mainstruct \\(string\\) does not accept mixed\\.$#"
-			count: 1
-			path: gatherling/event.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Event\\:\\:\\$series \\(string\\|null\\) does not accept mixed\\.$#"
 			count: 1
 			path: gatherling/event.php
 
