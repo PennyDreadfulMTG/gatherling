@@ -30,6 +30,10 @@ use function Gatherling\Helpers\get;
 use function Gatherling\Helpers\post;
 use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\server;
+use function Safe\fclose;
+use function Safe\fopen;
+use function Safe\preg_replace;
+use function Safe\strtotime;
 
 require_once 'lib.php';
 

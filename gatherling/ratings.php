@@ -6,6 +6,7 @@ use Gatherling\Models\Player;
 use Gatherling\Models\BestEverDto;
 use Gatherling\Models\PlayerRatingDto;
 use Gatherling\Views\Pages\Ratings;
+use Safe\DateTime;
 use Zebra_Pagination as Pagination;
 
 use function Gatherling\Helpers\db;

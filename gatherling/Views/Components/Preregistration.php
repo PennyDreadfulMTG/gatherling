@@ -9,6 +9,8 @@ use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 
+use function Safe\strtotime;
+
 class Preregistration extends Component
 {
     public bool $hasUpcomingEvents = false;

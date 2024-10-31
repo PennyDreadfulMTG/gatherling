@@ -8,6 +8,7 @@ use Gatherling\Models\DeckDto;
 use Gatherling\Models\MostPlayedDeckDto;
 
 use function Gatherling\Helpers\db;
+use function Safe\strtotime;
 
 class MostPlayedDecks extends Component
 {
@@ -48,8 +49,7 @@ class MostPlayedDecks extends Component
 
         $decks = db()->select($sql, MostPlayedDeckDto::class);
         foreach ($decks as $deck) {
-            $created = $deck->created_date ? strtotime($deck->created_date) : null;
-            $createdTime = $created ? new Time($created, time()) : null;
+            $createdTime = $deck->created_date ? new Time(strtotime($deck->created_date), time()) : null;
             $this->decks[] = [
                 'count' => $deck->cnt,
                 'playerLink' => 'profile.php?player=' . rawurlencode($deck->playername) . '&mode=Lookup+Profile',

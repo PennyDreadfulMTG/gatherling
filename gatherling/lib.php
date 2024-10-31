@@ -6,6 +6,11 @@ use Gatherling\Auth\Session;
 use Gatherling\Models\Player;
 
 use function Gatherling\Helpers\config;
+use function Safe\iconv;
+use function Safe\ob_start;
+use function Safe\php_sapi_name;
+use function Safe\preg_replace;
+use function Safe\preg_split;
 
 require_once 'bootstrap.php';
 
@@ -104,19 +109,14 @@ function toCamel(string $string): string
 {
     // Convert to ASCII, remove apostrophes, and split into words
     $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
-    if ($string === false) {
-        throw new \RuntimeException("Failed to convert string to ASCII: $string");
-    }
     $string = str_replace("'", "", $string);
     $words = preg_split('/[^a-zA-Z0-9]+/', $string);
-    if ($words === false) {
-        throw new \RuntimeException("Failed to split string into words: $string");
-    }
 
     // Convert each word to camel case
     $camelCase = array_map(function ($word) {
         // Split words that are already in camel case
         $word = preg_replace('/(?<=\p{Ll})(?=\p{Lu})/u', ' ', $word);
+        /** @var string $word */
         $word = preg_replace('/(?<=\p{Lu})(?=\p{Lu}\p{Ll})/u', ' ', $word);
         $subWords = explode(' ', $word);
 

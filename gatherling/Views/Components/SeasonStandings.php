@@ -8,6 +8,8 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Views\Components\Component;
 
+use function Safe\preg_replace;
+
 class SeasonStandings extends Component
 {
     public string $seriesName;
@@ -26,7 +28,7 @@ class SeasonStandings extends Component
 
         $seasonEvents = [];
         foreach ($seasonEventNames as $eventName) {
-            $shortName = preg_replace("/^{$series->name} /", '', $eventName) ?? '';
+            $shortName = preg_replace("/^{$series->name} /", '', $eventName);
             $eventReportLink = 'eventreport.php?event=' . rawurlencode($eventName);
             $seasonEvents[] = [
                 'shortName' => $shortName,

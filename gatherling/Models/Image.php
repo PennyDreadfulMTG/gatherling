@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
+use function Safe\base64_decode;
+
 class Image
 {
     public function __construct(public string $content, public string $type, public int $size)

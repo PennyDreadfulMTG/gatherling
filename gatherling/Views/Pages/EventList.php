@@ -14,6 +14,7 @@ use Gatherling\Views\Components\SeriesDropMenu;
 
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\get;
+use function Safe\strtotime;
 
 class EventList extends Page
 {

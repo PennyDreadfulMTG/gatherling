@@ -13,6 +13,7 @@ use Gatherling\Views\Components\PlayerLink;
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\logger;
 use function Gatherling\Helpers\session;
+use function Safe\session_destroy;
 
 class Player
 {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Gatherling\Views\JsonResponse;
 
 use function Gatherling\Helpers\server;
+use function Safe\simplexml_load_string;
 
 require_once 'lib.php';
 

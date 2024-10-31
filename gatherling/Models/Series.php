@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use PDO;
-use Exception;
 use InvalidArgumentException;
 
 use function Gatherling\Helpers\db;
+use function Safe\fclose;
+use function Safe\fopen;
 
 class Series
 {

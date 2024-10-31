@@ -8,6 +8,8 @@ use Gatherling\Views\Components\Time;
 use Gatherling\Views\Components\EventReportLink;
 use Gatherling\Models\Series as SeriesModel;
 
+use function Safe\strtotime;
+
 class Series extends Page
 {
     /** @var array<string, mixed> */

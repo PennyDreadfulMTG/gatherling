@@ -8,6 +8,8 @@ require_once 'gatherling/lib.php';
 
 use PHPUnit\Framework\TestCase;
 
+use function Safe\strtotime;
+
 final class TimeTest extends TestCase
 {
     public function testHumanDate(): void

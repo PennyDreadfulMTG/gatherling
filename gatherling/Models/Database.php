@@ -9,6 +9,7 @@ use mysqli;
 use PDO;
 
 use function Gatherling\Helpers\config;
+use function Safe\define;
 
 // Use PHP7 default error reporting to avoid a complex refactor
 mysqli_report(MYSQLI_REPORT_OFF);

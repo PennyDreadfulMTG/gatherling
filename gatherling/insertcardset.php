@@ -10,6 +10,7 @@ use Gatherling\Views\Redirect;
 use function Gatherling\Helpers\files;
 use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\server;
+use function Safe\set_time_limit;
 
 set_time_limit(0);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);

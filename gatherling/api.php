@@ -11,6 +11,7 @@ use Gatherling\Models\Series;
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\get;
 use function Gatherling\Helpers\request;
+use function Safe\json_encode;
 
 require_once 'lib.php';
 require_once 'api_lib.php';

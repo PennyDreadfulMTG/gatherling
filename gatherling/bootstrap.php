@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use function Safe\file_get_contents;
+
 if (file_exists('/var/www/vendor/autoload.php')) {
     // Docker environment
     /** @phpstan-ignore-next-line */
@@ -19,11 +21,7 @@ if (file_exists(__DIR__ . '/config.php')) {
 
 $CONFIG['GIT_HASH'] = null;
 if (file_exists('../.git/HEAD')) {
-    $s = file_get_contents('../.git/HEAD');
-    if ($s === false) {
-        throw new \RuntimeException('Failed to read .git/HEAD');
-    }
-    $branch = trim(substr($s, 5));
+    $branch = trim(substr(file_get_contents('../.git/HEAD'), 5));
     if ($hash = file_get_contents(sprintf('../.git/%s', $branch))) {
         $CONFIG['GIT_HASH'] = $hash;
     }

@@ -7,6 +7,8 @@ namespace Gatherling\Views\Components;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 
+use function Safe\strtotime;
+
 class InfoCell extends Component
 {
     public string $threadLink;

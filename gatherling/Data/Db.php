@@ -16,6 +16,9 @@ use Gatherling\Models\Dto;
 use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\logger;
 use function Gatherling\Helpers\marshal;
+use function Safe\json_encode;
+use function Safe\preg_match;
+use function Safe\preg_replace;
 
 // Do not access this directly, use Gatherling\Helpers\db() instead
 class Db
@@ -450,7 +453,7 @@ class Db
             if (is_null($value)) {
                 $values[$key] = 'NULL';
             } elseif (is_int($value) || is_float($value)) {
-                $values[$key] = $value;
+                $values[$key] = (string) $value;
             } elseif (is_bool($value)) {
                 $values[$key] = $value ? 'true' : 'false';
             } elseif (is_string($value)) {
@@ -464,15 +467,8 @@ class Db
         // Surround placehodlers with escape sequence, so we don't accidentally match
         // "?" or ":foo" inside any of the values.
         $query = preg_replace(['/\?/', '/(:[a-zA-Z0-9_]+)/'], ["$s?$e", "$s$1$e"], $query);
-        if ($query === null) {
-            throw new DatabaseException("Failed to interpolate query: $query");
-        }
         // Replace placeholders with actual values
         $query = preg_replace($keys, $values, $query, -1, $count);
-        if ($query === null) {
-            throw new DatabaseException("Failed to interpolate query: $query");
-        }
-
         return $query;
     }
 
@@ -566,9 +562,6 @@ class Db
     private function safeName(string $name): string
     {
         $safeName = preg_replace('/[^a-zA-Z0-9_]/', '_', $name);
-        if ($safeName === null) {
-            throw new DatabaseException("Failed to safely name $name");
-        }
         $safeName = trim($safeName, '_');
         if (empty($safeName) || is_numeric($safeName[0])) {
             $safeName = 'sp_' . $safeName;

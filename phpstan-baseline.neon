@@ -11,6 +11,16 @@ parameters:
 			path: gatherling/Auth/Session.php
 
 		-
+			message: "#^Cannot access offset 1 on iterable\\<\\(int\\|string\\), string\\>\\|null\\.$#"
+			count: 1
+			path: gatherling/Helpers/cards.php
+
+		-
+			message: "#^Cannot access offset 2 on iterable\\<\\(int\\|string\\), string\\>\\|null\\.$#"
+			count: 1
+			path: gatherling/Helpers/cards.php
+
+		-
 			message: "#^Cannot access property \\$data on mixed\\.$#"
 			count: 1
 			path: gatherling/Models/CardSet.php
@@ -456,16 +466,6 @@ parameters:
 			path: gatherling/Models/Formats.php
 
 		-
-			message: "#^Parameter \\#1 \\$cards of function parseCards expects array\\<string\\>\\|string, string\\|false given\\.$#"
-			count: 1
-			path: gatherling/Models/Formats.php
-
-		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
-			count: 2
-			path: gatherling/Models/Formats.php
-
-		-
 			message: "#^Binary operation \"\\+\\=\" between int\\|null and int\\|string results in an error\\.$#"
 			count: 4
 			path: gatherling/Models/Matchup.php
@@ -726,11 +726,6 @@ parameters:
 			path: gatherling/Models/SetScraper.php
 
 		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
-			count: 1
-			path: gatherling/Models/SetScraper.php
-
-		-
 			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
 			count: 2
 			path: gatherling/Models/Standings.php
@@ -756,11 +751,6 @@ parameters:
 			path: gatherling/Models/Standings.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Components/CardLink.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Components/EventStandings.php
@@ -784,21 +774,6 @@ parameters:
 			message: "#^Parameter \\#2 \\$exponent of function pow expects float\\|int, int\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Components/InfoCell.php
-
-		-
-			message: "#^Parameter \\#2 \\$timestamp of function date expects int\\|null, int\\|false given\\.$#"
-			count: 1
-			path: gatherling/Views/Components/InfoCell.php
-
-		-
-			message: "#^Parameter \\#1 \\$datetime of function strtotime expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Components/InfoTable.php
-
-		-
-			message: "#^Parameter \\#1 \\$time of class Gatherling\\\\Views\\\\Components\\\\Time constructor expects int, int\\|false given\\.$#"
-			count: 1
-			path: gatherling/Views/Components/InfoTable.php
 
 		-
 			message: "#^Binary operation \"\\+\" between float\\|int\\|string\\|null and 1 results in an error\\.$#"
@@ -831,32 +806,27 @@ parameters:
 			path: gatherling/Views/Components/TextInput.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/DeckDownload.php
-
-		-
-			message: "#^Offset 1 might not exist on array\\{0\\?\\: string, 1\\?\\: numeric\\-string, 2\\?\\: numeric\\-string, 3\\?\\: numeric\\-string, 4\\?\\: numeric\\-string, 5\\?\\: numeric\\-string\\}\\.$#"
+			message: "#^Cannot access offset 1 on iterable\\<\\(int\\|string\\), string\\>\\|null\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventForm.php
 
 		-
-			message: "#^Offset 2 might not exist on array\\{0\\?\\: string, 1\\?\\: numeric\\-string, 2\\?\\: numeric\\-string, 3\\?\\: numeric\\-string, 4\\?\\: numeric\\-string, 5\\?\\: numeric\\-string\\}\\.$#"
+			message: "#^Cannot access offset 2 on iterable\\<\\(int\\|string\\), string\\>\\|null\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventForm.php
 
 		-
-			message: "#^Offset 3 might not exist on array\\{0\\?\\: string, 1\\?\\: numeric\\-string, 2\\?\\: numeric\\-string, 3\\?\\: numeric\\-string, 4\\?\\: numeric\\-string, 5\\?\\: numeric\\-string\\}\\.$#"
+			message: "#^Cannot access offset 3 on iterable\\<\\(int\\|string\\), string\\>\\|null\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventForm.php
 
 		-
-			message: "#^Offset 4 might not exist on array\\{0\\?\\: string, 1\\?\\: numeric\\-string, 2\\?\\: numeric\\-string, 3\\?\\: numeric\\-string, 4\\?\\: numeric\\-string, 5\\?\\: numeric\\-string\\}\\.$#"
+			message: "#^Cannot access offset 4 on iterable\\<\\(int\\|string\\), string\\>\\|null\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventForm.php
 
 		-
-			message: "#^Offset 5 might not exist on array\\{0\\?\\: string, 1\\?\\: numeric\\-string, 2\\?\\: numeric\\-string, 3\\?\\: numeric\\-string, 4\\?\\: numeric\\-string, 5\\?\\: numeric\\-string\\}\\.$#"
+			message: "#^Cannot access offset 5 on iterable\\<\\(int\\|string\\), string\\>\\|null\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/EventForm.php
 
@@ -921,11 +891,6 @@ parameters:
 			path: gatherling/Views/Pages/Profile.php
 
 		-
-			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\Ratings\\:\\:\\$paginationSafe \\(string\\) does not accept string\\|false\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/Ratings.php
-
-		-
 			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\ReportsForm\\:\\:\\$registrants \\(list\\<array\\<string, int\\|string\\>\\>\\) does not accept list\\<array\\{n\\: int\\<1, max\\>, entryName\\: mixed, emailAd\\: string\\|null\\}\\>\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/ReportsForm.php
@@ -936,17 +901,7 @@ parameters:
 			path: gatherling/Views/Pages/ReportsForm.php
 
 		-
-			message: "#^Parameter \\#1 \\$datetime of function strtotime expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/Series.php
-
-		-
-			message: "#^Parameter \\#1 \\$time of class Gatherling\\\\Views\\\\Components\\\\Time constructor expects int, int\\|false given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/Series.php
-
-		-
-			message: "#^Parameter \\#2 \\$timestamp of function date expects int\\|null, int\\|false given\\.$#"
+			message: "#^Parameter \\#1 \\$datetime of function Safe\\\\strtotime expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/Series.php
 
@@ -1106,7 +1061,7 @@ parameters:
 			path: gatherling/event.php
 
 		-
-			message: "#^Parameter \\#1 \\$datetime of function strtotime expects string, string\\|null given\\.$#"
+			message: "#^Parameter \\#1 \\$datetime of function Safe\\\\strtotime expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/event.php
 
@@ -1171,28 +1126,8 @@ parameters:
 			path: gatherling/lib.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function strtolower expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/lib.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/lib.php
-
-		-
 			message: "#^Parameter \\#2 \\$arr of function arrayMapRecursive expects array\\<string, mixed\\>, array given\\.$#"
 			count: 1
-			path: gatherling/lib.php
-
-		-
-			message: "#^Parameter \\#2 \\$string of function explode expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/lib.php
-
-		-
-			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
-			count: 3
 			path: gatherling/lib.php
 
 		-

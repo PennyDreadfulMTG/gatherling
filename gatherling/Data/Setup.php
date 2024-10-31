@@ -11,6 +11,9 @@ use Gatherling\Exceptions\FileNotFoundException;
 use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\logger;
+use function Safe\file_get_contents;
+use function Safe\preg_match;
+use function Safe\scandir;
 
 require_once __DIR__ . '/../lib.php';
 
@@ -107,9 +110,6 @@ class Setup
             throw new DatabaseException('Refusing to restore dump in production environment');
         }
         $s = file_get_contents($path);
-        if (!$s) {
-            throw new FileNotFoundException("Dump file not found: $path");
-        }
         $commands = explode(';', $s);
         foreach ($commands as $sql) {
             db()->execute($sql);
@@ -125,9 +125,6 @@ class Setup
         $migrationDirectory = __DIR__ . '/sql/migrations';
         $migrations = [];
         $dir = scandir($migrationDirectory);
-        if ($dir === false) {
-            throw new FileNotFoundException("Failed to read migration directory: $migrationDirectory");
-        }
         foreach ($dir as $file) {
             if (!preg_match('/^[1-9]\d*\.sql$/', $file)) {
                 continue;
@@ -140,9 +137,6 @@ class Setup
                 $path = $migrationDirectory . DIRECTORY_SEPARATOR . $file;
                 logger()->debug("Loading migration $fileVersion from $path");
                 $sql = file_get_contents($path);
-                if (!$sql) {
-                    throw new FileNotFoundException("Failed to read migration file: $path");
-                }
                 $migrations[] = new Migration($fileVersion, $sql);
             }
         }

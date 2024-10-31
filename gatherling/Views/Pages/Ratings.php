@@ -11,6 +11,9 @@ use Gatherling\Views\Components\RatingsTable;
 use Gatherling\Views\Components\FormatDropMenuR;
 use Zebra_Pagination as Pagination;
 
+use function Safe\ob_start;
+use function Safe\ob_get_clean;
+
 class Ratings extends Page
 {
     public FormatDropMenuR $formatDropMenuR;

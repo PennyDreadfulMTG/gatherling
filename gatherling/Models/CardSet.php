@@ -10,6 +10,9 @@ use Gatherling\Exceptions\FileNotFoundException;
 
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\normaliseCardName;
+use function Safe\file_get_contents;
+use function Safe\preg_match;
+use function Safe\json_decode;
 
 class CardSet
 {
@@ -26,11 +29,6 @@ class CardSet
     {
         $messages = [];
         $file = file_get_contents($filename);
-
-        if (!$file) {
-            throw new FileNotFoundException("Can't open the file you requested: {$filename}");
-        }
-
         $data = json_decode($file);
         $data = $data->data;
         $set = $data->name;

@@ -18,6 +18,7 @@ use function Gatherling\Helpers\parseCardsWithQuantity;
 use function Gatherling\Helpers\server;
 use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\session;
+use function Safe\json_encode;
 
 /**
  * @param array<string, mixed> $array

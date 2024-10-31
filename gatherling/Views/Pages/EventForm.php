@@ -17,6 +17,8 @@ use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\SeriesDropMenu;
 use Gatherling\Views\Components\TimeDropMenu;
 
+use function Safe\preg_match;
+
 class EventForm extends EventFrame
 {
     public bool $currentlyEditing;

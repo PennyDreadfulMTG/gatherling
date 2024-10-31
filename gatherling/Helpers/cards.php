@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Gatherling\Helpers;
 
+use function Safe\preg_match;
+use function Safe\preg_replace;
+
 /**
  * @param string|array<string> $cards
  * @return list<string>
