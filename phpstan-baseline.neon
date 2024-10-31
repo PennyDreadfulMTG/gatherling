@@ -136,21 +136,6 @@ parameters:
 			path: gatherling/Models/Decksearch.php
 
 		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Entry.php
-
-		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Entry.php
-
-		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 1
-			path: gatherling/Models/Entry.php
-
-		-
 			message: "#^Binary operation \"\\+\" between int\\|string and int\\<1, max\\>\\|string results in an error\\.$#"
 			count: 3
 			path: gatherling/Models/Event.php

@@ -19,15 +19,12 @@ class Entry
     public ?int $drop_round;
     public ?int $initial_byes;
     public ?int $initial_seed;
-    public ?int $ignored;
 
-    // TODO: remove ignore functionality
     public function __construct(int $event_id, string $playername)
     {
-        $this->ignored = 0;
         $sql = '
             SELECT
-                deck AS deck_id, medal, ignored, drop_round, initial_byes, initial_seed
+                deck AS deck_id, medal, drop_round, initial_byes, initial_seed
             FROM
                 entries
             WHERE
@@ -38,7 +35,6 @@ class Entry
             throw new NotFoundException('Entry for ' . $playername . ' in ' . $event_id . ' not found');
         }
         $this->medal = $entry->medal;
-        $this->ignored = $entry->ignored;
         $this->drop_round = $entry->drop_round;
         $this->initial_byes = $entry->initial_byes;
         $this->initial_seed = $entry->initial_seed;
@@ -163,18 +159,6 @@ class Entry
         }
 
         return false;
-    }
-
-    // TODO: Remove ignore functionality
-    public function setIgnored(int $new_ignored): void
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('UPDATE entries SET ignored = ? WHERE player = ? and event_id = ?');
-        $playername = $this->player->name;
-        $event_id = $this->event->id;
-        $stmt->bind_param('isd', $new_ignored, $playername, $event_id);
-        $stmt->execute();
-        $stmt->close();
     }
 
     public function removeEntry(): bool

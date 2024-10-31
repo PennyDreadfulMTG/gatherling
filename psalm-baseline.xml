@@ -23,7 +23,6 @@
   <file src="gatherling/Models/Entry.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[dropped]]></code>
-      <code><![CDATA[setIgnored]]></code>
     </PossiblyUnusedMethod>
   </file>
   <file src="gatherling/Models/Event.php">
