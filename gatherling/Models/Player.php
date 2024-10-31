@@ -11,6 +11,7 @@ use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\PlayerLink;
 
 use function Gatherling\Helpers\db;
+use function Gatherling\Helpers\logger;
 use function Gatherling\Helpers\session;
 
 class Player
@@ -1275,8 +1276,7 @@ class Player
             return true;
         } else {
             $error_log = "Player = '{$this->name}' Challenge = '{$challenge}' Verify = '{$verifyplayer}' DBChallenge = '{$db_challenge}'\n";
-            file_put_contents('/var/www/pdcmagic.com/gatherling/challenge.log', $error_log, FILE_APPEND);
-
+            logger()->error("Challenge check failed: $error_log");
             return false;
         }
     }
