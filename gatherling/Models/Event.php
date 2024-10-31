@@ -1291,11 +1291,9 @@ class Event
 
         $standing = new Standings($this->name, $playername);
         $opponents = $standing->getOpponents($this->name, $subevent, 1);
-        if ($opponents != null) {
-            foreach ($opponents as $opponent) {
-                if ($opponent->active === 1) {
-                    $list_opponents[] = $opponent->player;
-                }
+        foreach ($opponents as $opponent) {
+            if ($opponent->active === 1 && $opponent->player !== null) {
+                $list_opponents[] = $opponent->player;
             }
         }
 
