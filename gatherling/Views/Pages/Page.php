@@ -35,7 +35,7 @@ abstract class Page extends TemplateResponse
         $this->isHost = $this->player?->isHost() ?? false;
         $this->isOrganizer = count($this->player?->organizersSeries() ?? []) > 0;
         $this->isSuper = $this->player?->isSuper() ?? false;
-        $this->versionTagline = $this->versionTagline();
+        $this->versionTagline = $this->version();
         $this->jsLink = 'gatherling.js?v=' . rawurlencode($this->gitHash);
     }
 
@@ -45,7 +45,7 @@ abstract class Page extends TemplateResponse
         return TemplateHelper::render('page', $this);
     }
 
-    private function versionTagline(): string
+    private function version(): string
     {
         return 'Gatherling version 6.0.3 ("Nothing is so painful to the human mind as a great and sudden change.")';
         // return 'Gatherling version 6.0.2 ("Nixon was normalizing relations with China. I figured that if he could normalize relations, then so could I.")';
