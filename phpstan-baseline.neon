@@ -1196,11 +1196,6 @@ parameters:
 			path: gatherling/lib.php
 
 		-
-			message: "#^Cannot cast mixed to float\\.$#"
-			count: 1
-			path: gatherling/profile.php
-
-		-
 			message: "#^Property Gatherling\\\\Models\\\\Player\\:\\:\\$emailAddress \\(string\\|null\\) does not accept mixed\\.$#"
 			count: 1
 			path: gatherling/profile.php

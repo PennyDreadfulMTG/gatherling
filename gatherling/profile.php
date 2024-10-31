@@ -22,7 +22,7 @@ function main(): void
     if ($player && $profileEdit == 2) {
         $player->emailAddress = $_GET['email'];
         $player->emailPrivacy = get()->int('email_public');
-        $player->timezone = (float) $_GET['timezone'];
+        $player->timezone = get()->float('timezone');
         $player->save();
     }
 
