@@ -20,7 +20,7 @@ function sendEmail(string $to, string $subj, string $msg): bool
     curl_setopt($ch, CURLOPT_URL, 'https://api.brevo.com/v3/smtp/email');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body, JSON_THROW_ON_ERROR));
 
     $headers = [];
     $headers[] = 'Accept: application/json';
