@@ -21,6 +21,38 @@ class Entry
     public ?int $initial_seed;
     public ?int $ignored;
 
+    // TODO: remove ignore functionality
+    public function __construct(int $event_id, string $playername)
+    {
+        $this->ignored = 0;
+        $sql = '
+            SELECT
+                deck AS deck_id, medal, ignored, drop_round, initial_byes, initial_seed
+            FROM
+                entries
+            WHERE
+                event_id = :event_id AND player = :player';
+        $params = ['event_id' => $event_id, 'player' => $playername];
+        $entry = db()->selectOnlyOrNull($sql, EntryDto::class, $params);
+        if ($entry == null) {
+            throw new NotFoundException('Entry for ' . $playername . ' in ' . $event_id . ' not found');
+        }
+        $this->medal = $entry->medal;
+        $this->ignored = $entry->ignored;
+        $this->drop_round = $entry->drop_round;
+        $this->initial_byes = $entry->initial_byes;
+        $this->initial_seed = $entry->initial_seed;
+
+        if ($entry->deck_id != null) {
+            $this->deck = new Deck($entry->deck_id);
+        } else {
+            $this->deck = null;
+        }
+
+        $this->event = new Event($event_id);
+        $this->player = new Player($playername);
+    }
+
     public static function findByEventAndPlayer(int $event_id, string $playername): ?self
     {
         $sql = 'SELECT deck FROM entries WHERE event_id = :event_id AND player = :player';
@@ -71,38 +103,6 @@ class Entry
                 player';
         $params = ['event_id' => $eventid, 'player' => $playername];
         return db()->optionalString($sql, $params) !== null;
-    }
-
-    // TODO: remove ignore functionality
-    public function __construct(int $event_id, string $playername)
-    {
-        $this->ignored = 0;
-        $sql = '
-            SELECT
-                deck AS deck_id, medal, ignored, drop_round, initial_byes, initial_seed
-            FROM
-                entries
-            WHERE
-                event_id = :event_id AND player = :player';
-        $params = ['event_id' => $event_id, 'player' => $playername];
-        $entry = db()->selectOnlyOrNull($sql, EntryDto::class, $params);
-        if ($entry == null) {
-            throw new NotFoundException('Entry for ' . $playername . ' in ' . $event_id . ' not found');
-        }
-        $this->medal = $entry->medal;
-        $this->ignored = $entry->ignored;
-        $this->drop_round = $entry->drop_round;
-        $this->initial_byes = $entry->initial_byes;
-        $this->initial_seed = $entry->initial_seed;
-
-        if ($entry->deck_id != null) {
-            $this->deck = new Deck($entry->deck_id);
-        } else {
-            $this->deck = null;
-        }
-
-        $this->event = new Event($event_id);
-        $this->player = new Player($playername);
     }
 
     public function recordString(): string
