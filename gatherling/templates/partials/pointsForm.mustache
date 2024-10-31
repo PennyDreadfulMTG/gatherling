@@ -4,15 +4,15 @@
 <p style="width:75%; text-align: left;"><strong>Points are NOT counted for events with the 'Custom' number!</strong></p>
 <center>
     <form action="seriescp.php">
-        <input type="hidden" name="series" value="{{seriesName}}" />
+        <input type="hidden" name="series" value="{{seriesName}}">
         {{#seasonDropMenu}}{{> dropMenu}}{{/seasonDropMenu}}
-        <input type="hidden" name="view" value="points_management" />
-        <input class="inputbutton" type="submit" value="Choose Season" />
+        <input type="hidden" name="view" value="points_management">
+        <input class="inputbutton" type="submit" value="Choose Season">
     </form>
 </center>
 <form action="seriescp.php" method="post">
-    <input type="hidden" name="series" value="{{seriesName}}" />
-    <input type="hidden" name="season" value="{{season}}" />
+    <input type="hidden" name="series" value="{{seriesName}}">
+    <input type="hidden" name="season" value="{{season}}">
     <table class="form c">
         <tr>
             <th class="top" colspan="2">Season {{season}} Settings</th>
@@ -22,8 +22,8 @@
         {{/rules}}
         <tr>
             <td colspan="2" class="buttons">
-                <input type="hidden" name="view" value="points_management" />
-                <input class="inputbutton" type="submit" name="action" value="Update Points Rules" />
+                <input type="hidden" name="view" value="points_management">
+                <input class="inputbutton" type="submit" name="action" value="Update Points Rules">
             </td>
         </tr>
     </table>

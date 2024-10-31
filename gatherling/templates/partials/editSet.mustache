@@ -2,9 +2,9 @@
 
 <form action="cardscp.php" method="post">
     <table>
-        <input type="hidden" name="view" value="edit_set" />
-        <input type="hidden" name="set" value="{{cardSetName}}" />
-        <input type="hidden" name="action" value="modify_set" />
+        <input type="hidden" name="view" value="edit_set">
+        <input type="hidden" name="set" value="{{cardSetName}}">
+        <input type="hidden" name="action" value="modify_set">
 
         <table>
 
@@ -30,7 +30,7 @@
                     <td>{{rarity}}</td>
                     <td>{{count}}</td>
                     <td>
-                        <input type="checkbox" name="delentries[]" value="{{id}}"{{#checked}} checked="yes"{{/checked}} />
+                        <input type="checkbox" name="delentries[]" value="{{id}}"{{#checked}} checked{{/checked}}>
                     </td>
                     <td>
                         <a href="{{editLink}}">Edit</a>
@@ -39,5 +39,5 @@
             {{/cards}}
 
     </table>
-    <input class="inputbutton" type="submit" name="mode" value="Modify Set" />
+    <input class="inputbutton" type="submit" name="mode" value="Modify Set">
 </form>

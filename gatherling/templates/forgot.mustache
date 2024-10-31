@@ -23,8 +23,8 @@
             {{#showNewPasswordForm}}
                 <p>Enter your new password.</p>
                 <form action="forgot.php" method="post">
-                    <input type="hidden" name="view" value="new_password" />
-                    <input type="hidden" name="token" value="{{token}}" />
+                    <input type="hidden" name="view" value="new_password">
+                    <input type="hidden" name="token" value="{{token}}">
                     <table class="form">
                         {{#newPasswordInput}}{{> passwordInput}}{{/newPasswordInput}}
                         {{#resetPassword}}{{> submit}}{{/resetPassword}}
@@ -35,7 +35,7 @@
             {{#showForgotForm}}
                 <p>Enter your email or username and we'll send you a link to get back into your account.</p>
                 <form action="forgot.php" method="post">
-                    <input type="hidden" name="view" value="send_login_link" />
+                    <input type="hidden" name="view" value="send_login_link">
                     <table class="form">
                         {{#identifierInput}}{{> textInput}}{{/identifierInput}}
                         {{#sendLoginLink}}{{> submit}}{{/sendLoginLink}}

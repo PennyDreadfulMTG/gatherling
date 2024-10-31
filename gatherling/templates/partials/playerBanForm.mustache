@@ -1,6 +1,6 @@
 <h2><center>Banned Players</center></h2>
 <form action="seriescp.php" method="post">
-    <input type="hidden" name="series" value="{{seriesName}}" />
+    <input type="hidden" name="series" value="{{seriesName}}">
     <p style="width: 75%; text-align: left;">
         Players added to this ban list will not be able to register for any event
         (including alt events) that are created by this series. You can also suspend
@@ -21,7 +21,7 @@
                 <td style="text-align: center;">{{reasonBanned}}</td>
                 <td style="text-align: center; width: 50px;">
                     <input type="checkbox" value="{{playerName}}" name="removebannedplayer[]"
-                        {{#isCurrentPlayer}}disabled="yes"{{/isCurrentPlayer}}
+                        {{#isCurrentPlayer}}disabled{{/isCurrentPlayer}}
                     />
                 </td>
             </tr>
@@ -35,16 +35,16 @@
     <table class="form c">
         <tr>
             <td>Add new:</td>
-            <td><input class="inputbox" type="text" name="addbannedplayer" /></td>
+            <td><input class="inputbox" type="text" name="addbannedplayer"></td>
         </tr>
         <tr>
             <td>Reason:</td>
-            <td><input class="inputbox" type="text" name="reason" /></td>
+            <td><input class="inputbox" type="text" name="reason"></td>
         </tr>
         <tr>
             <td colspan="2" class="buttons">
-                <input type="hidden" name="view" value="bannedplayers" />
-                <input class="inputbutton" type="submit" value="Update Banned Players" name="action" />
+                <input type="hidden" name="view" value="bannedplayers">
+                <input class="inputbutton" type="submit" value="Update Banned Players" name="action">
             </td>
         </tr>
 </table>

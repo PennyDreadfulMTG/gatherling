@@ -1,9 +1,9 @@
 <h2>Success</h2>
 <p>{{message}}</p>
 <form action="formatcp.php" method="post">
-    <input type="hidden" name="view" value="settings" />
+    <input type="hidden" name="view" value="settings">
     {{#formatName}}
-        <input type="hidden" name="format" value="{{formatName}}" />
+        <input type="hidden" name="format" value="{{formatName}}">
     {{/formatName}}
-    <input class="inputbutton" type="submit" value="Continue" name ="action" />
+    <input class="inputbutton btn-primary" type="submit" value="Continue" name ="action">
 </form>

@@ -20,15 +20,15 @@
         <th>
             <form action="report.php" method="post">
                 {{#isDrop}}
-                    <input name="drop" type="hidden" value="Y" />
+                    <input name="drop" type="hidden" value="Y">
                 {{/isDrop}}
-                <input name="action" type="hidden" value="finalize_result" />
-                <input name="match_id" type="hidden" value="{{matchId}}" />
-                <input name="report" type="hidden" value="{{report}}" />
-                <input name="opponent" type="hidden" value="{{opponent}}" />
-                <input name="player" type="hidden" value="{{playerName}}" />
-                <input name="event" type="hidden" value="{{eventName}}" />
-                <input class="inputbutton" name="submit" type="submit" value="Verify Match Report" />
+                <input name="action" type="hidden" value="finalize_result">
+                <input name="match_id" type="hidden" value="{{matchId}}">
+                <input name="report" type="hidden" value="{{report}}">
+                <input name="opponent" type="hidden" value="{{opponent}}">
+                <input name="player" type="hidden" value="{{playerName}}">
+                <input name="event" type="hidden" value="{{eventName}}">
+                <input class="inputbutton" name="submit" type="submit" value="Verify Match Report">
             </form>
         </th>
         <td>
@@ -36,10 +36,10 @@
             where there is no match_id, but it currently does not so don't show it. -->
             {{#matchId}}
                 <form action="report.php" method="get">
-                    <input name="match_id" type="hidden" value="{{matchId}}" />
-                    <input name="player" type="hidden" value="{{playerName}}" />
-                    <input name="mode" type="hidden" value="submit_result" />
-                    <input class="inputbutton" name="submit" type="submit" value="Go Back and Correct" />
+                    <input name="match_id" type="hidden" value="{{matchId}}">
+                    <input name="player" type="hidden" value="{{playerName}}">
+                    <input name="mode" type="hidden" value="submit_result">
+                    <input class="inputbutton" name="submit" type="submit" value="Go Back and Correct">
                 </form>
             {{/matchId}}
         </td>
