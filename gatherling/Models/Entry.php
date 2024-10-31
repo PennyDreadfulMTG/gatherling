@@ -23,12 +23,9 @@ class Entry
     public function __construct(int $event_id, string $playername)
     {
         $sql = '
-            SELECT
-                deck AS deck_id, medal, drop_round, initial_byes, initial_seed
-            FROM
-                entries
-            WHERE
-                event_id = :event_id AND player = :player';
+            SELECT deck AS deck_id, medal, drop_round, initial_byes, initial_seed
+              FROM entries
+             WHERE event_id = :event_id AND player = :player';
         $params = ['event_id' => $event_id, 'player' => $playername];
         $entry = db()->selectOnlyOrNull($sql, EntryDto::class, $params);
         if ($entry == null) {
@@ -66,20 +63,12 @@ class Entry
     public static function getActivePlayers(int $eventid): array
     {
         $sql = '
-            SELECT
-                e.player
-            FROM
-                entries e
-            JOIN
-                events ev ON e.event_id = ev.id
-            JOIN
-                standings s ON ev.name = s.event
-            WHERE
-                e.event_id = :eventid
-            AND
-                s.active = 1
-            GROUP BY
-                player';
+            SELECT e.player
+              FROM entries e
+              JOIN events ev ON e.event_id = ev.id
+              JOIN standings s ON ev.name = s.event
+             WHERE e.event_id = :eventid AND s.active = 1
+          GROUP BY player';
         $playernames = db()->strings($sql, ['eventid' => $eventid]);
         return array_map(fn (string $name) => new Entry($eventid, $name), $playernames);
     }
@@ -87,16 +76,11 @@ class Entry
     public static function playerRegistered(int $eventid, string $playername): bool
     {
         $sql = '
-            SELECT
-                n.player
-            FROM
-                entries n
-            JOIN
-                events e ON n.event_id = e.id
-            WHERE
-                n.event_id = :event_id  AND n.player = :player
-            GROUP BY
-                player';
+            SELECT n.player
+              FROM entries n
+              JOIN events e ON n.event_id = e.id
+             WHERE n.event_id = :event_id  AND n.player = :player
+          GROUP BY player';
         $params = ['event_id' => $eventid, 'player' => $playername];
         return db()->optionalString($sql, $params) !== null;
     }
@@ -192,12 +176,9 @@ class Entry
     public function setInitialByes(int $byeqty): void
     {
         $sql = '
-            UPDATE
-                entries
-            SET
-                initial_byes = :initial_byes
-            WHERE
-                player = :player AND event_id = :event_id';
+            UPDATE entries
+               SET initial_byes = :initial_byes
+             WHERE player = :player AND event_id = :event_id';
         $params = [
             'initial_byes' => $byeqty,
             'player' => $this->player->name,
@@ -209,12 +190,9 @@ class Entry
     public function setInitialSeed(int $byeqty): void
     {
         $sql = '
-            UPDATE
-                entries
-            SET
-                initial_seed = :initial_seed
-            WHERE
-                player = :player AND event_id = :event_id';
+            UPDATE entries
+               SET initial_seed = :initial_seed
+             WHERE player = :player AND event_id = :event_id';
         $params = [
             'initial_seed' => $byeqty,
             'player' => $this->player->name,
