@@ -20,7 +20,7 @@ class InfoCell extends Component
     /** @var list<string> */
     public array $subevents;
     public PlayerLink $hostLink;
-    public string $reportLink;
+    public string $eventReportLink;
     public string $seasonLeaderboardLink;
 
     public function __construct(Event $event)
@@ -48,7 +48,7 @@ class InfoCell extends Component
             $host = new Player($event->host);
             $this->hostLink = new PlayerLink($host);
         }
-        $this->reportLink = $event->reporturl ?? '';
+        $this->eventReportLink = $event->reporturl ?? '';
         $this->seasonLeaderboardLink = 'seriesreport.php?series=' . rawurlencode($event->series) . '&season=' . rawurlencode((string) $event->season);
     }
 }

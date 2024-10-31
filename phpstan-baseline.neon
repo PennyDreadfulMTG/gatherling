@@ -1131,7 +1131,7 @@ parameters:
 			path: gatherling/Views/Pages/Home.php
 
 		-
-			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\Home\\:\\:\\$activeEvents \\(list\\<array\\{name\\: string, format\\: string, currentRound\\: int, reportLink\\: string\\}\\>\\) does not accept non\\-empty\\-list\\<array\\{name\\: string\\|null, format\\: string\\|null, currentRound\\: int\\|null, reportLink\\: string\\}\\>\\.$#"
+			message: "#^Property Gatherling\\\\Views\\\\Pages\\\\Home\\:\\:\\$activeEvents \\(list\\<array\\{name\\: string, format\\: string, currentRound\\: int, eventReportLink\\: string\\}\\>\\) does not accept non\\-empty\\-list\\<array\\{name\\: string\\|null, format\\: string\\|null, currentRound\\: int\\|null, eventReportLink\\: string\\}\\>\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/Home.php
 
@@ -1256,7 +1256,7 @@ parameters:
 			path: gatherling/Views/Pages/Series.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Views\\\\Components\\\\ReportLink constructor expects string, string\\|null given\\.$#"
+			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Views\\\\Components\\\\EventReportLink constructor expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/Series.php
 

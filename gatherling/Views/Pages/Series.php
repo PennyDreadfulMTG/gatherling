@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Views\Pages;
 
 use Gatherling\Views\Components\Time;
-use Gatherling\Views\Components\ReportLink;
+use Gatherling\Views\Components\EventReportLink;
 use Gatherling\Models\Series as SeriesModel;
 
 class Series extends Page
@@ -44,7 +44,7 @@ class Series extends Page
                 'regularTime' => $regularTime,
                 'masterDocumentLink' => $masterDocumentLink,
                 'season' => $season,
-                'reportLink' => $mostRecentEvent ? new ReportLink($mostRecentEvent->name) : null,
+                'eventReportLink' => $mostRecentEvent ? new EventReportLink($mostRecentEvent->name) : null,
                 'nextEventStart' => $nextEventStart,
             ];
         }

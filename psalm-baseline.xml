@@ -135,10 +135,6 @@
     </UnusedVariable>
   </file>
   <file src="gatherling/Models/Standings.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[addPlayerToEvent]]></code>
-      <code><![CDATA[dropPlayer]]></code>
-    </PossiblyUnusedMethod>
     <UnusedVariable>
       <code><![CDATA[$allPlayers]]></code>
       <code><![CDATA[$opponent_names]]></code>

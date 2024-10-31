@@ -13,7 +13,7 @@
                 {{#activeEvents}}
                     <tr>
                         <td>
-                            <a href="{{reportLink}}">{{name}}</a><br>
+                            <a href="{{eventReportLink}}">{{name}}</a><br>
                             {{format}}
                         </td>
                         <td style="text-align: right">Round {{currentRound}}</td>
@@ -29,7 +29,7 @@
                 {{#upcomingEvents}}
                     <tr>
                         <td>
-                            <a href="{{reportLink}}">{{name}}</a><br>
+                            <a href="{{eventReportLink}}">{{name}}</a><br>
                             {{format}}
                         </td>
                         <td style="text-align: right">
@@ -104,7 +104,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <a class="borderless" href="{{reportLink}}">
+                                <a class="borderless" href="{{eventReportLink}}">
                                     {{#colorImages}}{{> colorImages}}{{/colorImages}}
                                 </a>
                             </td>
