@@ -28,7 +28,7 @@ if (typeof window === 'undefined') {
 //
 // What we sacrifice is any attempt at localization. But Gatherling is very much a site presented in US English.
 // If we suddenly started saying "Mecredi" instead of "Wednesday" that might even be annoying to French users.
-// It does mean people to whom "1 June" makes more sense than "June 1" will nonetheless see the former.
+// It does mean people to whom "1 June" makes more sense than "June 1" will nonetheless see the latter.
 // Similarly if 13:00 makes more sense to you than 1pm you are out of luck.
 //
 // Long form gains less from abandoning Intl styles, but it's still better I think:
@@ -74,15 +74,15 @@ function formatDate(originalDate, start, timeZone, locale, short) {
       format += ', yyyy';
     }
     formattedDate = date.toFormat(format);
-  } else if (diffInDays === -1) {
+  } else if (date.hasSame(now.minus({ days: 1 }), 'day')) {
     formattedDate = 'Yesterday';
-  } else if (diffInDays === 0) {
+  } else if (date.hasSame(now, 'day')) {
     formattedDate = 'Today';
-  } else if (diffInDays === 1) {
+  } else if (date.hasSame(now.plus({ days: 1 }), 'day')) {
     formattedDate = 'Tomorrow';
-  } else if (diffInDays > 1 && diffInDays < 7) {
+  } else if (diffInDays > 0 && diffInDays < 7) {
     formattedDate = date.toFormat('cccc');
-  } else if (diffInDays < -1 && diffInDays >= -7) {
+  } else if (diffInDays < 0 && diffInDays >= -7) {
     formattedDate = 'Last ' + date.toFormat('cccc');
   } else if (isThisYear && diffInDays >= 7) {
     formattedDate = date.toFormat('ccc, MMM d');
