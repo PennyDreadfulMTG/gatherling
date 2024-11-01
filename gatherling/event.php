@@ -529,7 +529,7 @@ function updateMatches(): void
     }
     $rnd = post()->int('newmatchround');
 
-    if ($rnd) {
+    if ($pA !== '' && $pB !== '' && $rnd) {
         $playerA = new Standings($event->name, $pA);
         $playerB = new Standings($event->name, $pB);
         if ($res == 'P') {
