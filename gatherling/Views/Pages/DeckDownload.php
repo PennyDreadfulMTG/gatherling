@@ -7,6 +7,9 @@ namespace Gatherling\Views\Pages;
 use Gatherling\Models\Deck;
 use Gatherling\Views\TextFileDownload;
 
+use function Gatherling\Helpers\normaliseCardName;
+use function Safe\preg_replace;
+
 class DeckDownload extends TextFileDownload
 {
     /** @var list<array{qty: int, card: string}> */
@@ -16,7 +19,7 @@ class DeckDownload extends TextFileDownload
 
     public function __construct(Deck $deck)
     {
-        $filename = preg_replace('/ /', '_', $deck->name) . '.txt';
+        $filename = preg_replace('/ /', '_', $deck->name ?? 'deck') . '.txt';
         parent::__construct($filename);
         $this->maindeckCards = $this->prepare($deck->maindeck_cards);
         $this->sideboardCards = $this->prepare($deck->sideboard_cards);

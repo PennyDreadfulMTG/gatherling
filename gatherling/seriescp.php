@@ -26,7 +26,7 @@ use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     if (!Player::isLoggedIn()) {
         (new LoginRedirect())->send();
@@ -47,10 +47,12 @@ function main(): void
     }
     $activeSeriesName = get()->string('series');
 
+    $playerName = Player::loginName();
+
     if (isset($_POST['series'])) {
         $seriesname = post()->string('series');
         $series = new Series($seriesname);
-        if ($series->authCheck(Player::loginName())) {
+        if ($playerName !== false && $series->authCheck($playerName)) {
             if ($_POST['action'] == 'Update Series') {
                 $newactive = post()->int('isactive', 0);
                 $newtime = $_POST['hour'];
@@ -60,14 +62,12 @@ function main(): void
                 $prereg = post()->int('preregdefault', 0);
 
                 $series = new Series($seriesname);
-                if ($series->authCheck(Player::loginName())) {
-                    $series->active = $newactive;
-                    $series->start_time = $newtime . ':00';
-                    $series->start_day = $newday;
-                    $series->prereg_default = $prereg;
-                    $series->mtgo_room = $room;
-                    $series->save();
-                }
+                $series->active = $newactive;
+                $series->start_time = $newtime . ':00';
+                $series->start_day = $newday;
+                $series->prereg_default = $prereg;
+                $series->mtgo_room = $room;
+                $series->save();
             } elseif ($_POST['action'] == 'Change Logo') {
                 $file = files()->file('logo');
                 if ($file->size > 0) {
@@ -99,7 +99,7 @@ function main(): void
     }
     $activeSeries = new Series($activeSeriesName);
 
-    if (!$activeSeries->authCheck(Player::loginName())) {
+    if ($playerName === false || !$activeSeries->authCheck($playerName)) {
         $viewComponent = new NoSeries();
     } else {
         switch ($view) {
@@ -169,7 +169,6 @@ function updateBannedPlayers(Series $series, array $removeBannedPlayers, string 
     if ($addplayer == null) {
         return "Can't add {$addition} to Banned Players, they don't exist!";
     }
-    assert($addplayer->name !== null); // Else we would not have found them
     $series->addBannedPlayer($addplayer->name, $reason);
     return '';
 }

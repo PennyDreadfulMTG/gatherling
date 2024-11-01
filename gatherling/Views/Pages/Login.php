@@ -14,7 +14,6 @@ class Login extends Page
         public string $target,
         public string $discordId
     ) {
-        parent::__construct();
-        $this->title = 'Login';
+        parent::__construct('Login');
     }
 }

@@ -6,5 +6,8 @@ namespace Gatherling\Views\Pages;
 
 class AuthFailed extends Page
 {
-    public string $title = 'Event Host Control Panel';
+    public function __construct()
+    {
+        parent::__construct('Event Host Control Panel');
+    }
 }

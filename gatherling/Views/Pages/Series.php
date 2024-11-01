@@ -5,19 +5,20 @@ declare(strict_types=1);
 namespace Gatherling\Views\Pages;
 
 use Gatherling\Views\Components\Time;
-use Gatherling\Views\Components\ReportLink;
+use Gatherling\Views\Components\EventReportLink;
 use Gatherling\Models\Series as SeriesModel;
+
+use function Safe\strtotime;
 
 class Series extends Page
 {
-    /** @var array<string, mixed> */
+    /** @var array<array{seriesName: string, logoSrc: string, formatName: ?string, hosts: string, regularTime: string, masterDocumentLink: string, season: int|string|null, eventReportLink: EventReportLink|null, nextEventStart: Time|null}> */
     public array $activeSeries;
 
     /** @param list<string> $activeSeriesNames */
     public function __construct(array $activeSeriesNames)
     {
-        parent::__construct();
-        $this->title = 'Event Information';
+        parent::__construct('Event Information');
         $this->activeSeries = [];
         foreach ($activeSeriesNames as $seriesName) {
             $series = new SeriesModel($seriesName);
@@ -45,7 +46,7 @@ class Series extends Page
                 'regularTime' => $regularTime,
                 'masterDocumentLink' => $masterDocumentLink,
                 'season' => $season,
-                'reportLink' => $mostRecentEvent ? new ReportLink($mostRecentEvent->name) : null,
+                'eventReportLink' => $mostRecentEvent ? new EventReportLink($mostRecentEvent->name) : null,
                 'nextEventStart' => $nextEventStart,
             ];
         }

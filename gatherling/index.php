@@ -16,7 +16,7 @@ use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     $activeEvents = Event::getActiveEvents(false);
     $upcomingEvents = getUpcomingEvents();

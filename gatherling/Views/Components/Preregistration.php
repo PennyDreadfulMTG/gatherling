@@ -9,12 +9,14 @@ use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 
+use function Safe\strtotime;
+
 class Preregistration extends Component
 {
     public bool $hasUpcomingEvents = false;
     /** @var array<array{eventLink: string, eventName: string, startingSoon: bool, startTime: Time, createDeckLink: CreateDeckLink|null, deckLink: DeckLink|null, unregLink: string}> */
     public array $upcomingEvents = [];
-    /** @var array<array{eventLink: string, eventName: string, startTime: Time, isFull: bool, requiresMtgo: bool, requiresMtga: bool, isOpen: bool}> */
+    /** @var array<array{eventReportLink: string, eventName: string, startTime: Time, isFull: bool, requiresMtgo: bool, requiresMtga: bool, isOpen: bool, registerLink: string}> */
     public array $availableEvents = [];
     public bool $promptToLinkMtgo = false;
     public bool $promptToLinkMtga = false;
@@ -95,7 +97,7 @@ class Preregistration extends Component
         }
 
         foreach ($availableEvents as $event) {
-            $eventLink = 'eventreport.php?event=' . rawurlencode($event->name ?? '');
+            $eventReportLink = 'eventreport.php?event=' . rawurlencode($event->name ?? '');
             $eventName = $event->name ?? '';
             if (!$event->start || !strtotime($event->start)) {
                 throw new NotFoundException("Event start time not found for event {$event->name}");
@@ -106,7 +108,7 @@ class Preregistration extends Component
             $requiresMtga = $event->client == 2 && empty($player->mtga_username);
             $isOpen = !$isFull && !$requiresMtgo && !$requiresMtga;
             $this->availableEvents[] = [
-                'eventLink' => $eventLink,
+                'eventReportLink' => $eventReportLink,
                 'eventName' => $eventName,
                 'startTime' => $startTime,
                 'isFull' => $isFull,

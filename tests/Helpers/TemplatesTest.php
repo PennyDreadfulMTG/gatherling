@@ -2,14 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Gatherling\Tests;
+namespace Gatherling\Tests\Helpers;
 
 require_once 'gatherling/lib.php';
 
 use stdClass;
 use PHPUnit\Framework\TestCase;
 
-final class LibTest extends TestCase
+use function Gatherling\Helpers\getObjectVarsCamelCase;
+use function Gatherling\Helpers\toCamel;
+
+final class TemplatesTest extends TestCase
 {
     public function testObjectVarsCamelCase(): void
     {

@@ -8,6 +8,8 @@ require_once 'gatherling/lib.php';
 
 use PHPUnit\Framework\TestCase;
 
+use function Gatherling\Helpers\normaliseCardName;
+
 final class NamesTest extends TestCase
 {
     public function testNames(): void

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use Exception;
 use Gatherling\Exceptions\NotFoundException;
 use InvalidArgumentException;
 use Gatherling\Views\Components\DeckLink;
@@ -557,17 +556,7 @@ class Deck
 
             // Restricted Card list. Only one of these cards is alowed in a deck
             if ($format->isCardOnRestrictedList($card)) {
-                $restrictedError = false;
-                if ($amt > 1) {
-                    $restrictedError = true;
-                }
-                foreach ($this->maindeck_cards as $restrictedCard => $mainamt) {
-                    if ($restrictedCard == $card) {
-                        $restrictedError = true;
-                        break;
-                    }
-                }
-                if ($restrictedError) {
+                if ($amt > 1 || array_key_exists($card, $this->maindeck_cards)) {
                     $this->errors[] = "Sideboard card: {$amt} {$card} is on the restricted list.
                                  Only one of this card may be in a deck list.";
                     $this->unparsed_side[$card] = ($this->unparsed_side[$card] ?? 0) + $amt;
@@ -578,12 +567,12 @@ class Deck
             if ($format->singleton) {
                 if (!$format->isCardSingletonLegal($card, $amt)) {
                     $this->errors[] = "Singleton formats allow only one of any card, except basic lands.
-                                 You entered {$amt} {$card} on your sideboard.";
+                                 You entered {$amt} {$card} in your sideboard.";
                 }
                 foreach ($this->maindeck_cards as $singletonCard => $mainamt) {
                     if ($singletonCard == $card) {
                         $this->errors[] = "Singleton formats allow only one of any card, except basic lands.
-                                     You entered {$amt} {$card} on your sideboard
+                                     You entered {$amt} {$card} in your sideboard
                                      and {$mainamt} {$card} in your mainboard.";
                         break;
                     }
@@ -591,12 +580,12 @@ class Deck
             } else {
                 if (!$format->isQuantityLegal($card, $amt)) {
                     $this->errors[] = "No more than four of any card is allowed in this format, except basic lands.
-                                 You entered {$amt} {$card} on your sideboard.";
+                                 You entered {$amt} {$card} in your sideboard.";
                 } else {
                     foreach ($this->maindeck_cards as $quantityCard => $mainamt) {
                         if (!$format->isQuantityLegalAgainstMain($card, $amt, $quantityCard, $mainamt)) {
                             $this->errors[] = "No more than four of any card is allowed in this format, except basic lands.
-                                         You entered {$amt} {$card} on your sideboard
+                                         You entered {$amt} {$card} in your sideboard
                                          and {$mainamt} {$card} in your mainboard.";
                             break;
                         }
@@ -723,14 +712,10 @@ class Deck
     private function findIdenticalDecksInternal(): array
     {
         $sql = '
-            SELECT
-                d.id
-            FROM
-                decks d, entries n, events e
-            WHERE
-                deck_hash = :deck_hash AND d.id != :id AND n.deck = d.id AND e.id = n.event_id AND e.finalized = 1
-            ORDER BY
-                e.start DESC';
+            SELECT d.id
+              FROM decks d, entries n, events e
+             WHERE deck_hash = :deck_hash AND d.id != :id AND n.deck = d.id AND e.id = n.event_id AND e.finalized = 1
+          ORDER BY e.start DESC';
         $params = ['deck_hash' => $this->deck_hash, 'id' => $this->id];
         $deckIds = db()->ints($sql, $params);
         $decks = [];

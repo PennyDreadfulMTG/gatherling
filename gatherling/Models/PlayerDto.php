@@ -16,7 +16,6 @@ class PlayerDto extends Dto
     public ?string $emailAddress;
     public int $emailPrivacy;
     public float $timezone;
-    public ?string $theme;
     public ?string $discord_id;
     public ?string $discord_handle;
     public ?string $api_key;

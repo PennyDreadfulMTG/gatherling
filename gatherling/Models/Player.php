@@ -11,21 +11,22 @@ use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\PlayerLink;
 
 use function Gatherling\Helpers\db;
+use function Gatherling\Helpers\logger;
 use function Gatherling\Helpers\session;
+use function Safe\session_destroy;
 
 class Player
 {
-    public ?string $name;
+    public string $name;
     public ?string $password;
-    public ?int $host = 0;
-    public ?int $super;
-    public ?int $rememberMe; // if selected will record IP address. Gatherling will automatically log players in of known IP addresses.
+    public int $host = 0;
+    public int $super;
+    public int $rememberMe; // if selected will record IP address. Gatherling will automatically log players in of known IP addresses.
     public ?string $ipAddress;
     public ?string $emailAddress = null;
     public ?int $emailPrivacy = 0;
     public ?float $timezone = -5.0;
     public ?int $verified;
-    public ?string $theme = null; // DEPRECATED. Always null.
     public ?string $discord_id = null;
     public ?string $discord_handle = null;
     public ?string $api_key;
@@ -40,14 +41,13 @@ class Player
             $this->super = 0;
             $this->rememberMe = 0;
             $this->verified = 0;
-            $this->theme = null;
             return;
         }
         $sql = '
             SELECT
                 name, password, rememberme AS rememberMe, INET_NTOA(ipaddress) AS ipAddress, host, super,
                 mtgo_confirmed AS verified, email AS emailAddress, email_privacy as emailPrivacy, timezone,
-                theme, discord_id, discord_handle, api_key, mtga_username, mtgo_username
+                discord_id, discord_handle, api_key, mtga_username, mtgo_username
             FROM
                 players
             WHERE
@@ -108,34 +108,7 @@ class Player
             return false;
         }
         $hashpwd = hash('sha256', $password);
-        return strcmp($srvpass, $hashpwd) == 0;
-    }
-
-    public static function getClientIPAddress(): string
-    {
-        // this is used with the rememberMe feature to keep players logged in
-        // Test if it is a shared client
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        //Is it a proxy address
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
-
-        return $ip;
-    }
-
-    public static function saveIPAddress(string $ipAddress, string $player): void
-    {
-        $ipAddress = ip2long($ipAddress);
-        $db = Database::getConnection();
-        $stmt = $db->prepare('UPDATE players SET ipaddress = ? WHERE name = ?');
-        $stmt or exit($db->error);
-        $stmt->bind_param('ds', $ipAddress, $player);
-        $stmt->execute();
-        $stmt->close();
+        return $srvpass === $hashpwd;
     }
 
     public static function findByName(string $playerName): ?self
@@ -306,11 +279,6 @@ class Player
         db()->execute($sql, $params);
     }
 
-    public function getIPAddresss(): ?string
-    {
-        return $this->ipAddress;
-    }
-
     public function emailIsPublic(): bool
     {
         return (bool) $this->emailPrivacy;
@@ -418,29 +386,6 @@ class Player
         $sql = 'SELECT series FROM series_organizers WHERE player = :player AND series = :series';
         $params = ['player' => $this->name, 'series' => $seriesName];
         return db()->optionalString($sql, $params) !== null;
-    }
-
-    /** @return list<Event> */
-    public function getHostedEvents(): array
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE host = ? OR cohost = ?');
-        $stmt->bind_param('ss', $this->name, $this->name);
-        $stmt->execute();
-        $stmt->bind_result($evname);
-
-        $evnames = [];
-        while ($stmt->fetch()) {
-            $evnames[] = $evname;
-        }
-        $stmt->close();
-
-        $evs = [];
-        foreach ($evnames as $evname) {
-            $evs[] = new Event($evname);
-        }
-
-        return $evs;
     }
 
     public function getHostedEventsCount(): int
@@ -1275,8 +1220,7 @@ class Player
             return true;
         } else {
             $error_log = "Player = '{$this->name}' Challenge = '{$challenge}' Verify = '{$verifyplayer}' DBChallenge = '{$db_challenge}'\n";
-            file_put_contents('/var/www/pdcmagic.com/gatherling/challenge.log', $error_log, FILE_APPEND);
-
+            logger()->error("Challenge check failed: $error_log");
             return false;
         }
     }

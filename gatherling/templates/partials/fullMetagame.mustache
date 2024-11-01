@@ -24,15 +24,15 @@
             {{/entries}}
         {{/meta}}
     {{/decklistsAreVisible}}
-    {{^decklistsAreVisible}}
+    {{#showRegisteredPlayers}}
         <tr>
             <td colspan="5" class="c"><h2>Registered Players</h2></td>
         </tr>
         <tr>
             <td colspan="5" class="c">
                 <center>
-                    <p>Deck lists are not shown for privacy until event is finalized.</p>
-                </center>
+                <p>Deck lists are not shown for privacy until event is finalized.</p>
+            </center>
             </td>
         {{#players}}
             <tr>
@@ -43,6 +43,6 @@
                 <td></td>
             </tr>
         {{/players}}
-    {{/decklistsAreVisible}}
+    {{/showRegisteredPlayers}}
     {{#eventStandings}}{{> eventStandings}}{{/eventStandings}}
 </table>

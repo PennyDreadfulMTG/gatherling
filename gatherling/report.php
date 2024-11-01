@@ -22,7 +22,7 @@ use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     $player = Player::getSessionPlayer();
     if (!$player) {
@@ -136,6 +136,8 @@ function main(): void
                 $viewComponent = new SubmitResultForm($match->id, true);
             }
             break;
+        default:
+            (new Redirect('player.php'))->send();
     }
     $page = new Report($result, $viewComponent);
     $page->send();

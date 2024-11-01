@@ -8,8 +8,10 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 
+use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\get;
 use function Gatherling\Helpers\request;
+use function Safe\json_encode;
 
 require_once 'lib.php';
 require_once 'api_lib.php';
@@ -99,33 +101,24 @@ switch ($action) {
         break;
 
     case 'recent_events':
-        $events = [];
-        $db = Database::getConnection();
-        $query = $db->query('SELECT e.name as name FROM events e
-                         WHERE e.finalized AND e.start < NOW()
-                         ORDER BY e.start DESC LIMIT 10');
-        while ($row = $query->fetch_assoc()) {
-            $events[] = $row['name'];
-        }
-        $query->close();
-        foreach ($events as $eventname) {
-            $event = new Event($eventname);
+        $sql = '
+            SELECT e.name
+              FROM events e
+             WHERE e.finalized AND e.start < NOW()
+          ORDER BY e.start DESC
+             LIMIT 10';
+        $eventNames = db()->strings($sql);
+        foreach ($eventNames as $eventName) {
+            $event = new Event($eventName);
             $result[$event->name] = repr_json_event($event);
         }
         break;
 
     case 'upcoming_events':
-        $events = [];
-        $db = Database::getConnection();
-        $query = $db->query('SELECT e.name as name FROM events e
-                         WHERE e.start > NOW()
-                         ORDER BY e.start ASC');
-        while ($row = $query->fetch_assoc()) {
-            $events[] = $row['name'];
-        }
-        $query->close();
-        foreach ($events as $eventname) {
-            $event = new Event($eventname);
+        $sql = 'SELECT e.name FROM events e WHERE e.start > NOW() ORDER BY e.start ASC';
+        $eventNames = db()->strings($sql);
+        foreach ($eventNames as $eventName) {
+            $event = new Event($eventName);
             $result[$event->name] = repr_json_event($event);
         }
         break;

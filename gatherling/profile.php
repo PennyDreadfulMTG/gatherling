@@ -13,7 +13,7 @@ use function Gatherling\Helpers\session;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     $playerName = post()->optionalString('player') ?? get()->optionalString('player') ?? session()->optionalString('username') ?? '';
     $profileEdit = request()->int('profile_edit', 0);
@@ -22,7 +22,7 @@ function main(): void
     if ($player && $profileEdit == 2) {
         $player->emailAddress = $_GET['email'];
         $player->emailPrivacy = get()->int('email_public');
-        $player->timezone = (float) $_GET['timezone'];
+        $player->timezone = get()->float('timezone');
         $player->save();
     }
 

@@ -18,7 +18,7 @@ class FormatDropMenuDS extends DropMenu
             $options[] = [
                 'value' => $name,
                 'text' => $name,
-                'isSelected' => strcmp($name, $formatName) == 0,
+                'isSelected' => $name === $formatName,
             ];
         }
         parent::__construct($formName, $options, $title, 'ds_select');

@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use PDO;
-use Exception;
 use InvalidArgumentException;
 
 use function Gatherling\Helpers\db;
+use function Safe\fclose;
+use function Safe\fopen;
 
 class Series
 {
@@ -195,24 +196,6 @@ class Series
         }
 
         return false;
-    }
-
-    /** @return list<string> */
-    public function getEvents(): array
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE series = ?');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->bind_result($eventname);
-
-        $events = [];
-        while ($stmt->fetch()) {
-            $events[] = $eventname;
-        }
-        $stmt->close();
-
-        return $events;
     }
 
     /** @return list<Event> */
@@ -405,11 +388,8 @@ class Series
         return $season_rules;
     }
 
-    /**
-     * @param array<string, int|string> $new_rules
-     * @return array<string, int|string>
-     */
-    public function setSeasonRules(int $season_number, array $new_rules): array
+    /** @param array<string, int|string> $new_rules */
+    public function setSeasonRules(int $season_number, array $new_rules): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO series_seasons(series, season, first_pts, second_pts, semi_pts, quarter_pts,
@@ -458,8 +438,6 @@ class Series
         );
         $stmt->execute();
         $stmt->close();
-
-        return $new_rules;
     }
 
     // SCORE HELPER FUNCTIONS:
@@ -853,7 +831,7 @@ class Series
         // Make totals
         foreach ($total_pointarray as $player => $eventarray) {
             $total_pointarray[$player]['.total'] = 0;
-            foreach ($eventarray as $event => $points) {
+            foreach (array_values($eventarray) as $points) {
                 if (is_array($points)) {
                     if (is_int($points['points'])) {
                         $total_pointarray[$player]['.total'] += $points['points'];

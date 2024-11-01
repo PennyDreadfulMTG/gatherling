@@ -1,8 +1,8 @@
 <h3>Core Cardsets Allowed</h3>
 <form action="formatcp.php" method="post">
-    <input type="hidden" name="view" value="cardsets" />
-    <input type="hidden" name="format" value="{{activeFormatName}}" />
-    <input type="hidden" name="series" value="{{seriesName}}" />
+    <input type="hidden" name="view" value="cardsets">
+    <input type="hidden" name="format" value="{{activeFormatName}}">
+    <input type="hidden" name="series" value="{{seriesName}}">
     <table class="form c">
         <tr>
             <th class="c">Cardset Name</th>
@@ -12,7 +12,7 @@
             <tr>
                 <td class="c">{{.}}</td>
                 <td class="c" style="width: 50px; ">
-                    <input type="checkbox" name="delcardsetname[]" value="{{.}}" />
+                    <input type="checkbox" name="delcardsetname[]" value="{{.}}">
                 </td>
             </tr>
         {{/coreCardSets}}
@@ -31,8 +31,8 @@
                 {{#coreCardSetsDropMenu}}{{> cardsetDropMenu}}{{/coreCardSetsDropMenu}}
             </td>
             <td colspan="2" class="buttons">
-                <input type="hidden" name="view" value="cardsets" />
-                <input class="inputbutton" type="submit" value="Update Cardsets" name ="action" />
+                <input type="hidden" name="view" value="cardsets">
+                <input class="inputbutton" type="submit" value="Update Cardsets" name ="action">
             </td>
         </tr>
     </table>
@@ -40,9 +40,9 @@
 
 <h3>Block Cardsets Allowed</h3>
 <form action="formatcp.php" method="post">
-    <input type="hidden" name="view" value="cardsets" />
-    <input type="hidden" name="format" value="{{activeFormatName}}" />
-    <input type="hidden" name="series" value="{{seriesName}}" />
+    <input type="hidden" name="view" value="cardsets">
+    <input type="hidden" name="format" value="{{activeFormatName}}">
+    <input type="hidden" name="series" value="{{seriesName}}">
     <table class="form c">
         <tr>
             <th class="c">Cardset Name</th>
@@ -52,7 +52,7 @@
             <tr>
                 <td class="c">{{.}}</td>
                 <td class="c" style="width: 50px">
-                    <input type="checkbox" name="delcardsetname[]" value="{{.}}" />
+                    <input type="checkbox" name="delcardsetname[]" value="{{.}}">
                 </td>
             </tr>
         {{/blockCardSets}}
@@ -69,8 +69,8 @@
                 {{#blockCardSetsDropMenu}}{{> cardsetDropMenu}}{{/blockCardSetsDropMenu}}
             </td>
             <td colspan="2" class="buttons">
-                <input type="hidden" name="view" value="cardsets" />
-                <input class="inputbutton" type="submit" value="Update Cardsets" name ="action" />
+                <input type="hidden" name="view" value="cardsets">
+                <input class="inputbutton" type="submit" value="Update Cardsets" name ="action">
             </tr>
         </tr>
     </table>
@@ -78,9 +78,9 @@
 
 <h3>Extra Cardsets Allowed</h3>
 <form action="formatcp.php" method="post">
-    <input type="hidden" name="view" value="cardsets" />
-    <input type="hidden" name="format" value="{{activeFormatName}}" />
-    <input type="hidden" name="series" value="{{seriesName}}" />
+    <input type="hidden" name="view" value="cardsets">
+    <input type="hidden" name="format" value="{{activeFormatName}}">
+    <input type="hidden" name="series" value="{{seriesName}}">
     <table class="form c">
         <tr>
             <th class="c">Cardset Name</th>
@@ -90,7 +90,7 @@
             <tr>
                 <td class="c">{{.}}</td>
                 <td class="c" style="width: 50px">
-                    <input type="checkbox" name="delcardsetname[]" value="{{.}}" />
+                    <input type="checkbox" name="delcardsetname[]" value="{{.}}">
                 </td>
             </tr>
         {{/extraCardSets}}
@@ -107,8 +107,8 @@
                 {{#extraCardSetsDropMenu}}{{> cardsetDropMenu}}{{/extraCardSetsDropMenu}}
             </td>
             <td colspan="2" class="buttons">
-                <input type="hidden" name="view" value="cardsets" />
-                <input class="inputbutton" type="submit" value="Update Cardsets" name ="action" />
+                <input type="hidden" name="view" value="cardsets">
+                <input class="inputbutton" type="submit" value="Update Cardsets" name ="action">
             </td>
         </tr>
     </table>

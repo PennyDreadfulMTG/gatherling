@@ -8,15 +8,22 @@ use Gatherling\Views\Pages\InsertCardSet;
 use Gatherling\Views\Redirect;
 
 use function Gatherling\Helpers\files;
+use function Gatherling\Helpers\logger;
 use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\server;
-
-set_time_limit(0);
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+use function Safe\set_time_limit;
 
 require_once __DIR__ . '/lib.php';
 
-function main(): void
+try {
+    set_time_limit(0);
+} catch (\Exception $e) {
+    // set_time_limit is not allowed here but we'll try our best to complete in time.
+    logger()->warning('Failed to set time limit, running anyway: ' . $e->getMessage());
+}
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+function main(): never
 {
     global $argv;
     if (PHP_SAPI == 'cli') {
@@ -31,7 +38,7 @@ function main(): void
         foreach ($messages as $message) {
             print("$message\n");
         }
-        return;
+        exit;
     }
 
     if (!(Player::getSessionPlayer()?->isSuper() ?? false)) {

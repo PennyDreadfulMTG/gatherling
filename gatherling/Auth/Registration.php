@@ -11,6 +11,7 @@ class Registration
     public const SUCCESS = 0;
     public const ERROR_PLAYER_EXISTS = -3;
     public const ERROR_PASSWORD_MISMATCH = -1;
+    public const ERROR_PASSWORD_EMPTY = -4;
 
     public static function register(string $username, string $pw1, string $pw2, string $email, int $emailStatus, float $timezone, ?string $discordId, ?string $discordName): int
     {
@@ -18,11 +19,11 @@ class Registration
         if (!is_null($player->password)) {
             return self::ERROR_PLAYER_EXISTS;
         }
-        if (strcmp($pw1, $pw2) != 0) {
+        if ($pw1 !== $pw2) {
             return self::ERROR_PASSWORD_MISMATCH;
         }
         if (empty($pw1) && !isset($discordId)) {
-            return self::ERROR_PASSWORD_MISMATCH;
+            return self::ERROR_PASSWORD_EMPTY;
         }
         $player->password = hash('sha256', $pw1);
         $player->super = Player::activeCount() == 0 ? 1 : 0;

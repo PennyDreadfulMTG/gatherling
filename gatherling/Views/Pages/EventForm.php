@@ -17,6 +17,9 @@ use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\SeriesDropMenu;
 use Gatherling\Views\Components\TimeDropMenu;
 
+use function Gatherling\Helpers\getObjectVarsCamelCase;
+use function Safe\preg_match;
+
 class EventForm extends EventFrame
 {
     public bool $currentlyEditing;
@@ -221,7 +224,7 @@ function kValueSelectInput(int $kvalue): SelectInput
 /** @return array{name: string, default: string, options: array<int, array{isSelected: bool, value: int, text: string}>} */
 function monthDropMenuArgs(string|int $month): array
 {
-    if (strcmp($month, '') == 0) {
+    if ($month === '') {
         $month = -1;
     }
     $names = [
@@ -251,15 +254,12 @@ function structDropMenuArgs(string $field, string $def): array
     if ($def == 'Swiss (Blossom)') {
         $def = 'Swiss';
     }
-    if ($def == 'Round Robin') {
-        $names[] = 'Round Robin';
-    }
     $options = [];
     foreach ($names as $name) {
         $options[] = [
             'value'      => $name,
             'text'       => $name,
-            'isSelected' => strcmp($def, $name) == 0,
+            'isSelected' => $def === $name,
         ];
     }
 

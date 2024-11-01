@@ -7,6 +7,11 @@ namespace Gatherling\Views\Components;
 use Gatherling\Models\Decksearch;
 use Zebra_Pagination as Pagination;
 
+use function Safe\ob_get_clean;
+use function Safe\ob_start;
+use function Safe\preg_replace;
+use function Safe\strtotime;
+
 class DisplayDecks extends Component
 {
     /** @var list<array{isEven: bool, playerLink: string, playerName: string, deckLink: string, deckName: string, archetype: string, format: string, created: ?Time, record: string}> */
@@ -34,8 +39,7 @@ class DisplayDecks extends Component
             if (strlen($deckinfo['name']) > 23) {
                 $deckinfo['name'] = preg_replace('/\s+?(\S+)?$/', '', substr($deckinfo['name'], 0, 22)) . '...';
             }
-            $created = $deckinfo['created_date'] ? strtotime($deckinfo['created_date']) : null;
-            $createdTime = $created ? new Time($created, $now) : null;
+            $createdTime = $deckinfo['created_date'] ? new Time(strtotime($deckinfo['created_date']), $now) : null;
             $this->decks[] = [
                 'isEven' => $index % 2 === 0,
                 'playerLink' => 'profile.php?player=' . rawurlencode($deckinfo['playername']) . '&mode=Lookup+Profile',

@@ -11,6 +11,9 @@ use Gatherling\Views\Components\RatingsTable;
 use Gatherling\Views\Components\FormatDropMenuR;
 use Zebra_Pagination as Pagination;
 
+use function Safe\ob_start;
+use function Safe\ob_get_clean;
+
 class Ratings extends Page
 {
     public FormatDropMenuR $formatDropMenuR;
@@ -31,8 +34,7 @@ class Ratings extends Page
         public array $ratingsData,
         Pagination $pagination,
     ) {
-        parent::__construct();
-        $this->title = 'Ratings';
+        parent::__construct('Ratings');
         $this->formatDropMenuR = (new FormatDropMenuR($format));
         $this->highestRatingDate = date('l, F j, Y', $highestRatingTimestamp);
         $this->lastTournamentDate = $lastTournamentDate->format('Y-m-d');

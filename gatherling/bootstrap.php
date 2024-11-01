@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use function Safe\file_get_contents;
+
 if (file_exists('/var/www/vendor/autoload.php')) {
     // Docker environment
     /** @phpstan-ignore-next-line */
@@ -27,6 +29,6 @@ if (file_exists('../.git/HEAD')) {
 
 Sentry\init([
     'dsn'         => 'https://ed7243cbdd9e47c8bc2205d4ac36b764@sentry.redpoint.games/16',
-    'environment' => $CONFIG['site_name'],
+    'environment' => 'Gatherling',
     'release'     => $CONFIG['GIT_HASH'],
 ]);

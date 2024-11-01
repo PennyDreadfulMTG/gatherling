@@ -12,17 +12,17 @@ use Gatherling\Models\UpcomingEventDto;
 
 class Home extends Page
 {
-    /** @var list<array{name: string, format: string, currentRound: int, reportLink: string}> */
+    /** @var list<array{name: string, format: string, currentRound: int, eventReportLink: string}> */
     public array $activeEvents = [];
     public bool $hasActiveEvents;
-    /** @var list<array{name: string, format: string, reportLink: string, time: Time}> */
+    /** @var list<array{name: string, format: string, eventReportLink: string, time: Time}> */
     public array $upcomingEvents = [];
     public bool $hasUpcomingEvents;
     /** @var ?array{name: string, link: string} */
     public ?array $playerInfo = null;
     /** @var ?array{name: string, link: string} */
     public ?array $mostRecentHostedEvent = null;
-    /** @var list<array{eventName: string, reportLink: string, playerLink: string, deckLink: string, playerName: string, deckName: string, colorImages: ColorImages}> */
+    /** @var list<array{eventName: string, eventReportLink: string, playerLink: string, deckLink: string, playerName: string, deckName: string, colorImages: ColorImages}> */
     public array $recentWinners;
     public bool $hasRecentWinners;
 
@@ -34,14 +34,13 @@ class Home extends Page
      */
     public function __construct(array $activeEvents, array $upcomingEvents, public array $stats, ?Player $player, ?Event $mostRecentHostedEvent, array $recentWinners)
     {
-        parent::__construct();
-        $this->title = 'Home';
+        parent::__construct('Home');
         foreach ($activeEvents as $event) {
             $this->activeEvents[] = [
                 'name' => $event->name,
                 'format' => $event->format,
                 'currentRound' => $event->current_round,
-                'reportLink' => 'eventreport.php?event=' . rawurlencode($event->name),
+                'eventReportLink' => 'eventreport.php?event=' . rawurlencode($event->name),
             ];
         }
         $this->hasActiveEvents = count($this->activeEvents) > 0;
@@ -49,7 +48,7 @@ class Home extends Page
             $this->upcomingEvents[] = [
                 'name' => $event->name,
                 'format' => $event->format,
-                'reportLink' => 'eventreport.php?event=' . rawurlencode($event->name),
+                'eventReportLink' => 'eventreport.php?event=' . rawurlencode($event->name),
                 'time' => new Time($event->d, time()),
             ];
         }
@@ -69,7 +68,7 @@ class Home extends Page
         foreach ($recentWinners as $winner) {
             $this->recentWinners[] = [
                 'eventName' => $winner['event'],
-                'reportLink' => 'eventreport.php?event=' . rawurlencode($winner['event']),
+                'eventReportLink' => 'eventreport.php?event=' . rawurlencode($winner['event']),
                 'playerLink' => 'profile.php?player=' . rawurlencode($winner['player']),
                 'deckLink' => 'deck.php?mode=view&event=' . rawurlencode($winner['event']),
                 'playerName' => $winner['player'],

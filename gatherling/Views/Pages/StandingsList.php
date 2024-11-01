@@ -11,7 +11,7 @@ class StandingsList extends EventFrame
 {
     public EventStandings $eventStandings;
 
-    public function __construct(Event $event, string|bool $playerLoginName)
+    public function __construct(Event $event, ?string $playerLoginName)
     {
         parent::__construct($event);
         $this->eventStandings = new EventStandings($event->name, $playerLoginName);

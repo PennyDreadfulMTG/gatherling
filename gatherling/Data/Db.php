@@ -16,10 +16,15 @@ use Gatherling\Models\Dto;
 use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\logger;
 use function Gatherling\Helpers\marshal;
+use function Safe\json_encode;
+use function Safe\preg_match;
+use function Safe\preg_replace;
 
 // Do not access this directly, use Gatherling\Helpers\db() instead
 class Db
 {
+    private const SLOW_QUERY_THRESHOLD = 1.0;
+
     private PDO $pdo;
     private bool $connected = false;
     /** @var list<string> */
@@ -448,7 +453,7 @@ class Db
             if (is_null($value)) {
                 $values[$key] = 'NULL';
             } elseif (is_int($value) || is_float($value)) {
-                $values[$key] = $value;
+                $values[$key] = (string) $value;
             } elseif (is_bool($value)) {
                 $values[$key] = $value ? 'true' : 'false';
             } elseif (is_string($value)) {
@@ -462,15 +467,9 @@ class Db
         // Surround placehodlers with escape sequence, so we don't accidentally match
         // "?" or ":foo" inside any of the values.
         $query = preg_replace(['/\?/', '/(:[a-zA-Z0-9_]+)/'], ["$s?$e", "$s$1$e"], $query);
-        if ($query === null) {
-            throw new DatabaseException("Failed to interpolate query: $query");
-        }
         // Replace placeholders with actual values
+        /** @var string $query */
         $query = preg_replace($keys, $values, $query, -1, $count);
-        if ($query === null) {
-            throw new DatabaseException("Failed to interpolate query: $query");
-        }
-
         return $query;
     }
 
@@ -537,7 +536,13 @@ class Db
         [$sql, $params] = $this->expandArrayParams($sql, $params);
 
         try {
-            return $operation($sql, $params);
+            $startTime = microtime(true);
+            $result = $operation($sql, $params);
+            $duration = microtime(true) - $startTime;
+            if ($duration > self::SLOW_QUERY_THRESHOLD) {
+                logger()->warning("[DB] Query took " . number_format($duration, 3) . "s: $sql", $context);
+            }
+            return $result;
         } catch (PDOException $e) {
             if ($e->getCode() === '3D000') {
                 logger()->warning('Database connection lost, attempting to reconnect...');
@@ -548,7 +553,7 @@ class Db
                     throw new DatabaseException("Failed to reconnect and execute query: $sql with params " . json_encode($params), 0, $e);
                 }
             }
-            $msg = "Failed to execute query: $sql with params " . json_encode($params);
+            $msg = "Failed to execute query: " . $this->interpolateQuery($sql, $params);
             logger()->error($msg, $context);
 
             throw new DatabaseException($msg, 0, $e);
@@ -558,9 +563,6 @@ class Db
     private function safeName(string $name): string
     {
         $safeName = preg_replace('/[^a-zA-Z0-9_]/', '_', $name);
-        if ($safeName === null) {
-            throw new DatabaseException("Failed to safely name $name");
-        }
         $safeName = trim($safeName, '_');
         if (empty($safeName) || is_numeric($safeName[0])) {
             $safeName = 'sp_' . $safeName;

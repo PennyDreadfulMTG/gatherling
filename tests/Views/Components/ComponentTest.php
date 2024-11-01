@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Gatherling\Tests\Views;
+namespace Gatherling\Tests\Views\Components;
 
 use Gatherling\Views\Components\Component;
 use PHPUnit\Framework\TestCase;
 
-class TemplateHelperTest extends TestCase
+class ComponentTest extends TestCase
 {
     public function testRenderComponent(): void
     {
@@ -54,8 +54,8 @@ class TemplateHelperTest extends TestCase
 
         $expected = "<h1>Fun &amp; Games</h1>"
             . "<ul>"
-            . '        <li><img alt="icon1 icon" src="src1" /> Stick</li>'
-            . '        <li><img alt="icon2 icon" src="src2" /> Bat &amp; Ball</li>'
+            . '        <li><img alt="icon1 icon" src="src1"> Stick</li>'
+            . '        <li><img alt="icon2 icon" src="src2"> Bat &amp; Ball</li>'
             . '        <li>Crossbow</li>'
             . "</ul>";
         $this->assertEquals($expected, str_replace("\n", '', $actual));

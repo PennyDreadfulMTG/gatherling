@@ -8,7 +8,7 @@
             <p>Please <a href="login.php">log in</a> to see your profile. You may also use the search above without logging in.</p>
         {{/isLoggedOut}}
         {{#notFound}}
-            <p><b>{{playername}}</b> could not be found in the database. Please check your spelling and try again.</p>
+            <p><b>{{playerName}}</b> could not be found in the database. Please check your spelling and try again.</p>
         {{/notFound}}
         {{#profileEditForm}}
             {{>profileEditForm}}

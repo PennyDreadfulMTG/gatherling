@@ -17,7 +17,7 @@ use function Gatherling\Helpers\session;
 require_once __DIR__ . '/lib.php';
 require __DIR__ . '/authlib.php';
 
-function main(): void
+function main(): never
 {
     global $provider;
 
@@ -93,7 +93,7 @@ function sendToDiscord(mixed $scope = null): never
     (new Redirect($authUrl))->send();
 }
 
-function doLogin(AccessTokenInterface $token): void
+function doLogin(AccessTokenInterface $token): never
 {
     global $provider;
 

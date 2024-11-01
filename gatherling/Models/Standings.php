@@ -276,8 +276,6 @@ class Standings
     public function getAvailableLeagueOpponents(int $subevent, int $round, int $league_length): array
     {
         $opponentsAlreadyFaced = [];
-        $allPlayers = [];
-        $opponent_names = [];
 
         if ($round == '0') {
             return [];
@@ -325,19 +323,6 @@ class Standings
             $standing = new self($event_name, $entry->player->name, $entry->initial_seed);
             $standing->save();
         }
-    }
-
-    public static function addPlayerToEvent(string $event_name, string $entry): void
-    {
-        $standing = new self($event_name, $entry);
-        $standing->save();
-    }
-
-    public static function dropPlayer(string $eventname, string $playername): void
-    {
-        $standing = new self($eventname, $playername);
-        $standing->active = 0;
-        $standing->save();
     }
 
     public static function playerActive(string $eventname, string $playername): bool

@@ -6,6 +6,8 @@ namespace Gatherling\Views\Components;
 
 use Gatherling\Models\Series;
 
+use function Safe\strtotime;
+
 class RecentEventsTable extends Component
 {
     /** @var array<array{eventLink: string, eventName: string, startTime: ?Time, playerCount: int, host: string, cohost: string}> */

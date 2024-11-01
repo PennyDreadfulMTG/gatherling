@@ -15,7 +15,7 @@ use function Gatherling\Helpers\server;
 include 'util/email.php';
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     $hasResetPassword = $passwordResetFailed = $showForgotForm = $showNewPasswordForm = $sentLoginLink = $cantSendLoginLink = $cantFindPlayer = false;
     $token = $email = null;

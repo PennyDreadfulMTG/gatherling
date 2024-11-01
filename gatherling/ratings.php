@@ -6,6 +6,7 @@ use Gatherling\Models\Player;
 use Gatherling\Models\BestEverDto;
 use Gatherling\Models\PlayerRatingDto;
 use Gatherling\Views\Pages\Ratings;
+use Safe\DateTime;
 use Zebra_Pagination as Pagination;
 
 use function Gatherling\Helpers\db;
@@ -14,7 +15,7 @@ use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     $format = post()->string('format', 'Composite');
     ['date' => $lastTournamentDate, 'name' => $lastTournamentName] = currentThrough($format);
@@ -79,21 +80,15 @@ function ratingsData(string $format, int $minMatches): array
 function bestEver(string $format): array
 {
     $sql = '
-        SELECT
-            p.name AS player, r.rating, UNIX_TIMESTAMP(r.updated) AS t
-        FROM
-            ratings AS r,
-            players AS p,
-            (
-                SELECT
-                    MAX(qr.rating) AS qmax
-                FROM
-                    ratings AS qr
-                WHERE
-                    qr.format = :format
-            ) AS q
-        WHERE
-            format = :format AND p.name = r.player AND q.qmax = r.rating';
+        SELECT p.name AS player, r.rating, UNIX_TIMESTAMP(r.updated) AS t
+          FROM ratings AS r,
+               players AS p,
+               (
+                   SELECT MAX(qr.rating) AS qmax
+                     FROM ratings AS qr
+                    WHERE qr.format = :format
+               ) AS q
+        WHERE format = :format AND p.name = r.player AND q.qmax = r.rating';
     $bestEver = db()->select($sql, BestEverDto::class, ['format' => $format])[0];
     return [
         'player' => $bestEver->player,
@@ -106,7 +101,7 @@ function bestEver(string $format): array
 function currentThrough(string $format): array
 {
     $start = db()->string('SELECT MAX(updated) FROM ratings WHERE format = :format', ['format' => $format]);
-    $name = db()->string('SELECT name FROM events WHERE start = :start', ['start' => $start]);
+    $name = db()->string('SELECT name FROM events WHERE start = :start ORDER BY name LIMIT 1', ['start' => $start]);
     return ['date' => new DateTime($start), 'name' => $name];
 }
 

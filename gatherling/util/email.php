@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\logger;
+use function Safe\curl_exec;
+use function Safe\curl_getinfo;
+use function Safe\curl_init;
+use function Safe\curl_setopt;
+use function Safe\json_encode;
 
 // Use Brevo to send an email from us to a single recipient. Brevo supports multiple recipients, attachments, etc. but we don't need that yet.
 function sendEmail(string $to, string $subj, string $msg): bool
@@ -33,6 +38,7 @@ function sendEmail(string $to, string $subj, string $msg): bool
         logger()->error('Error sending email: ' . curl_error($ch));
         return false;
     }
+    /** @var int $response_code */
     $response_code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
     if ($response_code >= 300) {
         logger()->error('Error sending email: ' . $response_code . ' response code');

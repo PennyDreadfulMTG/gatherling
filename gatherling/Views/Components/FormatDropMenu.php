@@ -13,14 +13,14 @@ class FormatDropMenu extends DropMenu
     public function __construct(?string $format, bool $useAll = false, string $formName = 'format')
     {
         $sql = 'SELECT name FROM formats ORDER BY priority desc, name';
-        $formats = db()->select($sql, FormatDto::class);
+        $formats = db()->strings($sql);
 
         $options = [];
-        foreach ($formats as $f) {
+        foreach ($formats as $formatName) {
             $options[] = [
-                'text' => $f->name,
-                'value' => $f->name,
-                'isSelected' => $f->name === $format,
+                'text' => $formatName,
+                'value' => $formatName,
+                'isSelected' => $formatName === $format,
             ];
         }
 

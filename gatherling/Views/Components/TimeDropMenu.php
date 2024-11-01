@@ -8,7 +8,7 @@ class TimeDropMenu extends DropMenu
 {
     public function __construct(string $name, int|string $hour, int|string $minutes = 0)
     {
-        if (strcmp((string) $hour, '') == 0) {
+        if ((string) $hour === '') {
             $hour = -1;
         }
         $options = [];

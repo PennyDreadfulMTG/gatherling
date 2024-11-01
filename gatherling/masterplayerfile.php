@@ -2,17 +2,24 @@
 
 declare(strict_types=1);
 
-use Gatherling\Models\Database;
+use function Gatherling\Helpers\db;
+use function Gatherling\Helpers\server;
 
-header('Content-type: text/plain');
 require_once 'lib.php';
-$db = Database::getConnection();
-$result = $db->query('SELECT name FROM players ORDER BY name');
-$n = 10000001;
-while ($row = $result->fetch_assoc()) {
-    if (rtrim($row['name']) != '') {
-        printf("%08d\tx\t%s\tUS\n", $n, $row['name']);
+
+function main(): never
+{
+    header('Content-type: text/plain');
+    $sql = 'SELECT name FROM players ORDER BY name';
+    $names = db()->strings($sql);
+    $n = 10000001;
+    foreach ($names as $name) {
+        printf("%08d\tx\t%s\tUS\n", $n, $name);
         $n++;
     }
+    exit;
 }
-$result->close();
+
+if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
+    main();
+}

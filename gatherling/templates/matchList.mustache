@@ -3,8 +3,8 @@
         <h1 class="uppertitle">Host Control Panel</h1>
         {{> controlPanel}}
         <p class="c">
-            <b>Match List</b><br />
-            <i>* denotes a playoff/finals match.</i><br />
+            <b>Match List</b><br>
+            <i>* denotes a playoff/finals match.</i><br>
             <i>To drop a player while entering match results, select the check box next to the players name.</i>
         </p>
         <p class="c">
@@ -136,13 +136,13 @@
                         This event will be {{structureSummary}}<br><br>
                     {{/isBeforeRoundTwo}}
                     {{#lastRound}}
-                        Pairings for Round {{round}} {{extraRoundTitle}}<br />
+                        Pairings for Round {{round}} {{extraRoundTitle}}<br>
                         {{#matches}}
                             {{#isActiveUnverified}}
                                 {{#gameNameA}}{{> gameName}}{{/gameNameA}} vs. {{#gameNameB}}{{> gameName}}{{/gameNameB}}<br>
                             {{/isActiveUnverified}}
                             {{#isBye}}
-                                {{#gameNameA}}{{> gameName}}{{/gameNameA}} has the BYE<br />
+                                {{#gameNameA}}{{> gameName}}{{/gameNameA}} has the BYE<br>
                             {{/isBye}}
                             {{#isDraw}}
                                 {{#gameNameA}}{{> gameName}}{{/gameNameA}} {{playerAWins}}-{{playerBWins}} {{#gameNameB}}{{> gameName}}{{/gameNameB}}<br>
@@ -152,7 +152,7 @@
                             {{/hasResult}}
                         {{/matches}}
                     {{/lastRound}}
-                    Good luck everyone!<br />
+                    Good luck everyone!<br>
                 </code>
             </p>
         {{/event.finalized}}

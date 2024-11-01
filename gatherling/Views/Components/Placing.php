@@ -9,6 +9,8 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use InvalidArgumentException;
 
+use function Safe\strtotime;
+
 class Placing extends Component
 {
     public Medal $medal;

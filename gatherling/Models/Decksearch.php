@@ -44,12 +44,6 @@ class Decksearch
      * </code>
      *
      * will return an array of deck id's matching the set search terms
-     *
-     *
-     *
-     * @version 1.0
-     *
-     * @category Deck
      */
     public function __construct()
     {
@@ -66,14 +60,9 @@ class Decksearch
         if (count($this->results) <= 0 || count($this->errors) > 0) {
             return false;
         }
-        $array_keys = array_keys($this->results);
-        $first_key = array_shift($array_keys);
-        $tmp_results = $this->results[$first_key];
-        foreach ($this->results as $key => $value) {
-            $tmp_results = array_intersect($tmp_results, $this->results[$key]);
-        }
-        if (count($tmp_results) == 0) {
-            $this->errors[] = '<center><br>Your search query did not have any matches';
+        $tmp_results = array_intersect(...array_values($this->results));
+        if (empty($tmp_results)) {
+            $this->errors[] = 'Your search query did not have any matches';
             return false;
         }
         // Filter out decks in events that haven't been finalized (and should remain secret for now)
@@ -106,7 +95,7 @@ class Decksearch
         if (count($results) > 0) {
             $this->results['format'] = $results;
         } else {
-            $this->errors[] = "<center><br>No decks match the format: $format";
+            $this->errors[] = "No decks match the format: $format";
         }
     }
 
@@ -123,7 +112,7 @@ class Decksearch
         if (count($results) > 0) {
             $this->results['player'] = $results;
         } else {
-            $this->errors[] = "<center><br>No decks by the player like: <font color=red>$player</font></center>";
+            $this->errors[] = "No decks by the player like: $player";
         }
     }
 
@@ -147,7 +136,7 @@ class Decksearch
         if (count($results) > 0) {
             $this->results['medal'] = $results;
         } else {
-            $this->errors[] = "<center><br>No decks found with the medal: <font color=red>$medal</font></center>";
+            $this->errors[] = "No decks found with the medal: $medal";
         }
     }
 
@@ -174,7 +163,7 @@ class Decksearch
         if (count($results) > 0) {
             $this->results['color'] = $results;
         } else {
-            $this->errors[] = "<center><br>No decks found matching the colors: <font color=red>$final_color_str</font></center>";
+            $this->errors[] = "No decks found matching the colors: $final_color_str";
         }
     }
 
@@ -191,7 +180,7 @@ class Decksearch
         if (count($results) > 0) {
             $this->results['archetype'] = $results;
         } else {
-            $this->errors[] = "<center><br>No decks found matching archetype: <font color=red>$archetype</font></center>";
+            $this->errors[] = "No decks found matching archetype: $archetype";
         }
     }
 
@@ -213,7 +202,7 @@ class Decksearch
         if (count($results) > 0) {
             $this->results['series'] = $results;
         } else {
-            $this->errors[] = "<center><br>No decks found matching series: <font color=red>$series</font></center>";
+            $this->errors[] = "No decks found matching series: $series";
         }
     }
 
@@ -225,7 +214,7 @@ class Decksearch
     public function searchByCardName(string $cardname): void
     {
         if (strlen($cardname) < 3) {
-            $this->errors[] = '<center><br>String length is too short must be <font color=red>3</font> characters or greater</center>';
+            $this->errors[] = 'String length is too short must be 3 characters or greater';
             return;
         }
         $sql = '
@@ -238,7 +227,7 @@ class Decksearch
         if (count($results) > 0) {
             $this->results['cardname'] = $results;
         } else {
-            $this->errors[] = "<center><br>No decks found with the card name like: <font color=red>$cardname</font></center>";
+            $this->errors[] = "No decks found with the card name like: $cardname";
         }
     }
 
@@ -251,7 +240,7 @@ class Decksearch
         $db = Database::getConnection();
 
         //sanitize the id_arr to protect against sql injection.
-        $id_arr = array_filter(array_map('intval', $id_arr));
+        $id_arr = array_filter(array_map(fn($id) => intval($id), $id_arr));
 
         $query = 'SELECT id, archetype, name, playername, format, created_date from decks WHERE id IN (' . implode(',', $id_arr) . ') ORDER BY DATE(`created_date`) DESC';
         $stmt = $db->prepare($query);

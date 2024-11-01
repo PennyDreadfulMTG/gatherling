@@ -8,11 +8,13 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Views\Components\Component;
 
+use function Safe\preg_replace;
+
 class SeasonStandings extends Component
 {
     public string $seriesName;
     public int $season;
-    /** @var list<array{shortName: string, reportLink: string}> */
+    /** @var list<array{shortName: string, eventReportLink: string}> */
     public array $seasonEvents;
     /** @var list<array{classes: string, count: int, playerLink: PlayerLink, totalPoints: int, events: list<array{points: int|null, why: string|null}>}> */
     public array $players;
@@ -22,15 +24,15 @@ class SeasonStandings extends Component
         $seasonEventNames = $series->getSeasonEventNames($season);
         $points = $series->seasonPointsTable($season);
         $cutoff = $series->getSeasonCutoff($season);
-        uasort($points, [self::class, 'reverseTotalSort']);
+        uasort($points, fn($a, $b) => self::reverseTotalSort($a, $b));
 
         $seasonEvents = [];
         foreach ($seasonEventNames as $eventName) {
-            $shortName = preg_replace("/^{$series->name} /", '', $eventName) ?? '';
-            $reportLink = 'eventreport.php?event=' . rawurlencode($eventName);
+            $shortName = preg_replace("/^{$series->name} /", '', $eventName);
+            $eventReportLink = 'eventreport.php?event=' . rawurlencode($eventName);
             $seasonEvents[] = [
                 'shortName' => $shortName,
-                'reportLink' => $reportLink,
+                'eventReportLink' => $eventReportLink,
             ];
         }
 

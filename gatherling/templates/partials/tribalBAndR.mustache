@@ -1,8 +1,8 @@
 <h3>Restricted To Tribe List: {{cardCount}} Cards</h3>
 <form action="formatcp.php" method="post">
-    <input type="hidden" name="view" value="tribal" />
-    <input type="hidden" name="format" value="{{activeFormatName}}" />
-    <input type="hidden" name="series" value="{{seriesName}}" />
+    <input type="hidden" name="view" value="tribal">
+    <input type="hidden" name="format" value="{{activeFormatName}}">
+    <input type="hidden" name="series" value="{{seriesName}}">
     <table class="form c">
         <tr>
             <th class="c">Card Name</th>
@@ -15,7 +15,7 @@
                     {{^cardLink}}{{> cardName}}<br>{{/cardLink}}
                 </td>
                 <td class="c">
-                    <input type="checkbox" name="delrestrictedtotribe[]" value="{{cardName}}" />
+                    <input type="checkbox" name="delrestrictedtotribe[]" value="{{cardName}}">
                 </td>
             </tr>
         {{/restrictedToTribe}}
@@ -34,10 +34,10 @@
         </tr>
         <tr>
             <td class="buttons">
-                <input class="inputbutton" type="submit" value="Update Restricted To Tribe List" name ="action" />
+                <input class="inputbutton" type="submit" value="Update Restricted To Tribe List" name ="action">
             </td>
             <td class="buttons">
-                <input class="inputbutton" type="submit" value="Delete Entire Restricted To Tribe List" name ="action" />
+                <input class="inputbutton" type="submit" value="Delete Entire Restricted To Tribe List" name ="action">
             </td>
         </tr>
     </table>
@@ -45,9 +45,9 @@
 
 <h3>Tribe Banlist</h3>
 <form action="formatcp.php" method="post">
-    <input type="hidden" name="view" value="tribal" />
-    <input type="hidden" name="format" value="{{activeFormatName}}" />
-    <input type="hidden" name="series" value="{{seriesName}}" />
+    <input type="hidden" name="view" value="tribal">
+    <input type="hidden" name="format" value="{{activeFormatName}}">
+    <input type="hidden" name="series" value="{{seriesName}}">
     <table class="form c">
         <tr>
             <th class="c">Tribe Name</th>
@@ -57,7 +57,7 @@
             <tr>
                 <td class="c">{{.}}</td>
                 <td class="c" style="width: 50px">
-                    <input type="checkbox" name="delbannedtribe[]" value="{{.}}" />
+                    <input type="checkbox" name="delbannedtribe[]" value="{{.}}">
                 </td>
             </tr>
         {{/tribesBanned}}
@@ -76,11 +76,11 @@
                 {{#tribeBanDropMenu}}{{> dropMenu}}{{/tribeBanDropMenu}}
             </td>
             <td colspan="2" class="buttons">
-                <input type="hidden" name="view" value="bandr" />
-                <input class="inputbutton" type="submit" value="Update Tribe Ban" name ="action" />
+                <input type="hidden" name="view" value="bandr">
+                <input class="inputbutton" type="submit" value="Update Tribe Ban" name ="action">
             </td>
             <td>
-                <input class="inputbutton" type="submit" value="Ban All Tribes" name ="action" />
+                <input class="inputbutton" type="submit" value="Ban All Tribes" name ="action">
             </td>
         </tr>
     </table>
@@ -88,9 +88,9 @@
 
 <h3>Subtype Banlist</h3>
 <form action="formatcp.php" method="post">
-    <input type="hidden" name="view" value="tribal" />
-    <input type="hidden" name="format" value="{{activeFormatName}}" />
-    <input type="hidden" name="series" value="{{seriesName}}" />
+    <input type="hidden" name="view" value="tribal">
+    <input type="hidden" name="format" value="{{activeFormatName}}">
+    <input type="hidden" name="series" value="{{seriesName}}">
     <table class="form c">
         <tr>
             <th class="c">Tribe Name</th>
@@ -100,7 +100,7 @@
             <tr>
                 <td class="c">{{.}}</td>
                 <td class="c" style="width: 50px">
-                    <input type="checkbox" name="delbannedsubtype[]" value="{{.}}" />
+                    <input type="checkbox" name="delbannedsubtype[]" value="{{.}}">
                 </td>
             </tr>
         {{/subTypesBanned}}
@@ -117,8 +117,8 @@
                 {{#subTypeBanDropMenu}}{{> dropMenu}}{{/subTypeBanDropMenu}}
             </td>
             <td colspan="2" class="buttons">
-                <input type="hidden" name="view" value="tribal" />
-                <input class="inputbutton" type="submit" value="Update Subtype Ban" name ="action" />
+                <input type="hidden" name="view" value="tribal">
+                <input class="inputbutton" type="submit" value="Update Subtype Ban" name ="action">
             </td>
         </tr>
     </table>

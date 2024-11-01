@@ -8,14 +8,15 @@ use Exception;
 
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\logger;
+use function Gatherling\Helpers\normaliseCardName;
 
 class Format
 {
-    public ?string $name;
-    public ?string $description;
-    public ?string $type;        // who has access to filter: public, private, system
-    public ?string $series_name; // filter owner
-    public ?int $priority;
+    public string $name;
+    public string $description;
+    public string $type;        // who has access to filter: public, private, system
+    public string $series_name; // filter owner
+    public int $priority;
     public ?bool $new = null;
 
     // card set construction
@@ -27,36 +28,36 @@ class Format
     public array $card_legallist = [];
     /** @var list<string> */
     public array $legal_sets = [];
-    public ?int $eternal;
-    public ?int $modern;
-    public ?int $standard;
+    public int $eternal;
+    public int $modern;
+    public int $standard;
 
     // deck construction switches
-    public ?int $singleton;
-    public ?int $commander;
-    public ?int $planechase;
-    public ?int $vanguard;
-    public ?int $prismatic;
-    public ?int $tribal;
-    public ?int $pure;
-    public ?int $underdog;
-    public ?int $limitless;
+    public int $singleton;
+    public int $commander;
+    public int $planechase;
+    public int $vanguard;
+    public int $prismatic;
+    public int $tribal;
+    public int $pure;
+    public int $underdog;
+    public int $limitless;
 
     // rarities allowed switches
-    public ?int $allow_commons;
-    public ?int $allow_uncommons;
-    public ?int $allow_rares;
-    public ?int $allow_mythics;
-    public ?int $allow_timeshifted;
+    public int $allow_commons;
+    public int $allow_uncommons;
+    public int $allow_rares;
+    public int $allow_mythics;
+    public int $allow_timeshifted;
 
     // deck limits
-    public ?int $min_main_cards_allowed;
-    public ?int $max_main_cards_allowed;
-    public ?int $min_side_cards_allowed;
-    public ?int $max_side_cards_allowed;
+    public int $min_main_cards_allowed;
+    public int $max_main_cards_allowed;
+    public int $min_side_cards_allowed;
+    public int $max_side_cards_allowed;
 
     // Meta Formats
-    public ?int $is_meta_format;
+    public int $is_meta_format;
 
     /** @var list<string> */
     private array $error = [];
@@ -84,6 +85,7 @@ class Format
             $this->tribal = 0;
             $this->pure = 0;
             $this->underdog = 0;
+            $this->limitless = 0;
             $this->allow_commons = 1;
             $this->allow_uncommons = 1;
             $this->allow_rares = 1;
@@ -105,49 +107,44 @@ class Format
             $this->insertNewFormat();
             return;
         } else {
-            $db = Database::getConnection();
-            $stmt = $db->prepare('SELECT name, description, type, series_name, singleton, commander, planechase, vanguard,
-                                         prismatic, tribal, pure, underdog, limitless, allow_commons, allow_uncommons, allow_rares, allow_mythics,
-                                         allow_timeshifted, priority, min_main_cards_allowed, max_main_cards_allowed,
-                                         min_side_cards_allowed, max_side_cards_allowed, eternal, modern, `standard`, is_meta_format
-                                  FROM formats
-                                  WHERE name = ?');
-            $stmt or exit($db->error);
-            $stmt->bind_param('s', $name);
-            $stmt->execute();
-            $stmt->bind_result(
-                $this->name,
-                $this->description,
-                $this->type,
-                $this->series_name,
-                $this->singleton,
-                $this->commander,
-                $this->planechase,
-                $this->vanguard,
-                $this->prismatic,
-                $this->tribal,
-                $this->pure,
-                $this->underdog,
-                $this->limitless,
-                $this->allow_commons,
-                $this->allow_uncommons,
-                $this->allow_rares,
-                $this->allow_mythics,
-                $this->allow_timeshifted,
-                $this->priority,
-                $this->min_main_cards_allowed,
-                $this->max_main_cards_allowed,
-                $this->min_side_cards_allowed,
-                $this->max_side_cards_allowed,
-                $this->eternal,
-                $this->modern,
-                $this->standard,
-                $this->is_meta_format
-            );
-            if ($stmt->fetch() == null) {
-                throw new Exception('Format ' . $name . ' not found in DB');
-            }
-            $stmt->close();
+            $sql = '
+                SELECT name, description, type, series_name, singleton, commander, planechase, vanguard,
+                      prismatic, tribal, pure, underdog, limitless, allow_commons, allow_uncommons,
+                      allow_rares, allow_mythics, allow_timeshifted, priority, min_main_cards_allowed,
+                      max_main_cards_allowed, min_side_cards_allowed, max_side_cards_allowed, eternal,
+                      modern, `standard`, is_meta_format
+                 FROM formats
+                WHERE name = :name';
+            $result = db()->selectOnly($sql, FormatDto::class, ['name' => $name]);
+
+            $this->name = $result->name;
+            $this->description = $result->description;
+            $this->type = $result->type;
+            $this->series_name = $result->series_name;
+            $this->singleton = $result->singleton;
+            $this->commander = $result->commander;
+            $this->planechase = $result->planechase;
+            $this->vanguard = $result->vanguard;
+            $this->prismatic = $result->prismatic;
+            $this->tribal = $result->tribal;
+            $this->pure = $result->pure;
+            $this->underdog = $result->underdog;
+            $this->limitless = $result->limitless;
+            $this->allow_commons = $result->allow_commons;
+            $this->allow_uncommons = $result->allow_uncommons;
+            $this->allow_rares = $result->allow_rares;
+            $this->allow_mythics = $result->allow_mythics;
+            $this->allow_timeshifted = $result->allow_timeshifted;
+            $this->priority = $result->priority;
+            $this->min_main_cards_allowed = $result->min_main_cards_allowed;
+            $this->max_main_cards_allowed = $result->max_main_cards_allowed;
+            $this->min_side_cards_allowed = $result->min_side_cards_allowed;
+            $this->max_side_cards_allowed = $result->max_side_cards_allowed;
+            $this->eternal = $result->eternal;
+            $this->modern = $result->modern;
+            $this->standard = $result->standard;
+            $this->is_meta_format = $result->is_meta_format;
+
             $this->card_banlist = $this->getBanList();
             $this->card_legallist = $this->getLegalList();
             $this->card_restrictedlist = $this->getRestrictedList();
@@ -177,7 +174,7 @@ class Format
                 $type = self::removeTypeCrap($type);
                 $types = explode(' ', $type);
                 foreach ($types as $subtype) {
-                    $type = trim($subtype);
+                    $subtype = trim($subtype);
                     if ($subtype == '') {
                         continue;
                     }
@@ -259,63 +256,6 @@ class Format
         $stmt->close();
 
         return true;
-    }
-
-    public function saveAndDeleteAuthorization(string $playerName): bool
-    {
-        // this will be used to determine if the save and delete buttons will appear on the format editor
-        // there are 3 different format types: system, public, private
-
-        $player = new Player($playerName); // to access isOrganizer and isSuper functions
-        $authorized = false;
-
-        switch ($this->type) {
-            case 'System':
-                // Only supers can save or delete system formats
-                if ($player->isSuper()) {
-                    $authorized = true;
-                }
-                break;
-            case 'Public':
-                // Only Series Organizer of the series that created the format
-                // and Supers can save or delete Public formats
-                if ($player->isOrganizer($this->series_name) || $player->isSuper()) {
-                    $authorized = true;
-                }
-                break;
-            case 'Private':
-                // The only difference in access between a public and private format is that private formats can be
-                // viewed only by the series organizers of the series it belongs to
-                // the save and delete access is the same
-                if ($player->isOrganizer($this->series_name) || $player->isSuper()) {
-                    $authorized = true;
-                }
-                break;
-        }
-
-        return $authorized;
-    }
-
-    public function viewAuthorization(string $playerName): bool
-    {
-        // this will be used to determine if a format will appear in the drop down to load in the format filter
-        // there are 3 different format types: system, public, private
-
-        $player = new Player($playerName); // to access isOrganizer and isSuper functions
-
-        switch ($this->type) {
-            case 'System':
-            case 'Public':
-                return true; // anyone can view a system and public format
-            case 'Private':
-                // Only supers and organizers can view private formats
-                if ($player->isOrganizer($this->series_name) || $player->isSuper()) {
-                    return true;
-                }
-                break;
-        }
-
-        return false;
     }
 
     public function save(): bool
@@ -442,10 +382,10 @@ class Format
 
     public function delete(): bool
     {
-        $success = $this->deleteEntireLegallist();
-        $success = $this->deleteEntireBanlist();
-        $success = $this->deleteEntireRestrictedlist();
-        $success = $this->deleteAllLegalSets();
+        $this->deleteEntireLegallist();
+        $this->deleteEntireBanlist();
+        $this->deleteEntireRestrictedlist();
+        $this->deleteAllLegalSets();
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM formats WHERE name = ? AND series_name = ?');
         $stmt->bind_param('ss', $this->name, $this->series_name);
@@ -454,11 +394,6 @@ class Format
         $stmt->close();
 
         return $success;
-    }
-
-    public function noFormatLoaded(): bool
-    {
-        return ($this->name == '') || is_null($this->name);
     }
 
     /** @return list<string> */
@@ -532,7 +467,7 @@ class Format
         $legalCoreSets = [];
         foreach ($legalSets as $legalSet) {
             $setType = Database::singleResultSingleParam('SELECT type FROM cardsets WHERE name = ?', 's', $legalSet);
-            if (strcmp($setType, 'Core') == 0) {
+            if ($setType === 'Core') {
                 $legalCoreSets[] = $legalSet;
             }
         }
@@ -548,7 +483,7 @@ class Format
         $legalBlockSets = [];
         foreach ($legalSets as $legalSet) {
             $setType = Database::singleResultSingleParam('SELECT type FROM cardsets WHERE name = ?', 's', $legalSet);
-            if (strcmp($setType, 'Block') == 0) {
+            if ($setType === 'Block') {
                 $legalBlockSets[] = $legalSet;
             }
         }
@@ -564,7 +499,7 @@ class Format
         $legalExtraSets = [];
         foreach ($legalSets as $legalSet) {
             $setType = Database::singleResultSingleParam('SELECT type FROM cardsets WHERE name = ?', 's', $legalSet);
-            if (strcmp($setType, 'Extra') == 0) {
+            if ($setType === 'Extra') {
                 $legalExtraSets[] = $legalSet;
             }
         }
@@ -616,19 +551,6 @@ class Format
     }
 
     /** @return list<string> */
-    public function getTribesAllowed(): array
-    {
-        return Database::listResultSingleParam(
-            'SELECT name
-                                                   FROM tribe_bans
-                                                   WHERE format = ? AND allowed = 1
-                                                   ORDER BY name',
-            's',
-            $this->name
-        );
-    }
-
-    /** @return list<string> */
     public function getRestrictedList(): array
     {
         return Database::listResultSingleParam(
@@ -661,12 +583,6 @@ class Format
         $this->error = [];
 
         return $currentErrors;
-    }
-
-    /** @return list<string> */
-    public function getFormats(): array
-    {
-        return db()->strings('SELECT name FROM formats');
     }
 
     /** @return list<string> */
@@ -774,7 +690,7 @@ class Format
         }
         $legal = $this->getLegalCardsets();
         foreach ($legal as $legalsetName) {
-            if (strcmp($setName, $legalsetName) == 0) {
+            if ($setName === $legalsetName) {
                 return true;
             }
         }
@@ -891,7 +807,6 @@ class Format
         $changelingCreatures = [];
         $restrictedToTribeCreatures = [];
         $tribesTied = [];
-        $tribeKey = '';
 
         foreach ($creatures as $card => $amt) {
             // Begin processing tribe subtypes
@@ -946,7 +861,7 @@ class Format
 
         if (count($tribesTied) > 1) {
             // Two or more tribes are tied for largest tribe
-            foreach ($tribesTied as $type => $amt) {
+            foreach (array_keys($tribesTied) as $type) {
                 // Checking for tribe size in database for tie breaker
                 $sql = 'SELECT COUNT(DISTINCT name) FROM cards WHERE type LIKE :type';
                 $params = ['type' => '%' . db()->likeEscape($type) . '%'];
@@ -995,8 +910,8 @@ class Format
         // so that this changeling feature can be turned on or off.
         // here we add the changeling numbers to each of the other subtypes
         if (!$this->pure) {
-            foreach ($subTypeCount as $Type => $amt) {
-                $subTypeCount[$Type] += $subTypeChangeling;
+            foreach (array_keys($subTypeCount) as $type) {
+                $subTypeCount[$type] += $subTypeChangeling;
             }
         }
 
@@ -1004,11 +919,11 @@ class Format
         // prevent duplicate adding
         // here we check to see if the changeling's type is already counted for
         // if not we add it to the list of types
-        foreach ($changelingCreatures as $Type => $amt) {
-            if (array_key_exists($Type, $subTypeCount)) {
+        foreach ($changelingCreatures as $type => $amt) {
+            if (array_key_exists($type, $subTypeCount)) {
                 continue;
             } else {
-                $subTypeCount[$Type] = $amt;
+                $subTypeCount[$type] = $amt;
             }
         }
 
@@ -1036,7 +951,7 @@ class Format
 
         if (count($tribesTied) > 1) {
             // Two or more tribes are tied for largest tribe
-            foreach ($tribesTied as $type => $amt) {
+            foreach (array_keys($tribesTied) as $type) {
                 // Checking for tribe size in database for tie breaker
                 $sql = 'SELECT COUNT(DISTINCT name) FROM cards WHERE type LIKE :type';
                 $params = ['type' => '%' . db()->likeEscape($type) . '%'];
@@ -1133,18 +1048,15 @@ class Format
     {
         $isLegal = true;
         $deck = new Deck($deckID);
-        $commanderColors = [];
         $commanderCard = self::getCommanderCard($deck);
 
         if (is_null($commanderCard)) {
             $this->error[] = 'Cannot find a Commander in your deck. There must be a Legendary Creature on the sideboard to serve as the Commander.';
-
             return false;
-        } else {
-            $commanderColors = self::getCardColors($commanderCard);
         }
 
-        foreach ($deck->maindeck_cards as $card => $amt) {
+        $commanderColors = self::getCardColors($commanderCard);
+        foreach (array_keys($deck->maindeck_cards) as $card) {
             $colors = self::getCardColors($card);
             foreach ($colors as $color => $num) {
                 if ($num > 0) {
@@ -1178,7 +1090,7 @@ class Format
 
     public static function getCommanderCard(Deck $deck): ?string
     {
-        foreach ($deck->sideboard_cards as $card => $amt) {
+        foreach (array_keys($deck->sideboard_cards) as $card) {
             if (self::isCardLegendary($card)) {
                 return $card;
             }
@@ -1488,40 +1400,31 @@ class Format
         return $removed;
     }
 
-    public function deleteAllLegalSets(): bool
+    public function deleteAllLegalSets(): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM setlegality WHERE format = ?');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $removed = $stmt->affected_rows > 0;
         $stmt->close();
-
-        return $removed;
     }
 
-    public function deleteAllBannedTribes(): bool
+    public function deleteAllBannedTribes(): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM tribe_bans WHERE format = ?');
         $stmt->bind_param('s', $this->name);
         $stmt->execute();
-        $removed = $stmt->affected_rows > 0;
         $stmt->close();
-
-        return $removed;
     }
 
-    public function deleteCardFromLegallist(string $cardName): bool
+    public function deleteCardFromLegallist(string $cardName): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('DELETE FROM bans WHERE format = ? AND card_name = ? AND allowed = 1');
         $stmt->bind_param('ss', $this->name, $cardName);
         $stmt->execute();
-        $removed = $stmt->affected_rows > 0;
         $stmt->close();
-
-        return $removed;
     }
 
     public function deleteEntireLegallist(): bool
@@ -1610,26 +1513,22 @@ class Format
         return Database::singleResultSingleParam('SELECT name FROM cards WHERE name LIKE ?', 's', $cardname . '/%');
     }
 
-    public function insertNewLegalSet(string $cardsetName): bool
+    public function insertNewLegalSet(string $cardsetName): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO setlegality(format, cardset)VALUES(?, ?)');
         $stmt->bind_param('ss', $this->name, $cardsetName);
         $stmt->execute() or exit($stmt->error);
         $stmt->close();
-
-        return true;
     }
 
-    public function insertNewSubTypeBan(string $subTypeBanned): bool
+    public function insertNewSubTypeBan(string $subTypeBanned): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('INSERT INTO subtype_bans(name, format, allowed) VALUES(?, ?, 0)');
         $stmt->bind_param('ss', $subTypeBanned, $this->name);
         $stmt->execute() or exit($stmt->error);
         $stmt->close();
-
-        return true;
     }
 
     public function insertNewTribeBan(string $tribeBanned): void

@@ -20,13 +20,14 @@ use Gatherling\Views\Components\NullComponent;
 use Gatherling\Views\Pages\Deck as DeckPage;
 
 use function Gatherling\Helpers\get;
+use function Gatherling\Helpers\parseCardsWithQuantity;
 use function Gatherling\Helpers\post;
 use function Gatherling\Helpers\server;
 use function Gatherling\Helpers\request;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     $event = null;
 
@@ -36,7 +37,7 @@ function main(): void
             unset($_GET['event']);
         } else {
             $event = new Event(get()->string('event'));
-            $title = $event->name ?? 'Deck Database';
+            $title = $event->name;
         }
     }
 
@@ -44,7 +45,7 @@ function main(): void
     $postMode = post()->string('mode', '');
 
     $viewComponent = new NullComponent();
-    if (strcmp($requestMode, 'view') == 0) {
+    if ($requestMode === 'view') {
         $deck = null;
         if (isset($_GET['event'])) {
             $deck = $event->getPlaceDeck('1st');
@@ -73,11 +74,11 @@ function main(): void
         $playerName = isset($_POST['player']) ? post()->string('player') : get()->optionalString('player');
         $eventName = isset($_POST['player']) ? request()->optionalString('event') : get()->optionalString('event');
         // part of the reg-decklist feature. both "register" and "addregdeck" switches
-        if (strcmp($requestMode, 'register') == 0) {
+        if ($requestMode === 'register') {
             $playerName = isset($_POST['player']) ? post()->string('player') : get()->string('player');
             $eventName = isset($_POST['player']) ? post()->string('event') : get()->string('event');
             $viewComponent = new DeckRegisterForm($playerName, $eventName);
-        } elseif (strcmp($requestMode, 'addregdeck') == 0) {
+        } elseif ($requestMode === 'addregdeck') {
             $deck = insertDeck($event, post()->string('name'), post()->string('archetype'), post()->string('notes'), post()->string('player'), post()->string('contents', ''), post()->string('sideboard', ''));
             $viewComponent = new DeckProfile($deck);
         } elseif (is_null($deck) && $event->name == '') {
@@ -85,14 +86,14 @@ function main(): void
         } elseif ($deck_player === false || !Player::isLoggedIn()) {
             $viewComponent = new LoginRequired();
         } elseif (checkDeckAuth($event, $deck_player, $deck)) {
-            if (strcmp($postMode, 'Create Deck') == 0) {
+            if ($postMode === 'Create Deck') {
                 $deck = insertDeck($event, post()->string('name'), post()->string('archetype'), post()->string('notes'), post()->string('player'), post()->string('contents', ''), post()->string('sideboard', ''));
                 if ($deck->isValid()) {
                     $viewComponent = deckProfile($deck);
                 } else {
                     $viewComponent = deckForm($deck, $playerName, $eventName);
                 }
-            } elseif (strcmp($postMode, 'Update Deck') == 0) {
+            } elseif ($postMode === 'Update Deck') {
                 $deck = updateDeck($deck, post()->string('archetype'), post()->string('name'), post()->string('notes'), post()->string('contents', ''), post()->string('sideboard', ''));
                 if ($deck->id === null) {
                     throw new NotFoundException('Trying to update a deck with null id, which is not possible');
@@ -103,9 +104,9 @@ function main(): void
                 } else {
                     $viewComponent = deckForm($deck, $playerName, $eventName);
                 }
-            } elseif (strcmp($postMode, 'Edit Deck') == 0) {
+            } elseif ($postMode === 'Edit Deck') {
                 $viewComponent = deckForm($deck, $playerName, $eventName);
-            } elseif (strcmp($requestMode, 'create') == 0) {
+            } elseif ($requestMode === 'create') {
                 $viewComponent = deckForm(null, $playerName, $eventName);
             }
         } else {

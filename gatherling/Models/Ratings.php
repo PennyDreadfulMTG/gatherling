@@ -42,7 +42,7 @@ class Ratings
         $db->query('DELETE FROM ratings') or exit($db->error);
     }
 
-    public function deleteRatingByFormat(string $format): bool
+    public function deleteRatingByFormat(string $format): void
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('Delete FROM ratings WHERE format = ?');
@@ -51,10 +51,7 @@ class Ratings
         }
         $stmt->bind_param('s', $format);
         $stmt->execute();
-        $removed = $stmt->affected_rows > 0;
         $stmt->close();
-
-        return $removed;
     }
 
     public function calcAllRatings(): void
@@ -156,12 +153,12 @@ class Ratings
         for ($ndx = 0; $ndx < count($matches); $ndx++) {
             $aPts = 0.5;
             $bPts = 0.5;
-            if (strcmp($matches[$ndx]['result'], 'A') == 0) {
+            if ($matches[$ndx]['result'] === 'A') {
                 $aPts = 1.0;
                 $bPts = 0.0;
                 $players[$matches[$ndx]['playera']]['wins']++;
                 $players[$matches[$ndx]['playerb']]['losses']++;
-            } elseif (strcmp($matches[$ndx]['result'], 'B') == 0) {
+            } elseif ($matches[$ndx]['result'] === 'B') {
                 $aPts = 0.0;
                 $bPts = 1.0;
                 $players[$matches[$ndx]['playerb']]['wins']++;

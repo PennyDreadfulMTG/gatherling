@@ -30,17 +30,21 @@ use function Gatherling\Helpers\get;
 use function Gatherling\Helpers\post;
 use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\server;
+use function Safe\fclose;
+use function Safe\fopen;
+use function Safe\preg_replace;
+use function Safe\strtotime;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     if (!Player::isLoggedIn()) {
         (new LoginRedirect())->send();
     }
 
     $getSeriesName = get()->string('series', '');
-    $season = get()->string('season', '');
+    $season = get()->optionalInt('season');
     $requestEventName = request()->string('name', '');
     $getEventName = get()->optionalString('name') ?? get()->optionalString('event');
     $postEventName = post()->optionalString('name');
@@ -69,17 +73,16 @@ function main(): void
 
 function mode_is(string $str): bool
 {
-    $mode = request()->string('mode', '');
-    return strcmp($mode, $str) == 0;
+    return request()->string('mode', '') === $str;
 }
 
 function createNewEvent(): Event|bool
 {
     $series = new Series(post()->optionalString('series'));
-    if ($series->authCheck(Player::loginName()) && isset($_POST['insert'])) {
+    $playerName = Player::loginName();
+    if ($playerName !== false && $series->authCheck($playerName) && isset($_POST['insert'])) {
         return insertEvent();
     }
-
     return false;
 }
 
@@ -125,10 +128,11 @@ function newEventFromEventName(string $eventName, bool $newSeason = false): Even
 function getEvent(string $eventName, ?string $action, ?string $eventId, ?string $player): Page
 {
     $event = new Event($eventName);
-    if (!$event->authCheck(Player::loginName())) {
+    $playerName = Player::loginName();
+    if ($playerName !== false && !$event->authCheck($playerName)) {
         return new AuthFailed();
     }
-    if ($action && strcmp($action, 'undrop') == 0) {
+    if ($action === 'undrop') {
         $entry = new Entry((int) $eventId, $player);
         if ($entry->deck && $entry->deck->isValid()) {
             $event->undropPlayer($player);
@@ -144,7 +148,8 @@ function postEvent(string $eventName): Page
 {
     $event = new Event($eventName);
 
-    if (!$event->authCheck(Player::loginName())) {
+    $playerName = Player::loginName();
+    if ($playerName !== false && !$event->authCheck($playerName)) {
         return new AuthFailed();
     }
 
@@ -205,21 +210,21 @@ function eventFrame(Event $event = null, bool $forceNew = false): EventFrame
         $view = 'edit';
     }
 
-    if (strcmp($view, 'reg') == 0) {
+    if ($view === 'reg') {
         return new PlayerList($event);
-    } elseif (strcmp($view, 'match') == 0) {
+    } elseif ($view === 'match') {
         // Prevent warnings in php output.  TODO: make this not needed.
         if (!isset($_POST['newmatchround'])) {
             $_POST['newmatchround'] = '';
         }
         return new MatchList($event, post()->optionalString('newmatchround'));
-    } elseif (strcmp($view, 'standings') == 0) {
-        return new StandingsList($event, Player::loginName());
-    } elseif (strcmp($view, 'medal') == 0) {
+    } elseif ($view === 'standings') {
+        return new StandingsList($event, Player::loginName() ?: null);
+    } elseif ($view === 'medal') {
         return new MedalList($event);
-    } elseif (strcmp($view, 'points_adj') == 0) {
+    } elseif ($view === 'points_adj') {
         return new PointsAdjustmentForm($event);
-    } elseif (strcmp($view, 'reports') == 0) {
+    } elseif ($view === 'reports') {
         return new ReportsForm($event);
     }
 
@@ -313,53 +318,53 @@ function updateEvent(): Event
 
     $event = new Event(post()->string('name'));
     $event->start = "{$_POST['year']}-{$_POST['month']}-{$_POST['day']} {$_POST['hour']}:00";
-    $event->finalized = (int) $_POST['finalized'];
-    $event->active = (int) $_POST['active'];
-    $event->current_round = (int) $_POST['newmatchround'];
-    $event->prereg_allowed = (int) $_POST['prereg_allowed'];
-    $event->player_reportable = (int) $_POST['player_reportable'];
-    $event->prereg_cap = (int) $_POST['prereg_cap'];
-    $event->private_decks = (int) $_POST['private_decks'];
-    $event->private_finals = (int) $_POST['private_finals'];
-    $event->player_reported_draws = (int) $_POST['player_reported_draws'];
-    $event->late_entry_limit = (int) $_POST['late_entry_limit'];
+    $event->finalized = post()->int('finalized');
+    $event->active = post()->int('active');
+    $event->current_round = (int) post()->string('newmatchround', '0');
+    $event->prereg_allowed = post()->int('prereg_allowed');
+    $event->player_reportable = post()->int('player_reportable');
+    $event->prereg_cap = post()->int('prereg_cap');
+    $event->private_decks = post()->int('private_decks');
+    $event->private_finals = post()->int('private_finals');
+    $event->player_reported_draws = post()->int('player_reported_draws');
+    $event->late_entry_limit = post()->int('late_entry_limit');
 
-    if ($event->format != $_POST['format']) {
-        $event->format = $_POST['format'];
+    if ($event->format != post()->string('format')) {
+        $event->format = post()->string('format');
         $event->updateDecksFormat(post()->string('format'));
     }
 
-    $event->host = $_POST['host'];
-    $event->cohost = $_POST['cohost'];
-    $event->kvalue = (int) $_POST['kvalue'];
-    $event->series = $_POST['series'];
-    $event->season = (int) $_POST['season'];
-    $event->number = (int) $_POST['number'];
-    $event->threadurl = $_POST['threadurl'];
-    $event->metaurl = $_POST['metaurl'];
-    $event->reporturl = $_POST['reporturl'];
+    $event->host = post()->string('host');
+    $event->cohost = post()->string('cohost');
+    $event->kvalue = post()->int('kvalue');
+    $event->series = post()->string('series');
+    $event->season = post()->int('season');
+    $event->number = post()->int('number');
+    $event->threadurl = post()->string('threadurl');
+    $event->metaurl = post()->string('metaurl');
+    $event->reporturl = post()->string('reporturl');
 
-    if ($_POST['mainrounds'] == '') {
-        $_POST['mainrounds'] = 3;
+    if (post()->string('mainrounds') == '') {
+        post()->string('mainrounds', '3');
     }
-    if ($_POST['mainstruct'] == '') {
+    if (post()->string('mainstruct') == '') {
         $_POST['mainstruct'] = 'Swiss';
     }
-    if ($_POST['mainrounds'] >= $event->current_round) {
-        $event->mainrounds = $_POST['mainrounds'];
-        $event->mainstruct = $_POST['mainstruct'];
+    if (post()->int('mainrounds') >= $event->current_round) {
+        $event->mainrounds = post()->int('mainrounds');
+        $event->mainstruct = post()->string('mainstruct');
     }
 
-    if ($_POST['finalrounds'] == '') {
+    if (post()->string('finalrounds') == '') {
         $_POST['finalrounds'] = 0;
     }
-    if ($_POST['finalstruct'] == '') {
+    if (post()->string('finalstruct') == '') {
         $_POST['finalstruct'] = 'Single Elimination';
     }
-    $event->finalrounds = $_POST['finalrounds'];
-    $event->finalstruct = $_POST['finalstruct'];
-    $event->private = (int) $_POST['private'];
-    $event->client = (int) $_POST['client'];
+    $event->finalrounds = post()->int('finalrounds');
+    $event->finalstruct = post()->string('finalstruct');
+    $event->private = post()->int('private');
+    $event->client = post()->int('client');
 
     $event->save();
 
@@ -524,10 +529,7 @@ function updateMatches(): void
     }
     $rnd = post()->int('newmatchround');
 
-    if (
-        strcmp($pA, '') != 0 && strcmp($pB, '') != 0
-        && strcmp($res, '') != 0 && $rnd
-    ) {
+    if ($pA !== '' && $pB !== '' && $rnd) {
         $playerA = new Standings($event->name, $pA);
         $playerB = new Standings($event->name, $pB);
         if ($res == 'P') {
@@ -537,7 +539,7 @@ function updateMatches(): void
         }
     }
 
-    if (strcmp(post()->string('newbyeplayer', ''), '') != 0) {
+    if (post()->string('newbyeplayer', '') !== '') {
         $playerBye = new Standings($event->name, post()->string('newbyeplayer'));
         $event->addMatch($playerBye, $playerBye, $rnd, 'BYE');
     }

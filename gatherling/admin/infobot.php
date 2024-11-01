@@ -13,7 +13,7 @@ use function Gatherling\Helpers\server;
 
 require_once __DIR__ . '/../lib.php';
 
-function main(): void
+function main(): never
 {
     if (strncmp(server()->string('HTTP_USER_AGENT', ''), 'infobot', 7) != 0) {
         (new InfobotError("You're not infobot!"))->send();
@@ -24,25 +24,23 @@ function main(): void
         (new InfobotError('Wrong passkey'))->send();
     }
 
-    $siteName = config()->string('site_name');
-
     // generate a user passkey for verification
     $random_num = mt_rand();
     $key = sha1((string) $random_num);
     $challenge = substr($key, 0, 5);
     $player = Player::findByName(get()->optionalString('username') ?? '');
     if (!$player) {
-        (new InfobotReply("You're not registered on {$siteName}!"))->send();
+        (new InfobotReply("You're not registered on Gatherling!"))->send();
     }
 
-    if (strcmp(request()->string('mode', ''), 'verify') == 0) {
+    $mode = request()->string('mode', '');
+    if ($mode === 'verify') {
         $player->setChallenge($challenge);
-        (new InfobotReply("Your verification code for {$siteName} is $challenge"))->send();
-    } elseif (strcmp(request()->string('mode', ''), 'reset') == 0) {
+        (new InfobotReply("Your verification code for Gatherling is $challenge"))->send();
+    } elseif ($mode === 'reset') {
         $player->setPassword($challenge);
-        (new InfobotReply("Your temporary password for {$siteName} is $challenge"))->send();
+        (new InfobotReply("Your temporary password for Gatherling is $challenge"))->send();
     } else {
-        $mode = request()->string('mode', '');
         (new InfobotError("Unknown Action {$mode}"))->send();
     }
 }

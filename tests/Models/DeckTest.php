@@ -10,6 +10,8 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Tests\Support\TestCases\DatabaseCase;
 
+use function Gatherling\Helpers\parseCardsWithQuantity;
+
 class DeckTest extends DatabaseCase
 {
     protected Event $event;

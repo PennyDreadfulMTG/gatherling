@@ -8,7 +8,6 @@ class PromptLinkAccount extends Page
 {
     public function __construct(public string $email)
     {
-        parent::__construct();
-        $this->title = 'Login';
+        parent::__construct('Login');
     }
 }

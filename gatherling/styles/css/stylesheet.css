@@ -766,7 +766,7 @@ a:hover {
     padding: 0px;
     border-radius: 5px;
 }
-a:has(h1), a:has(h2), a:has(h3), a:has(h4), a:has(h5), a:has(h6),
+a:has(h1):link, a:has(h2):link, a:has(h3):link, a:has(h4):link, a:has(h5):link, a:has(h6):link,
 a:has(h1):visited, a:has(h2):visited, a:has(h3):visited, a:has(h4):visited, a:has(h5):visited, a:has(h6):visited {
     color: var(--main-text-color);
     padding: inherit;
@@ -1069,7 +1069,7 @@ table.center {
 }
 
 /* Align text with icon */
-.event-type, .player-count, .view-standings {
+.event-type, .player-count, .event-action {
     display: flex;
     align-items: center;
     gap: var(--spacing-5-static);

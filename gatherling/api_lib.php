@@ -10,14 +10,15 @@ use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
-use Gatherling\Models\Database;
 use Gatherling\Models\Standings;
 
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\config;
+use function Gatherling\Helpers\parseCardsWithQuantity;
 use function Gatherling\Helpers\server;
 use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\session;
+use function Safe\json_encode;
 
 /**
  * @param array<string, mixed> $array
@@ -436,17 +437,8 @@ function create_pairing(Event $event, int $round, ?string $a, ?string $b, ?strin
 /** @return list<string> */
 function card_catalog(): array
 {
-    $result = [];
-    $db = Database::getConnection();
-    $query = $db->query('SELECT c.name as name FROM cards c');
-    while ($row = $query->fetch_assoc()) {
-        if (!in_array($row['name'], $result)) {
-            $result[] = $row['name'];
-        }
-    }
-    $query->close();
-
-    return $result;
+    $sql = 'SELECT DISTINCT name FROM cards';
+    return db()->strings($sql);
 }
 
 function cardname_from_id(string $id): string

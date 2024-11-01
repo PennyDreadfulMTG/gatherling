@@ -8,6 +8,10 @@ use Gatherling\Exceptions\SetMissingException;
 
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\logger;
+use function Gatherling\Helpers\parseCards;
+use function Safe\file_get_contents;
+use function Safe\json_decode;
+use function Safe\strtotime;
 
 class Formats
 {

@@ -11,7 +11,7 @@ use function Gatherling\Helpers\server;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     $sql = 'SELECT image, type, size FROM trophies WHERE event = :event';
     $args = ['event' => $_GET['event']];

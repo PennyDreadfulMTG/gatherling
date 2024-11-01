@@ -15,11 +15,36 @@ class Entry
     public Event $event;
     public Player $player;
     public ?Deck $deck;
-    public ?string $medal;
-    public ?int $drop_round;
-    public ?int $initial_byes;
-    public ?int $initial_seed;
-    public ?int $ignored;
+    public string $medal;
+    public int $drop_round;
+    public int $initial_byes;
+    public int $initial_seed;
+
+    public function __construct(int $event_id, string $playername)
+    {
+        $sql = '
+            SELECT deck AS deck_id, medal, drop_round, initial_byes, initial_seed
+              FROM entries
+             WHERE event_id = :event_id AND player = :player';
+        $params = ['event_id' => $event_id, 'player' => $playername];
+        $entry = db()->selectOnlyOrNull($sql, EntryDto::class, $params);
+        if ($entry == null) {
+            throw new NotFoundException('Entry for ' . $playername . ' in ' . $event_id . ' not found');
+        }
+        $this->medal = $entry->medal;
+        $this->drop_round = $entry->drop_round;
+        $this->initial_byes = $entry->initial_byes;
+        $this->initial_seed = $entry->initial_seed;
+
+        if ($entry->deck_id != null) {
+            $this->deck = new Deck($entry->deck_id);
+        } else {
+            $this->deck = null;
+        }
+
+        $this->event = new Event($event_id);
+        $this->player = new Player($playername);
+    }
 
     public static function findByEventAndPlayer(int $event_id, string $playername): ?self
     {
@@ -38,20 +63,12 @@ class Entry
     public static function getActivePlayers(int $eventid): array
     {
         $sql = '
-            SELECT
-                e.player
-            FROM
-                entries e
-            JOIN
-                events ev ON e.event_id = ev.id
-            JOIN
-                standings s ON ev.name = s.event
-            WHERE
-                e.event_id = :eventid
-            AND
-                s.active = 1
-            GROUP BY
-                player';
+            SELECT e.player
+              FROM entries e
+              JOIN events ev ON e.event_id = ev.id
+              JOIN standings s ON ev.name = s.event
+             WHERE e.event_id = :eventid AND s.active = 1
+          GROUP BY player';
         $playernames = db()->strings($sql, ['eventid' => $eventid]);
         return array_map(fn (string $name) => new Entry($eventid, $name), $playernames);
     }
@@ -59,50 +76,13 @@ class Entry
     public static function playerRegistered(int $eventid, string $playername): bool
     {
         $sql = '
-            SELECT
-                n.player
-            FROM
-                entries n
-            JOIN
-                events e ON n.event_id = e.id
-            WHERE
-                n.event_id = :event_id  AND n.player = :player
-            GROUP BY
-                player';
+            SELECT n.player
+              FROM entries n
+              JOIN events e ON n.event_id = e.id
+             WHERE n.event_id = :event_id  AND n.player = :player
+          GROUP BY player';
         $params = ['event_id' => $eventid, 'player' => $playername];
         return db()->optionalString($sql, $params) !== null;
-    }
-
-    // TODO: remove ignore functionality
-    public function __construct(int $event_id, string $playername)
-    {
-        $this->ignored = 0;
-        $sql = '
-            SELECT
-                deck AS deck_id, medal, ignored, drop_round, initial_byes, initial_seed
-            FROM
-                entries
-            WHERE
-                event_id = :event_id AND player = :player';
-        $params = ['event_id' => $event_id, 'player' => $playername];
-        $entry = db()->selectOnlyOrNull($sql, EntryDto::class, $params);
-        if ($entry == null) {
-            throw new NotFoundException('Entry for ' . $playername . ' in ' . $event_id . ' not found');
-        }
-        $this->medal = $entry->medal;
-        $this->ignored = $entry->ignored;
-        $this->drop_round = $entry->drop_round;
-        $this->initial_byes = $entry->initial_byes;
-        $this->initial_seed = $entry->initial_seed;
-
-        if ($entry->deck_id != null) {
-            $this->deck = new Deck($entry->deck_id);
-        } else {
-            $this->deck = null;
-        }
-
-        $this->event = new Event($event_id);
-        $this->player = new Player($playername);
     }
 
     public function recordString(): string
@@ -144,11 +124,6 @@ class Entry
         return count($matches) == 0;
     }
 
-    public function dropped(): bool
-    {
-        return $this->drop_round > 0;
-    }
-
     public function canCreateDeck(string $username): bool
     {
         $player = new Player($username);
@@ -163,18 +138,6 @@ class Entry
         }
 
         return false;
-    }
-
-    // TODO: Remove ignore functionality
-    public function setIgnored(int $new_ignored): void
-    {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('UPDATE entries SET ignored = ? WHERE player = ? and event_id = ?');
-        $playername = $this->player->name;
-        $event_id = $this->event->id;
-        $stmt->bind_param('isd', $new_ignored, $playername, $event_id);
-        $stmt->execute();
-        $stmt->close();
     }
 
     public function removeEntry(): bool
@@ -208,12 +171,9 @@ class Entry
     public function setInitialByes(int $byeqty): void
     {
         $sql = '
-            UPDATE
-                entries
-            SET
-                initial_byes = :initial_byes
-            WHERE
-                player = :player AND event_id = :event_id';
+            UPDATE entries
+               SET initial_byes = :initial_byes
+             WHERE player = :player AND event_id = :event_id';
         $params = [
             'initial_byes' => $byeqty,
             'player' => $this->player->name,
@@ -225,12 +185,9 @@ class Entry
     public function setInitialSeed(int $byeqty): void
     {
         $sql = '
-            UPDATE
-                entries
-            SET
-                initial_seed = :initial_seed
-            WHERE
-                player = :player AND event_id = :event_id';
+            UPDATE entries
+               SET initial_seed = :initial_seed
+             WHERE player = :player AND event_id = :event_id';
         $params = [
             'initial_seed' => $byeqty,
             'player' => $this->player->name,

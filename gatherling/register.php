@@ -13,7 +13,7 @@ use function Gatherling\Helpers\session;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     $message = '';
     if (isset($_POST['pw1'])) {
@@ -33,6 +33,8 @@ function main(): void
         } elseif ($code == -3) {
             $message = 'A password has already been created for this account.';
             (new LoginRedirect('player.php', $message, trim($username)))->send();
+        } elseif ($code == -4) {
+            $message = 'Password cannot be empty.';
         }
     }
     $showRegForm = !isset($_POST['pw1']);

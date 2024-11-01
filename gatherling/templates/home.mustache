@@ -13,7 +13,7 @@
                 {{#activeEvents}}
                     <tr>
                         <td>
-                            <a href="{{reportLink}}">{{name}}</a><br>
+                            <a href="{{eventReportLink}}">{{name}}</a><br>
                             {{format}}
                         </td>
                         <td style="text-align: right">Round {{currentRound}}</td>
@@ -29,7 +29,7 @@
                 {{#upcomingEvents}}
                     <tr>
                         <td>
-                            <a href="{{reportLink}}">{{name}}</a><br>
+                            <a href="{{eventReportLink}}">{{name}}</a><br>
                             {{format}}
                         </td>
                         <td style="text-align: right">
@@ -58,7 +58,7 @@
                 <p><b>Welcome back {{name}}</b></p>
                 <ul>
                     <li> <a href="profile.php">Check out your profile</a> </li>
-                    <li> <a href="player.php?mode=alldecks">Enter your own decklists</a> </li>
+                    <li> <a href="player.php?mode=alldecks">See your decklists</a> </li>
                     {{#mostRecentHostedEvent}}
                         <li><a href="{{link}}">Manage {{name}}</a></li>
                     {{/mostRecentHostedEvent}}
@@ -74,22 +74,22 @@
                 <table class="form">
                     <tr>
                         <th><label for="username">Username</label></th>
-                        <td><input class="inputbox" type="text" name="username" value="" /></td>
+                        <td><input class="inputbox" type="text" name="username" value="">/td>
                     </tr>
                     <tr>
                         <th><label for="password">Password</label></th>
-                        <td><input class="inputbox" type="password" name="password" value="" /></td>
+                        <td><input class="inputbox" type="password" name="password" value=""></td>
                     </tr>
                     <tr>
                         <td colspan="2" class="buttons">
-                            <input class="inputbutton btn-primary" type="submit" name="mode" value="Log In" />
-                            <input class="inputbutton discordlogin fa-discord" type="submit" name="mode" value="Log In with Discord" />
+                            <input class="inputbutton btn-primary" type="submit" name="mode" value="Log In">
+                            <input class="inputbutton discordlogin fa-discord" type="submit" name="mode" value="Log In with Discord">
                         </td>
                     </tr>
                 </table>
             </form>
             <p>
-                <a href="register.php">Need to register?</a><br />
+                <a href="register.php">Need to register?</a><br>
                 <a href="forgot.php">Forgot your password?</a>
             </p>
         {{/player}}
@@ -104,7 +104,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <a class="borderless" href="{{reportLink}}">
+                                <a class="borderless" href="{{eventReportLink}}">
                                     {{#colorImages}}{{> colorImages}}{{/colorImages}}
                                 </a>
                             </td>

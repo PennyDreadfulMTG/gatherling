@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-class ReportLink extends Component
+class EventReportLink extends Component
 {
-    public string $reportLink;
+    public string $eventReportLink;
     public string $text;
 
     public function __construct(string $name)
     {
-        $this->reportLink = 'eventreport.php?event=' . rawurlencode($name);
+        $this->eventReportLink = 'eventreport.php?event=' . rawurlencode($name);
         $this->text = $name;
     }
 }

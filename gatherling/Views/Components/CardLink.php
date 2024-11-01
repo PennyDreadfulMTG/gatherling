@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
+use function Safe\preg_replace;
+
 class CardLink extends Component
 {
     public string $gathererLink;

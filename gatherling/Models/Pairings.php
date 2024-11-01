@@ -15,8 +15,8 @@ class Pairings
     public array $pairing = [];
 
     /**
-     * @param array<int, array{player: string, score: int, opponents: array<int, string>}> $players
-     * @param ?array{player: string, score: int, opponents: array<int, string>} $bye_data
+     * @param list<array{player: string, score: int, opponents: array<int, string>, paired: bool}> $players
+     * @param ?array{player: string, score: int, opponents: array<int, string>, paired: bool} $bye_data
      */
     public function __construct(array $players, ?array $bye_data)
     {
@@ -50,7 +50,7 @@ class Pairings
     }
 
     /**
-     * @param array<int, array<string, int|string|array<int, string>>> $players
+     * @param list<array{player: string, score: int, opponents: array<int, string>, paired: bool}> $players
      * @return list<array{int, int, int}>
      */
     public function weights(array $players): array
@@ -70,8 +70,8 @@ class Pairings
     }
 
     /**
-     * @param array{score: int, player: string, opponents: array<int, string>} $player1
-     * @param array{score: int, player: string, opponents: array<int, string>} $player2
+     * @param array{score: int, player: string, opponents: array<int, string>, paired: bool} $player1
+     * @param array{score: int, player: string, opponents: array<int, string>, paired: bool} $player2
      */
     public function weight(int $highest_points, array $player1, array $player2): int
     {

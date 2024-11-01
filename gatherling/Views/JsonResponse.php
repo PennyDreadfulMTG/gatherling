@@ -6,6 +6,8 @@ namespace Gatherling\Views;
 
 use InvalidArgumentException;
 
+use function Safe\json_encode;
+
 class JsonResponse extends Response
 {
     /** @param array<array-key, mixed> $data */
@@ -16,10 +18,6 @@ class JsonResponse extends Response
 
     public function body(): string
     {
-        $result = json_encode($this->data);
-        if ($result === false) {
-            throw new InvalidArgumentException('Failed to encode data to JSON');
-        }
-        return $result;
+        return json_encode($this->data);
     }
 }

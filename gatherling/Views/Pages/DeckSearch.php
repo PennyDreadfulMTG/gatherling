@@ -21,8 +21,7 @@ class DeckSearch extends Page
      */
     public function __construct(array $results, string $phpSelf, public array $errors, string $playerName, string $cardName, string $formatName, string $archetype, string $seriesName, string $medals, array $colors)
     {
-        parent::__construct();
-        $this->title = 'Deck Search';
+        parent::__construct('Deck Search');
         $this->searchForm = new SearchForm(count($results), $phpSelf, $playerName, $cardName, $formatName, $archetype, $seriesName, $medals, $colors);
         if ($results) {
             $this->displayDecks = new DisplayDecks($results);

@@ -17,7 +17,7 @@ class SeriesDropMenu extends DropMenu
             $options[] = [
                 'text'       => $name,
                 'value'      => $name,
-                'isSelected' => $seriesName && strcmp($seriesName, $name) == 0,
+                'isSelected' => $seriesName === $name,
             ];
         }
         parent::__construct('series', $options, $default);

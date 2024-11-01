@@ -20,9 +20,6 @@ $CONFIG['db_test_database'] = 'gatherling_test';
 // $CONFIG['base_url'] = "https://gatherling.com";
 $CONFIG['base_url'] = "http://localhost:8080/gatherling/";
 
-# The name of your site.  This is used in a lot of places.
-$CONFIG['site_name'] = "Gatherling";
-
 # A description for the ical calendar which is accessible at calendar.php
 $CONFIG['calendar_description'] = "a description for the events calendar";
 

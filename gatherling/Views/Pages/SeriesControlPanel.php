@@ -16,8 +16,7 @@ class SeriesControlPanel extends Page
 
     public function __construct(?Series $activeSeries, ?Component $orientationComponent, public string $errorMsg, Component $viewComponent)
     {
-        parent::__construct();
-        $this->title = 'Series Control Panel';
+        parent::__construct('Series Control Panel');
         $this->orientationSafe = $orientationComponent ? $orientationComponent->render() : '';
         $this->seriesControlPanelMenu = $activeSeries ? new SeriesControlPanelMenu($activeSeries) : null;
         $this->viewSafe = $viewComponent->render();

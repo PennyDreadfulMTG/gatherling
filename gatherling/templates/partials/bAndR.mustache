@@ -1,7 +1,7 @@
 <form action="formatcp.php" method="post">
-    <input type="hidden" name="view" value="bandr" />
-    <input type="hidden" name="format" value="{{activeFormatName}}" />
-    <input type="hidden" name="series" value="{{seriesName}}" />
+    <input type="hidden" name="view" value="bandr">
+    <input type="hidden" name="format" value="{{activeFormatName}}">
+    <input type="hidden" name="series" value="{{seriesName}}">
     <h3>Card Restricted List: {{restrictedCardCount}} Cards</h3>
     <table class="form c">
         <tr>
@@ -15,7 +15,7 @@
                     {{^cardLink}}{{cardName}}{{/cardLink}}
                 </td>
                 <td class="c">
-                    <input type="checkbox" name="delrestrictedcards[]" value="{{cardName}}" />
+                    <input type="checkbox" name="delrestrictedcards[]" value="{{cardName}}">
                 </td>
             </tr>
         {{/restrictedCards}}
@@ -35,15 +35,15 @@
         <tr>
             <td colspan="2">
                 <label>Load txt</label>
-                <input class="inputbutton" type="file" value="Upload Restricted List" link="addrestrictedcard" accept=".txt"/>
+                <input class="inputbutton" type="file" value="Upload Restricted List" link="addrestrictedcard" accept=".txt">
             </td>
         </tr>
         <tr>
             <td class="buttons">
-                <input class="inputbutton" type="submit" value="Update Restricted List" name ="action" />
+                <input class="inputbutton" type="submit" value="Update Restricted List" name ="action">
             </td>
             <td class="buttons">
-                <input class="inputbutton" type="submit" value="Delete Entire Restricted List" name ="action" />
+                <input class="inputbutton" type="submit" value="Delete Entire Restricted List" name ="action">
             </td>
         </tr>
     </table>
@@ -51,9 +51,9 @@
 
 
 <form action="formatcp.php" method="post">
-    <input type="hidden" name="view" value="bandr" />
-    <input type="hidden" name="format" value="{{activeFormatName}}" />
-    <input type="hidden" name="series" value="{{seriesName}}" />
+    <input type="hidden" name="view" value="bandr">
+    <input type="hidden" name="format" value="{{activeFormatName}}">
+    <input type="hidden" name="series" value="{{seriesName}}">
     <h3>Card Banlist: {{bannedCardCount}} Cards</h3>
     <table class="form c">
         <tr>
@@ -67,7 +67,7 @@
                     {{^cardLink}}{{cardName}}{{/cardLink}}
                 </td>
                 <td class="c">
-                    <input type="checkbox" name="delbancards[]" value="{{cardName}}" />
+                    <input type="checkbox" name="delbancards[]" value="{{cardName}}">
                 </td>
             </tr>
         {{/bannedCards}}
@@ -87,24 +87,24 @@
         <tr>
             <td colspan="2">
                 <label>Load txt</label>
-                <input class="inputbutton" type="file" value="Upload Banned List" link="addbancard" accept=".txt"/>
+                <input class="inputbutton" type="file" value="Upload Banned List" link="addbancard" accept=".txt">
             </td>
         </tr>
         <tr>
             <td class="buttons">
-                <input class="inputbutton" type="submit" value="Update Banlist" name ="action" />
+                <input class="inputbutton" type="submit" value="Update Banlist" name ="action">
             </td>
             <td class="buttons">
-                <input class="inputbutton" type="submit" value="Delete Entire Banlist" name ="action" />
+                <input class="inputbutton" type="submit" value="Delete Entire Banlist" name ="action">
             </td>
         </tr>
     </table>
 </form>
 
 <form action="formatcp.php" method="post">
-    <input type="hidden" name="view" value="bandr" />
-    <input type="hidden" name="format" value="{{activeFormatName}}" />
-    <input type="hidden" name="series" value="{{seriesName}}" />
+    <input type="hidden" name="view" value="bandr">
+    <input type="hidden" name="format" value="{{activeFormatName}}">
+    <input type="hidden" name="series" value="{{seriesName}}">
     <h3>Legal Card List: {{legalCardCount}} Cards</h3>
     <table class="form c">
         <tr>
@@ -118,7 +118,7 @@
                     {{^cardLink}}{{cardName}}{{/cardLink}}
                 </td>
                 <td class="c">
-                    <input type="checkbox" name="dellegalcards[]" value="{{cardName}}" />
+                    <input type="checkbox" name="dellegalcards[]" value="{{cardName}}">
                 </td>
             </tr>
         {{/legalCards}}
@@ -138,15 +138,15 @@
         <tr>
             <td colspan="2">
                 <label>Load txt</label>
-                <input class="inputbutton" type="file" value="Upload Legal List" link="addlegalcard" accept=".txt"/>
+                <input class="inputbutton" type="file" value="Upload Legal List" link="addlegalcard" accept=".txt">
             </td>
         </tr>
         <tr>
             <td class="buttons">
-                <input class="inputbutton" type="submit" value="Update Legal List" name ="action" />
+                <input class="inputbutton" type="submit" value="Update Legal List" name ="action">
             </td>
             <td class="buttons">
-                <input class="inputbutton" type="submit" value="Delete Entire Legal List" name ="action" />
+                <input class="inputbutton" type="submit" value="Delete Entire Legal List" name ="action">
             </td>
         </tr>
     </table>

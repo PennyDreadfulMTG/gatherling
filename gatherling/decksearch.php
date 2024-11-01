@@ -14,7 +14,7 @@ use function Gatherling\Helpers\session;
 
 require_once 'lib.php';
 
-function main(): void
+function main(): never
 {
     if (count($_POST) > 0) {
         unset($_SESSION['search_results']);
@@ -26,7 +26,7 @@ function main(): void
     }
 
     $results = $errors = [];
-    if (isset($_GET['mode']) && strcmp(get()->string('mode'), 'search') == 0 && !isset($_GET['page'])) {
+    if (isset($_GET['mode']) && get()->string('mode') === 'search' && !isset($_GET['page'])) {
         if (!empty($_POST['format'])) {
             $decksearch->searchByFormat(post()->string('format'));
             $_SESSION['format'] = $_POST['format'];

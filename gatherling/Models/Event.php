@@ -12,7 +12,7 @@ use function Gatherling\Helpers\logger;
 
 class Event
 {
-    public ?string $name;
+    public string $name;
     public ?int $id;
 
     public ?int $season;
@@ -21,16 +21,16 @@ class Event
 
     public ?string $start;
     public ?int $kvalue = null;
-    public ?int $active;
-    public ?int $finalized;
-    public ?int $prereg_allowed;
-    public ?string $threadurl;
-    public ?string $reporturl;
-    public ?string $metaurl;
+    public int $active;
+    public int $finalized;
+    public int $prereg_allowed;
+    public string $threadurl;
+    public string $reporturl;
+    public string $metaurl;
     public ?int $private;
-    public ?int $client;
+    public int $client;
 
-    public ?int $player_editdecks;
+    public int $player_editdecks;
 
     // Class associations
     public ?string $series = null; // belongs to Series
@@ -46,15 +46,15 @@ class Event
     public ?int $finalid; // Has one final subevent
 
     // Pairing/event related
-    public ?int $current_round;
+    public int $current_round;
     public Standings $standing;
-    public ?int $player_reportable;
-    public ?int $player_reported_draws;
-    public ?int $prereg_cap; // Cap on player initiated registration
-    public ?int $late_entry_limit; // How many rounds we let people perform late entries
+    public int $player_reportable;
+    public int $player_reported_draws;
+    public int $prereg_cap; // Cap on player initiated registration
+    public int $late_entry_limit; // How many rounds we let people perform late entries
 
-    public ?int $private_decks; // Toggle to disable deck privacy for active events. Allows the metagame page to display during an active event and lets deck lists be viewed if disabled.
-    public ?int $private_finals; // As above, but for finals
+    public int $private_decks; // Toggle to disable deck privacy for active events. Allows the metagame page to display during an active event and lets deck lists be viewed if disabled.
+    public int $private_finals; // As above, but for finals
 
     public ?int $hastrophy;
     private ?bool $new = null;
@@ -70,9 +70,9 @@ class Event
             $this->finalstruct = '';
             $this->host = null;
             $this->cohost = null;
-            $this->threadurl = null;
-            $this->reporturl = null;
-            $this->metaurl = null;
+            $this->threadurl = '';
+            $this->reporturl = '';
+            $this->metaurl = '';
             $this->start = null;
             $this->finalized = 0;
             $this->prereg_allowed = 0;
@@ -195,7 +195,7 @@ class Event
             $number = $mostRecentEvent ? $mostRecentEvent->number + 1 : 1;
         }
 
-        if (strcmp($naming, 'auto') == 0) {
+        if ($naming === 'auto') {
             $event->name = sprintf('%s %d.%02d', $series, $season, $number);
         } else {
             $event->name = $name;
@@ -392,21 +392,6 @@ class Event
         return new Deck($deckId);
     }
 
-    public function getPlacePlayer(string $placing = '1st'): ?string
-    {
-        $sql = '
-            SELECT
-                n.player
-            FROM
-                entries n, events e
-            WHERE
-                n.event_id = e.id
-                AND n.medal = :medal
-                AND e.name = :name';
-        $params = ['medal' => $placing, 'name' => $this->name];
-        return db()->optionalString($sql, $params);
-    }
-
     public function decklistsVisible(): bool
     {
         return ($this->finalized && !$this->active) || $this->private_decks == 0 || ($this->current_round > $this->mainrounds && !$this->private_finals);
@@ -465,23 +450,12 @@ class Event
         db()->commit('set_finalists');
     }
 
-    public function getTrophyImageLink(): string
-    {
-        return "<a href=\"deck.php?mode=view&event={$this->id}\" class=\"borderless\">\n"
-           . self::trophyImageTag($this->name) . "\n</a>\n";
-    }
-
     public function isHost(string $name): bool
     {
         $ishost = !is_null($this->host) && strcasecmp($name, $this->host) == 0;
         $iscohost = !is_null($this->cohost) && strcasecmp($name, $this->cohost) == 0;
 
         return $ishost || $iscohost;
-    }
-
-    public function isFinalized(): bool
-    {
-        return $this->finalized != 0;
     }
 
     public function isOrganizer(string $name): bool
@@ -664,7 +638,7 @@ class Event
     public function addPlayer(string $playername): bool
     {
         $playername = trim($playername);
-        if (strcmp($playername, '') == 0) {
+        if ($playername === '') {
             return false;
         }
         $series = new Series($this->series);
@@ -875,10 +849,8 @@ class Event
     // Assigns trophies based on the finals matches which are entered.
     public function assignTropiesFromMatches(): void
     {
-        $t8 = [];
         $t4 = [];
-        $sec = '';
-        $win = '';
+        $t8 = [];
         if ($this->finalrounds > 0) {
             $quarter_finals = $this->finalrounds >= 3;
             if ($quarter_finals) {
@@ -1113,11 +1085,6 @@ class Event
         $stmt->close();
     }
 
-    public static function trophyImageTag(string $eventname): string
-    {
-        return "<img style=\"border-width: 0px; max-width: 260px\" src=\"{self::trophySrc($eventname)}\" />";
-    }
-
     public static function trophySrc(string $eventname): string
     {
         return 'displayTrophy.php?event=' . rawurlencode($eventname);
@@ -1184,9 +1151,6 @@ class Event
                         //$this->current_round ++;
                         //$this->save();
                         break;
-                    case 'Round Robin':
-                        //Do later
-                        break;
                 }
 
                 db()->releaseLock((string) $subevent_id);
@@ -1251,7 +1215,7 @@ class Event
                 $activePlayers[$i]['paired'] = false;
             }
 
-            $pairings = new Pairings($activePlayers, $bye_data);
+            $pairings = new Pairings(array_values($activePlayers), $bye_data);
             $pairing = $pairings->pairing;
             if ($bye_data) {
                 array_push($activePlayers, $bye_data);
@@ -1327,11 +1291,9 @@ class Event
 
         $standing = new Standings($this->name, $playername);
         $opponents = $standing->getOpponents($this->name, $subevent, 1);
-        if ($opponents != null) {
-            foreach ($opponents as $opponent) {
-                if ($opponent->active === 1) {
-                    $list_opponents[] = $opponent->player;
-                }
+        foreach ($opponents as $opponent) {
+            if ($opponent->active === 1 && $opponent->player !== null) {
+                $list_opponents[] = $opponent->player;
             }
         }
 
@@ -1613,7 +1575,6 @@ class Event
         $stmt = $db->prepare('DELETE FROM matches WHERE subevent = ? OR subevent = ?');
         $stmt->bind_param('ss', $this->mainid, $this->finalid);
         $stmt->execute();
-        $removed = $stmt->affected_rows > 0;
         $stmt->close();
 
         $db = Database::getConnection();
@@ -1643,7 +1604,6 @@ class Event
         $stmt = $db->prepare('DELETE FROM matches WHERE subevent = ? AND round = ?');
         $stmt->bind_param('dd', $subevent, $round);
         $stmt->execute();
-        $removed = $stmt->affected_rows > 0;
         $stmt->close();
 
         $this->current_round--;
@@ -1655,31 +1615,12 @@ class Event
 
     public function assignMedals(): void
     {
-        if ($this->current_round > $this->mainrounds) {
-            $structure = $this->finalstruct;
-            $subevent_id = $this->finalid;
-            $round = 'final';
-        } else {
-            $structure = $this->mainstruct;
-            $subevent_id = $this->mainid;
-            $round = 'main';
-        }
+        $structure = $this->current_round > $this->mainrounds ? $this->finalstruct : $this->mainstruct;
 
-        switch ($structure) {
-            case 'Swiss':
-            case 'Swiss (Blossom)':
-                $this->AssignMedalsbyStandings();
-                break;
-            case 'Single Elimination':
-                $this->assignTropiesFromMatches();
-                break;
-            case 'League':
-            case 'League Match':
-                $this->AssignMedalsbyStandings();
-                break;
-            case 'Round Robin':
-                //Do later
-                break;
+        if (in_array($structure, ['Swiss', 'Swiss (Blossom)', 'League', 'League Match'])) {
+            $this->AssignMedalsbyStandings();
+        } elseif ($structure === 'Single Elimination') {
+            $this->assignTropiesFromMatches();
         }
     }
 
