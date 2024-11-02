@@ -1,17 +1,8 @@
-/*
-    Gatherling Style Sheet
-    --------------------------------------------------------------
-    Style name: ChandraNeue
-    Original Author:  Daniel K. Billett Jr.
-    Updates: Thomas David Baker <bakert@gmail.com>
-    --------------------------------------------------------------
-*/
-
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
 
-/* Colors */
-
 :root {
+    /* Colors In Use */
+
     --black: oklch(0% 0 0deg);
     --night: oklch(20.02% 0 0deg);
     --eerie-black: oklch(26.86% 0 0deg);
@@ -20,11 +11,14 @@
     --silver: oklch(84.52% 0 0deg);
     --dim-gray: oklch(51.03% 0 0deg);
     --persian-orange: oklch(71.61% 0.1009 45.65deg);
-    --ut-orange: oklch(75.98% 0.1620909518888169 52.94742844820851deg);
+    --ut-orange: oklch(75.98% 0.1621 52.9474deg);
     --flame: oklch(62.15% 0.1627 42.49deg);
-    --red: oklch(62.8% 0.25768330773615683 29.2338851923426deg);
-    --yellow: oklch(96.8% 0.21095439261133309 109.76923207652135deg);
+    --red: oklch(62.8% 0.2577 29.2339deg);
+    --yellow: oklch(96.8% 0.211 109.7692deg);
     --green: oklch(51.98% 0.1768 142.5deg);
+
+    /* Semantic Color Names */
+
     --main-text-color: var(--silver);
     --link-text-color: var(--persian-orange);
     --link-noticeable-text-color: var(--ut-orange);
@@ -57,11 +51,9 @@
     --current-pagination-background-color: var(--flame);
     --current-pagination-border-color: var(--black);
     --current-pagination-text-color: var(--black);
-}
 
-/* Spacing */
+    /* Spacing */
 
-:root {
     --spacing-1-static: 1px;
     --spacing-5-static: 5px;
     --spacing-10-static: 10px;
@@ -80,11 +72,9 @@
     --spacing-320-dynamic: calc(320rem / 16);
     --card-grid-gap: var(--spacing-20-static);
     --card-internal-gap: var(--spacing-10-static);
-}
 
-/* Typography */
+    /* Typography */
 
-:root {
     /* Set font sizes in rem but use px numbers for ease of use */
     --font-size-12: calc(12rem / 16);
     --font-size-14: calc(14rem / 16);
@@ -102,6 +92,10 @@
 
 /* Text */
 
+p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
+    margin: 0;
+}
+
 table, tr, th, td, ul {
     color: var(--main-text-color);
     margin: 0;
@@ -115,13 +109,13 @@ table, tr, th, td, ul {
 
 body {
     font: var(--font-size-14) / 1.45 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
-}
-
-hr {
-    border: 0 var(--main-text-color) solid;
-    border-top-width: 1px;
-    clear: both;
-    height: 0;
+    vertical-align:baseline;
+    margin:0;
+    border:0;
+    outline:0;
+    background: var(--base-background-color);
+    padding: 20px 0 0;
+    color: var(--main-text-color);
 }
 
 h1 {
@@ -161,19 +155,31 @@ li {
     margin-left: 30px;
 }
 
-p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
-    margin: 0;
+td {
+    vertical-align: baseline;
 }
 
-/* 960 grid system, with everything we don't use ripped out, to be replaced */
+a {
+    border-bottom: 1px dotted var(--link-text-color);
+    text-decoration: none;
+    font-weight: bold;
+    padding: 1px;
+}
+
+hr {
+    border: 0 var(--main-text-color) solid;
+    border-top-width: 1px;
+    clear: both;
+    height: 0;
+}
+
+/* Remnants of the hacked upon 960 grid system, with everything we don't use ripped out */
 
 .container_12 {
     margin-left: auto;
     margin-right: auto;
     max-width: 960px;
-
-    /* When we're ready to go responsive, we'll remove this min-width */
-    min-width: 960px;
+    min-width: 960px; /* When we're ready to go responsive, we'll remove this min-width */
     width: 100%;
 }
 
@@ -444,14 +450,20 @@ a.create_deck_link {
     border-radius: 5px;
 }
 
+/* Buttons */
+
 .inputbutton {
     border: 1px solid var(--control-border-color);
     color: var(--main-text-color);
     background-color: var(--control-background-color);
-    padding: 3px;
     margin: 5px;
-    border-radius: 5px;
     box-shadow: 0 2px 5px var(--control-border-color);
+    display: inline-block;
+    padding: var(--spacing-10-static) var(--spacing-20-static);
+    border-radius: var(--spacing-5-static);
+    font-size: var(--font-size-14);
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .inputbutton:not(.discordlogin):hover {
@@ -473,17 +485,6 @@ a.create_deck_link {
     background-color: var(--disabled-control-background-color);
     color: var(--disabled-control-color);
     box-shadow: 0 0 0 var(--disabled-control-border-color);
-}
-
-/* Buttons */
-
-.inputbutton {
-    display: inline-block;
-    padding: var(--spacing-10-static) var(--spacing-20-static);
-    border-radius: var(--spacing-5-static);
-    font-size: var(--font-size-14);
-    cursor: pointer;
-    transition: all 0.2s ease;
 }
 
 .btn-primary {
@@ -518,12 +519,6 @@ a.create_deck_link {
     text-align: left;
     line-height: 1.3em;
     font-size: 14px;
-}
-
-#table-decksearch decksearch {
-    font-size: 12px;
-    padding: 4px 7px 2px;
-    vertical-align: top;
 }
 
 .ds_inputbox {
@@ -714,7 +709,7 @@ a.create_deck_link {
 .discordlogin::before {
     display: inline-block;
     margin-right: .5em;
-    font: normal normal normal 14px/1 FontAwesome;
+    font: normal normal normal 14px/1 FontAwesome; /* stylelint-disable-line font-family-no-missing-generic-family-keyword */
     font-size: inherit;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
@@ -784,27 +779,6 @@ table.events  td:last-child {
 
 .score, .player {
     white-space: nowrap;
-}
-
-body {
-    vertical-align:baseline;
-    margin:0;
-    border:0;
-    outline:0;
-    background: var(--base-background-color);
-    padding: 20px 0 0;
-    color: var(--main-text-color);
-}
-
-td {
-    vertical-align:baseline;
-}
-
-a {
-    border-bottom: 1px dotted var(--link-text-color);
-    text-decoration: none;
-    font-weight: bold;
-    padding: 1px;
 }
 
 a.emailPop {
@@ -1232,6 +1206,8 @@ Enjoy.
 
 */
 
+/* stylelint-disable */
+
 /* zebra_pagination.css copy and pasted in from v2.4 of Zebra_Pagination */
 
 .Zebra_Pagination {
@@ -1371,7 +1347,6 @@ Enjoy.
 }
 
 .Zebra_Pagination a.disabled {
-    filter: alpha(opacity=20);
     opacity: 0.2;
     box-shadow: var(--disabled-control-border-color) 0 0 0;
 }
@@ -1412,3 +1387,5 @@ Enjoy.
     background-color: inherit;
     border: none;
 }
+
+/** stylelint-enable */
