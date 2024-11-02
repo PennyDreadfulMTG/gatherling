@@ -966,19 +966,19 @@ del {
     border-color: var(--link-border-color);
 }
 
-#mainmenu ul, #submenu ul, #mainmenu_submenu ul {
+.menubar ul {
     padding-top: var(--spacing-5-static);
     border-radius: var(--grid-border-radius);
 }
 
-#mainmenu ul li, #mainmenu_submenu ul li, #submenu ul li {
+.menubar ul li {
     display: inline-block;
     border: 1px solid var(--control-border-color);
     border-radius: var(--control-border-radius);
     box-shadow: 0 2px 5px var(--control-border-color);
 }
 
-#mainmenu ul li a, #mainmenu_submenu ul li a, #submenu ul li a {
+.menubar ul li a {
     float: left; /* BAKERT */
     background: var(--main-background-color);
     text-align: center;
@@ -986,19 +986,11 @@ del {
     border-radius: var(--control-border-radius);
 }
 
-#submenu ul li a {
+.menubar ul li a {
     min-width: 145px;
 }
 
-#mainmenu ul li a, #mainmenu_submenu ul li a {
-    min-width: 145px;
-}
-
-#mainmenu ul li.last a, #mainmenu_submenu ul li.last a {
-    min-width: 145px;
-}
-
-#mainmenu ul li a:hover, #mainmenu ul li .current, #mainmenu_submenu ul li a:hover, #submenu ul li a:hover, #submenu ul li .current, #mainmenu_submenu ul li.open a:hover, #mainmenu_submenu ul li.current a {
+.menubar ul li a:hover {
     color: var(--link-emphasis-text-color);
     background: var(--highlight-background-color);
     border: 1px solid var(--link-border-color);
