@@ -960,44 +960,34 @@ del {
     box-shadow: 0 2px 10px var(--control-border-color);
     border: 1px solid var(--control-border-color);
     background: var(--main-background-color);
+    padding-top: var(--spacing-5-static);
 }
 
 .menubar:hover {
     border-color: var(--link-border-color);
 }
 
-.menubar ul {
-    padding-top: var(--spacing-5-static);
-    border-radius: var(--grid-border-radius);
-}
-
-.menubar ul li {
+.menubar li {
     display: inline-block;
     border: 1px solid var(--control-border-color);
     border-radius: var(--control-border-radius);
     box-shadow: 0 2px 5px var(--control-border-color);
 }
 
-.menubar ul li a {
+.menubar li a {
     float: left; /* BAKERT */
-    background: var(--main-background-color);
     text-align: center;
     border-bottom: none;
     border-radius: var(--control-border-radius);
 }
 
-.menubar ul li a {
+.menubar li a {
     min-width: 145px;
 }
 
-.menubar ul li a:hover {
+.menubar li a:hover {
     color: var(--link-emphasis-text-color);
-    background: var(--highlight-background-color);
     border: 1px solid var(--link-border-color);
-}
-
-#maincontainer {
-    background: var(--base-background-color);
 }
 
 .deck {
