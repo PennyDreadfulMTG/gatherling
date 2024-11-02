@@ -401,7 +401,7 @@ a.create_deck_link {
     display: none;
 }
 
-ecardhoverimagewrapper a:hover .linkCardHoverImage {
+.cardHoverImageWrapper:hover .linkCardHoverImage {
     display: block;
 }
 
