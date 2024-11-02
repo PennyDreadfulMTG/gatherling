@@ -270,6 +270,14 @@ hr {
 
 /* End of 960 grid system */
 
+
+/* To enable move to mobile view, allow tables to horizontally scroll */
+table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+}
+
 .c {
     text-align: center;
 }
