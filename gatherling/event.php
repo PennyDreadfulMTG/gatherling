@@ -53,13 +53,14 @@ function main(): never
     $player = get()->optionalString('player');
     $format = get()->string('format', '');
 
-    if (mode_is('Create New Event')) {
+    $mode = request()->string('mode', '');
+    if ($mode === 'Create New Event') {
         $event = createNewEvent();
         $page = $event === false ? new AuthFailed() : new EventList($getSeriesName, $format, $season);
-    } elseif (mode_is('Create A New Event')) {
+    } elseif ($mode === 'Create A New Event') {
         $page = eventFrame(null, true);
-    } elseif (mode_is('Create Next Event') || mode_is('Create Next Season')) {
-        $newEvent = newEventFromEventName($requestEventName, mode_is('Create Next Season'));
+    } elseif ($mode === 'Create Next Event' || $mode === 'Create Next Season') {
+        $newEvent = newEventFromEventName($requestEventName, $mode === 'Create Next Season');
         $page = eventFrame($newEvent, true);
     } elseif (isset($getEventName)) {
         $page = getEvent($getEventName, $action, $eventId, $player);
@@ -69,11 +70,6 @@ function main(): never
         $page = new EventList($getSeriesName, $format, $season);
     }
     $page->send();
-}
-
-function mode_is(string $str): bool
-{
-    return request()->string('mode', '') === $str;
 }
 
 function createNewEvent(): Event|bool
@@ -153,44 +149,45 @@ function postEvent(string $eventName): Page
         return new AuthFailed();
     }
 
-    if (mode_is('Start Event')) {
+    $mode = request()->string('mode', '');
+    if ($mode === 'Start Event') {
         $event->startEvent(true);
-    } elseif (mode_is('Start Event (No Deck Check)')) {
+    } elseif ($mode === 'Start Event (No Deck Check)') {
         $event->startEvent(false);
-    } elseif (mode_is('Recalculate Standings')) {
+    } elseif ($mode === 'Recalculate Standings') {
         $structure = $event->mainstruct;
         $event->recalculateScores($structure);
         Standings::updateStandings($event->name, $event->mainid, 1);
-    } elseif (mode_is('End Current League Round')) {
+    } elseif ($mode === 'End Current League Round') {
         $event->recalculateScores('League');
         Standings::updateStandings($event->name, $event->mainid, 1);
         $event->pairCurrentRound();
-    } elseif (mode_is('Reset Event')) {
+    } elseif ($mode === 'Reset Event') {
         $event->resetEvent();
-    } elseif (mode_is('Delete Matches and Re-Pair Round')) {
+    } elseif ($mode === 'Delete Matches and Re-Pair Round') {
         $event->repairRound();
-    } elseif (mode_is('Reactivate Event')) {
+    } elseif ($mode === 'Reactivate Event') {
         $event->active = 1;
         $event->finalized = 0;
         $event->save();
-    } elseif (mode_is('Assign Medals')) {
+    } elseif ($mode === 'Assign Medals') {
         $event->assignMedals();
-    } elseif (mode_is('Set Current Round to')) {
+    } elseif ($mode === 'Set Current Round to') {
         $event->repairRound();
-    } elseif (mode_is('Update Registration')) {
+    } elseif ($mode === 'Update Registration') {
         updateReg();
-    } elseif (mode_is('Update Match Listing')) {
+    } elseif ($mode === 'Update Match Listing') {
         updateMatches();
-    } elseif (mode_is('Update Medals')) {
+    } elseif ($mode === 'Update Medals') {
         updateMedals();
-    } elseif (mode_is('Update Adjustments')) {
+    } elseif ($mode === 'Update Adjustments') {
         updateAdjustments();
-    } elseif (mode_is('Upload Trophy')) {
+    } elseif ($mode === 'Upload Trophy') {
         if (insertTrophy()) {
             $event->hastrophy = 1;
             $_GET['view'] = 'settings';
         }
-    } elseif (mode_is('Update Event Info')) {
+    } elseif ($mode === 'Update Event Info') {
         $event = updateEvent();
         $_GET['view'] = 'settings';
     }
