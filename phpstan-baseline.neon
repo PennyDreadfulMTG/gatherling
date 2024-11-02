@@ -156,28 +156,8 @@ parameters:
 			path: gatherling/Models/Decksearch.php
 
 		-
-			message: "#^Binary operation \"\\+\" between int\\|string and int\\<1, max\\>\\|string results in an error\\.$#"
-			count: 3
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Binary operation \"\\+\" between int\\|string and int\\|string results in an error\\.$#"
-			count: 2
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Binary operation \"\\-\" between int and int\\|string results in an error\\.$#"
 			count: 6
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Binary operation \"\\-\" between int\\|string and 1 results in an error\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Binary operation \"\\-\" between int\\|string and 2 results in an error\\.$#"
-			count: 1
 			path: gatherling/Models/Event.php
 
 		-

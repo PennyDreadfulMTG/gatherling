@@ -103,11 +103,8 @@ class Series
         }
         if ($this->new) {
             $sql = '
-                INSERT INTO
-                    series
-                    (name, day, normalstart, isactive, prereg_default, mtgo_room)
-                VALUES
-                    (:name, :day, :normalstart, :isactive, :prereg_default, :mtgo_room)';
+                INSERT INTO series (name, day, normalstart, isactive, prereg_default, mtgo_room)
+                     VALUES (:name, :day, :normalstart, :isactive, :prereg_default, :mtgo_room)';
             $params = [
                 'name' => $this->name,
                 'day' => $this->start_day,
@@ -120,8 +117,8 @@ class Series
         } else {
             $sql = '
                 UPDATE series
-                SET day = :day, normalstart = :normalstart, isactive = :isactive, prereg_default = :prereg_default, mtgo_room = :mtgo_room
-                WHERE name = :name';
+                   SET day = :day, normalstart = :normalstart, isactive = :isactive, prereg_default = :prereg_default, mtgo_room = :mtgo_room
+                 WHERE name = :name';
             $params = [
                 'day' => $this->start_day,
                 'normalstart' => $this->start_time,
