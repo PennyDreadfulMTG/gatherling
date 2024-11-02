@@ -155,6 +155,10 @@ li {
     margin-left: 30px;
 }
 
+.menubar li {
+    margin-left: var(--spacing-10-static);
+}
+
 td {
     vertical-align: baseline;
 }
@@ -181,6 +185,10 @@ hr {
     max-width: 960px;
     min-width: 960px; /* When we're ready to go responsive, we'll remove this min-width */
     width: 100%;
+}
+
+.container_12.responsive {
+    min-width: 0;
 }
 
 .grid_2,
@@ -960,8 +968,6 @@ del {
 
 #mainmenu ul, #submenu ul, #mainmenu_submenu ul {
     color: var(--link-text-color);
-
-    /* menu font color */
     margin: 0;
     margin-top: 1px;
     float: left;
