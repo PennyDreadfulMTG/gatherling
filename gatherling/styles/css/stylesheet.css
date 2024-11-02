@@ -112,6 +112,12 @@
     --font-size-24: calc(24rem / 16);
 }
 
+/* Reset */
+
+* {
+    box-sizing: border-box;
+}
+
 /* Text */
 
 table, tr, th, td, ul {
@@ -170,7 +176,10 @@ p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
 .container_12 {
     margin-left: auto;
     margin-right: auto;
-    width: 960px
+    max-width: 960px;
+    /* When we're ready to go responsive, we'll remove this min-width */
+    min-width: 960px;
+    width: 100%;
 }
 
 .grid_2,
@@ -186,14 +195,15 @@ p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
     position: relative;
     margin-left: var(--spacing-10-static);
     margin-right: var(--spacing-10-static);
+    width: calc(100% - var(--spacing-10-static) - var(--spacing-10-static)); /* 100% width minus left and right margins */
 }
 
 .container_12 .grid_6 {
-    width: 460px
+    max-width: 460px;
 }
 
 .container_12 .grid_12 {
-    width: 940px;
+    max-width: 940px;
 }
 
 .alpha {
@@ -204,28 +214,28 @@ p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
     margin-right: 0
 }
 .container_12 .grid_2 {
-    width: 140px
+    max-width: 140px;
 }
 
 .container_12 .grid_4 {
-    width: 298px;
+    max-width: 298px;
 }
 
 .container_12 .grid_5 {
-    width: 45%;
+    max-width: 373px;
     padding: 15px;
 }
 
 .container_12 .grid_7 {
-    width: 540px
+    max-width: 540px;
 }
 
 .container_12 .grid_8 {
-    width: 620px
+    max-width: 620px;
 }
 
 .container_12 .grid_10 {
-    width: 98%;
+    max-width: 940px;
     margin-bottom: 15px;
 }
 
@@ -829,12 +839,15 @@ del {
     text-decoration:line-through
 }
 #header_bar {
-    width: 940px;
+    width: calc(100% - var(--spacing-10-static) - var(--spacing-10-static)); /* 100% width minus left and right margins */
+    max-width: 940px;
     height: 135px;
-    margin-left: 10px;
+    margin-left: var(--spacing-10-static);
+    margin-right: var(--spacing-10-static);
     margin-bottom: 5px;
     background-image: url(../images/header_background.jpg);
-    background-repeat: repeat-x;
+    background-size: cover;
+    background-position: 40% center;
 }
 #header_logo {
     float: left;
@@ -935,7 +948,7 @@ del {
     text-align: center;
 }
 .deck .deck_player {
-    width: 95px;
+    max-width: 95px;
 }
 .deck .deck_name {
     width: 150px;
@@ -958,7 +971,7 @@ del {
 table.center {
     margin-left: auto;
     margin-right: auto;
-    width: 90%;
+    max-width: 90%;
 }
 /* Gatherling Entries */
 #gatherling_main table {
@@ -998,8 +1011,6 @@ table.center {
     padding: 20px;
     margin-bottom: 30px;
     margin-top: 30px;
-    margin-left: 10px;
-    margin-right: 10px;
     clear: both;
     font-size: 14px;
 }
@@ -1013,7 +1024,6 @@ table.center {
     border-width: 0px;
     vertical-align: top;
 }
-
 
 /* Event List */
 
