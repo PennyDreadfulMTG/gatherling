@@ -113,6 +113,16 @@ function main(): never
             }
         }
     }
+    if (empty($matches)) {
+        $recentMatches = $player->getRecentMatches(1);
+        if (count($recentMatches) > 0) {
+            $match = $recentMatches[0];
+            $event = $match->getEvent();
+            if (!$event->finalized && $event->active && $match->playerBye($player)) {
+                $message = "You were awarded the bye in round {$event->current_round} of {$event->name}.";
+            }
+        }
+    }
 
     if ($message !== '') {
         $message = '<div class="banner_alert">' . $message . '</div>';
