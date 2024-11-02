@@ -320,7 +320,7 @@ function updateEvent(): Event
     $event->start = "{$_POST['year']}-{$_POST['month']}-{$_POST['day']} {$_POST['hour']}:00";
     $event->finalized = post()->int('finalized');
     $event->active = post()->int('active');
-    $event->current_round = (int) post()->string('newmatchround', '0');
+    $event->current_round = post()->int('newmatchround', 0);
     $event->prereg_allowed = post()->int('prereg_allowed');
     $event->player_reportable = post()->int('player_reportable');
     $event->prereg_cap = post()->int('prereg_cap');

@@ -424,10 +424,10 @@ class Event
     }
 
     /**
-     * @param ?array<int, ?string> $t4
-     * @param ?array<int, ?string> $t8
+     * @param array{0?: ?string, 1?: ?string} $t4
+     * @param array{0?: ?string, 1?: ?string, 2?: ?string, 3?: ?string} $t8
      */
-    public function setFinalists(string $win, ?string $sec, ?array $t4 = null, ?array $t8 = null): void
+    public function setFinalists(string $win, ?string $sec, array $t4, array $t8): void
     {
         db()->begin('set_finalists');
         $sql = "UPDATE entries SET medal = 'dot' WHERE event_id = :event_id";
@@ -435,17 +435,11 @@ class Event
         $sql = 'UPDATE entries SET medal = :medal WHERE event_id = :event_id AND player = :player';
         db()->execute($sql, ['medal' => '1st', 'event_id' => $this->id, 'player' => $win]);
         db()->execute($sql, ['medal' => '2nd', 'event_id' => $this->id, 'player' => $sec]);
-        if (!is_null($t4)) {
-            $medal = 't4';
-            db()->execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t4[0]]);
-            db()->execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t4[1]]);
+        foreach ($t4 as $player) {
+            db()->execute($sql, ['medal' => 't4', 'event_id' => $this->id, 'player' => $player]);
         }
-        if (!is_null($t8)) {
-            $medal = 't8';
-            db()->execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[0]]);
-            db()->execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[1]]);
-            db()->execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[2]]);
-            db()->execute($sql, ['medal' => $medal, 'event_id' => $this->id, 'player' => $t8[3]]);
+        foreach ($t8 as $player) {
+            db()->execute($sql, ['medal' => 't8', 'event_id' => $this->id, 'player' => $player]);
         }
         db()->commit('set_finalists');
     }
@@ -454,7 +448,6 @@ class Event
     {
         $ishost = !is_null($this->host) && strcasecmp($name, $this->host) == 0;
         $iscohost = !is_null($this->cohost) && strcasecmp($name, $this->cohost) == 0;
-
         return $ishost || $iscohost;
     }
 
@@ -651,10 +644,8 @@ class Event
         if (is_null($entry)) {
             $player = Player::findOrCreateByName($playername);
             $sql = '
-                INSERT INTO entries
-                    (event_id, player, registered_at)
-                VALUES
-                    (:event_id, :player, NOW())';
+                INSERT INTO entries (event_id, player, registered_at)
+                     VALUES (:event_id, :player, NOW())';
             $params = ['event_id' => $this->id, 'player' => $player->name];
             db()->execute($sql, $params);
             //For late registration. Check to see if event is active, if so, create entry for player in standings
@@ -849,65 +840,40 @@ class Event
     // Assigns trophies based on the finals matches which are entered.
     public function assignTropiesFromMatches(): void
     {
+        $win = null;
+        $sec = null;
         $t4 = [];
         $t8 = [];
-        if ($this->finalrounds > 0) {
-            $quarter_finals = $this->finalrounds >= 3;
-            if ($quarter_finals) {
-                $quart_round = $this->mainrounds + $this->finalrounds - 2;
-                $matches = $this->getRoundMatches($quart_round);
-                foreach ($matches as $match) {
-                    $loser = $match->getLoser();
-                    if ($loser !== null) {
-                        $t8[] = $loser;
-                    }
-                }
-            }
-            $semi_finals = $this->finalrounds >= 2;
-            if ($semi_finals) {
-                $semi_round = $this->mainrounds + $this->finalrounds - 1;
-                $matches = $this->getRoundMatches($semi_round);
-                foreach ($matches as $match) {
-                    $loser = $match->getLoser();
-                    if ($loser !== null) {
-                        $t4[] = $loser;
-                    }
-                }
-            }
 
-            $finalmatches = $this->getRoundMatches($this->mainrounds + $this->finalrounds);
-            $finalmatch = $finalmatches[0];
-            $sec = $finalmatch->getLoser();
-            $win = $finalmatch->getWinner();
-        } else {
-            $quarter_finals = $this->mainrounds >= 3;
-            if ($quarter_finals) {
-                $quart_round = $this->mainrounds - 2;
-                $matches = $this->getRoundMatches($quart_round);
-                foreach ($matches as $match) {
-                    $loser = $match->getLoser();
-                    if ($loser !== null) {
-                        $t8[] = $loser;
-                    }
-                }
-            }
-            $semi_finals = $this->mainrounds >= 2;
-            if ($semi_finals) {
-                $semi_round = $this->mainrounds - 1;
-                $matches = $this->getRoundMatches($semi_round);
-                foreach ($matches as $match) {
-                    $loser = $match->getLoser();
-                    if ($loser !== null) {
-                        $t4[] = $loser;
-                    }
-                }
-            }
+        $totalRounds = max((int) $this->mainrounds, (int) $this->mainrounds + (int) $this->finalrounds);
 
-            $finalmatches = $this->getRoundMatches($this->mainrounds);
-            $finalmatch = $finalmatches[0];
-            $sec = $finalmatch->getLoser();
-            $win = $finalmatch->getWinner();
+        $finalMatches = $this->getRoundMatches($totalRounds);
+        if (!empty($finalMatches)) {
+            $finalMatch = $finalMatches[0];
+            $win = $finalMatch->getWinner();
+            $sec = $finalMatch->getLoser();
         }
+
+        if ($totalRounds >= 2) {
+            $semiMatches = $this->getRoundMatches($totalRounds - 1);
+            foreach ($semiMatches as $match) {
+                $loser = $match->getLoser();
+                if ($loser !== null) {
+                    $t4[] = $loser;
+                }
+            }
+        }
+
+        if ($totalRounds >= 3) {
+            $quarterMatches = $this->getRoundMatches($totalRounds - 2);
+            foreach ($quarterMatches as $match) {
+                $loser = $match->getLoser();
+                if ($loser !== null) {
+                    $t8[] = $loser;
+                }
+            }
+        }
+
         $this->setFinalists($win, $sec, $t4, $t8);
     }
 
@@ -1092,9 +1058,9 @@ class Event
 
     public function isLeague(): bool
     {
-        $test = $this->current_round;
-        if ($test <= ($this->finalrounds + $this->mainrounds)) {
-            if ($test > $this->mainrounds) {
+        $test = (int) $this->current_round;
+        if ($test <= ((int) $this->finalrounds + (int) $this->mainrounds)) {
+            if ($test > (int) $this->mainrounds) {
                 $structure = $this->finalstruct;
             } else {
                 $structure = $this->mainstruct;
@@ -1119,9 +1085,9 @@ class Event
         //Check if all matches in the current round are finished
         if (count($this->unfinishedMatches()) === 0) {
             //Check to see if we are main rounds or final, get structure
-            $test = $this->current_round;
-            if ($test < ($this->finalrounds + $this->mainrounds)) {
-                if ($test >= $this->mainrounds) {
+            $test = (int) $this->current_round;
+            if ($test < ((int) $this->finalrounds + (int) $this->mainrounds)) {
+                if ($test >= (int) $this->mainrounds) {
                     // In the final rounds.
                     $structure = $this->finalstruct;
                     $subevent_id = $this->finalid;
@@ -1618,7 +1584,7 @@ class Event
         $structure = $this->current_round > $this->mainrounds ? $this->finalstruct : $this->mainstruct;
 
         if (in_array($structure, ['Swiss', 'Swiss (Blossom)', 'League', 'League Match'])) {
-            $this->AssignMedalsbyStandings();
+            $this->assignMedalsbyStandings();
         } elseif ($structure === 'Single Elimination') {
             $this->assignTropiesFromMatches();
         }
@@ -1629,44 +1595,18 @@ class Event
         $players = $this->standing->getEventStandings($this->name, 0);
         $numberOfPlayers = count($players);
 
-        if ($numberOfPlayers < 8) {
-            $medalCount = 2; // only give 2 medals if there are less than 8 players
-        } elseif ($numberOfPlayers < 16) {
-            $medalCount = 4; // only give 4 medals if there are less than 16 players
-        } else {
-            $medalCount = 8;
-        }
+        $medalCount = $numberOfPlayers < 8 ? 2 : ($numberOfPlayers < 16 ? 4 : 8);
 
-        $t8 = [];
-        $t4 = [];
-        $sec = null;
-        $win = null;
-
-        switch ($medalCount) {
-            case 8:
-                $t8[3] = $players[7]->player;
-                // Intentional fallthrough
-            case 7:
-                $t8[2] = $players[6]->player;
-                // Intentional fallthrough
-            case 6:
-                $t8[1] = $players[5]->player;
-                // Intentional fallthrough
-            case 5:
-                $t8[0] = $players[4]->player;
-                // Intentional fallthrough
-            case 4:
-                $t4[1] = $players[3]->player;
-                // Intentional fallthrough
-            case 3:
-                $t4[0] = $players[2]->player;
-                // Intentional fallthrough
-            case 2:
-                $sec = $players[1]->player;
-                // Intentional fallthrough
-            case 1:
-                $win = $players[0]->player;
+        $t8 = $t4 = [];
+        if ($medalCount >= 8) {
+            $t8 = array_map(fn($i) => $players[$i]->player, [4, 5, 6, 7]);
         }
+        if ($medalCount >= 4) {
+            $t4 = array_map(fn($i) => $players[$i]->player, [2, 3]);
+        }
+        $sec = $players[1]->player ?? null;
+        $win = $players[0]->player;
+
         $this->setFinalists($win, $sec, $t4, $t8);
     }
 

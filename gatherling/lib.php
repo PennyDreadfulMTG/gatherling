@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Gatherling\Auth\Session;
-use Gatherling\Models\Player;
 
 use function Safe\ob_start;
 use function Safe\php_sapi_name;
@@ -20,12 +19,3 @@ if (php_sapi_name() !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 date_default_timezone_set('US/Eastern'); // force time functions to use US/Eastern time
-
-function json_headers(): void
-{
-    header('Content-type: application/json');
-    header('Cache-Control: no-cache');
-    header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-    header('Access-Control-Allow-Origin: *');
-    header('HTTP_X_USERNAME: ' . Player::loginName());
-}
