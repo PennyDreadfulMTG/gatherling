@@ -8,7 +8,7 @@ use Gatherling\Models\Event;
 
 class RoundDropMenu extends DropMenu
 {
-    public function __construct(Event $event, int|string|null $selected)
+    public function __construct(Event $event, int|string|null $selected, int $defaultValue = 0)
     {
         $options = [];
         for ($r = 1; $r <= ((int) $event->mainrounds + (int) $event->finalrounds); $r++) {
@@ -19,6 +19,6 @@ class RoundDropMenu extends DropMenu
                 'text'       => "$r$star",
             ];
         }
-        parent::__construct('newmatchround', $options, '- Round -');
+        parent::__construct('newmatchround', $options, '- Round -', defaultValue: (string) $defaultValue);
     }
 }

@@ -136,7 +136,7 @@ class EventForm extends EventFrame
         if ($edit) {
             $finalizeEventCheckbox = new CheckboxInput('Finalize Event', 'finalized', (bool) $event->finalized);
             $eventActiveCheckbox = new CheckboxInput('Event Active', 'active', (bool) $event->active);
-            $currentRoundDropMenu = new RoundDropMenu($event, $event->current_round);
+            $currentRoundDropMenu = new RoundDropMenu($event, $event->current_round, 0);
             $trophyField = trophyFieldArgs($event);
             $nextEventName = sprintf('%s %d.%02d', $event->series, $event->season, $event->number + 1);
             $nextSeasonName = sprintf('%s %d.%02d', $event->series, $event->season + 1, 1);

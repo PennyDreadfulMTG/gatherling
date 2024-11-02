@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
   <file src="gatherling/Models/Event.php">
-    <UnusedVariable>
-      <code><![CDATA[$win]]></code>
-    </UnusedVariable>
+    <InvalidArgument>
+      <code><![CDATA[$t4]]></code>
+      <code><![CDATA[$t8]]></code>
+    </InvalidArgument>
   </file>
   <file src="gatherling/Views/Components/AuthDebugInfo.php">
     <UndefinedFunction>
@@ -42,6 +43,11 @@
     <UnusedVariable>
       <code><![CDATA[$provider]]></code>
     </UnusedVariable>
+  </file>
+  <file src="tests/Models/EventTest.php">
+    <InvalidArrayOffset>
+      <code><![CDATA[$expected_medals[$i]]]></code>
+    </InvalidArrayOffset>
   </file>
   <file src="tests/Support/Listeners/DatabaseTestListener.php">
     <UnusedClass>

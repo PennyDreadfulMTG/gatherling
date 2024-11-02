@@ -24,7 +24,7 @@ abstract class Page extends TemplateResponse
     public string $versionTagline;
     public string $jsLink;
 
-    public function __construct(public string $title, public bool $isResponsive = false)
+    public function __construct(public string $title)
     {
         $this->gitHash = substr(config()->string('GIT_HASH', ''), 0, 7);
         $this->cssLink = 'styles/css/stylesheet.css?v=' . rawurlencode($this->gitHash);
