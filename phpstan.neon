@@ -7,4 +7,5 @@ parameters:
     paths:
         - .
     excludePaths:
+        - node_modules
         - vendor
