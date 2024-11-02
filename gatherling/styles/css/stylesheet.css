@@ -12,63 +12,48 @@
 /* Colors */
 
 :root {
-    --black: oklch(0 0 0);
-    --night: oklch(20.02% 0 0);
-    --eerie-black: oklch(26.86% 0 0);
-    --jet: oklch(32.9% 0 0);
-    --onyx: oklch(39.04% 0 0);
-
-    --silver: oklch(84.52% 0 0);
-    --dim-gray: oklch(51.03% 0 0);
-
-    --persian-orange: oklch(71.61% 0.1009 45.65);
-    --ut-orange: oklch(75.98% 0.1620909518888169 52.94742844820851);
-    --flame: oklch(62.15% 0.1627 42.49);
-
-    --red: oklch(62.8% 0.25768330773615683 29.2338851923426);
-    --yellow: oklch(96.8% 0.21095439261133309 109.76923207652135);
-    --green: oklch(51.98% 0.1768 142.5);
-
+    --black: oklch(0% 0 0deg);
+    --night: oklch(20.02% 0 0deg);
+    --eerie-black: oklch(26.86% 0 0deg);
+    --jet: oklch(32.9% 0 0deg);
+    --onyx: oklch(39.04% 0 0deg);
+    --silver: oklch(84.52% 0 0deg);
+    --dim-gray: oklch(51.03% 0 0deg);
+    --persian-orange: oklch(71.61% 0.1009 45.65deg);
+    --ut-orange: oklch(75.98% 0.1620909518888169 52.94742844820851deg);
+    --flame: oklch(62.15% 0.1627 42.49deg);
+    --red: oklch(62.8% 0.25768330773615683 29.2338851923426deg);
+    --yellow: oklch(96.8% 0.21095439261133309 109.76923207652135deg);
+    --green: oklch(51.98% 0.1768 142.5deg);
     --main-text-color: var(--silver);
-
     --link-text-color: var(--persian-orange);
     --link-noticeable-text-color: var(--ut-orange);
     --link-emphasis-text-color: var(--flame);
     --emphasis-text-color: var(--flame);
     --deemphasized-text-color: var(--dim-gray);
-
     --error-text-color: var(--red);
     --notice-text-color: var(--red);
     --self-text-color: var(--green);
     --verified-text-color: var(--green);
     --pending-text-color: var(--yellow);
-
     --base-background-color: var(--night);
     --main-background-color: var(--eerie-black);
     --card-background-color: var(--jet);
     --hover-background-color: var(--jet);
     --top-background-color: var(--onyx);
-
     --title-border-color: var(--flame);
-
     --link-noticeable-border-color: var(--ut-orange);
     --link-border-color: var(--flame);
-
     --divider-border-color: var(--onyx);
-
     --control-border-color: var(--black);
     --control-background-color: var(--eerie-black);
-
     --disabled-control-color: var(--black);
     --disabled-control-background-color: var(--night);
     --disabled-control-border-color: var(--night);
-
     --focused-control-color: var(--black);
     --focused-control-background-color: var(--night);
-
     --discord-brand-color: #fff;
     --discord-brand-background-color: #7289DA;
-
     --current-pagination-background-color: var(--flame);
     --current-pagination-border-color: var(--black);
     --current-pagination-text-color: var(--black);
@@ -85,7 +70,6 @@
     --spacing-80-static: 80px;
     --spacing-160-static: 160px;
     --spacing-320-static: 320px;
-
     --spacing-1-dynamic: calc(1rem / 16);
     --spacing-5-dynamic: calc(5rem / 16);
     --spacing-10-dynamic: calc(10rem / 16);
@@ -94,9 +78,7 @@
     --spacing-80-dynamic: calc(80rem / 16);
     --spacing-160-dynamic: calc(160rem / 16);
     --spacing-320-dynamic: calc(320rem / 16);
-
     --card-grid-gap: var(--spacing-20-static);
-
     --card-internal-gap: var(--spacing-10-static);
 }
 
@@ -130,43 +112,55 @@ table, tr, th, td, ul {
     vertical-align: baseline;
     background: transparent;
 }
+
 body {
     font: var(--font-size-14) / 1.45 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
 }
+
 hr {
     border: 0 var(--main-text-color) solid;
     border-top-width: 1px;
     clear: both;
     height: 0;
 }
+
 h1 {
     font-size: 14px;
 }
+
 h2, .box h2 {
     font-size: var(--font-size-24);
     margin-bottom: var(--spacing-20-static);
 }
+
 h3 {
     font-size: var(--font-size-20);
 }
+
 h4 {
     font-size: var(--font-size-16);
 }
+
 h5 {
     font-size: var(--font-size-14);
 }
+
 h6 {
     font-size: var(--font-size-12);
 }
+
 ol {
     list-style: decimal;
 }
+
 ul {
     list-style: disc;
 }
+
 li {
     margin-left: 30px;
 }
+
 p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
     margin: 0;
 }
@@ -177,6 +171,7 @@ p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
     margin-left: auto;
     margin-right: auto;
     max-width: 960px;
+
     /* When we're ready to go responsive, we'll remove this min-width */
     min-width: 960px;
     width: 100%;
@@ -213,6 +208,7 @@ p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
 .omega {
     margin-right: 0
 }
+
 .container_12 .grid_2 {
     max-width: 140px;
 }
@@ -240,11 +236,11 @@ p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
 }
 
 .container_12 .prefix_1 {
-    padding-left: 0px
+    padding-left: 0
 }
 
 .container_12 .suffix_1 {
-    padding-right: 0px
+    padding-right: 0
 }
 
 .clear {
@@ -293,10 +289,11 @@ See: https://bluebones.net/2024/09/avoid-trailing-comma-when-emitting-lists-in-m
     display: inline;
 }
 
-.inline-list.comma li:not(:last-child):after {
+.inline-list.comma li:not(:last-child)::after {
     content: ", ";
 }
-.inline-list.pipe li:not(:last-child):after {
+
+.inline-list.pipe li:not(:last-child)::after {
     content: " | "
 }
 
@@ -308,25 +305,32 @@ span.notallowed {
     font-size: larger;
     color: var(--error-text-color);
 }
+
 table.scoreboard span {
     border-bottom: 1px dotted var(--notice-text-color);
 }
+
 table.scoreboard tr.odd {
     background-color: var(--highlight-background-color);
 }
+
 table.scoreboard tr.even {
     background-color: var(--main-background-color);
 }
+
 table.scoreboard tr.cutoff {
     border-bottom: 3px double var(--notice-text-color);
 }
+
 table.scoreboard td, table.scoreboard th {
     text-align: center;
     padding-right: 5px;
 }
+
 table.scoreboard .playername {
     text-align: left;
 }
+
 .series {
     background-color: var(--main-background-color);
     width: 100%;
@@ -337,66 +341,80 @@ table.scoreboard .playername {
     margin-bottom: 20px;
     padding-bottom: 20px;
 }
+
 .series .series-content {
     display: flex;
 }
+
 .series .series-name {
     width: 400px;
     font-size: 22px;
     font-weight: bold;
-    right: 0px;
+    right: 0;
 }
+
 .series .series-logo {
     width: 360px;
     margin-right: 40px;
 }
+
 .series .series-logo img {
     max-width: 280px;
     max-height: 200px;
 }
+
 .series .series-info table {
     margin: 0;
     padding: 0;
     border-collapse: collapse;
 }
+
 .series .series-info table th {
     text-align: right;
     vertical-align: baseline;
     padding-right: 5px;
 }
+
 #gatherling_main .series .series-info table td {
     vertical-align: baseline;
 }
+
 a.create_deck_link {
     font-size: 13px;
     color: var(--link-emphasis-text-color);
 }
+
 /* autocard */
 .cardHoverImageWrapper {
     position: relative;
     display: inline-block;
 }
+
 .linkCardHoverImage {
     position: absolute;
     left: 150px;
     top: -155px;
     z-index: 20;
 }
+
 .cardHoverImageWrapper .linkCardHoverImage {
     display: none;
 }
-ecardHoverImageWrapper a:hover .linkCardHoverImage {
+
+ecardhoverimagewrapper a:hover .linkCardHoverImage {
     display: block;
 }
+
 .crop {
     float: left;
     overflow:  hidden;
     border-radius: 10px;
     box-shadow: 0 2px 30px var(--link-border-color);
 }
+
 /* input values to crop the image: top, right, bottom, left */
 .crop img {
-    margin: -2px -6px -6px -6px;
+    margin: -2px -6px -6px;
 }
 
 /* Forms */
@@ -408,13 +426,16 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     padding: 3px;
     border-radius: 5px;
 }
+
 .inputbox:hover {
     border-color: var(--link-emphasis-text-color);
 }
+
 .inputbox:focus {
-    border: 1px solid rgb(234, 234, 234);
+    border: 1px solid rgb(234 234 234);
     border-color: var(--link-border-color);
 }
+
 .inputbox:disabled {
     border: 1px solid var(--control-border-color);
     background-color: var(--disabled-control-background-color);
@@ -422,6 +443,7 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     padding: 3px;
     border-radius: 5px;
 }
+
 .inputbutton {
     border: 1px solid var(--control-border-color);
     color: var(--main-text-color);
@@ -431,18 +453,21 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     border-radius: 5px;
     box-shadow: 0 2px 5px var(--control-border-color);
 }
+
 .inputbutton:not(.discordlogin):hover {
     border-color: var(--link-border-color);
     background-color: var(--highlight-background-color);
     color: var(--link-emphasis-text-color);
     box-shadow: 0 2px 5px var(--link-border-color);
 }
+
 .inputbutton:focus {
     border: 1px solid var(--control-border-color);
     background-color: var(--focused-control-background-color);
     color: var(--focused-control-color);
     box-shadow: 0 0 0 var(--control-border-color);
 }
+
 .inputbutton:disabled {
     border: 1px solid var(--disabled-control-border-color);
     background-color: var(--disabled-control-background-color);
@@ -468,7 +493,7 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
 }
 
 .btn-primary:hover {
-    background: rgba(255, 107, 26, 0.1);
+    background: rgb(255 107 26 / 10%);
     border-color: var(--link-border-color);
     color: var(--link-emphasis-text-color);
 }
@@ -478,26 +503,29 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     color: var(--main-text-color);
     background-color: var(--highlight-background-color);
     padding: 3px;
-    border-radius: 5px;
     width: 100%;
     border-radius: 3px;
 }
+
 #table-decksearch td, #table-decksearch th {
     border-top-color: var(--divider-border-color);
     border-bottom: 1px solid var(--divider-border-color);
     color: var(--main-text-color);
 }
+
 #table-decksearch th {
     padding: 7px 7px 8px;
     text-align: left;
     line-height: 1.3em;
     font-size: 14px;
 }
+
 #table-decksearch decksearch {
     font-size: 12px;
     padding: 4px 7px 2px;
     vertical-align: top;
 }
+
 .ds_inputbox {
     margin: auto;
     width: 750px;
@@ -507,29 +535,34 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     padding: 3px;
     border-radius: 5px;
 }
+
 .ds_left {
     width: 590px;
     background-color: var(--highlight-background-color);
     float: left;
     padding: 3px;
 }
+
 .ds_right {
     width: 125px;
     background-color: var(--highlight-background-color);
     padding: 3px;
     float: left;
 }
+
 .ds_label {
     margin: 8px;
     display: block;
     font-size: 13px;
     padding: 5px;
 }
+
 .ds_select {
     margin-top: 15px;
     display: block;
     font-size: 13px;
 }
+
 .ds_input {
     border: 1px solid var(--control-border-color);
     color: var(--main-text-color);
@@ -540,13 +573,16 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     margin: 0;
     float:right;
 }
+
 .ds_input:hover {
     border-color: var(--link-border-color);
 }
+
 .ds_input:focus {
-    border: 1px solid rgb(234, 234, 234);
+    border: 1px solid rgb(234 234 234);
     border-color: var(--link-border-color);
 }
+
 .ds_input:disabled {
     border: 1px solid var(--control-border-color);
     background-color: var(--disabled-control-background-color);
@@ -554,8 +590,8 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     padding: 3px;
     border-radius: 5px;
 }
+
 .ds_submit {
-    border-radius: 5px;
     color: var(--main-text-color);
     background-color: var(--control-background-color);
     margin: auto;
@@ -570,24 +606,28 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     border-radius: 5px;
     box-shadow: 0 2px 5px var(--control-border-color);
 }
+
 .ds_submit:hover {
     border-color: var(--link-border-color);
     background-color: var(--highlight-background-color);
     color: var(--link-emphasis-text-color);
     box-shadow: 0 2px 5px var(--link-border-color);
 }
+
 .ds_submit:focus {
     border: 1px solid var(--control-border-color);
     background-color: var(--focused-control-background-color);
     color: var(--focused-control-color);
     box-shadow: 0 0 0 var(--control-border-color);
 }
+
 .ds_submit:disabled {
     border: 1px solid var(--disabled-control-border-color);
     background-color: var(--disabled-control-background-color);
     color: var(--disabled-control-color);
     box-shadow: 0 0 0 var(--disabled-control-border-color);
 }
+
 .ds_results {
     font-weight: bold;;
     margin: auto;
@@ -598,6 +638,7 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     clear: both;
     border: none;
 }
+
 .ds_color {
     appearance: none;
     font-size: 15px;
@@ -607,6 +648,7 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     margin-left: 85px;
     margin-top: 5px;
 }
+
 .ds_checkbox {
     padding:10px;
     margin: 5px;
@@ -614,17 +656,20 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     border-radius: 5px;
     background-color: var(--control-background-color);
 }
+
 .ds_checkbox:hover {
     border-color: var(--link-border-color);
 }
+
 .ds_mana_image {
     vertical-align: middle;
     padding-bottom: 4px;
     padding-left: 3px;
 }
+
 #ds_select {
     margin: 5px;
-    margin-top: 0px;
+    margin-top: 0;
     width: 140px;
     height: 27px;
     outline: solid transparent;
@@ -634,19 +679,22 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     padding: 3px;
     border-radius: 5px;
 }
-}
+
 #ds_select:hover {
     border-color: var(--link-border-color);
 }
-.group:before, .group:after {
+
+.group::before, .group::after {
     content: "\0020";
     display: block;
     height: 0;
     overflow: hidden;
 }
-.group:after {
+
+.group::after {
     clear:both;
 }
+
 .group {
     zoom: 1;
 }
@@ -682,14 +730,15 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
     background-color: var(--control-background-color);
     color: var(--link-text-color);
     float: left;
-    padding: 8px 8px;
-    margin: 1px 0px;
+    padding: 8px;
+    margin: 1px 0;
     width: 25%;
 }
 
 .tablink:hover {
     color: var(--link-emphasis-text-color);
-    /*text color of selected and active item*/
+
+    /* text color of selected and active item */
     background: var(--highlight-background-color);
     border: 1px solid var(--link-border-color);
 }
@@ -703,141 +752,172 @@ ecardHoverImageWrapper a:hover .linkCardHoverImage {
 .box table td {
     padding: 8px 12px;
 }
+
 table.events {
     width: 100%;
 }
+
 table.events td {
     padding: 8px 12px;
 }
+
 table.events td:first-child {
     padding-left: 0;
 }
+
 table.events  td:last-child {
     padding-right: 0;
 }
+
 .winners {
     border-collapse: collapse;
 }
+
 .winners .event-name {
     padding-top: 24px;
 }
+
 .winners tr.player-deck td {
     border-bottom: 1px solid var(--divider-border-color);
     padding-bottom: 24px;
 }
+
 .score, .player {
     white-space: nowrap;
 }
 
 body {
     vertical-align:baseline;
-    background:transparent;
     margin:0;
-    padding:0;
     border:0;
     outline:0;
     background: var(--base-background-color);
-    padding: 20px 0px 0px 0px;
+    padding: 20px 0 0;
     color: var(--main-text-color);
 }
+
 td {
     vertical-align:baseline;
 }
+
 a {
     border-bottom: 1px dotted var(--link-text-color);
     text-decoration: none;
     font-weight: bold;
     padding: 1px;
 }
+
 a.emailPop {
     color: var(--verified-text-color);
     border: none;
 }
+
 .borderless {
     border: none;
+
     /* removes borders from img anchors */
 }
+
 .borderless:hover {
     border: 1px solid var(--main-background-color);
+
     /* colors border on img anchors so border matches background and is unseen */
 }
+
 a:link {
     color: var(--link-text-color);
 }
+
 a:visited {
     color: var(--link-text-color);
 }
+
 a:active {
     color: var(--link-emphasis-text-color);
 }
+
 a:hover {
     color: var(--link-emphasis-text-color);
     border: 1px solid var(--link-border-color);
-    padding: 0px;
+    padding: 0;
     border-radius: 5px;
 }
+
 a:has(h1):link, a:has(h2):link, a:has(h3):link, a:has(h4):link, a:has(h5):link, a:has(h6):link,
 a:has(h1):visited, a:has(h2):visited, a:has(h3):visited, a:has(h4):visited, a:has(h5):visited, a:has(h6):visited {
     color: var(--main-text-color);
     padding: inherit;
 }
+
 a.emailPop:hover {
     color: var(--verified-text-color);
     border: 1px solid var(--verified-text-color);
-    padding: 0px;
+    padding: 0;
     border-radius: 5px;
 }
+
 .match_verified {
     color: var(--verified-text-color);
     border: none;
     padding: 0;
     font-weight: normal;
 }
+
 .match_unverified {
     color: var(--pending-text-color);
     border: none;
     padding: 0;
     font-weight: normal;
 }
+
 .match_failed {
     color: var(--error-text-color);
     border: none;
     padding: 0;
     font-weight: normal;
 }
+
 a.deckverified {
     color: var(--verified-text-color);
     border-bottom: 1px dotted var(--verified-text-color);
 }
+
 a.deckverified:hover {
     color: var(--verified-text-color);
     border: 1px solid var(--verified-text-color);
-    padding: 0px;
+    padding: 0;
 }
+
 a.createlink {
     color: var(--pending-text-color);
     border-bottom: 1px dotted var(--pending-text-color);
 }
+
 a.createlink:hover {
     color: var(--pending-text-color);
     border: 1px solid var(--pending-text-color);
-    padding: 0px;
+    padding: 0;
 }
+
 a.deckunverified {
     color: var(--error-text-color);
     border-bottom: 1px dotted var(--error-text-color);
 }
+
 a.deckunverified:hover {
     color: var(--error-text-color);
     border: 1px solid var(--error-text-color);
-    padding: 0px;
+    padding: 0;
 }
+
 em {
     color: var(--emphasis-text-color);
 }
+
 del {
     text-decoration:line-through
 }
+
 #header_bar {
     width: calc(100% - var(--spacing-10-static) - var(--spacing-10-static)); /* 100% width minus left and right margins */
     max-width: 940px;
@@ -845,20 +925,23 @@ del {
     margin-left: var(--spacing-10-static);
     margin-right: var(--spacing-10-static);
     margin-bottom: 5px;
-    background-image: url(../images/header_background.jpg);
+    background-image: url("../images/header_background.jpg");
     background-size: cover;
     background-position: 40% center;
 }
+
 #header_logo {
     float: left;
     padding-top: 5px;
     padding-left: 10px;
 }
+
 #header_gatherling {
     float: right;
     margin-right: 312px;
     padding-top: 26px;
 }
+
 .box {
     border-radius: 5px;
     box-shadow: 0 2px 5px var(--control-border-color);
@@ -867,11 +950,13 @@ del {
     border: 1px solid var(--control-border-color);
     padding-bottom: 10px;
 }
+
 .box p, .box ul, .box .uppertitle, .box table, .box form,
 .box h1, .box h2, .box h3, .box h4, .box h5, .box h6,
 .box .series-logo img {
     padding: 5px 10px;
 }
+
 .uppertitle, h2.uppertitle {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -881,6 +966,7 @@ del {
     border-bottom: 2px solid var(--title-border-color);
     margin-bottom: 10px;
 }
+
 .menubar {
     border-radius: 5px;
     box-shadow: 0 2px 10px var(--control-border-color);
@@ -889,29 +975,35 @@ del {
     margin-top: 1px;
     margin-bottom: 1px;
 }
+
 .menubar:hover {
     border-color: var(--link-border-color);
 }
+
 #mainmenu, #mainmenu_submenu, #submenu {
     font-weight: bold;
 }
+
 #mainmenu ul, #submenu ul, #mainmenu_submenu ul {
     color: var(--link-text-color);
+
     /* menu font color */
-    margin: 0px;
+    margin: 0;
     margin-top: 1px;
     float: left;
     background: var(--main-background-color);
-    padding: 0px;
+    padding: 0;
     padding-top: 5px;
     border-radius: 5px;
 }
+
 #mainmenu ul li, #mainmenu_submenu ul li, #submenu ul li {
     display: inline-block;
     border: 1px solid var(--control-border-color);
     border-radius: 5px;
     box-shadow: 0 2px 5px var(--control-border-color);
 }
+
 #mainmenu ul li a, #mainmenu_submenu ul li a, #submenu ul li a {
     float: left;
     text-decoration: none;
@@ -919,27 +1011,35 @@ del {
     border-bottom: none;
     border-radius: 5px;
 }
+
 #submenu ul li a {
     width: 145px;
 }
+
 #mainmenu ul li a, #mainmenu_submenu ul li a {
     width: 115px;
 }
+
 #mainmenu ul li.last a, #mainmenu_submenu ul li.last a {
     width: 115px;
 }
+
 #mainmenu ul li a:hover, #mainmenu ul li .current, #mainmenu_submenu ul li a:hover, #submenu ul li a:hover, #submenu ul li .current, #mainmenu_submenu ul li.open a:hover, #mainmenu_submenu ul li.current a {
     color: var(--link-emphasis-text-color);
-    /*text color of selected and active item*/
+
+    /* text color of selected and active item */
     background: var(--highlight-background-color);
     border: 1px solid var(--link-border-color);
 }
+
 #maincontainer {
     background: var(--base-background-color);
 }
+
 .deck {
     width: 100%;
 }
+
 .deck span {
     display: block;
     overflow: hidden;
@@ -947,63 +1047,78 @@ del {
     margin-right: 5px;
     text-align: center;
 }
+
 .deck .deck_player {
     max-width: 95px;
 }
+
 .deck .deck_name {
     width: 150px;
     height: 1.5em;
     text-align: left;
 }
+
 .deck .deck_colors {
     width: 75px;
     padding: 2px;
     text-align: left;
 }
+
 .deck .deck_place {
     width: 15px;
     padding: 2px;
 }
+
 .recent_tourneyname {
     text-align: center;
     padding-top: 0.5em;
 }
+
 table.center {
     margin-left: auto;
     margin-right: auto;
     max-width: 90%;
 }
+
 /* Gatherling Entries */
 #gatherling_main table {
     margin-left: auto;
     margin-right: auto;
 }
+
 #gatherling_main table td {
     padding: 3px;
 }
+
 #gatherling_main table.form th {
     vertical-align: middle;
     text-align: right;
 }
+
 #gatherling_main table.form td.buttons {
     text-align: center;
 }
+
 #gatherling_main .error {
     color: var(--error-text-color);
     font-weight: bolder;
 }
+
 #gatherling_full table {
     margin-left: inherit;
     table-layout: auto;
 }
+
 #gatherling_lefthalf table {
     width: 100%;
     margin-left: inherit;
 }
+
 #gatherling_righthalf table {
     width: 100%;
     margin-left: inherit;
 }
+
 #gatherling_footer {
     background-color: var(--main-background-color);
     color: var(--deemphasized-text-color);
@@ -1014,14 +1129,17 @@ table.center {
     clear: both;
     font-size: 14px;
 }
+
 #gatherling_main .eventname {
     border-bottom: 1px dotted black;
 }
+
 #gatherling_main table th.top {
     text-align: center;
 }
+
 #EventReport table td {
-    border-width: 0px;
+    border-width: 0;
     vertical-align: top;
 }
 
@@ -1035,7 +1153,7 @@ table.center {
     margin-right: var(--spacing-10-static);
 }
 
-@media (min-width: 40rem) {
+@media (width >= 40rem) {
     .event-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1045,7 +1163,7 @@ table.center {
     background-color: var(--card-background-color);
     border-radius: var(--spacing-10-static);
     padding: var(--spacing-20-static);
-    box-shadow: 0 var(--spacing-5-static) var(--spacing-5-static) -1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 var(--spacing-5-static) var(--spacing-5-static) -1px rgb(0 0 0 / 10%);
 }
 
 .event-card a, .event-card a:hover {
@@ -1069,7 +1187,7 @@ table.center {
     border-bottom: 1px solid var(--divider-border-color);
 }
 
-@media (min-width: 40rem) {
+@media (width >= 40rem) {
     .card-header {
         flex-direction: row;
         gap: var(--spacing-10-static);
@@ -1187,7 +1305,7 @@ Enjoy.
 
 /* Our old customized version of Zebra Pagination CSS from when we copy and pasted it rather than having it as a dependency. */
 
-/* ATTRIBUTES FOR THE CONTAINER (THIS HOW WE CENTER EVERYTHING)----------------------------------------------------------------------------------------------------------------------*/
+/* ATTRIBUTES FOR THE CONTAINER (THIS HOW WE CENTER EVERYTHING)---------------------------------------------------------------------------------------------------------------------- */
 .Zebra_Pagination {
     clear: both;
     width: 100%;
@@ -1209,10 +1327,10 @@ Enjoy.
     margin: 6px;
 }
 
-/* COMMON ATTRIBUTES FOR ALL THE LINKS----------------------------------------------------------------------------------------------------------------------*/
+/* COMMON ATTRIBUTES FOR ALL THE LINKS---------------------------------------------------------------------------------------------------------------------- */
 .Zebra_Pagination a {
     padding: 4px;
-    border: 1px solid Black;
+    border: 1px solid black;
     color: var(--main-text-color);
     background-color: var(--main-background-color);
     text-decoration: none;
@@ -1230,7 +1348,7 @@ Enjoy.
     box-shadow: 0 2px 5px var(--link-border-color);
 }
 
-/* "NEXT PAGE" AND "PREVIOUS PAGE" LINKS----------------------------------------------------------------------------------------------------------------------*/
+/* "NEXT PAGE" AND "PREVIOUS PAGE" LINKS---------------------------------------------------------------------------------------------------------------------- */
 .Zebra_Pagination a.navigation {
     border: 1px solid var(--control-border-color);
     background-repeat: no-repeat
@@ -1241,13 +1359,13 @@ Enjoy.
 }
 
 .Zebra_Pagination a.previous {
-    background-image: url(../images/larrow.png);
+    background-image: url("../images/larrow.png");
     background-position: left center;
     padding-left: 45px
 }
 
 .Zebra_Pagination a.next {
-    background-image: url(../images/rarrow.png);
+    background-image: url("../images/rarrow.png");
     background-position: right center;
     padding-right: 45px
 }
@@ -1255,7 +1373,7 @@ Enjoy.
 .Zebra_Pagination a.disabled {
     filter: alpha(opacity=20);
     opacity: 0.2;
-    box-shadow: var(--disabled-control-border-color) 0 0px 0px;
+    box-shadow: var(--disabled-control-border-color) 0 0 0;
 }
 
 /* Arrows that can't be used and the elipsis should not change on hover. */
@@ -1266,7 +1384,7 @@ Enjoy.
     border: inherit;
 }
 
-/* CURRENT PAGE----------------------------------------------------------------------------------------------------------------------*/
+/* CURRENT PAGE---------------------------------------------------------------------------------------------------------------------- */
 .Zebra_Pagination a.current,
 .Zebra_Pagination a.current:hover {
     background: var(--current-pagination-background-color);
@@ -1274,7 +1392,7 @@ Enjoy.
     color: var(--current-pagination-text-color);
 }
 
-/* THE "..." SEPARATOR----------------------------------------------------------------------------------------------------------------------*/
+/* THE "..." SEPARATOR---------------------------------------------------------------------------------------------------------------------- */
 .Zebra_Pagination span {
     color: var(--main-text-color);
     margin-right: 2px;

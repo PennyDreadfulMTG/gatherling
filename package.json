@@ -1,6 +1,13 @@
 {
   "type": "module",
+  "scripts": {
+    "lint:css": "stylelint '**/*.css'"
+  },
   "dependencies": {
     "luxon": "^3.5.0"
+  },
+  "devDependencies": {
+    "stylelint": "^16.10.0",
+    "stylelint-config-standard": "^36.0.1"
   }
 }

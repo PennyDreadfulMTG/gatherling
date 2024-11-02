@@ -38,6 +38,7 @@ or with a dockerized setup:
 $ composer lint # phpcs
 $ composer autofix # phpcbf
 $ composer static # phpstan and psalm
+$ composer csslint # stylelint
 
 ## JavaScript Tests
 
