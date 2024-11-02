@@ -70,8 +70,14 @@
     --spacing-80-dynamic: calc(80rem / 16);
     --spacing-160-dynamic: calc(160rem / 16);
     --spacing-320-dynamic: calc(320rem / 16);
+
+    /* Semantic Spacing */
+
     --card-grid-gap: var(--spacing-20-static);
     --card-internal-gap: var(--spacing-10-static);
+    --control-border-radius: var(--spacing-5-static);
+    --grid-border-radius: var(--spacing-5-static);
+    --card-border-radius: var(--spacing-10-static);
 
     /* Typography */
 
@@ -438,7 +444,7 @@ a.create_deck_link {
     color: var(--main-text-color);
     background-color: var(--highlight-background-color);
     padding: 3px;
-    border-radius: 5px;
+    border-radius: var(--control-border-radius);
 }
 
 .inputbox:hover {
@@ -455,7 +461,7 @@ a.create_deck_link {
     background-color: var(--disabled-control-background-color);
     color: var(--disabled-control-color);
     padding: 3px;
-    border-radius: 5px;
+    border-radius: var(--control-border-radius);
 }
 
 /* Buttons */
@@ -468,7 +474,7 @@ a.create_deck_link {
     box-shadow: 0 2px 5px var(--control-border-color);
     display: inline-block;
     padding: var(--spacing-10-static) var(--spacing-20-static);
-    border-radius: var(--spacing-5-static);
+    border-radius: var(--control-border-radius);
     font-size: var(--font-size-14);
     cursor: pointer;
     transition: all 0.2s ease;
@@ -536,7 +542,7 @@ a.create_deck_link {
     color: var(--main-text-color);
     background-color: var(--highlight-background-color);
     padding: 3px;
-    border-radius: 5px;
+    border-radius: var(--control-border-radius);
 }
 
 .ds_left {
@@ -570,7 +576,7 @@ a.create_deck_link {
     border: 1px solid var(--control-border-color);
     color: var(--main-text-color);
     background-color: var(--highlight-background-color);
-    border-radius: 5px;
+    border-radius: var(--control-border-radius);
     width: 450px;
     padding: 5px;
     margin: 0;
@@ -591,7 +597,7 @@ a.create_deck_link {
     background-color: var(--disabled-control-background-color);
     color: var(--disabled-control-color);
     padding: 3px;
-    border-radius: 5px;
+    border-radius: var(--control-border-radius);
 }
 
 .ds_submit {
@@ -606,7 +612,7 @@ a.create_deck_link {
     clear: both;
     padding: 6px 28px;
     border: 1px solid var(--control-border-color);
-    border-radius: 5px;
+    border-radius: var(--control-border-radius);
     box-shadow: 0 2px 5px var(--control-border-color);
 }
 
@@ -656,7 +662,7 @@ a.create_deck_link {
     padding:10px;
     margin: 5px;
     border: 1px solid var(--control-border-color);
-    border-radius: 5px;
+    border-radius: var(--control-border-radius);
     background-color: var(--control-background-color);
 }
 
@@ -680,7 +686,7 @@ a.create_deck_link {
     color: var(--main-text-color);
     background-color: var(--highlight-background-color);
     padding: 3px;
-    border-radius: 5px;
+    border-radius: var(--control-border-radius);
 }
 
 #ds_select:hover {
@@ -727,7 +733,7 @@ a.create_deck_link {
 
 /* Style tab links */
 .tablink {
-    border-radius: 5px;
+    border-radius: var(--control-border-radius);
     box-shadow: 0 2px 10px var(--control-border-color);
     border: 1px solid var(--control-border-color);
     background-color: var(--control-background-color);
@@ -822,7 +828,7 @@ a:hover {
     color: var(--link-emphasis-text-color);
     border: 1px solid var(--link-border-color);
     padding: 0;
-    border-radius: 5px;
+    border-radius: var(--control-border-radius);
 }
 
 a:has(h1):link, a:has(h2):link, a:has(h3):link, a:has(h4):link, a:has(h5):link, a:has(h6):link,
@@ -835,7 +841,7 @@ a.emailPop:hover {
     color: var(--verified-text-color);
     border: 1px solid var(--verified-text-color);
     padding: 0;
-    border-radius: 5px;
+    border-radius: var(--control-border-radius);
 }
 
 .match_verified {
@@ -925,7 +931,7 @@ del {
 }
 
 .box {
-    border-radius: 5px;
+    border-radius: var(--grid-border-radius);
     box-shadow: 0 2px 5px var(--control-border-color);
     margin-top: 15px;
     background: var(--main-background-color);
@@ -940,8 +946,8 @@ del {
 }
 
 .uppertitle, h2.uppertitle {
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    border-top-left-radius: var(--grid-border-radius);
+    border-top-right-radius: var(--grid-border-radius);
     background: var(--highlight-background-color);
     font-size: 15px;
     font-weight: bold;
@@ -950,64 +956,50 @@ del {
 }
 
 .menubar {
-    border-radius: 5px;
+    border-radius: var(--grid-border-radius);
     box-shadow: 0 2px 10px var(--control-border-color);
-    background: var(--main-background-color);
     border: 1px solid var(--control-border-color);
-    margin-top: 1px;
-    margin-bottom: 1px;
+    background: var(--main-background-color);
 }
 
 .menubar:hover {
     border-color: var(--link-border-color);
 }
 
-#mainmenu, #mainmenu_submenu, #submenu {
-    font-weight: bold;
-}
-
 #mainmenu ul, #submenu ul, #mainmenu_submenu ul {
-    color: var(--link-text-color);
-    margin: 0;
-    margin-top: 1px;
-    float: left;
-    background: var(--main-background-color);
-    padding: 0;
-    padding-top: 5px;
-    border-radius: 5px;
+    padding-top: var(--spacing-5-static);
+    border-radius: var(--grid-border-radius);
 }
 
 #mainmenu ul li, #mainmenu_submenu ul li, #submenu ul li {
     display: inline-block;
     border: 1px solid var(--control-border-color);
-    border-radius: 5px;
+    border-radius: var(--control-border-radius);
     box-shadow: 0 2px 5px var(--control-border-color);
 }
 
 #mainmenu ul li a, #mainmenu_submenu ul li a, #submenu ul li a {
-    float: left;
-    text-decoration: none;
+    float: left; /* BAKERT */
+    background: var(--main-background-color);
     text-align: center;
     border-bottom: none;
-    border-radius: 5px;
+    border-radius: var(--control-border-radius);
 }
 
 #submenu ul li a {
-    width: 145px;
+    min-width: 145px;
 }
 
 #mainmenu ul li a, #mainmenu_submenu ul li a {
-    width: 115px;
+    min-width: 145px;
 }
 
 #mainmenu ul li.last a, #mainmenu_submenu ul li.last a {
-    width: 115px;
+    min-width: 145px;
 }
 
 #mainmenu ul li a:hover, #mainmenu ul li .current, #mainmenu_submenu ul li a:hover, #submenu ul li a:hover, #submenu ul li .current, #mainmenu_submenu ul li.open a:hover, #mainmenu_submenu ul li.current a {
     color: var(--link-emphasis-text-color);
-
-    /* text color of selected and active item */
     background: var(--highlight-background-color);
     border: 1px solid var(--link-border-color);
 }
@@ -1141,7 +1133,7 @@ table.center {
 
 .event-card {
     background-color: var(--card-background-color);
-    border-radius: var(--spacing-10-static);
+    border-radius: var(--card-border-radius);
     padding: var(--spacing-20-static);
     box-shadow: 0 var(--spacing-5-static) var(--spacing-5-static) -1px rgb(0 0 0 / 10%);
 }
@@ -1193,7 +1185,7 @@ a.player-count, a.event-type {
     align-items: center;
     background-color: var(--top-background-color);
     padding: var(--spacing-10-static);
-    border-radius: var(--spacing-5-static);
+    border-radius: var(--control-border-radius);
     margin: var(--spacing-20-static) 0;
 }
 
