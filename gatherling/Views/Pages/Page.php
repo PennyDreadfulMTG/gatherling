@@ -13,15 +13,13 @@ use function Gatherling\Helpers\config;
 abstract class Page extends TemplateResponse
 {
     public bool $enableVue = false;
-    public string $contentSafe;
+    public string $contentSafe = '';
     public string $gitHash;
     public string $cssLink;
     public string $headerLogoSrc;
-    public bool $includeSorttable;
     public bool $isHost;
     public bool $isOrganizer;
     public bool $isSuper;
-    public string $js;
     public ?Player $player;
     public string $versionTagline;
     public string $jsLink;
@@ -47,7 +45,7 @@ abstract class Page extends TemplateResponse
 
     private function version(): string
     {
-        return 'Gatherling version 6.0.4 ("One thing\'s for sure – we\'re all gonna be a lot thinner.")';
+        return 'Gatherling version 6.0.4 ("One thing\'s for sure — we\'re all gonna be a lot thinner.")';
         // return 'Gatherling version 6.0.3 ("Nothing is so painful to the human mind as a great and sudden change.")';
         // return 'Gatherling version 6.0.2 ("Nixon was normalizing relations with China. I figured that if he could normalize relations, then so could I.")';
         // return 'Gatherling version 6.0.1 ("A guilty system recognizes no innocents.")';
