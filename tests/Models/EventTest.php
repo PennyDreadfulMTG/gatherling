@@ -88,11 +88,9 @@ class EventTest extends TestCase
             );
             $event = new Event($name);
 
-            $players = [];
             for ($i = 1; $i <= $num_players; $i++) {
                 $player = Player::findOrCreateByName("Player{$name}_$i");
                 $event->addPlayer($player->name);
-                $players[] = $player;
 
                 $standing = new Standings($name, $player->name);
                 $standing->event = $name;
