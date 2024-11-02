@@ -161,10 +161,6 @@ li {
     margin-left: 30px;
 }
 
-.menubar li {
-    margin-left: var(--spacing-10-static);
-}
-
 td {
     vertical-align: baseline;
 }
@@ -960,29 +956,32 @@ del {
     box-shadow: 0 2px 10px var(--control-border-color);
     border: 1px solid var(--control-border-color);
     background: var(--main-background-color);
-    padding-top: var(--spacing-5-static);
+    padding: var(--spacing-10-static);
+    gap: var(--spacing-10-static);
 }
 
 .menubar:hover {
     border-color: var(--link-border-color);
 }
 
+.menubar ul {
+    display: grid;
+    gap: var(--spacing-10-static);
+    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr))
+}
+
 .menubar li {
-    display: inline-block;
+    display: block;
     border: 1px solid var(--control-border-color);
     border-radius: var(--control-border-radius);
     box-shadow: 0 2px 5px var(--control-border-color);
-}
-
-.menubar li a {
-    float: left; /* BAKERT */
+    margin: 0;
     text-align: center;
-    border-bottom: none;
-    border-radius: var(--control-border-radius);
 }
 
 .menubar li a {
-    min-width: 145px;
+    border-bottom: none;
+    display: block;
 }
 
 .menubar li a:hover {
