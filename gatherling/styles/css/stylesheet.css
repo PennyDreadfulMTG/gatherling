@@ -47,7 +47,7 @@
     --focused-control-color: var(--black);
     --focused-control-background-color: var(--night);
     --discord-brand-color: #fff;
-    --discord-brand-background-color: #7289DA;
+    --discord-brand-background-color: #7289da;
     --current-pagination-background-color: var(--flame);
     --current-pagination-border-color: var(--black);
     --current-pagination-text-color: var(--black);
@@ -98,11 +98,29 @@
 
 /* Text */
 
-p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
+p,
+dl,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ol,
+ul,
+pre,
+table,
+address,
+fieldset {
     margin: 0;
 }
 
-table, tr, th, td, ul {
+table,
+tr,
+th,
+td,
+ul {
     color: var(--main-text-color);
     margin: 0;
     padding: 0;
@@ -114,11 +132,16 @@ table, tr, th, td, ul {
 }
 
 body {
-    font: var(--font-size-14) / 1.45 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
-    vertical-align:baseline;
-    margin:0;
-    border:0;
-    outline:0;
+    font:
+        var(--font-size-14) / 1.45 "Helvetica Neue",
+        Arial,
+        "Liberation Sans",
+        FreeSans,
+        sans-serif;
+    vertical-align: baseline;
+    margin: 0;
+    border: 0;
+    outline: 0;
     background: var(--base-background-color);
     padding: 20px 0 0;
     color: var(--main-text-color);
@@ -128,7 +151,8 @@ h1 {
     font-size: 14px;
 }
 
-h2, .box h2 {
+h2,
+.box h2 {
     font-size: var(--font-size-24);
     margin-bottom: var(--spacing-20-static);
 }
@@ -201,7 +225,9 @@ hr {
     position: relative;
     margin-left: var(--spacing-10-static);
     margin-right: var(--spacing-10-static);
-    width: calc(100% - var(--spacing-10-static) - var(--spacing-10-static)); /* 100% width minus left and right margins */
+    width: calc(
+        100% - var(--spacing-10-static) - var(--spacing-10-static)
+    ); /* 100% width minus left and right margins */
 }
 
 .container_12 .grid_6 {
@@ -213,11 +239,11 @@ hr {
 }
 
 .alpha {
-    margin-left: 0
+    margin-left: 0;
 }
 
 .omega {
-    margin-right: 0
+    margin-right: 0;
 }
 
 .container_12 .grid_2 {
@@ -247,11 +273,11 @@ hr {
 }
 
 .container_12 .prefix_1 {
-    padding-left: 0
+    padding-left: 0;
 }
 
 .container_12 .suffix_1 {
-    padding-right: 0
+    padding-right: 0;
 }
 
 .clear {
@@ -260,11 +286,10 @@ hr {
     overflow: hidden;
     visibility: hidden;
     width: 0;
-    height: 0
+    height: 0;
 }
 
 /* End of 960 grid system */
-
 
 /* To enable move to mobile view, allow tables to horizontally scroll */
 table {
@@ -277,7 +302,8 @@ table {
     text-align: center;
 }
 
-.n, .r {
+.n,
+.r {
     text-align: right;
 }
 
@@ -299,9 +325,10 @@ table {
 Work around Mustache's trailing comma problem.
 See: https://bluebones.net/2024/09/avoid-trailing-comma-when-emitting-lists-in-mustache-templates/
  */
-.inline-list, .inline-list li {
-        margin: 0;
-        padding: 0;
+.inline-list,
+.inline-list li {
+    margin: 0;
+    padding: 0;
 }
 
 .inline-list li {
@@ -313,7 +340,7 @@ See: https://bluebones.net/2024/09/avoid-trailing-comma-when-emitting-lists-in-m
 }
 
 .inline-list.pipe li:not(:last-child)::after {
-    content: " | "
+    content: " | ";
 }
 
 .highlight td {
@@ -341,7 +368,8 @@ table.scoreboard tr.cutoff {
     border-bottom: 3px double var(--notice-text-color);
 }
 
-table.scoreboard td, table.scoreboard th {
+table.scoreboard td,
+table.scoreboard th {
     text-align: center;
     padding-right: 5px;
 }
@@ -426,7 +454,7 @@ a.create_deck_link {
 
 .crop {
     float: left;
-    overflow:  hidden;
+    overflow: hidden;
     border-radius: 10px;
     box-shadow: 0 2px 30px var(--link-border-color);
 }
@@ -521,7 +549,8 @@ a.create_deck_link {
     border-radius: 3px;
 }
 
-#table-decksearch td, #table-decksearch th {
+#table-decksearch td,
+#table-decksearch th {
     border-top-color: var(--divider-border-color);
     border-bottom: 1px solid var(--divider-border-color);
     color: var(--main-text-color);
@@ -579,7 +608,7 @@ a.create_deck_link {
     width: 450px;
     padding: 5px;
     margin: 0;
-    float:right;
+    float: right;
 }
 
 .ds_input:hover {
@@ -637,7 +666,7 @@ a.create_deck_link {
 }
 
 .ds_results {
-    font-weight: bold;;
+    font-weight: bold;
     margin: auto;
     margin-top: 10px;
     font-size: 13px;
@@ -658,7 +687,7 @@ a.create_deck_link {
 }
 
 .ds_checkbox {
-    padding:10px;
+    padding: 10px;
     margin: 5px;
     border: 1px solid var(--control-border-color);
     border-radius: var(--control-border-radius);
@@ -692,7 +721,8 @@ a.create_deck_link {
     border-color: var(--link-border-color);
 }
 
-.group::before, .group::after {
+.group::before,
+.group::after {
     content: "\0020";
     display: block;
     height: 0;
@@ -700,7 +730,7 @@ a.create_deck_link {
 }
 
 .group::after {
-    clear:both;
+    clear: both;
 }
 
 .group {
@@ -714,14 +744,14 @@ a.create_deck_link {
 }
 
 .discordlogin {
-    background: var(--discord-brand-background-color);;
+    background: var(--discord-brand-background-color);
     color: var(--discord-brand-color);
     text-decoration: none;
 }
 
 .discordlogin::before {
     display: inline-block;
-    margin-right: .5em;
+    margin-right: 0.5em;
     font: normal normal normal 14px/1 FontAwesome; /* stylelint-disable-line font-family-no-missing-generic-family-keyword */
     font-size: inherit;
     text-rendering: auto;
@@ -773,7 +803,7 @@ table.events td:first-child {
     padding-left: 0;
 }
 
-table.events  td:last-child {
+table.events td:last-child {
     padding-right: 0;
 }
 
@@ -790,7 +820,8 @@ table.events  td:last-child {
     padding-bottom: 24px;
 }
 
-.score, .player {
+.score,
+.player {
     white-space: nowrap;
 }
 
@@ -830,8 +861,18 @@ a:hover {
     border-radius: var(--control-border-radius);
 }
 
-a:has(h1):link, a:has(h2):link, a:has(h3):link, a:has(h4):link, a:has(h5):link, a:has(h6):link,
-a:has(h1):visited, a:has(h2):visited, a:has(h3):visited, a:has(h4):visited, a:has(h5):visited, a:has(h6):visited {
+a:has(h1):link,
+a:has(h2):link,
+a:has(h3):link,
+a:has(h4):link,
+a:has(h5):link,
+a:has(h6):link,
+a:has(h1):visited,
+a:has(h2):visited,
+a:has(h3):visited,
+a:has(h4):visited,
+a:has(h5):visited,
+a:has(h6):visited {
     color: var(--main-text-color);
     padding: inherit;
 }
@@ -902,11 +943,14 @@ em {
 }
 
 del {
-    text-decoration:line-through
+    text-decoration: line-through;
 }
 
 #header_bar {
-    width: calc(100% - var(--spacing-10-static) - var(--spacing-10-static)); /* 100% width minus left and right margins */
+    width: calc(
+        100% - var(--spacing-10-static) - var(--spacing-10-static)
+    ); /* 100% width minus left and right margins */
+
     max-width: 940px;
     height: 135px;
     margin-left: var(--spacing-10-static);
@@ -938,13 +982,23 @@ del {
     padding-bottom: 10px;
 }
 
-.box p, .box ul, .box .uppertitle, .box table, .box form,
-.box h1, .box h2, .box h3, .box h4, .box h5, .box h6,
+.box p,
+.box ul,
+.box .uppertitle,
+.box table,
+.box form,
+.box h1,
+.box h2,
+.box h3,
+.box h4,
+.box h5,
+.box h6,
 .box .series-logo img {
     padding: 5px 10px;
 }
 
-.uppertitle, h2.uppertitle {
+.uppertitle,
+h2.uppertitle {
     border-top-left-radius: var(--grid-border-radius);
     border-top-right-radius: var(--grid-border-radius);
     background: var(--highlight-background-color);
@@ -970,7 +1024,7 @@ del {
 .menubar ul {
     display: grid;
     gap: var(--spacing-10-static);
-    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr))
+    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
 }
 
 .menubar li {
@@ -1119,10 +1173,12 @@ table.center {
     background-color: var(--card-background-color);
     border-radius: var(--card-border-radius);
     padding: var(--spacing-20-static);
-    box-shadow: 0 var(--spacing-5-static) var(--spacing-5-static) -1px rgb(0 0 0 / 10%);
+    box-shadow: 0 var(--spacing-5-static) var(--spacing-5-static) -1px rgb(0 0 0 /
+                10%);
 }
 
-.event-card a, .event-card a:hover {
+.event-card a,
+.event-card a:hover {
     border: none;
     padding: inherit;
 }
@@ -1131,7 +1187,12 @@ table.center {
     color: var(--link-emphasis-text-color);
 }
 
-.event-card h2, .event-card h3, .event-card h4, .event-card h5, .event-card h6, .event-card p {
+.event-card h2,
+.event-card h3,
+.event-card h4,
+.event-card h5,
+.event-card h6,
+.event-card p {
     padding-left: 0;
 }
 
@@ -1153,13 +1214,16 @@ table.center {
 }
 
 /* Align text with icon */
-.event-type, .player-count, .event-action {
+.event-type,
+.player-count,
+.event-action {
     display: flex;
     align-items: center;
     gap: var(--spacing-5-static);
 }
 
-a.player-count, a.event-type {
+a.player-count,
+a.event-type {
     color: var(--deemphasized-text-color);
 }
 
@@ -1204,13 +1268,13 @@ Enjoy.
     list-style-type: none;
     margin: 0;
     padding: 0;
-    float: left
+    float: left;
 }
 
 .Zebra_Pagination li {
     position: relative;
     float: left;
-    right: 50%
+    right: 50%;
 }
 
 .Zebra_Pagination .pagination {
@@ -1224,10 +1288,10 @@ Enjoy.
 .Zebra_Pagination a,
 .Zebra_Pagination span {
     padding: 6px 12px;
-    color: #337AB7;
+    color: #337ab7;
     text-decoration: none;
-    background-color: #FFF;
-    border: 1px solid #DDD;
+    background-color: #fff;
+    border: 1px solid #ddd;
     display: block;
     float: left;
     position: relative;
@@ -1235,30 +1299,30 @@ Enjoy.
 }
 
 .Zebra_Pagination li.active a {
-    color: #FFF;
+    color: #fff;
     cursor: default;
-    background-color: #337AB7;
-    border-color: #337AB7;
+    background-color: #337ab7;
+    border-color: #337ab7;
 }
 
 .Zebra_Pagination li a:hover,
 .Zebra_Pagination li span:hover {
-    color: #23527C;
-    background-color: #EEE;
-    border-color: #DDD;
+    color: #23527c;
+    background-color: #eee;
+    border-color: #ddd;
 }
 
 .Zebra_Pagination li.disabled a {
-    color: #DEDEDE;
+    color: #dedede;
     background-color: transparent;
-    border-color: #DEDEDE;
+    border-color: #dedede;
     cursor: default;
 }
 
 .Zebra_Pagination li.disabled a:hover {
-    color: #DEDEDE;
+    color: #dedede;
     background-color: transparent;
-    border-color: #DEDEDE;
+    border-color: #dedede;
 }
 
 /* Our old customized version of Zebra Pagination CSS from when we copy and pasted it rather than having it as a dependency. */
@@ -1275,7 +1339,7 @@ Enjoy.
     list-style-type: none;
     margin: 0;
     padding: 0;
-    float: left
+    float: left;
 }
 
 .Zebra_Pagination li {
@@ -1309,7 +1373,7 @@ Enjoy.
 /* "NEXT PAGE" AND "PREVIOUS PAGE" LINKS---------------------------------------------------------------------------------------------------------------------- */
 .Zebra_Pagination a.navigation {
     border: 1px solid var(--control-border-color);
-    background-repeat: no-repeat
+    background-repeat: no-repeat;
 }
 
 .Zebra_Pagination a.navigation:hover {
@@ -1319,13 +1383,13 @@ Enjoy.
 .Zebra_Pagination a.previous {
     background-image: url("../images/larrow.png");
     background-position: left center;
-    padding-left: 45px
+    padding-left: 45px;
 }
 
 .Zebra_Pagination a.next {
     background-image: url("../images/rarrow.png");
     background-position: right center;
-    padding-right: 45px
+    padding-right: 45px;
 }
 
 .Zebra_Pagination a.disabled {
@@ -1355,7 +1419,7 @@ Enjoy.
     margin-right: 2px;
     display: block;
     float: left;
-    padding: 8px 4px
+    padding: 8px 4px;
 }
 
 /* A little extra CSS that overrides some colors in the zebra_pagination.css that aren't set in the old CSS. */
