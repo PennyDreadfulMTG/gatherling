@@ -122,4 +122,22 @@ class MarshallerTest extends TestCase
         $this->expectException(MarshalException::class);
         marshal(new stdClass())->string();
     }
+
+    public function testDictIntOrString(): void
+    {
+        $input = ['a' => 1, 'b' => 'hello', 'c' => '99'];
+        $this->assertSame(['a' => 1, 'b' => 'hello', 'c' => 99], marshal($input)->dictIntOrString());
+    }
+
+    public function testDictIntOrStringThrowsOnFloat(): void
+    {
+        $this->expectException(MarshalException::class);
+        marshal(['a' => 1, 'b' => 'hello', 'c' => 99.99])->dictIntOrString();
+    }
+
+    public function testDictIntOrStringThrowsOnNull(): void
+    {
+        $this->expectException(MarshalException::class);
+        marshal(['a' => 1, 'b' => 'hello', 'c' => null])->dictIntOrString();
+    }
 }

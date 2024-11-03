@@ -131,13 +131,19 @@ class Marshaller
         }
         $result = [];
         foreach ($this->value as $key => $value) {
-            if (is_int($value)) {
-                $result[$key] = (int) $value;
-            } elseif (is_string($value)) {
-                $result[$key] = (string) $value;
-            } else {
-                throw new MarshalException($value, 'dictIntOrStringEntry');
+            if (is_scalar($value)) {
+                try {
+                    $this->strictIntCheck($value);
+                    $result[$key] = (int) $value;
+                    continue;
+                } catch (MarshalException) {
+                    if (is_string($value)) {
+                        $result[$key] = $value;
+                        continue;
+                    }
+                }
             }
+            throw new MarshalException($value, 'dictIntOrStringEntry');
         }
         return $result;
     }
