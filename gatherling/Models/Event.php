@@ -838,40 +838,46 @@ class Event
     }
 
     // Assigns trophies based on the finals matches which are entered.
-    public function assignTropiesFromMatches(): void
+    public function assignTrophiesFromMatches(): void
     {
         $win = null;
         $sec = null;
         $t4 = [];
         $t8 = [];
 
-        $totalRounds = max((int) $this->mainrounds, (int) $this->mainrounds + (int) $this->finalrounds);
+        // BAKERT redundant max here unless finalrounds can be negative XD
+        $finalRounds = (int) $this->finalrounds;
+        $totalRounds = (int) $this->mainrounds + $finalRounds;
 
-        $finalMatches = $this->getRoundMatches($totalRounds);
-        if (!empty($finalMatches)) {
-            $finalMatch = $finalMatches[0];
-            $win = $finalMatch->getWinner();
-            $sec = $finalMatch->getLoser();
-        }
+        if ($finalRounds > 0) {
+            $finalMatches = $this->getRoundMatches($totalRounds);
+            if (!empty($finalMatches)) {
+                $finalMatch = $finalMatches[0];
+                $win = $finalMatch->getWinner();
+                $sec = $finalMatch->getLoser();
+            }
 
-        if ($totalRounds >= 2) {
-            $semiMatches = $this->getRoundMatches($totalRounds - 1);
-            foreach ($semiMatches as $match) {
-                $loser = $match->getLoser();
-                if ($loser !== null) {
-                    $t4[] = $loser;
+            if ($finalRounds >= 2) {
+                $semiMatches = $this->getRoundMatches($totalRounds - 1);
+                foreach ($semiMatches as $match) {
+                    $loser = $match->getLoser();
+                    if ($loser !== null) {
+                        $t4[] = $loser;
+                    }
                 }
             }
-        }
 
-        if ($totalRounds >= 3) {
-            $quarterMatches = $this->getRoundMatches($totalRounds - 2);
-            foreach ($quarterMatches as $match) {
-                $loser = $match->getLoser();
-                if ($loser !== null) {
-                    $t8[] = $loser;
+            if ($finalRounds >= 3) {
+                $quarterMatches = $this->getRoundMatches($totalRounds - 2);
+                foreach ($quarterMatches as $match) {
+                    $loser = $match->getLoser();
+                    if ($loser !== null) {
+                        $t8[] = $loser;
+                    }
                 }
             }
+
+            print_r(['win' => $win, 'sec' => $sec, 't4' => $t4, 't8' => $t8]);
         }
 
         $this->setFinalists($win, $sec, $t4, $t8);
@@ -1586,7 +1592,7 @@ class Event
         if (in_array($structure, ['Swiss', 'Swiss (Blossom)', 'League', 'League Match'])) {
             $this->assignMedalsbyStandings();
         } elseif ($structure === 'Single Elimination') {
-            $this->assignTropiesFromMatches();
+            $this->assignTrophiesFromMatches();
         }
     }
 
