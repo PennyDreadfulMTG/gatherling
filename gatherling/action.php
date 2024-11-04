@@ -118,7 +118,7 @@ function main(): never
         if (count($recentMatches) > 0) {
             $match = $recentMatches[0];
             $event = $match->getEvent();
-            if (!$event->finalized && $event->active && $match->playerBye($player)) {
+            if (!$event->finalized && $event->active && $match->playerBye($player) && $match->round === $event->current_round) {
                 $message = "You were awarded the bye in round {$event->current_round} of {$event->name}.";
             }
         }

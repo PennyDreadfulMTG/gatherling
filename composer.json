@@ -9,7 +9,7 @@
         "autofix": "vendor/bin/phpcbf -d memory_limit=2G --runtime-set testVersion 8.2 .",
         "analyze": "vendor/bin/phpstan --memory-limit=2G && vendor/bin/psalm --no-cache --threads=1",
         "jstests": "bun test",
-		"csslint": "npx stylelint '**/*.css' '!vendor/**/*.css'",
+		"csslint": "npx stylelint '**/*.css' '!vendor/**/*.css' && npx prettier --write '**/*.css' '!vendor/**/*.css'",
 		"cssfix": "npx stylelint --fix '**/*.css' '!vendor/**/*.css'"
     },
     "require": {
