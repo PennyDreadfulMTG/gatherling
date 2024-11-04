@@ -26,7 +26,7 @@
         "mustache/mustache": "^2.14",
         "monolog/monolog": "^3.7",
         "symfony/dom-crawler": "^6.4",
-        "symfony/css-selector": "^6.4",
+        "symfony/css-selector": "^7.1",
         "bakert/blossom-php": "^1.0",
         "stefangabos/zebra_pagination": "^2.4",
         "yassinedoghri/php-icons": "^1.1",
