@@ -46,7 +46,7 @@
   </file>
   <file src="tests/Models/EventTest.php">
     <InvalidArrayOffset>
-      <code><![CDATA[$expected_medals[$i]]]></code>
+      <code><![CDATA[$expectedMedals[$i]]]></code>
     </InvalidArrayOffset>
   </file>
   <file src="tests/Support/Listeners/DatabaseTestListener.php">
