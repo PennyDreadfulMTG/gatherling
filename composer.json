@@ -25,7 +25,7 @@
         "firebase/php-jwt": "^6.10",
         "mustache/mustache": "^2.14",
         "monolog/monolog": "^3.7",
-        "symfony/dom-crawler": "^6.4",
+        "symfony/dom-crawler": "^7.1",
         "symfony/css-selector": "^7.1",
         "bakert/blossom-php": "^1.0",
         "stefangabos/zebra_pagination": "^2.4",
