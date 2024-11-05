@@ -38,10 +38,10 @@ class Event
     public ?string $cohost; // has one Player - cohost
 
     // Subevents
-    public string|int $mainrounds;
+    public int $mainrounds;
     public string $mainstruct;
     public ?int $mainid; // Has one main subevent
-    public string|int $finalrounds;
+    public int $finalrounds;
     public string $finalstruct;
     public ?int $finalid; // Has one final subevent
 
@@ -64,9 +64,9 @@ class Event
         if ($name == '') {
             $this->id = 0;
             $this->name = '';
-            $this->mainrounds = '';
+            $this->mainrounds = 0;
             $this->mainstruct = '';
-            $this->finalrounds = '';
+            $this->finalrounds = 0;
             $this->finalstruct = '';
             $this->host = null;
             $this->cohost = null;
@@ -117,11 +117,12 @@ class Event
             }
         }
 
+        // BAKERT remove all casts on mainrounds and finalrounds
         $this->standing = new Standings($this->name, '0');
 
         // Main rounds
         $this->mainid = null;
-        $this->mainrounds = '';
+        $this->mainrounds = 0;
         $this->mainstruct = '';
         $sql = 'SELECT id AS mainid, rounds, type FROM subevents WHERE parent = :parent AND timing = 1';
         $params = ['parent' => $this->name];
@@ -134,7 +135,7 @@ class Event
 
         // Final rounds
         $this->finalid = null;
-        $this->finalrounds = '';
+        $this->finalrounds = 0;
         $this->finalstruct = '';
         $sql = 'SELECT id AS mainid, rounds, type FROM subevents WHERE parent = :parent AND timing = 2';
         $params = ['parent' => $this->name];
@@ -179,9 +180,9 @@ class Event
         string $player_reportable,
         string $late_entry_limit,
         string $private,
-        string $mainrounds,
+        int $mainrounds,
         string $mainstruct,
-        string $finalrounds,
+        int $finalrounds,
         string $finalstruct,
         string $client
     ): Event {
@@ -220,7 +221,7 @@ class Event
 
         $event->late_entry_limit = (int) $late_entry_limit;
 
-        if ($mainrounds == '') {
+        if ($mainrounds === 0) {
             $mainrounds = 3;
         }
         if ($mainstruct == '') {
@@ -293,8 +294,8 @@ class Event
             ];
             db()->execute($sql, $params);
 
-            $this->newSubevent((int) $this->mainrounds, 1, $this->mainstruct);
-            $this->newSubevent((int) $this->finalrounds, 2, $this->finalstruct);
+            $this->newSubevent($this->mainrounds, 1, $this->mainstruct);
+            $this->newSubevent($this->finalrounds, 2, $this->finalstruct);
         } else {
             $sql = '
                 UPDATE
@@ -339,19 +340,19 @@ class Event
             db()->execute($sql, $params);
 
             if ($this->mainid == null) {
-                $this->newSubevent((int) $this->mainrounds, 1, $this->mainstruct);
+                $this->newSubevent($this->mainrounds, 1, $this->mainstruct);
             } else {
                 $main = new Subevent($this->mainid);
-                $main->rounds = (int) $this->mainrounds;
+                $main->rounds = $this->mainrounds;
                 $main->type = $this->mainstruct;
                 $main->save();
             }
 
             if ($this->finalid == null) {
-                $this->newSubevent((int) $this->finalrounds, 2, $this->finalstruct);
+                $this->newSubevent($this->finalrounds, 2, $this->finalstruct);
             } else {
                 $final = new Subevent($this->finalid);
-                $final->rounds = (int) $this->finalrounds;
+                $final->rounds = $this->finalrounds;
                 $final->type = $this->finalstruct;
                 $final->save();
             }
@@ -815,9 +816,9 @@ class Event
         $draws = 0;
         $id = $this->mainid;
 
-        if ($round > (int) $this->mainrounds) {
+        if ($round > $this->mainrounds) {
             $id = $this->finalid;
-            $round = $round - (int) $this->mainrounds;
+            $round = $round - $this->mainrounds;
         }
 
         if ($round == -99) {
@@ -845,9 +846,8 @@ class Event
         $t4 = [];
         $t8 = [];
 
-        // BAKERT redundant max here unless finalrounds can be negative XD
-        $finalRounds = (int) $this->finalrounds;
-        $totalRounds = (int) $this->mainrounds + $finalRounds;
+        $finalRounds = $this->finalrounds;
+        $totalRounds = $this->mainrounds + $finalRounds;
 
         if ($finalRounds > 0) {
             $finalMatches = $this->getRoundMatches($totalRounds);
@@ -876,8 +876,6 @@ class Event
                     }
                 }
             }
-
-            print_r(['win' => $win, 'sec' => $sec, 't4' => $t4, 't8' => $t8]);
         }
 
         $this->setFinalists($win, $sec, $t4, $t8);
@@ -1064,9 +1062,9 @@ class Event
 
     public function isLeague(): bool
     {
-        $test = (int) $this->current_round;
-        if ($test <= ((int) $this->finalrounds + (int) $this->mainrounds)) {
-            if ($test > (int) $this->mainrounds) {
+        $test = $this->current_round;
+        if ($test <= ($this->finalrounds + $this->mainrounds)) {
+            if ($test > $this->mainrounds) {
                 $structure = $this->finalstruct;
             } else {
                 $structure = $this->mainstruct;
@@ -1091,9 +1089,9 @@ class Event
         //Check if all matches in the current round are finished
         if (count($this->unfinishedMatches()) === 0) {
             //Check to see if we are main rounds or final, get structure
-            $test = (int) $this->current_round;
-            if ($test < ((int) $this->finalrounds + (int) $this->mainrounds)) {
-                if ($test >= (int) $this->mainrounds) {
+            $test = $this->current_round;
+            if ($test < ($this->finalrounds + $this->mainrounds)) {
+                if ($test >= $this->mainrounds) {
                     // In the final rounds.
                     $structure = $this->finalstruct;
                     $subevent_id = $this->finalid;
@@ -1694,9 +1692,9 @@ class Event
 
     public function structureSummary(): string
     {
-        $ret = $this->toEnglish($this->mainstruct, (int) $this->mainrounds, false);
+        $ret = $this->toEnglish($this->mainstruct, $this->mainrounds, false);
         if ($this->finalrounds > 0) {
-            $ret = $ret . ' followed by ' . $this->toEnglish($this->finalstruct, (int) $this->finalrounds, true);
+            $ret = $ret . ' followed by ' . $this->toEnglish($this->finalstruct, $this->finalrounds, true);
         }
         return $ret;
     }

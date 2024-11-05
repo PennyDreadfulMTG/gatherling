@@ -270,9 +270,9 @@ function insertEvent(): Event
         post()->string('player_reportable'),
         post()->string('late_entry_limit'),
         post()->string('private'),
-        post()->string('mainrounds'),
+        post()->int('mainrounds'),
         post()->string('mainstruct'),
-        post()->string('finalrounds'),
+        post()->int('finalrounds'),
         post()->string('finalstruct'),
         post()->string('client')
     );

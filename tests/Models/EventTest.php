@@ -96,7 +96,7 @@ class EventTest extends TestCase
                 Matchup::saveReport('W20', $match->id, 'a');
                 Matchup::saveReport('L20', $match->id, 'b');
             }
-            for ($i = 2; $i <= (int) $event->mainrounds + (int) $event->finalrounds; $i++) {
+            for ($i = 2; $i <= $event->mainrounds + $event->finalrounds; $i++) {
                 $matches = $event->getRoundMatches($i);
                 foreach ($matches as $match) {
                     Matchup::saveReport('W20', $match->id, 'a');
@@ -105,7 +105,6 @@ class EventTest extends TestCase
             }
             $event->assignTrophiesFromMatches();
             $entries = $event->getEntries();
-            print_r($entries);
             foreach ($expectedMedals as $i => $medal) {
                 $this->assertEquals($medal, $entries[$i]->medal);
             }
@@ -165,10 +164,10 @@ class EventTest extends TestCase
                 '1',
                 '0',
                 '3',
+                1,
                 'Single Elimination',
-                '1',
-                '1', // BAKERT
-                '1',
+                1,
+                'Single Elimination',
                 '1'
             );
             $event = new Event($name);

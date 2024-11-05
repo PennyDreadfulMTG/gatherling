@@ -7,6 +7,6 @@ namespace Gatherling\Models;
 class EventSubeventDto extends Dto
 {
     public int $mainid;
-    public string $rounds;
+    public int $rounds;
     public string $type;
 }

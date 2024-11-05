@@ -366,9 +366,9 @@ function create_event(): array
         argStr('player_reportable', ''),
         argStr('late_entry_limit', ''),
         argStr('private', ''),
-        argStr('mainrounds', ''),
+        (int) argStr('mainrounds', '0'),
         argStr('mainstruct', ''),
-        argStr('finalrounds', ''),
+        (int) argStr('finalrounds', '0'),
         argStr('finalstruct', ''),
         argStr('client', '1')
     );
