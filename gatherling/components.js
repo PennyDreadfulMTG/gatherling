@@ -33,6 +33,6 @@ Vue.use(Toasted);
     });
 
   var app = new Vue({
-        el: '#maincontainer',
+        el: 'body',
         store
     })

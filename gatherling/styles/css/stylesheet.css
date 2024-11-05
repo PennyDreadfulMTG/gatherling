@@ -206,7 +206,7 @@ hr {
 
 /* Remnants of the hacked upon 960 grid system, with everything we don't use ripped out */
 
-.container_12 {
+body {
     margin-left: auto;
     margin-right: auto;
     max-width: 960px;
@@ -231,11 +231,11 @@ hr {
     ); /* 100% width minus left and right margins */
 }
 
-.container_12 .grid_6 {
+.grid_6 {
     max-width: 460px;
 }
 
-.container_12 .grid_12 {
+.grid_12 {
     max-width: 940px;
 }
 
@@ -247,36 +247,36 @@ hr {
     margin-right: 0;
 }
 
-.container_12 .grid_2 {
+.grid_2 {
     max-width: 140px;
 }
 
-.container_12 .grid_4 {
+.grid_4 {
     max-width: 298px;
 }
 
-.container_12 .grid_5 {
+.grid_5 {
     max-width: 373px;
 }
 
-.container_12 .grid_7 {
+.grid_7 {
     max-width: 540px;
 }
 
-.container_12 .grid_8 {
+.grid_8 {
     max-width: 620px;
 }
 
-.container_12 .grid_10 {
+.grid_10 {
     max-width: 940px;
     margin-bottom: 15px;
 }
 
-.container_12 .prefix_1 {
+.prefix_1 {
     padding-left: 0;
 }
 
-.container_12 .suffix_1 {
+.suffix_1 {
     padding-right: 0;
 }
 
