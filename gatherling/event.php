@@ -526,7 +526,10 @@ function updateMatches(): void
     }
     $rnd = post()->int('newmatchround');
 
-    if ($pA !== '' && $pB !== '' && $rnd) {
+    if ($pA !== '' && $pB !== '') {
+        if ($rnd === 0) {
+            throw new InvalidArgumentException('Cannot add match to round 0');
+        }
         $playerA = new Standings($event->name, $pA);
         $playerB = new Standings($event->name, $pB);
         if ($res == 'P') {
