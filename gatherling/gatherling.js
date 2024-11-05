@@ -91,6 +91,12 @@ function formatDate(originalDate, start, timeZone, locale, short) {
   } else {
     formattedDate = date.toFormat('ccc, MMM d, yyyy');
   }
+  if (formattedTime === 'midnight' && formattedDate === 'Today') {
+    formattedDate = 'This';
+  }
+  if (formattedTime === 'midnight') {
+    formattedDate += ' morning';
+  }
 
   return `${formattedDate} • ${formattedTime}`;
 }
