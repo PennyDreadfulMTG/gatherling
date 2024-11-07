@@ -1998,16 +1998,16 @@
         },
         {
             "name": "yassinedoghri/php-icons",
-            "version": "v1.1.0",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yassinedoghri/php-icons.git",
-                "reference": "25530661989860a225f13b6c92c1ee1d2784f9d1"
+                "reference": "87ff8cbb0145965d8dfa6d10f8d370650cf4e569"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yassinedoghri/php-icons/zipball/25530661989860a225f13b6c92c1ee1d2784f9d1",
-                "reference": "25530661989860a225f13b6c92c1ee1d2784f9d1",
+                "url": "https://api.github.com/repos/yassinedoghri/php-icons/zipball/87ff8cbb0145965d8dfa6d10f8d370650cf4e569",
+                "reference": "87ff8cbb0145965d8dfa6d10f8d370650cf4e569",
                 "shasum": ""
             },
             "require": {
@@ -2017,10 +2017,10 @@
             },
             "require-dev": {
                 "kint-php/kint": "^5.1.1",
-                "pestphp/pest": "^3.3.0",
-                "pestphp/pest-plugin-type-coverage": "^3.1.0",
-                "phpstan/phpstan": "^1.12.6",
-                "rector/rector": "^1.2.6",
+                "pestphp/pest": "v3.5.1",
+                "pestphp/pest-plugin-type-coverage": "^v3.1.0",
+                "phpstan/phpstan": "^1.12.7",
+                "rector/rector": "^1.2.8",
                 "symplify/coding-standard": "^12.2.3",
                 "symplify/easy-coding-standard": "^12.3.6"
             },
@@ -2030,6 +2030,7 @@
             "type": "library",
             "autoload": {
                 "files": [
+                    "src/functions.php",
                     "src/Console/helpers.php"
                 ],
                 "psr-4": {
@@ -2051,9 +2052,9 @@
             "description": "A PHP library based on iconify's API to download and render svg icons from popular open source icon sets.",
             "support": {
                 "issues": "https://github.com/yassinedoghri/php-icons/issues",
-                "source": "https://github.com/yassinedoghri/php-icons/tree/v1.1.0"
+                "source": "https://github.com/yassinedoghri/php-icons/tree/v1.2.0"
             },
-            "time": "2024-10-07T12:38:01+00:00"
+            "time": "2024-11-06T11:12:15+00:00"
         },
         {
             "name": "ypho/scryfall",
@@ -3218,16 +3219,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "5.5.0",
+            "version": "5.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "54e10d44fc1a84e2598d26f70d4f6f1f233e228a"
+                "reference": "0c70d2c566e899666f367ab7b80986beb3581e6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/54e10d44fc1a84e2598d26f70d4f6f1f233e228a",
-                "reference": "54e10d44fc1a84e2598d26f70d4f6f1f233e228a",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/0c70d2c566e899666f367ab7b80986beb3581e6f",
+                "reference": "0c70d2c566e899666f367ab7b80986beb3581e6f",
                 "shasum": ""
             },
             "require": {
@@ -3276,9 +3277,9 @@
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
             "support": {
                 "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
-                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.5.0"
+                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.5.1"
             },
-            "time": "2024-11-04T21:26:31+00:00"
+            "time": "2024-11-06T11:58:54+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
