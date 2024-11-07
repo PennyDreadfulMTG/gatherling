@@ -339,28 +339,21 @@ class Deck
 
     public function canView(string|false $username): bool
     {
-        if ($username === false) {
-            return false;
-        }
         $event = $this->getEvent();
-        $player = new Player($username);
-
         if (($event->finalized && !$event->active) || $event->private_decks == 0) {
             return true;
         } elseif ($event->current_round > $event->mainrounds && !$event->private_finals) {
             return true;
-        } else {
-            if (
-                $player->isSuper() ||
-                $event->isHost($username) ||
-                $event->isOrganizer($username) ||
-                strcasecmp($username, $this->playername) == 0
-            ) {
-                return true;
-            }
+        } elseif ($username === false) {
+            return false;
         }
-
-        return false;
+        $player = new Player($username);
+        return (
+            $player->isSuper() ||
+            $event->isHost($username) ||
+            $event->isOrganizer($username) ||
+            ($this->playername !== null && strcasecmp($username, $this->playername) == 0)
+        );
     }
 
     public function isValid(): bool

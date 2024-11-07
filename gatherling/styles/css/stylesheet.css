@@ -206,7 +206,7 @@ hr {
 
 /* Remnants of the hacked upon 960 grid system, with everything we don't use ripped out */
 
-.container_12 {
+body {
     margin-left: auto;
     margin-right: auto;
     max-width: 960px;
@@ -231,11 +231,11 @@ hr {
     ); /* 100% width minus left and right margins */
 }
 
-.container_12 .grid_6 {
+.grid_6 {
     max-width: 460px;
 }
 
-.container_12 .grid_12 {
+.grid_12 {
     max-width: 940px;
 }
 
@@ -247,37 +247,36 @@ hr {
     margin-right: 0;
 }
 
-.container_12 .grid_2 {
+.grid_2 {
     max-width: 140px;
 }
 
-.container_12 .grid_4 {
+.grid_4 {
     max-width: 298px;
 }
 
-.container_12 .grid_5 {
+.grid_5 {
     max-width: 373px;
-    padding: 15px;
 }
 
-.container_12 .grid_7 {
+.grid_7 {
     max-width: 540px;
 }
 
-.container_12 .grid_8 {
+.grid_8 {
     max-width: 620px;
 }
 
-.container_12 .grid_10 {
+.grid_10 {
     max-width: 940px;
     margin-bottom: 15px;
 }
 
-.container_12 .prefix_1 {
+.prefix_1 {
     padding-left: 0;
 }
 
-.container_12 .suffix_1 {
+.suffix_1 {
     padding-right: 0;
 }
 
@@ -566,7 +565,7 @@ a.create_deck_link {
 
 .ds_inputbox {
     margin: auto;
-    width: 750px;
+    max-width: 750px;
     border: 1px solid var(--control-border-color);
     color: var(--main-text-color);
     background-color: var(--highlight-background-color);
@@ -575,17 +574,15 @@ a.create_deck_link {
 }
 
 .ds_left {
-    width: 590px;
+    max-width: 590px;
     background-color: var(--highlight-background-color);
-    float: left;
     padding: 3px;
 }
 
 .ds_right {
-    width: 125px;
+    max-width: 125px;
     background-color: var(--highlight-background-color);
     padding: 3px;
-    float: left;
 }
 
 .ds_label {
@@ -598,7 +595,11 @@ a.create_deck_link {
 .ds_select {
     margin-top: 15px;
     display: block;
-    font-size: 13px;
+}
+
+.ds_label span {
+    display: inline-block;
+    min-width: 12ch;
 }
 
 .ds_input {
@@ -606,10 +607,9 @@ a.create_deck_link {
     color: var(--main-text-color);
     background-color: var(--highlight-background-color);
     border-radius: var(--control-border-radius);
-    width: 450px;
+    max-width: 450px;
     padding: 5px;
     margin: 0;
-    float: right;
 }
 
 .ds_input:hover {
@@ -635,10 +635,9 @@ a.create_deck_link {
     margin: auto;
     margin-top: 13px;
     font-size: 13px;
-    width: 110px;
+    max-width: 110px;
     text-align: center;
     display: block;
-    clear: both;
     padding: 6px 28px;
     border: 1px solid var(--control-border-color);
     border-radius: var(--control-border-radius);
@@ -670,29 +669,28 @@ a.create_deck_link {
     font-weight: bold;
     margin: auto;
     margin-top: 10px;
-    font-size: 13px;
     text-align: center;
     display: block;
-    clear: both;
     border: none;
 }
 
 .ds_color {
     appearance: none;
-    font-size: 15px;
     border: none;
     border-radius: 0;
     padding: 5px;
-    margin-left: 85px;
     margin-top: 5px;
 }
 
 .ds_checkbox {
-    padding: 10px;
+    padding: var(--spacing-5-static);
     margin: 5px;
     border: 1px solid var(--control-border-color);
     border-radius: var(--control-border-radius);
     background-color: var(--control-background-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .ds_checkbox:hover {
@@ -708,7 +706,7 @@ a.create_deck_link {
 #ds_select {
     margin: 5px;
     margin-top: 0;
-    width: 140px;
+    max-width: 140px;
     height: 27px;
     outline: solid transparent;
     border: 1px solid var(--control-border-color);
@@ -728,14 +726,6 @@ a.create_deck_link {
     display: block;
     height: 0;
     overflow: hidden;
-}
-
-.group::after {
-    clear: both;
-}
-
-.group {
-    zoom: 1;
 }
 
 .banner_alert {

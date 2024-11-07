@@ -11,7 +11,7 @@ class RoundDropMenu extends DropMenu
     public function __construct(Event $event, int|string|null $selected, int $defaultValue = 0)
     {
         $options = [];
-        for ($r = 1; $r <= ((int) $event->mainrounds + (int) $event->finalrounds); $r++) {
+        for ($r = 1; $r <= ($event->mainrounds + $event->finalrounds); $r++) {
             $star = $r > $event->mainrounds ? '*' : '';
             $options[] = [
                 'isSelected' => $selected == $r,

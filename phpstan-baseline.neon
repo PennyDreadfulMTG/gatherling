@@ -156,21 +156,6 @@ parameters:
 			path: gatherling/Models/Decksearch.php
 
 		-
-			message: "#^Binary operation \"\\-\" between int and int\\|string results in an error\\.$#"
-			count: 6
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Binary operation \"\\-\" between int\\|string and int\\<min, \\-1\\>\\|int\\<1, max\\> results in an error\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
-			message: "#^Binary operation \"\\-\\=\" between int and int\\|string results in an error\\.$#"
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
 			message: "#^Cannot access property \\$num_rows on mysqli_stmt\\|false\\.$#"
 			count: 1
 			path: gatherling/Models/Event.php

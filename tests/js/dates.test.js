@@ -17,7 +17,7 @@ const tests = {
     now,
     ['Today • 8pm', 'Friday, May 31 • 8pm EDT'],
     ['Today • 1am', 'Saturday, June 1 • 1am BST'],
-    ['Today • midnight', 'Saturday, June 1 • midnight UTC']
+    ['This morning • midnight', 'Saturday, June 1 • midnight UTC']
   ],
   twelveHoursAgo: [
     DateTime.fromISO('2024-05-31T12:00:00Z'),
@@ -47,13 +47,13 @@ const tests = {
     DateTime.fromISO('2024-05-31T00:00:00Z'),
     ['Yesterday • 8pm', 'Thursday, May 30, 2024 • 8pm EDT'],
     ['Yesterday • 1am', 'Friday, May 31, 2024 • 1am BST'],
-    ['Yesterday • midnight', 'Friday, May 31, 2024 • midnight UTC']
+    ['Yesterday morning • midnight', 'Friday, May 31, 2024 • midnight UTC']
   ],
   tomorrow: [
     DateTime.fromISO('2024-06-02T00:00:00Z'),
     ['Tomorrow • 8pm', 'Saturday, June 1 • 8pm EDT'],
     ['Tomorrow • 1am', 'Sunday, June 2 • 1am BST'],
-    ['Tomorrow • midnight', 'Sunday, June 2 • midnight UTC']
+    ['Tomorrow morning • midnight', 'Sunday, June 2 • midnight UTC']
   ],
   nextWeek: [
     DateTime.fromISO('2024-06-05T08:30:00Z'),
@@ -76,8 +76,8 @@ const tests = {
   farPast: [
     DateTime.fromISO('2023-01-01T00:00:00Z'),
     ['Sat, Dec 31, 2022 • 7pm', 'Saturday, December 31, 2022 • 7pm EST'],
-    ['Sun, Jan 1, 2023 • midnight', 'Sunday, January 1, 2023 • midnight GMT'],
-    ['Sun, Jan 1, 2023 • midnight', 'Sunday, January 1, 2023 • midnight UTC']
+    ['Sun, Jan 1, 2023 morning • midnight', 'Sunday, January 1, 2023 • midnight GMT'],
+    ['Sun, Jan 1, 2023 morning • midnight', 'Sunday, January 1, 2023 • midnight UTC']
   ]
 };
 
