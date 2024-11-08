@@ -101,18 +101,43 @@ function formatDate(originalDate, start, timeZone, locale, short) {
   return `${formattedDate} • ${formattedTime}`;
 }
 
-export { formatDate };
+function initTime() {
+  const timeElements = document.querySelectorAll('time[datetime]');
+  timeElements.forEach(timeElement => {
+      const isoDate = timeElement.getAttribute('datetime');
+      const originalDate = luxon.DateTime.fromISO(isoDate);
+      const start = luxon.DateTime.now();
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const locale = navigator.language || navigator.languages[0]; // Fallback to languages array if needed
+      const short = !timeElement.classList.contains('long');
+      const formattedDate = formatDate(originalDate, start, timeZone, locale, short);
+      timeElement.textContent = formattedDate;
+  });
+}
+
+function initHoverImage() {
+  document.querySelectorAll('.cardHoverImageWrapper').forEach(wrapper => {
+    wrapper.addEventListener('mouseenter', function() {
+        const hoverImage = this.querySelector('.linkCardHoverImage');
+        const rect = this.getBoundingClientRect();
+
+        // Adjust the hover image position based on card's position in the viewport, with your offsets
+        hoverImage.style.position = 'fixed';
+        hoverImage.style.left = `${rect.left + 160}px`; // Offset 150px to the right of the card
+        hoverImage.style.top = `${rect.top - 160}px`; // Offset -155px above the card
+        hoverImage.style.display = 'block';
+    });
+
+    wrapper.addEventListener('mouseleave', function() {
+        const hoverImage = this.querySelector('.linkCardHoverImage');
+        hoverImage.style.display = 'none';
+    });
+  });
+}
+
+export { formatDate, initHoverImage };
 
 if (typeof window !== 'undefined') {
-    const timeElements = document.querySelectorAll('time[datetime]');
-    timeElements.forEach(timeElement => {
-        const isoDate = timeElement.getAttribute('datetime');
-        const originalDate = luxon.DateTime.fromISO(isoDate);
-        const start = luxon.DateTime.now();
-        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const locale = navigator.language || navigator.languages[0]; // Fallback to languages array if needed
-        const short = !timeElement.classList.contains('long');
-        const formattedDate = formatDate(originalDate, start, timeZone, locale, short);
-        timeElement.textContent = formattedDate;
-    });
+  initTime();
+  initHoverImage();
 }
