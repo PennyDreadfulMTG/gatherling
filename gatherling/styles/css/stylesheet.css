@@ -431,25 +431,9 @@ a.create_deck_link {
     color: var(--link-emphasis-text-color);
 }
 
-/* autocard */
-.cardHoverImageWrapper {
-    position: relative;
-    display: inline-block;
-}
-
-.linkCardHoverImage {
-    position: absolute;
-    left: 150px;
-    top: -155px;
-    z-index: 20;
-}
-
 .cardHoverImageWrapper .linkCardHoverImage {
     display: none;
-}
-
-.cardHoverImageWrapper:hover .linkCardHoverImage {
-    display: block;
+    z-index: 20;
 }
 
 .crop {
