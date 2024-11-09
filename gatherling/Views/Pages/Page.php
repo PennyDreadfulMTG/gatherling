@@ -12,7 +12,6 @@ use function Gatherling\Helpers\config;
 
 abstract class Page extends TemplateResponse
 {
-    public bool $enableVue = false;
     public string $contentSafe = '';
     public string $gitHash;
     public string $cssLink;
