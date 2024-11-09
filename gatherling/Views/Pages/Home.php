@@ -23,7 +23,7 @@ class Home extends Page
     /** @var ?array{name: string, link: string} */
     public ?array $mostRecentHostedEvent = null;
     /** @var list<array{eventName: string, eventReportLink: string, playerLink: string, deckLink: string, playerName: string, deckName: string, colorImages: ColorImages}> */
-    public array $recentWinners;
+    public array $recentWinners = [];
     public bool $hasRecentWinners;
 
     /**
