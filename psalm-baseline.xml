@@ -1,11 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
   <file src="gatherling/Auth/Session.php">
+    <MixedInferredReturnType>
+      <code><![CDATA[array<string, mixed>]]></code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement>
+      <code><![CDATA[$details ? json_decode($details, true) : []]]></code>
+      <code><![CDATA[$details ? json_decode($details, true) : []]]></code>
+    </MixedReturnStatement>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$token]]></code>
+      <code><![CDATA[$details]]></code>
+    </RiskyTruthyFalsyComparison>
     <TypeDoesNotContainType>
       <code><![CDATA[is_string($token)]]></code>
     </TypeDoesNotContainType>
   </file>
   <file src="gatherling/Data/Db.php">
+    <MissingClosureParamType>
+      <code><![CDATA[$_params]]></code>
+      <code><![CDATA[$_params]]></code>
+      <code><![CDATA[$params]]></code>
+      <code><![CDATA[$params]]></code>
+      <code><![CDATA[$params]]></code>
+      <code><![CDATA[$params]]></code>
+      <code><![CDATA[$params]]></code>
+      <code><![CDATA[$sql]]></code>
+      <code><![CDATA[$sql]]></code>
+      <code><![CDATA[$sql]]></code>
+      <code><![CDATA[$sql]]></code>
+      <code><![CDATA[$sql]]></code>
+      <code><![CDATA[$sql]]></code>
+      <code><![CDATA[$sql]]></code>
+    </MissingClosureParamType>
+    <MixedArgument>
+      <code><![CDATA[$params]]></code>
+      <code><![CDATA[$params]]></code>
+      <code><![CDATA[$params]]></code>
+      <code><![CDATA[$params]]></code>
+      <code><![CDATA[$params]]></code>
+      <code><![CDATA[$sql]]></code>
+      <code><![CDATA[$sql]]></code>
+      <code><![CDATA[$sql]]></code>
+      <code><![CDATA[$sql]]></code>
+      <code><![CDATA[$sql]]></code>
+      <code><![CDATA[$sql]]></code>
+      <code><![CDATA[$sql]]></code>
+    </MixedArgument>
+    <MixedAssignment>
+      <code><![CDATA[$expandedParams[$key]]]></code>
+      <code><![CDATA[$expandedParams[$newKey]]]></code>
+      <code><![CDATA[$item]]></code>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[$value]]></code>
+      <code><![CDATA[$value]]></code>
+      <code><![CDATA[$value]]></code>
+    </MixedAssignment>
+    <PossiblyInvalidArgument>
+      <code><![CDATA[$safeName]]></code>
+    </PossiblyInvalidArgument>
+    <RedundantCastGivenDocblockType>
+      <code><![CDATA[(string)$value]]></code>
+    </RedundantCastGivenDocblockType>
     <RedundantCondition>
       <code><![CDATA[isset($this->pdo) && ($this->connected || !$connectToDatabase)]]></code>
     </RedundantCondition>
@@ -13,49 +69,2585 @@
       <code><![CDATA[isset($this->pdo)]]></code>
     </RedundantPropertyInitializationCheck>
   </file>
+  <file src="gatherling/Data/Setup.php">
+    <MixedArgument>
+      <code><![CDATA[$file]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$CONFIG[$from]]]></code>
+    </MixedArrayAccess>
+    <MixedArrayAssignment>
+      <code><![CDATA[$CONFIG[$to]]]></code>
+    </MixedArrayAssignment>
+    <MixedAssignment>
+      <code><![CDATA[$CONFIG[$to]]]></code>
+      <code><![CDATA[$file]]></code>
+    </MixedAssignment>
+    <MixedPropertyFetch>
+      <code><![CDATA[$a->version]]></code>
+      <code><![CDATA[$b->version]]></code>
+    </MixedPropertyFetch>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!config()->optionalString($from)]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Helpers/Marshaller.php">
+    <MixedAssignment>
+      <code><![CDATA[$value]]></code>
+    </MixedAssignment>
+    <MixedReturnTypeCoercion>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[array<string, int|string>]]></code>
+    </MixedReturnTypeCoercion>
+  </file>
+  <file src="gatherling/Helpers/cards.php">
+    <PossiblyInvalidArgument>
+      <code><![CDATA[$card]]></code>
+      <code><![CDATA[$card]]></code>
+    </PossiblyInvalidArgument>
+    <PossiblyNullArgument>
+      <code><![CDATA[$m[2]]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullArrayAccess>
+      <code><![CDATA[$m[1]]]></code>
+      <code><![CDATA[$m[2]]]></code>
+    </PossiblyNullArrayAccess>
+  </file>
+  <file src="gatherling/Helpers/database.php">
+    <MixedInferredReturnType>
+      <code><![CDATA[Db]]></code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement>
+      <code><![CDATA[$db]]></code>
+      <code><![CDATA[$db]]></code>
+    </MixedReturnStatement>
+  </file>
+  <file src="gatherling/Helpers/helpers.php">
+    <MixedArgument>
+      <code><![CDATA[$CONFIG]]></code>
+    </MixedArgument>
+    <MixedInferredReturnType>
+      <code><![CDATA[Logger]]></code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement>
+      <code><![CDATA[$logger]]></code>
+      <code><![CDATA[$logger]]></code>
+    </MixedReturnStatement>
+  </file>
+  <file src="gatherling/Helpers/templates.php">
+    <MissingClosureParamType>
+      <code><![CDATA[$key]]></code>
+    </MissingClosureParamType>
+    <MixedArgument>
+      <code><![CDATA[$word]]></code>
+    </MixedArgument>
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[$value]]></code>
+    </MixedArgumentTypeCoercion>
+    <MixedArrayOffset>
+      <code><![CDATA[$result[$newKey]]]></code>
+      <code><![CDATA[$result[$newKey]]]></code>
+      <code><![CDATA[$result[$newKey]]]></code>
+    </MixedArrayOffset>
+    <MixedAssignment>
+      <code><![CDATA[$newKey]]></code>
+      <code><![CDATA[$result[$newKey]]]></code>
+      <code><![CDATA[$value]]></code>
+    </MixedAssignment>
+    <MixedReturnTypeCoercion>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[array<string, mixed>]]></code>
+    </MixedReturnTypeCoercion>
+  </file>
+  <file src="gatherling/Logger.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$environment]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Models/ArchetypeDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$name]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/BestEverDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$player]]></code>
+      <code><![CDATA[$rating]]></code>
+      <code><![CDATA[$t]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/CalendarEventDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$d]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$threadurl]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/CardDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$cardset]]></code>
+      <code><![CDATA[$count]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$is_changeling]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$rarity]]></code>
+      <code><![CDATA[$scryfallId]]></code>
+      <code><![CDATA[$type]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/CardSet.php">
+    <MixedArgument>
+      <code><![CDATA[$card]]></code>
+      <code><![CDATA[$card->availability]]></code>
+      <code><![CDATA[$card->manaCost]]></code>
+      <code><![CDATA[$card->name]]></code>
+      <code><![CDATA[$card->rarity]]></code>
+      <code><![CDATA[$card->subtypes]]></code>
+      <code><![CDATA[$card->subtypes]]></code>
+      <code><![CDATA[$card->text]]></code>
+      <code><![CDATA[$card->types]]></code>
+      <code><![CDATA[$set]]></code>
+      <code><![CDATA[$set]]></code>
+    </MixedArgument>
+    <MixedAssignment>
+      <code><![CDATA[$card]]></code>
+      <code><![CDATA[$data]]></code>
+      <code><![CDATA[$data]]></code>
+      <code><![CDATA[$releaseDate]]></code>
+      <code><![CDATA[$set]]></code>
+      <code><![CDATA[$setType]]></code>
+    </MixedAssignment>
+    <MixedPropertyFetch>
+      <code><![CDATA[$card->rarity]]></code>
+      <code><![CDATA[$data->cards]]></code>
+      <code><![CDATA[$data->code]]></code>
+      <code><![CDATA[$data->code]]></code>
+      <code><![CDATA[$data->data]]></code>
+      <code><![CDATA[$data->name]]></code>
+      <code><![CDATA[$data->releaseDate]]></code>
+      <code><![CDATA[$data->type]]></code>
+    </MixedPropertyFetch>
+  </file>
+  <file src="gatherling/Models/CardSetDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$code]]></code>
+      <code><![CDATA[$count]]></code>
+      <code><![CDATA[$last_updated]]></code>
+      <code><![CDATA[$modern_legal]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$released]]></code>
+      <code><![CDATA[$standard_legal]]></code>
+      <code><![CDATA[$type]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/Database.php">
+    <MixedAssignment>
+      <code><![CDATA[$list[]]]></code>
+    </MixedAssignment>
+    <MixedInferredReturnType>
+      <code><![CDATA[PDO]]></code>
+      <code><![CDATA[mysqli]]></code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement>
+      <code><![CDATA[$instance]]></code>
+      <code><![CDATA[$instance]]></code>
+      <code><![CDATA[$pdo_instance]]></code>
+      <code><![CDATA[$pdo_instance]]></code>
+    </MixedReturnStatement>
+  </file>
+  <file src="gatherling/Models/Deck.php">
+    <MissingClosureReturnType>
+      <code><![CDATA[fn($c) => $colors->{$c}]]></code>
+    </MissingClosureReturnType>
+    <MixedAssignment>
+      <code><![CDATA[$value]]></code>
+    </MixedAssignment>
+    <MixedReturnTypeCoercion>
+      <code><![CDATA[(array) $count]]></code>
+      <code><![CDATA[array<string, int>]]></code>
+    </MixedReturnTypeCoercion>
+    <PossiblyInvalidMethodCall>
+      <code><![CDATA[fetch_assoc]]></code>
+    </PossiblyInvalidMethodCall>
+    <PossiblyNullArgument>
+      <code><![CDATA[$this->deck_color_str]]></code>
+      <code><![CDATA[$this->deck_color_str]]></code>
+      <code><![CDATA[$this->event_id]]></code>
+      <code><![CDATA[$this->event_id]]></code>
+      <code><![CDATA[$this->event_id]]></code>
+      <code><![CDATA[$this->id]]></code>
+      <code><![CDATA[$this->id]]></code>
+      <code><![CDATA[$this->playername]]></code>
+      <code><![CDATA[$this->playername]]></code>
+      <code><![CDATA[$this->playername]]></code>
+      <code><![CDATA[$this->playername]]></code>
+      <code><![CDATA[$this->playername]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullOperand>
+      <code><![CDATA[$this->archetype]]></code>
+      <code><![CDATA[$this->eventname]]></code>
+      <code><![CDATA[$this->id]]></code>
+      <code><![CDATA[$this->id]]></code>
+      <code><![CDATA[$this->playername]]></code>
+      <code><![CDATA[$this->tribe]]></code>
+    </PossiblyNullOperand>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$created_date]]></code>
+      <code><![CDATA[$deck_contents_cache]]></code>
+      <code><![CDATA[$deck_hash]]></code>
+      <code><![CDATA[$event_id]]></code>
+      <code><![CDATA[$eventname]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$identical_decks]]></code>
+      <code><![CDATA[$sideboard_hash]]></code>
+      <code><![CDATA[$unparsed_cards]]></code>
+      <code><![CDATA[$unparsed_side]]></code>
+      <code><![CDATA[$whole_hash]]></code>
+    </PropertyNotSetInConstructor>
+    <RedundantCastGivenDocblockType>
+      <code><![CDATA[(int) $amt]]></code>
+      <code><![CDATA[(int) $amt]]></code>
+    </RedundantCastGivenDocblockType>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$this->format]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[empty($this->deck_color_str)]]></code>
+      <code><![CDATA[empty($this->playername)]]></code>
+    </RiskyTruthyFalsyComparison>
+    <UninitializedProperty>
+      <code><![CDATA[$this->created_date]]></code>
+      <code><![CDATA[$this->eventname]]></code>
+      <code><![CDATA[$this->eventname]]></code>
+    </UninitializedProperty>
+  </file>
+  <file src="gatherling/Models/DeckCardDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$issideboard]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$qty]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/DeckColorsDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$b]]></code>
+      <code><![CDATA[$g]]></code>
+      <code><![CDATA[$r]]></code>
+      <code><![CDATA[$u]]></code>
+      <code><![CDATA[$w]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/DeckDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$archetype]]></code>
+      <code><![CDATA[$created_date]]></code>
+      <code><![CDATA[$deck_color_str]]></code>
+      <code><![CDATA[$deck_hash]]></code>
+      <code><![CDATA[$format]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$notes]]></code>
+      <code><![CDATA[$playername]]></code>
+      <code><![CDATA[$sideboard_hash]]></code>
+      <code><![CDATA[$tribe]]></code>
+      <code><![CDATA[$whole_hash]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/DeckEventDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$name]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/Decksearch.php">
+    <MixedArgument>
+      <code><![CDATA[$matchid]]></code>
+      <code><![CDATA[$row['id']]]></code>
+      <code><![CDATA[$this->playerName]]></code>
+    </MixedArgument>
+    <MixedAssignment>
+      <code><![CDATA[$matchid]]></code>
+      <code><![CDATA[$matchids[]]]></code>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[$this->eventName]]></code>
+      <code><![CDATA[$this->eventName]]></code>
+      <code><![CDATA[$this->playerName]]></code>
+      <code><![CDATA[$this->playerName]]></code>
+      <code><![CDATA[$this->playerName]]></code>
+    </MixedAssignment>
+    <MixedReturnTypeCoercion>
+      <code><![CDATA[$list]]></code>
+      <code><![CDATA[list<array{id: int, archetype: string, name: string, playername: string, format: string, created_date: string, record: string}>]]></code>
+    </MixedReturnTypeCoercion>
+    <PossiblyNullOperand>
+      <code><![CDATA[$final_color_str]]></code>
+    </PossiblyNullOperand>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$eventName]]></code>
+      <code><![CDATA[$playerName]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Models/Entry.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$deckId]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Models/EntryDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$deck_id]]></code>
+      <code><![CDATA[$drop_round]]></code>
+      <code><![CDATA[$initial_byes]]></code>
+      <code><![CDATA[$initial_seed]]></code>
+      <code><![CDATA[$medal]]></code>
+    </MissingConstructor>
+  </file>
   <file src="gatherling/Models/Event.php">
+    <DocblockTypeContradiction>
+      <code><![CDATA[$players[$counter] == null]]></code>
+    </DocblockTypeContradiction>
     <InvalidArgument>
       <code><![CDATA[$t4]]></code>
       <code><![CDATA[$t8]]></code>
     </InvalidArgument>
+    <MixedArgument>
+      <code><![CDATA[$activePlayers[$i]['player']]]></code>
+      <code><![CDATA[$activePlayers[$pairing[$i]]['player']]]></code>
+      <code><![CDATA[$event]]></code>
+      <code><![CDATA[$event_name]]></code>
+      <code><![CDATA[$event_name]]></code>
+      <code><![CDATA[$event_name]]></code>
+      <code><![CDATA[$eventname]]></code>
+      <code><![CDATA[$eventname]]></code>
+      <code><![CDATA[$eventname]]></code>
+      <code><![CDATA[$mid]]></code>
+      <code><![CDATA[$mid]]></code>
+      <code><![CDATA[$subid]]></code>
+    </MixedArgument>
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[array_values($activePlayers)]]></code>
+    </MixedArgumentTypeCoercion>
+    <MixedAssignment>
+      <code><![CDATA[$event_names[]]]></code>
+      <code><![CDATA[$event_names[]]]></code>
+      <code><![CDATA[$event_names[]]]></code>
+      <code><![CDATA[$eventname]]></code>
+      <code><![CDATA[$eventname]]></code>
+      <code><![CDATA[$eventname]]></code>
+      <code><![CDATA[$mid]]></code>
+      <code><![CDATA[$mid]]></code>
+      <code><![CDATA[$mids[]]]></code>
+      <code><![CDATA[$mids[]]]></code>
+      <code><![CDATA[$playera->player]]></code>
+      <code><![CDATA[$playerb->player]]></code>
+      <code><![CDATA[$subid]]></code>
+      <code><![CDATA[$subids[]]]></code>
+      <code><![CDATA[$this->finalid]]></code>
+      <code><![CDATA[$this->id]]></code>
+      <code><![CDATA[$this->id]]></code>
+      <code><![CDATA[$this->mainid]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->season]]></code>
+      <code><![CDATA[$this->season]]></code>
+      <code><![CDATA[$this->season]]></code>
+      <code><![CDATA[$this->series]]></code>
+      <code><![CDATA[$this->series]]></code>
+      <code><![CDATA[$this->series]]></code>
+      <code><![CDATA[$this->series]]></code>
+      <code><![CDATA[$value]]></code>
+    </MixedAssignment>
+    <MixedInferredReturnType>
+      <code><![CDATA[int]]></code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement>
+      <code><![CDATA[Database::singleResultSingleParam('SELECT count(*) FROM entries WHERE event_id = ?', 'd', $this->id)]]></code>
+    </MixedReturnStatement>
+    <MixedReturnTypeCoercion>
+      <code><![CDATA[['adjustment' => $adjustment, 'reason' => $reason]]]></code>
+      <code><![CDATA[array_map(fn (FinalistDto $finalist) => (array) $finalist, $finalists)]]></code>
+      <code><![CDATA[array{adjustment: int, reason: string}]]></code>
+      <code><![CDATA[list<array{medal: string, player: string, deck: ?int}>]]></code>
+    </MixedReturnTypeCoercion>
+    <PossiblyNullArgument>
+      <code><![CDATA[$playera->player]]></code>
+      <code><![CDATA[$playerb->player]]></code>
+      <code><![CDATA[$players[$bye]->player]]></code>
+      <code><![CDATA[$players[0]->player]]></code>
+      <code><![CDATA[$players[0]->player]]></code>
+      <code><![CDATA[$players[0]->player]]></code>
+      <code><![CDATA[$players[1]->player]]></code>
+      <code><![CDATA[$players[1]->player]]></code>
+      <code><![CDATA[$players[1]->player]]></code>
+      <code><![CDATA[$players[2]->player]]></code>
+      <code><![CDATA[$players[2]->player]]></code>
+      <code><![CDATA[$players[3]->player]]></code>
+      <code><![CDATA[$players[3]->player]]></code>
+      <code><![CDATA[$players[4]->player]]></code>
+      <code><![CDATA[$players[5]->player]]></code>
+      <code><![CDATA[$players[6]->player]]></code>
+      <code><![CDATA[$players[7]->player]]></code>
+      <code><![CDATA[$season]]></code>
+      <code><![CDATA[$subevent_id]]></code>
+      <code><![CDATA[$this->format]]></code>
+      <code><![CDATA[$this->id]]></code>
+      <code><![CDATA[$this->id]]></code>
+      <code><![CDATA[$this->id]]></code>
+      <code><![CDATA[$this->id]]></code>
+      <code><![CDATA[$this->id]]></code>
+      <code><![CDATA[$this->id]]></code>
+      <code><![CDATA[$this->id]]></code>
+      <code><![CDATA[$this->mainid]]></code>
+      <code><![CDATA[$this->mainid]]></code>
+      <code><![CDATA[$this->mainid]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->start]]></code>
+      <code><![CDATA[$win]]></code>
+      <code><![CDATA[$win]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullOperand>
+      <code><![CDATA[$mostRecentEvent->number]]></code>
+      <code><![CDATA[$this->number]]></code>
+      <code><![CDATA[$this->number]]></code>
+    </PossiblyNullOperand>
+    <PossiblyNullPropertyFetch>
+      <code><![CDATA[$players[0]->player]]></code>
+    </PossiblyNullPropertyFetch>
+    <PossiblyUndefinedArrayOffset>
+      <code><![CDATA[$players[0]]]></code>
+    </PossiblyUndefinedArrayOffset>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$active]]></code>
+      <code><![CDATA[$client]]></code>
+      <code><![CDATA[$cohost]]></code>
+      <code><![CDATA[$current_round]]></code>
+      <code><![CDATA[$finalized]]></code>
+      <code><![CDATA[$host]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$late_entry_limit]]></code>
+      <code><![CDATA[$metaurl]]></code>
+      <code><![CDATA[$player_editdecks]]></code>
+      <code><![CDATA[$player_reportable]]></code>
+      <code><![CDATA[$player_reported_draws]]></code>
+      <code><![CDATA[$prereg_allowed]]></code>
+      <code><![CDATA[$prereg_cap]]></code>
+      <code><![CDATA[$private]]></code>
+      <code><![CDATA[$private_decks]]></code>
+      <code><![CDATA[$private_finals]]></code>
+      <code><![CDATA[$reporturl]]></code>
+      <code><![CDATA[$season]]></code>
+      <code><![CDATA[$start]]></code>
+      <code><![CDATA[$threadurl]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$deckId]]></code>
+      <code><![CDATA[!$this->series]]></code>
+      <code><![CDATA[$activeCheck]]></code>
+    </RiskyTruthyFalsyComparison>
+    <UninitializedProperty>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+    </UninitializedProperty>
+  </file>
+  <file src="gatherling/Models/EventDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$active]]></code>
+      <code><![CDATA[$client]]></code>
+      <code><![CDATA[$cohost]]></code>
+      <code><![CDATA[$current_round]]></code>
+      <code><![CDATA[$finalized]]></code>
+      <code><![CDATA[$format]]></code>
+      <code><![CDATA[$host]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$kvalue]]></code>
+      <code><![CDATA[$late_entry_limit]]></code>
+      <code><![CDATA[$metaurl]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$number]]></code>
+      <code><![CDATA[$player_editdecks]]></code>
+      <code><![CDATA[$player_reportable]]></code>
+      <code><![CDATA[$player_reported_draws]]></code>
+      <code><![CDATA[$prereg_allowed]]></code>
+      <code><![CDATA[$prereg_cap]]></code>
+      <code><![CDATA[$private]]></code>
+      <code><![CDATA[$private_decks]]></code>
+      <code><![CDATA[$private_finals]]></code>
+      <code><![CDATA[$reporturl]]></code>
+      <code><![CDATA[$season]]></code>
+      <code><![CDATA[$series]]></code>
+      <code><![CDATA[$start]]></code>
+      <code><![CDATA[$threadurl]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/EventListEntryDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$cohost]]></code>
+      <code><![CDATA[$format]]></code>
+      <code><![CDATA[$host]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$players]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/EventSubeventDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$mainid]]></code>
+      <code><![CDATA[$rounds]]></code>
+      <code><![CDATA[$type]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/FinalistDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$deck]]></code>
+      <code><![CDATA[$medal]]></code>
+      <code><![CDATA[$player]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/Format.php">
+    <MixedArgument>
+      <code><![CDATA[$tribe]]></code>
+      <code><![CDATA[$type]]></code>
+    </MixedArgument>
+    <MixedArrayOffset>
+      <code><![CDATA[$subTypeCount[$tribeKey]]]></code>
+    </MixedArrayOffset>
+    <MixedAssignment>
+      <code><![CDATA[$cardRarities[]]]></code>
+      <code><![CDATA[$cardType]]></code>
+      <code><![CDATA[$formatName]]></code>
+      <code><![CDATA[$legalBlockSets[]]]></code>
+      <code><![CDATA[$legalCoreSets[]]]></code>
+      <code><![CDATA[$legalExtraSets[]]]></code>
+      <code><![CDATA[$legalSet]]></code>
+      <code><![CDATA[$legalSet]]></code>
+      <code><![CDATA[$legalSet]]></code>
+      <code><![CDATA[$rarity]]></code>
+      <code><![CDATA[$setType]]></code>
+      <code><![CDATA[$setType]]></code>
+      <code><![CDATA[$setType]]></code>
+      <code><![CDATA[$this->allow_commons]]></code>
+      <code><![CDATA[$this->allow_commons]]></code>
+      <code><![CDATA[$this->allow_mythics]]></code>
+      <code><![CDATA[$this->allow_mythics]]></code>
+      <code><![CDATA[$this->allow_rares]]></code>
+      <code><![CDATA[$this->allow_rares]]></code>
+      <code><![CDATA[$this->allow_timeshifted]]></code>
+      <code><![CDATA[$this->allow_timeshifted]]></code>
+      <code><![CDATA[$this->allow_uncommons]]></code>
+      <code><![CDATA[$this->allow_uncommons]]></code>
+      <code><![CDATA[$this->commander]]></code>
+      <code><![CDATA[$this->commander]]></code>
+      <code><![CDATA[$this->description]]></code>
+      <code><![CDATA[$this->description]]></code>
+      <code><![CDATA[$this->eternal]]></code>
+      <code><![CDATA[$this->eternal]]></code>
+      <code><![CDATA[$this->is_meta_format]]></code>
+      <code><![CDATA[$this->is_meta_format]]></code>
+      <code><![CDATA[$this->limitless]]></code>
+      <code><![CDATA[$this->limitless]]></code>
+      <code><![CDATA[$this->max_main_cards_allowed]]></code>
+      <code><![CDATA[$this->max_main_cards_allowed]]></code>
+      <code><![CDATA[$this->max_side_cards_allowed]]></code>
+      <code><![CDATA[$this->max_side_cards_allowed]]></code>
+      <code><![CDATA[$this->min_main_cards_allowed]]></code>
+      <code><![CDATA[$this->min_main_cards_allowed]]></code>
+      <code><![CDATA[$this->min_side_cards_allowed]]></code>
+      <code><![CDATA[$this->min_side_cards_allowed]]></code>
+      <code><![CDATA[$this->modern]]></code>
+      <code><![CDATA[$this->modern]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->planechase]]></code>
+      <code><![CDATA[$this->planechase]]></code>
+      <code><![CDATA[$this->priority]]></code>
+      <code><![CDATA[$this->priority]]></code>
+      <code><![CDATA[$this->prismatic]]></code>
+      <code><![CDATA[$this->prismatic]]></code>
+      <code><![CDATA[$this->pure]]></code>
+      <code><![CDATA[$this->pure]]></code>
+      <code><![CDATA[$this->series_name]]></code>
+      <code><![CDATA[$this->series_name]]></code>
+      <code><![CDATA[$this->series_name]]></code>
+      <code><![CDATA[$this->singleton]]></code>
+      <code><![CDATA[$this->singleton]]></code>
+      <code><![CDATA[$this->standard]]></code>
+      <code><![CDATA[$this->standard]]></code>
+      <code><![CDATA[$this->tribal]]></code>
+      <code><![CDATA[$this->tribal]]></code>
+      <code><![CDATA[$this->type]]></code>
+      <code><![CDATA[$this->type]]></code>
+      <code><![CDATA[$this->underdog]]></code>
+      <code><![CDATA[$this->underdog]]></code>
+      <code><![CDATA[$this->vanguard]]></code>
+      <code><![CDATA[$this->vanguard]]></code>
+      <code><![CDATA[$tribe]]></code>
+      <code><![CDATA[$tribe['name']]]></code>
+      <code><![CDATA[$type]]></code>
+    </MixedAssignment>
+    <MixedInferredReturnType>
+      <code><![CDATA[?int]]></code>
+      <code><![CDATA[?string]]></code>
+      <code><![CDATA[?string]]></code>
+      <code><![CDATA[string]]></code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement>
+      <code><![CDATA[$cardType]]></code>
+      <code><![CDATA[Database::singleResultSingleParam('SELECT id FROM cards WHERE name = ?', 's', $cardname)]]></code>
+      <code><![CDATA[Database::singleResultSingleParam('SELECT name FROM cards WHERE name = ?', 's', $cardname)]]></code>
+      <code><![CDATA[Database::singleResultSingleParam('SELECT name FROM cards WHERE name LIKE ?', 's', $cardname . '/%')]]></code>
+    </MixedReturnStatement>
+    <MixedReturnTypeCoercion>
+      <code><![CDATA[$legalBlockSets]]></code>
+      <code><![CDATA[$legalCoreSets]]></code>
+      <code><![CDATA[$legalExtraSets]]></code>
+      <code><![CDATA[$tribe]]></code>
+      <code><![CDATA[Database::listResultSingleParam(
+            'SELECT card_name
+                                                   FROM bans
+                                                   WHERE format = ? AND allowed = 1
+                                                   ORDER BY card_name',
+            's',
+            $this->name
+        )]]></code>
+      <code><![CDATA[Database::listResultSingleParam(
+            'SELECT card_name
+                                                   FROM restricted
+                                                   WHERE format = ?
+                                                   ORDER BY card_name',
+            's',
+            $this->name
+        )]]></code>
+      <code><![CDATA[Database::listResultSingleParam(
+            'SELECT card_name
+                                                   FROM restrictedtotribe
+                                                   WHERE format = ? AND allowed = 1
+                                                   ORDER BY card_name',
+            's',
+            $this->name
+        )]]></code>
+      <code><![CDATA[Database::listResultSingleParam('SELECT card_name
+                                                   FROM bans
+                                                   WHERE format = ?
+                                                   AND allowed = 0
+                                                   ORDER BY card_name', 's', $this->name)]]></code>
+      <code><![CDATA[Database::listResultSingleParam('SELECT cardset FROM setlegality WHERE format = ?', 's', $this->name)]]></code>
+      <code><![CDATA[Database::listResultSingleParam('SELECT name
+                                                   FROM subtype_bans
+                                                   WHERE format = ?
+                                                   AND allowed = 0
+                                                   ORDER BY name', 's', $this->name)]]></code>
+      <code><![CDATA[Database::listResultSingleParam('SELECT name
+                                                   FROM tribe_bans
+                                                   WHERE format = ?
+                                                   AND allowed = 0
+                                                   ORDER BY name', 's', $this->name)]]></code>
+      <code><![CDATA[Database::listResultSingleParam('SELECT name FROM formats WHERE type = ?', 's', 'Public')]]></code>
+      <code><![CDATA[Database::listResultSingleParam('SELECT name FROM formats WHERE type = ?', 's', 'System')]]></code>
+      <code><![CDATA[array{name: string, count: int}]]></code>
+      <code><![CDATA[list<string>]]></code>
+      <code><![CDATA[list<string>]]></code>
+      <code><![CDATA[list<string>]]></code>
+      <code><![CDATA[list<string>]]></code>
+      <code><![CDATA[list<string>]]></code>
+      <code><![CDATA[list<string>]]></code>
+      <code><![CDATA[list<string>]]></code>
+      <code><![CDATA[list<string>]]></code>
+      <code><![CDATA[list<string>]]></code>
+      <code><![CDATA[list<string>]]></code>
+      <code><![CDATA[list<string>]]></code>
+      <code><![CDATA[list<string>]]></code>
+    </MixedReturnTypeCoercion>
+    <PossiblyInvalidArrayOffset>
+      <code><![CDATA[$tribesTied[$firstType]]]></code>
+      <code><![CDATA[$tribesTied[$firstType]]]></code>
+    </PossiblyInvalidArrayOffset>
+    <PossiblyNullArgument>
+      <code><![CDATA[$card]]></code>
+      <code><![CDATA[$card]]></code>
+      <code><![CDATA[$card]]></code>
+      <code><![CDATA[$card]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullArrayAccess>
+      <code><![CDATA[$cardar['id']]]></code>
+      <code><![CDATA[$cardar['name']]]></code>
+    </PossiblyNullArrayAccess>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$allow_commons]]></code>
+      <code><![CDATA[$allow_mythics]]></code>
+      <code><![CDATA[$allow_rares]]></code>
+      <code><![CDATA[$allow_timeshifted]]></code>
+      <code><![CDATA[$allow_uncommons]]></code>
+      <code><![CDATA[$commander]]></code>
+      <code><![CDATA[$description]]></code>
+      <code><![CDATA[$eternal]]></code>
+      <code><![CDATA[$is_meta_format]]></code>
+      <code><![CDATA[$limitless]]></code>
+      <code><![CDATA[$max_main_cards_allowed]]></code>
+      <code><![CDATA[$max_side_cards_allowed]]></code>
+      <code><![CDATA[$min_main_cards_allowed]]></code>
+      <code><![CDATA[$min_side_cards_allowed]]></code>
+      <code><![CDATA[$modern]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$planechase]]></code>
+      <code><![CDATA[$priority]]></code>
+      <code><![CDATA[$prismatic]]></code>
+      <code><![CDATA[$pure]]></code>
+      <code><![CDATA[$series_name]]></code>
+      <code><![CDATA[$singleton]]></code>
+      <code><![CDATA[$standard]]></code>
+      <code><![CDATA[$tribal]]></code>
+      <code><![CDATA[$type]]></code>
+      <code><![CDATA[$underdog]]></code>
+      <code><![CDATA[$vanguard]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$underdogKey]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Models/FormatDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$allow_commons]]></code>
+      <code><![CDATA[$allow_mythics]]></code>
+      <code><![CDATA[$allow_rares]]></code>
+      <code><![CDATA[$allow_timeshifted]]></code>
+      <code><![CDATA[$allow_uncommons]]></code>
+      <code><![CDATA[$commander]]></code>
+      <code><![CDATA[$description]]></code>
+      <code><![CDATA[$eternal]]></code>
+      <code><![CDATA[$is_meta_format]]></code>
+      <code><![CDATA[$limitless]]></code>
+      <code><![CDATA[$max_main_cards_allowed]]></code>
+      <code><![CDATA[$max_side_cards_allowed]]></code>
+      <code><![CDATA[$min_main_cards_allowed]]></code>
+      <code><![CDATA[$min_side_cards_allowed]]></code>
+      <code><![CDATA[$modern]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$planechase]]></code>
+      <code><![CDATA[$priority]]></code>
+      <code><![CDATA[$prismatic]]></code>
+      <code><![CDATA[$pure]]></code>
+      <code><![CDATA[$series_name]]></code>
+      <code><![CDATA[$singleton]]></code>
+      <code><![CDATA[$standard]]></code>
+      <code><![CDATA[$tribal]]></code>
+      <code><![CDATA[$type]]></code>
+      <code><![CDATA[$underdog]]></code>
+      <code><![CDATA[$vanguard]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/Formats.php">
+    <MixedArgument>
+      <code><![CDATA[$data->set]]></code>
+      <code><![CDATA[$set->enter_date]]></code>
+      <code><![CDATA[$set->exit_date]]></code>
+      <code><![CDATA[$setName]]></code>
+      <code><![CDATA[$setName]]></code>
+      <code><![CDATA[$set[2]]]></code>
+    </MixedArgument>
+    <MixedAssignment>
+      <code><![CDATA[$data]]></code>
+      <code><![CDATA[$expected[]]]></code>
+      <code><![CDATA[$legal]]></code>
+      <code><![CDATA[$set]]></code>
+      <code><![CDATA[$setName]]></code>
+      <code><![CDATA[$setName]]></code>
+    </MixedAssignment>
+    <MixedPropertyAssignment>
+      <code><![CDATA[$set]]></code>
+    </MixedPropertyAssignment>
+    <MixedPropertyFetch>
+      <code><![CDATA[$data->set]]></code>
+      <code><![CDATA[$legal->sets]]></code>
+      <code><![CDATA[$set->code]]></code>
+      <code><![CDATA[$set->enter_date]]></code>
+      <code><![CDATA[$set->exit_date]]></code>
+    </MixedPropertyFetch>
+  </file>
+  <file src="gatherling/Models/HostedEventDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$active]]></code>
+      <code><![CDATA[$cohost]]></code>
+      <code><![CDATA[$current_round]]></code>
+      <code><![CDATA[$finalized]]></code>
+      <code><![CDATA[$format]]></code>
+      <code><![CDATA[$host]]></code>
+      <code><![CDATA[$kvalue]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$players]]></code>
+      <code><![CDATA[$series]]></code>
+      <code><![CDATA[$start]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/ImageDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$image]]></code>
+      <code><![CDATA[$size]]></code>
+      <code><![CDATA[$type]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/LegalCardDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$allowed]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$original_name]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/Matchup.php">
+    <MixedAssignment>
+      <code><![CDATA[$value]]></code>
+    </MixedAssignment>
+    <PossiblyInvalidOperand>
+      <code><![CDATA[$seasonRules['loss_pts']]]></code>
+      <code><![CDATA[$seasonRules['loss_pts']]]></code>
+      <code><![CDATA[$seasonRules['loss_pts']]]></code>
+      <code><![CDATA[$seasonRules['loss_pts']]]></code>
+    </PossiblyInvalidOperand>
+    <PossiblyNullArgument>
+      <code><![CDATA[$this->event_id]]></code>
+      <code><![CDATA[$this->eventname]]></code>
+      <code><![CDATA[$this->playera]]></code>
+      <code><![CDATA[$this->playera]]></code>
+      <code><![CDATA[$this->playera]]></code>
+      <code><![CDATA[$this->playera]]></code>
+      <code><![CDATA[$this->playera]]></code>
+      <code><![CDATA[$this->playerb]]></code>
+      <code><![CDATA[$this->playerb]]></code>
+      <code><![CDATA[$this->playerb]]></code>
+      <code><![CDATA[$this->playerb]]></code>
+      <code><![CDATA[$this->playerb]]></code>
+      <code><![CDATA[$this->season]]></code>
+      <code><![CDATA[$this->season]]></code>
+      <code><![CDATA[$this->subevent]]></code>
+      <code><![CDATA[$this->subevent]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullOperand>
+      <code><![CDATA[$playera_standing->draws]]></code>
+      <code><![CDATA[$playera_standing->games_played]]></code>
+      <code><![CDATA[$playera_standing->games_played]]></code>
+      <code><![CDATA[$playera_standing->games_won]]></code>
+      <code><![CDATA[$playera_standing->games_won]]></code>
+      <code><![CDATA[$playera_standing->matches_played]]></code>
+      <code><![CDATA[$playera_standing->matches_played]]></code>
+      <code><![CDATA[$playera_standing->matches_won]]></code>
+      <code><![CDATA[$playera_standing->score]]></code>
+      <code><![CDATA[$playera_standing->score]]></code>
+      <code><![CDATA[$playera_standing->score]]></code>
+      <code><![CDATA[$playera_standing->score]]></code>
+      <code><![CDATA[$playera_standing->score]]></code>
+      <code><![CDATA[$playera_standing->score]]></code>
+      <code><![CDATA[$playera_standing->score]]></code>
+      <code><![CDATA[$playerb_standing->byes]]></code>
+      <code><![CDATA[$playerb_standing->byes]]></code>
+      <code><![CDATA[$playerb_standing->draws]]></code>
+      <code><![CDATA[$playerb_standing->games_played]]></code>
+      <code><![CDATA[$playerb_standing->games_played]]></code>
+      <code><![CDATA[$playerb_standing->games_won]]></code>
+      <code><![CDATA[$playerb_standing->games_won]]></code>
+      <code><![CDATA[$playerb_standing->matches_played]]></code>
+      <code><![CDATA[$playerb_standing->matches_played]]></code>
+      <code><![CDATA[$playerb_standing->matches_won]]></code>
+      <code><![CDATA[$playerb_standing->matches_won]]></code>
+      <code><![CDATA[$playerb_standing->score]]></code>
+      <code><![CDATA[$playerb_standing->score]]></code>
+      <code><![CDATA[$playerb_standing->score]]></code>
+      <code><![CDATA[$playerb_standing->score]]></code>
+      <code><![CDATA[$playerb_standing->score]]></code>
+      <code><![CDATA[$playerb_standing->score]]></code>
+      <code><![CDATA[$playerb_standing->score]]></code>
+      <code><![CDATA[$playerb_standing->score]]></code>
+      <code><![CDATA[$playerb_standing->score]]></code>
+    </PossiblyNullOperand>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$event_id]]></code>
+      <code><![CDATA[$eventname]]></code>
+      <code><![CDATA[$format]]></code>
+      <code><![CDATA[$playera]]></code>
+      <code><![CDATA[$playerb]]></code>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[$round]]></code>
+      <code><![CDATA[$rounds]]></code>
+      <code><![CDATA[$season]]></code>
+      <code><![CDATA[$series]]></code>
+      <code><![CDATA[$timing]]></code>
+      <code><![CDATA[$type]]></code>
+      <code><![CDATA[$verification]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Models/MatchupDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$event_id]]></code>
+      <code><![CDATA[$eventname]]></code>
+      <code><![CDATA[$format]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$playera]]></code>
+      <code><![CDATA[$playera_draws]]></code>
+      <code><![CDATA[$playera_losses]]></code>
+      <code><![CDATA[$playera_wins]]></code>
+      <code><![CDATA[$playerb]]></code>
+      <code><![CDATA[$playerb_draws]]></code>
+      <code><![CDATA[$playerb_losses]]></code>
+      <code><![CDATA[$playerb_wins]]></code>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[$round]]></code>
+      <code><![CDATA[$rounds]]></code>
+      <code><![CDATA[$season]]></code>
+      <code><![CDATA[$series]]></code>
+      <code><![CDATA[$subevent]]></code>
+      <code><![CDATA[$timing]]></code>
+      <code><![CDATA[$type]]></code>
+      <code><![CDATA[$verification]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/MetaColorsDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$cnt]]></code>
+      <code><![CDATA[$colors]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/MetaDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$archetype]]></code>
+      <code><![CDATA[$colors]]></code>
+      <code><![CDATA[$deckname]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$medal]]></code>
+      <code><![CDATA[$player]]></code>
+      <code><![CDATA[$srtordr]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/MostPlayedDeckDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$archetype]]></code>
+      <code><![CDATA[$cnt]]></code>
+      <code><![CDATA[$created_date]]></code>
+      <code><![CDATA[$format]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$playername]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/PairingPlayerDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$byes]]></code>
+      <code><![CDATA[$player]]></code>
+      <code><![CDATA[$score]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/Pairings.php">
+    <MixedAssignment>
+      <code><![CDATA[$this->pairing]]></code>
+    </MixedAssignment>
+    <RedundantCastGivenDocblockType>
+      <code><![CDATA[(int) $players[$i]['score']]]></code>
+      <code><![CDATA[(int) $players[$i]['score']]]></code>
+      <code><![CDATA[(int) $players[$i]['score']]]></code>
+    </RedundantCastGivenDocblockType>
+  </file>
+  <file src="gatherling/Models/Player.php">
+    <MixedArgument>
+      <code><![CDATA[$db_challenge]]></code>
+      <code><![CDATA[$deckid]]></code>
+      <code><![CDATA[$deckid]]></code>
+      <code><![CDATA[$deckid]]></code>
+      <code><![CDATA[$lastevname]]></code>
+      <code><![CDATA[$matchid]]></code>
+      <code><![CDATA[$matchid]]></code>
+      <code><![CDATA[$matchid]]></code>
+      <code><![CDATA[$matchid]]></code>
+      <code><![CDATA[$mid]]></code>
+      <code><![CDATA[$resname]]></code>
+      <code><![CDATA[$resname]]></code>
+      <code><![CDATA[$resname]]></code>
+      <code><![CDATA[$resname]]></code>
+      <code><![CDATA[$resname]]></code>
+      <code><![CDATA[$rival]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$verifyplayer]]></code>
+    </MixedArgument>
+    <MixedArrayOffset>
+      <code><![CDATA[$medals[$medal]]]></code>
+    </MixedArrayOffset>
+    <MixedAssignment>
+      <code><![CDATA[$deckid]]></code>
+      <code><![CDATA[$deckid]]></code>
+      <code><![CDATA[$deckids[]]]></code>
+      <code><![CDATA[$deckids[]]]></code>
+      <code><![CDATA[$events[]]]></code>
+      <code><![CDATA[$formats[]]]></code>
+      <code><![CDATA[$matchid]]></code>
+      <code><![CDATA[$matchid]]></code>
+      <code><![CDATA[$matchid]]></code>
+      <code><![CDATA[$matchid]]></code>
+      <code><![CDATA[$matchids[]]]></code>
+      <code><![CDATA[$matchids[]]]></code>
+      <code><![CDATA[$matchids[]]]></code>
+      <code><![CDATA[$matchids[]]]></code>
+      <code><![CDATA[$medals[$medal]]]></code>
+      <code><![CDATA[$mid]]></code>
+      <code><![CDATA[$mids[]]]></code>
+      <code><![CDATA[$res]]></code>
+      <code><![CDATA[$result[]]]></code>
+      <code><![CDATA[$seasons[]]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$value]]></code>
+    </MixedAssignment>
+    <MixedInferredReturnType>
+      <code><![CDATA[?int]]></code>
+      <code><![CDATA[?int]]></code>
+      <code><![CDATA[?string]]></code>
+      <code><![CDATA[int]]></code>
+      <code><![CDATA[int]]></code>
+      <code><![CDATA[int]]></code>
+    </MixedInferredReturnType>
+    <MixedOperand>
+      <code><![CDATA[$losses]]></code>
+      <code><![CDATA[$wins]]></code>
+    </MixedOperand>
+    <MixedReturnStatement>
+      <code><![CDATA[$count]]></code>
+      <code><![CDATA[$evcount]]></code>
+      <code><![CDATA[$max]]></code>
+      <code><![CDATA[$min]]></code>
+      <code><![CDATA[$rating]]></code>
+      <code><![CDATA[$rating]]></code>
+      <code><![CDATA[$res]]></code>
+      <code><![CDATA[$res]]></code>
+    </MixedReturnStatement>
+    <MixedReturnTypeCoercion>
+      <code><![CDATA[$events]]></code>
+      <code><![CDATA[$formats]]></code>
+      <code><![CDATA[$formats]]></code>
+      <code><![CDATA[$medals]]></code>
+      <code><![CDATA[$opponents]]></code>
+      <code><![CDATA[$res]]></code>
+      <code><![CDATA[$res]]></code>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[$seasons]]></code>
+      <code><![CDATA[array<string, int>]]></code>
+      <code><![CDATA[list<array{format: string, cnt: int}>]]></code>
+      <code><![CDATA[list<array{name: string, cnt: int, id: int, t8: int, t4: int, '2nd': int, '1st': int, score: int}>]]></code>
+      <code><![CDATA[list<array{opp: string, cnt: int}>]]></code>
+      <code><![CDATA[list<array{series: string, cnt: int}>]]></code>
+      <code><![CDATA[list<int>]]></code>
+      <code><![CDATA[list<string>]]></code>
+      <code><![CDATA[list<string>]]></code>
+      <code><![CDATA[list<string>]]></code>
+    </MixedReturnTypeCoercion>
+    <PossiblyNullArgument>
+      <code><![CDATA[$match->format]]></code>
+      <code><![CDATA[$match->otherPlayer($this->name)]]></code>
+      <code><![CDATA[$match->series]]></code>
+      <code><![CDATA[$otherplayer]]></code>
+    </PossiblyNullArgument>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$api_key]]></code>
+      <code><![CDATA[$ipAddress]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$password]]></code>
+      <code><![CDATA[$rememberMe]]></code>
+      <code><![CDATA[$super]]></code>
+      <code><![CDATA[$verified]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Models/PlayerDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$api_key]]></code>
+      <code><![CDATA[$discord_handle]]></code>
+      <code><![CDATA[$discord_id]]></code>
+      <code><![CDATA[$emailAddress]]></code>
+      <code><![CDATA[$emailPrivacy]]></code>
+      <code><![CDATA[$host]]></code>
+      <code><![CDATA[$ipAddress]]></code>
+      <code><![CDATA[$mtga_username]]></code>
+      <code><![CDATA[$mtgo_username]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$password]]></code>
+      <code><![CDATA[$rememberMe]]></code>
+      <code><![CDATA[$super]]></code>
+      <code><![CDATA[$timezone]]></code>
+      <code><![CDATA[$verified]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/PlayerRatingDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$losses]]></code>
+      <code><![CDATA[$player]]></code>
+      <code><![CDATA[$rating]]></code>
+      <code><![CDATA[$wins]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/Ratings.php">
+    <MixedArgument>
+      <code><![CDATA[$eventar[$index + 1]]]></code>
+      <code><![CDATA[$eventar[$index]]]></code>
+      <code><![CDATA[$eventar[$index]]]></code>
+    </MixedArgument>
+    <MixedArrayOffset>
+      <code><![CDATA[$data[$player]]]></code>
+    </MixedArrayOffset>
+    <MixedAssignment>
+      <code><![CDATA[$datum['losses']]]></code>
+      <code><![CDATA[$datum['rating']]]></code>
+      <code><![CDATA[$datum['wins']]]></code>
+      <code><![CDATA[$event_id]]></code>
+      <code><![CDATA[$eventar[$index + 1]]]></code>
+      <code><![CDATA[$eventar[$index]]]></code>
+    </MixedAssignment>
+    <MixedReturnTypeCoercion>
+      <code><![CDATA[$data]]></code>
+      <code><![CDATA[$data]]></code>
+      <code><![CDATA[array<string, array<string, int>>]]></code>
+      <code><![CDATA[list<array{playera: string, playerb: string, result: string, kvalue: int}>]]></code>
+    </MixedReturnTypeCoercion>
+    <PossiblyInvalidArgument>
+      <code><![CDATA[$event]]></code>
+      <code><![CDATA[$event]]></code>
+      <code><![CDATA[$event]]></code>
+      <code><![CDATA[$event]]></code>
+      <code><![CDATA[$row['start']]]></code>
+      <code><![CDATA[$row['start']]]></code>
+    </PossiblyInvalidArgument>
+    <PossiblyInvalidMethodCall>
+      <code><![CDATA[close]]></code>
+      <code><![CDATA[close]]></code>
+      <code><![CDATA[fetch_assoc]]></code>
+      <code><![CDATA[fetch_assoc]]></code>
+    </PossiblyInvalidMethodCall>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$format]]></code>
+      <code><![CDATA[$losses]]></code>
+      <code><![CDATA[$player]]></code>
+      <code><![CDATA[$rating]]></code>
+      <code><![CDATA[$ratingNames]]></code>
+      <code><![CDATA[$updated]]></code>
+      <code><![CDATA[$wins]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Models/RatingsDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$deck_id]]></code>
+      <code><![CDATA[$event_id]]></code>
+      <code><![CDATA[$medal]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$rating]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/RecentWinnerDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$event]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$player]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/ReportDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$playera_losses]]></code>
+      <code><![CDATA[$playera_wins]]></code>
+      <code><![CDATA[$playerb_losses]]></code>
+      <code><![CDATA[$playerb_wins]]></code>
+      <code><![CDATA[$subevent]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/Series.php">
+    <MixedArgument>
+      <code><![CDATA[$f]]></code>
+    </MixedArgument>
+    <MixedArrayOffset>
+      <code><![CDATA[$player_event_array[$playername]]]></code>
+      <code><![CDATA[$player_event_array[$playername]]]></code>
+      <code><![CDATA[$player_event_array[$playername]]]></code>
+      <code><![CDATA[$player_event_array[$playername]]]></code>
+      <code><![CDATA[$player_event_array[$playername]]]></code>
+      <code><![CDATA[$player_event_array[$playername]]]></code>
+      <code><![CDATA[$player_event_array[$playername]]]></code>
+      <code><![CDATA[$player_event_array[$playername]]]></code>
+      <code><![CDATA[$player_event_array[$playername][$event_name]]]></code>
+      <code><![CDATA[$player_event_array[$playername][$event_name]]]></code>
+      <code><![CDATA[$player_event_array[$playername][$event_name]]]></code>
+      <code><![CDATA[$player_event_array[$playername][$event_name]]]></code>
+      <code><![CDATA[$player_event_array[$playername][$event_name]]]></code>
+      <code><![CDATA[$player_event_array[$playername][$event_name]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$total_pointarray[$player]]]></code>
+      <code><![CDATA[$total_pointarray[$player]]]></code>
+      <code><![CDATA[$total_pointarray[$player]]]></code>
+      <code><![CDATA[$total_pointarray[$player]]]></code>
+      <code><![CDATA[$total_pointarray[$player][$event]]]></code>
+      <code><![CDATA[$total_pointarray[$player][$event]]]></code>
+      <code><![CDATA[$total_pointarray[$player][$event]]]></code>
+    </MixedArrayOffset>
+    <MixedAssignment>
+      <code><![CDATA[$eventnames[]]]></code>
+      <code><![CDATA[$player_event_array[$playername][$event_name]]]></code>
+      <code><![CDATA[$player_event_array[$playername][$event_name]]]></code>
+      <code><![CDATA[$player_event_array[$playername][$event_name]]]></code>
+      <code><![CDATA[$player_event_array[$playername][$event_name]]]></code>
+      <code><![CDATA[$points]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$results[$playername][$eventname]]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$this->name]]></code>
+      <code><![CDATA[$total_pointarray[$player]['.total']]]></code>
+      <code><![CDATA[$total_pointarray[$player]['.total']]]></code>
+      <code><![CDATA[$value]]></code>
+    </MixedAssignment>
+    <MixedInferredReturnType>
+      <code><![CDATA[?string]]></code>
+      <code><![CDATA[?string]]></code>
+      <code><![CDATA[int]]></code>
+      <code><![CDATA[int]]></code>
+    </MixedInferredReturnType>
+    <MixedOperand>
+      <code><![CDATA[$adjustment]]></code>
+      <code><![CDATA[$points]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$result[$playername][$eventname]]]></code>
+      <code><![CDATA[$results[$playername][$eventname]]]></code>
+      <code><![CDATA[$total_pointarray[$player]['.total']]]></code>
+    </MixedOperand>
+    <MixedReturnStatement>
+      <code><![CDATA[$cutoff]]></code>
+      <code><![CDATA[$seasonnum]]></code>
+      <code><![CDATA[Database::singleResultSingleParam('SELECT date FROM playerbans WHERE player = ?', 's', $name)]]></code>
+      <code><![CDATA[Database::singleResultSingleParam('SELECT reason FROM playerbans WHERE player = ?', 's', $name)]]></code>
+    </MixedReturnStatement>
+    <MixedReturnTypeCoercion>
+      <code><![CDATA[$eventnames]]></code>
+      <code><![CDATA[$player_event_array]]></code>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[$total_pointarray]]></code>
+      <code><![CDATA[array<string, array<string, int>>]]></code>
+      <code><![CDATA[array<string, array<string, int>>]]></code>
+      <code><![CDATA[array<string, array<string, int>>]]></code>
+      <code><![CDATA[array<string, array<string, int>>]]></code>
+      <code><![CDATA[array<string, array<string, int>>]]></code>
+      <code><![CDATA[array<string, array<string, int>>]]></code>
+      <code><![CDATA[array<string, array<string, int|array<string, string|int>>>]]></code>
+      <code><![CDATA[list<string>]]></code>
+    </MixedReturnTypeCoercion>
+    <PossiblyInvalidArgument>
+      <code><![CDATA[$rules['bye_pts']]]></code>
+      <code><![CDATA[$rules['decklist_pts']]]></code>
+      <code><![CDATA[$rules['first_pts']]]></code>
+      <code><![CDATA[$rules['loss_pts']]]></code>
+      <code><![CDATA[$rules['participation_pts']]]></code>
+      <code><![CDATA[$rules['quarter_pts']]]></code>
+      <code><![CDATA[$rules['rounds_pts']]]></code>
+      <code><![CDATA[$rules['second_pts']]]></code>
+      <code><![CDATA[$rules['semi_pts']]]></code>
+      <code><![CDATA[$rules['win_pts']]]></code>
+    </PossiblyInvalidArgument>
+    <PossiblyNullArgument>
+      <code><![CDATA[$this->mtgo_room]]></code>
+    </PossiblyNullArgument>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$discord_channel_id]]></code>
+      <code><![CDATA[$discord_channel_name]]></code>
+      <code><![CDATA[$discord_guild_id]]></code>
+      <code><![CDATA[$discord_guild_invite]]></code>
+      <code><![CDATA[$discord_guild_name]]></code>
+      <code><![CDATA[$discord_require_membership]]></code>
+      <code><![CDATA[$mtgo_room]]></code>
+      <code><![CDATA[$prereg_default]]></code>
+      <code><![CDATA[$start_day]]></code>
+      <code><![CDATA[$start_time]]></code>
+      <code><![CDATA[$this_season_format]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[$result]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Models/SeriesDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$active]]></code>
+      <code><![CDATA[$discord_channel_id]]></code>
+      <code><![CDATA[$discord_channel_name]]></code>
+      <code><![CDATA[$discord_guild_id]]></code>
+      <code><![CDATA[$discord_guild_invite]]></code>
+      <code><![CDATA[$discord_guild_name]]></code>
+      <code><![CDATA[$discord_require_membership]]></code>
+      <code><![CDATA[$mtgo_room]]></code>
+      <code><![CDATA[$prereg_default]]></code>
+      <code><![CDATA[$start_day]]></code>
+      <code><![CDATA[$start_time]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/SeriesSeasonDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$format]]></code>
+      <code><![CDATA[$master_link]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/SetScraper.php">
+    <MissingClosureParamType>
+      <code><![CDATA[$set]]></code>
+    </MissingClosureParamType>
+    <MixedArgument>
+      <code><![CDATA[$sets]]></code>
+    </MixedArgument>
+    <MixedArrayOffset>
+      <code><![CDATA[$dropdown[$unknownSet->code]]]></code>
+      <code><![CDATA[$knowncodesDict[$set->code]]]></code>
+    </MixedArrayOffset>
+    <MixedAssignment>
+      <code><![CDATA[$dropdown[$unknownSet->code]]]></code>
+      <code><![CDATA[$sets]]></code>
+      <code><![CDATA[$sets]]></code>
+      <code><![CDATA[$unknownSet]]></code>
+    </MixedAssignment>
+    <MixedPropertyFetch>
+      <code><![CDATA[$set->code]]></code>
+      <code><![CDATA[$sets->data]]></code>
+      <code><![CDATA[$unknownSet->code]]></code>
+      <code><![CDATA[$unknownSet->name]]></code>
+    </MixedPropertyFetch>
+    <MixedReturnTypeCoercion>
+      <code><![CDATA[$dropdown]]></code>
+      <code><![CDATA[array<string, string>]]></code>
+    </MixedReturnTypeCoercion>
+  </file>
+  <file src="gatherling/Models/Standings.php">
+    <MixedArgument>
+      <code><![CDATA[$eventname]]></code>
+      <code><![CDATA[$playername]]></code>
+      <code><![CDATA[$playername]]></code>
+    </MixedArgument>
+    <MixedAssignment>
+      <code><![CDATA[$opponent_name]]></code>
+      <code><![CDATA[$opponent_name]]></code>
+      <code><![CDATA[$opponent_name]]></code>
+      <code><![CDATA[$opponent_name]]></code>
+      <code><![CDATA[$opponentsAlreadyFaced[]]]></code>
+      <code><![CDATA[$playername]]></code>
+      <code><![CDATA[$playername]]></code>
+      <code><![CDATA[$playernames[]]]></code>
+      <code><![CDATA[$playernames[]]]></code>
+      <code><![CDATA[$structure]]></code>
+      <code><![CDATA[$this->player]]></code>
+      <code><![CDATA[$this->player]]></code>
+      <code><![CDATA[$this->player]]></code>
+      <code><![CDATA[$this->player]]></code>
+      <code><![CDATA[$value]]></code>
+    </MixedAssignment>
+    <PossiblyNullOperand>
+      <code><![CDATA[$opponent->draws]]></code>
+      <code><![CDATA[$opponent->draws]]></code>
+      <code><![CDATA[$opponent->games_played]]></code>
+      <code><![CDATA[$opponent->games_played]]></code>
+      <code><![CDATA[$opponent->games_won]]></code>
+      <code><![CDATA[$opponent->games_won]]></code>
+      <code><![CDATA[$opponent->matches_played]]></code>
+      <code><![CDATA[$opponent->matches_played]]></code>
+      <code><![CDATA[$opponent->matches_won]]></code>
+      <code><![CDATA[$opponent->matches_won]]></code>
+      <code><![CDATA[$this->games_played]]></code>
+      <code><![CDATA[$this->games_won]]></code>
+    </PossiblyNullOperand>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$OP_Game]]></code>
+      <code><![CDATA[$OP_Match]]></code>
+      <code><![CDATA[$PL_Game]]></code>
+      <code><![CDATA[$byes]]></code>
+      <code><![CDATA[$draws]]></code>
+      <code><![CDATA[$games_played]]></code>
+      <code><![CDATA[$games_won]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$matched]]></code>
+      <code><![CDATA[$matches_played]]></code>
+      <code><![CDATA[$matches_won]]></code>
+      <code><![CDATA[$score]]></code>
+      <code><![CDATA[$seed]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Models/StandingsDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$OP_Game]]></code>
+      <code><![CDATA[$OP_Match]]></code>
+      <code><![CDATA[$PL_Game]]></code>
+      <code><![CDATA[$active]]></code>
+      <code><![CDATA[$byes]]></code>
+      <code><![CDATA[$draws]]></code>
+      <code><![CDATA[$games_played]]></code>
+      <code><![CDATA[$games_won]]></code>
+      <code><![CDATA[$matched]]></code>
+      <code><![CDATA[$matches_played]]></code>
+      <code><![CDATA[$matches_won]]></code>
+      <code><![CDATA[$score]]></code>
+      <code><![CDATA[$seed]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/Subevent.php">
+    <MixedAssignment>
+      <code><![CDATA[$value]]></code>
+    </MixedAssignment>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$parent]]></code>
+      <code><![CDATA[$rounds]]></code>
+      <code><![CDATA[$timing]]></code>
+      <code><![CDATA[$type]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Models/SubeventDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$parent]]></code>
+      <code><![CDATA[$rounds]]></code>
+      <code><![CDATA[$timing]]></code>
+      <code><![CDATA[$type]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/UpcomingEventDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$d]]></code>
+      <code><![CDATA[$format]]></code>
+      <code><![CDATA[$name]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Views/Components/AllDecks.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$decks]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$deck->medal]]></code>
+    </RiskyTruthyFalsyComparison>
+    <UninitializedProperty>
+      <code><![CDATA[$this->decks]]></code>
+    </UninitializedProperty>
+  </file>
+  <file src="gatherling/Views/Components/AllRatings.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$rating->medal]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/Views/Components/AuthDebugInfo.php">
+    <MissingClosureParamType>
+      <code><![CDATA[$g]]></code>
+    </MissingClosureParamType>
+    <MixedArgument>
+      <code><![CDATA[$guilds]]></code>
+    </MixedArgument>
+    <MixedAssignment>
+      <code><![CDATA[$guilds]]></code>
+      <code><![CDATA[$this->discriminator]]></code>
+      <code><![CDATA[$this->username]]></code>
+      <code><![CDATA[$user]]></code>
+      <code><![CDATA[$value]]></code>
+    </MixedAssignment>
+    <MixedMethodCall>
+      <code><![CDATA[getDiscriminator]]></code>
+      <code><![CDATA[getResourceOwner]]></code>
+      <code><![CDATA[getUsername]]></code>
+      <code><![CDATA[toArray]]></code>
+    </MixedMethodCall>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$details]]></code>
+      <code><![CDATA[$discriminator]]></code>
+      <code><![CDATA[$errorMessage]]></code>
+      <code><![CDATA[$guilds]]></code>
+      <code><![CDATA[$username]]></code>
+    </PropertyNotSetInConstructor>
+    <PropertyTypeCoercion>
+      <code><![CDATA[array_map(fn ($g) => var_export($g, true), $guilds)]]></code>
+    </PropertyTypeCoercion>
     <UndefinedFunction>
       <code><![CDATA[get_user_guilds($token)]]></code>
     </UndefinedFunction>
   </file>
+  <file src="gatherling/Views/Components/BAndR.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$noBannedCards]]></code>
+      <code><![CDATA[$noLegalCards]]></code>
+      <code><![CDATA[$noRestrictedCards]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Views/Components/CardLink.php">
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[$gathererName]]></code>
+    </MixedArgumentTypeCoercion>
+    <PossiblyInvalidArgument>
+      <code><![CDATA[$gathererName]]></code>
+    </PossiblyInvalidArgument>
+    <PossiblyInvalidCast>
+      <code><![CDATA[$gathererName]]></code>
+    </PossiblyInvalidCast>
+  </file>
+  <file src="gatherling/Views/Components/CcTable.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$castingCosts]]></code>
+    </PropertyNotSetInConstructor>
+    <UninitializedProperty>
+      <code><![CDATA[$this->castingCosts]]></code>
+    </UninitializedProperty>
+  </file>
+  <file src="gatherling/Views/Components/CommentsTable.php">
+    <PossiblyInvalidPropertyAssignmentValue>
+      <code><![CDATA[$notes]]></code>
+    </PossiblyInvalidPropertyAssignmentValue>
+  </file>
+  <file src="gatherling/Views/Components/CreateDeckLink.php">
+    <PossiblyFalseArgument>
+      <code><![CDATA[Player::loginName()]]></code>
+    </PossiblyFalseArgument>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$createDeckLink]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[Player::loginName()]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/CurrentMatchesTable.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$opp]]></code>
+      <code><![CDATA[$opp]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/DeckForm.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$deckId]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$playerName]]></code>
+      <code><![CDATA[$aDeck->id]]></code>
+      <code><![CDATA[$aDeck->name]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/DeckInfo.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$event->format]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/DeckInfoCell.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$deckId]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$deck->name]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/DeckLink.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$deckLink]]></code>
+      <code><![CDATA[$isValid]]></code>
+      <code><![CDATA[$name]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[empty($deck->name)]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/DeckProfile.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$deckErrorTable]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$deck->id]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/DeckTrophyCell.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$deck->medal]]></code>
+      <code><![CDATA[$deck->getEvent()->hastrophy]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/DisplayDecks.php">
+    <PossiblyInvalidOperand>
+      <code><![CDATA[preg_replace('/\s+?(\S+)?$/', '', substr($deckinfo['name'], 0, 22))]]></code>
+    </PossiblyInvalidOperand>
+  </file>
+  <file src="gatherling/Views/Components/EventStandings.php">
+    <PossiblyNullArgument>
+      <code><![CDATA[$standing->player]]></code>
+    </PossiblyNullArgument>
+  </file>
+  <file src="gatherling/Views/Components/FormatCPMenu.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$restrictedTooltip]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Views/Components/FullMetagame.php">
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[(array) $row]]></code>
+    </MixedArgumentTypeCoercion>
+    <PossiblyNullArgument>
+      <code><![CDATA[$event->format]]></code>
+      <code><![CDATA[$event->id]]></code>
+    </PossiblyNullArgument>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$eventStandings]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Views/Components/GameName.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[empty($player->discord_handle)]]></code>
+      <code><![CDATA[empty($player->mtga_username)]]></code>
+      <code><![CDATA[empty($player->mtgo_username)]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/InfoCell.php">
+    <PossiblyNullArgument>
+      <code><![CDATA[$event->series]]></code>
+      <code><![CDATA[$subevent->rounds]]></code>
+    </PossiblyNullArgument>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$hostLink]]></code>
+      <code><![CDATA[$percentReported]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$event->host]]></code>
+      <code><![CDATA[$event->start]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/InfoTable.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$lastEventName]]></code>
+      <code><![CDATA[$lastEventTime]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$lastEvent->start]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/MainPlayerControlPanel.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$currentMatchesTable]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$event->id]]></code>
+      <code><![CDATA[$event->private]]></code>
+      <code><![CDATA[$series->discord_channel_name]]></code>
+      <code><![CDATA[$series->discord_guild_name]]></code>
+      <code><![CDATA[empty($player->discord_id)]]></code>
+      <code><![CDATA[empty($player->discord_id)]]></code>
+      <code><![CDATA[session()->optionalString('DISCORD_ID')]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/MatchTable.php">
+    <PossiblyNullOperand>
+      <code><![CDATA[$match->round]]></code>
+      <code><![CDATA[$match->rounds]]></code>
+    </PossiblyNullOperand>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$rows]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$event->id]]></code>
+      <code><![CDATA[!$opp]]></code>
+      <code><![CDATA[$losses]]></code>
+      <code><![CDATA[$wins]]></code>
+    </RiskyTruthyFalsyComparison>
+    <UninitializedProperty>
+      <code><![CDATA[$this->rows]]></code>
+    </UninitializedProperty>
+  </file>
+  <file src="gatherling/Views/Components/MatchupTable.php">
+    <PossiblyNullOperand>
+      <code><![CDATA[$match->round]]></code>
+      <code><![CDATA[$match->round]]></code>
+      <code><![CDATA[$match->rounds]]></code>
+    </PossiblyNullOperand>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$deck->event_id]]></code>
+      <code><![CDATA[!$deck->eventname]]></code>
+      <code><![CDATA[!$deck->playername]]></code>
+      <code><![CDATA[!$oppName]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/MetaStats.php">
+    <PossiblyNullArrayOffset>
+      <code><![CDATA[$archcnt]]></code>
+      <code><![CDATA[$archcnt]]></code>
+    </PossiblyNullArrayOffset>
+  </file>
+  <file src="gatherling/Views/Components/MissingTrophies.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$eventsMissingTrophies]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$event->hastrophy]]></code>
+      <code><![CDATA[$event->start]]></code>
+    </RiskyTruthyFalsyComparison>
+    <UninitializedProperty>
+      <code><![CDATA[$this->eventsMissingTrophies]]></code>
+    </UninitializedProperty>
+  </file>
+  <file src="gatherling/Views/Components/MostPlayedDecks.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$deck->created_date]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/NewFormatForm.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$action]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Views/Components/NumDropMenu.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$special]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/Placing.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$day]]></code>
+      <code><![CDATA[$eventName]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$deck->playername]]></code>
+      <code><![CDATA[$event->start]]></code>
+      <code><![CDATA[$player]]></code>
+      <code><![CDATA[$startTime]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/PlayerBanForm.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$bannedPlayers]]></code>
+    </PropertyNotSetInConstructor>
+    <UninitializedProperty>
+      <code><![CDATA[$this->bannedPlayers]]></code>
+    </UninitializedProperty>
+  </file>
+  <file src="gatherling/Views/Components/Prereg.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$registerLink]]></code>
+      <code><![CDATA[$unregisterLink]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$event->start]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/Preregistration.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$event->id]]></code>
+      <code><![CDATA[!$event->start]]></code>
+      <code><![CDATA[!$event->start]]></code>
+      <code><![CDATA[empty($player->mtga_username)]]></code>
+      <code><![CDATA[empty($player->mtga_username)]]></code>
+      <code><![CDATA[empty($player->mtgo_username)]]></code>
+      <code><![CDATA[empty($player->mtgo_username)]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/RatingsTable.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$playerLink]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Views/Components/RecentDecksDropMenu.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$deck->id]]></code>
+      <code><![CDATA[$deck->name]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/RecentDecksTable.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$deck->eventname]]></code>
+      <code><![CDATA[!$event->id]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/RecentEventsTable.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$events]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$event->start]]></code>
+      <code><![CDATA[$eventStartTime]]></code>
+    </RiskyTruthyFalsyComparison>
+    <UninitializedProperty>
+      <code><![CDATA[$this->events]]></code>
+    </UninitializedProperty>
+  </file>
+  <file src="gatherling/Views/Components/RecentMatchTable.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$losses]]></code>
+      <code><![CDATA[$opp]]></code>
+      <code><![CDATA[$wins]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/SeasonDropMenu.php">
+    <PossiblyInvalidArgument>
+      <code><![CDATA[max(10, $max + 1)]]></code>
+    </PossiblyInvalidArgument>
+    <PossiblyInvalidMethodCall>
+      <code><![CDATA[close]]></code>
+      <code><![CDATA[fetch_assoc]]></code>
+    </PossiblyInvalidMethodCall>
+    <PossiblyInvalidOperand>
+      <code><![CDATA[$max]]></code>
+    </PossiblyInvalidOperand>
+    <PossiblyNullArrayAccess>
+      <code><![CDATA[$maxArr['m']]]></code>
+    </PossiblyNullArrayAccess>
+    <PossiblyNullOperand>
+      <code><![CDATA[$max]]></code>
+    </PossiblyNullOperand>
+  </file>
+  <file src="gatherling/Views/Components/SeasonStandings.php">
+    <MixedArgument>
+      <code><![CDATA[$a]]></code>
+      <code><![CDATA[$b]]></code>
+    </MixedArgument>
+    <PropertyTypeCoercion>
+      <code><![CDATA[$players]]></code>
+      <code><![CDATA[$seasonEvents]]></code>
+    </PropertyTypeCoercion>
+    <RedundantCastGivenDocblockType>
+      <code><![CDATA[(string) $playerName]]></code>
+    </RedundantCastGivenDocblockType>
+  </file>
+  <file src="gatherling/Views/Components/SelectInput.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$options]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/SeriesForm.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$timeDropMenu]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$series->start_time]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/SeriesOrganizersForm.php">
+    <PossiblyFalseArgument>
+      <code><![CDATA[Player::loginName()]]></code>
+    </PossiblyFalseArgument>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$organizers]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[Player::loginName()]]></code>
+    </RiskyTruthyFalsyComparison>
+    <UninitializedProperty>
+      <code><![CDATA[$this->organizers]]></code>
+    </UninitializedProperty>
+  </file>
+  <file src="gatherling/Views/Components/SideboardTable.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$sideboardCards]]></code>
+    </PropertyNotSetInConstructor>
+    <UninitializedProperty>
+      <code><![CDATA[$this->sideboardCards]]></code>
+    </UninitializedProperty>
+  </file>
+  <file src="gatherling/Views/Components/StatsTable.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$eventLink]]></code>
+      <code><![CDATA[$mostRecentTrophySrc]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Views/Components/SubmitResultForm.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$letter]]></code>
+      <code><![CDATA[!$opp]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/SymbolTable.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$symbols]]></code>
+    </PropertyNotSetInConstructor>
+    <UninitializedProperty>
+      <code><![CDATA[$this->symbols]]></code>
+    </UninitializedProperty>
+  </file>
+  <file src="gatherling/Views/Components/TimeZoneDropMenu.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$selected]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Components/TribalBAndR.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$noRestrictedToTribeCreatures]]></code>
+      <code><![CDATA[$noSubTypesBanned]]></code>
+      <code><![CDATA[$noTribesBanned]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Views/Components/TrophyCell.php">
+    <PossiblyNullReference>
+      <code><![CDATA[manaSrc]]></code>
+    </PossiblyNullReference>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$trophySrc]]></code>
+      <code><![CDATA[$winner]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$event->hastrophy]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Pages/DeckDownload.php">
+    <PossiblyInvalidOperand>
+      <code><![CDATA[preg_replace('/ /', '_', $deck->name ?? 'deck')]]></code>
+    </PossiblyInvalidOperand>
+  </file>
+  <file src="gatherling/Views/Pages/DeckSearch.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$displayDecks]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Views/Pages/EventForm.php">
+    <ArgumentTypeCoercion>
+      <code><![CDATA[$seriesList]]></code>
+    </ArgumentTypeCoercion>
+    <PossiblyNullArgument>
+      <code><![CDATA[$event->season]]></code>
+      <code><![CDATA[$event->series]]></code>
+      <code><![CDATA[$event->series]]></code>
+      <code><![CDATA[$hour]]></code>
+      <code><![CDATA[$minutes]]></code>
+      <code><![CDATA[$month]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullArrayAccess>
+      <code><![CDATA[$datearr[1]]]></code>
+      <code><![CDATA[$datearr[2]]]></code>
+      <code><![CDATA[$datearr[3]]]></code>
+      <code><![CDATA[$datearr[4]]]></code>
+      <code><![CDATA[$datearr[5]]]></code>
+    </PossiblyNullArrayAccess>
+    <PossiblyNullOperand>
+      <code><![CDATA[$event->number]]></code>
+      <code><![CDATA[$event->season]]></code>
+    </PossiblyNullOperand>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$event->series]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Pages/EventList.php">
+    <PossiblyNullArgument>
+      <code><![CDATA[$player]]></code>
+    </PossiblyNullArgument>
+  </file>
+  <file src="gatherling/Views/Pages/EventReport.php">
+    <PossiblyNullArgument>
+      <code><![CDATA[$event->series]]></code>
+    </PossiblyNullArgument>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$finalists]]></code>
+      <code><![CDATA[$hasStarted]]></code>
+      <code><![CDATA[$isFinalized]]></code>
+      <code><![CDATA[$isRegistrationOpen]]></code>
+      <code><![CDATA[$metaStats]]></code>
+      <code><![CDATA[$prereg]]></code>
+      <code><![CDATA[$trophyCell]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Views/Pages/Forgot.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$identifierInput]]></code>
+      <code><![CDATA[$newPasswordInput]]></code>
+      <code><![CDATA[$resetPassword]]></code>
+      <code><![CDATA[$sendLoginLink]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Views/Pages/Home.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$recentWinners]]></code>
+    </PropertyNotSetInConstructor>
+    <PropertyTypeCoercion>
+      <code><![CDATA[$this->activeEvents]]></code>
+    </PropertyTypeCoercion>
+    <UninitializedProperty>
+      <code><![CDATA[$this->recentWinners]]></code>
+    </UninitializedProperty>
+  </file>
+  <file src="gatherling/Views/Pages/MatchList.php">
+    <PossiblyFalseOperand>
+      <code><![CDATA[$losses]]></code>
+      <code><![CDATA[$losses]]></code>
+      <code><![CDATA[$wins]]></code>
+      <code><![CDATA[$wins]]></code>
+    </PossiblyFalseOperand>
+    <PossiblyNullArgument>
+      <code><![CDATA[$match->playera]]></code>
+      <code><![CDATA[$match->playera]]></code>
+      <code><![CDATA[$match->playerb]]></code>
+      <code><![CDATA[$match->playerb]]></code>
+      <code><![CDATA[$match->verification]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullArrayOffset>
+      <code><![CDATA[$playersInMatches]]></code>
+      <code><![CDATA[$playersInMatches]]></code>
+      <code><![CDATA[$rounds]]></code>
+      <code><![CDATA[$rounds]]></code>
+    </PossiblyNullArrayOffset>
+    <PossiblyNullOperand>
+      <code><![CDATA[$losses]]></code>
+      <code><![CDATA[$losses]]></code>
+      <code><![CDATA[$match->round]]></code>
+      <code><![CDATA[$rndAdd]]></code>
+      <code><![CDATA[$wins]]></code>
+      <code><![CDATA[$wins]]></code>
+    </PossiblyNullOperand>
+  </file>
+  <file src="gatherling/Views/Pages/PlayerList.php">
+    <PossiblyNullArgument>
+      <code><![CDATA[$event->format]]></code>
+      <code><![CDATA[$event->season]]></code>
+      <code><![CDATA[$event->series]]></code>
+      <code><![CDATA[$event->series]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullOperand>
+      <code><![CDATA[$event->number]]></code>
+      <code><![CDATA[$event->season]]></code>
+    </PossiblyNullOperand>
+  </file>
+  <file src="gatherling/Views/Pages/Profile.php">
+    <PossiblyNullArgument>
+      <code><![CDATA[$player->emailAddress]]></code>
+      <code><![CDATA[$player->emailPrivacy]]></code>
+      <code><![CDATA[$player->timezone]]></code>
+    </PossiblyNullArgument>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[Profile]]></code>
+      <code><![CDATA[Profile]]></code>
+      <code><![CDATA[Profile]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="gatherling/Views/Pages/ReportsForm.php">
+    <MissingClosureParamType>
+      <code><![CDATA[$entries]]></code>
+    </MissingClosureParamType>
+    <MissingClosureReturnType>
+      <code><![CDATA[function ($entries) {]]></code>
+    </MissingClosureReturnType>
+    <MixedArgument>
+      <code><![CDATA[$entryName]]></code>
+    </MixedArgument>
+    <MixedAssignment>
+      <code><![CDATA[$entryName]]></code>
+    </MixedAssignment>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$player->emailAddress]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Pages/Series.php">
+    <PossiblyNullArgument>
+      <code><![CDATA[$series->start_time]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullPropertyFetch>
+      <code><![CDATA[$mostRecentEvent->format]]></code>
+    </PossiblyNullPropertyFetch>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$mostRecentEvent->start]]></code>
+      <code><![CDATA[$nextEvent->start]]></code>
+      <code><![CDATA[$series->start_day]]></code>
+      <code><![CDATA[$series->this_season_master_link]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/Pages/SeriesReport.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$seasonStandings]]></code>
+    </PropertyNotSetInConstructor>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$season]]></code>
+      <code><![CDATA[$seriesName]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/Views/TemplateHelper.php">
+    <MissingClosureParamType>
+      <code><![CDATA[$value]]></code>
+    </MissingClosureParamType>
+    <MissingClosureReturnType>
+      <code><![CDATA[fn ($value) => $value]]></code>
+    </MissingClosureReturnType>
+  </file>
+  <file src="gatherling/action.php">
+    <PossiblyNullArgument>
+      <code><![CDATA[$event->id]]></code>
+      <code><![CDATA[$opp]]></code>
+      <code><![CDATA[$opp]]></code>
+      <code><![CDATA[$opp]]></code>
+      <code><![CDATA[$opp]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullPropertyFetch>
+      <code><![CDATA[$opp_entry->deck]]></code>
+    </PossiblyNullPropertyFetch>
+    <PossiblyNullReference>
+      <code><![CDATA[linkTo]]></code>
+    </PossiblyNullReference>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$event->private]]></code>
+      <code><![CDATA[$series->active]]></code>
+      <code><![CDATA[empty($player->discord_id)]]></code>
+      <code><![CDATA[empty($player->discord_id)]]></code>
+      <code><![CDATA[empty($player->mtga_username)]]></code>
+      <code><![CDATA[empty($player->mtgo_username)]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/admin/infobot.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$passKey]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/admincp.php">
+    <PossiblyInvalidOperand>
+      <code><![CDATA[$newtime]]></code>
+    </PossiblyInvalidOperand>
+    <PossiblyInvalidPropertyAssignmentValue>
+      <code><![CDATA[$newday]]></code>
+      <code><![CDATA[$newseries]]></code>
+    </PossiblyInvalidPropertyAssignmentValue>
+    <RiskyCast>
+      <code><![CDATA[$_POST['isactive']]]></code>
+    </RiskyCast>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$playerName]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/api.php">
+    <PossiblyInvalidArgument>
+      <code><![CDATA[$result]]></code>
+    </PossiblyInvalidArgument>
+    <PossiblyNullPropertyFetch>
+      <code><![CDATA[$player->name]]></code>
+    </PossiblyNullPropertyFetch>
+    <PossiblyNullReference>
+      <code><![CDATA[setApiKey]]></code>
+    </PossiblyNullReference>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!auth()]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
   <file src="gatherling/api_lib.php">
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[array_keys($extra)]]></code>
+    </MixedArgumentTypeCoercion>
+    <MixedArrayAssignment>
+      <code><![CDATA[$json['matches'][]]]></code>
+      <code><![CDATA[$json['unreported'][]]]></code>
+      <code><![CDATA[$json['unreported'][]]]></code>
+      <code><![CDATA[$json['waiting_on'][]]]></code>
+      <code><![CDATA[$json['waiting_on'][]]]></code>
+    </MixedArrayAssignment>
+    <MixedAssignment>
+      <code><![CDATA[$array[$key]]]></code>
+    </MixedAssignment>
+    <MixedReturnTypeCoercion>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[array<string, mixed>]]></code>
+      <code><![CDATA[array<string, mixed>]]></code>
+    </MixedReturnTypeCoercion>
     <NoValue>
       <code><![CDATA[return error("Missing argument '$key'");]]></code>
     </NoValue>
+    <PossiblyNullArgument>
+      <code><![CDATA[$a]]></code>
+      <code><![CDATA[$b]]></code>
+      <code><![CDATA[$m->playera]]></code>
+      <code><![CDATA[$m->playerb]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$res]]></code>
+      <code><![CDATA[$s->player]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullOperand>
+      <code><![CDATA[$m->round]]></code>
+      <code><![CDATA[$roundnum]]></code>
+    </PossiblyNullOperand>
+    <PossiblyUndefinedVariable>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[$result]]></code>
+      <code><![CDATA[$result]]></code>
+    </PossiblyUndefinedVariable>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$username]]></code>
+      <code><![CDATA[empty($decklist)]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/auth.php">
+    <ArgumentTypeCoercion>
+      <code><![CDATA[$token]]></code>
+    </ArgumentTypeCoercion>
+    <MixedArgument>
+      <code><![CDATA[$token->getValues()['scope']]]></code>
+    </MixedArgument>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$email]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[empty($_GET['state'])]]></code>
+      <code><![CDATA[empty($player->emailAddress)]]></code>
+      <code><![CDATA[empty($player->emailAddress)]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/authdebug.php">
+    <ArgumentTypeCoercion>
+      <code><![CDATA[$token]]></code>
+    </ArgumentTypeCoercion>
     <InvalidGlobal>
       <code><![CDATA[global $provider;]]></code>
     </InvalidGlobal>
+    <MixedArgument>
+      <code><![CDATA[$authUrl]]></code>
+    </MixedArgument>
+    <MixedAssignment>
+      <code><![CDATA[$_SESSION['oauth2state']]]></code>
+      <code><![CDATA[$authUrl]]></code>
+    </MixedAssignment>
+    <MixedMethodCall>
+      <code><![CDATA[getAuthorizationUrl]]></code>
+      <code><![CDATA[getState]]></code>
+    </MixedMethodCall>
+  </file>
+  <file src="gatherling/authlib.php">
+    <MixedAssignment>
+      <code><![CDATA[$_SESSION['DISCORD_SCOPES']]]></code>
+    </MixedAssignment>
+    <MixedInferredReturnType>
+      <code><![CDATA[list<array{id: string, name: string, icon: string, owner: bool, permissions: int}>]]></code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement>
+      <code><![CDATA[$provider->getParsedResponse($guildsRequest)]]></code>
+    </MixedReturnStatement>
   </file>
   <file src="gatherling/bootstrap.php">
     <InvalidGlobal>
       <code><![CDATA[global $CONFIG;]]></code>
     </InvalidGlobal>
+    <MixedArrayAccess>
+      <code><![CDATA[$CONFIG['GIT_HASH']]]></code>
+    </MixedArrayAccess>
+    <MixedArrayAssignment>
+      <code><![CDATA[$CONFIG['GIT_HASH']]]></code>
+      <code><![CDATA[$CONFIG['GIT_HASH']]]></code>
+    </MixedArrayAssignment>
   </file>
   <file src="gatherling/config.php">
+    <MixedArrayAssignment>
+      <code><![CDATA[$CONFIG['DISCORD_CLIENT_ID']]]></code>
+      <code><![CDATA[$CONFIG['DISCORD_CLIENT_SECRET']]]></code>
+      <code><![CDATA[$CONFIG['base_url']]]></code>
+      <code><![CDATA[$CONFIG['brevo_api_key']]]></code>
+      <code><![CDATA[$CONFIG['calendar_description']]]></code>
+      <code><![CDATA[$CONFIG['db_database']]]></code>
+      <code><![CDATA[$CONFIG['db_hostname']]]></code>
+      <code><![CDATA[$CONFIG['db_password']]]></code>
+      <code><![CDATA[$CONFIG['db_test_database']]]></code>
+      <code><![CDATA[$CONFIG['db_test_hostname']]]></code>
+      <code><![CDATA[$CONFIG['db_test_password']]]></code>
+      <code><![CDATA[$CONFIG['db_test_username']]]></code>
+      <code><![CDATA[$CONFIG['db_username']]]></code>
+      <code><![CDATA[$CONFIG['env']]]></code>
+      <code><![CDATA[$CONFIG['infobot_passkey']]]></code>
+      <code><![CDATA[$CONFIG['infobot_prefix']]]></code>
+      <code><![CDATA[$CONFIG['password_reset_key']]]></code>
+      <code><![CDATA[$CONFIG['site_name']]]></code>
+    </MixedArrayAssignment>
+    <PossiblyUndefinedGlobalVariable>
+      <code><![CDATA[$CONFIG]]></code>
+    </PossiblyUndefinedGlobalVariable>
     <UnusedVariable>
       <code><![CDATA[$CONFIG]]></code>
     </UnusedVariable>
+  </file>
+  <file src="gatherling/deck.php">
+    <PossiblyNullArgument>
+      <code><![CDATA[$deck]]></code>
+      <code><![CDATA[$deck->eventname]]></code>
+      <code><![CDATA[$event]]></code>
+      <code><![CDATA[$event]]></code>
+      <code><![CDATA[$eventName]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullPropertyFetch>
+      <code><![CDATA[$deck->eventname]]></code>
+      <code><![CDATA[$event->name]]></code>
+    </PossiblyNullPropertyFetch>
+    <PossiblyNullReference>
+      <code><![CDATA[canEdit]]></code>
+      <code><![CDATA[getPlaceDeck]]></code>
+    </PossiblyNullReference>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$playerName]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/deckXmlParser.php">
+    <PossiblyNullArgument>
+      <code><![CDATA[$xml->Cards]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullArrayAccess>
+      <code><![CDATA[$xml->Cards[$i]['Name']]]></code>
+      <code><![CDATA[$xml->Cards[$i]['Quantity']]]></code>
+      <code><![CDATA[$xml->Cards[$i]['Sideboard']]]></code>
+    </PossiblyNullArrayAccess>
+  </file>
+  <file src="gatherling/deckdl.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$id]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/decksearch.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$results]]></code>
+      <code><![CDATA[empty($_POST['archetype'])]]></code>
+      <code><![CDATA[empty($_POST['cardname'])]]></code>
+      <code><![CDATA[empty($_POST['format'])]]></code>
+      <code><![CDATA[empty($_POST['medals'])]]></code>
+      <code><![CDATA[empty($_POST['player'])]]></code>
+      <code><![CDATA[empty($_POST['series'])]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/event.php">
+    <MixedArgument>
+      <code><![CDATA[$f]]></code>
+      <code><![CDATA[$pAWins]]></code>
+      <code><![CDATA[$pBWins]]></code>
+    </MixedArgument>
+    <PossiblyInvalidCast>
+      <code><![CDATA[$_POST['day']]]></code>
+      <code><![CDATA[$_POST['hour']]]></code>
+      <code><![CDATA[$_POST['month']]]></code>
+      <code><![CDATA[$_POST['year']]]></code>
+    </PossiblyInvalidCast>
+    <PossiblyInvalidPropertyAssignmentValue>
+      <code><![CDATA[$seriesName]]></code>
+    </PossiblyInvalidPropertyAssignmentValue>
+    <PossiblyNullArgument>
+      <code><![CDATA[$event->id]]></code>
+      <code><![CDATA[$event->id]]></code>
+      <code><![CDATA[$event->mainid]]></code>
+      <code><![CDATA[$event->mainid]]></code>
+      <code><![CDATA[$newEvent->series]]></code>
+      <code><![CDATA[$oldEvent->start]]></code>
+      <code><![CDATA[$player]]></code>
+      <code><![CDATA[$stmt->errorInfo()[2]]]></code>
+      <code><![CDATA[$stmt->errorInfo()[2]]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullOperand>
+      <code><![CDATA[$oldEvent->number]]></code>
+      <code><![CDATA[$oldEvent->season]]></code>
+    </PossiblyNullOperand>
+    <PossiblyUndefinedVariable>
+      <code><![CDATA[$pAWins]]></code>
+      <code><![CDATA[$pBWins]]></code>
+    </PossiblyUndefinedVariable>
+    <RiskyCast>
+      <code><![CDATA[$_POST['hostupdatesmatches'][$ndx]]]></code>
+    </RiskyCast>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[Player::loginName()]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/eventreport.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$eventName]]></code>
+      <code><![CDATA[empty($season)]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/forgot.php">
+    <MixedArgument>
+      <code><![CDATA[$payload->name]]></code>
+    </MixedArgument>
+    <PossiblyNullArgument>
+      <code><![CDATA[$player->emailAddress]]></code>
+    </PossiblyNullArgument>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$player->emailPrivacy]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/formatcp.php">
     <InvalidArgument>
       <code><![CDATA[$_POST]]></code>
     </InvalidArgument>
+    <PossiblyInvalidCast>
+      <code><![CDATA[$_POST['action']]]></code>
+    </PossiblyInvalidCast>
+    <PossiblyNullArgument>
+      <code><![CDATA[$seriesName]]></code>
+    </PossiblyNullArgument>
+    <PossiblyUndefinedArrayOffset>
+      <code><![CDATA[$playerSeries[0]]]></code>
+    </PossiblyUndefinedArrayOffset>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$format]]></code>
+      <code><![CDATA[empty($_REQUEST['format'])]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/insertcardset.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$cardSetCode]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/login.php">
+    <MixedArgument>
+      <code><![CDATA[$target ?? '']]></code>
+    </MixedArgument>
+  </file>
+  <file src="gatherling/player.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[Player::loginName()]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/prereg.php">
     <InvalidGlobal>
       <code><![CDATA[global $provider;]]></code>
     </InvalidGlobal>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$series->discord_guild_id]]></code>
+      <code><![CDATA[$series->discord_require_membership]]></code>
+    </RiskyTruthyFalsyComparison>
     <UnusedVariable>
       <code><![CDATA[$provider]]></code>
     </UnusedVariable>
+  </file>
+  <file src="gatherling/profile.php">
+    <PossiblyInvalidPropertyAssignmentValue>
+      <code><![CDATA[$_GET['email']]]></code>
+    </PossiblyInvalidPropertyAssignmentValue>
+  </file>
+  <file src="gatherling/ratings.php">
+    <LessSpecificReturnStatement>
+      <code><![CDATA[['ratings_data' => $results, 'pagination' => $pagination]]]></code>
+    </LessSpecificReturnStatement>
+    <MoreSpecificReturnType>
+      <code><![CDATA[array{ratings_data: list<array{rank: int, playerName: string, player: Player}>, pagination: Pagination}]]></code>
+    </MoreSpecificReturnType>
+  </file>
+  <file src="gatherling/seriescp.php">
+    <PossiblyInvalidOperand>
+      <code><![CDATA[$newtime]]></code>
+    </PossiblyInvalidOperand>
+    <PossiblyInvalidPropertyAssignmentValue>
+      <code><![CDATA[$newday]]></code>
+      <code><![CDATA[$room]]></code>
+    </PossiblyInvalidPropertyAssignmentValue>
+    <PossiblyNullPropertyFetch>
+      <code><![CDATA[Player::getSessionPlayer()->super]]></code>
+    </PossiblyNullPropertyFetch>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$addition]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="gatherling/util/updateDefaultFormats.php">
+    <PossiblyUndefinedArrayOffset>
+      <code><![CDATA[$_SERVER['REQUEST_METHOD']]]></code>
+    </PossiblyUndefinedArrayOffset>
+  </file>
+  <file src="tests/EventsTest.php">
+    <PossiblyNullOperand>
+      <code><![CDATA[$event->number]]></code>
+    </PossiblyNullOperand>
   </file>
   <file src="tests/Models/EventTest.php">
     <InvalidArrayOffset>
@@ -78,5 +2670,19 @@
       <code><![CDATA[requires]]></code>
       <code><![CDATA[requires]]></code>
     </InternalMethod>
+  </file>
+  <file src="tests/Support/TestDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$is_active]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$value]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="tests/Views/Components/ComponentTest.php">
+    <MissingClosureReturnType>
+      <code><![CDATA[function (string $name, ?Component $icon = null) {]]></code>
+      <code><![CDATA[function (string $name, string $src) {]]></code>
+    </MissingClosureReturnType>
   </file>
 </files>
