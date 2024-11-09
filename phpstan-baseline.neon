@@ -711,11 +711,6 @@ parameters:
 			path: gatherling/Views/Components/FullMetagame.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Components/InfoCell.php
-
-		-
 			message: "#^Parameter \\#2 \\$exponent of function pow expects float\\|int, int\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Components/InfoCell.php

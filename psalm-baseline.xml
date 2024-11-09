@@ -232,7 +232,6 @@
     <MissingConstructor>
       <code><![CDATA[$code]]></code>
       <code><![CDATA[$count]]></code>
-      <code><![CDATA[$last_updated]]></code>
       <code><![CDATA[$modern_legal]]></code>
       <code><![CDATA[$name]]></code>
       <code><![CDATA[$released]]></code>
@@ -1810,7 +1809,6 @@
   </file>
   <file src="gatherling/Views/Components/InfoCell.php">
     <PossiblyNullArgument>
-      <code><![CDATA[$event->series]]></code>
       <code><![CDATA[$subevent->rounds]]></code>
     </PossiblyNullArgument>
     <PropertyNotSetInConstructor>
