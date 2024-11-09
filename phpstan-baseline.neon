@@ -966,11 +966,6 @@ parameters:
 			path: gatherling/event.php
 
 		-
-			message: "#^Parameter \\#1 \\$to of function sendEmail expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/forgot.php
-
-		-
 			message: "#^Parameter \\#1 \\$values of function updateFormat expects array\\<string, string\\>, array given\\.$#"
 			count: 1
 			path: gatherling/formatcp.php

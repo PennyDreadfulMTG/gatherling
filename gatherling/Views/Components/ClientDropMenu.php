@@ -16,7 +16,7 @@ class ClientDropMenu extends DropMenu
         foreach ($clients as $value => $text) {
             $options[] = [
                 'isSelected' => $def == $value,
-                'value'      => $value,
+                'value'      => (string) $value,
                 'text'       => $text,
             ];
         }

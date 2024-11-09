@@ -2445,12 +2445,6 @@
     <MixedArgument>
       <code><![CDATA[$payload->name]]></code>
     </MixedArgument>
-    <PossiblyNullArgument>
-      <code><![CDATA[$player->emailAddress]]></code>
-    </PossiblyNullArgument>
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$player->emailPrivacy]]></code>
-    </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/formatcp.php">
     <InvalidArgument>
