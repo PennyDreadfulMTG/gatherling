@@ -51,6 +51,6 @@ class InfoCell extends Component
             $this->hostLink = new PlayerLink($host);
         }
         $this->eventReportLink = $event->reporturl;
-        $this->seasonLeaderboardLink = 'seriesreport.php?series=' . rawurlencode($event->series) . '&season=' . rawurlencode((string) $event->season);
+        $this->seasonLeaderboardLink = 'seriesreport.php?series=' . rawurlencode($event->series ?? '') . '&season=' . rawurlencode((string) $event->season);
     }
 }
