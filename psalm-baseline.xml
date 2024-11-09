@@ -1897,11 +1897,6 @@
       <code><![CDATA[$deck->created_date]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
-  <file src="gatherling/Views/Components/NewFormatForm.php">
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[$action]]></code>
-    </PropertyNotSetInConstructor>
-  </file>
   <file src="gatherling/Views/Components/NumDropMenu.php">
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[$special]]></code>
@@ -2568,18 +2563,8 @@
     <InvalidArgument>
       <code><![CDATA[$_POST]]></code>
     </InvalidArgument>
-    <PossiblyInvalidCast>
-      <code><![CDATA[$_POST['action']]]></code>
-    </PossiblyInvalidCast>
-    <PossiblyNullArgument>
-      <code><![CDATA[$seriesName]]></code>
-    </PossiblyNullArgument>
-    <PossiblyUndefinedArrayOffset>
-      <code><![CDATA[$playerSeries[0]]]></code>
-    </PossiblyUndefinedArrayOffset>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[$format]]></code>
-      <code><![CDATA[empty($_REQUEST['format'])]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/insertcardset.php">

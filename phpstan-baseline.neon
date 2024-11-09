@@ -1036,11 +1036,6 @@ parameters:
 			path: gatherling/formatcp.php
 
 		-
-			message: "#^Part \\$_POST\\['action'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
-			count: 1
-			path: gatherling/formatcp.php
-
-		-
 			message: "#^Property Gatherling\\\\Models\\\\Player\\:\\:\\$emailAddress \\(string\\|null\\) does not accept mixed\\.$#"
 			count: 1
 			path: gatherling/profile.php
