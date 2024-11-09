@@ -117,7 +117,7 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$string2 of function strcasecmp expects string, string\\|null given\\.$#"
-			count: 3
+			count: 2
 			path: gatherling/Models/Deck.php
 
 		-
