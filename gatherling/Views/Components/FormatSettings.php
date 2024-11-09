@@ -28,7 +28,7 @@ class FormatSettings extends Component
 
     public function __construct(public string $seriesName, Format $activeFormat)
     {
-        $this->activeFormatName = $activeFormat->name ?? '';
+        $this->activeFormatName = $activeFormat->name;
         $this->activeFormat = getObjectVarsCamelCase($activeFormat);
         $this->minMainStringField = new StringField('minmain', $activeFormat->min_main_cards_allowed, 5);
         $this->showMinMainWarning = $activeFormat->min_main_cards_allowed == 0;
@@ -36,7 +36,7 @@ class FormatSettings extends Component
         $this->showMaxMainWarning = $activeFormat->max_main_cards_allowed == 0;
         $this->minSideStringField = new StringField('minside', $activeFormat->min_side_cards_allowed, 5);
         $this->maxSideStringField = new StringField('maxside', $activeFormat->max_side_cards_allowed, 5);
-        $this->showRarityWarning = 0 == (int) $activeFormat->allow_commons + (int) $activeFormat->allow_uncommons + (int) $activeFormat->allow_rares + (int) $activeFormat->allow_mythics + (int) $activeFormat->allow_timeshifted;
+        $this->showRarityWarning = 0 == $activeFormat->allow_commons + $activeFormat->allow_uncommons + $activeFormat->allow_rares + $activeFormat->allow_mythics + $activeFormat->allow_timeshifted;
         $this->underdogTooltip = new Tooltip('Underdog', 'Restrict usage of Changelings to 4 cards (8 for tribes with only 3 members).');
         $this->pureTooltip = new Tooltip('Pure', "Don't allow for off-tribe creatures or Changelings. All creatures in the deck must share at least one creature type.");
         $this->eternalTooltip = new Tooltip('Eternal Format', 'Eternal Formats treat all cardsets as legal.');

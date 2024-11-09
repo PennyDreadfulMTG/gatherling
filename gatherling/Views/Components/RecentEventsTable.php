@@ -21,8 +21,8 @@ class RecentEventsTable extends Component
             $eventStartTime = $event->start ? strtotime($event->start) : null;
             $startTime = $eventStartTime ? new Time($eventStartTime, $now) : null;
             $this->events[] = [
-                'eventLink' => 'event.php?name=' . rawurlencode($event->name ?? ''),
-                'eventName' => $event->name ?? '',
+                'eventLink' => 'event.php?name=' . rawurlencode($event->name),
+                'eventName' => $event->name,
                 'startTime' => $startTime,
                 'playerCount' => $event->getPlayerCount(),
                 'host' => $event->host ?? '',

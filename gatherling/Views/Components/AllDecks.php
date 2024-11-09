@@ -15,19 +15,19 @@ class AllDecks extends Component
     public function __construct(Player $player)
     {
         $decks = $player->getAllDecks();
-        $this->upPlayer = strtoupper($player->name ?? '');
+        $this->upPlayer = strtoupper($player->name);
 
         foreach ($decks as $deck) {
             $event = $deck->getEvent();
             $targetUrl = $event->authCheck($player->name) ? 'event' : 'eventreport';
-            $eventLink = $targetUrl . '.php?event=' . rawurlencode($event->name ?? '');
+            $eventLink = $targetUrl . '.php?event=' . rawurlencode($event->name);
             $this->decks[] = [
                 'medalSrc' => $deck->medal ? 'styles/images/' . rawurlencode($deck->medal) . '.png' : '',
                 'recordString' => $deck->recordString(),
                 'deckLink' => new DeckLink($deck),
                 'isValid' => $deck->isValid(),
                 'eventLink' => $eventLink,
-                'eventName' => $event->name ?? '',
+                'eventName' => $event->name,
                 'targetUrl' => $targetUrl,
             ];
         }

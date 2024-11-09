@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
+  <file src="gatherling/Auth/Session.php">
+    <TypeDoesNotContainType>
+      <code><![CDATA[is_string($token)]]></code>
+    </TypeDoesNotContainType>
+  </file>
+  <file src="gatherling/Data/Db.php">
+    <RedundantCondition>
+      <code><![CDATA[isset($this->pdo) && ($this->connected || !$connectToDatabase)]]></code>
+    </RedundantCondition>
+    <RedundantPropertyInitializationCheck>
+      <code><![CDATA[isset($this->pdo)]]></code>
+    </RedundantPropertyInitializationCheck>
+  </file>
   <file src="gatherling/Models/Event.php">
     <InvalidArgument>
       <code><![CDATA[$t4]]></code>
@@ -58,5 +71,12 @@
     <UnusedClass>
       <code><![CDATA[LogTestListener]]></code>
     </UnusedClass>
+  </file>
+  <file src="tests/Support/TestCases/DatabaseCase.php">
+    <InternalMethod>
+      <code><![CDATA[name]]></code>
+      <code><![CDATA[requires]]></code>
+      <code><![CDATA[requires]]></code>
+    </InternalMethod>
   </file>
 </files>

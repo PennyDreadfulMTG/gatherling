@@ -24,7 +24,7 @@ class CardSets extends Component
 
     public function __construct(public string $seriesName, Format $activeFormat)
     {
-        $this->activeFormatName = $activeFormat->name ?? '';
+        $this->activeFormatName = $activeFormat->name;
         $this->coreCardSets = $activeFormat->getCoreCardsets();
         $this->noCoreCardSets = $this->coreCardSets ? new NotAllowed('No Selected Card Set To Delete') : null;
         $this->coreCardSetsDropMenu = new CardsetDropMenu('Core', $activeFormat);

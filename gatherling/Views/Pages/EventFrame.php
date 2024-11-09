@@ -39,7 +39,7 @@ abstract class EventFrame extends Page
         $links = [];
         foreach ($views as $view => $text) {
             $links[] = [
-                'link' => 'event.php?name=' . rawurlencode($event->name ?? '') . '&view=' . $view,
+                'link' => 'event.php?name=' . rawurlencode($event->name) . '&view=' . $view,
                 'text' => $text,
             ];
         }

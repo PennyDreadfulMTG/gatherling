@@ -26,7 +26,7 @@ function main(): never
     $page->send();
 }
 
-/** @return array{ratings_data: list<array{player: string, rank: int, playerName: string, player: Player}>, pagination: Pagination} */
+/** @return array{ratings_data: list<array{rank: int, playerName: string, player: Player}>, pagination: Pagination} */
 function ratingsData(string $format, int $minMatches): array
 {
     $subquery = '

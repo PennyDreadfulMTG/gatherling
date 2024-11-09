@@ -14,6 +14,6 @@ class VerifyMtgoForm extends Component
     public function __construct(Player $player, public string $infobotPrefix)
     {
         $this->isVerified = $player->verified == 1;
-        $this->playerName = $player->name ?? '';
+        $this->playerName = $player->name;
     }
 }

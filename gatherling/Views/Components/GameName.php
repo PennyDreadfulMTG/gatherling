@@ -18,7 +18,7 @@ class GameName extends Component
     public function __construct(Player $player, int|string|null $game = 'gatherling', bool $html = true)
     {
         $iconClass = null;
-        $name = $player->name ?? '';
+        $name = $player->name;
         if ($html) {
             if ($game == self::MTGO && !empty($player->mtgo_username)) {
                 $iconClass = 'ss ss-pmodo';

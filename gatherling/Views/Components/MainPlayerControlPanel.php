@@ -15,6 +15,7 @@ use Gatherling\Views\Components\RecentDecksTable;
 use Gatherling\Views\Components\RecentMatchTable;
 use Gatherling\Views\Components\StatsTable;
 
+use function Gatherling\Helpers\logger;
 use function Gatherling\Helpers\session;
 
 class MainPlayerControlPanel extends Component
@@ -84,8 +85,7 @@ class MainPlayerControlPanel extends Component
             $showDiscordRoom = $series->discord_guild_name && $series->discord_channel_name;
             $discordChannelName = $series->discord_channel_name ?? '';
             $discordGuildName = $series->discord_guild_name ?? '';
-            $showMtgoRoom = !$showDiscordRoom && $series->mtgo_room;
-            $mtgoRoom = $showMtgoRoom ? $series->mtgo_room ?? '' : '';
+            $mtgoRoom = $series->mtgo_room !== null && !$showDiscordRoom ? $series->mtgo_room : '';
             $standingsLink = 'player.php?mode=standings&event=' . rawurlencode($event->name);
             if ($event->current_round > $event->mainrounds) {
                 $structure = $event->finalstruct;
@@ -140,7 +140,7 @@ class MainPlayerControlPanel extends Component
                 'showDiscordRoom' => $showDiscordRoom,
                 'discordChannelName' => $discordChannelName,
                 'discordGuildName' => $discordGuildName,
-                'showMtgoRoom' => $showMtgoRoom,
+                'showMtgoRoom' => $mtgoRoom !== '',
                 'mtgoRoom' => $mtgoRoom,
                 'standingsLink' => $standingsLink,
                 'dropLink' => $dropLink,
@@ -156,8 +156,11 @@ class MainPlayerControlPanel extends Component
 
 function reportLeagueGameLink(Event $event, ?int $subeventId): string
 {
-    $eventName = $event->name ?? '';
-    $round = (string) ($event->current_round ?? '');
+    if ($event->current_round === 0) {
+        logger()->warning('I generated a reportLeagueGameLink for an event with no current round', ['event' => $event]);
+    }
+    $eventName = $event->name;
+    $round = (string) $event->current_round;
     $subeventId = (string) ($subeventId ?? '');
     return 'report.php?mode=submit_league_result&event=' . rawurlencode($eventName) . '&round=' . rawurlencode($round) . '&subevent=' . rawurlencode($subeventId);
 }

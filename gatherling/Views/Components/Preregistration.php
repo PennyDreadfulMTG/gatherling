@@ -59,8 +59,8 @@ class Preregistration extends Component
             if ($event->authCheck($player->name)) {
                 $targetUrl = 'event';
             }
-            $eventLink = $targetUrl . '.php?event=' . rawurlencode($event->name ?? '');
-            $eventName = $event->name ?? '';
+            $eventLink = $targetUrl . '.php?event=' . rawurlencode($event->name);
+            $eventName = $event->name;
             if (!$event->start || !strtotime($event->start)) {
                 throw new NotFoundException("Event start time not found for event {$event->name}");
             }
@@ -78,7 +78,7 @@ class Preregistration extends Component
                 $deckLink = new DeckLink($entry->deck);
             }
 
-            $unregLink = 'prereg.php?action=unreg&event=' . rawurlencode($event->name ?? '');
+            $unregLink = 'prereg.php?action=unreg&event=' . rawurlencode($event->name);
             $this->upcomingEvents[] = [
                 'eventLink' => $eventLink,
                 'eventName' => $eventName,
@@ -97,8 +97,8 @@ class Preregistration extends Component
         }
 
         foreach ($availableEvents as $event) {
-            $eventReportLink = 'eventreport.php?event=' . rawurlencode($event->name ?? '');
-            $eventName = $event->name ?? '';
+            $eventReportLink = 'eventreport.php?event=' . rawurlencode($event->name);
+            $eventName = $event->name;
             if (!$event->start || !strtotime($event->start)) {
                 throw new NotFoundException("Event start time not found for event {$event->name}");
             }

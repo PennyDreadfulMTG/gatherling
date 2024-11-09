@@ -24,7 +24,7 @@ class FormatDropMenu extends DropMenu
             ];
         }
 
-        $default = $useAll == 0 ? '- Format -' : 'All';
+        $default = $useAll ? 'All' : '- Format -';
 
         parent::__construct($formName, $options, $default);
     }

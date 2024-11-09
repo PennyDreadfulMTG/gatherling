@@ -38,7 +38,7 @@ class RecentMatchTable extends Component
             $wins = $player->name ? $match->getPlayerWins($player->name) : 0;
             $losses = $player->name ? $match->getPlayerLosses($player->name) : 0;
             $this->matches[] = [
-                'eventName' => $event->name ?? '',
+                'eventName' => $event->name,
                 'round' => (string) $match->round,
                 'res' => $res,
                 'playerWins' => $wins ?: 0,

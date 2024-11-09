@@ -31,8 +31,8 @@ class EditSet extends Component
 
         $this->setCodeInput = new TextInput('Set Code', 'code', $set->code);
         $this->releaseDateInput = new TextInput('Release Date', 'released', $set->released);
-        $this->standardLegalInput = new CheckboxInput('Standard Legal', 'standard_legal', (bool) $set->standard_legal);
-        $this->modernLegalInput = new CheckboxInput('Modern Legal', 'modern_legal', (bool) $set->modern_legal);
+        $this->standardLegalInput = new CheckboxInput('Standard Legal', 'standard_legal', $set->standard_legal);
+        $this->modernLegalInput = new CheckboxInput('Modern Legal', 'modern_legal', $set->modern_legal);
 
         $sql = '
             SELECT

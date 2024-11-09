@@ -30,7 +30,7 @@ class CurrentMatchesTable extends Component
                 $player_number = 'a';
             }
             $matchInfo = [
-                'eventName' => $event->name ?? '',
+                'eventName' => $event->name,
                 'currentRound' => ((string) $event->current_round) ?: '',
                 'isBye' => $match->result == 'BYE',
             ];
@@ -42,9 +42,9 @@ class CurrentMatchesTable extends Component
                 $oppplayer = new Player($opp);
                 $matchInfo['opponentLink'] = new PlayerLink($oppplayer, $event->client);
                 if ($match->verification == 'unverified') {
-                    if ($player_number == 'b' and ((int) $match->playerb_wins + (int) $match->playerb_losses) > 0) {
+                    if ($player_number == 'b' and ($match->playerb_wins + $match->playerb_losses) > 0) {
                         $matchInfo['isReportSubmitted'] = true;
-                    } elseif ($player_number == 'a' and ((int) $match->playera_wins + (int) $match->playera_losses) > 0) {
+                    } elseif ($player_number == 'a' and ($match->playera_wins + $match->playera_losses) > 0) {
                         $matchInfo['isReportSubmitted'] = true;
                     } else {
                         if ($match->playerReportableCheck() == true) {

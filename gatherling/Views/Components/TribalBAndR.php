@@ -25,7 +25,7 @@ class TribalBAndR extends Component
 
     public function __construct(public string $seriesName, Format $activeFormat)
     {
-        $this->activeFormatName = $activeFormat->name ?? '';
+        $this->activeFormatName = $activeFormat->name;
 
         $restrictedToTribe = $activeFormat->getRestrictedToTribeList();
         $this->cardCount = count($restrictedToTribe);

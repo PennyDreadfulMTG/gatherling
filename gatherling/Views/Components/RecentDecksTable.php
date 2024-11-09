@@ -40,8 +40,8 @@ class RecentDecksTable extends Component
             $medalSrc = 'styles/images/' . rawurlencode($deck->medal ?? 'dot') . '.png';
             $deckLink = new DeckLink($deck);
             $targetUrl = $event->authCheck($player->name) ? 'event' : 'eventreport';
-            $eventLink = $targetUrl . '.php?event=' . rawurlencode($event->name ?? '');
-            $eventName = $event->name ?? '';
+            $eventLink = $targetUrl . '.php?event=' . rawurlencode($event->name);
+            $eventName = $event->name;
             $recordString = $deck->recordString();
             $this->decks[] = [
                 'medalSrc' => $medalSrc,

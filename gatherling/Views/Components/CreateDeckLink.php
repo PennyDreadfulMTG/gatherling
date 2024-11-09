@@ -16,7 +16,7 @@ class CreateDeckLink extends Component
     {
         $this->canCreateDeck = Player::loginName() ? $entry->canCreateDeck(Player::loginName()) : false;
         if ($this->canCreateDeck) {
-            $this->createDeckLink = 'deck.php?player=' . rawurlencode($entry->player->name ?? '') . '&event=' . rawurlencode((string) $entry->event->id) . '&mode=create';
+            $this->createDeckLink = 'deck.php?player=' . rawurlencode($entry->player->name) . '&event=' . rawurlencode((string) $entry->event->id) . '&mode=create';
         }
     }
 }

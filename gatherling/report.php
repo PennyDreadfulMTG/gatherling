@@ -63,7 +63,7 @@ function main(): never
         } else {
             // Non-league matches
             $match = new Matchup(post()->int('match_id'));
-            if ($match->playerLetter($player->name ?? '') == post()->string('player')) {
+            if ($match->playerLetter($player->name) == post()->string('player')) {
                 Matchup::saveReport(post()->string('report'), post()->int('match_id'), post()->string('player'));
                 (new Redirect('player.php'))->send();
             } else {
@@ -115,7 +115,7 @@ function main(): never
                     continue;
                 }
                 if ($match->verification == 'unverified') {
-                    $playerLetter = $match->playerLetter($player->name ?? '');
+                    $playerLetter = $match->playerLetter($player->name);
                     if ($playerLetter == 'b' and ($match->playerb_wins + $match->playerb_losses) > 0) {
                         // Fine.
                     } elseif ($playerLetter == 'a' and ($match->playera_wins + $match->playera_losses) > 0) {
@@ -131,7 +131,7 @@ function main(): never
             }
 
             if ($canDrop) {
-                $viewComponent = new DropConfirm($eventName, $player->name ?? '');
+                $viewComponent = new DropConfirm($eventName, $player->name);
             } elseif ($match) {
                 $viewComponent = new SubmitResultForm($match->id, true);
             }
