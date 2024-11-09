@@ -66,6 +66,7 @@ class Event
             $this->name = '';
             $this->season = 0;
             $this->number = 0;
+            $this->format = '';
             $this->mainrounds = 0;
             $this->mainstruct = '';
             $this->finalrounds = 0;
