@@ -380,12 +380,6 @@ function updateFormat(array $values): Component
         $format->standard = 0;
     }
 
-    if (isset($values['is_meta_format'])) {
-        $format->is_meta_format = 1;
-    } else {
-        $format->is_meta_format = 0;
-    }
-
     $format->save();
 
     return new NullComponent();

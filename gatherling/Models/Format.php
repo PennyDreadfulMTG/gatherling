@@ -56,9 +56,6 @@ class Format
     public int $min_side_cards_allowed;
     public int $max_side_cards_allowed;
 
-    // Meta Formats
-    public int $is_meta_format;
-
     /** @var list<string> */
     private array $error = [];
 
@@ -95,7 +92,6 @@ class Format
             $this->max_main_cards_allowed = 2000;
             $this->min_side_cards_allowed = 0;
             $this->max_side_cards_allowed = 15;
-            $this->is_meta_format = 0;
             $this->new = true;
 
             return;
@@ -112,7 +108,7 @@ class Format
                       prismatic, tribal, pure, underdog, limitless, allow_commons, allow_uncommons,
                       allow_rares, allow_mythics, allow_timeshifted, priority, min_main_cards_allowed,
                       max_main_cards_allowed, min_side_cards_allowed, max_side_cards_allowed, eternal,
-                      modern, `standard`, is_meta_format
+                      modern, `standard`
                  FROM formats
                 WHERE name = :name';
             $result = db()->selectOnly($sql, FormatDto::class, ['name' => $name]);
@@ -143,7 +139,6 @@ class Format
             $this->eternal = $result->eternal;
             $this->modern = $result->modern;
             $this->standard = $result->standard;
-            $this->is_meta_format = $result->is_meta_format;
 
             $this->card_banlist = $this->getBanList();
             $this->card_legallist = $this->getLegalList();
@@ -220,10 +215,10 @@ class Format
                                                   vanguard, prismatic, tribal, pure, underdog, limitless, allow_commons, allow_uncommons, allow_rares,
                                                   allow_mythics, allow_timeshifted, priority, min_main_cards_allowed,
                                                   max_main_cards_allowed, min_side_cards_allowed, max_side_cards_allowed,
-                                                  eternal, modern, `standard`, is_meta_format)
-                              VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+                                                  eternal, modern, `standard`)
+                              VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $stmt->bind_param(
-            'ssssddddddddddddddddddddddd',
+            'ssssdddddddddddddddddddddd',
             $this->name,
             $this->description,
             $this->type,
@@ -250,7 +245,6 @@ class Format
             $this->eternal,
             $this->modern,
             $this->standard,
-            $this->is_meta_format
         );
         $stmt->execute() or exit($stmt->error);
         $stmt->close();
@@ -272,11 +266,11 @@ class Format
                                   allow_commons = ?, allow_uncommons = ?, allow_rares = ?,
                                   allow_mythics = ?, allow_timeshifted = ?, priority = ?, min_main_cards_allowed = ?,
                                   max_main_cards_allowed = ?, min_side_cards_allowed = ?, max_side_cards_allowed = ?,
-                                  eternal = ?, modern = ?, `standard` = ?, is_meta_format = ?
+                                  eternal = ?, modern = ?, `standard` = ?
                                   WHERE name = ?');
             $stmt or exit($db->error);
             $stmt->bind_param(
-                'sssddddddddddddddddddddddds',
+                'sssdddddddddddddddddddddds',
                 $this->description,
                 $this->type,
                 $this->series_name,
@@ -302,7 +296,6 @@ class Format
                 $this->eternal,
                 $this->modern,
                 $this->standard,
-                $this->is_meta_format,
                 $this->name
             );
             $stmt->execute() or exit($stmt->error);
@@ -341,7 +334,6 @@ class Format
             $this->eternal = $oldFormat->eternal;
             $this->modern = $oldFormat->modern;
             $this->standard = $oldFormat->standard;
-            $this->is_meta_format = $oldFormat->is_meta_format;
             $this->new = false;
             $success = $this->save();
             if (!$success) {

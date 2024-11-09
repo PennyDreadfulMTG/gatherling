@@ -600,8 +600,6 @@
       <code><![CDATA[$this->description]]></code>
       <code><![CDATA[$this->eternal]]></code>
       <code><![CDATA[$this->eternal]]></code>
-      <code><![CDATA[$this->is_meta_format]]></code>
-      <code><![CDATA[$this->is_meta_format]]></code>
       <code><![CDATA[$this->limitless]]></code>
       <code><![CDATA[$this->limitless]]></code>
       <code><![CDATA[$this->max_main_cards_allowed]]></code>
@@ -760,7 +758,6 @@
       <code><![CDATA[$commander]]></code>
       <code><![CDATA[$description]]></code>
       <code><![CDATA[$eternal]]></code>
-      <code><![CDATA[$is_meta_format]]></code>
       <code><![CDATA[$limitless]]></code>
       <code><![CDATA[$max_main_cards_allowed]]></code>
       <code><![CDATA[$max_side_cards_allowed]]></code>
@@ -794,7 +791,6 @@
       <code><![CDATA[$commander]]></code>
       <code><![CDATA[$description]]></code>
       <code><![CDATA[$eternal]]></code>
-      <code><![CDATA[$is_meta_format]]></code>
       <code><![CDATA[$limitless]]></code>
       <code><![CDATA[$max_main_cards_allowed]]></code>
       <code><![CDATA[$max_side_cards_allowed]]></code>
