@@ -13,21 +13,21 @@ use function Gatherling\Helpers\logger;
 class Event
 {
     public string $name;
-    public ?int $id;
+    public int $id;
 
-    public ?int $season;
-    public ?int $number = null;
-    public ?string $format = null;
+    public int $season;
+    public int $number;
+    public string $format;
 
-    public ?string $start;
-    public ?int $kvalue = null;
+    public string $start;
+    public int $kvalue;
     public int $active;
     public int $finalized;
     public int $prereg_allowed;
     public string $threadurl;
     public string $reporturl;
     public string $metaurl;
-    public ?int $private;
+    public int $private;
     public int $client;
 
     public int $player_editdecks;
@@ -57,13 +57,15 @@ class Event
     public int $private_finals; // As above, but for finals
 
     public ?int $hastrophy;
-    private ?bool $new = null;
+    private bool $new;
 
     public function __construct(int|string $name = '')
     {
         if ($name == '') {
             $this->id = 0;
             $this->name = '';
+            $this->season = 0;
+            $this->number = 0;
             $this->mainrounds = 0;
             $this->mainstruct = '';
             $this->finalrounds = 0;
@@ -73,7 +75,9 @@ class Event
             $this->threadurl = '';
             $this->reporturl = '';
             $this->metaurl = '';
-            $this->start = null;
+            $this->private = 0;
+            $this->start = '';
+            $this->kvalue = 16;
             $this->finalized = 0;
             $this->prereg_allowed = 0;
             $this->hastrophy = 0;
@@ -93,31 +97,48 @@ class Event
             return;
         }
 
-        if (!$this->new) {
-            $sql = '
-                SELECT
-                    id, name, format, host, cohost, series, season, number,
-                    start, kvalue, finalized, prereg_allowed, threadurl,
-                    metaurl, reporturl, active, current_round, player_reportable, player_editdecks,
-                    prereg_cap, private_decks, private_finals, player_reported_draws, late_entry_limit,
-                    `private`, client
-                FROM
-                    events
+        $sql = '
+            SELECT id, name, format, host, cohost, series, season, number, start, kvalue, finalized,
+                    prereg_allowed, threadurl, metaurl, reporturl, active, current_round, player_reportable,
+                    player_editdecks, prereg_cap, private_decks, private_finals, player_reported_draws,
+                    late_entry_limit, `private`, client
+                FROM events
                 WHERE ';
-            if (is_numeric($name)) {
-                $sql .= 'id = :id';
-                $params = ['id' => $name];
-            } else {
-                $sql .= 'name = :name';
-                $params = ['name' => $name];
-            }
-            $event = db()->selectOnly($sql, EventDto::class, $params);
-            foreach (get_object_vars($event) as $property => $value) {
-                $this->$property = $value;
-            }
+        if (is_numeric($name)) {
+            $sql .= 'id = :id';
+            $params = ['id' => $name];
+        } else {
+            $sql .= 'name = :name';
+            $params = ['name' => $name];
         }
+        $event = db()->selectOnly($sql, EventDto::class, $params);
+        $this->id = $event->id;
+        $this->name = $event->name;
+        $this->format = $event->format;
+        $this->host = $event->host;
+        $this->cohost = $event->cohost;
+        $this->series = $event->series;
+        $this->season = $event->season;
+        $this->number = $event->number;
+        $this->start = $event->start;
+        $this->kvalue = $event->kvalue;
+        $this->finalized = $event->finalized;
+        $this->prereg_allowed = $event->prereg_allowed;
+        $this->threadurl = $event->threadurl;
+        $this->metaurl = $event->metaurl;
+        $this->reporturl = $event->reporturl;
+        $this->active = $event->active;
+        $this->current_round = $event->current_round;
+        $this->player_reportable = $event->player_reportable;
+        $this->player_editdecks = $event->player_editdecks;
+        $this->prereg_cap = $event->prereg_cap;
+        $this->private_decks = $event->private_decks;
+        $this->private_finals = $event->private_finals;
+        $this->player_reported_draws = $event->player_reported_draws;
+        $this->late_entry_limit = $event->late_entry_limit;
+        $this->private = $event->private;
+        $this->client = $event->client;
 
-        // BAKERT remove all casts on mainrounds and finalrounds
         $this->standing = new Standings($this->name, '0');
 
         // Main rounds

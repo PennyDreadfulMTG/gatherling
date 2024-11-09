@@ -30,7 +30,7 @@ class InfoCell extends Component
         $this->threadLink = $event->threadurl;
         $this->eventName = $event->name;
         $this->eventDate = $event->start ? date('j F Y', strtotime($event->start)) : '';
-        $this->eventFormat = $event->format ?? '';
+        $this->eventFormat = $event->format;
         $this->playerCount = $event->getPlayerCount();
         $this->deckCount = count($event->getDecks());
         $this->isActive = (bool) $event->active;

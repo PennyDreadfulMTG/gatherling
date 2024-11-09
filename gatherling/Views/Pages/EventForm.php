@@ -108,9 +108,6 @@ class EventForm extends EventFrame
         $numberDropMenu = new NumDropMenu('number', '- Event Number -', Event::largestEventNum() + 5, $event->number, 0, 'Custom');
         $formatDropMenu = new FormatDropMenu($event->format);
 
-        if (is_null($event->kvalue)) {
-            $event->kvalue = 16;
-        }
         $kValueDropMenu = kValueSelectInput($event->kvalue);
         $hostField = new StringField('host', $event->host, 20);
         $cohostField = new StringField('cohost', $event->cohost, 20);

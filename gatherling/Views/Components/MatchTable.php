@@ -45,7 +45,7 @@ class MatchTable extends Component
             if (!$event->id) {
                 throw new NotFoundException("Event not found for match {$match->id}");
             }
-            $oppRating = $opponent->getRating('Composite', $event->start ?? '');
+            $oppRating = $opponent->getRating('Composite', $event->start);
             $oppDeck = $opponent->getDeckEvent($event->id);
 
             if ($oldName != $event->name) {

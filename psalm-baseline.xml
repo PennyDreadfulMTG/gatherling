@@ -459,7 +459,6 @@
       <code><![CDATA[$this->series]]></code>
       <code><![CDATA[$this->series]]></code>
       <code><![CDATA[$this->series]]></code>
-      <code><![CDATA[$value]]></code>
     </MixedAssignment>
     <MixedInferredReturnType>
       <code><![CDATA[int]]></code>
@@ -491,67 +490,24 @@
       <code><![CDATA[$players[5]->player]]></code>
       <code><![CDATA[$players[6]->player]]></code>
       <code><![CDATA[$players[7]->player]]></code>
-      <code><![CDATA[$season]]></code>
       <code><![CDATA[$subevent_id]]></code>
-      <code><![CDATA[$this->format]]></code>
-      <code><![CDATA[$this->id]]></code>
-      <code><![CDATA[$this->id]]></code>
-      <code><![CDATA[$this->id]]></code>
-      <code><![CDATA[$this->id]]></code>
-      <code><![CDATA[$this->id]]></code>
-      <code><![CDATA[$this->id]]></code>
-      <code><![CDATA[$this->id]]></code>
       <code><![CDATA[$this->mainid]]></code>
       <code><![CDATA[$this->mainid]]></code>
       <code><![CDATA[$this->mainid]]></code>
-      <code><![CDATA[$this->name]]></code>
-      <code><![CDATA[$this->start]]></code>
       <code><![CDATA[$win]]></code>
       <code><![CDATA[$win]]></code>
     </PossiblyNullArgument>
-    <PossiblyNullOperand>
-      <code><![CDATA[$mostRecentEvent->number]]></code>
-      <code><![CDATA[$this->number]]></code>
-      <code><![CDATA[$this->number]]></code>
-    </PossiblyNullOperand>
     <PossiblyNullPropertyFetch>
       <code><![CDATA[$players[0]->player]]></code>
     </PossiblyNullPropertyFetch>
     <PossiblyUndefinedArrayOffset>
       <code><![CDATA[$players[0]]]></code>
     </PossiblyUndefinedArrayOffset>
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[$active]]></code>
-      <code><![CDATA[$client]]></code>
-      <code><![CDATA[$cohost]]></code>
-      <code><![CDATA[$current_round]]></code>
-      <code><![CDATA[$finalized]]></code>
-      <code><![CDATA[$host]]></code>
-      <code><![CDATA[$id]]></code>
-      <code><![CDATA[$late_entry_limit]]></code>
-      <code><![CDATA[$metaurl]]></code>
-      <code><![CDATA[$player_editdecks]]></code>
-      <code><![CDATA[$player_reportable]]></code>
-      <code><![CDATA[$player_reported_draws]]></code>
-      <code><![CDATA[$prereg_allowed]]></code>
-      <code><![CDATA[$prereg_cap]]></code>
-      <code><![CDATA[$private]]></code>
-      <code><![CDATA[$private_decks]]></code>
-      <code><![CDATA[$private_finals]]></code>
-      <code><![CDATA[$reporturl]]></code>
-      <code><![CDATA[$season]]></code>
-      <code><![CDATA[$start]]></code>
-      <code><![CDATA[$threadurl]]></code>
-    </PropertyNotSetInConstructor>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[!$deckId]]></code>
       <code><![CDATA[!$this->series]]></code>
       <code><![CDATA[$activeCheck]]></code>
     </RiskyTruthyFalsyComparison>
-    <UninitializedProperty>
-      <code><![CDATA[$this->name]]></code>
-      <code><![CDATA[$this->name]]></code>
-    </UninitializedProperty>
   </file>
   <file src="gatherling/Models/EventDto.php">
     <MissingConstructor>
@@ -1736,11 +1692,6 @@
       <code><![CDATA[$aDeck->name]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
-  <file src="gatherling/Views/Components/DeckInfo.php">
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[!$event->format]]></code>
-    </RiskyTruthyFalsyComparison>
-  </file>
   <file src="gatherling/Views/Components/DeckInfoCell.php">
     <PropertyNotSetInConstructor>
       <code><![CDATA[$deckId]]></code>
@@ -1792,10 +1743,6 @@
     <MixedArgumentTypeCoercion>
       <code><![CDATA[(array) $row]]></code>
     </MixedArgumentTypeCoercion>
-    <PossiblyNullArgument>
-      <code><![CDATA[$event->format]]></code>
-      <code><![CDATA[$event->id]]></code>
-    </PossiblyNullArgument>
     <PropertyNotSetInConstructor>
       <code><![CDATA[$eventStandings]]></code>
     </PropertyNotSetInConstructor>
@@ -1817,7 +1764,6 @@
     </PropertyNotSetInConstructor>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[$event->host]]></code>
-      <code><![CDATA[$event->start]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/Views/Components/InfoTable.php">
@@ -1825,17 +1771,12 @@
       <code><![CDATA[$lastEventName]]></code>
       <code><![CDATA[$lastEventTime]]></code>
     </PropertyNotSetInConstructor>
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$lastEvent->start]]></code>
-    </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/Views/Components/MainPlayerControlPanel.php">
     <PropertyNotSetInConstructor>
       <code><![CDATA[$currentMatchesTable]]></code>
     </PropertyNotSetInConstructor>
     <RiskyTruthyFalsyComparison>
-      <code><![CDATA[!$event->id]]></code>
-      <code><![CDATA[$event->private]]></code>
       <code><![CDATA[$series->discord_channel_name]]></code>
       <code><![CDATA[$series->discord_guild_name]]></code>
       <code><![CDATA[empty($player->discord_id)]]></code>
@@ -1852,7 +1793,6 @@
       <code><![CDATA[$rows]]></code>
     </PropertyNotSetInConstructor>
     <RiskyTruthyFalsyComparison>
-      <code><![CDATA[!$event->id]]></code>
       <code><![CDATA[!$opp]]></code>
       <code><![CDATA[$losses]]></code>
       <code><![CDATA[$wins]]></code>
@@ -1886,7 +1826,6 @@
     </PropertyNotSetInConstructor>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[$event->hastrophy]]></code>
-      <code><![CDATA[$event->start]]></code>
     </RiskyTruthyFalsyComparison>
     <UninitializedProperty>
       <code><![CDATA[$this->eventsMissingTrophies]]></code>
@@ -1909,7 +1848,6 @@
     </PropertyNotSetInConstructor>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[!$deck->playername]]></code>
-      <code><![CDATA[$event->start]]></code>
       <code><![CDATA[$player]]></code>
       <code><![CDATA[$startTime]]></code>
     </RiskyTruthyFalsyComparison>
@@ -1927,15 +1865,9 @@
       <code><![CDATA[$registerLink]]></code>
       <code><![CDATA[$unregisterLink]]></code>
     </PropertyNotSetInConstructor>
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$event->start]]></code>
-    </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/Views/Components/Preregistration.php">
     <RiskyTruthyFalsyComparison>
-      <code><![CDATA[!$event->id]]></code>
-      <code><![CDATA[!$event->start]]></code>
-      <code><![CDATA[!$event->start]]></code>
       <code><![CDATA[empty($player->mtga_username)]]></code>
       <code><![CDATA[empty($player->mtga_username)]]></code>
       <code><![CDATA[empty($player->mtgo_username)]]></code>
@@ -1956,7 +1888,6 @@
   <file src="gatherling/Views/Components/RecentDecksTable.php">
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[!$deck->eventname]]></code>
-      <code><![CDATA[!$event->id]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/Views/Components/RecentEventsTable.php">
@@ -1964,7 +1895,6 @@
       <code><![CDATA[$events]]></code>
     </PropertyNotSetInConstructor>
     <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$event->start]]></code>
       <code><![CDATA[$eventStartTime]]></code>
     </RiskyTruthyFalsyComparison>
     <UninitializedProperty>
@@ -2104,7 +2034,6 @@
       <code><![CDATA[$seriesList]]></code>
     </ArgumentTypeCoercion>
     <PossiblyNullArgument>
-      <code><![CDATA[$event->season]]></code>
       <code><![CDATA[$event->series]]></code>
       <code><![CDATA[$event->series]]></code>
       <code><![CDATA[$hour]]></code>
@@ -2118,10 +2047,6 @@
       <code><![CDATA[$datearr[4]]]></code>
       <code><![CDATA[$datearr[5]]]></code>
     </PossiblyNullArrayAccess>
-    <PossiblyNullOperand>
-      <code><![CDATA[$event->number]]></code>
-      <code><![CDATA[$event->season]]></code>
-    </PossiblyNullOperand>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[$event->series]]></code>
     </RiskyTruthyFalsyComparison>
@@ -2157,9 +2082,6 @@
     <PropertyNotSetInConstructor>
       <code><![CDATA[$recentWinners]]></code>
     </PropertyNotSetInConstructor>
-    <PropertyTypeCoercion>
-      <code><![CDATA[$this->activeEvents]]></code>
-    </PropertyTypeCoercion>
     <UninitializedProperty>
       <code><![CDATA[$this->recentWinners]]></code>
     </UninitializedProperty>
@@ -2195,15 +2117,9 @@
   </file>
   <file src="gatherling/Views/Pages/PlayerList.php">
     <PossiblyNullArgument>
-      <code><![CDATA[$event->format]]></code>
-      <code><![CDATA[$event->season]]></code>
       <code><![CDATA[$event->series]]></code>
       <code><![CDATA[$event->series]]></code>
     </PossiblyNullArgument>
-    <PossiblyNullOperand>
-      <code><![CDATA[$event->number]]></code>
-      <code><![CDATA[$event->season]]></code>
-    </PossiblyNullOperand>
   </file>
   <file src="gatherling/Views/Pages/Profile.php">
     <PossiblyNullArgument>
@@ -2242,8 +2158,6 @@
       <code><![CDATA[$mostRecentEvent->format]]></code>
     </PossiblyNullPropertyFetch>
     <RiskyTruthyFalsyComparison>
-      <code><![CDATA[!$mostRecentEvent->start]]></code>
-      <code><![CDATA[$nextEvent->start]]></code>
       <code><![CDATA[$series->start_day]]></code>
       <code><![CDATA[$series->this_season_master_link]]></code>
     </RiskyTruthyFalsyComparison>
@@ -2267,7 +2181,6 @@
   </file>
   <file src="gatherling/action.php">
     <PossiblyNullArgument>
-      <code><![CDATA[$event->id]]></code>
       <code><![CDATA[$opp]]></code>
       <code><![CDATA[$opp]]></code>
       <code><![CDATA[$opp]]></code>
@@ -2280,7 +2193,6 @@
       <code><![CDATA[linkTo]]></code>
     </PossiblyNullReference>
     <RiskyTruthyFalsyComparison>
-      <code><![CDATA[!$event->private]]></code>
       <code><![CDATA[$series->active]]></code>
       <code><![CDATA[empty($player->discord_id)]]></code>
       <code><![CDATA[empty($player->discord_id)]]></code>
@@ -2517,20 +2429,13 @@
       <code><![CDATA[$seriesName]]></code>
     </PossiblyInvalidPropertyAssignmentValue>
     <PossiblyNullArgument>
-      <code><![CDATA[$event->id]]></code>
-      <code><![CDATA[$event->id]]></code>
       <code><![CDATA[$event->mainid]]></code>
       <code><![CDATA[$event->mainid]]></code>
       <code><![CDATA[$newEvent->series]]></code>
-      <code><![CDATA[$oldEvent->start]]></code>
       <code><![CDATA[$player]]></code>
       <code><![CDATA[$stmt->errorInfo()[2]]]></code>
       <code><![CDATA[$stmt->errorInfo()[2]]]></code>
     </PossiblyNullArgument>
-    <PossiblyNullOperand>
-      <code><![CDATA[$oldEvent->number]]></code>
-      <code><![CDATA[$oldEvent->season]]></code>
-    </PossiblyNullOperand>
     <PossiblyUndefinedVariable>
       <code><![CDATA[$pAWins]]></code>
       <code><![CDATA[$pBWins]]></code>
@@ -2626,11 +2531,6 @@
     <PossiblyUndefinedArrayOffset>
       <code><![CDATA[$_SERVER['REQUEST_METHOD']]]></code>
     </PossiblyUndefinedArrayOffset>
-  </file>
-  <file src="tests/EventsTest.php">
-    <PossiblyNullOperand>
-      <code><![CDATA[$event->number]]></code>
-    </PossiblyNullOperand>
   </file>
   <file src="tests/Models/EventTest.php">
     <InvalidArrayOffset>

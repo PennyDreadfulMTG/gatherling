@@ -18,9 +18,9 @@ class EventDto extends Dto
     public int $kvalue;
     public int $finalized;
     public int $prereg_allowed;
-    public ?string $threadurl;
-    public ?string $metaurl;
-    public ?string $reporturl;
+    public string $threadurl;
+    public string $metaurl;
+    public string $reporturl;
     public int $active;
     public int $current_round;
     public int $player_reportable;
@@ -30,6 +30,6 @@ class EventDto extends Dto
     public int $private_finals;
     public int $player_reported_draws;
     public int $late_entry_limit;
-    public ?int $private;
+    public int $private;
     public int $client;
 }
