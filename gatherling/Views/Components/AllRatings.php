@@ -59,18 +59,14 @@ class AllRatings extends Component
         $this->formatDropMenu = new DropMenu('format', $options);
 
         $sql = '
-            SELECT
-                e.name, e.id AS event_id, r.rating, n.medal, n.deck AS deck_id
-            FROM
-                events e, entries n, ratings r
-            WHERE
-                r.format = :format
-            AND
-                r.player = :player
-            AND
-                e.start = r.updated AND n.player = r.player AND n.event_id = e.id
-            ORDER BY
-                e.start DESC';
+            SELECT e.name, e.id AS event_id, r.rating, n.medal, n.deck AS deck_id
+              FROM events e, entries n, ratings r
+             WHERE r.format = :format
+                   AND r.player = :player
+                   AND e.start = r.updated
+                   AND n.player = r.player
+                   AND n.event_id = e.id
+          ORDER BY e.start DESC';
         $ratings = array_reverse(db()->select($sql, RatingsDto::class, ['format' => $formatName, 'player' => $player->name]));
 
         $prevRating = 1600;
