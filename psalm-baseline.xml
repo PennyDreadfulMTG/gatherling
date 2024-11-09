@@ -2078,14 +2078,6 @@
       <code><![CDATA[$sendLoginLink]]></code>
     </PropertyNotSetInConstructor>
   </file>
-  <file src="gatherling/Views/Pages/Home.php">
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[$recentWinners]]></code>
-    </PropertyNotSetInConstructor>
-    <UninitializedProperty>
-      <code><![CDATA[$this->recentWinners]]></code>
-    </UninitializedProperty>
-  </file>
   <file src="gatherling/Views/Pages/MatchList.php">
     <PossiblyFalseOperand>
       <code><![CDATA[$losses]]></code>

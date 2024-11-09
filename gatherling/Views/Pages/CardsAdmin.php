@@ -12,7 +12,7 @@ class CardsAdmin extends Page
 
     public function __construct(Component $viewComponent)
     {
-        parent::__construct('Admin Control Panel');
+        parent::__construct('Admin Control Panel', true);
         $this->viewSafe = $viewComponent->render();
     }
 }

@@ -9,6 +9,6 @@ class InsertCardSet extends Page
     /** @param list<string> $messages */
     public function __construct(public array $messages)
     {
-        parent::__construct('Insert Card Set');
+        parent::__construct('Insert Card Set', true);
     }
 }

@@ -14,7 +14,7 @@ class Register extends Page
 
     public function __construct(public bool $showRegForm, public string $message)
     {
-        parent::__construct('Register');
+        parent::__construct('Register', true);
         $this->emailStatusDropMenu = new EmailStatusDropMenu();
         $this->timeZoneDropMenu = new TimeZoneDropMenu();
     }

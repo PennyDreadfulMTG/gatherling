@@ -19,7 +19,7 @@ class Profile extends Page
 
     public function __construct(public string $playerName, ?Player $player, public int $profileEdit)
     {
-        parent::__construct('Player Profile');
+        parent::__construct('Player Profile', false);
 
         $this->playerSearchForm = new PlayerSearchForm($playerName);
         if (rtrim($playerName) === '') {

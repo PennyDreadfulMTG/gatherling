@@ -13,7 +13,7 @@ class AuthDebug extends Page
 
     public function __construct(AccessToken $token)
     {
-        parent::__construct('Auth Debug');
+        parent::__construct('Auth Debug', true);
         $this->authDebugInfo = new AuthDebugInfo($token);
     }
 }
