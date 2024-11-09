@@ -14,7 +14,7 @@ function main(): never
 {
     $name = 'Gatherling Tournament Schedule';
     $description = 'Magic Player Run Events on Magic: The Gathering Online';
-    $ourEvents = array_merge(lastNEvents(50), upcomingEvents());
+    $ourEvents = events();
     $calendarEvents = [];
     foreach ($ourEvents as $event) {
         $calendarEvents[] = [
@@ -31,35 +31,14 @@ function main(): never
 }
 
 /** @return list<CalendarEventDto> */
-function lastNEvents(int $n): array
-{
-    return events('start < NOW()', $n);
-}
-
-/** @return list<CalendarEventDto> */
-function upcomingEvents(): array
-{
-    return events('start > NOW()');
-}
-
-/** @return list<CalendarEventDto> */
-function events(string $where, int $limit = 0): array
+function events(): array
 {
     $sql = "
-        SELECT
-            UNIX_TIMESTAMP(start) AS d,
-            name,
-            threadurl
-        FROM
-            events
-        WHERE
-            {$where}";
-    $params = [];
-    if ($limit) {
-        $sql .= ' ORDER BY start DESC LIMIT :limit';
-        $params['limit'] = $limit;
-    }
-    return db()->select($sql, CalendarEventDto::class, $params);
+        SELECT UNIX_TIMESTAMP(start) AS d, name, threadurl
+          FROM events
+         WHERE start >= NOW() - INTERVAL 2 WEEK
+      ORDER BY start";
+    return db()->select($sql, CalendarEventDto::class);
 }
 
 if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
