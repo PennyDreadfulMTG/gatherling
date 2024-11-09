@@ -19,7 +19,7 @@ abstract class EventFrame extends Page
 
     public function __construct(Event $event)
     {
-        parent::__construct('Event Host Control Panel');
+        parent::__construct('Event Host Control Panel', true);
         $this->event = getObjectVarsCamelCase($event);
         $this->controlPanelLinks = $this->getControlPanelLinks($event);
     }

@@ -22,7 +22,7 @@ class FormatAdmin extends Page
      */
     public function __construct(string $action, array $playerSeries, string $seriesName, Format $activeFormat, Component|array $actionResultComponent, ?Component $viewComponent = null)
     {
-        parent::__construct('Format Control Panel');
+        parent::__construct('Format Control Panel', true);
         $this->organizerSelect = count($playerSeries) > 1 ? new OrganizerSelect($action, $playerSeries, $seriesName) : null;
 
         $actionResultComponents = is_array($actionResultComponent) ? $actionResultComponent : [$actionResultComponent];
