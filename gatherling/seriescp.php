@@ -55,11 +55,10 @@ function main(): never
         if ($playerName !== false && $series->authCheck($playerName)) {
             if ($_POST['action'] == 'Update Series') {
                 $newactive = post()->int('isactive', 0);
-                $newtime = $_POST['hour'];
-                $newday = $_POST['start_day'];
-                $room = $_POST['mtgo_room'];
-
+                $newtime = post()->string('hour');
+                $newday = post()->string('start_day');
                 $prereg = post()->int('preregdefault', 0);
+                $room = post()->string('mtgo_room');
 
                 $series = new Series($seriesname);
                 $series->active = $newactive;

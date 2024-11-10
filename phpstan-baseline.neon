@@ -771,11 +771,6 @@ parameters:
 			path: gatherling/Views/Pages/MatchList.php
 
 		-
-			message: "#^Parameter \\#2 \\$email of class Gatherling\\\\Views\\\\Components\\\\ProfileEditForm constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/Profile.php
-
-		-
 			message: "#^Parameter \\#1 \\$datetime of function Safe\\\\strtotime expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/Series.php
@@ -961,26 +956,6 @@ parameters:
 			path: gatherling/formatcp.php
 
 		-
-			message: "#^Property Gatherling\\\\Models\\\\Player\\:\\:\\$emailAddress \\(string\\|null\\) does not accept mixed\\.$#"
-			count: 1
-			path: gatherling/profile.php
-
-		-
-			message: "#^Binary operation \"\\.\" between mixed and '\\:00' results in an error\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
 			message: "#^Cannot access property \\$super on Gatherling\\\\Models\\\\Player\\|null\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Series\\:\\:\\$mtgo_room \\(string\\|null\\) does not accept mixed\\.$#"
-			count: 1
-			path: gatherling/seriescp.php
-
-		-
-			message: "#^Property Gatherling\\\\Models\\\\Series\\:\\:\\$start_day \\(string\\|null\\) does not accept mixed\\.$#"
 			count: 1
 			path: gatherling/seriescp.php

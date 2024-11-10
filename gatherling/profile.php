@@ -20,7 +20,7 @@ function main(): never
 
     $player = Player::findByName($playerName);
     if ($player && $profileEdit == 2) {
-        $player->emailAddress = $_GET['email'];
+        $player->emailAddress = get()->string('email');
         $player->emailPrivacy = get()->int('email_public');
         $player->timezone = get()->float('timezone');
         $player->save();

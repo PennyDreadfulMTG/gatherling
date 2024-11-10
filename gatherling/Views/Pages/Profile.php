@@ -30,7 +30,7 @@ class Profile extends Page
             $this->notFound = true;
             return;
         }
-        $this->profileEditForm = $profileEdit == 1 ? new ProfileEditForm($player->timezone, $player->emailAddress, $player->emailPrivacy) : null;
+        $this->profileEditForm = $profileEdit == 1 ? new ProfileEditForm($player->timezone, $player->emailAddress ?? '', $player->emailPrivacy) : null;
         $this->profileTable = $profileEdit != 1 ? new ProfileTable($player) : null;
     }
 }

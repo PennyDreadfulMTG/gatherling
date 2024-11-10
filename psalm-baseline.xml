@@ -2095,9 +2095,6 @@
     </PossiblyNullArgument>
   </file>
   <file src="gatherling/Views/Pages/Profile.php">
-    <PossiblyNullArgument>
-      <code><![CDATA[$player->emailAddress]]></code>
-    </PossiblyNullArgument>
     <PropertyNotSetInConstructor>
       <code><![CDATA[Profile]]></code>
       <code><![CDATA[Profile]]></code>
@@ -2464,11 +2461,6 @@
       <code><![CDATA[$provider]]></code>
     </UnusedVariable>
   </file>
-  <file src="gatherling/profile.php">
-    <PossiblyInvalidPropertyAssignmentValue>
-      <code><![CDATA[$_GET['email']]]></code>
-    </PossiblyInvalidPropertyAssignmentValue>
-  </file>
   <file src="gatherling/ratings.php">
     <LessSpecificReturnStatement>
       <code><![CDATA[['ratings_data' => $results, 'pagination' => $pagination]]]></code>
@@ -2478,13 +2470,6 @@
     </MoreSpecificReturnType>
   </file>
   <file src="gatherling/seriescp.php">
-    <PossiblyInvalidOperand>
-      <code><![CDATA[$newtime]]></code>
-    </PossiblyInvalidOperand>
-    <PossiblyInvalidPropertyAssignmentValue>
-      <code><![CDATA[$newday]]></code>
-      <code><![CDATA[$room]]></code>
-    </PossiblyInvalidPropertyAssignmentValue>
     <PossiblyNullPropertyFetch>
       <code><![CDATA[Player::getSessionPlayer()->super]]></code>
     </PossiblyNullPropertyFetch>
