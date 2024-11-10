@@ -14,6 +14,6 @@ class EditEmailForm extends Component
     public function __construct(Player $player)
     {
         $this->emailAddress = $player->emailAddress ?? '';
-        $this->emailPrivacy = $player->emailPrivacy ?? 1;
+        $this->emailPrivacy = $player->emailPrivacy;
     }
 }

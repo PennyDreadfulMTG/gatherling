@@ -771,17 +771,7 @@ parameters:
 			path: gatherling/Views/Pages/MatchList.php
 
 		-
-			message: "#^Parameter \\#1 \\$timezone of class Gatherling\\\\Views\\\\Components\\\\ProfileEditForm constructor expects float, float\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/Profile.php
-
-		-
 			message: "#^Parameter \\#2 \\$email of class Gatherling\\\\Views\\\\Components\\\\ProfileEditForm constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/Profile.php
-
-		-
-			message: "#^Parameter \\#3 \\$emailPrivacy of class Gatherling\\\\Views\\\\Components\\\\ProfileEditForm constructor expects int, int\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Pages/Profile.php
 

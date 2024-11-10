@@ -1108,7 +1108,6 @@
       <code><![CDATA[$this->name]]></code>
       <code><![CDATA[$this->name]]></code>
       <code><![CDATA[$this->name]]></code>
-      <code><![CDATA[$value]]></code>
     </MixedAssignment>
     <MixedInferredReturnType>
       <code><![CDATA[?int]]></code>
@@ -1158,15 +1157,6 @@
       <code><![CDATA[$match->series]]></code>
       <code><![CDATA[$otherplayer]]></code>
     </PossiblyNullArgument>
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[$api_key]]></code>
-      <code><![CDATA[$ipAddress]]></code>
-      <code><![CDATA[$name]]></code>
-      <code><![CDATA[$password]]></code>
-      <code><![CDATA[$rememberMe]]></code>
-      <code><![CDATA[$super]]></code>
-      <code><![CDATA[$verified]]></code>
-    </PropertyNotSetInConstructor>
   </file>
   <file src="gatherling/Models/PlayerDto.php">
     <MissingConstructor>
@@ -2112,8 +2102,6 @@
   <file src="gatherling/Views/Pages/Profile.php">
     <PossiblyNullArgument>
       <code><![CDATA[$player->emailAddress]]></code>
-      <code><![CDATA[$player->emailPrivacy]]></code>
-      <code><![CDATA[$player->timezone]]></code>
     </PossiblyNullArgument>
     <PropertyNotSetInConstructor>
       <code><![CDATA[Profile]]></code>
