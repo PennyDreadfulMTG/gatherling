@@ -9,7 +9,7 @@ class InsufficientPermissions extends Page
     public string $errorMsg;
     public function __construct(bool $isOrganizer)
     {
-        parent::__construct('Forbidden');
+        parent::__construct('Forbidden', true);
         http_response_code(403);
         if ($isOrganizer) {
             $this->errorMsg = "You're not authorized to edit this format! Access Restricted.";

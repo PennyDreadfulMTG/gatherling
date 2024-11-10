@@ -21,7 +21,7 @@ class PlayerEventList extends Page
     /** @param list<EventListEntryDto> $events */
     public function __construct(string $format, string $series, ?int $season, array $events)
     {
-        parent::__construct('Event List');
+        parent::__construct('Event List', true);
 
         $this->formatDropMenu = new FormatDropMenu($format, true);
         $this->seriesDropMenu = new SeriesDropMenu($series, 'All');

@@ -8,6 +8,6 @@ class PromptLinkAccount extends Page
 {
     public function __construct(public string $email)
     {
-        parent::__construct('Login');
+        parent::__construct('Link Discord Account', true);
     }
 }

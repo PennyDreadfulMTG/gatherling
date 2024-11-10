@@ -12,7 +12,6 @@ use function Gatherling\Helpers\config;
 
 abstract class Page extends TemplateResponse
 {
-    public bool $enableVue = false;
     public string $contentSafe = '';
     public string $gitHash;
     public string $cssLink;
@@ -24,7 +23,7 @@ abstract class Page extends TemplateResponse
     public string $versionTagline;
     public string $jsLink;
 
-    public function __construct(public string $title)
+    public function __construct(public string $title, public bool $useStandardLayout)
     {
         $this->gitHash = substr(config()->string('GIT_HASH', ''), 0, 7);
         $this->cssLink = 'styles/css/stylesheet.css?v=' . rawurlencode($this->gitHash);

@@ -29,7 +29,7 @@ class EventList extends Page
 
     public function __construct(string $seriesName, string $format, ?int $season)
     {
-        parent::__construct('Event Host Control Panel');
+        parent::__construct('Event Host Control Panel', true);
         $player = Player::getSessionPlayer();
         $playerSeries = $player?->organizersSeries() ?? [];
 

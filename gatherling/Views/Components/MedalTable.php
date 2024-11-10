@@ -13,7 +13,7 @@ class MedalTable extends Component
     public string $playerName;
     public function __construct(Player $player)
     {
-        $this->playerName = $player->name ?? '';
+        $this->playerName = $player->name;
         $medalStats = $player->getMedalStats();
         $this->medalStats = array_map(fn($medal) => [
             'medal' => $medal,

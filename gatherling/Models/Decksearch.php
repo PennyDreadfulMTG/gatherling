@@ -68,12 +68,9 @@ class Decksearch
         // Filter out decks in events that haven't been finalized (and should remain secret for now)
         foreach ($tmp_results as $value) {
             $sql = '
-                SELECT
-                    e.finalized
-                FROM
-                    decks d, entries n, events e
-                WHERE
-                    d.id = :deck_id AND d.id = n.deck AND n.event_id = e.id';
+                SELECT e.finalized
+                  FROM decks d, entries n, events e
+                 WHERE d.id = :deck_id AND d.id = n.deck AND n.event_id = e.id';
             $finalized = db()->optionalInt($sql, ['deck_id' => $value]);
             if ($finalized === null || $finalized) {
                 array_push($this->finalResults, $value);

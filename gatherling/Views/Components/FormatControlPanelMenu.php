@@ -6,18 +6,18 @@ namespace Gatherling\Views\Components;
 
 use Gatherling\Models\Format;
 
-class FormatCPMenu extends Component
+class FormatControlPanelMenu extends Component
 {
     public string $activeFormatName;
     public string $formatSettingsLink;
     public string $bAndRLink;
     public string $tribalLink = '';
     public string $cardsetsLink = '';
-    public ?Tooltip $restrictedTooltip;
+    public ?Tooltip $restrictedTooltip = null;
 
     public function __construct(public string $seriesName, Format $activeFormat)
     {
-        $this->activeFormatName = $activeFormat->name ?? '';
+        $this->activeFormatName = $activeFormat->name;
         $escaped = rawurlencode($activeFormat->name);
         $this->formatSettingsLink = "formatcp.php?view=settings&format={$escaped}";
         $this->bAndRLink = "formatcp.php?view=bandr&format={$escaped}";

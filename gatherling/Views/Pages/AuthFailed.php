@@ -8,6 +8,6 @@ class AuthFailed extends Page
 {
     public function __construct()
     {
-        parent::__construct('Event Host Control Panel');
+        parent::__construct('Event Host Control Panel', true);
     }
 }

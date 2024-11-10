@@ -26,7 +26,7 @@ function main(): never
     $page->send();
 }
 
-/** @return array{ratings_data: list<array{player: string, rank: int, playerName: string, player: Player}>, pagination: Pagination} */
+/** @return array{ratings_data: list<array{rank: int, playerName: string, player: Player}>, pagination: Pagination} */
 function ratingsData(string $format, int $minMatches): array
 {
     $subquery = '
@@ -88,8 +88,9 @@ function bestEver(string $format): array
                      FROM ratings AS qr
                     WHERE qr.format = :format
                ) AS q
-        WHERE format = :format AND p.name = r.player AND q.qmax = r.rating';
-    $bestEver = db()->select($sql, BestEverDto::class, ['format' => $format])[0];
+         WHERE format = :format AND p.name = r.player AND q.qmax = r.rating
+         LIMIT 1';
+    $bestEver = db()->selectOnly($sql, BestEverDto::class, ['format' => $format]);
     return [
         'player' => $bestEver->player,
         'rating' => $bestEver->rating,

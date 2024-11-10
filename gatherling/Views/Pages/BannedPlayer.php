@@ -8,6 +8,6 @@ class BannedPlayer extends Page
 {
     public function __construct()
     {
-        parent::__construct('You have been banned');
+        parent::__construct('You have been banned', true);
     }
 }

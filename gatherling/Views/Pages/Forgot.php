@@ -17,7 +17,7 @@ class Forgot extends Page
 
     public function __construct(public bool $hasResetPassword, public bool $passwordResetFailed, public bool $showForgotForm, public bool $showNewPasswordForm, public ?string $token, public ?string $email, public bool $sentLoginLink, public bool $cantSendLoginLink, public bool $cantFindPlayer)
     {
-        parent::__construct('Login');
+        parent::__construct('Login', true);
         if ($this->showNewPasswordForm) {
             $this->newPasswordInput = new PasswordInput('New Password', 'password');
             $this->resetPassword = new Submit('Reset Password');

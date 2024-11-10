@@ -23,7 +23,7 @@ class Home extends Page
     /** @var ?array{name: string, link: string} */
     public ?array $mostRecentHostedEvent = null;
     /** @var list<array{eventName: string, eventReportLink: string, playerLink: string, deckLink: string, playerName: string, deckName: string, colorImages: ColorImages}> */
-    public array $recentWinners;
+    public array $recentWinners = [];
     public bool $hasRecentWinners;
 
     /**
@@ -34,7 +34,7 @@ class Home extends Page
      */
     public function __construct(array $activeEvents, array $upcomingEvents, public array $stats, ?Player $player, ?Event $mostRecentHostedEvent, array $recentWinners)
     {
-        parent::__construct('Home');
+        parent::__construct('Home', false);
         foreach ($activeEvents as $event) {
             $this->activeEvents[] = [
                 'name' => $event->name,

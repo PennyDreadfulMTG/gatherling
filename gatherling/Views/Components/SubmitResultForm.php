@@ -25,7 +25,7 @@ class SubmitResultForm extends Component
         if (!$player) {
             throw new InvalidArgumentException('Player is not logged in');
         }
-        $letter = $match->playerLetter($player->name ?? '');
+        $letter = $match->playerLetter($player->name);
         if (!$letter) {
             throw new InvalidArgumentException("Player ({$player->name}) is not in this match ({$matchId})");
         }
@@ -35,7 +35,7 @@ class SubmitResultForm extends Component
             throw new InvalidArgumentException("Opponent for player ({$player->name}) in match ({$matchId}) is not found");
         }
         $oppPlayer = new Player($opp);
-        $this->currentRound = $event->current_round ?? 0;
+        $this->currentRound = $event->current_round;
         $this->opponentGameName = new GameName($oppPlayer, $event->client);
         $this->allowsPlayerReportedDraws = $match->allowsPlayerReportedDraws() === 1;
         $this->isSingleElimination = $match->type === 'Single Elimination';

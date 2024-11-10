@@ -39,8 +39,8 @@ class MissingTrophies extends Component
             $startTime = $event->start ? new Time(strtotime($event->start), $now) : null;
             $this->eventsMissingTrophies[] = [
                 'hasWinner' => $hasWinner,
-                'eventName' => $event->name ?? '',
-                'eventLink' => 'event.php?name=' . rawurlencode($event->name ?? ''),
+                'eventName' => $event->name,
+                'eventLink' => 'event.php?name=' . rawurlencode($event->name),
                 'startTime' => $startTime,
                 'playerLink' => 'profile.php?player=' . rawurlencode($winningPlayer ?? ''),
                 'playerName' => $winningPlayer ?? '',

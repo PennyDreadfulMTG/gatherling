@@ -28,15 +28,15 @@ class MatchTable extends Component
                 $rnd = 'L';
             }
 
-            $opp = $match->otherPlayer($player->name ?? '');
+            $opp = $match->otherPlayer($player->name);
             if (!$opp) {
                 throw new NotFoundException("Opponent not found for match {$match->id}");
             }
             $res = 'D';
-            if ($match->playerWon($player->name ?? '')) {
+            if ($match->playerWon($player->name)) {
                 $res = 'W';
             }
-            if ($match->playerLost($player->name ?? '')) {
+            if ($match->playerLost($player->name)) {
                 $res = 'L';
             }
             $opponent = new Player($opp);
@@ -45,7 +45,7 @@ class MatchTable extends Component
             if (!$event->id) {
                 throw new NotFoundException("Event not found for match {$match->id}");
             }
-            $oppRating = $opponent->getRating('Composite', $event->start ?? '');
+            $oppRating = $opponent->getRating('Composite', $event->start);
             $oppDeck = $opponent->getDeckEvent($event->id);
 
             if ($oldName != $event->name) {
@@ -56,7 +56,7 @@ class MatchTable extends Component
                     $rowcolor = 'even';
                     $Count++;
                 }
-                $eventName = $event->name ?? '';
+                $eventName = $event->name;
             } else {
                 $eventName = '';
             }

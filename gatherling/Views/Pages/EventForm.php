@@ -6,6 +6,7 @@ namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
+use Gatherling\Views\Components\ClientDropMenu;
 use Gatherling\Views\Components\TextInput;
 use Gatherling\Views\Components\NumDropMenu;
 use Gatherling\Views\Components\SelectInput;
@@ -54,8 +55,7 @@ class EventForm extends EventFrame
     public CheckboxInput $finalsListPrivacyCheckbox;
     public CheckboxInput $playerReportedDrawsCheckbox;
     public CheckboxInput $privateEventCheckbox;
-    /** @var array<string, mixed> */
-    public array $clientDropMenu;
+    public ClientDropMenu $clientDropMenu;
     public ?CheckboxInput $finalizeEventCheckbox;
     public ?CheckboxInput $eventActiveCheckbox;
     public ?RoundDropMenu $currentRoundDropMenu;
@@ -108,9 +108,6 @@ class EventForm extends EventFrame
         $numberDropMenu = new NumDropMenu('number', '- Event Number -', Event::largestEventNum() + 5, $event->number, 0, 'Custom');
         $formatDropMenu = new FormatDropMenu($event->format);
 
-        if (is_null($event->kvalue)) {
-            $event->kvalue = 16;
-        }
         $kValueDropMenu = kValueSelectInput($event->kvalue);
         $hostField = new StringField('host', $event->host, 20);
         $cohostField = new StringField('cohost', $event->cohost, 20);
@@ -129,7 +126,7 @@ class EventForm extends EventFrame
         $finalsListPrivacyCheckbox = new CheckboxInput('Finals List Privacy', 'private_finals', (bool) $event->private_finals);
         $playerReportedDrawsCheckbox = new CheckboxInput('Allow Player Reported Draws', 'player_reported_draws', (bool) $event->player_reported_draws, 'This allows players to report a draw result for matches.');
         $privateEventCheckbox = new CheckboxInput('Private Event', 'private', (bool) $event->private, 'This event is invisible to non-participants');
-        $clientDropMenu = clientDropMenuArgs('client', $event->client);
+        $clientDropMenu = new ClientDropMenu('client', $event->client);
 
         $finalizeEventCheckbox = $eventActiveCheckbox = $currentRoundDropMenu = $trophyField = null;
         $showCreateNextEvent = $showCreateNextSeason = false;
@@ -181,31 +178,6 @@ class EventForm extends EventFrame
         $this->showCreateNextEvent = $showCreateNextEvent;
         $this->showCreateNextSeason = $showCreateNextSeason;
     }
-}
-
-/** @return array{id: string, name: string, default: string, options: array<int, array{isSelected: bool, value: int, text: string}>} */
-function clientDropMenuArgs(string $field, int $def): array
-{
-    $clients = [
-        1 => 'MTGO',
-        2 => 'Arena',
-        3 => 'Other',
-    ];
-    $options = [];
-    foreach ($clients as $value => $text) {
-        $options[] = [
-            'isSelected' => $def == $value,
-            'value'      => $value,
-            'text'       => $text,
-        ];
-    }
-
-    return [
-        'id'      => $field,
-        'name'    => $field,
-        'default' => '- Client -',
-        'options' => $options,
-    ];
 }
 
 function kValueSelectInput(int $kvalue): SelectInput

@@ -34,7 +34,7 @@ class Ratings extends Page
         public array $ratingsData,
         Pagination $pagination,
     ) {
-        parent::__construct('Ratings');
+        parent::__construct('Ratings', true);
         $this->formatDropMenuR = (new FormatDropMenuR($format));
         $this->highestRatingDate = date('l, F j, Y', $highestRatingTimestamp);
         $this->lastTournamentDate = $lastTournamentDate->format('Y-m-d');

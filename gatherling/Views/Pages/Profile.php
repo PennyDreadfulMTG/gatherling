@@ -19,7 +19,7 @@ class Profile extends Page
 
     public function __construct(public string $playerName, ?Player $player, public int $profileEdit)
     {
-        parent::__construct('Player Profile');
+        parent::__construct('Player Profile', false);
 
         $this->playerSearchForm = new PlayerSearchForm($playerName);
         if (rtrim($playerName) === '') {
@@ -30,7 +30,7 @@ class Profile extends Page
             $this->notFound = true;
             return;
         }
-        $this->profileEditForm = $profileEdit == 1 ? new ProfileEditForm($player->timezone, $player->emailAddress, $player->emailPrivacy) : null;
+        $this->profileEditForm = $profileEdit == 1 ? new ProfileEditForm($player->timezone, $player->emailAddress ?? '', $player->emailPrivacy) : null;
         $this->profileTable = $profileEdit != 1 ? new ProfileTable($player) : null;
     }
 }

@@ -146,6 +146,10 @@ body {
     background: var(--base-background-color);
     padding: 20px 0 0;
     color: var(--main-text-color);
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 960px;
+    width: 100%;
 }
 
 h1 {
@@ -204,14 +208,8 @@ hr {
     height: 0;
 }
 
-/* Remnants of the hacked upon 960 grid system, with everything we don't use ripped out */
-
-body {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 960px;
-    width: 100%;
-}
+/* Remnants of the hacked upon 960 grid system, with everything we don't use ripped out.
+See also body. */
 
 .grid_2,
 .grid_4,
@@ -405,7 +403,7 @@ table.scoreboard .playername {
     margin-right: 40px;
 }
 
-.series .series-logo img {
+.series-logo-img {
     max-width: 280px;
     max-height: 200px;
 }

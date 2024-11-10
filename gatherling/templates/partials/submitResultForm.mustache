@@ -1,7 +1,5 @@
-<center>
-    <h2>Report Game Results</h2>
-    Enter results for <em>{{eventName}}</em> round {{currentRound}} vs. {{#opponentGameName}}{{> gameName}}{{/opponentGameName}}
-</center>
+<h2>Report Game Results</h2>
+<p>Enter results for <em>{{eventName}}</em> round {{currentRound}} vs. {{#opponentGameName}}{{> gameName}}{{/opponentGameName}}</p>
 
 <form action="report.php" method="post">
     <input name="mode" type="hidden" value="verify_result">
@@ -42,4 +40,3 @@
         </tr>
     </table>
 </form>
-<div class="clear"></div>

@@ -12,7 +12,7 @@ class AdminControlPanel extends Page
 
     public function __construct(public string $result, Component $viewComponent)
     {
-        parent::__construct('Admin Control Panel');
+        parent::__construct('Admin Control Panel', true);
         $this->viewSafe = $viewComponent->render();
     }
 }

@@ -32,5 +32,4 @@ class FormatDto extends Dto
     public int $eternal;
     public int $modern;
     public int $standard;
-    public int $is_meta_format;
 }

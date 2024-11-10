@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use function Gatherling\Helpers\config;
-use function Gatherling\Helpers\logger;
+namespace Gatherling\Helpers;
+
 use function Safe\curl_exec;
 use function Safe\curl_getinfo;
 use function Safe\curl_init;

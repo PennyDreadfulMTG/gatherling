@@ -27,10 +27,10 @@ class InfoCell extends Component
 
     public function __construct(Event $event)
     {
-        $this->threadLink = $event->threadurl ?? '';
-        $this->eventName = $event->name ?? '';
+        $this->threadLink = $event->threadurl;
+        $this->eventName = $event->name;
         $this->eventDate = $event->start ? date('j F Y', strtotime($event->start)) : '';
-        $this->eventFormat = $event->format ?? '';
+        $this->eventFormat = $event->format;
         $this->playerCount = $event->getPlayerCount();
         $this->deckCount = count($event->getDecks());
         $this->isActive = (bool) $event->active;
@@ -50,7 +50,7 @@ class InfoCell extends Component
             $host = new Player($event->host);
             $this->hostLink = new PlayerLink($host);
         }
-        $this->eventReportLink = $event->reporturl ?? '';
-        $this->seasonLeaderboardLink = 'seriesreport.php?series=' . rawurlencode($event->series) . '&season=' . rawurlencode((string) $event->season);
+        $this->eventReportLink = $event->reporturl;
+        $this->seasonLeaderboardLink = 'seriesreport.php?series=' . rawurlencode($event->series ?? '') . '&season=' . rawurlencode((string) $event->season);
     }
 }

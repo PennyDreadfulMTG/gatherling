@@ -23,7 +23,7 @@ function post(): Request
 
 function session(): Request
 {
-    return new Request($_SESSION);
+    return new Request(isset($_SESSION) ? $_SESSION : []);
 }
 
 function server(): Request

@@ -10,9 +10,9 @@ use Gatherling\Views\Pages\Forgot;
 use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\get;
 use function Gatherling\Helpers\post;
+use function Gatherling\Helpers\sendEmail;
 use function Gatherling\Helpers\server;
 
-include 'util/email.php';
 require_once 'lib.php';
 
 function main(): never
@@ -36,11 +36,16 @@ function main(): never
             $player = Player::findByName($identifier);
         }
         if ($player) {
-            $email = $player->emailPrivacy ? "your registered email" : $player->emailAddress;
-            if (sendLoginLink($player)) {
-                $sentLoginLink = true;
+            if ($player->emailAddress === null) {
+                $email = '(NOT REGISTERED)';
+                $cantSendLoginLink = true;
             } else {
-                $cantSendLoginLink = $showForgotForm = true;
+                $email = (bool) $player->emailPrivacy ? "your registered email" : $player->emailAddress;
+                if (sendLoginLink($player)) {
+                    $sentLoginLink = true;
+                } else {
+                    $cantSendLoginLink = $showForgotForm = true;
+                }
             }
         } else {
             $cantFindPlayer = $showForgotForm = true;
@@ -55,6 +60,9 @@ function main(): never
 
 function sendLoginLink(Player $player): bool
 {
+    if ($player->emailAddress === null) {
+        throw new InvalidArgumentException('Player email address is null');
+    }
     $link = generateSecureResetLink($player->name);
     $body = <<<END
         <p>Hi $player->name,</p>

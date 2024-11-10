@@ -55,7 +55,7 @@ function main(): never
 
     $mode = request()->string('mode', '');
     if ($mode === 'Create New Event') {
-        $event = createNewEvent();
+        $event = createNewEvent(post()->optionalString('series'));
         $page = $event === false ? new AuthFailed() : new EventList($getSeriesName, $format, $season);
     } elseif ($mode === 'Create A New Event') {
         $page = eventFrame(null, true);
@@ -72,9 +72,9 @@ function main(): never
     $page->send();
 }
 
-function createNewEvent(): Event|bool
+function createNewEvent(?string $seriesName): Event|false
 {
-    $series = new Series(post()->optionalString('series'));
+    $series = new Series($seriesName);
     $playerName = Player::loginName();
     if ($playerName !== false && $series->authCheck($playerName) && isset($_POST['insert'])) {
         return insertEvent();
@@ -230,31 +230,12 @@ function eventFrame(Event $event = null, bool $forceNew = false): EventFrame
 
 function insertEvent(): Event
 {
-    if (!isset($_POST['naming'])) {
-        $_POST['naming'] = '';
-    }
-
-    if (!isset($_POST['prereg_allowed'])) {
-        $_POST['prereg_allowed'] = '0';
-    }
-
-    if (!isset($_POST['player_reportable'])) {
-        $_POST['player_reportable'] = '0';
-    }
-
-    if (!isset($_POST['late_entry_limit'])) {
-        $_POST['late_entry_limit'] = 0;
-    }
-    if (!isset($_POST['private'])) {
-        $_POST['private'] = '0';
-    }
-
     $event = Event::createEvent(
         post()->string('year'),
         post()->string('month'),
         post()->string('day'),
         post()->string('hour'),
-        post()->string('naming'),
+        post()->string('naming', ''),
         post()->string('name'),
         post()->string('format'),
         post()->string('host'),
@@ -266,10 +247,10 @@ function insertEvent(): Event
         post()->string('threadurl'),
         post()->string('metaurl'),
         post()->string('reporturl'),
-        post()->string('prereg_allowed'),
-        post()->string('player_reportable'),
-        post()->string('late_entry_limit'),
-        post()->string('private'),
+        post()->string('prereg_allowed', '0'),
+        post()->string('player_reportable', '0'),
+        post()->string('late_entry_limit', '0'),
+        post()->string('private', '0'),
         post()->int('mainrounds'),
         post()->string('mainstruct'),
         post()->int('finalrounds'),

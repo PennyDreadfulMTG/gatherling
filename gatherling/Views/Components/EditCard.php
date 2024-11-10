@@ -37,7 +37,7 @@ class EditCard extends Component
         $this->typelineInput = new TextInput('Typeline', 'type', $card->type, 100);
         $this->rarityInput = new TextInput('Rarity', 'rarity', $card->rarity);
         $this->scryfallIdInput = new TextInput('Scryfall ID', 'sfId', $card->scryfallId, 36);
-        $this->isChangelingInput = new CheckboxInput('Changeling', 'is_changeling', (bool) $card->is_changeling);
+        $this->isChangelingInput = new CheckboxInput('Changeling', 'is_changeling', $card->is_changeling);
 
         if (str_contains($card->type, 'Creature')) {
             $this->creatureType = Format::removeTypeCrap($card->type);
