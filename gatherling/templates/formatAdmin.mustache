@@ -1,7 +1,5 @@
-<center>
-    {{#organizerSelect}}{{> organizerSelect}}{{/organizerSelect}}
-    {{^organizerSelect}}<center>Managing {{seriesName}}</center>{{/organizerSelect}}
-    {{{actionResultSafe}}}
-    {{#formatControlPanelMenu}}{{> formatControlPanelMenu}}{{/formatControlPanelMenu}}
-    {{{viewSafe}}}
-</center>
+{{#organizerSelect}}{{> organizerSelect}}{{/organizerSelect}}
+{{^organizerSelect}}Managing {{seriesName}}{{/organizerSelect}}
+{{{actionResultSafe}}}
+{{#formatControlPanelMenu}}{{> formatControlPanelMenu}}{{/formatControlPanelMenu}}
+{{{viewSafe}}}

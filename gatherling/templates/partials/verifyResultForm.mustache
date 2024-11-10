@@ -1,19 +1,14 @@
-<center>
-    <h2>Confirm Game Results</h2>
-</center>
-<center style="color: red; font-weight: bold;">
-    <p>Please confirm your entry.</p>
-</center>
+<h2>Confirm Game Results</h2>
+<p style="color: red; font-weight: bold;">Please confirm your entry.</p>
 
-<center>
-    <p>
-        {{#showOpponent}}Opponent: {{opponent}}{{/showOpponent}}
-        {{resultText}}
-        {{#isDrop}}
-            <center style="color: red; font-weight: bold;"><p>I want to drop out of this event.</p></center>
-        {{/isDrop}}
-    </p>
-</center>
+<p>
+    {{#showOpponent}}Opponent: {{opponent}}{{/showOpponent}}
+    {{resultText}}
+</p>
+
+{{#isDrop}}
+    <p style="color: red; font-weight: bold;">I want to drop out of this event.</p>
+{{/isDrop}}
 
 <table class="form">
     <tr>
@@ -48,4 +43,3 @@
         <td colspan="2" class="buttons"></td>
     </tr>
 </table>
-<div class="clear"></div>

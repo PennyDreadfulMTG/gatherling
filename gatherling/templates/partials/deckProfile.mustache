@@ -1,9 +1,7 @@
-<center>
-    <form action="deckdl.php" method="post">
-        <input type="hidden" name="id" value="{{deckId}}">
-        <input class="inputbutton" type="submit" name="mode" value="Download deck as .txt file">
-    </form>
-</center>
+<form action="deckdl.php" method="post">
+    <input type="hidden" name="id" value="{{deckId}}">
+    <input class="inputbutton" type="submit" name="mode" value="Download deck as .txt file">
+</form>
 <br>
 <div class="grid_5 alpha">
     <div id="gatherling_lefthalf">
@@ -34,10 +32,8 @@
 </div>
 <div class="clear"></div>
 {{#canEdit}}
-    <center>
-        <form action="deck.php" method="post">
-            <input type="hidden" name="id" value="{{deckId}}">
-            <input class="inputbutton" type="submit" name="mode" value="Edit Deck">
-        </form>
-    </center>
+    <form action="deck.php" method="post">
+        <input type="hidden" name="id" value="{{deckId}}">
+        <input class="inputbutton" type="submit" name="mode" value="Edit Deck">
+    </form>
 {{/canEdit}}

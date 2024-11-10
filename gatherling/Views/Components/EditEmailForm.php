@@ -9,11 +9,11 @@ use Gatherling\Models\Player;
 class EditEmailForm extends Component
 {
     public string $emailAddress;
-    public int $emailPrivacy;
+    public EmailStatusDropMenu $emailStatusDropMenu;
 
     public function __construct(Player $player)
     {
         $this->emailAddress = $player->emailAddress ?? '';
-        $this->emailPrivacy = $player->emailPrivacy;
+        $this->emailStatusDropMenu = new EmailStatusDropMenu($player->emailPrivacy);
     }
 }

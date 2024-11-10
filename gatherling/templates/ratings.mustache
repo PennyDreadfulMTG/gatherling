@@ -10,14 +10,6 @@
         </tr>
     </table>
 </form>
-<br>
-<center>
-    <b>Ratings current through {{lastTournamentDate}} - <span style="color: #D45E28">{{lastTournamentName}}</span></b>
-</center>
-<br>
-<center>
-    The highest {{format}} rating ever achieved is <b>{{highestRating}}</b>, obtained by <b>{{highestRatedPlayer}}</b> on {{highestRatingDate}}
-</center>
-<br>
+<p><b>Ratings current through {{lastTournamentDate}} - <span style="color: #D45E28">{{lastTournamentName}}</span></b></p>
+<p>The highest {{format}} rating ever achieved is <b>{{highestRating}}</b>, obtained by <b>{{highestRatedPlayer}}</b> on {{highestRatingDate}}</p>
 {{#ratingsTable}}{{> ratingsTable}}{{/ratingsTable}}
-<br>
