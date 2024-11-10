@@ -6,7 +6,8 @@ namespace Gatherling\Views\Components;
 
 class ClientDropMenu extends DropMenu
 {
-    public function __construct(string $field, int $def) {
+    public function __construct(string $field, int $def)
+    {
         $clients = [
             1 => 'MTGO',
             2 => 'Arena',
