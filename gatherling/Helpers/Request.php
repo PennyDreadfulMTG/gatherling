@@ -18,7 +18,7 @@ class Request
 
     public function optionalInt(string $key): ?int
     {
-        return marshal($this->vars[$key] ?? null)->optionalInt();
+        return marshal($this->coalesceNumeric($key))->optionalInt();
     }
 
     public function string(string $key, string|false $default = false): string
@@ -39,7 +39,7 @@ class Request
     /** @psalm-suppress PossiblyUnusedMethod */
     public function optionalFloat(string $key): ?float
     {
-        return marshal($this->vars[$key] ?? null)->optionalFloat();
+        return marshal($this->coalesceNumeric($key))->optionalFloat();
     }
 
     /** @return list<int> */
@@ -70,5 +70,18 @@ class Request
     public function dictString(string $key): array
     {
         return marshal($this->vars[$key] ?? null)->dictString();
+    }
+
+    // Coalesce like ?? does, but additionally if the value is an empty string, return null.
+    // This is how we want to treat something like 'season=' in a querystring.
+    private function coalesceNumeric(string $key): mixed
+    {
+        if (!isset($this->vars[$key])) {
+            return null;
+        }
+        if ($this->vars[$key] === '') {
+            return null;
+        }
+        return $this->vars[$key];
     }
 }

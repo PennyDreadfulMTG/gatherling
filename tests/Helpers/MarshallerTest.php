@@ -36,6 +36,12 @@ class MarshallerTest extends TestCase
         marshal(123.45)->optionalInt();
     }
 
+    public function testOptionalIntThrowsOnEmptyString(): void
+    {
+        $this->expectException(MarshalException::class);
+        marshal('')->optionalInt();
+    }
+
     public function testString(): void
     {
         $this->assertEquals('hello', marshal('hello')->string('key'));
