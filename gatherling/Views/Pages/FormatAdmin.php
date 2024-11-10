@@ -6,14 +6,14 @@ namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Format;
 use Gatherling\Views\Components\Component;
-use Gatherling\Views\Components\FormatCPMenu;
+use Gatherling\Views\Components\FormatControlPanelMenu;
 use Gatherling\Views\Components\OrganizerSelect;
 
 class FormatAdmin extends Page
 {
     public ?OrganizerSelect $organizerSelect;
     public string $actionResultSafe = '';
-    public FormatCPMenu $formatCPMenu;
+    public FormatControlPanelMenu $formatControlPanelMenu;
     public string $viewSafe;
 
     /**
@@ -30,7 +30,7 @@ class FormatAdmin extends Page
             $this->actionResultSafe .= $actionResultComponent->render();
         }
 
-        $this->formatCPMenu = new FormatCPMenu($seriesName, $activeFormat);
+        $this->formatControlPanelMenu = new FormatControlPanelMenu($seriesName, $activeFormat);
 
         $this->viewSafe = $viewComponent ? $viewComponent->render() : '';
     }

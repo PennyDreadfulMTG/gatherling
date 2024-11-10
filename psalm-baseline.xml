@@ -1720,11 +1720,6 @@
       <code><![CDATA[$standing->player]]></code>
     </PossiblyNullArgument>
   </file>
-  <file src="gatherling/Views/Components/FormatCPMenu.php">
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[$restrictedTooltip]]></code>
-    </PropertyNotSetInConstructor>
-  </file>
   <file src="gatherling/Views/Components/FullMetagame.php">
     <MixedArgumentTypeCoercion>
       <code><![CDATA[(array) $row]]></code>

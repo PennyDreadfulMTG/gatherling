@@ -6,14 +6,14 @@ namespace Gatherling\Views\Components;
 
 use Gatherling\Models\Format;
 
-class FormatCPMenu extends Component
+class FormatControlPanelMenu extends Component
 {
     public string $activeFormatName;
     public string $formatSettingsLink;
     public string $bAndRLink;
     public string $tribalLink = '';
     public string $cardsetsLink = '';
-    public ?Tooltip $restrictedTooltip;
+    public ?Tooltip $restrictedTooltip = null;
 
     public function __construct(public string $seriesName, Format $activeFormat)
     {
