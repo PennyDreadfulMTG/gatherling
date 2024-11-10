@@ -60,7 +60,7 @@ function eventList(string $format, string $series, ?int $season): array
         $params['series'] = $series;
     }
 
-    if (!empty($season)) {
+    if ($season !== null) {
         $sql .= ' AND e.season = :season';
         $params['season'] = $season;
     }

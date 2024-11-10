@@ -70,17 +70,17 @@ class EventForm extends EventFrame
         if ($event->start != null) {
             $date = $event->start;
             preg_match('/([0-9]+)-([0-9]+)-([0-9]+) ([0-9]+):([0-9]+):.*/', $date, $datearr);
-            $year = $datearr[1];
-            $month = $datearr[2];
-            $day = $datearr[3];
-            $hour = $datearr[4];
-            $minutes = $datearr[5];
+            $year = (int) $datearr[1];
+            $month = (int) $datearr[2];
+            $day = (int) $datearr[3];
+            $hour = (int) $datearr[4];
+            $minutes = (int) $datearr[5];
         } else {
-            $year = date('Y', time());
-            $month = date('n', time());
-            $day = date('j', time());
-            $hour = date('H', time());
-            $minutes = date('i', time());
+            $year = (int) date('Y', time());
+            $month = (int) date('n', time());
+            $day = (int) date('j', time());
+            $hour = (int) date('H', time());
+            $minutes = (int) date('i', time());
         }
 
         $navLinks = [];

@@ -25,6 +25,13 @@ class RequestTest extends TestCase
         $request->int('baz');
     }
 
+    public function testIntThrowsOnEmptyString(): void
+    {
+        $request = new Request(['foo' => '']);
+        $this->expectException(MarshalException::class);
+        $request->int('foo');
+    }
+
     public function testOptionalInt(): void
     {
         $request = new Request(['foo' => '123', 'bar' => '123.4']);
@@ -32,6 +39,12 @@ class RequestTest extends TestCase
         $this->assertNull($request->optionalInt('baz'));
         $this->expectException(MarshalException::class);
         $request->optionalInt('bar');
+    }
+
+    public function testOptionalIntReturnsNullOnEmptyString(): void
+    {
+        $request = new Request(['foo' => '']);
+        $this->assertNull($request->optionalInt('foo'));
     }
 
     public function testFloat(): void
