@@ -274,31 +274,19 @@ class Event
         } catch (DatetimeException $e) {
             throw new ValidationException("Invalid start date {$this->start}");
         }
-        try {
-            db()->int('SELECT 1 FROM formats WHERE name = :name', ['name' => $this->format]);
-        } catch (DatabaseException $e) {
+        if (db()->optionalInt('SELECT 1 FROM formats WHERE name = :name', ['name' => $this->format]) === null) {
             throw new ValidationException("Invalid format {$this->format}");
         }
-        try {
-            db()->int('SELECT 1 FROM players WHERE name = :name', ['name' => $this->host]);
-        } catch (DatabaseException $e) {
+        if (db()->optionalInt('SELECT 1 FROM players WHERE name = :name', ['name' => $this->host]) === null) {
             throw new ValidationException("Invalid host {$this->host}");
         }
-        if ($this->cohost !== null) {
-            try {
-                db()->int('SELECT 1 FROM players WHERE name = :name', ['name' => $this->cohost]);
-            } catch (DatabaseException $e) {
-                throw new ValidationException("Invalid cohost {$this->cohost}");
-            }
+        if ($this->cohost !== null && db()->optionalInt('SELECT 1 FROM players WHERE name = :name', ['name' => $this->cohost]) === null) {
+            throw new ValidationException("Invalid cohost {$this->cohost}");
         }
-        try {
-            db()->int('SELECT 1 FROM series WHERE name = :name', ['name' => $this->series]);
-        } catch (DatabaseException $e) {
+        if (db()->optionalInt('SELECT 1 FROM series WHERE name = :name', ['name' => $this->series]) === null) {
             throw new ValidationException("Invalid series {$this->series}");
         }
-        try {
-            db()->int('SELECT 1 FROM clients WHERE id = :id', ['id' => $this->client]);
-        } catch (DatabaseException $e) {
+        if (db()->optionalInt('SELECT 1 FROM client WHERE id = :id', ['id' => $this->client]) === null) {
             throw new ValidationException("Invalid client {$this->client}");
         }
     }
