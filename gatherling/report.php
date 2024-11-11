@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Gatherling\Exceptions\ValidationException;
 use Gatherling\Models\Event;
 use Gatherling\Models\Matchup;
 use Gatherling\Models\Player;
@@ -100,6 +101,8 @@ function main(): never
                 $opponent = request()->string('opponent', '0');
                 $eventName = request()->string('event', '0');
                 $viewComponent = new VerifyResultForm(post()->string('report'), post()->int('match_id'), post()->string('player'), $drop, $opponent, $eventName);
+            } elseif ($dispMode === 'verify_league_result') {
+                throw new ValidationException('You must supply the match score');
             } else {
                 $viewComponent = new SubmitResultForm(request()->int('match_id'));
             }
