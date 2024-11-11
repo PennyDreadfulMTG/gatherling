@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling;
 
+use Gatherling\Exceptions\ValidationException;
 use Gatherling\Models\Database;
 use Gatherling\Models\Entry;
 use Gatherling\Models\Event;

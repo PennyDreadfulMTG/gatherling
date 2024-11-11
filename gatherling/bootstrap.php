@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Gatherling\Helpers\ErrorHandler;
+
 use function Safe\file_get_contents;
 
 if (file_exists('/var/www/vendor/autoload.php')) {
@@ -26,6 +28,8 @@ if (file_exists('../.git/HEAD')) {
         $CONFIG['GIT_HASH'] = $hash;
     }
 }
+
+set_exception_handler(fn (\Throwable $e) => (new ErrorHandler())->handle($e));
 
 Sentry\init([
     'dsn'         => 'https://ed7243cbdd9e47c8bc2205d4ac36b764@sentry.redpoint.games/16',

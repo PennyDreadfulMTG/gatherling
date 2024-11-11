@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Gatherling\Helpers;
 
 use Gatherling\Exceptions\MarshalException;
+use Gatherling\Helpers\Types\DictType;
+use Gatherling\Helpers\Types\ListType;
+use Gatherling\Helpers\Types\SimpleType;
+use Gatherling\Helpers\Types\TypeMismatch;
 
 class Marshaller
 {
@@ -19,7 +23,7 @@ class Marshaller
             if ($default !== false) {
                 return $default;
             }
-            throw new MarshalException($this->value, 'int');
+            throw new MarshalException($this->value, SimpleType::INT, TypeMismatch::NULL);
         }
         return $value;
     }
@@ -41,7 +45,7 @@ class Marshaller
             if ($default !== false) {
                 return $default;
             }
-            throw new MarshalException($this->value, 'string');
+            throw new MarshalException($this->value, SimpleType::STRING, TypeMismatch::NULL);
         }
         return $value;
     }
@@ -52,7 +56,7 @@ class Marshaller
             return null;
         }
         if (!is_string($this->value)) {
-            throw new MarshalException($this->value, 'optionalString');
+            throw new MarshalException($this->value, SimpleType::STRING, TypeMismatch::NOT_OF_TYPE);
         }
         return $this->value;
     }
@@ -64,7 +68,7 @@ class Marshaller
             if ($default !== false) {
                 return $default;
             }
-            throw new MarshalException($this->value, 'float');
+            throw new MarshalException($this->value, SimpleType::FLOAT, TypeMismatch::NULL);
         }
         return $value;
     }
@@ -75,7 +79,7 @@ class Marshaller
             return null;
         }
         if (!is_numeric($this->value)) {
-            throw new MarshalException($this->value, 'optionalFloat');
+            throw new MarshalException($this->value, SimpleType::FLOAT, TypeMismatch::NOT_OF_TYPE);
         }
         return (float) $this->value;
     }
@@ -87,12 +91,12 @@ class Marshaller
             return [];
         }
         if (!is_array($this->value)) {
-            throw new MarshalException($this->value, 'listInt');
+            throw new MarshalException($this->value, ListType::int(), TypeMismatch::NOT_ARRAY);
         }
         $result = [];
         foreach ($this->value as $value) {
             if (!is_numeric($value)) {
-                throw new MarshalException($value, 'listIntEntry');
+                throw new MarshalException($value, ListType::int(), TypeMismatch::INVALID_VALUE_TYPE);
             }
             $this->strictIntCheck($value);
             $result[] = (int) $value;
@@ -108,12 +112,12 @@ class Marshaller
             return [];
         }
         if (!is_array($this->value)) {
-            throw new MarshalException($this->value, 'listString');
+            throw new MarshalException($this->value, ListType::string(), TypeMismatch::NOT_ARRAY);
         }
         $result = [];
         foreach ($this->value as $value) {
             if (!is_string($value)) {
-                throw new MarshalException($value, 'listStringEntry');
+                throw new MarshalException($value, ListType::string(), TypeMismatch::INVALID_VALUE_TYPE);
             }
             $result[] = $value;
         }
@@ -127,7 +131,7 @@ class Marshaller
             return [];
         }
         if (!is_array($this->value)) {
-            throw new MarshalException($this->value, 'dictIntOrString');
+            throw new MarshalException($this->value, DictType::intOrString(), TypeMismatch::NOT_ARRAY);
         }
         $result = [];
         foreach ($this->value as $key => $value) {
@@ -143,7 +147,7 @@ class Marshaller
                     }
                 }
             }
-            throw new MarshalException($value, 'dictIntOrStringEntry');
+            throw new MarshalException($value, DictType::intOrString(), TypeMismatch::INVALID_VALUE_TYPE);
         }
         return $result;
     }
@@ -155,15 +159,15 @@ class Marshaller
             return [];
         }
         if (!is_array($this->value)) {
-            throw new MarshalException($this->value, 'dictInt');
+            throw new MarshalException($this->value, DictType::int(), TypeMismatch::NOT_ARRAY);
         }
         $result = [];
         foreach ($this->value as $key => $value) {
             if (!is_string($key)) {
-                throw new MarshalException($key, 'dictIntKey');
+                throw new MarshalException($key, DictType::int(), TypeMismatch::INVALID_KEY_TYPE);
             }
             if (!is_int($value)) {
-                throw new MarshalException($value, 'dictIntValue');
+                throw new MarshalException($value, DictType::int(), TypeMismatch::INVALID_VALUE_TYPE);
             }
             $result[$key] = $value;
         }
@@ -177,15 +181,15 @@ class Marshaller
             return [];
         }
         if (!is_array($this->value)) {
-            throw new MarshalException($this->value, 'dictString');
+            throw new MarshalException($this->value, DictType::string(), TypeMismatch::NOT_ARRAY);
         }
         $result = [];
         foreach ($this->value as $key => $value) {
             if (!is_string($key)) {
-                throw new MarshalException($key, 'dictStringKey');
+                throw new MarshalException($key, DictType::string(), TypeMismatch::INVALID_KEY_TYPE);
             }
             if (!is_string($value)) {
-                throw new MarshalException($value, 'dictStringValue');
+                throw new MarshalException($value, DictType::string(), TypeMismatch::INVALID_VALUE_TYPE);
             }
             $result[$key] = $value;
         }
@@ -194,15 +198,15 @@ class Marshaller
 
     private function strictIntCheck(mixed $value): void
     {
-        if (!is_scalar($value) && !is_null($value)) {
-            throw new MarshalException($value, 'strictIntCheckScalar');
+        if (!is_scalar($value) && $value !== null) {
+            throw new MarshalException($value, SimpleType::INT, TypeMismatch::NOT_SCALAR);
         }
         $canBeInt = is_int($value) || is_float($value) || (is_string($value) && is_numeric($value));
         if (!$canBeInt) {
-            throw new MarshalException($value, 'strictIntCheckInt');
+            throw new MarshalException($value, SimpleType::INT, TypeMismatch::NOT_INT_COMPATIBLE);
         }
         if ((string)(int) $value !== (string) $value) {
-            throw new MarshalException($value, 'strictIntCheckDetail');
+            throw new MarshalException($value, SimpleType::INT, TypeMismatch::NOT_WHOLE_NUMBER);
         }
     }
 }
