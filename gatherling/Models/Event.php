@@ -267,6 +267,42 @@ class Event
         return $event;
     }
 
+    private function validate(): void
+    {
+        try {
+            strtotime($this->start);
+        } catch (DatetimeException $e) {
+            throw new ValidationException("Invalid start date {$this->start}");
+        }
+        try {
+            db()->int('SELECT 1 FROM formats WHERE name = :name', ['name' => $this->format]);
+        } catch (DatabaseException $e) {
+            throw new ValidationException("Invalid format {$this->format}");
+        }
+        try {
+            db()->int('SELECT 1 FROM players WHERE name = :name', ['name' => $this->host]);
+        } catch (DatabaseException $e) {
+            throw new ValidationException("Invalid host {$this->host}");
+        }
+        if ($this->cohost !== null) {
+            try {
+                db()->int('SELECT 1 FROM players WHERE name = :name', ['name' => $this->cohost]);
+            } catch (DatabaseException $e) {
+                throw new ValidationException("Invalid cohost {$this->cohost}");
+            }
+        }
+        try {
+            db()->int('SELECT 1 FROM series WHERE name = :name', ['name' => $this->series]);
+        } catch (DatabaseException $e) {
+            throw new ValidationException("Invalid series {$this->series}");
+        }
+        try {
+            db()->int('SELECT 1 FROM clients WHERE id = :id', ['id' => $this->client]);
+        } catch (DatabaseException $e) {
+            throw new ValidationException("Invalid client {$this->client}");
+        }
+    }
+
     public function save(): void
     {
         if ($this->cohost == '') {
@@ -279,10 +315,9 @@ class Event
             $this->active = 0;
         }
 
+        $this->validate();
+
         if ($this->new) {
-            if (!$this->series) {
-                throw new ValidationException("Series is required for a new event");
-            }
             $sql = '
                 INSERT INTO events (name, start, format, host, cohost, kvalue, number, season, series, threadurl, reporturl,
                                     metaurl, prereg_allowed, finalized, player_reportable, prereg_cap, player_editdecks,

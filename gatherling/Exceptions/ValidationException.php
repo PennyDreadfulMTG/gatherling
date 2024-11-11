@@ -8,6 +8,6 @@ class ValidationException extends BadRequestException
 {
     public function getUserMessage(): string
     {
-        return 'The request was invalid';
+        return $this->getMessage();
     }
 }
