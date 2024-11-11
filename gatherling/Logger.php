@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gatherling;
 
 use Gatherling\Exceptions\ConfigurationException;
+use Gatherling\Helpers\Request;
 use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\BufferHandler;
 use Monolog\Handler\ErrorLogHandler;
@@ -15,6 +16,7 @@ use Psr\Log\LoggerInterface;
 use Stringable;
 
 use function Gatherling\Helpers\config;
+use function Gatherling\Helpers\server;
 
 class Logger implements LoggerInterface
 {
@@ -28,7 +30,7 @@ class Logger implements LoggerInterface
                 new StreamHandler('php://stderr', Level::Debug),
                 0, // No buffer limit
                 Level::Debug, // Minimum log level to buffer
-                false, // Don't flush when script ends (flush manually)
+                false, // Don't flush when script ends (flushgg manually)
                 false // Do NOT flush on overflow
             );
             $this->logger->pushHandler($bufferHandler);
@@ -53,6 +55,7 @@ class Logger implements LoggerInterface
      */
     public function log(mixed $level, Stringable|string $message, array $context = []): void
     {
+        $context = array_merge($this->getRequestContext(), $context);
         // Work around a mismatch between LoggerInterface and Monolog\Logger types.
         $logLevel = $this->normalizeLogLevel($level);
         $this->logger->log($logLevel, $message, $context);
@@ -80,7 +83,7 @@ class Logger implements LoggerInterface
      */
     public function emergency(string|Stringable $message, array $context = []): void
     {
-        $this->logger->emergency($message, $context);
+        $this->log(Level::Emergency, $message, $context);
     }
 
     /**
@@ -88,7 +91,7 @@ class Logger implements LoggerInterface
      */
     public function alert(string|Stringable $message, array $context = []): void
     {
-        $this->logger->alert($message, $context);
+        $this->log(Level::Alert, $message, $context);
     }
 
     /**
@@ -96,7 +99,7 @@ class Logger implements LoggerInterface
      */
     public function critical(string|Stringable $message, array $context = []): void
     {
-        $this->logger->critical($message, $context);
+        $this->log(Level::Critical, $message, $context);
     }
 
     /**
@@ -104,7 +107,7 @@ class Logger implements LoggerInterface
      */
     public function error(string|Stringable $message, array $context = []): void
     {
-        $this->logger->error($message, $context);
+        $this->log(Level::Error, $message, $context);
     }
 
     /**
@@ -112,7 +115,7 @@ class Logger implements LoggerInterface
      */
     public function warning(string|Stringable $message, array $context = []): void
     {
-        $this->logger->warning($message, $context);
+        $this->log(Level::Warning, $message, $context);
     }
 
     /**
@@ -120,7 +123,7 @@ class Logger implements LoggerInterface
      */
     public function notice(string|Stringable $message, array $context = []): void
     {
-        $this->logger->notice($message, $context);
+        $this->log(Level::Notice, $message, $context);
     }
 
     /**
@@ -128,7 +131,7 @@ class Logger implements LoggerInterface
      */
     public function info(string|Stringable $message, array $context = []): void
     {
-        $this->logger->info($message, $context);
+        $this->log(Level::Info, $message, $context);
     }
 
     /**
@@ -136,7 +139,7 @@ class Logger implements LoggerInterface
      */
     public function debug(string|Stringable $message, array $context = []): void
     {
-        $this->logger->debug($message, $context);
+        $this->log(Level::Debug, $message, $context);
     }
 
     public function clear(): void
@@ -156,4 +159,20 @@ class Logger implements LoggerInterface
             }
         }
     }
+
+    /** @return array<string, mixed> */
+    private function getRequestContext(): array
+    {
+        return [
+            'request_id' => Request::getRequestId(),
+            'url' => server()->string('REQUEST_URI', 'unknown'),
+            'referer' => server()->string('HTTP_REFERER', 'none'),
+            'post' => empty($_POST) ? [] : $_POST,
+            'session' => empty($_SESSION) ? [] : $_SESSION,
+            'method' => server()->string('REQUEST_METHOD', 'unknown'),
+            'ip' => server()->string('REMOTE_ADDR', 'unknown'),
+            'user_agent' => server()->string('HTTP_USER_AGENT', 'unknown')
+        ];
+    }
+
 }

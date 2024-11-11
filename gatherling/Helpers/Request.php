@@ -4,84 +4,106 @@ declare(strict_types=1);
 
 namespace Gatherling\Helpers;
 
+use Gatherling\Exceptions\MarshalException;
+use Gatherling\Exceptions\RequestException;
+use Gatherling\Helpers\Marshaller;
+
 class Request
 {
+    private static ?string $requestId = null;
+
     /** @param array<int|string, mixed> $vars */
     public function __construct(private array $vars)
     {
     }
 
+    public static function getRequestId(): string
+    {
+        if (self::$requestId === null) {
+            self::$requestId = substr(str_shuffle('0123456789bcdfghjklmnpqrstvwxz'), 0, 4);
+        }
+        return self::$requestId;
+    }
+
     public function int(string $key, int|false $default = false): int
     {
-        return marshal($this->vars[$key] ?? null)->int($default);
+        return $this->marshal($key, fn($m) => $m->int($default));
     }
 
     public function optionalInt(string $key): ?int
     {
-        return marshal($this->coalesceNumeric($key))->optionalInt();
+        return $this->marshal($key, fn($m) => $m->optionalInt(), true);
     }
 
     public function string(string $key, string|false $default = false): string
     {
-        return marshal($this->vars[$key] ?? null)->string($default);
+        return $this->marshal($key, fn($m) => $m->string($default));
     }
 
     public function optionalString(string $key): ?string
     {
-        return marshal($this->vars[$key] ?? null)->optionalString();
+        return $this->marshal($key, fn($m) => $m->optionalString());
     }
 
     public function float(string $key, float|false $default = false): float
     {
-        return marshal($this->vars[$key] ?? null)->float($default);
+        return $this->marshal($key, fn($m) => $m->float($default));
     }
 
     /** @psalm-suppress PossiblyUnusedMethod */
     public function optionalFloat(string $key): ?float
     {
-        return marshal($this->coalesceNumeric($key))->optionalFloat();
+        return $this->marshal($key, fn($m) => $m->optionalFloat(), true);
     }
 
     /** @return list<int> */
     public function listInt(string $key): array
     {
-        return marshal($this->vars[$key] ?? null)->ints();
+        return $this->marshal($key, fn($m) => $m->ints());
     }
 
     /** @return list<string> */
     public function listString(string $key): array
     {
-        return marshal($this->vars[$key] ?? null)->strings();
+        return $this->marshal($key, fn($m) => $m->strings());
     }
 
     /** @return array<string, int|string> */
     public function dictIntOrString(string $key): array
     {
-        return marshal($this->vars[$key] ?? null)->dictIntOrString();
+        return $this->marshal($key, fn($m) => $m->dictIntOrString());
     }
 
     /** @return array<string, int> */
     public function dictInt(string $key): array
     {
-        return marshal($this->vars[$key] ?? null)->dictInt();
+        return $this->marshal($key, fn($m) => $m->dictInt());
     }
 
     /** @return array<string, string> */
     public function dictString(string $key): array
     {
-        return marshal($this->vars[$key] ?? null)->dictString();
+        return $this->marshal($key, fn($m) => $m->dictString());
     }
 
-    // Coalesce like ?? does, but additionally if the value is an empty string, return null.
-    // This is how we want to treat something like 'season=' in a querystring.
-    private function coalesceNumeric(string $key): mixed
+    /**
+     * @template T
+     * @param string $key
+     * @param callable(Marshaller): T $f
+     * @param bool $nullIfEmptyString
+     * @return T
+     */
+    private function marshal(string $key, callable $f, bool $nullIfEmptyString = false): mixed
     {
-        if (!isset($this->vars[$key])) {
-            return null;
+        /** @var string|int|float|null $value */
+        $value = $this->vars[$key] ?? null;
+        if ($nullIfEmptyString && $value === '') {
+            $value = null;
         }
-        if ($this->vars[$key] === '') {
-            return null;
+        try {
+            return $f(marshal($value));
+        } catch (MarshalException $e) {
+            throw new RequestException($key, $e->expectedType, $value, $e);
         }
-        return $this->vars[$key];
     }
 }

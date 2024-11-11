@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use Exception;
+use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\NotFoundException;
+use Gatherling\Exceptions\ValidationException;
+use Safe\Exceptions\DatetimeException;
 
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\logger;
+use function Safe\strtotime;
 
 class Event
 {
@@ -264,6 +267,30 @@ class Event
         return $event;
     }
 
+    private function validate(): void
+    {
+        try {
+            strtotime($this->start);
+        } catch (DatetimeException $e) {
+            throw new ValidationException("Invalid start date {$this->start}");
+        }
+        if (db()->optionalInt('SELECT 1 FROM formats WHERE name = :name', ['name' => $this->format]) === null) {
+            throw new ValidationException("Invalid format {$this->format}");
+        }
+        if (db()->optionalInt('SELECT 1 FROM players WHERE name = :name', ['name' => $this->host]) === null) {
+            throw new ValidationException("Invalid host {$this->host}");
+        }
+        if ($this->cohost !== null && db()->optionalInt('SELECT 1 FROM players WHERE name = :name', ['name' => $this->cohost]) === null) {
+            throw new ValidationException("Invalid cohost {$this->cohost}");
+        }
+        if (db()->optionalInt('SELECT 1 FROM series WHERE name = :name', ['name' => $this->series]) === null) {
+            throw new ValidationException("Invalid series {$this->series}");
+        }
+        if (db()->optionalInt('SELECT 1 FROM client WHERE id = :id', ['id' => $this->client]) === null) {
+            throw new ValidationException("Invalid client {$this->client}");
+        }
+    }
+
     public function save(): void
     {
         if ($this->cohost == '') {
@@ -276,20 +303,16 @@ class Event
             $this->active = 0;
         }
 
+        $this->validate();
+
         if ($this->new) {
-            if (!$this->series) {
-                throw new \Exception("Series is required for a new event");
-            }
             $sql = '
-                INSERT INTO
-                    events
-                    (name, start, format, host, cohost, kvalue, number, season, series, threadurl, reporturl,
-                    metaurl, prereg_allowed, finalized, player_reportable, prereg_cap, player_editdecks,
-                    private_decks, private_finals, player_reported_draws, late_entry_limit, `private`, client)
-                VALUES
-                    (:name, :start, :format, :host, :cohost, :kvalue, :number, :season, :series, :threadurl, :reporturl,
-                    :metaurl, :prereg_allowed, 0, :player_reportable, :prereg_cap, :player_editdecks,
-                    :private_decks, :private_finals, :player_reported_draws, :late_entry_limit, :private, :client)';
+                INSERT INTO events (name, start, format, host, cohost, kvalue, number, season, series, threadurl, reporturl,
+                                    metaurl, prereg_allowed, finalized, player_reportable, prereg_cap, player_editdecks,
+                                    private_decks, private_finals, player_reported_draws, late_entry_limit, `private`, client)
+                     VALUES (:name, :start, :format, :host, :cohost, :kvalue, :number, :season, :series, :threadurl, :reporturl,
+                             :metaurl, :prereg_allowed, 0, :player_reportable, :prereg_cap, :player_editdecks,
+                             :private_decks, :private_finals, :player_reported_draws, :late_entry_limit, :private, :client)';
             $params = [
                 'name' => $this->name,
                 'start' => $this->start,
@@ -320,18 +343,15 @@ class Event
             $this->newSubevent($this->finalrounds, 2, $this->finalstruct);
         } else {
             $sql = '
-                UPDATE
-                    events
-                SET
-                    start = :start, format = :format, host = :host, cohost = :cohost, kvalue = :kvalue,
-                    number = :number, season = :season, series = :series, threadurl = :threadurl, reporturl = :reporturl,
-                    metaurl = :metaurl, finalized = :finalized, prereg_allowed = :prereg_allowed, active = :active,
-                    current_round = :current_round, player_reportable = :player_reportable, prereg_cap = :prereg_cap,
-                    player_editdecks = :player_editdecks, private_decks = :private_decks, private_finals = :private_finals,
-                    player_reported_draws = :player_reported_draws, late_entry_limit = :late_entry_limit,
-                    `private` = :private, client = :client
-                WHERE
-                    name = :name';
+                UPDATE events
+                   SET start = :start, format = :format, host = :host, cohost = :cohost, kvalue = :kvalue,
+                       number = :number, season = :season, series = :series, threadurl = :threadurl, reporturl = :reporturl,
+                       metaurl = :metaurl, finalized = :finalized, prereg_allowed = :prereg_allowed, active = :active,
+                       current_round = :current_round, player_reportable = :player_reportable, prereg_cap = :prereg_cap,
+                       player_editdecks = :player_editdecks, private_decks = :private_decks, private_finals = :private_finals,
+                       player_reported_draws = :player_reported_draws, late_entry_limit = :late_entry_limit,
+                       `private` = :private, client = :client
+                 WHERE name = :name';
             $params = [
                 'start' => $this->start,
                 'format' => $this->format,
