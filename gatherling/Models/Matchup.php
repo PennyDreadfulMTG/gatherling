@@ -509,12 +509,9 @@ class Matchup
     public function getEventNamebyMatchid(): string
     {
         $sql = '
-            SELECT
-                e.name
-            FROM
-                matches m, subevents s, events e
-            WHERE
-                m.id = :id AND m.subevent = s.id AND e.name = s.parent';
+            SELECT e.name
+              FROM matches m, subevents s, events e
+             WHERE m.id = :id AND m.subevent = s.id AND e.name = s.parent';
         return db()->string($sql, ['id' => $this->id]);
     }
 
