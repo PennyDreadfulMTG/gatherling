@@ -505,7 +505,6 @@
     </PossiblyUndefinedArrayOffset>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[!$deckId]]></code>
-      <code><![CDATA[!$this->series]]></code>
       <code><![CDATA[$activeCheck]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
@@ -2017,9 +2016,6 @@
     <PossiblyNullArgument>
       <code><![CDATA[$event->series]]></code>
       <code><![CDATA[$event->series]]></code>
-      <code><![CDATA[$hour]]></code>
-      <code><![CDATA[$minutes]]></code>
-      <code><![CDATA[$month]]></code>
     </PossiblyNullArgument>
     <PossiblyNullArrayAccess>
       <code><![CDATA[$datearr[1]]]></code>
@@ -2418,7 +2414,6 @@
   <file src="gatherling/eventreport.php">
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[$eventName]]></code>
-      <code><![CDATA[empty($season)]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/forgot.php">
