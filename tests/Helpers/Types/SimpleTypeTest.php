@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Helpers\Types;
+namespace Gatherling\Tests\Helpers\Types;
 
 use Gatherling\Helpers\Types\SimpleType;
 use PHPUnit\Framework\TestCase;
