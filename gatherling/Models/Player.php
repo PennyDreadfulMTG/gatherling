@@ -6,7 +6,9 @@ namespace Gatherling\Models;
 
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\NotFoundException;
+use Gatherling\Exceptions\ValidationException;
 use Gatherling\Models\PlayerDto;
+use Gatherling\Models\ValidPlayerDto;
 use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\PlayerLink;
 
@@ -254,25 +256,33 @@ class Player
         return $found;
     }
 
+    private function validate(): void
+    {
+        $uniqueFields = [
+            'discord_id' => 'Discord ID',
+            'mtga_username' => 'MTGA username',
+            'mtgo_username' => 'MTGO username'
+        ];
+        foreach ($uniqueFields as $field => $label) {
+            $sql = "SELECT name FROM players WHERE {$field} = :{$field} AND name != :name";
+            $params = [$field => $this->$field, 'name' => $this->name];
+            $existing = db()->optionalString($sql, $params);
+            if ($existing !== null) {
+                throw new ValidationException("{$label} already in use by {$existing}");
+            }
+        }
+    }
+
     public function save(): void
     {
+        $this->validate();
         $sql = '
-            UPDATE
-                players
-            SET
-                password = :password,
-                rememberme = :remember_me,
-                host = :host,
-                super = :super,
-                email = :email_address,
-                email_privacy = :email_privacy,
-                timezone = :timezone,
-                discord_id = :discord_id,
-                discord_handle = :discord_handle,
-                mtga_username = :mtga_username,
-                mtgo_username = :mtgo_username
-            WHERE
-                name = :name';
+            UPDATE players
+               SET password = :password, rememberme = :remember_me, host = :host, super = :super,
+                   email = :email_address, email_privacy = :email_privacy, timezone = :timezone,
+                   email_privacy = :email_privacy, timezone = :timezone, discord_id = :discord_id,
+                   discord_handle = :discord_handle, mtga_username = :mtga_username, mtgo_username = :mtgo_username
+             WHERE name = :name';
         $params = [
             'password' => $this->password,
             'remember_me' => $this->rememberMe,
