@@ -8,7 +8,6 @@ use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\NotFoundException;
 use Gatherling\Exceptions\ValidationException;
 use Gatherling\Models\PlayerDto;
-use Gatherling\Models\ValidPlayerDto;
 use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\PlayerLink;
 
