@@ -24,13 +24,14 @@ class ErrorHandler
             logger()->error($message);
             $userMessage = "Oops! Something went wrong.";
         }
+        $debug = config()->optionalString('env') === 'dev' ? $message : '';
 
         if ($e instanceof GatherlingException) {
             $httpStatusCode = $e->httpStatusCode;
         } else {
             $httpStatusCode = 500;
         }
-        $page = new Error($requestId, $userMessage, $httpStatusCode);
+        $page = new Error($requestId, $userMessage, $httpStatusCode, $debug);
         $page->send();
     }
 }

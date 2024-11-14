@@ -174,5 +174,4 @@ class Logger implements LoggerInterface
             'user_agent' => server()->string('HTTP_USER_AGENT', 'unknown')
         ];
     }
-
 }

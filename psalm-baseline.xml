@@ -505,7 +505,6 @@
     </PossiblyUndefinedArrayOffset>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[!$deckId]]></code>
-      <code><![CDATA[!$this->series]]></code>
       <code><![CDATA[$activeCheck]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
@@ -2017,9 +2016,6 @@
     <PossiblyNullArgument>
       <code><![CDATA[$event->series]]></code>
       <code><![CDATA[$event->series]]></code>
-      <code><![CDATA[$hour]]></code>
-      <code><![CDATA[$minutes]]></code>
-      <code><![CDATA[$month]]></code>
     </PossiblyNullArgument>
     <PossiblyNullArrayAccess>
       <code><![CDATA[$datearr[1]]]></code>
@@ -2384,8 +2380,6 @@
   <file src="gatherling/event.php">
     <MixedArgument>
       <code><![CDATA[$f]]></code>
-      <code><![CDATA[$pAWins]]></code>
-      <code><![CDATA[$pBWins]]></code>
     </MixedArgument>
     <PossiblyInvalidCast>
       <code><![CDATA[$_POST['day']]]></code>
@@ -2404,10 +2398,6 @@
       <code><![CDATA[$stmt->errorInfo()[2]]]></code>
       <code><![CDATA[$stmt->errorInfo()[2]]]></code>
     </PossiblyNullArgument>
-    <PossiblyUndefinedVariable>
-      <code><![CDATA[$pAWins]]></code>
-      <code><![CDATA[$pBWins]]></code>
-    </PossiblyUndefinedVariable>
     <RiskyCast>
       <code><![CDATA[$_POST['hostupdatesmatches'][$ndx]]]></code>
     </RiskyCast>
@@ -2418,7 +2408,6 @@
   <file src="gatherling/eventreport.php">
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[$eventName]]></code>
-      <code><![CDATA[empty($season)]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/forgot.php">

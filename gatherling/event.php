@@ -483,34 +483,29 @@ function updateMatches(): void
     $pA = post()->string('newmatchplayerA', '');
     $pB = post()->string('newmatchplayerB', '');
     $res = post()->string('newmatchresult', '');
-    if ($res == '2-0') {
-        $pAWins = 2;
-        $pBWins = 0;
-        $res = 'A';
-    } elseif ($res == '2-1') {
-        $pAWins = 2;
-        $pBWins = 1;
-        $res = 'A';
-    } elseif ($res == '1-2') {
-        $pAWins = 1;
-        $pBWins = 2;
-        $res = 'B';
-    } elseif ($res == '0-2') {
-        $pAWins = 0;
-        $pBWins = 2;
-        $res = 'B';
-    } elseif ($res == 'D') {
-        $pAWins = 1;
-        $pBWins = 1;
-        $res = 'D';
-    } elseif ($res != 'P') {
-        throw new InvalidArgumentException('Invalid result for match: $res');
-    }
     $rnd = post()->int('newmatchround');
 
-    if ($pA !== '' && $pB !== '') {
+    if ($pA || $pB || $res || $rnd) {
+        [$pAWins, $pBWins, $res] = match ($res) {
+            '2-0' => [2, 0, 'A'],
+            '2-1' => [2, 1, 'A'],
+            '1-2' => [1, 2, 'B'],
+            '0-2' => [0, 2, 'B'],
+            'D' => [1, 1, 'D'],
+            'P' => [0, 0, 'P'],
+            default => throw new ValidationException("Invalid result for match")
+        };
+        if ($pA === '') {
+            throw new ValidationException('Player A is required');
+        }
+        if ($pB === '') {
+            throw new ValidationException('Player B is required');
+        }
+        if ($pA === $pB) {
+            throw new ValidationException('Players cannot play themselves');
+        }
         if ($rnd === 0) {
-            throw new InvalidArgumentException('Cannot add match to round 0');
+            throw new ValidationException('Cannot add match to round 0');
         }
         $playerA = new Standings($event->name, $pA);
         $playerB = new Standings($event->name, $pB);
