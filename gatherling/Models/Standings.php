@@ -38,14 +38,11 @@ class Standings
             return;
         } else {
             $sql = '
-                SELECT
-                    active, matches_played, games_won, games_played, byes, OP_Match, PL_Game, OP_Game,
-                    score, seed, matched, matches_won, draws
-                FROM
-                    standings
-                WHERE
-                    event = :event AND player = :player
-                LIMIT 1';
+                SELECT active, matches_played, games_won, games_played, byes, OP_Match, PL_Game, OP_Game,
+                       score, seed, matched, matches_won, draws
+                  FROM standings
+                 WHERE event = :event AND player = :player
+                 LIMIT 1';
             $params = ['event' => $eventname, 'player' => $playername];
             $standings = db()->selectOnlyOrNull($sql, StandingsDto::class, $params);
             $this->player = $playername;
