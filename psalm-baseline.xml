@@ -2380,8 +2380,6 @@
   <file src="gatherling/event.php">
     <MixedArgument>
       <code><![CDATA[$f]]></code>
-      <code><![CDATA[$pAWins]]></code>
-      <code><![CDATA[$pBWins]]></code>
     </MixedArgument>
     <PossiblyInvalidCast>
       <code><![CDATA[$_POST['day']]]></code>
@@ -2400,10 +2398,6 @@
       <code><![CDATA[$stmt->errorInfo()[2]]]></code>
       <code><![CDATA[$stmt->errorInfo()[2]]]></code>
     </PossiblyNullArgument>
-    <PossiblyUndefinedVariable>
-      <code><![CDATA[$pAWins]]></code>
-      <code><![CDATA[$pBWins]]></code>
-    </PossiblyUndefinedVariable>
     <RiskyCast>
       <code><![CDATA[$_POST['hostupdatesmatches'][$ndx]]]></code>
     </RiskyCast>
