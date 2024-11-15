@@ -485,7 +485,7 @@ function updateMatches(): void
     $res = post()->string('newmatchresult', '');
     $rnd = post()->int('newmatchround');
 
-    if ($pA || $pB || $res || $rnd) {
+    if ($pA || $pB) {
         [$pAWins, $pBWins, $res] = match ($res) {
             '2-0' => [2, 0, 'A'],
             '2-1' => [2, 1, 'A'],
