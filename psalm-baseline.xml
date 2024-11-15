@@ -1403,9 +1403,6 @@
       <code><![CDATA[$rules['semi_pts']]]></code>
       <code><![CDATA[$rules['win_pts']]]></code>
     </PossiblyInvalidArgument>
-    <PossiblyNullArgument>
-      <code><![CDATA[$this->mtgo_room]]></code>
-    </PossiblyNullArgument>
     <PropertyNotSetInConstructor>
       <code><![CDATA[$discord_channel_id]]></code>
       <code><![CDATA[$discord_channel_name]]></code>

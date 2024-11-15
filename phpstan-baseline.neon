@@ -626,16 +626,6 @@ parameters:
 			path: gatherling/Models/Series.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Series.php
-
-		-
-			message: "#^Parameter \\#1 \\$string1 of function strncmp expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Series.php
-
-		-
 			message: "#^Parameter \\#3 \\$multiplier of method Gatherling\\\\Models\\\\Series\\:\\:multiplyAndAddPoints\\(\\) expects int, int\\|string given\\.$#"
 			count: 10
 			path: gatherling/Models/Series.php
