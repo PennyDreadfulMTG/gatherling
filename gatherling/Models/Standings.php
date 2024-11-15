@@ -10,29 +10,27 @@ use function Gatherling\Helpers\db;
 
 class Standings
 {
-    public int $id;
     public ?string $event = null;  // belongs_to event
     public ?string $player = null; // belongs_to player
-    public ?int $active = null;
-    public ?int $score;
-    public ?int $matches_played;
-    public ?int $matches_won;
-    public ?int $draws;
-    public ?int $games_won;
-    public ?int $games_played;
-    public ?int $byes;
-    public ?float $OP_Match;
-    public ?float $PL_Game;
-    public ?float $OP_Game;
-    public ?int $seed;
-    public ?int $matched;
+    public int $active;
+    public int $score;
+    public int $matches_played;
+    public int $matches_won;
+    public int $draws;
+    public int $games_won;
+    public int $games_played;
+    public int $byes;
+    public float $OP_Match;
+    public float $PL_Game;
+    public float $OP_Game;
+    public int $seed;
+    public int $matched;
     public ?bool $new = null;
 
     public function __construct(string $eventname, string $playername, int $initial_seed = 127)
     {
         // Check to see if we are doing event standings of player standings
         if ($playername == '0') {
-            $this->id = 0;
             $this->new = true;
 
             return;
@@ -52,9 +50,19 @@ class Standings
                 $this->seed = $initial_seed;
                 return;
             }
-            foreach (get_object_vars($standings) as $key => $value) {
-                $this->$key = $value;
-            }
+            $this->active = $standings->active;
+            $this->matches_played = $standings->matches_played;
+            $this->games_won = $standings->games_won;
+            $this->games_played = $standings->games_played;
+            $this->byes = $standings->byes;
+            $this->OP_Match = $standings->OP_Match;
+            $this->PL_Game = $standings->PL_Game;
+            $this->OP_Game = $standings->OP_Game;
+            $this->score = $standings->score;
+            $this->seed = $standings->seed;
+            $this->matched = $standings->matched;
+            $this->matches_won = $standings->matches_won;
+            $this->draws = $standings->draws;
         }
     }
 
@@ -79,13 +87,10 @@ class Standings
                 $this->draws = 0;
 
                 $sql = '
-                    INSERT INTO
-                        standings
-                        (player, event, active, matches_played, draws, games_won, games_played, matches_won, byes, OP_Match, PL_Game,
-                        OP_Game, score, seed, matched)
-                    VALUES
-                        (:player, :event, :active, :matches_played, :draws, :games_won, :games_played, :matches_won, :byes, :OP_Match, :PL_Game,
-                        :OP_Game, :score, :seed, :matched)';
+                    INSERT INTO standings (player, event, active, matches_played, draws, games_won, games_played,
+                                           matches_won, byes, OP_Match, PL_Game, OP_Game, score, seed, matched)
+                         VALUES (:player, :event, :active, :matches_played, :draws, :games_won, :games_played,
+                                 :matches_won, :byes, :OP_Match, :PL_Game, :OP_Game, :score, :seed, :matched)';
                 $params = [
                     'player' => $this->player,
                     'event' => $this->event,
@@ -106,15 +111,12 @@ class Standings
                 db()->execute($sql, $params);
             } else {
                 $sql = '
-                    UPDATE
-                        standings
-                    SET
-                        player = :player, event = :event, active = :active, matches_played = :matches_played,
-                        games_won = :games_won, games_played = :games_played, byes = :byes, OP_Match = :OP_Match,
-                        PL_Game = :PL_Game, OP_Game = :OP_Game, score = :score, seed = :seed, matched = :matched,
-                        matches_won = :matches_won, draws = :draws
-                    WHERE
-                        player = :player AND event = :event';
+                    UPDATE standings
+                       SET player = :player, event = :event, active = :active, matches_played = :matches_played,
+                           games_won = :games_won, games_played = :games_played, byes = :byes, OP_Match = :OP_Match,
+                           PL_Game = :PL_Game, OP_Game = :OP_Game, score = :score, seed = :seed, matched = :matched,
+                           matches_won = :matches_won, draws = :draws
+                     WHERE player = :player AND event = :event';
                 $params = [
                     'player' => $this->player,
                     'event' => $this->event,
