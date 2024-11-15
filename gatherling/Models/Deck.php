@@ -407,11 +407,8 @@ class Deck
         if ($this->id == 0) {
             // New record.  Set up the decks entry and the Entry.
             $sql = '
-                INSERT INTO
-                    decks
-                    (archetype, name, playername, format, tribe, notes, created_date)
-                VALUES
-                    (:archetype, :name, :playername, :format, :tribe, :notes, NOW())';
+                INSERT INTO decks (archetype, name, playername, format, tribe, notes, created_date)
+                     VALUES (:archetype, :name, :playername, :format, :tribe, :notes, NOW())';
             $params = [
                 'archetype' => $this->archetype,
                 'name' => $this->name,
