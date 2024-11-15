@@ -1732,9 +1732,6 @@
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/Views/Components/InfoCell.php">
-    <PossiblyNullArgument>
-      <code><![CDATA[$subevent->rounds]]></code>
-    </PossiblyNullArgument>
     <PropertyNotSetInConstructor>
       <code><![CDATA[$hostLink]]></code>
       <code><![CDATA[$percentReported]]></code>
