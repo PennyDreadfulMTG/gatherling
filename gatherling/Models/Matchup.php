@@ -388,7 +388,7 @@ class Matchup
                     $playera_standing->score += 3;
                 } elseif ($structure == 'League' || $structure == 'League Match') {
                     $playera_standing->score += 3;
-                    $playerb_standing->score += (int) $seasonRules['loss_pts'];
+                    $playerb_standing->score += $seasonRules['loss_pts'];
                 }
                 $this->result = 'A';
             } else {
@@ -398,7 +398,7 @@ class Matchup
                     $playerb_standing->score += 3;
                 } elseif ($structure == 'League' || $structure == 'League Match') {
                     $playerb_standing->score += 3;
-                    $playera_standing->score += (int) $seasonRules['loss_pts'];
+                    $playera_standing->score += $seasonRules['loss_pts'];
                 }
                 $this->result = 'B';
             }
@@ -462,7 +462,7 @@ class Matchup
                 $playera_standing->score += 3;
                 $playera_standing->matches_won += 1;
                 if ($structure == 'League' || $structure == 'League Match') {
-                    $playerb_standing->score += (int) $seasonRules['loss_pts'];
+                    $playerb_standing->score += $seasonRules['loss_pts'];
                 }
                 if ($structure == 'Single Elimination') {
                     $playerb_standing->active = 0;
@@ -472,7 +472,7 @@ class Matchup
                 $playerb_standing->score += 3;
                 $playerb_standing->matches_won += 1;
                 if ($structure == 'League' || $structure == 'League Match') {
-                    $playera_standing->score += (int) $seasonRules['loss_pts'];
+                    $playera_standing->score += $seasonRules['loss_pts'];
                 }
                 if ($structure == 'Single Elimination') {
                     $playera_standing->active = 0;
