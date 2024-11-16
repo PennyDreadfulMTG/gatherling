@@ -1,6 +1,6 @@
 {{placing}} by
 {{#showPlayer}}
-    in <a href="{{eventLink}}"><span class="eventname" title="{{day}}">{{eventName}}</span></a>
+    {{#playerLink}}{{> playerLink}}{{/playerLink}} in <a href="{{eventLink}}"><span class="eventname" title="{{day}}">{{eventName}}</span></a>
 {{/showPlayer}}
 {{^showPlayer}}
     Never played (?) according to records.
