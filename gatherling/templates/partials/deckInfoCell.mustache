@@ -1,6 +1,10 @@
 <table>
     <tr>
-        <td style="font-size: 10pt;"><b>{{name}}</b> (deck id: {{deckId}}){{^isValid}}<font color="#FF0000">*</font>{{/isValid}}</td>
+        <td style="font-size: 10pt;">
+            <b>{{name}}</b>
+            (deck id: {{deckId}})
+            {{^isValid}}<font color="#FF0000">*</font>{{/isValid}}
+        </td>
     </tr>
     <tr>
         <td>{{#cardCounts}}{{> cardCounts}}{{/cardCounts}}</td>

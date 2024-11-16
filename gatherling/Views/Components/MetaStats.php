@@ -19,7 +19,7 @@ class MetaStats extends Component
     public function __construct(Event $event)
     {
         $archcnt = $this->initArchetypeCount();
-        $colorcnt = ['w' => 0, 'g' => 0, 'u' => 0, 'r' => 0, 'b' => 0];
+        $colorcnt = ['w' => 0, 'u' => 0, 'b' => 0, 'r' => 0, 'g' => 0];
         $decks = $event->getDecks();
         $ndecks = count($decks);
         foreach ($decks as $deck) {

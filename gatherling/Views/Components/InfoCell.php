@@ -39,6 +39,9 @@ class InfoCell extends Component
         }
         $this->subevents = [];
         foreach ($event->getSubevents() as $subevent) {
+            if ($subevent->rounds === null || $subevent->rounds === 0) {
+                continue;
+            }
             if ($subevent->type != 'Single Elimination') {
                 $this->subevents[] = "{$subevent->rounds} rounds {$subevent->type}";
             } else {

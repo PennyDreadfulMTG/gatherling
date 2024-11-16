@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use PDO;
+use Gatherling\Exceptions\ValidationException;
 use InvalidArgumentException;
+use PDO;
 
 use function Gatherling\Helpers\db;
 use function Safe\fclose;
@@ -96,11 +97,19 @@ class Series
         $this->new = false;
     }
 
+    private function validate(): void
+    {
+        if ($this->mtgo_room !== null && strlen($this->mtgo_room) > 20) {
+            throw new ValidationException('MTGO room cannot be longer than 20 characters');
+        }
+    }
+
     public function save(): void
     {
-        if (strncmp($this->mtgo_room, '#', 1) == 0) {
+        if ($this->mtgo_room !== null && strncmp($this->mtgo_room, '#', 1) == 0) {
             $this->mtgo_room = substr($this->mtgo_room, 1);
         }
+        $this->validate();
         if ($this->new) {
             $sql = '
                 INSERT INTO series (name, day, normalstart, isactive, prereg_default, mtgo_room)

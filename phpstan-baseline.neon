@@ -401,11 +401,6 @@ parameters:
 			path: gatherling/Models/Formats.php
 
 		-
-			message: "#^Binary operation \"\\+\\=\" between int\\|null and int\\|string results in an error\\.$#"
-			count: 4
-			path: gatherling/Models/Matchup.php
-
-		-
 			message: "#^Parameter \\#1 \\$event_id of class Gatherling\\\\Models\\\\Entry constructor expects int, int\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Matchup.php
@@ -626,16 +621,6 @@ parameters:
 			path: gatherling/Models/Series.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Series.php
-
-		-
-			message: "#^Parameter \\#1 \\$string1 of function strncmp expects string, string\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Series.php
-
-		-
 			message: "#^Parameter \\#3 \\$multiplier of method Gatherling\\\\Models\\\\Series\\:\\:multiplyAndAddPoints\\(\\) expects int, int\\|string given\\.$#"
 			count: 10
 			path: gatherling/Models/Series.php
@@ -674,11 +659,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
 			count: 1
 			path: gatherling/Views/Components/EventStandings.php
-
-		-
-			message: "#^Parameter \\#2 \\$exponent of function pow expects float\\|int, int\\|null given\\.$#"
-			count: 1
-			path: gatherling/Views/Components/InfoCell.php
 
 		-
 			message: "#^Binary operation \"\\+\" between float\\|int\\|string\\|null and 1 results in an error\\.$#"
