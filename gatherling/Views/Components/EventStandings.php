@@ -15,9 +15,9 @@ class EventStandings extends Component
         rank: int,
         gameName: GameName,
         matchScore: int,
-        opMatch: string,
-        plGame: string,
-        opGame: string,
+        opMatch: ?string,
+        plGame: ?string,
+        opGame: ?string,
         matchesPlayed: int,
         byes: int,
     }> */
@@ -37,12 +37,12 @@ class EventStandings extends Component
                 'shouldHighlight' => $standing->player == $playerName,
                 'rank' => $rank,
                 'gameName' => new GameName($sp, $event->client),
-                'matchScore' => $standing->score,
-                'opMatch' => number_format($standing->OP_Match, 3),
-                'plGame' => number_format($standing->PL_Game, 3),
-                'opGame' => number_format($standing->OP_Game, 3),
-                'matchesPlayed' => $standing->matches_played,
-                'byes' => $standing->byes,
+                'matchScore' => $standing->score ?? 0,
+                'opMatch' => $standing->OP_Match !== null ? number_format($standing->OP_Match, 3) : null,
+                'plGame' => $standing->PL_Game !== null ? number_format($standing->PL_Game, 3) : null,
+                'opGame' => $standing->OP_Game !== null ? number_format($standing->OP_Game, 3) : null,
+                'matchesPlayed' => $standing->matches_played ?? 0,
+                'byes' => $standing->byes ?? 0,
             ];
             $rank++;
             $standingInfoList[] = $standingInfo;

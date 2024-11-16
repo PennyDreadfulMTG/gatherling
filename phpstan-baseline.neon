@@ -401,6 +401,11 @@ parameters:
 			path: gatherling/Models/Formats.php
 
 		-
+			message: "#^Binary operation \"\\+\\=\" between int\\|null and int\\|string results in an error\\.$#"
+			count: 4
+			path: gatherling/Models/Matchup.php
+
+		-
 			message: "#^Parameter \\#1 \\$event_id of class Gatherling\\\\Models\\\\Entry constructor expects int, int\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Matchup.php
