@@ -10,7 +10,7 @@ class SymbolTable extends Component
 {
     public int $sum;
     /** @var array<array{color: string, num: int}> */
-    public array $symbols;
+    public array $colors = [];
 
     public function __construct(Deck $deck)
     {
@@ -22,7 +22,7 @@ class SymbolTable extends Component
             if ($num == 0) {
                 continue;
             }
-            $this->symbols[] = [
+            $this->colors[] = [
                 'color' => $color,
                 'num' => $num,
             ];
