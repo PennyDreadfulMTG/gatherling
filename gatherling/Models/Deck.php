@@ -53,13 +53,10 @@ class Deck
             return;
         }
         $sql = '
-            SELECT
-                id, name, playername, archetype, format, tribe, notes, deck_hash,
-                sideboard_hash, whole_hash, created_date, deck_colors AS deck_color_str
-            FROM
-                decks d
-            WHERE
-                id = :id';
+            SELECT id, name, playername, archetype, format, tribe, notes, deck_hash,
+                   sideboard_hash, whole_hash, created_date, deck_colors AS deck_color_str
+              FROM decks d
+             WHERE id = :id';
         $deck = db()->selectOnlyOrNull($sql, DeckDto::class, ['id' => $id]);
         if (!$deck) {
             $this->id = 0;
@@ -73,12 +70,9 @@ class Deck
 
         if (empty($this->playername)) {
             $sql = '
-                SELECT
-                    p.name
-                FROM
-                    players p, entries e, decks d
-                WHERE
-                    p.name = e.player AND d.id = e.deck AND d.id = :id';
+                SELECT p.name
+                  FROM players p, entries e, decks d
+                 WHERE p.name = e.player AND d.id = e.deck AND d.id = :id';
             $this->playername = db()->optionalString($sql, ['id' => $id]);
         }
 
@@ -90,16 +84,10 @@ class Deck
 
         // Retrieve cards.
         $sql = '
-            SELECT
-                c.name, dc.qty, dc.issideboard
-            FROM
-                cards c, deckcontents dc, decks d
-            WHERE
-                d.id = dc.deck
-                AND c.id = dc.card
-                AND d.id = :id
-            ORDER BY
-                c.name';
+            SELECT c.name, dc.qty, dc.issideboard
+              FROM cards c, deckcontents dc, decks d
+             WHERE d.id = dc.deck AND c.id = dc.card AND d.id = :id
+          ORDER BY c.name';
         $cards = db()->select($sql, DeckCardDto::class, ['id' => $id]);
 
         $this->maindeck_cardcount = 0;
@@ -116,14 +104,9 @@ class Deck
 
         // Retrieve event
         $sql = '
-            SELECT
-                e.name, e.id
-            FROM
-                events e, entries n, decks d
-            WHERE
-                d.id = :id
-                AND d.id = n.deck
-                AND n.event_id = e.id';
+            SELECT e.name, e.id
+              FROM events e, entries n, decks d
+             WHERE d.id = :id AND d.id = n.deck AND n.event_id = e.id';
         $event = db()->selectOnlyOrNull($sql, DeckEventDto::class, ['id' => $id]);
         if ($event) {
             $this->eventname = $event->name;
@@ -137,14 +120,10 @@ class Deck
         // Find subevent id     - ignores sub-subevents like finals, which have the same name but different subevent id
         if (!is_null($this->eventname)) {
             $sql = '
-                SELECT
-                    events.format
-                FROM
-                    entries
-                INNER JOIN
-                    events ON entries.event_id = events.id
-                WHERE
-                    entries.deck = :id';
+                SELECT events.format
+                  FROM entries
+            INNER JOIN events ON entries.event_id = events.id
+                 WHERE entries.deck = :id';
             $this->format = db()->optionalString($sql, ['id' => $id]);
             $sql = 'SELECT MIN(id) FROM subevents WHERE parent = :eventname';
             $this->subeventid = db()->optionalInt($sql, ['eventname' => $this->eventname]);
