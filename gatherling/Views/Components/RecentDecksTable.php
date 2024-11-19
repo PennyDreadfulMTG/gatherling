@@ -7,7 +7,6 @@ namespace Gatherling\Views\Components;
 use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
-use Gatherling\Exceptions\NotFoundException;
 
 use function Gatherling\Helpers\logger;
 
@@ -21,9 +20,6 @@ class RecentDecksTable extends Component
         $event = $player->getLastEventPlayed();
         if (is_null($event)) {
             return;
-        }
-        if (!$event->id || !$player->name || !$event->name) {
-            throw new NotFoundException("Seeming invalid event data for ({$event->id}|{$event->name}|{$player->name}");
         }
         $entry = new Entry($event->id, $player->name);
         if ($entry->deck) {

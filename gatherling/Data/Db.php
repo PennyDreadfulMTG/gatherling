@@ -7,6 +7,7 @@ namespace Gatherling\Data;
 use Gatherling\Exceptions\ConfigurationException;
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\MarshalException;
+use Gatherling\Exceptions\NotFoundInDatabaseException;
 use PDOException;
 use PDOStatement;
 use PDO;
@@ -180,7 +181,12 @@ class Db
     public function selectOnly(string $sql, string $class, array $params = []): Dto
     {
         $result = $this->select($sql, $class, $params);
-        if (count($result) !== 1) {
+        if (count($result) === 0) {
+            $type = str_replace('Dto', '', basename(str_replace('\\', '/', $class)));
+            $ids = array_values(array_filter($params, fn($v) => is_int($v) || is_string($v)));
+            throw new NotFoundInDatabaseException("Expected 1 row, got 0 for query: $sql with params " . json_encode($params), 0, null, $type, $ids);
+        }
+        if (count($result) > 1) {
             throw new DatabaseException('Expected 1 row, got ' . count($result) . " for query: $sql with params " . json_encode($params));
         }
         return $result[0];

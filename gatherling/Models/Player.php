@@ -53,11 +53,7 @@ class Player
               FROM players
              WHERE name = :name';
         $params = ['name' => $name];
-        try {
-            $result = db()->selectOnly($sql, PlayerDto::class, $params);
-        } catch (DatabaseException $e) {
-            throw new NotFoundException("Player $name is not found.", 0, $e);
-        }
+        $result = db()->selectOnly($sql, PlayerDto::class, $params);
         $this->name = $result->name;
         $this->password = $result->password;
         $this->host = $result->host;
@@ -240,7 +236,7 @@ class Player
 
         $newPlayer = self::findByName($playername);
         if (!$newPlayer) {
-            throw new NotFoundException("Failed to retrieve player we just created: {$playername}");
+            throw new NotFoundException("Failed to retrieve player we just created: {$playername}", 0, null, 'Player', [$playername]);
         }
         return $newPlayer;
     }

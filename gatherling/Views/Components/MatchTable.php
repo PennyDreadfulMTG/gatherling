@@ -29,8 +29,8 @@ class MatchTable extends Component
             }
 
             $opp = $match->otherPlayer($player->name);
-            if (!$opp) {
-                throw new NotFoundException("Opponent not found for match {$match->id}");
+            if ($opp === null) {
+                throw new NotFoundException("Opponent not found for match {$match->id}", 0, null, 'Opponent', [$player->name]);
             }
             $res = 'D';
             if ($match->playerWon($player->name)) {
@@ -43,7 +43,7 @@ class MatchTable extends Component
 
             $event = $match->getEvent();
             if (!$event->id) {
-                throw new NotFoundException("Event not found for match {$match->id}");
+                throw new NotFoundException("Event not found for match {$match->id}", 0, null, 'Event', [$match->id]);
             }
             $oppRating = $opponent->getRating('Composite', $event->start);
             $oppDeck = $opponent->getDeckEvent($event->id);

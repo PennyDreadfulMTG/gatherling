@@ -8,6 +8,7 @@ use Gatherling\Exceptions\NotFoundException;
 use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
+use InvalidArgumentException;
 
 use function Safe\strtotime;
 
@@ -24,7 +25,7 @@ class Preregistration extends Component
     public function __construct(Player $player)
     {
         if (!$player->name) {
-            throw new NotFoundException("Tried to display preregistration for a player with no name");
+            throw new NotFoundException("Tried to display preregistration for a player with no name", 0, null, 'Player', []);
         }
 
         $upcomingEvents = Event::getUpcomingEvents($player->name);
@@ -61,13 +62,14 @@ class Preregistration extends Component
             }
             $eventLink = $targetUrl . '.php?event=' . rawurlencode($event->name);
             $eventName = $event->name;
-            if (!$event->start || !strtotime($event->start)) {
-                throw new NotFoundException("Event start time not found for event {$event->name}");
+            $eventStart = strtotime($event->start);
+            if (!$eventStart) {
+                throw new InvalidArgumentException("Event start time not found for event {$event->name}");
             }
-            $startingSoon = time() >= strtotime($event->start);
-            $startTime = new Time(strtotime($event->start), $now);
+            $startingSoon = time() >= $eventStart;
+            $startTime = new Time($eventStart, $now);
             if (!$event->id) {
-                throw new NotFoundException("Event ID not found for event {$event->name}");
+                throw new InvalidArgumentException("Event ID not found for event {$event->name}");
             }
             $entry = new Entry($event->id, $player->name);
 
@@ -99,10 +101,11 @@ class Preregistration extends Component
         foreach ($availableEvents as $event) {
             $eventReportLink = 'eventreport.php?event=' . rawurlencode($event->name);
             $eventName = $event->name;
-            if (!$event->start || !strtotime($event->start)) {
-                throw new NotFoundException("Event start time not found for event {$event->name}");
+            $eventStart = strtotime($event->start);
+            if (!$eventStart) {
+                throw new InvalidArgumentException("Event start time not found for event {$event->name}");
             }
-            $startTime = new Time(strtotime($event->start), time());
+            $startTime = new Time($eventStart, time());
             $isFull = $event->isFull();
             $requiresMtgo = $event->client == 1 && empty($player->mtgo_username);
             $requiresMtga = $event->client == 2 && empty($player->mtga_username);
