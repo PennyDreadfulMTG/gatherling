@@ -258,9 +258,6 @@
     <MissingClosureReturnType>
       <code><![CDATA[fn($c) => $colors->{$c}]]></code>
     </MissingClosureReturnType>
-    <MixedAssignment>
-      <code><![CDATA[$value]]></code>
-    </MixedAssignment>
     <MixedReturnTypeCoercion>
       <code><![CDATA[(array) $count]]></code>
       <code><![CDATA[array<string, int>]]></code>
@@ -272,11 +269,6 @@
       <code><![CDATA[$this->deck_color_str]]></code>
       <code><![CDATA[$this->deck_color_str]]></code>
       <code><![CDATA[$this->event_id]]></code>
-      <code><![CDATA[$this->event_id]]></code>
-      <code><![CDATA[$this->event_id]]></code>
-      <code><![CDATA[$this->id]]></code>
-      <code><![CDATA[$this->id]]></code>
-      <code><![CDATA[$this->playername]]></code>
       <code><![CDATA[$this->playername]]></code>
       <code><![CDATA[$this->playername]]></code>
       <code><![CDATA[$this->playername]]></code>
@@ -285,24 +277,9 @@
     <PossiblyNullOperand>
       <code><![CDATA[$this->archetype]]></code>
       <code><![CDATA[$this->eventname]]></code>
-      <code><![CDATA[$this->id]]></code>
-      <code><![CDATA[$this->id]]></code>
       <code><![CDATA[$this->playername]]></code>
       <code><![CDATA[$this->tribe]]></code>
     </PossiblyNullOperand>
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[$created_date]]></code>
-      <code><![CDATA[$deck_contents_cache]]></code>
-      <code><![CDATA[$deck_hash]]></code>
-      <code><![CDATA[$event_id]]></code>
-      <code><![CDATA[$eventname]]></code>
-      <code><![CDATA[$id]]></code>
-      <code><![CDATA[$identical_decks]]></code>
-      <code><![CDATA[$sideboard_hash]]></code>
-      <code><![CDATA[$unparsed_cards]]></code>
-      <code><![CDATA[$unparsed_side]]></code>
-      <code><![CDATA[$whole_hash]]></code>
-    </PropertyNotSetInConstructor>
     <RedundantCastGivenDocblockType>
       <code><![CDATA[(int) $amt]]></code>
       <code><![CDATA[(int) $amt]]></code>
@@ -311,13 +288,7 @@
       <code><![CDATA[!$this->format]]></code>
       <code><![CDATA[$this->name]]></code>
       <code><![CDATA[empty($this->deck_color_str)]]></code>
-      <code><![CDATA[empty($this->playername)]]></code>
     </RiskyTruthyFalsyComparison>
-    <UninitializedProperty>
-      <code><![CDATA[$this->created_date]]></code>
-      <code><![CDATA[$this->eventname]]></code>
-      <code><![CDATA[$this->eventname]]></code>
-    </UninitializedProperty>
   </file>
   <file src="gatherling/Models/DeckCardDto.php">
     <MissingConstructor>
@@ -1670,7 +1641,6 @@
     </PropertyNotSetInConstructor>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[!$playerName]]></code>
-      <code><![CDATA[$aDeck->id]]></code>
       <code><![CDATA[$aDeck->name]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
@@ -1696,9 +1666,6 @@
     <PropertyNotSetInConstructor>
       <code><![CDATA[$deckErrorTable]]></code>
     </PropertyNotSetInConstructor>
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[!$deck->id]]></code>
-    </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/Views/Components/DeckTrophyCell.php">
     <RiskyTruthyFalsyComparison>
@@ -1854,7 +1821,6 @@
   </file>
   <file src="gatherling/Views/Components/RecentDecksDropMenu.php">
     <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$deck->id]]></code>
       <code><![CDATA[$deck->name]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
