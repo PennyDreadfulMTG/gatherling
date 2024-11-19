@@ -29,7 +29,7 @@ class Entry
         $params = ['event_id' => $event_id, 'player' => $playername];
         $entry = db()->selectOnlyOrNull($sql, EntryDto::class, $params);
         if ($entry == null) {
-            throw new NotFoundException('Entry for ' . $playername . ' in ' . $event_id . ' not found');
+            throw new NotFoundException('Entry for ' . $playername . ' in ' . $event_id . ' not found', 0, null, 'Entry', [$playername, $event_id]);
         }
         $this->medal = $entry->medal;
         $this->drop_round = $entry->drop_round;

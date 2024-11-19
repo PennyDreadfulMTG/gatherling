@@ -8,13 +8,27 @@ use Throwable;
 
 class NotFoundException extends BadRequestException
 {
-    public function __construct(string $message = "", int $code = 0, ?Throwable $previous = null)
-    {
+    /** @var list<int|string> */
+    public array $ids;
+
+    /** @param list<int|string|null> $ids */
+    public function __construct(
+        string $message,
+        int $code,
+        ?Throwable $previous,
+        public string $type,
+        array $ids
+    ) {
+        $this->ids = array_values(array_filter($ids, fn($id) => $id !== null));
         parent::__construct($message, $code, $previous, 404);
     }
 
     public function getUserMessage(): string
     {
-        return 'The requested resource was not found';
+        $msg = 'The requested ' . strtolower($this->type);
+        if ($this->ids !== []) {
+            $msg .= " (" . implode(', ', $this->ids) . ")";
+        }
+        return $msg . " was not found";
     }
 }

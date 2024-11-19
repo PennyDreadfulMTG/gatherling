@@ -96,7 +96,7 @@ function main(): never
             } elseif ($postMode === 'Update Deck') {
                 $deck = updateDeck($deck, post()->string('archetype'), post()->string('name'), post()->string('notes'), post()->string('contents', ''), post()->string('sideboard', ''));
                 if ($deck->id === null) {
-                    throw new NotFoundException('Trying to update a deck with null id, which is not possible');
+                    throw new InvalidArgumentException('Trying to update a deck with null id, which is not possible');
                 }
                 $deck = new Deck($deck->id); // had to do this to get the constructor to run, otherwise errors weren't loading
                 if ($deck->isValid()) {

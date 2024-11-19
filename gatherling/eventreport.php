@@ -16,7 +16,7 @@ require_once 'lib.php';
 function main(): never
 {
     $eventName = get()->optionalString('event') ?? get()->optionalString('name');
-    if ($eventName && Event::exists($eventName)) {
+    if ($eventName !== null && Event::exists($eventName)) {
         $event = new Event($eventName);
         $notYetStarted = db()->bool('SELECT `start` > NOW() AS okay FROM events WHERE `name` = :name', ['name' => $event->name]);
         $canPrereg = $event->prereg_allowed && $notYetStarted;

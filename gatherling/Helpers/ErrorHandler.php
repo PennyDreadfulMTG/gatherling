@@ -6,6 +6,8 @@ namespace Gatherling\Helpers;
 
 use Gatherling\Exceptions\BadRequestException;
 use Gatherling\Exceptions\GatherlingException;
+use Gatherling\Exceptions\NotFoundException;
+use Gatherling\Exceptions\NotFoundInDatabaseException;
 use Gatherling\Views\Pages\Error;
 use Throwable;
 
@@ -14,6 +16,11 @@ class ErrorHandler
     public function handle(Throwable $e): never
     {
         $requestId = Request::getRequestId();
+
+        if ($e instanceof NotFoundInDatabaseException) {
+            // BAKERT this is weak but it's a start
+            $e = new NotFoundException($e->getMessage(), $e->getCode(), $e, $e->type, $e->ids);
+        }
 
         $message = (string)$e;
 

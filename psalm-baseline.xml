@@ -1767,7 +1767,6 @@
       <code><![CDATA[$rows]]></code>
     </PropertyNotSetInConstructor>
     <RiskyTruthyFalsyComparison>
-      <code><![CDATA[!$opp]]></code>
       <code><![CDATA[$losses]]></code>
       <code><![CDATA[$wins]]></code>
     </RiskyTruthyFalsyComparison>
@@ -1960,14 +1959,6 @@
       <code><![CDATA[!$letter]]></code>
       <code><![CDATA[!$opp]]></code>
     </RiskyTruthyFalsyComparison>
-  </file>
-  <file src="gatherling/Views/Components/SymbolTable.php">
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[$symbols]]></code>
-    </PropertyNotSetInConstructor>
-    <UninitializedProperty>
-      <code><![CDATA[$this->symbols]]></code>
-    </UninitializedProperty>
   </file>
   <file src="gatherling/Views/Components/TimeZoneDropMenu.php">
     <RiskyTruthyFalsyComparison>
@@ -2397,11 +2388,6 @@
     </RiskyCast>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[Player::loginName()]]></code>
-    </RiskyTruthyFalsyComparison>
-  </file>
-  <file src="gatherling/eventreport.php">
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$eventName]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/forgot.php">

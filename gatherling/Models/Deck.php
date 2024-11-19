@@ -424,7 +424,7 @@ class Deck
             $affectedRows = db()->modify($sql, $params);
             if ($affectedRows != 1) {
                 db()->rollback($transactionName);
-                throw new NotFoundException('Entry for ' . $this->playername . ' in ' . $this->eventname . ' not found');
+                throw new NotFoundException('Entry for ' . $this->playername . ' in ' . $this->eventname . ' not found', 0, null, 'Entry', [$this->playername, $this->eventname]);
             }
         } else {
             $sql = 'UPDATE decks SET archetype = :archetype, name = :name, format = :format, tribe = :tribe, deck_colors = :deck_colors, notes = :notes WHERE id = :id';
