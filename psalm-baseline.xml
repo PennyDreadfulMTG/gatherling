@@ -2007,12 +2007,6 @@
     </PropertyNotSetInConstructor>
   </file>
   <file src="gatherling/Views/Pages/MatchList.php">
-    <PossiblyFalseOperand>
-      <code><![CDATA[$losses]]></code>
-      <code><![CDATA[$losses]]></code>
-      <code><![CDATA[$wins]]></code>
-      <code><![CDATA[$wins]]></code>
-    </PossiblyFalseOperand>
     <PossiblyNullArgument>
       <code><![CDATA[$match->playera]]></code>
       <code><![CDATA[$match->playera]]></code>
@@ -2027,12 +2021,8 @@
       <code><![CDATA[$rounds]]></code>
     </PossiblyNullArrayOffset>
     <PossiblyNullOperand>
-      <code><![CDATA[$losses]]></code>
-      <code><![CDATA[$losses]]></code>
       <code><![CDATA[$match->round]]></code>
       <code><![CDATA[$rndAdd]]></code>
-      <code><![CDATA[$wins]]></code>
-      <code><![CDATA[$wins]]></code>
     </PossiblyNullOperand>
   </file>
   <file src="gatherling/Views/Pages/PlayerList.php">

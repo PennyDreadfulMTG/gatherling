@@ -33,7 +33,7 @@ class EntryListItem
 
     public function __construct(Entry $entry, int $numEntries, public bool $isTribal)
     {
-        // BAKERT !!!        $this->dropRound = $entry->drop_round;
+        $this->dropRound = $entry->drop_round;
         $this->eventName = $entry->event->name;
         $this->emailAddress = $entry->player->emailAddress;
         if ($entry->event->active == 1) {
@@ -59,7 +59,7 @@ class EntryListItem
             $this->createDeckLink = new CreateDeckLink($entry);
         }
         $this->invalidRegistration = $entry->deck != null && !$entry->deck->isValid();
-        $this->tribe = $isTribal && $entry->deck != null ? $entry->deck->tribe : '';
+        $this->tribe = $isTribal && $entry->deck !== null && $entry->deck->tribe !== null ? $entry->deck->tribe : '';
         $this->isSwiss = $entry->event->isSwiss();
         $this->hasStarted = $entry->event->hasStarted();
         $this->initialByes = $entry->initial_byes;
