@@ -8,6 +8,7 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Views\Components\ClientDropMenu;
 use Gatherling\Views\Components\TextInput;
+use Gatherling\Views\Components\MonthDropMenu;
 use Gatherling\Views\Components\NumDropMenu;
 use Gatherling\Views\Components\SelectInput;
 use Gatherling\Views\Components\StringField;
@@ -27,8 +28,7 @@ class EventForm extends EventFrame
     /** @var list<array{text: string, link: string}> */
     public array $navLinks;
     public NumDropMenu $yearDropMenu;
-    /** @var array<string, mixed> */
-    public array $monthDropMenu;
+    public MonthDropMenu $monthDropMenu;
     public NumDropMenu $dayDropMenu;
     public TimeDropMenu $timeDropMenu;
     public SeriesDropMenu $seriesDropMenu;
@@ -93,7 +93,7 @@ class EventForm extends EventFrame
             $navLinks[] = $nextEvent->makeLinkArgs('Next');
         }
         $yearDropMenu = new NumDropMenu('year', '- Year -', (int) date('Y') + 1, $year, 2011);
-        $monthDropMenu = monthDropMenuArgs($month);
+        $monthDropMenu = new MonthDropMenu($month);
         $dayDropMenu = new NumDropMenu('day', '- Day- ', 31, $day, 1);
         $timeDropMenu = new TimeDropMenu('hour', $hour, $minutes);
 
@@ -191,32 +191,6 @@ function kValueSelectInput(int $kvalue): SelectInput
         '32' => 'Championship',
     ];
     return new SelectInput('K-Value', 'kvalue', $names, $kvalue);
-}
-
-/** @return array{name: string, default: string, options: array<int, array{isSelected: bool, value: int, text: string}>} */
-function monthDropMenuArgs(string|int $month): array
-{
-    if ($month === '') {
-        $month = -1;
-    }
-    $names = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December',
-    ];
-    $options = [];
-    for ($m = 1; $m <= 12; $m++) {
-        $options[] = [
-            'isSelected' => $month == $m,
-            'value'      => $m,
-            'text'       => $names[$m - 1],
-        ];
-    }
-
-    return [
-        'name'    => 'month',
-        'default' => '- Month -',
-        'options' => $options,
-    ];
 }
 
 /** @return array{name: string, default: string, options: list<array{isSelected: bool, value: string, text: string}>} */
