@@ -49,67 +49,7 @@
             </tr>
         {{/hasEntries}}
         {{#entries}}
-            <tr id="entry_row_{{player.name}}">
-                {{#canDrop}}
-                    <td class="c">
-                        <input type="checkbox" name="dropplayer[]" value="{{player.name}}">
-                    </td>
-                {{/canDrop}}
-                {{#canUndrop}}
-                    <td>
-                        &#x2690; {{dropRound}}
-                        <a href="{{ undropLink }}">(undrop)</a>
-                    </td>
-                {{/canUndrop}}
-                {{#medalSrc}}
-                    <td class="c">
-                        <img alt="Medal" src="{{medalSrc}}">
-                    </td>
-                {{/medalSrc}}
-                <td>
-                    {{^player.emailAddress}}
-                        {{#gameName}}{{> gameName}}{{/gameName}}
-                    {{/player.emailAddress}}
-                    {{#player.emailAddress}}
-                        <a class="emailPop" title="{{player.emailAddress}}">{{#gameName}}{{> gameName}}{{/gameName}}</a>
-                    {{/player.emailAddress}}
-                </td>
-                <td>
-                    {{#deckLink}}{{> deckLink}}{{/deckLink}}
-                    {{#createDeckLink}}{{> createDeckLink}}{{/createDeckLink}}
-                </td>
-                {{#format.tribal}}
-                    <td>
-                        {{tribe}}
-                    </td>
-                {{/format.tribal}}
-                <td class="c">
-                    {{#isSwiss}}
-                        {{#hasStarted}}
-                            {{initialByes}}
-                        {{/hasStarted}}
-                        {{#initialByeDropMenu}}
-                            {{> dropMenu}}
-                        {{/initialByeDropMenu}}
-                    {{/isSwiss}}
-                    {{#isSingleElim}}
-                        {{#hasStarted}}
-                            {{initialSeed}}
-                        {{/hasStarted}}
-                        {{#initialSeedDropMenu}}
-                            {{> dropMenu}}
-                        {{/initialSeedDropMenu}}
-                    {{/isSingleElim}}
-                </td>
-                <td class="c">
-                    {{#canDelete}}
-                        <input type="checkbox" name="delentries[]" value="{{player.name}}">
-                    {{/canDelete}}
-                    {{#notAllowed}}
-                        {{> notAllowed}}
-                    {{/notAllowed}}
-                </td>
-            </tr>
+            {{> entryListItem}}
         {{/entries}}
         {{#newEntry}}
             <tr id="row_new_entry">
