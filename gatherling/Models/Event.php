@@ -890,32 +890,34 @@ class Event
 
         $finalRounds = $this->finalrounds;
         $totalRounds = $this->mainrounds + $finalRounds;
+        // If this event only has main rounds then those are effectively the "final rounds".
+        if ($finalRounds === 0) {
+            $finalRounds = $this->mainrounds;
+        }
 
-        if ($finalRounds > 0) {
-            $finalMatches = $this->getRoundMatches($totalRounds);
-            if (!empty($finalMatches)) {
-                $finalMatch = $finalMatches[0];
-                $win = $finalMatch->getWinner();
-                $sec = $finalMatch->getLoser();
-            }
+        $finalMatches = $this->getRoundMatches($totalRounds);
+        if (!empty($finalMatches)) {
+            $finalMatch = $finalMatches[0];
+            $win = $finalMatch->getWinner();
+            $sec = $finalMatch->getLoser();
+        }
 
-            if ($finalRounds >= 2) {
-                $semiMatches = $this->getRoundMatches($totalRounds - 1);
-                foreach ($semiMatches as $match) {
-                    $loser = $match->getLoser();
-                    if ($loser !== null) {
-                        $t4[] = $loser;
-                    }
+        if ($finalRounds >= 2) {
+            $semiMatches = $this->getRoundMatches($totalRounds - 1);
+            foreach ($semiMatches as $match) {
+                $loser = $match->getLoser();
+                if ($loser !== null) {
+                    $t4[] = $loser;
                 }
             }
+        }
 
-            if ($finalRounds >= 3) {
-                $quarterMatches = $this->getRoundMatches($totalRounds - 2);
-                foreach ($quarterMatches as $match) {
-                    $loser = $match->getLoser();
-                    if ($loser !== null) {
-                        $t8[] = $loser;
-                    }
+        if ($finalRounds >= 3) {
+            $quarterMatches = $this->getRoundMatches($totalRounds - 2);
+            foreach ($quarterMatches as $match) {
+                $loser = $match->getLoser();
+                if ($loser !== null) {
+                    $t8[] = $loser;
                 }
             }
         }
