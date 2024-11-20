@@ -497,7 +497,7 @@ class Db
 
     /**
      * @param array<string, mixed> $params
-     * @return array{0: string, 1: array<string, mixed>}
+     * @return array{sql: string, params: array<string, mixed>}
      */
     private function expandArrayParams(string $sql, array $params): array
     {
@@ -520,7 +520,7 @@ class Db
                 $expandedParams[$key] = $value;
             }
         }
-        return [$sql, $expandedParams];
+        return ['sql' => $sql, 'params' => $expandedParams];
     }
 
     /** @param array<string, mixed> $params */
@@ -539,7 +539,7 @@ class Db
             logger()->warning('[DB] DDL statement issued within transaction, this may cause issues.');
         }
 
-        [$sql, $params] = $this->expandArrayParams($sql, $params);
+        ['sql' => $sql, 'params' => $params] = $this->expandArrayParams($sql, $params);
 
         try {
             $startTime = microtime(true);
