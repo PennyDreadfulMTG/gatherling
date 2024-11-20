@@ -999,15 +999,6 @@ class Event
         return null;
     }
 
-    /** @return array{link: string, text: string} */
-    public function makeLinkArgs(string $text): array
-    {
-        return [
-            'link' => 'event.php?name=' . rawurlencode($this->name),
-            'text' => $text,
-        ];
-    }
-
     public static function count(): int
     {
         return db()->int('SELECT COUNT(name) FROM events');
