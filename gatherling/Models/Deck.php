@@ -12,7 +12,7 @@ use function Gatherling\Helpers\db;
 
 class Deck
 {
-    public ?int $id;
+    public int $id;
     public ?string $name = null;
     public ?string $archetype = null;
     public ?string $notes = null;
@@ -25,8 +25,8 @@ class Deck
     /** @var array<string> */
     public array $errors = [];
     public ?string $playername = null; // Belongs to player through entries, now held in decks table
-    public ?string $eventname; // Belongs to event through entries
-    public ?int $event_id; // Belongs to event through entries
+    public ?string $eventname = null; // Belongs to event through entries
+    public ?int $event_id = null; // Belongs to event through entries
     public ?int $subeventid; // Belongs to event
     public ?string $format = null; // Belongs to event..  now held in decks table
     public ?string $tribe = null; // used only for tribal events
@@ -36,12 +36,12 @@ class Deck
     public ?string $sideboard_hash;
     public ?string $whole_hash;
     /** @var array<string, int> */
-    public array $unparsed_cards;
+    public array $unparsed_cards = [];
     /** @var array<string, int> */
-    public array $unparsed_side;
-    public ?string $deck_contents_cache;
+    public array $unparsed_side = [];
+    public ?string $deck_contents_cache = null;
     /** @var ?list<self> */
-    public ?array $identical_decks;
+    public ?array $identical_decks = null;
     public ?string $medal = null; // has a medal
     public bool $new; // is new
 
@@ -53,32 +53,35 @@ class Deck
             return;
         }
         $sql = '
-            SELECT
-                id, name, playername, archetype, format, tribe, notes, deck_hash,
-                sideboard_hash, whole_hash, created_date, deck_colors AS deck_color_str
-            FROM
-                decks d
-            WHERE
-                id = :id';
+            SELECT id, name, playername, archetype, format, tribe, notes, deck_hash,
+                   sideboard_hash, whole_hash, created_date, deck_colors AS deck_color_str
+              FROM decks d
+             WHERE id = :id';
         $deck = db()->selectOnlyOrNull($sql, DeckDto::class, ['id' => $id]);
-        if (!$deck) {
+        if ($deck === null) {
             $this->id = 0;
             $this->new = true;
             return;
         }
-        foreach (get_object_vars($deck) as $key => $value) {
-            $this->{$key} = $value;
-        }
+        $this->id = $deck->id;
+        $this->name = $deck->name;
+        $this->playername = $deck->playername;
+        $this->archetype = $deck->archetype;
+        $this->format = $deck->format;
+        $this->tribe = $deck->tribe;
+        $this->notes = $deck->notes;
+        $this->deck_hash = $deck->deck_hash;
+        $this->sideboard_hash = $deck->sideboard_hash;
+        $this->whole_hash = $deck->whole_hash;
+        $this->created_date = $deck->created_date;
+        $this->deck_color_str = $deck->deck_color_str;
         $this->new = false;
 
         if (empty($this->playername)) {
             $sql = '
-                SELECT
-                    p.name
-                FROM
-                    players p, entries e, decks d
-                WHERE
-                    p.name = e.player AND d.id = e.deck AND d.id = :id';
+                SELECT p.name
+                  FROM players p, entries e, decks d
+                 WHERE p.name = e.player AND d.id = e.deck AND d.id = :id';
             $this->playername = db()->optionalString($sql, ['id' => $id]);
         }
 
@@ -90,16 +93,10 @@ class Deck
 
         // Retrieve cards.
         $sql = '
-            SELECT
-                c.name, dc.qty, dc.issideboard
-            FROM
-                cards c, deckcontents dc, decks d
-            WHERE
-                d.id = dc.deck
-                AND c.id = dc.card
-                AND d.id = :id
-            ORDER BY
-                c.name';
+            SELECT c.name, dc.qty, dc.issideboard
+              FROM cards c, deckcontents dc, decks d
+             WHERE d.id = dc.deck AND c.id = dc.card AND d.id = :id
+          ORDER BY c.name';
         $cards = db()->select($sql, DeckCardDto::class, ['id' => $id]);
 
         $this->maindeck_cardcount = 0;
@@ -116,16 +113,11 @@ class Deck
 
         // Retrieve event
         $sql = '
-            SELECT
-                e.name, e.id
-            FROM
-                events e, entries n, decks d
-            WHERE
-                d.id = :id
-                AND d.id = n.deck
-                AND n.event_id = e.id';
+            SELECT e.name, e.id
+              FROM events e, entries n, decks d
+             WHERE d.id = :id AND d.id = n.deck AND n.event_id = e.id';
         $event = db()->selectOnlyOrNull($sql, DeckEventDto::class, ['id' => $id]);
-        if ($event) {
+        if ($event !== null) {
             $this->eventname = $event->name;
             $this->event_id = $event->id;
         }
@@ -137,14 +129,10 @@ class Deck
         // Find subevent id     - ignores sub-subevents like finals, which have the same name but different subevent id
         if (!is_null($this->eventname)) {
             $sql = '
-                SELECT
-                    events.format
-                FROM
-                    entries
-                INNER JOIN
-                    events ON entries.event_id = events.id
-                WHERE
-                    entries.deck = :id';
+                SELECT events.format
+                  FROM entries
+            INNER JOIN events ON entries.event_id = events.id
+                 WHERE entries.deck = :id';
             $this->format = db()->optionalString($sql, ['id' => $id]);
             $sql = 'SELECT MIN(id) FROM subevents WHERE parent = :eventname';
             $this->subeventid = db()->optionalInt($sql, ['eventname' => $this->eventname]);
@@ -176,6 +164,9 @@ class Deck
 
     public function getEntry(): Entry
     {
+        if ($this->event_id === null || $this->playername === null) {
+            throw new InvalidArgumentException('Cannot get entry for deck without event ID and playername');
+        }
         return new Entry($this->event_id, $this->playername);
     }
 
@@ -251,6 +242,9 @@ class Deck
 
     public function getEvent(): Event
     {
+        if ($this->event_id === null) {
+            throw new InvalidArgumentException('Cannot get event for deck without event ID');
+        }
         return new Event($this->event_id);
     }
 

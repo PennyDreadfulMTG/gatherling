@@ -18,7 +18,6 @@ class ErrorHandler
         $requestId = Request::getRequestId();
 
         if ($e instanceof NotFoundInDatabaseException) {
-            // BAKERT this is weak but it's a start
             $e = new NotFoundException($e->getMessage(), $e->getCode(), $e, $e->type, $e->ids);
         }
 

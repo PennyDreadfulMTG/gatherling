@@ -71,27 +71,7 @@ parameters:
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$deckID of method Gatherling\\\\Models\\\\Format\\:\\:isDeckCommanderLegal\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$deckID of method Gatherling\\\\Models\\\\Format\\:\\:isDeckTribalLegal\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$event_id of class Gatherling\\\\Models\\\\Entry constructor expects int, int\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
 			message: "#^Parameter \\#1 \\$event_id of static method Gatherling\\\\Models\\\\Entry\\:\\:findByEventAndPlayer\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, int\\|null given\\.$#"
 			count: 1
 			path: gatherling/Models/Deck.php
 
@@ -103,11 +83,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$string of function strtoupper expects string, string\\|null given\\.$#"
 			count: 2
-			path: gatherling/Models/Deck.php
-
-		-
-			message: "#^Parameter \\#2 \\$playername of class Gatherling\\\\Models\\\\Entry constructor expects string, string\\|null given\\.$#"
-			count: 1
 			path: gatherling/Models/Deck.php
 
 		-

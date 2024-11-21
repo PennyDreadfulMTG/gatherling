@@ -1,0 +1,17 @@
+{{#hasPendingEvents}}
+    <h2>Pending Events</h2>
+    <div class="event-grid">
+        {{#pendingEvents}}
+            {{> eventCard}}
+        {{/pendingEvents}}
+    </div>
+{{/hasPendingEvents}}
+
+{{#hasActiveEvents}}
+    <h2>Active Events</h2>
+    <div class="event-grid">
+        {{#activeEvents}}
+            {{> eventCard}}
+        {{/activeEvents}}
+    </div>
+{{/hasActiveEvents}}

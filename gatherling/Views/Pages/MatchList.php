@@ -6,10 +6,12 @@ namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
-use Gatherling\Models\Matchup;
 use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\RoundDropMenu;
+use Gatherling\Views\Components\PlayerByeMenu;
 use Gatherling\Views\Components\PlayerDropMenu;
+use Gatherling\Views\Components\ResultDropMenu;
+use Gatherling\Views\Components\UnverifiedPlayerCell;
 
 use function Gatherling\Helpers\getObjectVarsCamelCase;
 
@@ -24,11 +26,9 @@ class MatchList extends EventFrame
     public array $lastRound;
     public PlayerDropMenu $playerADropMenu;
     public PlayerDropMenu $playerBDropMenu;
-    /** @var array{name: string, default: string, options: array<int, array{value: string, text: string}>} */
-    public ?array $playerByeMenu;
+    public ?PlayerByeMenu $playerByeMenu;
     public ?RoundDropMenu $roundDropMenu;
-    /** @var array{name: string, default: string, options: array<int, array{value: string, text: string}>} */
-    public ?array $resultDropMenu;
+    public ?ResultDropMenu $resultDropMenu;
     public bool $isBeforeRoundTwo;
     public string $structureSummary;
     public bool $isLeague;
@@ -84,9 +84,9 @@ class MatchList extends EventFrame
 
             $isActiveUnverified = strcasecmp($match->verification, 'verified') != 0 && $event->finalized == 0;
             if ($isActiveUnverified) {
-                $matchInfo['unverifiedPlayerCellA'] = unverifiedPlayerCellArgs($event, $match, $playerA);
-                $matchInfo['resultDropMenu'] = resultDropMenuArgs('matchresult[]');
-                $matchInfo['unverifiedPlayerCellB'] = unverifiedPlayerCellArgs($event, $match, $playerB);
+                $matchInfo['unverifiedPlayerCellA'] = new UnverifiedPlayerCell($event, $match, $playerA);
+                $matchInfo['resultDropMenu'] = new ResultDropMenu('matchresult[]');
+                $matchInfo['unverifiedPlayerCellB'] = new UnverifiedPlayerCell($event, $match, $playerB);
             } else {
                 $playerAWins = $match->getPlayerWins($match->playera);
                 $playerBWins = $match->getPlayerWins($match->playerb);
@@ -112,10 +112,10 @@ class MatchList extends EventFrame
         $playerBDropMenu = new PlayerDropMenu($event, 'B');
         $playerByeMenu = $roundDropMenu = $resultDropMenu = null;
         if ($event->active) {
-            $playerByeMenu = playerByeMenuArgs($event);
+            $playerByeMenu = new PlayerByeMenu($event);
         } else {
             $roundDropMenu = new RoundDropMenu($event, $newMatchRound);
-            $resultDropMenu = resultDropMenuArgs('newmatchresult');
+            $resultDropMenu = new ResultDropMenu('newmatchresult');
         }
 
         $structure = $event->current_round > $event->mainrounds ? $event->finalstruct : $event->mainstruct;
@@ -134,70 +134,4 @@ class MatchList extends EventFrame
         $this->structureSummary = $event->structureSummary();
         $this->isLeague = $isLeague;
     }
-}
-
-/** @return array{name: string, default: string, options: array<int, array{value: string, text: string}>} */
-function playerByeMenuArgs(Event $event): array
-{
-    $playerNames = $event->getRegisteredPlayers(true);
-    $options = [];
-    foreach ($playerNames as $player) {
-        $options[] = [
-            'value' => $player,
-            'text'  => $player,
-        ];
-    }
-
-    return [
-        'name'    => 'newbyeplayer',
-        'default' => '- Bye Player -',
-        'options' => $options,
-    ];
-}
-
-/**
- * @param array<string, string> $extraOptions
- * @return array{name: string, default: string, options: array<int, array{value: string, text: string}>}
- */
-function resultDropMenuArgs(string $name, array $extraOptions = []): array
-{
-    $options = [
-        ['value' => '2-0', 'text' => '2-0'],
-        ['value' => '2-1', 'text' => '2-1'],
-        ['value' => '1-2', 'text' => '1-2'],
-        ['value' => '0-2', 'text' => '0-2'],
-        ['value' => 'D', 'text' => 'Draw'],
-
-    ];
-    foreach ($extraOptions as $value => $text) {
-        $options[] = ['value' => $value, 'text' => $text];
-    }
-
-    return [
-        'name'    => $name,
-        'default' => '- Result -',
-        'options' => $options,
-    ];
-}
-
-/** @return array<string, mixed> */
-function unverifiedPlayerCellArgs(Event $event, Matchup $match, Player $player): array
-{
-    $playerName = $player->name;
-    $wins = $match->getPlayerWins($playerName);
-    $losses = $match->getPlayerLosses($playerName);
-    $matchResult = ($wins + $losses > 0) ? ($wins > $losses ? 'W' : 'L') : null;
-
-    return [
-        'playerName'      => $playerName,
-        'displayName'     => new GameName($player, $event->client),
-        'displayNameText' => new GameName($player, $event->client, false),
-        'hasDropped'      => $match->playerDropped($playerName),
-        'hasGames'        => ($wins + $losses > 0),
-        'matchResult'     => $matchResult,
-        'isDraw'          => ($wins == 1 && $losses == 1),
-        'verification'    => $match->verification,
-        'wins'            => $wins,
-        'losses'          => $losses,
-    ];
 }

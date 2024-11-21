@@ -8,6 +8,7 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Views\Components\ClientDropMenu;
 use Gatherling\Views\Components\TextInput;
+use Gatherling\Views\Components\MonthDropMenu;
 use Gatherling\Views\Components\NumDropMenu;
 use Gatherling\Views\Components\SelectInput;
 use Gatherling\Views\Components\StringField;
@@ -16,8 +17,9 @@ use Gatherling\Views\Components\RoundDropMenu;
 use Gatherling\Views\Components\FormatDropMenu;
 use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\SeriesDropMenu;
+use Gatherling\Views\Components\StructDropMenu;
 use Gatherling\Views\Components\TimeDropMenu;
-
+use Gatherling\Views\Components\TrophyField;
 use function Gatherling\Helpers\getObjectVarsCamelCase;
 use function Safe\preg_match;
 
@@ -27,8 +29,7 @@ class EventForm extends EventFrame
     /** @var list<array{text: string, link: string}> */
     public array $navLinks;
     public NumDropMenu $yearDropMenu;
-    /** @var array<string, mixed> */
-    public array $monthDropMenu;
+    public MonthDropMenu $monthDropMenu;
     public NumDropMenu $dayDropMenu;
     public TimeDropMenu $timeDropMenu;
     public SeriesDropMenu $seriesDropMenu;
@@ -42,11 +43,9 @@ class EventForm extends EventFrame
     public TextInput $metagameUrlField;
     public TextInput $reportUrlField;
     public NumDropMenu $mainRoundsNumDropMenu;
-    /** @var array<string, mixed> */
-    public array $mainRoundsStructDropMenu;
+    public StructDropMenu $mainRoundsStructDropMenu;
     public NumDropMenu $finalRoundsNumDropMenu;
-    /** @var array<string, mixed> */
-    public array $finalRoundsStructDropMenu;
+    public StructDropMenu $finalRoundsStructDropMenu;
     public CheckboxInput $preregistrationAllowedCheckbox;
     public TextInput $lateEntryLimitField;
     public CheckboxInput $playerReportedResultsCheckbox;
@@ -59,8 +58,7 @@ class EventForm extends EventFrame
     public ?CheckboxInput $finalizeEventCheckbox;
     public ?CheckboxInput $eventActiveCheckbox;
     public ?RoundDropMenu $currentRoundDropMenu;
-    /** @var ?array<string, mixed> */
-    public ?array $trophyField;
+    public ?TrophyField $trophyField;
     public bool $showCreateNextEvent;
     public bool $showCreateNextSeason;
 
@@ -86,14 +84,20 @@ class EventForm extends EventFrame
         $navLinks = [];
         $prevEvent = $event->findPrev();
         if ($prevEvent) {
-            $navLinks[] = $prevEvent->makeLinkArgs('Previous');
+            $navLinks[] = [
+                'link' => 'event.php?name=' . rawurlencode($prevEvent->name),
+                'text' => 'Previous',
+            ];
         }
         $nextEvent = $event->findNext();
         if ($nextEvent) {
-            $navLinks[] = $nextEvent->makeLinkArgs('Next');
+            $navLinks[] = [
+                'link' => 'event.php?name=' . rawurlencode($nextEvent->name),
+                'text' => 'Next',
+            ];
         }
         $yearDropMenu = new NumDropMenu('year', '- Year -', (int) date('Y') + 1, $year, 2011);
-        $monthDropMenu = monthDropMenuArgs($month);
+        $monthDropMenu = new MonthDropMenu($month);
         $dayDropMenu = new NumDropMenu('day', '- Day- ', 31, $day, 1);
         $timeDropMenu = new TimeDropMenu('hour', $hour, $minutes);
 
@@ -115,9 +119,9 @@ class EventForm extends EventFrame
         $metagameUrlField = new TextInput('Metagame URL', 'metaurl', $event->metaurl, 60);
         $reportUrlField = new TextInput('Report URL', 'reporturl', $event->reporturl, 60);
         $mainRoundsNumDropMenu = new NumDropMenu('mainrounds', '- No. of Rounds -', 10, $event->mainrounds, 1);
-        $mainRoundsStructDropMenu = structDropMenuArgs('mainstruct', $event->mainstruct);
+        $mainRoundsStructDropMenu = new StructDropMenu('mainstruct', $event->mainstruct);
         $finalRoundsNumDropMenu = new NumDropMenu('finalrounds', '- No. of Rounds -', 10, $event->finalrounds, 0);
-        $finalRoundsStructDropMenu = structDropMenuArgs('finalstruct', $event->finalstruct);
+        $finalRoundsStructDropMenu = new StructDropMenu('finalstruct', $event->finalstruct);
         $preregistrationAllowedCheckbox = new CheckboxInput('Allow Pre-Registration', 'prereg_allowed', (bool) $event->prereg_allowed, null);
         $lateEntryLimitField = new TextInput('Late Entry Limit', 'late_entry_limit', $event->late_entry_limit, 4, 'The event host may still add players after this round.');
         $playerReportedResultsCheckbox = new CheckboxInput('Allow Players to Report Results', 'player_reportable', (bool) $event->player_reportable);
@@ -134,7 +138,7 @@ class EventForm extends EventFrame
             $finalizeEventCheckbox = new CheckboxInput('Finalize Event', 'finalized', (bool) $event->finalized);
             $eventActiveCheckbox = new CheckboxInput('Event Active', 'active', (bool) $event->active);
             $currentRoundDropMenu = new RoundDropMenu($event, $event->current_round, 0);
-            $trophyField = trophyFieldArgs($event);
+            $trophyField = new TrophyField($event);
             $nextEventName = sprintf('%s %d.%02d', $event->series, $event->season, $event->number + 1);
             $nextSeasonName = sprintf('%s %d.%02d', $event->series, $event->season + 1, 1);
             $showCreateNextEvent = !Event::exists($nextEventName);
@@ -191,62 +195,4 @@ function kValueSelectInput(int $kvalue): SelectInput
         '32' => 'Championship',
     ];
     return new SelectInput('K-Value', 'kvalue', $names, $kvalue);
-}
-
-/** @return array{name: string, default: string, options: array<int, array{isSelected: bool, value: int, text: string}>} */
-function monthDropMenuArgs(string|int $month): array
-{
-    if ($month === '') {
-        $month = -1;
-    }
-    $names = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December',
-    ];
-    $options = [];
-    for ($m = 1; $m <= 12; $m++) {
-        $options[] = [
-            'isSelected' => $month == $m,
-            'value'      => $m,
-            'text'       => $names[$m - 1],
-        ];
-    }
-
-    return [
-        'name'    => 'month',
-        'default' => '- Month -',
-        'options' => $options,
-    ];
-}
-
-/** @return array{name: string, default: string, options: list<array{isSelected: bool, value: string, text: string}>} */
-function structDropMenuArgs(string $field, string $def): array
-{
-    $names = ['Swiss', 'Single Elimination', 'League', 'League Match'];
-    if ($def == 'Swiss (Blossom)') {
-        $def = 'Swiss';
-    }
-    $options = [];
-    foreach ($names as $name) {
-        $options[] = [
-            'value'      => $name,
-            'text'       => $name,
-            'isSelected' => $def === $name,
-        ];
-    }
-
-    return [
-        'name'    => $field,
-        'default' => '- Structure -',
-        'options' => $options,
-    ];
-}
-
-/** @return array{hasTrophy: bool, trophySrc: string} */
-function trophyFieldArgs(Event $event): array
-{
-    return [
-        'hasTrophy' => (bool) $event->hastrophy,
-        'trophySrc' => 'displayTrophy.php?event=' . rawurlencode($event->name),
-    ];
 }

@@ -467,8 +467,8 @@ class Event
     }
 
     /**
-     * @param array{0?: ?string, 1?: ?string} $t4
-     * @param array{0?: ?string, 1?: ?string, 2?: ?string, 3?: ?string} $t8
+     * @param list<string> $t4
+     * @param list<string> $t8
      */
     public function setFinalists(string $win, ?string $sec, array $t4, array $t8): void
     {
@@ -890,32 +890,34 @@ class Event
 
         $finalRounds = $this->finalrounds;
         $totalRounds = $this->mainrounds + $finalRounds;
+        // If this event only has main rounds then those are effectively the "final rounds".
+        if ($finalRounds === 0) {
+            $finalRounds = $this->mainrounds;
+        }
 
-        if ($finalRounds > 0) {
-            $finalMatches = $this->getRoundMatches($totalRounds);
-            if (!empty($finalMatches)) {
-                $finalMatch = $finalMatches[0];
-                $win = $finalMatch->getWinner();
-                $sec = $finalMatch->getLoser();
-            }
+        $finalMatches = $this->getRoundMatches($totalRounds);
+        if (!empty($finalMatches)) {
+            $finalMatch = $finalMatches[0];
+            $win = $finalMatch->getWinner();
+            $sec = $finalMatch->getLoser();
+        }
 
-            if ($finalRounds >= 2) {
-                $semiMatches = $this->getRoundMatches($totalRounds - 1);
-                foreach ($semiMatches as $match) {
-                    $loser = $match->getLoser();
-                    if ($loser !== null) {
-                        $t4[] = $loser;
-                    }
+        if ($finalRounds >= 2) {
+            $semiMatches = $this->getRoundMatches($totalRounds - 1);
+            foreach ($semiMatches as $match) {
+                $loser = $match->getLoser();
+                if ($loser !== null) {
+                    $t4[] = $loser;
                 }
             }
+        }
 
-            if ($finalRounds >= 3) {
-                $quarterMatches = $this->getRoundMatches($totalRounds - 2);
-                foreach ($quarterMatches as $match) {
-                    $loser = $match->getLoser();
-                    if ($loser !== null) {
-                        $t8[] = $loser;
-                    }
+        if ($finalRounds >= 3) {
+            $quarterMatches = $this->getRoundMatches($totalRounds - 2);
+            foreach ($quarterMatches as $match) {
+                $loser = $match->getLoser();
+                if ($loser !== null) {
+                    $t8[] = $loser;
                 }
             }
         }
@@ -995,15 +997,6 @@ class Event
             return new self($event_name);
         }
         return null;
-    }
-
-    /** @return array{link: string, text: string} */
-    public function makeLinkArgs(string $text): array
-    {
-        return [
-            'link' => 'event.php?name=' . rawurlencode($this->name),
-            'text' => $text,
-        ];
     }
 
     public static function count(): int
@@ -1645,10 +1638,10 @@ class Event
 
         $t8 = $t4 = [];
         if ($medalCount >= 8) {
-            $t8 = array_map(fn($i) => $players[$i]->player, [4, 5, 6, 7]);
+            $t8 = array_values(array_filter(array_map(fn($i) => $players[$i]->player ?? null, [4, 5, 6, 7])));
         }
         if ($medalCount >= 4) {
-            $t4 = array_map(fn($i) => $players[$i]->player, [2, 3]);
+            $t4 = array_values(array_filter(array_map(fn($i) => $players[$i]->player ?? null, [2, 3])));
         }
         $sec = $players[1]->player ?? null;
         $win = $players[0]->player;

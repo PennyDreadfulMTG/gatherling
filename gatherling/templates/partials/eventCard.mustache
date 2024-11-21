@@ -1,0 +1,38 @@
+<div class="event-card">
+    <div class="card-header">
+        <div class="title-section">
+            <a href="{{link}}"><h3>{{name}}</h3></a>
+            <div>
+                <a class="event-type" href="{{settingsLink}}">
+                    {{#structureIcon}}{{> icon}}{{/structureIcon}}
+                    {{structureSummary}}
+                </a>
+            </div>
+        </div>
+        <div>
+            <a class="player-count" href="{{registrationLink}}">
+                {{#playersIcon}}{{> icon}}{{/playersIcon}}
+                <span>{{players}}</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="round-status">
+        {{#active}}
+            <a href="{{matchesLink}}">Round {{currentRound}}</a>
+            <a href="{{standingsLink}}" class="event-action">
+                View Standings
+                {{#standingsIcon}}{{> icon}}{{/standingsIcon}}
+            </a>
+        {{/active}}
+        {{^active}}
+            <a href="{{settingsLink}}" class="event-action">
+                {{#startTime}}{{> time}}{{/startTime}}
+            </a>
+            <a href="{{registrationLink}}" class="event-action">
+                Start Event
+                {{#standingsIcon}}{{> icon}}{{/standingsIcon}}
+            </a>
+        {{/active}}
+    </div>
+</div>

@@ -1,0 +1,61 @@
+<tr id="entry_row_{{player.name}}">
+    {{#canDrop}}
+        <td class="c">
+            <input type="checkbox" name="dropplayer[]" value="{{player.name}}">
+        </td>
+    {{/canDrop}}
+    {{#canUndrop}}
+        <td>
+            &#x2690; {{dropRound}}
+            <a href="{{ undropLink }}">(undrop)</a>
+        </td>
+    {{/canUndrop}}
+    {{#medalSrc}}
+        <td class="c">
+            <img alt="Medal" src="{{medalSrc}}">
+        </td>
+    {{/medalSrc}}
+    <td>
+        {{^emailAddress}}
+            {{#gameName}}{{> gameName}}{{/gameName}}
+        {{/emailAddress}}
+        {{#emailAddress}}
+            <a class="emailPop" title="{{player.emailAddress}}">{{#gameName}}{{> gameName}}{{/gameName}}</a>
+        {{/emailAddress}}
+    </td>
+    <td>
+        {{#deckLink}}{{> deckLink}}{{/deckLink}}
+        {{#createDeckLink}}{{> createDeckLink}}{{/createDeckLink}}
+    </td>
+    {{#isTribal}}
+        <td>
+            {{tribe}}
+        </td>
+    {{/isTribal}}
+    <td class="c">
+        {{#isSwiss}}
+            {{#hasStarted}}
+                {{initialByes}}
+            {{/hasStarted}}
+            {{#initialByeDropMenu}}
+                {{> dropMenu}}
+            {{/initialByeDropMenu}}
+        {{/isSwiss}}
+        {{#isSingleElim}}
+            {{#hasStarted}}
+                {{initialSeed}}
+            {{/hasStarted}}
+            {{#initialSeedDropMenu}}
+                {{> dropMenu}}
+            {{/initialSeedDropMenu}}
+        {{/isSingleElim}}
+    </td>
+    <td class="c">
+        {{#canDelete}}
+            <input type="checkbox" name="delentries[]" value="{{player.name}}">
+        {{/canDelete}}
+        {{#notAllowed}}
+            {{> notAllowed}}
+        {{/notAllowed}}
+    </td>
+</tr>
