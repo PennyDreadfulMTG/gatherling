@@ -528,8 +528,8 @@ function updateMedals(): void
 
     $winner = post()->string('newmatchplayer1');
     $second = post()->optionalString('newmatchplayer2');
-    $t4 = [post()->optionalString('newmatchplayer3'), post()->optionalString('newmatchplayer4')];
-    $t8 = [post()->optionalString('newmatchplayer5'), post()->optionalString('newmatchplayer6'), post()->optionalString('newmatchplayer7'), post()->optionalString('newmatchplayer8')];
+    $t4 = array_values(array_filter([post()->optionalString('newmatchplayer3'), post()->optionalString('newmatchplayer4')]));
+    $t8 = array_values(array_filter([post()->optionalString('newmatchplayer5'), post()->optionalString('newmatchplayer6'), post()->optionalString('newmatchplayer7'), post()->optionalString('newmatchplayer8')]));
 
     $event->setFinalists($winner, $second, $t4, $t8);
 }

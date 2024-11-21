@@ -1638,10 +1638,10 @@ class Event
 
         $t8 = $t4 = [];
         if ($medalCount >= 8) {
-            $t8 = array_map(fn($i) => $players[$i]->player, [4, 5, 6, 7]);
+            $t8 = array_values(array_filter(array_map(fn($i) => $players[$i]->player ?? null, [4, 5, 6, 7])));
         }
         if ($medalCount >= 4) {
-            $t4 = array_map(fn($i) => $players[$i]->player, [2, 3]);
+            $t4 = array_values(array_filter(array_map(fn($i) => $players[$i]->player ?? null, [2, 3])));
         }
         $sec = $players[1]->player ?? null;
         $win = $players[0]->player;
