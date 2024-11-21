@@ -6,10 +6,7 @@ namespace Gatherling\Views\Components;
 
 class ResultDropMenu extends DropMenu
 {
-    /**
-     * @param array<string, string> $extraOptions
-     * @return array{name: string, default: string, options: array<int, array{value: string, text: string}>}
-     */
+    /** @param array<string, string> $extraOptions */
     public function __construct(string $name, array $extraOptions = [])
     {
         $options = [

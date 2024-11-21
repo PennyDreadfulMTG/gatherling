@@ -5,9 +5,9 @@
         </form>
     </div>
 {{/hasPlayerSeries}}
-{{#hostActiveEvents}}
-    {{> hostActiveEvents}}
-{{/hostActiveEvents}}
+{{#hostEvents}}
+    {{> hostEvents}}
+{{/hostEvents}}
 <h2>Filter Events</h2>
 <form action="event.php" method="get">
     <table class="form">
@@ -45,39 +45,43 @@
         </tr>
     </table>
 </form>
-<h2>All Events</h2>
-<table cellpadding="3">
+<h2>Upcoming Events</h2>
+<table>
     <tr>
         <td><b>Event</b></td>
-        <td><b>Format</b></td>
-        <td><b>K-Value</b></td>
         <td class="c"><b>Players</b></td>
-        <td><b>Host(s)</b></td>
-        <td class="c"><b>Finalized</b></td>
     </tr>
-    {{#events}}
+    {{#upcomingEvents}}
         <tr>
-            <td>{{#isOngoing}}* {{/isOngoing}}<a href="{{link}}">{{name}}</a></td>
-            <td>{{format}}</td>
-            <td>{{kvalueDisplay}}</td>
+            <td><a href="{{link}}">{{name}}</a></td>
             <td class="c">{{players}}</td>
-            <td>{{host}}{{#cohost}}/{{cohost}}{{/cohost}}</td>
-            <td class="c">{{#finalized}}&#x2714;{{/finalized}}</td>
         </tr>
-    {{/events}}
-    {{#hasMore}}
-        <tr>
-            <td colspan="5" width="500">&nbsp;</td>
-        </tr>
-        <tr>
-            <td colspan="5" class="c">
-                <i>This list only shows the 100 most recent results.
-                Please use the filters at the top of this page to find older
-                results.</i>
-            </td>
-        </tr>
-    {{/hasMore}}
+    {{/upcomingEvents}}
     <tr>
-        <td colspan="5" width="500">&nbsp;</td>
+        <td colspan="2">&nbsp;</td>
     </tr>
 </table>
+
+<h2>Past Events</h2>
+<table>
+    <tr>
+        <td><b>Event</b></td>
+        <td class="c"><b>Players</b></td>
+    </tr>
+    {{#pastEvents}}
+        <tr>
+        <!-- BAKERT scratch host, cohost, isOngoging, kvalueDisplay, format, spllit itnno two buckets -->
+            <td><a href="{{link}}">{{name}}</a></td>
+            <td class="c">{{players}}</td>
+        </tr>
+    {{/pastEvents}}
+    <tr>
+        <td colspan="2">&nbsp;</td>
+    </tr>
+</table>
+
+{{#hasMore}}
+    <p><i>This list only shows the 100 most recent results.
+    Please use the filters at the top of this page to find older
+    results.</i></p>
+{{/hasMore}}

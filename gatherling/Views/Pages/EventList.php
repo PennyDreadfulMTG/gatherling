@@ -8,9 +8,10 @@ use Gatherling\Models\Event;
 use Gatherling\Models\HostedEventDto;
 use Gatherling\Models\Player;
 use Gatherling\Views\Components\FormatDropMenu;
-use Gatherling\Views\Components\HostActiveEvents;
+use Gatherling\Views\Components\HostEvents;
 use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\SeriesDropMenu;
+use Gatherling\Views\Components\Time;
 
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\get;
@@ -18,13 +19,15 @@ use function Safe\strtotime;
 
 class EventList extends Page
 {
-    public ?HostActiveEvents $hostActiveEvents;
+    public ?HostEvents $hostEvents;
     public FormatDropMenu $formatDropMenu;
     public SeriesDropMenu $seriesDropMenu;
     public SeasonDropMenu $seasonDropMenu;
     public bool $hasPlayerSeries;
     /** @var list<array{name: string, format: string, players: int, host: string, start: string, active: int, finalized: int, cohost: string, series: string, kvalueDisplay: string, link: string, isOngoing: bool, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string}> */
-    public array $events = [];
+    public array $upcomingEvents;
+    /** @var list<array{name: string, format: string, players: int, host: string, start: string, active: int, finalized: int, cohost: string, series: string, kvalueDisplay: string, link: string, isOngoing: bool, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string}> */
+    public array $pastEvents;
     public bool $hasMore;
 
     public function __construct(string $seriesName, string $format, ?int $season)
@@ -44,7 +47,7 @@ class EventList extends Page
             32 => 'Championship',
         ];
 
-        $activeEvents = $seriesShown = [];
+        $pendingEvents = $activeEvents = $upcomingEvents = $pastEvents = $seriesShown = [];
         foreach ($events as $event) {
             $seriesShown[] = $event->series;
             $baseLink = 'event.php?name=' . rawurlencode($event->name) . '&view=';
@@ -68,11 +71,18 @@ class EventList extends Page
                 'standingsLink' => "{$baseLink}standings",
                 'structureSummary' => (new Event($event->name))->structureSummary(),
             ];
-            $this->events[] = $eventInfo;
-            if ($event->active == 1 || (!$event->finalized && strtotime($event->start) <= strtotime('+1 day'))) {
+            if (!$event->active && !$event->finalized && strtotime($event->start) <= strtotime('+1 hour')) {
+                $pendingEvents[] = $eventInfo;
+            } elseif ($event->active == 1) {
                 $activeEvents[] = $eventInfo;
+            } elseif (strtotime($event->start) > strtotime('+1 hour')) {
+                $upcomingEvents[] = $eventInfo;
+            } else {
+                $pastEvents[] = $eventInfo;
             }
         }
+        $this->upcomingEvents = array_reverse($upcomingEvents);
+        $this->pastEvents = $pastEvents;
 
         if ($seriesName) {
             $seriesShown = $playerSeries;
@@ -80,7 +90,7 @@ class EventList extends Page
             $seriesShown = array_values(array_unique($seriesShown));
         }
 
-        $this->hostActiveEvents = count($activeEvents) > 0 ? new HostActiveEvents($activeEvents) : null;
+        $this->hostEvents = new HostEvents($pendingEvents, $activeEvents);
         $this->formatDropMenu = new FormatDropMenu(get()->optionalString('format'), true);
         $this->seriesDropMenu = new SeriesDropMenu($seriesName, 'All', $seriesShown);
         $this->seasonDropMenu = new SeasonDropMenu($season, 'All');
@@ -114,7 +124,7 @@ function queryEvents(Player $player, array $playerSeries, string $seriesName, st
         $sql .= ' AND e.season = :season';
         $params['season'] = $season;
     }
-    $sql .= ' GROUP BY e.name ORDER BY e.finalized, e.start DESC LIMIT 100';
+    $sql .= ' GROUP BY e.name ORDER BY e.start DESC LIMIT 100';
 
     return db()->select($sql, HostedEventDto::class, $params);
 }

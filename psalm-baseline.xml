@@ -374,10 +374,6 @@
     <DocblockTypeContradiction>
       <code><![CDATA[$players[$counter] == null]]></code>
     </DocblockTypeContradiction>
-    <InvalidArgument>
-      <code><![CDATA[$t4]]></code>
-      <code><![CDATA[$t8]]></code>
-    </InvalidArgument>
     <MixedArgument>
       <code><![CDATA[$activePlayers[$i]['player']]]></code>
       <code><![CDATA[$activePlayers[$pairing[$i]]['player']]]></code>
