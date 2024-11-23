@@ -46,16 +46,16 @@ class FullMetagame extends Component
             $players[] = $info;
         }
         $sql = '
-            CREATE TEMPORARY TABLE meta
-                (
-                    player VARCHAR(40),
-                    deckname VARCHAR(120),
-                    archetype VARCHAR(20),
-                    colors VARCHAR(10),
-                    medal VARCHAR(10),
-                    id BIGINT UNSIGNED,
-                    srtordr TINYINT UNSIGNED DEFAULT 0
-                )';
+            CREATE TEMPORARY TABLE meta (
+                player    VARCHAR(40),
+                deckname  VARCHAR(120),
+                archetype VARCHAR(20),
+                colors    VARCHAR(10),
+                medal     VARCHAR(10),
+                id        BIGINT UNSIGNED,
+                srtordr   TINYINT UNSIGNED DEFAULT 0
+            )
+            CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
         db()->execute($sql);
         $sql = '
             INSERT INTO meta
