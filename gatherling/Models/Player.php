@@ -230,6 +230,9 @@ class Player
 
     public static function createByName(string $playername): self
     {
+        if (strlen($playername) > 40) {
+            throw new ValidationException('Username too long (must be less than 40 characters)');
+        }
         $sql = 'INSERT INTO players (name) VALUES (:player_name)';
         $params = ['player_name' => $playername];
         db()->execute($sql, $params);

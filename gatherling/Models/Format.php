@@ -1227,7 +1227,10 @@ class Format
      */
     private function getCurrentLegalityOfCards(array $cards): array
     {
-        $sql = "CREATE TEMPORARY TABLE input_cards (original_name VARCHAR(160))";
+        $sql = '
+            CREATE TEMPORARY TABLE input_cards (
+                original_name VARCHAR(160)
+            ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
         db()->execute($sql);
 
         $placeholders = $params = [];
