@@ -24,7 +24,7 @@ class Series
     public array $bannedplayers;
     public ?string $mtgo_room;
 
-    public ?string $this_season_format;
+    public ?string $this_season_format = null;
     public ?string $this_season_master_link = null;
     public int $this_season_season;
 
