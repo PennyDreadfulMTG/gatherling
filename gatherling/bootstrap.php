@@ -24,8 +24,13 @@ if (file_exists(__DIR__ . '/config.php')) {
 $CONFIG['GIT_HASH'] = null;
 if (file_exists('../.git/HEAD')) {
     $branch = trim(substr(file_get_contents('../.git/HEAD'), 5));
-    if ($hash = file_get_contents(sprintf('../.git/%s', $branch))) {
-        $CONFIG['GIT_HASH'] = $hash;
+    $hash_file = sprintf('../.git/%s', $branch);
+    if (file_exists($hash_file)) {
+    // On a branch, get the hash
+        $CONFIG['GIT_HASH'] = file_get_contents($hash_file);
+    } else {
+        // On a detached HEAD, just use the branch name
+        $CONFIG['GIT_HASH'] = $branch;
     }
 }
 

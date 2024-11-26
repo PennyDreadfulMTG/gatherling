@@ -11,6 +11,7 @@ class EntryListItem
 {
     public int $dropRound;
     public string $eventName;
+    public string $playerName;
     public ?string $emailAddress;
     public bool $canDrop = false;
     public bool $canUndrop = false;
@@ -35,6 +36,7 @@ class EntryListItem
     {
         $this->dropRound = $entry->drop_round;
         $this->eventName = $entry->event->name;
+        $this->playerName = $entry->player->name;
         $this->emailAddress = $entry->player->emailAddress;
         if ($entry->event->active == 1) {
             $playerActive = Standings::playerActive($entry->event->name, $entry->player->name);

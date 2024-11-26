@@ -1,7 +1,7 @@
-<tr id="entry_row_{{player.name}}">
+<tr id="entry_row_{{playerName}}">
     {{#canDrop}}
         <td class="c">
-            <input type="checkbox" name="dropplayer[]" value="{{player.name}}">
+            <input type="checkbox" name="dropplayer[]" value="{{playerName}}">
         </td>
     {{/canDrop}}
     {{#canUndrop}}
@@ -20,7 +20,7 @@
             {{#gameName}}{{> gameName}}{{/gameName}}
         {{/emailAddress}}
         {{#emailAddress}}
-            <a class="emailPop" title="{{player.emailAddress}}">{{#gameName}}{{> gameName}}{{/gameName}}</a>
+            <a class="emailPop" title="{{emailAddress}}">{{#gameName}}{{> gameName}}{{/gameName}}</a>
         {{/emailAddress}}
     </td>
     <td>
@@ -52,7 +52,7 @@
     </td>
     <td class="c">
         {{#canDelete}}
-            <input type="checkbox" name="delentries[]" value="{{player.name}}">
+            <input type="checkbox" name="delentries[]" value="{{playerName}}">
         {{/canDelete}}
         {{#notAllowed}}
             {{> notAllowed}}
