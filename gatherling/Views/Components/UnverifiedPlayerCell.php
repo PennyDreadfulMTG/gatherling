@@ -10,7 +10,7 @@ use Gatherling\Models\Player;
 
 class UnverifiedPlayerCell
 {
-    public ?string $playerName;
+    public string $playerName;
     public int|null|false $wins;
     public int|null|false $losses;
     public GameName $displayName;
