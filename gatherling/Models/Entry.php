@@ -48,10 +48,10 @@ class Entry
 
     public static function findByEventAndPlayer(int $event_id, string $playername): ?self
     {
-        $sql = 'SELECT deck FROM entries WHERE event_id = :event_id AND player = :player';
+        $sql = 'SELECT player FROM entries WHERE event_id = :event_id AND player = :player';
         $params = ['event_id' => $event_id, 'player' => $playername];
-        $deckId = db()->optionalInt($sql, $params);
-        if (!$deckId) {
+        $player = db()->optionalString($sql, $params);
+        if (!$player) {
             return null;
         }
         return new self($event_id, $playername);
