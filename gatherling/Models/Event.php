@@ -37,7 +37,7 @@ class Event
 
     // Class associations
     public ?string $series = null; // belongs to Series
-    public ?string $host; // has one Player - host
+    public string $host; // has one Player - host
     public ?string $cohost; // has one Player - cohost
 
     // Subevents
@@ -74,7 +74,7 @@ class Event
             $this->mainstruct = '';
             $this->finalrounds = 0;
             $this->finalstruct = '';
-            $this->host = null;
+            $this->host = '';
             $this->cohost = null;
             $this->threadurl = '';
             $this->reporturl = '';
@@ -296,9 +296,6 @@ class Event
         if ($this->cohost == '') {
             $this->cohost = null;
         }
-        if ($this->host == '') {
-            $this->host = null;
-        }
         if ($this->finalized) {
             $this->active = 0;
         }
@@ -489,7 +486,7 @@ class Event
 
     public function isHost(string $name): bool
     {
-        $ishost = !is_null($this->host) && strcasecmp($name, $this->host) == 0;
+        $ishost = strcasecmp($name, $this->host) == 0;
         $iscohost = !is_null($this->cohost) && strcasecmp($name, $this->cohost) == 0;
         return $ishost || $iscohost;
     }

@@ -1649,11 +1649,6 @@
       <code><![CDATA[empty($deck->name)]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
-  <file src="gatherling/Views/Components/DeckProfile.php">
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[$deckErrorTable]]></code>
-    </PropertyNotSetInConstructor>
-  </file>
   <file src="gatherling/Views/Components/DeckTrophyCell.php">
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[!$deck->medal]]></code>
@@ -1690,9 +1685,6 @@
       <code><![CDATA[$hostLink]]></code>
       <code><![CDATA[$percentReported]]></code>
     </PropertyNotSetInConstructor>
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$event->host]]></code>
-    </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/Views/Components/InfoTable.php">
     <PropertyNotSetInConstructor>
@@ -1817,15 +1809,9 @@
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/Views/Components/RecentEventsTable.php">
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[$events]]></code>
-    </PropertyNotSetInConstructor>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[$eventStartTime]]></code>
     </RiskyTruthyFalsyComparison>
-    <UninitializedProperty>
-      <code><![CDATA[$this->events]]></code>
-    </UninitializedProperty>
   </file>
   <file src="gatherling/Views/Components/RecentMatchTable.php">
     <RiskyTruthyFalsyComparison>
