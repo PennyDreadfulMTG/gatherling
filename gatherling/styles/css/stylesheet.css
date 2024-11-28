@@ -1141,7 +1141,8 @@ table.center {
     background-color: var(--card-background-color);
     border-radius: var(--card-border-radius);
     padding: var(--spacing-20);
-    box-shadow: 0 var(--spacing-5) var(--spacing-5) calc(-1 * var(--line)) var(--control-border-color);
+    box-shadow: 0 var(--spacing-5) var(--spacing-5) calc(-1 * var(--line))
+        var(--control-border-color);
 }
 
 .event-card a,
