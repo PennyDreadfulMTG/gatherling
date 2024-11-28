@@ -20,6 +20,7 @@ use Gatherling\Views\Components\SeriesDropMenu;
 use Gatherling\Views\Components\StructDropMenu;
 use Gatherling\Views\Components\TimeDropMenu;
 use Gatherling\Views\Components\TrophyField;
+
 use function Gatherling\Helpers\getObjectVarsCamelCase;
 use function Safe\preg_match;
 
