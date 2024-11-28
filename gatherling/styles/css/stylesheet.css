@@ -1,5 +1,3 @@
-@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
-
 :root {
     /* Colors In Use */
 
@@ -72,6 +70,8 @@
     --grid-border-radius: var(--spacing-5);
     --card-border-radius: var(--spacing-10);
     --line: var(--spacing-1);
+    --box-padding: var(--spacing-5) var(--spacing-10);
+    --form-element-padding: var(--spacing-5);
 
     /* Typography */
 
@@ -260,7 +260,6 @@ See also body. */
 
 .grid_10 {
     max-width: 940px;
-    margin-bottom: 15px;
 }
 
 .prefix_1 {
@@ -309,7 +308,7 @@ table {
 #gatherling_main td.box.round-header {
     background-color: var(--highlight-background-color);
     color: var(--main-text-color);
-    padding-left: 8px;
+    padding: var(--box-padding);
 }
 
 /*
@@ -356,13 +355,13 @@ table.scoreboard tr.even {
 }
 
 table.scoreboard tr.cutoff {
-    border-bottom: 3px double var(--notice-text-color);
+    border-bottom: var(--spacing-5) double var(--notice-text-color);
 }
 
 table.scoreboard td,
 table.scoreboard th {
     text-align: center;
-    padding-right: 5px;
+    padding-right: var(--spacing-5);
 }
 
 table.scoreboard .playername {
@@ -376,8 +375,8 @@ table.scoreboard .playername {
     margin-right: auto;
     border-bottom: var(--line) solid var(--divider-border-color);
     min-height: 200px;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
+    margin-bottom: var(--spacing-20);
+    padding-bottom: var(--spacing-20);
 }
 
 .series .series-content {
@@ -386,14 +385,14 @@ table.scoreboard .playername {
 
 .series .series-name {
     width: 400px;
-    font-size: 22px;
+    font-size: var(--font-size-24);
     font-weight: bold;
     right: 0;
 }
 
 .series .series-logo {
     width: 360px;
-    margin-right: 40px;
+    margin-right: var(--spacing-40);
 }
 
 .series-logo-img {
@@ -410,16 +409,18 @@ table.scoreboard .playername {
 .series .series-info table th {
     text-align: right;
     vertical-align: baseline;
-    padding-right: 5px;
+    padding-right: var(--spacing-5);
 }
 
 #gatherling_main .series .series-info table td {
     vertical-align: baseline;
 }
 
-a.create_deck_link {
-    font-size: 13px;
-    color: var(--link-emphasis-text-color);
+a.create-deck-link,
+a.create-deck-link:hover,
+a.create-deck-link:visited {
+    font-size: var(--font-size-14);
+    color: var(--error-text-color);
 }
 
 .cardHoverImageWrapper .linkCardHoverImage {
@@ -430,13 +431,14 @@ a.create_deck_link {
 .crop {
     float: left;
     overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 2px 30px var(--link-border-color);
+    border-radius: var(--spacing-10);
+    box-shadow: 0 var(--spacing-5) var(--spacing-40) var(--link-border-color);
 }
 
 /* input values to crop the image: top, right, bottom, left */
 .crop img {
-    margin: -2px -6px -6px;
+    margin: calc(-1 * var(--spacing-1)) calc(-1 * var(--spacing-5))
+        calc(-1 * var(--spacing-5));
 }
 
 /* Forms */
@@ -445,7 +447,7 @@ a.create_deck_link {
     border: var(--line) solid var(--control-border-color);
     color: var(--main-text-color);
     background-color: var(--highlight-background-color);
-    padding: 3px;
+    padding: var(--form-element-padding);
     border-radius: var(--control-border-radius);
 }
 
@@ -462,7 +464,7 @@ a.create_deck_link {
     border: var(--line) solid var(--control-border-color);
     background-color: var(--disabled-control-background-color);
     color: var(--disabled-control-color);
-    padding: 3px;
+    padding: var(--form-element-padding);
     border-radius: var(--control-border-radius);
 }
 
@@ -960,7 +962,7 @@ del {
 .box h5,
 .box h6,
 .box .series-logo img {
-    padding: 5px 10px;
+    padding: var(--box-padding);
 }
 
 .uppertitle,
