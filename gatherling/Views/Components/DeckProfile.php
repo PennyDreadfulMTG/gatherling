@@ -12,7 +12,7 @@ class DeckProfile extends Component
 {
     public int $deckId;
     public bool $canEdit;
-    public DeckErrorTable $deckErrorTable;
+    public ?DeckErrorTable $deckErrorTable = null;
     public DeckInfoCell $deckInfoCell;
     public MaindeckTable $maindeckTable;
     public SideboardTable $sideboardTable;
