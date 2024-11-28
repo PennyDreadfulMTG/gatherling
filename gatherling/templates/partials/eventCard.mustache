@@ -4,7 +4,7 @@
             <a href="{{link}}"><h3>{{name}}</h3></a>
             <div>
                 <a class="event-type" href="{{settingsLink}}">
-                    {{#structureIcon}}{{> icon}}{{/structureIcon}}
+                    <i class="fas fa-trophy"></i>
                     {{structureSummary}}
                 </a>
             </div>
@@ -22,7 +22,7 @@
             <a href="{{matchesLink}}">Round {{currentRound}}</a>
             <a href="{{standingsLink}}" class="event-action">
                 View Standings
-                <i class="fas fa-trophy"></i>
+                <i class="fas fa-arrow-right"></i>
             </a>
         {{/active}}
         {{^active}}
