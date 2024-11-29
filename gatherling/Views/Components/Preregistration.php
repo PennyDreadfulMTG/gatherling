@@ -68,9 +68,6 @@ class Preregistration extends Component
             }
             $startingSoon = time() >= $eventStart;
             $startTime = new Time($eventStart, $now);
-            if (!$event->id) {
-                throw new InvalidArgumentException("Event ID not found for event {$event->name}");
-            }
             $entry = new Entry($event->id, $player->name);
 
             $createDeckLink = $deckLink = null;
