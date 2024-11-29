@@ -24,10 +24,6 @@ class Preregistration extends Component
 
     public function __construct(Player $player)
     {
-        if (!$player->name) {
-            throw new NotFoundException("Tried to display preregistration for a player with no name", 0, null, 'Player', []);
-        }
-
         $upcomingEvents = Event::getUpcomingEvents($player->name);
         $events = Event::getNextPreRegister();
 
