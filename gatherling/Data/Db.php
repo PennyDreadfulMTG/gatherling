@@ -17,7 +17,6 @@ use Gatherling\Models\Dto;
 use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\logger;
 use function Gatherling\Helpers\marshal;
-use function Safe\json_encode;
 use function Safe\preg_match;
 use function Safe\preg_replace;
 
@@ -66,7 +65,7 @@ class Db
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo->exec("SET time_zone = 'America/New_York'");
         } catch (PDOException $e) {
-            throw new DatabaseException('Failed to connect to database: ' . $e->getMessage(), 0, $e);
+            throw new DatabaseException('Failed to connect to database: ' . $e->getMessage(), $e);
         }
     }
 
@@ -80,7 +79,7 @@ class Db
         try {
             $this->pdo->exec('USE ' . $this->quoteIdentifier($database));
         } catch (PDOException $e) {
-            throw new DatabaseException('Failed to connect to database: ' . $e->getMessage(), 0, $e);
+            throw new DatabaseException('Failed to connect to database: ' . $e->getMessage(), $e);
         }
         $this->connected = true;
         return;
@@ -117,7 +116,7 @@ class Db
     {
         $ids = $this->insertMany($sql, $params);
         if (count($ids) !== 1) {
-            throw new DatabaseException("Expected 1 id, got " . count($ids) . " for query: $sql with params " . json_encode($params));
+            throw new DatabaseException("Expected 1 id, got " . count($ids), null, $sql, $params);
         }
         return $ids[0];
     }
@@ -166,7 +165,7 @@ class Db
             try {
                 $rows = $stmt->fetchAll(PDO::FETCH_CLASS, $class);
             } catch (TypeError $e) {
-                throw new DatabaseException("Failed to fetch class $class for query: $sql with params " . json_encode($params), 0, $e);
+                throw new DatabaseException("Failed to fetch class $class", $e, $sql, $params);
             }
             return $rows;
         });
@@ -184,10 +183,10 @@ class Db
         if (count($result) === 0) {
             $type = str_replace('Dto', '', basename(str_replace('\\', '/', $class)));
             $ids = array_values(array_filter($params, fn($v) => is_int($v) || is_string($v)));
-            throw new NotFoundInDatabaseException("Expected 1 row, got 0 for query: $sql with params " . json_encode($params), 0, null, $type, $ids);
+            throw new NotFoundInDatabaseException('Expected 1 row, got 0', null, $sql, $params, $type, $ids);
         }
         if (count($result) > 1) {
-            throw new DatabaseException('Expected 1 row, got ' . count($result) . " for query: $sql with params " . json_encode($params));
+            throw new DatabaseException('Expected 1 row, got ' . count($result), null, $sql, $params);
         }
         return $result[0];
     }
@@ -202,7 +201,7 @@ class Db
     {
         $result = $this->select($sql, $class, $params);
         if (count($result) > 1) {
-            throw new DatabaseException('Expected 1 row, got ' . count($result) . " for query: $sql with params " . json_encode($params));
+            throw new DatabaseException('Expected 1 row, got ' . count($result), null, $sql, $params);
         }
         return $result[0] ?? null;
     }
@@ -213,7 +212,7 @@ class Db
         try {
             return marshal($this->value($sql, $params))->int();
         } catch (MarshalException $e) {
-            throw new DatabaseException("Expected int value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+            throw new DatabaseException('Expected int value for query, got ' . $e->getMessage(), $e, $sql, $params);
         }
     }
 
@@ -223,7 +222,7 @@ class Db
         try {
             return marshal($this->value($sql, $params))->optionalInt();
         } catch (MarshalException $e) {
-            throw new DatabaseException("Expected int value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+            throw new DatabaseException('Expected int value for query, got ' . $e->getMessage(), $e, $sql, $params);
         }
     }
 
@@ -233,7 +232,7 @@ class Db
         try {
             return marshal($this->value($sql, $params))->string();
         } catch (MarshalException $e) {
-            throw new DatabaseException("Expected string value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+            throw new DatabaseException('Expected string value for query, got ' . $e->getMessage(), $e, $sql, $params);
         }
     }
 
@@ -243,7 +242,7 @@ class Db
         try {
             return marshal($this->value($sql, $params))->optionalString();
         } catch (MarshalException $e) {
-            throw new DatabaseException("Expected string value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+            throw new DatabaseException('Expected string value, got ' . $e->getMessage(), $e, $sql, $params);
         }
     }
 
@@ -253,7 +252,7 @@ class Db
         try {
             $v = marshal($this->value($sql, $params))->float();
         } catch (MarshalException $e) {
-            throw new DatabaseException("Expected float value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+            throw new DatabaseException('Expected float value for query, got ' . $e->getMessage(), $e, $sql, $params);
         }
         return $v;
     }
@@ -264,7 +263,7 @@ class Db
         try {
             return marshal($this->value($sql, $params))->optionalFloat();
         } catch (MarshalException $e) {
-            throw new DatabaseException("Expected float value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+            throw new DatabaseException('Expected float value for query, got ' . $e->getMessage(), $e, $sql, $params);
         }
     }
 
@@ -273,7 +272,7 @@ class Db
     {
         $v = $this->optionalInt($sql, $params);
         if ($v === null) {
-            throw new DatabaseException("Expected non-null bool value for query: $sql with params " . json_encode($params));
+            throw new DatabaseException('Expected non-null bool value for query', null, $sql, $params);
         }
         return (bool) $v;
     }
@@ -293,7 +292,7 @@ class Db
     {
         $values = $this->values($sql, $params);
         if (count($values) > 1) {
-            throw new DatabaseException("Expected 1 value, got " . count($values) . " for query: $sql with params " . json_encode($params));
+            throw new DatabaseException('Expected 1 value, got ' . count($values), null, $sql, $params);
         }
         if (count($values) === 0) {
             return null;
@@ -310,7 +309,7 @@ class Db
         try {
             return marshal($this->values($sql, $params))->strings();
         } catch (MarshalException $e) {
-            throw new DatabaseException("Expected strings value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+            throw new DatabaseException('Expected strings value for query, got ' . $e->getMessage(), $e, $sql, $params);
         }
     }
 
@@ -323,7 +322,7 @@ class Db
         try {
             return marshal($this->values($sql, $params))->ints();
         } catch (MarshalException $e) {
-            throw new DatabaseException("Expected ints value for query: $sql with params " . json_encode($params) . ", got " . $e->getMessage(), 0, $e);
+            throw new DatabaseException('Expected ints value for query, got ' . $e->getMessage(), $e, $sql, $params);
         }
     }
 
@@ -334,7 +333,7 @@ class Db
     private function values(string $sql, array $params = []): array
     {
         /** @var list<mixed> */
-        return $this->executeInternal($sql, $params, function ($sql, $params) {
+        return $this->executeInternal($sql, $params, /** @param array<string, mixed> $params */ function (string $sql, array $params) {
             $stmt = $this->pdo->prepare($sql);
             $this->bindParams($stmt, $params);
             $stmt->execute();
@@ -353,7 +352,7 @@ class Db
             try {
                 $this->pdo->beginTransaction();
             } catch (PDOException $e) {
-                throw new DatabaseException("Failed to begin transaction $rawName", 0, $e);
+                throw new DatabaseException("Failed to begin transaction $rawName", $e);
             }
         } else {
             $this->execute("SAVEPOINT $name");
@@ -373,7 +372,7 @@ class Db
             try {
                 $this->pdo->rollback();
             } catch (PDOException $e) {
-                throw new DatabaseException("Failed to rollback $latestTransaction while handling mismatch", 0, $e);
+                throw new DatabaseException("Failed to rollback $latestTransaction while handling mismatch", $e);
             }
             throw new DatabaseException("Asked to commit $name, but $latestTransaction is open. ROLLBACK issued.");
         }
@@ -381,7 +380,7 @@ class Db
             try {
                 $this->pdo->commit();
             } catch (PDOException $e) {
-                throw new DatabaseException("Failed to commit $name", 0, $e);
+                throw new DatabaseException("Failed to commit $name", $e);
             }
         }
         array_pop($this->transactions);
@@ -396,7 +395,7 @@ class Db
             try {
                 $this->pdo->rollback();
             } catch (PDOException $e) {
-                throw new DatabaseException("Failed to rollback $name while handling faulty rollback call", 0, $e);
+                throw new DatabaseException("Failed to rollback $name while handling faulty rollback call", $e);
             }
             throw new DatabaseException("Asked to rollback $name, but no transaction is open. ROLLBACK issued.");
         }
@@ -405,7 +404,7 @@ class Db
             try {
                 $this->pdo->rollback();
             } catch (PDOException $e) {
-                throw new DatabaseException("Failed to rollback while handling incorrect rollback", 0, $e);
+                throw new DatabaseException("Failed to rollback while handling incorrect rollback", $e);
             }
             throw new DatabaseException("Asked to rollback $name, but $latestTransaction is open. ROLLBACK issued.");
         }
@@ -414,7 +413,7 @@ class Db
             try {
                 $this->pdo->rollback();
             } catch (PDOException $e) {
-                throw new DatabaseException("Failed to rollback $name", 0, $e);
+                throw new DatabaseException("Failed to rollback $name", $e);
             }
         } else {
             $this->execute("ROLLBACK TO SAVEPOINT $name"); // Rollback to the savepoint
@@ -441,7 +440,7 @@ class Db
 
     // Debugging code, don't use for anything else, probably bad.
     // See: https://stackoverflow.com/questions/210564/getting-raw-sql-query-string-from-pdo-prepared-statements, from
-    /** @param array<int|string, mixed> $params */
+    /** @param array<array-key, mixed> $params */
     public function interpolateQuery(string $query, array $params): string
     {
         $s = chr(2); // Escape sequence for start of placeholder
@@ -491,7 +490,7 @@ class Db
                 }
             }
         } catch (PDOException $e) {
-            throw new DatabaseException("Failed to bind params " . json_encode($params), 0, $e);
+            throw new DatabaseException("Failed to bind params", $e, '', $params);
         }
     }
 
@@ -556,13 +555,13 @@ class Db
                     $stmt = $this->pdo->prepare($sql);
                     return $stmt->execute($params);
                 } catch (PDOException $e) {
-                    throw new DatabaseException("Failed to reconnect and execute query: $sql with params " . json_encode($params), 0, $e);
+                    throw new DatabaseException('Failed to reconnect and execute query', $e, $sql, $params);
                 }
             }
             $msg = "Failed to execute query: " . $this->interpolateQuery($sql, $params);
             logger()->error($msg, $context);
 
-            throw new DatabaseException($msg, 0, $e);
+            throw new DatabaseException($msg, $e, $sql, $params);
         }
     }
 

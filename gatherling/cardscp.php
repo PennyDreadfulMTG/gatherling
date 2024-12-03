@@ -69,9 +69,10 @@ function deleteCards(array $cardIds): void
 function updateCard(int $cardId, string $name, string $type, string $rarity, string $sfId, bool $isChangeling): void
 {
     $db = Database::getConnection();
-    $stmt = $db->prepare('UPDATE `cards` SET `name` = ?, `type` = ?, `rarity` = ?, `scryfallId` = ?, `is_changeling` = ? WHERE `id` = ?');
+    $sql = 'UPDATE `cards` SET `name` = ?, `type` = ?, `rarity` = ?, `scryfallId` = ?, `is_changeling` = ? WHERE `id` = ?';
+    $stmt = $db->prepare($sql);
     if (!$stmt) {
-        throw new DatabaseException($db->error);
+        throw new DatabaseException($db->error, null, $sql);
     }
     $stmt->bind_param('ssssdi', $name, $type, $rarity, $sfId, $isChangeling, $cardId);
     $stmt->execute();

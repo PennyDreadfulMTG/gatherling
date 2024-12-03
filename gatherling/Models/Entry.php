@@ -51,7 +51,7 @@ class Entry
         $sql = 'SELECT player FROM entries WHERE event_id = :event_id AND player = :player';
         $params = ['event_id' => $event_id, 'player' => $playername];
         $player = db()->optionalString($sql, $params);
-        if (!$player) {
+        if ($player === null) {
             return null;
         }
         return new self($event_id, $playername);
