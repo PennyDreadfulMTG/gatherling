@@ -11,6 +11,6 @@ class MostPlayedDeckDto extends Dto
     public string $name;
     public ?string $archetype;
     public ?string $format;
-    public ?string $created_date;
+    public string $created_date;
     public int $id;
 }

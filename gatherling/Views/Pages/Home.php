@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Pages;
 
+use DateTimeZone;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Views\Components\ColorImages;
 use Gatherling\Views\Components\Time;
 use Gatherling\Models\UpcomingEventDto;
+use Safe\DateTimeImmutable;
+
+use function Gatherling\Helpers\datetime;
 
 class Home extends Page
 {
@@ -44,12 +48,14 @@ class Home extends Page
             ];
         }
         $this->hasActiveEvents = count($this->activeEvents) > 0;
+        $now = new DateTimeImmutable();
         foreach ($upcomingEvents as $event) {
+            $startTime = datetime($event->start);
             $this->upcomingEvents[] = [
                 'name' => $event->name,
                 'format' => $event->format,
                 'eventReportLink' => 'eventreport.php?event=' . rawurlencode($event->name),
-                'time' => new Time($event->d, time()),
+                'time' => new Time($startTime, $now),
             ];
         }
         $this->hasUpcomingEvents = count($this->upcomingEvents) > 0;

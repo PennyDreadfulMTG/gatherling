@@ -6,8 +6,7 @@ namespace Gatherling\Views\Components;
 
 use Gatherling\Models\Deck;
 use Gatherling\Models\Series;
-
-use function Safe\strtotime;
+use Safe\DateTimeImmutable;
 
 class MissingTrophies extends Component
 {
@@ -21,7 +20,7 @@ class MissingTrophies extends Component
 
         $this->noRecentEvents = count($recentEvents) == 0;
 
-        $now = time();
+        $now = new DateTimeImmutable();
         foreach ($recentEvents as $event) {
             if ($event->hastrophy) {
                 continue;
@@ -36,7 +35,7 @@ class MissingTrophies extends Component
                     $hasWinner = true;
                 }
             }
-            $startTime = $event->start ? new Time(strtotime($event->start), $now) : null;
+            $startTime = new Time($event->start, $now);
             $this->eventsMissingTrophies[] = [
                 'hasWinner' => $hasWinner,
                 'eventName' => $event->name,

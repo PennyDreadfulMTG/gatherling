@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Pages;
 
+use DateInterval;
 use Gatherling\Views\Components\Time;
 use Gatherling\Views\Components\EventReportLink;
 use Gatherling\Models\Series as SeriesModel;
+use Safe\DateTimeImmutable;
 
 use function Safe\strtotime;
 
@@ -20,11 +22,12 @@ class Series extends Page
     {
         parent::__construct('Event Information', false);
         $this->activeSeries = [];
+        $now = new DateTimeImmutable();
         foreach ($activeSeriesNames as $seriesName) {
             $series = new SeriesModel($seriesName);
             $mostRecentEvent = $series->mostRecentEvent();
             $nextEvent = $series->nextEvent();
-            $mostRecentEventDoesntCount = !$mostRecentEvent || !$mostRecentEvent->start || strtotime($mostRecentEvent->start) + (86400 * 7 * 4) < time();
+            $mostRecentEventDoesntCount = !$mostRecentEvent || $mostRecentEvent->start->add(DateInterval::createFromDateString('4 weeks')) < $now;
             if ($mostRecentEventDoesntCount && !$nextEvent) {
                 continue;
             }
@@ -37,7 +40,7 @@ class Series extends Page
                 $masterDocumentLink = $mostRecentEvent->threadurl;
             }
             $season = $series->this_season_season;
-            $nextEventStart = $nextEvent && $nextEvent->start ? new Time(strtotime($nextEvent->start), time()) : null;
+            $nextEventStart = $nextEvent ? new Time($nextEvent->start, $now) : null;
             $this->activeSeries[] = [
                 'seriesName' => $seriesName,
                 'logoSrc' => SeriesModel::logoSrc($seriesName),

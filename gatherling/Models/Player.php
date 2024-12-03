@@ -7,8 +7,10 @@ namespace Gatherling\Models;
 use Gatherling\Exceptions\NotFoundException;
 use Gatherling\Exceptions\ValidationException;
 use Gatherling\Models\PlayerDto;
+use Gatherling\Models\RecordDto;
 use Gatherling\Views\Components\GameName;
 use Gatherling\Views\Components\PlayerLink;
+use Safe\DateTimeImmutable;
 
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\logger;
@@ -717,48 +719,35 @@ class Player
         return $opponents;
     }
 
-    public function getRating(string $format = 'Composite', string $date = '3000-01-01 00:00:00'): int
+    public function getRating(string $format = 'Composite', ?DateTimeImmutable $date = null): int
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT rating
-                          FROM ratings
-                          WHERE player = ?
-                          AND updated < ?
-                          AND format = ?
-                          ORDER BY updated
-                          DESC LIMIT 1');
-        $stmt->bind_param('sss', $this->name, $date, $format);
-        $stmt->execute();
-        $stmt->bind_result($rating);
-
-        if ($stmt->fetch() == null) {
-            $rating = 0; // was set to 1600, I am going to use it to only show ratings for formats the players has played in
+        $sql = '
+            SELECT rating
+              FROM ratings
+             WHERE player = :player AND format = :format';
+        $params = ['player' => $this->name, 'format' => $format];
+        if ($date !== null) {
+            $sql .= ' AND updated < :updated';
+            $params['updated'] = $date;
         }
-
-        $stmt->close();
-
-        return $rating;
+        $sql .= ' ORDER BY updated DESC LIMIT 1';
+        return db()->optionalInt($sql, $params) ?? 0;
     }
 
-    public function getRatingRecord(string $format = 'Composite', string $date = '3000-01-01 00:00:00'): string
+    public function getRatingRecord(string $format): string
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT wins, losses
-                          FROM ratings
-                          WHERE player = ?
-                          AND updated < ?
-                          AND format = ?
-                          ORDER BY updated
-                          DESC LIMIT 1');
-        $stmt->bind_param('sss', $this->name, $date, $format);
-        $stmt->execute();
-        $wins = 0;
-        $losses = 0;
-        $stmt->bind_result($wins, $losses);
-        $stmt->fetch();
-        $stmt->close();
-
-        return $wins . '-' . $losses;
+        $sql = '
+            SELECT wins, losses
+              FROM ratings
+             WHERE player = :player AND format = :format
+          ORDER BY updated DESC
+             LIMIT 1';
+        $params = ['player' => $this->name, 'format' => $format];
+        $record = db()->select($sql, RecordDto::class, $params);
+        if (count($record) === 0) {
+            return '0-0';
+        }
+        return $record[0]->wins . '-' . $record[0]->losses;
     }
 
     public function getMaxRating(string $format = 'Composite'): ?int

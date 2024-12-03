@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-use Gatherling\Models\DeckDto;
 use Gatherling\Models\MostPlayedDeckDto;
+use Safe\DateTimeImmutable;
 
+use function Gatherling\Helpers\datetime;
 use function Gatherling\Helpers\db;
-use function Safe\strtotime;
 
 class MostPlayedDecks extends Component
 {
@@ -48,8 +48,9 @@ class MostPlayedDecks extends Component
             LIMIT 20';
 
         $decks = db()->select($sql, MostPlayedDeckDto::class);
+        $now = new DateTimeImmutable();
         foreach ($decks as $deck) {
-            $createdTime = $deck->created_date ? new Time(strtotime($deck->created_date), time()) : null;
+            $createdTime = new Time(datetime($deck->created_date), $now);
             $this->decks[] = [
                 'count' => $deck->cnt,
                 'playerLink' => 'profile.php?player=' . rawurlencode($deck->playername) . '&mode=Lookup+Profile',

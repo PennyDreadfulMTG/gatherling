@@ -10,6 +10,7 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Models\Standings;
 use PHPUnit\Framework\TestCase;
+use Safe\DateTimeImmutable;
 
 class EventTest extends TestCase
 {
@@ -61,7 +62,7 @@ class EventTest extends TestCase
             $event = new Event('');
             $event->name = $numPlayers . '_person_event_with_knockout';
             $event->host = $host->name;
-            $event->start = '2025-06-01';
+            $event->start = new DateTimeImmutable('2025-06-01');
             $event->kvalue = 8;
             $event->format = 'Standard';
             $event->series = $series->name;

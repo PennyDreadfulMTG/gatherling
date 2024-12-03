@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
-use Gatherling\Exceptions\NotFoundException;
 use Gatherling\Models\Entry;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
-use InvalidArgumentException;
+use Safe\DateTimeImmutable;
 
-use function Safe\strtotime;
 
 class Preregistration extends Component
 {
@@ -44,7 +42,7 @@ class Preregistration extends Component
         $this->hasUpcomingEvents = count($upcomingEvents) > 0;
 
         $arena = $mtgo = false;
-        $now = time();
+        $now = new DateTimeImmutable();
         foreach ($upcomingEvents as $event) {
             if ($event->client == 1) {
                 $mtgo = true;
@@ -58,12 +56,8 @@ class Preregistration extends Component
             }
             $eventLink = $targetUrl . '.php?event=' . rawurlencode($event->name);
             $eventName = $event->name;
-            $eventStart = strtotime($event->start);
-            if (!$eventStart) {
-                throw new InvalidArgumentException("Event start time not found for event {$event->name}");
-            }
-            $startingSoon = time() >= $eventStart;
-            $startTime = new Time($eventStart, $now);
+            $startingSoon = $now >= $event->start;
+            $startTime = new Time($event->start, $now);
             $entry = new Entry($event->id, $player->name);
 
             $createDeckLink = $deckLink = null;
@@ -94,11 +88,7 @@ class Preregistration extends Component
         foreach ($availableEvents as $event) {
             $eventReportLink = 'eventreport.php?event=' . rawurlencode($event->name);
             $eventName = $event->name;
-            $eventStart = strtotime($event->start);
-            if (!$eventStart) {
-                throw new InvalidArgumentException("Event start time not found for event {$event->name}");
-            }
-            $startTime = new Time($eventStart, time());
+            $startTime = new Time($event->start, $now);
             $isFull = $event->isFull();
             $requiresMtgo = $event->client == 1 && empty($player->mtgo_username);
             $requiresMtga = $event->client == 2 && empty($player->mtga_username);

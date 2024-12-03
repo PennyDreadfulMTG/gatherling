@@ -7,8 +7,6 @@ namespace Gatherling\Views\Components;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 
-use function Safe\strtotime;
-
 class InfoCell extends Component
 {
     public string $threadLink;
@@ -29,7 +27,7 @@ class InfoCell extends Component
     {
         $this->threadLink = $event->threadurl;
         $this->eventName = $event->name;
-        $this->eventDate = $event->start ? date('j F Y', strtotime($event->start)) : '';
+        $this->eventDate = $event->start->format('j F Y');
         $this->eventFormat = $event->format;
         $this->playerCount = $event->getPlayerCount();
         $this->deckCount = count($event->getDecks());

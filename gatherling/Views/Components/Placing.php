@@ -49,8 +49,7 @@ class Placing extends Component
                 $targetUrl = 'event';
             }
             $this->eventLink = $targetUrl . '.php?event=' . rawurlencode($deck->eventname ?? '');
-            $startTime = $event->start ? strtotime($event->start) : null;
-            $this->day = $startTime ? date('F j, Y', $startTime) : '';
+            $this->day = $event->start->format('F j, Y');
             $this->eventName = $deck->eventname ?? '';
         }
         $this->recordString = $deck->recordString();

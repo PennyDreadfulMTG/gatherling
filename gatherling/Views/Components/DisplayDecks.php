@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Gatherling\Views\Components;
 
 use Gatherling\Models\Decksearch;
+use Safe\DateTimeImmutable;
 use Zebra_Pagination as Pagination;
 
 use function Safe\ob_get_clean;
 use function Safe\ob_start;
 use function Safe\preg_replace;
-use function Safe\strtotime;
 
 class DisplayDecks extends Component
 {
@@ -34,12 +34,12 @@ class DisplayDecks extends Component
         //get the ids for the current page
         $ids_populated = array_slice($ids_populated, (($pagination->get_page() - 1) * $records_per_page), $records_per_page);
 
-        $now = time();
+        $now = new DateTimeImmutable();
         foreach ($ids_populated as $index => $deckinfo) {
             if (strlen($deckinfo['name']) > 23) {
                 $deckinfo['name'] = preg_replace('/\s+?(\S+)?$/', '', substr($deckinfo['name'], 0, 22)) . '...';
             }
-            $createdTime = $deckinfo['created_date'] ? new Time(strtotime($deckinfo['created_date']), $now) : null;
+            $createdTime = new Time($deckinfo['created_date'], $now);
             $this->decks[] = [
                 'isEven' => $index % 2 === 0,
                 'playerLink' => 'profile.php?player=' . rawurlencode($deckinfo['playername']) . '&mode=Lookup+Profile',

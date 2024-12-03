@@ -35,15 +35,11 @@ function main(): never
 function getUpcomingEvents(): array
 {
     $sql = '
-        SELECT
-            UNIX_TIMESTAMP(start) AS d, format, name
-        FROM
-            events
-        WHERE
-            start > NOW() AND private = 0
-        ORDER BY
-            start ASC
-        LIMIT 20';
+        SELECT start, format, name
+          FROM events
+         WHERE start > NOW() AND private = 0
+      ORDER BY start ASC
+         LIMIT 20';
     return db()->select($sql, UpcomingEventDto::class);
 }
 

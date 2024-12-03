@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use Exception;
-use Gatherling\Views\Components\DropMenu;
-use Gatherling\Views\Components\FormatDropMenuR;
+use Gatherling\Models\RatingsEventDto;
+use Safe\DateTimeImmutable;
+
+use function Gatherling\Helpers\datetime;
+use function Gatherling\Helpers\db;
 
 class Ratings
 {
@@ -65,67 +67,46 @@ class Ratings
 
     public function calcCompositeRating(): void
     {
-        $db = Database::getConnection();
-
-        $result = $db->query("SELECT name, start FROM events WHERE finalized = '1' ORDER BY start") or exit($db->error);
-
-        while ($row = $result->fetch_assoc()) {
-            $event = $row['name'];
-            $players = $this->calcPostEventRatings($event, 'Composite');
-            $this->insertRatings($event, $players, 'Composite', $row['start']);
+        $sql = "SELECT name, start FROM events WHERE finalized = '1' ORDER BY start";
+        $results = db()->select($sql, FinalizedEventDto::class);
+        foreach ($results as $event) {
+            $players = $this->calcPostEventRatings($event->name, 'Composite');
+            $this->insertRatings($event->name, $players, 'Composite', datetime($event->start));
         }
-        $result->close();
     }
 
     public function calcRatingByFormat(string $format): void
     {
-        $db = Database::getConnection();
         $searchString = '%' . $format . '%';
 
-        $stmt = $db->prepare("SELECT name, start FROM events WHERE finalized = '1' AND format LIKE ? ORDER BY start");
-        $stmt->bind_param('s', $searchString);
-        $stmt->execute();
-        $stmt->bind_result($eventname, $eventstart);
+        $sql = 'SELECT name, start, format FROM events WHERE finalized = 1 AND format LIKE :search_string ORDER BY start';
+        $params = ['search_string' => $searchString];
 
-        $eventar = [];
-        $index = 1;
-        while ($stmt->fetch()) {
-            $eventar[$index] = $eventname;
-            $eventar[$index + 1] = $eventstart;
-            $index += 2;
-        }
-        $stmt->close();
+        $results = db()->select($sql, RatingsEventDto::class, $params);
 
-        for ($index = 1, $size = count($eventar); $index <= $size; $index += 2) {
-            $players = $this->calcPostEventRatings($eventar[$index], $format);
-            $this->insertRatings($eventar[$index], $players, $format, $eventar[$index + 1]);
+        foreach ($results as $result) {
+            $players = $this->calcPostEventRatings($result->name, $format);
+            $this->insertRatings($result->name, $players, $format, new DateTimeImmutable($result->start));
         }
     }
 
     public function calcOtherRating(): void
     {
-        $db = Database::getConnection();
-
-        $notlike = '';
-        foreach ($this->ratingNames as $format) {
-            $notlike = $notlike . ' AND format NOT LIKE "%' . $format . '%" ';
+        $sql = '
+            SELECT name, start
+              FROM events
+             WHERE finalized = 1
+               AND format NOT IN (:formats)
+          ORDER BY start';
+        $params = ['formats' => $this->ratingNames];
+        $results = db()->select($sql, FinalizedEventDto::class, $params);
+        foreach ($results as $event) {
+            $players = $this->calcPostEventRatings($event->name, 'Other Formats');
+            $this->insertRatings($event->name, $players, 'Other Formats', datetime($event->start));
         }
-
-        $result = $db->query("SELECT name, start
-                              FROM events
-                              WHERE finalized = '1'
-                              $notlike
-                              ORDER BY start") or exit($db->error);
-
-        while ($row = $result->fetch_assoc()) {
-            $event = $row['name'];
-            $players = $this->calcPostEventRatings($event, 'Other Formats');
-            $this->insertRatings($event, $players, 'Other Formats', $row['start']);
-        }
-        $result->close();
     }
 
-    public function calcFinalizedEventRatings(string $event, string $format, string $start): void
+    public function calcFinalizedEventRatings(string $event, string $format, DateTimeImmutable $start): void
     {
         $players = $this->calcPostEventRatings($event, 'Composite');
         $this->insertRatings($event, $players, 'Composite', $start);
@@ -185,20 +166,22 @@ class Ratings
     }
 
     /** @param array<string, array<string, int>> $players */
-    public function insertRatings(string $event, array $players, string $format, string $date): void
+    public function insertRatings(string $event, array $players, string $format, DatetimeImmutable $date): void
     {
-        $db = Database::getConnection();
+        $sql = 'INSERT INTO ratings (event, player, rating, format, updated, wins, losses)
+                     VALUES (:event, :player, :rating, :format, :updated, :wins, :losses)';
 
         foreach ($players as $player => $data) {
-            $rating = $data['rating'];
-            $wins = $data['wins'];
-            $losses = $data['losses'];
-            $stmt = $db->prepare('INSERT INTO ratings VALUES(?, ?, ?, ?, ?, ?, ?)');
-            $stmt->bind_param('ssdssdd', $event, $player, $rating, $format, $date, $wins, $losses);
-            if (!$stmt->execute()) {
-                throw new Exception($stmt->error, 1);
-            }
-            $stmt->close();
+            $params = [
+                'event' => $event,
+                'player' => $player,
+                'rating' => $data['rating'],
+                'format' => $format,
+                'updated' => $date,
+                'wins' => $data['wins'],
+                'losses' => $data['losses']
+            ];
+            db()->execute($sql, $params);
         }
     }
 

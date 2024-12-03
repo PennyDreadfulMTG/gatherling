@@ -8,11 +8,12 @@ use Gatherling\Exceptions\ConfigurationException;
 use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\MarshalException;
 use Gatherling\Exceptions\NotFoundInDatabaseException;
+use Gatherling\Models\Dto;
 use PDOException;
 use PDOStatement;
 use PDO;
 use TypeError;
-use Gatherling\Models\Dto;
+use Safe\DateTimeImmutable;
 
 use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\logger;
@@ -522,6 +523,23 @@ class Db
         return ['sql' => $sql, 'params' => $expandedParams];
     }
 
+    /**
+     * @param array<string, mixed> $params
+     * @return array<string, mixed>
+     */
+    private function convertDateParams(array $params): array
+    {
+        $convertedParams = [];
+        foreach ($params as $key => $value) {
+            if ($value instanceof DateTimeImmutable) {
+                $convertedParams[$key] = $value->format('Y-m-d H:i:s');
+            } else {
+                $convertedParams[$key] = $value;
+            }
+        }
+        return $convertedParams;
+    }
+
     /** @param array<string, mixed> $params */
     private function executeInternal(string $sql, array $params, callable $operation, bool $connectToDatabase = true): mixed
     {
@@ -539,6 +557,7 @@ class Db
         }
 
         ['sql' => $sql, 'params' => $params] = $this->expandArrayParams($sql, $params);
+        $params = $this->convertDateParams($params);
 
         try {
             $startTime = microtime(true);

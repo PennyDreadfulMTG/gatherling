@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
+use Safe\DateTimeImmutable;
+
+use function Gatherling\Helpers\datetime;
 use function Gatherling\Helpers\db;
 
 class Decksearch
@@ -229,39 +232,31 @@ class Decksearch
     }
 
     /**
-     * @param list<int> $id_arr
-     * @return list<array{id: int, archetype: string, name: string, playername: string, format: string, created_date: string, record: string}>
+     * @param list<int> $ids
+     * @return list<array{id: int, archetype: string, name: string, playername: string, format: string, created_date: DateTimeImmutable, record: string}>
      */
-    public function idsToSortedInfo(array $id_arr): array
+    public function idsToSortedInfo(array $ids): array
     {
-        $db = Database::getConnection();
-
-        //sanitize the id_arr to protect against sql injection.
-        $id_arr = array_filter(array_map(fn($id) => intval($id), $id_arr));
-
-        $query = 'SELECT id, archetype, name, playername, format, created_date from decks WHERE id IN (' . implode(',', $id_arr) . ') ORDER BY DATE(`created_date`) DESC';
-        $stmt = $db->prepare($query);
-        $stmt->execute();
-        $stmt->bind_result($id, $archetype, $name, $playername, $format, $created_date);
-        $info = [];
-        while ($stmt->fetch()) {
-            $info[] = [
-                'id'           => $id,
-                'archetype'    => $archetype,
-                'name'         => $name,
-                'playername'   => $playername,
-                'format'       => $format,
-                'created_date' => $created_date,
-            ];
-        }
-        $stmt->close();
+        $sql = '
+            SELECT id, archetype, name, playername, format, created_date
+              FROM decks
+             WHERE id IN (:decks)
+          ORDER BY DATE(`created_date`) DESC';
+        $params = ['decks' => $ids];
+        $results = db()->select($sql, DeckInfoDto::class, $params);
 
         $list = [];
-        foreach ($info as $row) {
-            $row['record'] = $this->getDeckRecord($row['id']);
-            $list[] = $row;
+        foreach ($results as $deck) {
+            $list[] = [
+                'id'           => $deck->id,
+                'archetype'    => $deck->archetype,
+                'name'         => $deck->name,
+                'playername'   => $deck->playername,
+                'format'       => $deck->format,
+                'created_date' => datetime($deck->created_date),
+                'record'       => $this->getDeckRecord($deck->id),
+            ];
         }
-
         return $list;
     }
 

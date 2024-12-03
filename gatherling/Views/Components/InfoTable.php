@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Views\Components;
 
 use Gatherling\Models\Player;
-
-use function Safe\strtotime;
+use Safe\DateTimeImmutable;
 
 class InfoTable extends Component
 {
@@ -77,7 +76,7 @@ class InfoTable extends Component
         $this->pcgS = $pcgS;
         $this->hosted = $player->getHostedEventsCount();
         if ($lastEvent) {
-            $this->lastEventTime = $lastEvent->start ? new Time(strtotime($lastEvent->start), time(), true) : null;
+            $this->lastEventTime = new Time($lastEvent->start, new DateTimeImmutable(), true);
             $this->lastEventName = $lastEvent->name;
         }
         $this->numMatches = count($matches);

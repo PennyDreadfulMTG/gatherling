@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Views\Components;
 
 use Gatherling\Models\Series;
+use Safe\DateTimeImmutable;
 
 use function Safe\strtotime;
 
@@ -16,10 +17,9 @@ class RecentEventsTable extends Component
     public function __construct(public Series $series)
     {
         $recentEvents = $series->getRecentEvents();
-        $now = time();
+        $now = new DateTimeImmutable();
         foreach ($recentEvents as $event) {
-            $eventStartTime = $event->start ? strtotime($event->start) : null;
-            $startTime = $eventStartTime ? new Time($eventStartTime, $now) : null;
+            $startTime = new Time($event->start, $now);
             $this->events[] = [
                 'eventLink' => 'event.php?name=' . rawurlencode($event->name),
                 'eventName' => $event->name,

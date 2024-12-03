@@ -11,10 +11,10 @@ use Gatherling\Views\Components\FormatDropMenu;
 use Gatherling\Views\Components\HostEvents;
 use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\SeriesDropMenu;
+use Safe\DateTimeImmutable;
 
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\get;
-use function Safe\strtotime;
 
 class EventList extends Page
 {
@@ -23,9 +23,9 @@ class EventList extends Page
     public SeriesDropMenu $seriesDropMenu;
     public SeasonDropMenu $seasonDropMenu;
     public bool $hasPlayerSeries;
-    /** @var list<array{name: string, players: int, start: string, active: int, finalized: int, series: string, link: string, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string}> */
+    /** @var list<array{name: string, players: int, start: DateTimeImmutable, active: int, finalized: int, series: string, link: string, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string}> */
     public array $upcomingEvents;
-    /** @var list<array{name: string, players: int, start: string, active: int, finalized: int, series: string, link: string, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string}> */
+    /** @var list<array{name: string, players: int, start: DateTimeImmutable, active: int, finalized: int, series: string, link: string, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string}> */
     public array $pastEvents;
     public bool $hasMore;
 
@@ -45,7 +45,7 @@ class EventList extends Page
             $eventInfo = [
                 'name' => $event->name,
                 'players' => $event->players,
-                'start' => $event->start,
+                'start' => new DateTimeImmutable($event->start),
                 'active' => $event->active,
                 'finalized' => $event->finalized,
                 'series' => $event->series,
@@ -57,11 +57,11 @@ class EventList extends Page
                 'standingsLink' => "{$baseLink}standings",
                 'structureSummary' => (new Event($event->name))->structureSummary(),
             ];
-            if (!$event->active && !$event->finalized && strtotime($event->start) <= strtotime('+1 hour')) {
+            if (!$event->active && !$event->finalized && $event->start <= new DateTimeImmutable('+1 hour')) {
                 $pendingEvents[] = $eventInfo;
             } elseif ($event->active == 1) {
                 $activeEvents[] = $eventInfo;
-            } elseif (strtotime($event->start) > strtotime('+1 hour')) {
+            } elseif ($event->start > new DateTimeImmutable('+1 hour')) {
                 $upcomingEvents[] = $eventInfo;
             } else {
                 $pastEvents[] = $eventInfo;
