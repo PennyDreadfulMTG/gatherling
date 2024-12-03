@@ -11,7 +11,6 @@ use Gatherling\Views\Components\FormatDropMenu;
 use Gatherling\Views\Components\HostEvents;
 use Gatherling\Views\Components\SeasonDropMenu;
 use Gatherling\Views\Components\SeriesDropMenu;
-use Gatherling\Views\Components\Time;
 
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\get;
@@ -24,9 +23,9 @@ class EventList extends Page
     public SeriesDropMenu $seriesDropMenu;
     public SeasonDropMenu $seasonDropMenu;
     public bool $hasPlayerSeries;
-    /** @var list<array{name: string, format: string, players: int, host: string, start: string, active: int, finalized: int, cohost: string, series: string, kvalueDisplay: string, link: string, isOngoing: bool, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string}> */
+    /** @var list<array{name: string, players: int, start: string, active: int, finalized: int, series: string, link: string, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string}> */
     public array $upcomingEvents;
-    /** @var list<array{name: string, format: string, players: int, host: string, start: string, active: int, finalized: int, cohost: string, series: string, kvalueDisplay: string, link: string, isOngoing: bool, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string}> */
+    /** @var list<array{name: string, players: int, start: string, active: int, finalized: int, series: string, link: string, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string}> */
     public array $pastEvents;
     public bool $hasMore;
 
@@ -39,31 +38,18 @@ class EventList extends Page
         $events = queryEvents($player, $playerSeries, $seriesName, $format, $season);
         $hasMore = count($events) == 100;
 
-        $kvalueMap = [
-            0  => 'none',
-            8  => 'Casual',
-            16 => 'Regular',
-            24 => 'Large',
-            32 => 'Championship',
-        ];
-
         $pendingEvents = $activeEvents = $upcomingEvents = $pastEvents = $seriesShown = [];
         foreach ($events as $event) {
             $seriesShown[] = $event->series;
             $baseLink = 'event.php?name=' . rawurlencode($event->name) . '&view=';
             $eventInfo = [
                 'name' => $event->name,
-                'format' => $event->format,
                 'players' => $event->players,
-                'host' => $event->host,
                 'start' => $event->start,
                 'active' => $event->active,
                 'finalized' => $event->finalized,
-                'cohost' => $event->cohost ?? '',
                 'series' => $event->series,
-                'kvalueDisplay' => $kvalueMap[$event->kvalue] ?? '',
                 'link' => 'event.php?name=' . rawurlencode($event->name),
-                'isOngoing' => $event->finalized == 0 && $event->active == 1,
                 'currentRound' => $event->current_round,
                 'settingsLink' => "{$baseLink}settings",
                 'registrationLink' => "{$baseLink}reg",
@@ -106,8 +92,8 @@ class EventList extends Page
 function queryEvents(Player $player, array $playerSeries, string $seriesName, string $format, ?int $season): array
 {
     $sql = '
-        SELECT e.name, e.format, COUNT(DISTINCT n.player) AS players, e.host, e.start,
-               e.active, e.finalized, e.cohost, e.series, e.kvalue, e.current_round
+        SELECT e.name, COUNT(DISTINCT n.player) AS players, e.start, e.active,
+               e.finalized, e.series, e.current_round
           FROM events e
      LEFT JOIN entries AS n ON n.event_id = e.id
         WHERE (e.host = :player_name OR e.cohost = :player_name OR e.series IN (:series_names))';
