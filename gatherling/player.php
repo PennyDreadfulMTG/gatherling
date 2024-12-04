@@ -38,7 +38,7 @@ function main(): never
 
     // Handle actions
     if ($action == 'changePassword') {
-        $result = changePassword($player, post()->string('oldPasssword', ''), post()->string('newPassword'), post()->string('newPassword2'));
+        $result = changePassword($player, post()->string('oldPassword', ''), post()->string('newPassword'), post()->string('newPassword2'));
     } elseif ($action == 'editEmail') {
         $result = editEmail($player, post()->string('newEmail'), post()->string('newEmail2'), post()->int('emailStatus'));
     } elseif ($action == 'editAccounts') {
