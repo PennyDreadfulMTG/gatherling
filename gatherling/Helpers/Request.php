@@ -12,7 +12,7 @@ class Request
 {
     private static ?string $requestId = null;
 
-    /** @param array<int|string, mixed> $vars */
+    /** @param array<array-key, mixed> $vars */
     public function __construct(private array $vars)
     {
     }

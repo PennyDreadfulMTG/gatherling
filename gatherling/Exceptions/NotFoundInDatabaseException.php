@@ -8,14 +8,18 @@ use Throwable;
 
 class NotFoundInDatabaseException extends DatabaseException
 {
-    /** @param list<int|string> $ids */
+    /**
+     * @param list<int|string> $ids
+     * @param array<string, mixed> $params
+     */
     public function __construct(
         string $message,
-        int $code,
         ?Throwable $previous,
+        string $sql,
+        array $params,
         public string $type,
         public array $ids
     ) {
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $previous, $sql, $params);
     }
 }

@@ -68,13 +68,16 @@ function deleteCards(array $cardIds): void
 
 function updateCard(int $cardId, string $name, string $type, string $rarity, string $sfId, bool $isChangeling): void
 {
-    $db = Database::getConnection();
-    $stmt = $db->prepare('UPDATE `cards` SET `name` = ?, `type` = ?, `rarity` = ?, `scryfallId` = ?, `is_changeling` = ? WHERE `id` = ?');
-    if (!$stmt) {
-        throw new DatabaseException($db->error);
-    }
-    $stmt->bind_param('ssssdi', $name, $type, $rarity, $sfId, $isChangeling, $cardId);
-    $stmt->execute();
+    $sql = 'UPDATE `cards` SET `name` = :name, `type` = :type, `rarity` = :rarity, `scryfallId` = :sfId, `is_changeling` = :isChangeling WHERE `id` = :id';
+    $params = [
+        'name' => $name,
+        'type' => $type,
+        'rarity' => $rarity,
+        'sfId' => $sfId,
+        'isChangeling' => $isChangeling,
+        'id' => $cardId,
+    ];
+    db()->execute($sql, $params);
 }
 
 if (basename(__FILE__) == basename(server()->string('PHP_SELF'))) {
