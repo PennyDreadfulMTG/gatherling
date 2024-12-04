@@ -24,8 +24,6 @@
       <code><![CDATA[$params]]></code>
       <code><![CDATA[$params]]></code>
       <code><![CDATA[$params]]></code>
-      <code><![CDATA[$params]]></code>
-      <code><![CDATA[$sql]]></code>
       <code><![CDATA[$sql]]></code>
       <code><![CDATA[$sql]]></code>
       <code><![CDATA[$sql]]></code>
@@ -34,7 +32,6 @@
       <code><![CDATA[$sql]]></code>
     </MissingClosureParamType>
     <MixedArgument>
-      <code><![CDATA[$params]]></code>
       <code><![CDATA[$params]]></code>
       <code><![CDATA[$params]]></code>
       <code><![CDATA[$params]]></code>
@@ -355,11 +352,6 @@
       <code><![CDATA[$eventName]]></code>
       <code><![CDATA[$playerName]]></code>
     </PropertyNotSetInConstructor>
-  </file>
-  <file src="gatherling/Models/Entry.php">
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[!$deckId]]></code>
-    </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/Models/EntryDto.php">
     <MissingConstructor>
@@ -1381,7 +1373,6 @@
       <code><![CDATA[$prereg_default]]></code>
       <code><![CDATA[$start_day]]></code>
       <code><![CDATA[$start_time]]></code>
-      <code><![CDATA[$this_season_format]]></code>
     </PropertyNotSetInConstructor>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[$result]]></code>
@@ -2236,6 +2227,7 @@
       <code><![CDATA[$CONFIG['GIT_HASH']]]></code>
     </MixedArrayAccess>
     <MixedArrayAssignment>
+      <code><![CDATA[$CONFIG['GIT_HASH']]]></code>
       <code><![CDATA[$CONFIG['GIT_HASH']]]></code>
       <code><![CDATA[$CONFIG['GIT_HASH']]]></code>
     </MixedArrayAssignment>
