@@ -4,81 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a39bef66237f73bb3bed9ad05e4b5baa",
+    "content-hash": "1fc94f492dd3826ef4fc130185f01b0b",
     "packages": [
-        {
-            "name": "adhocore/cli",
-            "version": "v1.9.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/adhocore/php-cli.git",
-                "reference": "86be16e3c3b42d76fcdb32529bcded0fedb925d3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/adhocore/php-cli/zipball/86be16e3c3b42d76fcdb32529bcded0fedb925d3",
-                "reference": "86be16e3c3b42d76fcdb32529bcded0fedb925d3",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.0"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/functions.php"
-                ],
-                "psr-4": {
-                    "Ahc\\Cli\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jitendra Adhikari",
-                    "email": "jiten.adhikary@gmail.com"
-                }
-            ],
-            "description": "Command line interface library for PHP",
-            "keywords": [
-                "argument-parser",
-                "argv-parser",
-                "cli",
-                "cli-action",
-                "cli-app",
-                "cli-color",
-                "cli-option",
-                "cli-writer",
-                "command",
-                "console",
-                "console-app",
-                "php-cli",
-                "php8",
-                "stream-input",
-                "stream-output"
-            ],
-            "support": {
-                "issues": "https://github.com/adhocore/php-cli/issues",
-                "source": "https://github.com/adhocore/php-cli/tree/v1.9.3"
-            },
-            "funding": [
-                {
-                    "url": "https://paypal.me/ji10",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/adhocore",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-12-04T03:40:29+00:00"
-        },
         {
             "name": "bakert/blossom-php",
             "version": "v1.0.0",
@@ -2002,66 +1929,6 @@
             "time": "2022-12-29T18:45:10+00:00"
         },
         {
-            "name": "yassinedoghri/php-icons",
-            "version": "v1.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yassinedoghri/php-icons.git",
-                "reference": "87ff8cbb0145965d8dfa6d10f8d370650cf4e569"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yassinedoghri/php-icons/zipball/87ff8cbb0145965d8dfa6d10f8d370650cf4e569",
-                "reference": "87ff8cbb0145965d8dfa6d10f8d370650cf4e569",
-                "shasum": ""
-            },
-            "require": {
-                "adhocore/cli": "^1.7.2",
-                "composer-runtime-api": "^2.2",
-                "php": ">=8.1"
-            },
-            "require-dev": {
-                "kint-php/kint": "^5.1.1",
-                "pestphp/pest": "v3.5.1",
-                "pestphp/pest-plugin-type-coverage": "^v3.1.0",
-                "phpstan/phpstan": "^1.12.7",
-                "rector/rector": "^1.2.8",
-                "symplify/coding-standard": "^12.2.3",
-                "symplify/easy-coding-standard": "^12.3.6"
-            },
-            "bin": [
-                "bin/php-icons"
-            ],
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/functions.php",
-                    "src/Console/helpers.php"
-                ],
-                "psr-4": {
-                    "PHPIcons\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Yassine Doghri",
-                    "email": "yassine@doghri.fr",
-                    "homepage": "https://yassinedoghri.com",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "A PHP library based on iconify's API to download and render svg icons from popular open source icon sets.",
-            "support": {
-                "issues": "https://github.com/yassinedoghri/php-icons/issues",
-                "source": "https://github.com/yassinedoghri/php-icons/tree/v1.2.0"
-            },
-            "time": "2024-11-06T11:12:15+00:00"
-        },
-        {
             "name": "ypho/scryfall",
             "version": "2.0",
             "source": {
@@ -3393,16 +3260,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.12.8",
+            "version": "1.12.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "f6a60a4d66142b8156c9da923f1972657bc4748c"
+                "reference": "b5ae1b88f471d3fd4ba1aa0046234b5ca3776dd0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f6a60a4d66142b8156c9da923f1972657bc4748c",
-                "reference": "f6a60a4d66142b8156c9da923f1972657bc4748c",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b5ae1b88f471d3fd4ba1aa0046234b5ca3776dd0",
+                "reference": "b5ae1b88f471d3fd4ba1aa0046234b5ca3776dd0",
                 "shasum": ""
             },
             "require": {
@@ -3447,7 +3314,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-06T19:06:49+00:00"
+            "time": "2024-11-28T22:13:23+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -5716,11 +5583,11 @@
             "type": "project",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.x-dev",
-                    "dev-4.x": "4.x-dev",
-                    "dev-3.x": "3.x-dev",
+                    "dev-1.x": "1.x-dev",
                     "dev-2.x": "2.x-dev",
-                    "dev-1.x": "1.x-dev"
+                    "dev-3.x": "3.x-dev",
+                    "dev-4.x": "4.x-dev",
+                    "dev-master": "5.x-dev"
                 }
             },
             "autoload": {
@@ -5812,7 +5679,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
@@ -5823,6 +5690,6 @@
         "ext-pdo_mysql": "*",
         "ext-simplexml": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
