@@ -11,7 +11,7 @@ use function Safe\strtotime;
 class RecentEventsTable extends Component
 {
     /** @var array<array{eventLink: string, eventName: string, startTime: ?Time, playerCount: int, host: string, cohost: string}> */
-    public array $events;
+    public array $events = [];
 
     public function __construct(public Series $series)
     {
@@ -25,7 +25,7 @@ class RecentEventsTable extends Component
                 'eventName' => $event->name,
                 'startTime' => $startTime,
                 'playerCount' => $event->getPlayerCount(),
-                'host' => $event->host ?? '',
+                'host' => $event->host,
                 'cohost' => $event->cohost ?? '',
 
             ];

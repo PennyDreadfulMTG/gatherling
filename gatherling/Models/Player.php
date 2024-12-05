@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use Gatherling\Exceptions\DatabaseException;
 use Gatherling\Exceptions\NotFoundException;
 use Gatherling\Exceptions\ValidationException;
 use Gatherling\Models\PlayerDto;

@@ -1,5 +1,3 @@
-@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
-
 :root {
     /* Colors In Use */
 
@@ -55,30 +53,25 @@
 
     /* Spacing */
 
-    --spacing-1-static: 1px;
-    --spacing-5-static: 5px;
-    --spacing-10-static: 10px;
-    --spacing-20-static: 20px;
-    --spacing-40-static: 40px;
-    --spacing-80-static: 80px;
-    --spacing-160-static: 160px;
-    --spacing-320-static: 320px;
-    --spacing-1-dynamic: calc(1rem / 16);
-    --spacing-5-dynamic: calc(5rem / 16);
-    --spacing-10-dynamic: calc(10rem / 16);
-    --spacing-20-dynamic: calc(20rem / 16);
-    --spacing-40-dynamic: calc(40rem / 16);
-    --spacing-80-dynamic: calc(80rem / 16);
-    --spacing-160-dynamic: calc(160rem / 16);
-    --spacing-320-dynamic: calc(320rem / 16);
+    --spacing-1: calc(1rem / 16);
+    --spacing-5: calc(5rem / 16);
+    --spacing-10: calc(10rem / 16);
+    --spacing-20: calc(20rem / 16);
+    --spacing-40: calc(40rem / 16);
+    --spacing-80: calc(80rem / 16);
+    --spacing-160: calc(160rem / 16);
+    --spacing-320: calc(320rem / 16);
 
     /* Semantic Spacing */
 
-    --card-grid-gap: var(--spacing-20-static);
-    --card-internal-gap: var(--spacing-10-static);
-    --control-border-radius: var(--spacing-5-static);
-    --grid-border-radius: var(--spacing-5-static);
-    --card-border-radius: var(--spacing-10-static);
+    --card-grid-gap: var(--spacing-20);
+    --card-internal-gap: var(--spacing-10);
+    --control-border-radius: var(--spacing-5);
+    --grid-border-radius: var(--spacing-5);
+    --card-border-radius: var(--spacing-10);
+    --line: var(--spacing-1);
+    --box-padding: var(--spacing-5) var(--spacing-10);
+    --form-element-padding: var(--spacing-5);
 
     /* Typography */
 
@@ -144,7 +137,7 @@ body {
     border: 0;
     outline: 0;
     background: var(--base-background-color);
-    padding: 20px 0 0;
+    padding: var(--spacing-20) 0 0;
     color: var(--main-text-color);
     margin-left: auto;
     margin-right: auto;
@@ -153,13 +146,13 @@ body {
 }
 
 h1 {
-    font-size: 14px;
+    font-size: var(--font-size-14);
 }
 
 h2,
 .box h2 {
     font-size: var(--font-size-24);
-    margin-bottom: var(--spacing-20-static);
+    margin-bottom: var(--spacing-20);
 }
 
 h3 {
@@ -187,7 +180,7 @@ ul {
 }
 
 li {
-    margin-left: 30px;
+    margin-left: var(--spacing-40);
 }
 
 td {
@@ -195,15 +188,15 @@ td {
 }
 
 a {
-    border-bottom: 1px dotted var(--link-text-color);
+    border-bottom: var(--line) dotted var(--link-text-color);
     text-decoration: none;
     font-weight: bold;
-    padding: 1px;
+    padding: var(--line);
 }
 
 hr {
     border: 0 var(--main-text-color) solid;
-    border-top-width: 1px;
+    border-top-width: var(--line);
     clear: both;
     height: 0;
 }
@@ -222,10 +215,10 @@ See also body. */
     display: inline;
     float: left;
     position: relative;
-    margin-left: var(--spacing-10-static);
-    margin-right: var(--spacing-10-static);
+    margin-left: var(--spacing-10);
+    margin-right: var(--spacing-10);
     width: calc(
-        100% - var(--spacing-10-static) - var(--spacing-10-static)
+        100% - var(--spacing-10) - var(--spacing-10)
     ); /* 100% width minus left and right margins */
 }
 
@@ -267,7 +260,6 @@ See also body. */
 
 .grid_10 {
     max-width: 940px;
-    margin-bottom: 15px;
 }
 
 .prefix_1 {
@@ -316,7 +308,7 @@ table {
 #gatherling_main td.box.round-header {
     background-color: var(--highlight-background-color);
     color: var(--main-text-color);
-    padding-left: 8px;
+    padding: var(--box-padding);
 }
 
 /*
@@ -351,7 +343,7 @@ span.notallowed {
 }
 
 table.scoreboard span {
-    border-bottom: 1px dotted var(--notice-text-color);
+    border-bottom: var(--line) dotted var(--notice-text-color);
 }
 
 table.scoreboard tr.odd {
@@ -363,13 +355,13 @@ table.scoreboard tr.even {
 }
 
 table.scoreboard tr.cutoff {
-    border-bottom: 3px double var(--notice-text-color);
+    border-bottom: var(--spacing-5) double var(--notice-text-color);
 }
 
 table.scoreboard td,
 table.scoreboard th {
     text-align: center;
-    padding-right: 5px;
+    padding-right: var(--spacing-5);
 }
 
 table.scoreboard .playername {
@@ -381,10 +373,10 @@ table.scoreboard .playername {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    border-bottom: 1px solid var(--divider-border-color);
+    border-bottom: var(--line) solid var(--divider-border-color);
     min-height: 200px;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
+    margin-bottom: var(--spacing-20);
+    padding-bottom: var(--spacing-20);
 }
 
 .series .series-content {
@@ -393,14 +385,14 @@ table.scoreboard .playername {
 
 .series .series-name {
     width: 400px;
-    font-size: 22px;
+    font-size: var(--font-size-24);
     font-weight: bold;
     right: 0;
 }
 
 .series .series-logo {
     width: 360px;
-    margin-right: 40px;
+    margin-right: var(--spacing-40);
 }
 
 .series-logo-img {
@@ -417,16 +409,18 @@ table.scoreboard .playername {
 .series .series-info table th {
     text-align: right;
     vertical-align: baseline;
-    padding-right: 5px;
+    padding-right: var(--spacing-5);
 }
 
 #gatherling_main .series .series-info table td {
     vertical-align: baseline;
 }
 
-a.create_deck_link {
-    font-size: 13px;
-    color: var(--link-emphasis-text-color);
+a.create-deck-link,
+a.create-deck-link:hover,
+a.create-deck-link:visited {
+    font-size: var(--font-size-14);
+    color: var(--error-text-color);
 }
 
 .cardHoverImageWrapper .linkCardHoverImage {
@@ -437,22 +431,23 @@ a.create_deck_link {
 .crop {
     float: left;
     overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 2px 30px var(--link-border-color);
+    border-radius: var(--spacing-10);
+    box-shadow: 0 var(--spacing-5) var(--spacing-40) var(--link-border-color);
 }
 
 /* input values to crop the image: top, right, bottom, left */
 .crop img {
-    margin: -2px -6px -6px;
+    margin: calc(-1 * var(--spacing-1)) calc(-1 * var(--spacing-5))
+        calc(-1 * var(--spacing-5));
 }
 
 /* Forms */
 
 .inputbox {
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     color: var(--main-text-color);
     background-color: var(--highlight-background-color);
-    padding: 3px;
+    padding: var(--form-element-padding);
     border-radius: var(--control-border-radius);
 }
 
@@ -461,28 +456,28 @@ a.create_deck_link {
 }
 
 .inputbox:focus {
-    border: 1px solid rgb(234 234 234);
+    border: var(--line) solid rgb(234 234 234);
     border-color: var(--link-border-color);
 }
 
 .inputbox:disabled {
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     background-color: var(--disabled-control-background-color);
     color: var(--disabled-control-color);
-    padding: 3px;
+    padding: var(--form-element-padding);
     border-radius: var(--control-border-radius);
 }
 
 /* Buttons */
 
 .inputbutton {
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     color: var(--main-text-color);
     background-color: var(--control-background-color);
     margin: 5px;
     box-shadow: 0 2px 5px var(--control-border-color);
     display: inline-block;
-    padding: var(--spacing-10-static) var(--spacing-20-static);
+    padding: var(--spacing-10) var(--spacing-20);
     border-radius: var(--control-border-radius);
     font-size: var(--font-size-14);
     cursor: pointer;
@@ -497,14 +492,14 @@ a.create_deck_link {
 }
 
 .inputbutton:focus {
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     background-color: var(--focused-control-background-color);
     color: var(--focused-control-color);
     box-shadow: 0 0 0 var(--control-border-color);
 }
 
 .inputbutton:disabled {
-    border: 1px solid var(--disabled-control-border-color);
+    border: var(--line) solid var(--disabled-control-border-color);
     background-color: var(--disabled-control-background-color);
     color: var(--disabled-control-color);
     box-shadow: 0 0 0 var(--disabled-control-border-color);
@@ -513,7 +508,7 @@ a.create_deck_link {
 .btn-primary {
     background: transparent;
     color: var(--link-noticeable-text-color);
-    border: 1px solid var(--link-noticeable-border-color);
+    border: var(--line) solid var(--link-noticeable-border-color);
 }
 
 .btn-primary:hover {
@@ -534,7 +529,7 @@ a.create_deck_link {
 #table-decksearch td,
 #table-decksearch th {
     border-top-color: var(--divider-border-color);
-    border-bottom: 1px solid var(--divider-border-color);
+    border-bottom: var(--line) solid var(--divider-border-color);
     color: var(--main-text-color);
 }
 
@@ -548,7 +543,7 @@ a.create_deck_link {
 .ds_inputbox {
     margin: auto;
     max-width: 750px;
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     color: var(--main-text-color);
     background-color: var(--highlight-background-color);
     padding: 3px;
@@ -585,7 +580,7 @@ a.create_deck_link {
 }
 
 .ds_input {
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     color: var(--main-text-color);
     background-color: var(--highlight-background-color);
     border-radius: var(--control-border-radius);
@@ -599,12 +594,12 @@ a.create_deck_link {
 }
 
 .ds_input:focus {
-    border: 1px solid rgb(234 234 234);
+    border: var(--line) solid rgb(234 234 234);
     border-color: var(--link-border-color);
 }
 
 .ds_input:disabled {
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     background-color: var(--disabled-control-background-color);
     color: var(--disabled-control-color);
     padding: 3px;
@@ -621,7 +616,7 @@ a.create_deck_link {
     text-align: center;
     display: block;
     padding: 6px 28px;
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     border-radius: var(--control-border-radius);
     box-shadow: 0 2px 5px var(--control-border-color);
 }
@@ -634,14 +629,14 @@ a.create_deck_link {
 }
 
 .ds_submit:focus {
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     background-color: var(--focused-control-background-color);
     color: var(--focused-control-color);
     box-shadow: 0 0 0 var(--control-border-color);
 }
 
 .ds_submit:disabled {
-    border: 1px solid var(--disabled-control-border-color);
+    border: var(--line) solid var(--disabled-control-border-color);
     background-color: var(--disabled-control-background-color);
     color: var(--disabled-control-color);
     box-shadow: 0 0 0 var(--disabled-control-border-color);
@@ -665,9 +660,9 @@ a.create_deck_link {
 }
 
 .ds_checkbox {
-    padding: var(--spacing-5-static);
+    padding: var(--spacing-5);
     margin: 5px;
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     border-radius: var(--control-border-radius);
     background-color: var(--control-background-color);
     display: inline-flex;
@@ -691,7 +686,7 @@ a.create_deck_link {
     max-width: 140px;
     height: 27px;
     outline: solid transparent;
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     color: var(--main-text-color);
     background-color: var(--highlight-background-color);
     padding: 3px;
@@ -737,12 +732,12 @@ a.create_deck_link {
 .tablink {
     border-radius: var(--control-border-radius);
     box-shadow: 0 2px 10px var(--control-border-color);
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     background-color: var(--control-background-color);
     color: var(--link-text-color);
     float: left;
     padding: 8px;
-    margin: 1px 0;
+    margin: var(--line) 0;
     width: 25%;
 }
 
@@ -751,7 +746,7 @@ a.create_deck_link {
 
     /* text color of selected and active item */
     background: var(--highlight-background-color);
-    border: 1px solid var(--link-border-color);
+    border: var(--line) solid var(--link-border-color);
 }
 
 .tabcontent {
@@ -789,7 +784,7 @@ table.events td:last-child {
 }
 
 .winners tr.player-deck td {
-    border-bottom: 1px solid var(--divider-border-color);
+    border-bottom: var(--line) solid var(--divider-border-color);
     padding-bottom: 24px;
 }
 
@@ -810,7 +805,7 @@ a.emailPop {
 }
 
 .borderless:hover {
-    border: 1px solid var(--main-background-color);
+    border: var(--line) solid var(--main-background-color);
 
     /* colors border on img anchors so border matches background and is unseen */
 }
@@ -829,7 +824,7 @@ a:active {
 
 a:hover {
     color: var(--link-emphasis-text-color);
-    border: 1px solid var(--link-border-color);
+    border: var(--line) solid var(--link-border-color);
     padding: 0;
     border-radius: var(--control-border-radius);
 }
@@ -852,7 +847,7 @@ a:has(h6):visited {
 
 a.emailPop:hover {
     color: var(--verified-text-color);
-    border: 1px solid var(--verified-text-color);
+    border: var(--line) solid var(--verified-text-color);
     padding: 0;
     border-radius: var(--control-border-radius);
 }
@@ -880,34 +875,34 @@ a.emailPop:hover {
 
 a.deckverified {
     color: var(--verified-text-color);
-    border-bottom: 1px dotted var(--verified-text-color);
+    border-bottom: var(--line) dotted var(--verified-text-color);
 }
 
 a.deckverified:hover {
     color: var(--verified-text-color);
-    border: 1px solid var(--verified-text-color);
+    border: var(--line) solid var(--verified-text-color);
     padding: 0;
 }
 
 a.createlink {
     color: var(--pending-text-color);
-    border-bottom: 1px dotted var(--pending-text-color);
+    border-bottom: var(--line) dotted var(--pending-text-color);
 }
 
 a.createlink:hover {
     color: var(--pending-text-color);
-    border: 1px solid var(--pending-text-color);
+    border: var(--line) solid var(--pending-text-color);
     padding: 0;
 }
 
 a.deckunverified {
     color: var(--error-text-color);
-    border-bottom: 1px dotted var(--error-text-color);
+    border-bottom: var(--line) dotted var(--error-text-color);
 }
 
 a.deckunverified:hover {
     color: var(--error-text-color);
-    border: 1px solid var(--error-text-color);
+    border: var(--line) solid var(--error-text-color);
     padding: 0;
 }
 
@@ -921,13 +916,13 @@ del {
 
 #header_bar {
     width: calc(
-        100% - var(--spacing-10-static) - var(--spacing-10-static)
+        100% - var(--spacing-10) - var(--spacing-10)
     ); /* 100% width minus left and right margins */
 
     max-width: 940px;
     height: 135px;
-    margin-left: var(--spacing-10-static);
-    margin-right: var(--spacing-10-static);
+    margin-left: var(--spacing-10);
+    margin-right: var(--spacing-10);
     margin-bottom: 5px;
     background-image: url("../images/header_background.jpg");
     background-size: cover;
@@ -951,7 +946,7 @@ del {
     box-shadow: 0 2px 5px var(--control-border-color);
     margin-top: 15px;
     background: var(--main-background-color);
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     padding-bottom: 10px;
 }
 
@@ -967,7 +962,7 @@ del {
 .box h5,
 .box h6,
 .box .series-logo img {
-    padding: 5px 10px;
+    padding: var(--box-padding);
 }
 
 .uppertitle,
@@ -984,10 +979,10 @@ h2.uppertitle {
 .menubar {
     border-radius: var(--grid-border-radius);
     box-shadow: 0 2px 10px var(--control-border-color);
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     background: var(--main-background-color);
-    padding: var(--spacing-10-static);
-    gap: var(--spacing-10-static);
+    padding: var(--spacing-10);
+    gap: var(--spacing-10);
 }
 
 .menubar:hover {
@@ -996,13 +991,13 @@ h2.uppertitle {
 
 .menubar ul {
     display: grid;
-    gap: var(--spacing-10-static);
+    gap: var(--spacing-10);
     grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
 }
 
 .menubar li {
     display: block;
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     border-radius: var(--control-border-radius);
     box-shadow: 0 2px 5px var(--control-border-color);
     margin: 0;
@@ -1016,7 +1011,7 @@ h2.uppertitle {
 
 .menubar li a:hover {
     color: var(--link-emphasis-text-color);
-    border: 1px solid var(--link-border-color);
+    border: var(--line) solid var(--link-border-color);
 }
 
 .deck {
@@ -1114,7 +1109,7 @@ table.center {
 }
 
 #gatherling_main .eventname {
-    border-bottom: 1px dotted black;
+    border-bottom: var(--line) dotted black;
 }
 
 #gatherling_main table th.top {
@@ -1131,9 +1126,9 @@ table.center {
 .event-grid {
     display: grid;
     gap: var(--card-grid-gap);
-    margin-bottom: var(--spacing-20-dynamic);
-    margin-left: var(--spacing-10-static);
-    margin-right: var(--spacing-10-static);
+    margin-bottom: var(--spacing-20);
+    margin-left: var(--spacing-10);
+    margin-right: var(--spacing-10);
 }
 
 @media (width >= 40rem) {
@@ -1145,8 +1140,9 @@ table.center {
 .event-card {
     background-color: var(--card-background-color);
     border-radius: var(--card-border-radius);
-    padding: var(--spacing-20-static);
-    box-shadow: 0 var(--spacing-5-static) var(--spacing-5-static) -1px var(--control-border-color);
+    padding: var(--spacing-20);
+    box-shadow: 0 var(--spacing-5) var(--spacing-5) calc(-1 * var(--line))
+        var(--control-border-color);
 }
 
 .event-card a,
@@ -1171,15 +1167,15 @@ table.center {
 .card-header {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-5-static);
-    padding-bottom: var(--spacing-20-dynamic);
-    border-bottom: 1px solid var(--divider-border-color);
+    gap: var(--spacing-5);
+    padding-bottom: var(--spacing-20);
+    border-bottom: var(--line) solid var(--divider-border-color);
 }
 
 @media (width >= 40rem) {
     .card-header {
         flex-direction: row;
-        gap: var(--spacing-10-static);
+        gap: var(--spacing-10);
         justify-content: space-between;
         align-items: center;
     }
@@ -1191,7 +1187,7 @@ table.center {
 .event-action {
     display: flex;
     align-items: center;
-    gap: var(--spacing-5-static);
+    gap: var(--spacing-5);
 }
 
 a.player-count,
@@ -1204,9 +1200,9 @@ a.event-type {
     justify-content: space-between;
     align-items: center;
     background-color: var(--top-background-color);
-    padding: var(--spacing-10-static);
+    padding: var(--spacing-10);
     border-radius: var(--control-border-radius);
-    margin: var(--spacing-20-static) 0;
+    margin: var(--spacing-20) 0;
 }
 
 /* Pagination
@@ -1263,11 +1259,11 @@ Enjoy.
     color: #337ab7;
     text-decoration: none;
     background-color: #fff;
-    border: 1px solid #ddd;
+    border: var(--line) solid #ddd;
     display: block;
     float: left;
     position: relative;
-    margin-left: -1px;
+    margin-left: calc(-1 * var(--line));
 }
 
 .Zebra_Pagination li.active a {
@@ -1324,7 +1320,7 @@ Enjoy.
 /* COMMON ATTRIBUTES FOR ALL THE LINKS---------------------------------------------------------------------------------------------------------------------- */
 .Zebra_Pagination a {
     padding: 4px;
-    border: 1px solid black;
+    border: var(--line) solid black;
     color: var(--main-text-color);
     background-color: var(--main-background-color);
     text-decoration: none;
@@ -1344,7 +1340,7 @@ Enjoy.
 
 /* "NEXT PAGE" AND "PREVIOUS PAGE" LINKS---------------------------------------------------------------------------------------------------------------------- */
 .Zebra_Pagination a.navigation {
-    border: 1px solid var(--control-border-color);
+    border: var(--line) solid var(--control-border-color);
     background-repeat: no-repeat;
 }
 

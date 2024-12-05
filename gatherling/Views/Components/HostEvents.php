@@ -8,28 +8,20 @@ use function Safe\strtotime;
 
 class HostEvents extends Component
 {
-    /** @var list<array{name: string, format: string, players: int, host: string, start: string, active: int, finalized: int, cohost: string, series: string, kvalueDisplay: string, link: string, isOngoing: bool, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string, startTime: Time}> */
+    /** @var list<array{name: string, players: int, start: string, active: int, finalized: int, series: string, link: string, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string, startTime: Time}> */
     public array $pendingEvents = [];
-    /** @var list<array{name: string, format: string, players: int, host: string, start: string, active: int, finalized: int, cohost: string, series: string, kvalueDisplay: string, link: string, isOngoing: bool, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string, startTime: Time}> */
+    /** @var list<array{name: string, players: int, start: string, active: int, finalized: int, series: string, link: string, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string, startTime: Time}> */
     public array $activeEvents = [];
 
     public bool $hasPendingEvents;
     public bool $hasActiveEvents;
 
-    public Icon $playersIcon;
-    public Icon $structureIcon;
-    public Icon $standingsIcon;
-
     /**
-     * @param list<array{name: string, format: string, players: int, host: string, start: string, active: int, finalized: int, cohost: string, series: string, kvalueDisplay: string, link: string, isOngoing: bool, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string}> $pendingEvents
-     * @param list<array{name: string, format: string, players: int, host: string, start: string, active: int, finalized: int, cohost: string, series: string, kvalueDisplay: string, link: string, isOngoing: bool, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string}> $activeEvents
+     * @param list<array{name: string, players: int, start: string, active: int, finalized: int, series: string, link: string, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string}> $pendingEvents
+     * @param list<array{name: string, players: int, start: string, active: int, finalized: int, series: string, link: string, currentRound: int, settingsLink: string, registrationLink: string, matchesLink: string, standingsLink: string, structureSummary: string}> $activeEvents
      */
     public function __construct(array $pendingEvents, array $activeEvents)
     {
-        $this->playersIcon = new Icon('lucide:users');
-        $this->structureIcon = new Icon('lucide:trophy');
-        $this->standingsIcon = new Icon('lucide:chevron-right');
-
         $this->hasPendingEvents = count($pendingEvents) > 0;
         $this->hasActiveEvents = count($activeEvents) > 0;
 

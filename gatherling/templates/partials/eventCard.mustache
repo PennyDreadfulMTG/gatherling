@@ -4,14 +4,14 @@
             <a href="{{link}}"><h3>{{name}}</h3></a>
             <div>
                 <a class="event-type" href="{{settingsLink}}">
-                    {{#structureIcon}}{{> icon}}{{/structureIcon}}
+                    <i class="fas fa-trophy"></i>
                     {{structureSummary}}
                 </a>
             </div>
         </div>
         <div>
             <a class="player-count" href="{{registrationLink}}">
-                {{#playersIcon}}{{> icon}}{{/playersIcon}}
+                <i class="fas fa-users"></i>
                 <span>{{players}}</span>
             </a>
         </div>
@@ -22,7 +22,7 @@
             <a href="{{matchesLink}}">Round {{currentRound}}</a>
             <a href="{{standingsLink}}" class="event-action">
                 View Standings
-                {{#standingsIcon}}{{> icon}}{{/standingsIcon}}
+                <i class="fas fa-arrow-right"></i>
             </a>
         {{/active}}
         {{^active}}
@@ -31,7 +31,7 @@
             </a>
             <a href="{{registrationLink}}" class="event-action">
                 Start Event
-                {{#standingsIcon}}{{> icon}}{{/standingsIcon}}
+                <i class="fas fa-arrow-right"></i>
             </a>
         {{/active}}
     </div>

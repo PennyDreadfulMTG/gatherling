@@ -24,10 +24,6 @@ class Preregistration extends Component
 
     public function __construct(Player $player)
     {
-        if (!$player->name) {
-            throw new NotFoundException("Tried to display preregistration for a player with no name", 0, null, 'Player', []);
-        }
-
         $upcomingEvents = Event::getUpcomingEvents($player->name);
         $events = Event::getNextPreRegister();
 
@@ -68,9 +64,6 @@ class Preregistration extends Component
             }
             $startingSoon = time() >= $eventStart;
             $startTime = new Time($eventStart, $now);
-            if (!$event->id) {
-                throw new InvalidArgumentException("Event ID not found for event {$event->name}");
-            }
             $entry = new Entry($event->id, $player->name);
 
             $createDeckLink = $deckLink = null;

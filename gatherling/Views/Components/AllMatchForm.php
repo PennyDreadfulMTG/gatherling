@@ -19,7 +19,7 @@ class AllMatchForm extends Component
         $this->seriesDropMenuP = selector(opts($player->getSeriesPlayed()), 'series', '-- Series --', $selectedSeries ? $selectedSeries : '%');
         $this->seasonDropMenuP = selector(opts($player->getSeasonsPlayed()), 'season', '-- Season --', $selectedSeason ? $selectedSeason : '%');
         $opts = array_map(fn (array $item) => ['value' => $item['opp'], 'text' => $item['opp'] . ' [' . $item['cnt'] . ']'], $player->getOpponents());
-        $this->oppDropMenuP= selector($opts, 'opp', '-- Opponent --', $selectedOpponent ? $selectedOpponent : '%');
+        $this->oppDropMenuP = selector($opts, 'opp', '-- Opponent --', $selectedOpponent ? $selectedOpponent : '%');
     }
 }
 
