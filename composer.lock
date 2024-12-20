@@ -1179,16 +1179,16 @@
         },
         {
             "name": "shish/safe",
-            "version": "v2.6.3",
+            "version": "v2.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shish/safe.git",
-                "reference": "88c2cf506c6b497cd2a961c5e8116a18c5c272c0"
+                "reference": "482e6227330a70b21c1c9e9301cc99b5658ccb89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shish/safe/zipball/88c2cf506c6b497cd2a961c5e8116a18c5c272c0",
-                "reference": "88c2cf506c6b497cd2a961c5e8116a18c5c272c0",
+                "url": "https://api.github.com/repos/shish/safe/zipball/482e6227330a70b21c1c9e9301cc99b5658ccb89",
+                "reference": "482e6227330a70b21c1c9e9301cc99b5658ccb89",
                 "shasum": ""
             },
             "require": {
@@ -1219,6 +1219,7 @@
                     "deprecated/mysqli.php",
                     "generated/apache.php",
                     "generated/apcu.php",
+                    "generated/array.php",
                     "generated/bzip2.php",
                     "generated/calendar.php",
                     "generated/classobj.php",
@@ -1309,19 +1310,23 @@
             "description": "PHP core functions that throw exceptions instead of returning FALSE on error (a less-abandoned fork of thecodingmachine/safe)",
             "support": {
                 "issues": "https://github.com/shish/safe/issues",
-                "source": "https://github.com/shish/safe/tree/v2.6.3"
+                "source": "https://github.com/shish/safe/tree/v2.6.4"
             },
             "funding": [
+                {
+                    "url": "https://github.com/OskarStark",
+                    "type": "github"
+                },
                 {
                     "url": "https://github.com/shish",
                     "type": "github"
                 },
                 {
-                    "url": "https://ko-fi.com/shish2k",
-                    "type": "ko_fi"
+                    "url": "https://github.com/staabm",
+                    "type": "github"
                 }
             ],
-            "time": "2024-10-08T20:21:12+00:00"
+            "time": "2024-12-18T13:36:07+00:00"
         },
         {
             "name": "stefangabos/zebra_pagination",
