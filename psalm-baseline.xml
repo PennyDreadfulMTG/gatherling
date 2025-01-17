@@ -45,10 +45,12 @@
       <code><![CDATA[$sql]]></code>
     </MixedArgument>
     <MixedAssignment>
+      <code><![CDATA[$convertedParams[$key]]]></code>
       <code><![CDATA[$expandedParams[$key]]]></code>
       <code><![CDATA[$expandedParams[$newKey]]]></code>
       <code><![CDATA[$item]]></code>
       <code><![CDATA[$result]]></code>
+      <code><![CDATA[$value]]></code>
       <code><![CDATA[$value]]></code>
       <code><![CDATA[$value]]></code>
       <code><![CDATA[$value]]></code>
@@ -325,10 +327,19 @@
       <code><![CDATA[$name]]></code>
     </MissingConstructor>
   </file>
+  <file src="gatherling/Models/DeckInfoDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$archetype]]></code>
+      <code><![CDATA[$created_date]]></code>
+      <code><![CDATA[$format]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$playername]]></code>
+    </MissingConstructor>
+  </file>
   <file src="gatherling/Models/Decksearch.php">
     <MixedArgument>
       <code><![CDATA[$matchid]]></code>
-      <code><![CDATA[$row['id']]]></code>
       <code><![CDATA[$this->playerName]]></code>
     </MixedArgument>
     <MixedAssignment>
@@ -341,10 +352,6 @@
       <code><![CDATA[$this->playerName]]></code>
       <code><![CDATA[$this->playerName]]></code>
     </MixedAssignment>
-    <MixedReturnTypeCoercion>
-      <code><![CDATA[$list]]></code>
-      <code><![CDATA[list<array{id: int, archetype: string, name: string, playername: string, format: string, created_date: string, record: string}>]]></code>
-    </MixedReturnTypeCoercion>
     <PossiblyNullOperand>
       <code><![CDATA[$final_color_str]]></code>
     </PossiblyNullOperand>
@@ -518,6 +525,12 @@
       <code><![CDATA[$deck]]></code>
       <code><![CDATA[$medal]]></code>
       <code><![CDATA[$player]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/FinalizedEventDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$start]]></code>
     </MissingConstructor>
   </file>
   <file src="gatherling/Models/Format.php">
@@ -800,12 +813,8 @@
   <file src="gatherling/Models/HostedEventDto.php">
     <MissingConstructor>
       <code><![CDATA[$active]]></code>
-      <code><![CDATA[$cohost]]></code>
       <code><![CDATA[$current_round]]></code>
       <code><![CDATA[$finalized]]></code>
-      <code><![CDATA[$format]]></code>
-      <code><![CDATA[$host]]></code>
-      <code><![CDATA[$kvalue]]></code>
       <code><![CDATA[$name]]></code>
       <code><![CDATA[$players]]></code>
       <code><![CDATA[$series]]></code>
@@ -1064,8 +1073,6 @@
       <code><![CDATA[$this->name]]></code>
       <code><![CDATA[$this->name]]></code>
       <code><![CDATA[$this->name]]></code>
-      <code><![CDATA[$this->name]]></code>
-      <code><![CDATA[$this->name]]></code>
     </MixedAssignment>
     <MixedInferredReturnType>
       <code><![CDATA[?int]]></code>
@@ -1073,19 +1080,12 @@
       <code><![CDATA[?string]]></code>
       <code><![CDATA[int]]></code>
       <code><![CDATA[int]]></code>
-      <code><![CDATA[int]]></code>
     </MixedInferredReturnType>
-    <MixedOperand>
-      <code><![CDATA[$losses]]></code>
-      <code><![CDATA[$wins]]></code>
-    </MixedOperand>
     <MixedReturnStatement>
       <code><![CDATA[$count]]></code>
       <code><![CDATA[$evcount]]></code>
       <code><![CDATA[$max]]></code>
       <code><![CDATA[$min]]></code>
-      <code><![CDATA[$rating]]></code>
-      <code><![CDATA[$rating]]></code>
       <code><![CDATA[$res]]></code>
       <code><![CDATA[$res]]></code>
     </MixedReturnStatement>
@@ -1144,11 +1144,6 @@
     </MissingConstructor>
   </file>
   <file src="gatherling/Models/Ratings.php">
-    <MixedArgument>
-      <code><![CDATA[$eventar[$index + 1]]]></code>
-      <code><![CDATA[$eventar[$index]]]></code>
-      <code><![CDATA[$eventar[$index]]]></code>
-    </MixedArgument>
     <MixedArrayOffset>
       <code><![CDATA[$data[$player]]]></code>
     </MixedArrayOffset>
@@ -1157,8 +1152,6 @@
       <code><![CDATA[$datum['rating']]]></code>
       <code><![CDATA[$datum['wins']]]></code>
       <code><![CDATA[$event_id]]></code>
-      <code><![CDATA[$eventar[$index + 1]]]></code>
-      <code><![CDATA[$eventar[$index]]]></code>
     </MixedAssignment>
     <MixedReturnTypeCoercion>
       <code><![CDATA[$data]]></code>
@@ -1166,20 +1159,6 @@
       <code><![CDATA[array<string, array<string, int>>]]></code>
       <code><![CDATA[list<array{playera: string, playerb: string, result: string, kvalue: int}>]]></code>
     </MixedReturnTypeCoercion>
-    <PossiblyInvalidArgument>
-      <code><![CDATA[$event]]></code>
-      <code><![CDATA[$event]]></code>
-      <code><![CDATA[$event]]></code>
-      <code><![CDATA[$event]]></code>
-      <code><![CDATA[$row['start']]]></code>
-      <code><![CDATA[$row['start']]]></code>
-    </PossiblyInvalidArgument>
-    <PossiblyInvalidMethodCall>
-      <code><![CDATA[close]]></code>
-      <code><![CDATA[close]]></code>
-      <code><![CDATA[fetch_assoc]]></code>
-      <code><![CDATA[fetch_assoc]]></code>
-    </PossiblyInvalidMethodCall>
     <PropertyNotSetInConstructor>
       <code><![CDATA[$format]]></code>
       <code><![CDATA[$losses]]></code>
@@ -1199,12 +1178,24 @@
       <code><![CDATA[$rating]]></code>
     </MissingConstructor>
   </file>
+  <file src="gatherling/Models/RatingsEventDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$start]]></code>
+    </MissingConstructor>
+  </file>
   <file src="gatherling/Models/RecentWinnerDto.php">
     <MissingConstructor>
       <code><![CDATA[$event]]></code>
       <code><![CDATA[$id]]></code>
       <code><![CDATA[$name]]></code>
       <code><![CDATA[$player]]></code>
+    </MissingConstructor>
+  </file>
+  <file src="gatherling/Models/RecordDto.php">
+    <MissingConstructor>
+      <code><![CDATA[$losses]]></code>
+      <code><![CDATA[$wins]]></code>
     </MissingConstructor>
   </file>
   <file src="gatherling/Models/ReportDto.php">
@@ -1519,9 +1510,9 @@
   </file>
   <file src="gatherling/Models/UpcomingEventDto.php">
     <MissingConstructor>
-      <code><![CDATA[$d]]></code>
       <code><![CDATA[$format]]></code>
       <code><![CDATA[$name]]></code>
+      <code><![CDATA[$start]]></code>
     </MissingConstructor>
   </file>
   <file src="gatherling/Views/Components/AllDecks.php">
@@ -1750,11 +1741,6 @@
       <code><![CDATA[$this->eventsMissingTrophies]]></code>
     </UninitializedProperty>
   </file>
-  <file src="gatherling/Views/Components/MostPlayedDecks.php">
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$deck->created_date]]></code>
-    </RiskyTruthyFalsyComparison>
-  </file>
   <file src="gatherling/Views/Components/NumDropMenu.php">
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[$special]]></code>
@@ -1768,7 +1754,6 @@
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[!$deck->playername]]></code>
       <code><![CDATA[$player]]></code>
-      <code><![CDATA[$startTime]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/Views/Components/PlayerBanForm.php">
@@ -1806,11 +1791,6 @@
   <file src="gatherling/Views/Components/RecentDecksTable.php">
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[!$deck->eventname]]></code>
-    </RiskyTruthyFalsyComparison>
-  </file>
-  <file src="gatherling/Views/Components/RecentEventsTable.php">
-    <RiskyTruthyFalsyComparison>
-      <code><![CDATA[$eventStartTime]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/Views/Components/RecentMatchTable.php">
@@ -1941,13 +1921,6 @@
       <code><![CDATA[$event->series]]></code>
       <code><![CDATA[$event->series]]></code>
     </PossiblyNullArgument>
-    <PossiblyNullArrayAccess>
-      <code><![CDATA[$datearr[1]]]></code>
-      <code><![CDATA[$datearr[2]]]></code>
-      <code><![CDATA[$datearr[3]]]></code>
-      <code><![CDATA[$datearr[4]]]></code>
-      <code><![CDATA[$datearr[5]]]></code>
-    </PossiblyNullArrayAccess>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[$event->series]]></code>
     </RiskyTruthyFalsyComparison>
