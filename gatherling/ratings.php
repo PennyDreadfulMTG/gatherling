@@ -90,7 +90,10 @@ function bestEver(string $format): array
                ) AS q
          WHERE format = :format AND p.name = r.player AND q.qmax = r.rating
          LIMIT 1';
-    $bestEver = db()->selectOnly($sql, BestEverDto::class, ['format' => $format]);
+    $bestEver = db()->selectOnlyOrNull($sql, BestEverDto::class, ['format' => $format]);
+    if ($bestEver === null) {
+        return ['player' => 'No Player', 'rating' => 0, 't' => time()];
+    }
     return [
         'player' => $bestEver->player,
         'rating' => $bestEver->rating,
@@ -101,8 +104,8 @@ function bestEver(string $format): array
 /** @return array{date: DateTime, name: string} */
 function currentThrough(string $format): array
 {
-    $start = db()->string('SELECT MAX(updated) FROM ratings WHERE format = :format', ['format' => $format]);
-    $name = db()->string('SELECT name FROM events WHERE start = :start ORDER BY name LIMIT 1', ['start' => $start]);
+    $start = db()->string('SELECT COALESCE(MAX(updated), NOW()) FROM ratings WHERE format = :format', ['format' => $format]);
+    $name = db()->optionalString('SELECT name FROM events WHERE start = :start ORDER BY name LIMIT 1', ['start' => $start]) ?? 'No Event';
     return ['date' => new DateTime($start), 'name' => $name];
 }
 
