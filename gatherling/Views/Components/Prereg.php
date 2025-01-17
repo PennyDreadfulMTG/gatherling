@@ -6,8 +6,7 @@ namespace Gatherling\Views\Components;
 
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
-
-use function Safe\strtotime;
+use Safe\DateTimeImmutable;
 
 class Prereg extends Component
 {
@@ -36,6 +35,6 @@ class Prereg extends Component
             $this->showRegister = true;
             $this->registerLink = 'prereg.php?action=reg&event=' . rawurlencode($event->name);
         }
-        $this->start = $event->start ? new Time(strtotime($event->start), time(), true) : null;
+        $this->start = new Time($event->start, new DateTimeImmutable(), true);
     }
 }

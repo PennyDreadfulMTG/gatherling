@@ -4,30 +4,34 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
+use Safe\DateTimeImmutable;
+
 class Time extends Component
 {
     public string $datetime;
     public string $text;
 
-    public function __construct(int $time, int $now, public bool $long = false)
+    public function __construct(DateTimeImmutable $time, DateTimeImmutable $now, public bool $long = false)
     {
-        $this->datetime = date('c', $time);
+        $this->datetime = $time->format('c');
         $this->text = $this->humanDate($time, $now);
     }
 
-    private function humanDate(int $datetime, int $now): string
+    private function humanDate(DateTimeImmutable $datetime, DateTimeImmutable $nowDatetime): string
     {
-        $elapsed = abs($now - $datetime);
+        $then = $datetime->getTimestamp();
+        $now = $nowDatetime->getTimestamp();
+        $elapsed = abs($now - $then);
         if ($elapsed == 0) {
             return 'just now';
         }
         if ($elapsed > 60 * 60 * 24 * 365) {
-            return date('M Y', $datetime);
+            return date('M Y', $then);
         }
         if ($elapsed > 60 * 60 * 24 * 28) {
-            return date('M jS', $datetime);
+            return date('M jS', $then);
         }
-        $suffix = $datetime > $now ? 'from now' : 'ago';
+        $suffix = $then > $now ? 'from now' : 'ago';
         $INTERVALS = [
             'week'   => 60 * 60 * 24 * 7,
             'day'    => 60 * 60 * 24,

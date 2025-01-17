@@ -256,9 +256,9 @@ function updateRestrictedList(string $formatName, string|array $addRestrictedCar
         if (count($cards) > 0) {
             foreach ($cards as $card) {
                 $success = $format->insertCardIntoRestrictedlist($card);
-            }
-            if (!$success) {
-                return new ErrorMessage(["Can't add {$card} to Restricted list, it is either not in the database, on the ban list, legal card list, or already on the restricted list"]);
+                if (!$success) {
+                    return new ErrorMessage(["Can't add {$card} to Restricted list, it is either not in the database, on the ban list, legal card list, or already on the restricted list"]);
+                }
             }
         }
     }

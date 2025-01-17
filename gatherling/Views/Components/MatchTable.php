@@ -6,6 +6,7 @@ namespace Gatherling\Views\Components;
 
 use Gatherling\Models\Player;
 use Gatherling\Exceptions\NotFoundException;
+use Safe\DateTimeImmutable;
 
 class MatchTable extends Component
 {

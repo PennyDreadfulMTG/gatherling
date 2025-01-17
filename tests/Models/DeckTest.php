@@ -9,6 +9,7 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Tests\Support\TestCases\DatabaseCase;
+use Safe\DateTimeImmutable;
 
 use function Gatherling\Helpers\parseCardsWithQuantity;
 
@@ -33,7 +34,7 @@ class DeckTest extends DatabaseCase
         $event = new Event('');
         $event->name = 'Test Event';
         $event->host = $host->name;
-        $event->start = '2024-01-01';
+        $event->start = new DateTimeImmutable('2024-01-01');
         $event->kvalue = 16;
         $event->format = 'Standard';
         $event->series = 'Test Series';

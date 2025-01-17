@@ -16,8 +16,7 @@ class DatabaseException extends GatherlingException
         ?Throwable $previous = null,
         string $sql = '',
         array $params = [],
-    )
-    {
+    ) {
         $msg = $baseMessage;
         if ($sql) {
             $msg .= ' (' . db()->interpolateQuery($sql, $params) . ')';

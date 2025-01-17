@@ -26,7 +26,7 @@ class MaindeckTable extends Component
         $creatures = $deck->getCreatureCards();
         $this->creaturesCount = $deck->getCardCount($creatures);
 
-        $other = $deck->getOtherCardS();
+        $other = $deck->getOtherCards();
         $this->otherSpellsCount = $deck->getCardCount($other);
 
         $lands = $deck->getLandCards();

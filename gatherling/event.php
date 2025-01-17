@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling;
 
+use DateInterval;
 use Gatherling\Exceptions\ValidationException;
 use Gatherling\Models\Database;
 use Gatherling\Models\Entry;
@@ -24,7 +25,7 @@ use Gatherling\Views\Pages\PlayerList;
 use Gatherling\Views\Pages\PointsAdjustmentForm;
 use Gatherling\Views\Pages\ReportsForm;
 use Gatherling\Views\Pages\StandingsList;
-use InvalidArgumentException;
+use Safe\DateTimeImmutable;
 
 use function Gatherling\Helpers\files;
 use function Gatherling\Helpers\get;
@@ -34,7 +35,6 @@ use function Gatherling\Helpers\server;
 use function Safe\fclose;
 use function Safe\fopen;
 use function Safe\preg_replace;
-use function Safe\strtotime;
 
 require_once 'lib.php';
 
@@ -103,7 +103,7 @@ function newEventFromEventName(string $eventName, bool $newSeason = false): Even
     $newEvent = new Event('');
     $newEvent->season = $oldEvent->season + ($newSeason ? 1 : 0);
     $newEvent->number = $newSeason ? 1 : $oldEvent->number + 1;
-    $newEvent->start = date('Y-m-d H:i:00', strtotime($oldEvent->start) + (86400 * 7));
+    $newEvent->start = $oldEvent->start->add(DateInterval::createFromDateString('1 week'));
     $newEvent->finalized = 0;
 
     $copiableFields = ['format', 'kvalue', 'prereg_allowed', 'threadurl', 'reporturl', 'metaurl',
@@ -296,7 +296,7 @@ function updateEvent(): Event
     }
 
     $event = new Event(post()->string('name'));
-    $event->start = "{$_POST['year']}-{$_POST['month']}-{$_POST['day']} {$_POST['hour']}:00";
+    $event->start = new DateTimeImmutable("{$_POST['year']}-{$_POST['month']}-{$_POST['day']} {$_POST['hour']}:00");
     $event->finalized = post()->int('finalized');
     $event->active = post()->int('active');
     $event->current_round = post()->int('newmatchround');

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Gatherling\Helpers;
 
+use DateTimeZone;
 use Gatherling\Logger;
+use Safe\DateTimeImmutable;
 
 function request(): Request
 {
@@ -56,4 +58,9 @@ function logger(): Logger
     }
 
     return $logger;
+}
+
+function datetime(string $datetime): DateTimeImmutable
+{
+    return new DateTimeImmutable($datetime, new DateTimeZone(date_default_timezone_get()));
 }

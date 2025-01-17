@@ -102,22 +102,22 @@ parameters:
 
 		-
 			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 2
+			count: 1
 			path: gatherling/Models/Decksearch.php
 
 		-
 			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 2
+			count: 1
 			path: gatherling/Models/Decksearch.php
 
 		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 2
+			count: 1
 			path: gatherling/Models/Decksearch.php
 
 		-
 			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 2
+			count: 1
 			path: gatherling/Models/Decksearch.php
 
 		-
@@ -286,7 +286,7 @@ parameters:
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getRestrictedTotribeList\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getRestrictedToTribeList\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
 			count: 1
 			path: gatherling/Models/Format.php
 
@@ -432,27 +432,27 @@ parameters:
 
 		-
 			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 36
-			path: gatherling/Models/Player.php
-
-		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 31
-			path: gatherling/Models/Player.php
-
-		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
 			count: 34
 			path: gatherling/Models/Player.php
 
 		-
+			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
+			count: 29
+			path: gatherling/Models/Player.php
+
+		-
+			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
+			count: 32
+			path: gatherling/Models/Player.php
+
+		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 35
+			count: 33
 			path: gatherling/Models/Player.php
 
 		-
 			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 31
+			count: 29
 			path: gatherling/Models/Player.php
 
 		-
@@ -466,63 +466,33 @@ parameters:
 			path: gatherling/Models/Player.php
 
 		-
-			message: "#^Cannot access property \\$error on mysqli_stmt\\|false\\.$#"
+			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
 			count: 1
 			path: gatherling/Models/Ratings.php
 
 		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 3
-			path: gatherling/Models/Ratings.php
-
-		-
 			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 2
-			path: gatherling/Models/Ratings.php
-
-		-
-			message: "#^Cannot call method close\\(\\) on mysqli_result\\|true\\.$#"
-			count: 2
+			count: 1
 			path: gatherling/Models/Ratings.php
 
 		-
 			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 3
+			count: 1
 			path: gatherling/Models/Ratings.php
 
 		-
 			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 3
+			count: 1
 			path: gatherling/Models/Ratings.php
 
 		-
 			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
-			count: 2
-			path: gatherling/Models/Ratings.php
-
-		-
-			message: "#^Cannot call method fetch_assoc\\(\\) on mysqli_result\\|true\\.$#"
-			count: 2
+			count: 1
 			path: gatherling/Models/Ratings.php
 
 		-
 			message: "#^Method Gatherling\\\\Models\\\\Ratings\\:\\:getEntryRatings\\(\\) should return array\\<string, array\\<string, int\\>\\> but returns array\\<int\\|string, array\\<string, mixed\\>\\>\\.$#"
 			count: 1
-			path: gatherling/Models/Ratings.php
-
-		-
-			message: "#^Parameter \\#1 \\$event of method Gatherling\\\\Models\\\\Ratings\\:\\:calcPostEventRatings\\(\\) expects string, float\\|int\\|string\\|null given\\.$#"
-			count: 2
-			path: gatherling/Models/Ratings.php
-
-		-
-			message: "#^Parameter \\#1 \\$event of method Gatherling\\\\Models\\\\Ratings\\:\\:insertRatings\\(\\) expects string, float\\|int\\|string\\|null given\\.$#"
-			count: 2
-			path: gatherling/Models/Ratings.php
-
-		-
-			message: "#^Parameter \\#4 \\$date of method Gatherling\\\\Models\\\\Ratings\\:\\:insertRatings\\(\\) expects string, float\\|int\\|string\\|null given\\.$#"
-			count: 2
 			path: gatherling/Models/Ratings.php
 
 		-
@@ -669,31 +639,6 @@ parameters:
 			message: "#^Cannot cast mixed to string\\.$#"
 			count: 1
 			path: gatherling/Views/Components/TextInput.php
-
-		-
-			message: "#^Cannot access offset 1 on iterable\\<\\(int\\|string\\), string\\>\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventForm.php
-
-		-
-			message: "#^Cannot access offset 2 on iterable\\<\\(int\\|string\\), string\\>\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventForm.php
-
-		-
-			message: "#^Cannot access offset 3 on iterable\\<\\(int\\|string\\), string\\>\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventForm.php
-
-		-
-			message: "#^Cannot access offset 4 on iterable\\<\\(int\\|string\\), string\\>\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventForm.php
-
-		-
-			message: "#^Cannot access offset 5 on iterable\\<\\(int\\|string\\), string\\>\\|null\\.$#"
-			count: 1
-			path: gatherling/Views/Pages/EventForm.php
 
 		-
 			message: "#^Parameter \\#3 \\$limitTo of class Gatherling\\\\Views\\\\Components\\\\SeriesDropMenu constructor expects list\\<string\\>, array\\<int\\<0, max\\>, string\\> given\\.$#"

@@ -12,6 +12,7 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Models\Matchup;
 use Gatherling\Tests\Support\TestCases\DatabaseCase;
+use Safe\DateTimeImmutable;
 
 use function Gatherling\Helpers\parseCardsWithQuantity;
 use function Safe\json_encode;
@@ -51,7 +52,8 @@ final class EventsTest extends DatabaseCase
         $name = sprintf('%s %d.%02d', $series->name, 1, $number);
 
         $event = new Event('');
-        $event->start = date('Y-m-d H:00:00');
+        $start = new DateTimeImmutable('2024-12-03 02:25');
+        $event->start = $start;
         $event->name = $name;
 
         $host = Player::findOrCreateByName('JimmyTheHost');
@@ -79,7 +81,7 @@ final class EventsTest extends DatabaseCase
 
         $event = new Event($name);
         $this->assertEquals($event->name, $name);
-        $this->assertEquals($event->start, date('Y-m-d H:00:00'));
+        $this->assertEquals($event->start, $start);
 
         return $event;
     }

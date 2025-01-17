@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use Gatherling\Exceptions\DatabaseException;
+use DateTimeZone;
 use Gatherling\Exceptions\NotFoundException;
 use Gatherling\Exceptions\ValidationException;
-use Safe\Exceptions\DatetimeException;
+use Safe\DateTimeImmutable;
 
+use function Gatherling\Helpers\datetime;
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\logger;
-use function Safe\strtotime;
 
 class Event
 {
@@ -22,7 +22,7 @@ class Event
     public int $number;
     public string $format;
 
-    public string $start;
+    public DateTimeImmutable $start;
     public int $kvalue;
     public int $active;
     public int $finalized;
@@ -80,7 +80,7 @@ class Event
             $this->reporturl = '';
             $this->metaurl = '';
             $this->private = 0;
-            $this->start = '';
+            $this->start = datetime('+1 week');
             $this->kvalue = 16;
             $this->finalized = 0;
             $this->prereg_allowed = 0;
@@ -124,7 +124,7 @@ class Event
         $this->series = $event->series;
         $this->season = $event->season;
         $this->number = $event->number;
-        $this->start = $event->start;
+        $this->start = datetime($event->start);
         $this->kvalue = $event->kvalue;
         $this->finalized = $event->finalized;
         $this->prereg_allowed = $event->prereg_allowed;
@@ -212,7 +212,7 @@ class Event
         string $client
     ): Event {
         $event = new self('');
-        $event->start = "{$year}-{$month}-{$day} {$hour}:00";
+        $event->start = datetime("{$year}-{$month}-{$day} {$hour}:00");
 
         if (empty($season) && empty($number)) {
             $_series = new Series($series);
@@ -269,11 +269,6 @@ class Event
 
     private function validate(): void
     {
-        try {
-            strtotime($this->start);
-        } catch (DatetimeException $e) {
-            throw new ValidationException("Invalid start date {$this->start}");
-        }
         if (db()->optionalInt('SELECT 1 FROM formats WHERE name = :name', ['name' => $this->format]) === null) {
             throw new ValidationException("Invalid format {$this->format}");
         }
@@ -1620,7 +1615,7 @@ class Event
         $structure = $this->current_round > $this->mainrounds ? $this->finalstruct : $this->mainstruct;
 
         if (in_array($structure, ['Swiss', 'Swiss (Blossom)', 'League', 'League Match'])) {
-            $this->assignMedalsbyStandings();
+            $this->assignMedalsByStandings();
         } elseif ($structure === 'Single Elimination') {
             $this->assignTrophiesFromMatches();
         }

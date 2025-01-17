@@ -66,21 +66,11 @@ class EventForm extends EventFrame
     public function __construct(Event $event, bool $edit)
     {
         parent::__construct($event);
-        if ($event->start != null) {
-            $date = $event->start;
-            preg_match('/([0-9]+)-([0-9]+)-([0-9]+) ([0-9]+):([0-9]+):.*/', $date, $datearr);
-            $year = (int) $datearr[1];
-            $month = (int) $datearr[2];
-            $day = (int) $datearr[3];
-            $hour = (int) $datearr[4];
-            $minutes = (int) $datearr[5];
-        } else {
-            $year = (int) date('Y', time());
-            $month = (int) date('n', time());
-            $day = (int) date('j', time());
-            $hour = (int) date('H', time());
-            $minutes = (int) date('i', time());
-        }
+        $year = (int) $event->start->format('Y');
+        $month = (int) $event->start->format('n');
+        $day = (int) $event->start->format('j');
+        $hour = (int) $event->start->format('H');
+        $minutes = (int) $event->start->format('i');
 
         $navLinks = [];
         $prevEvent = $event->findPrev();
