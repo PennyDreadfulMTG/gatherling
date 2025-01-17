@@ -30,6 +30,10 @@ use function Gatherling\Helpers\session;
 function populate(array $array, object $src, array $keys): array
 {
     foreach ($keys as $key) {
+        if ($src->{$key} instanceof \DateTimeImmutable) {
+            $array[$key] = $src->{$key}->format('Y-m-d H:i:s');
+            continue;
+        }
         $array[$key] = $src->{$key};
     }
 
