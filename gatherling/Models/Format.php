@@ -556,7 +556,7 @@ class Format
     }
 
     /** @return list<string> */
-    public function getRestrictedTotribeList(): array
+    public function getRestrictedToTribeList(): array
     {
         return Database::listResultSingleParam(
             'SELECT card_name

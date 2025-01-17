@@ -371,7 +371,7 @@ class Db
         $latestTransaction = $this->transactions[$numTransactions - 1];
         if ($latestTransaction !== $name) {
             try {
-                $this->pdo->rollback();
+                $this->pdo->rollBack();
             } catch (PDOException $e) {
                 throw new DatabaseException("Failed to rollback $latestTransaction while handling mismatch", $e);
             }
@@ -394,7 +394,7 @@ class Db
         $numTransactions = count($this->transactions);
         if ($numTransactions === 0) {
             try {
-                $this->pdo->rollback();
+                $this->pdo->rollBack();
             } catch (PDOException $e) {
                 throw new DatabaseException("Failed to rollback $name while handling faulty rollback call", $e);
             }
@@ -403,7 +403,7 @@ class Db
         $latestTransaction = $this->transactions[$numTransactions - 1];
         if ($latestTransaction !== $name) {
             try {
-                $this->pdo->rollback();
+                $this->pdo->rollBack();
             } catch (PDOException $e) {
                 throw new DatabaseException("Failed to rollback while handling incorrect rollback", $e);
             }
@@ -412,7 +412,7 @@ class Db
         $isOuterTransaction = count($this->transactions) === 1;
         if ($isOuterTransaction) {
             try {
-                $this->pdo->rollback();
+                $this->pdo->rollBack();
             } catch (PDOException $e) {
                 throw new DatabaseException("Failed to rollback $name", $e);
             }

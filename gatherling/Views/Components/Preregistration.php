@@ -9,7 +9,6 @@ use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Safe\DateTimeImmutable;
 
-
 class Preregistration extends Component
 {
     public bool $hasUpcomingEvents = false;
