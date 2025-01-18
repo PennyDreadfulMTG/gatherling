@@ -57,11 +57,11 @@ class EventList extends Page
                 'standingsLink' => "{$baseLink}standings",
                 'structureSummary' => (new Event($event->name))->structureSummary(),
             ];
-            if (!$event->active && !$event->finalized && $event->start <= new DateTimeImmutable('+1 hour')) {
+            if (!$event->active && !$event->finalized && $eventInfo['start'] <= new DateTimeImmutable('+1 hour')) {
                 $pendingEvents[] = $eventInfo;
             } elseif ($event->active == 1) {
                 $activeEvents[] = $eventInfo;
-            } elseif ($event->start > new DateTimeImmutable('+1 hour')) {
+            } elseif ($eventInfo['start'] > new DateTimeImmutable('+1 hour')) {
                 $upcomingEvents[] = $eventInfo;
             } else {
                 $pastEvents[] = $eventInfo;
