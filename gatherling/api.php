@@ -104,7 +104,7 @@ function main(): never
                 FROM events e
                 WHERE e.finalized AND e.start < NOW()
             ORDER BY e.start DESC
-                LIMIT 100';
+                LIMIT 10';
             $eventNames = db()->strings($sql);
             foreach ($eventNames as $eventName) {
                 $event = new Event($eventName);
