@@ -6,6 +6,7 @@ use Gatherling\Models\Player;
 use Gatherling\Views\Redirect;
 use Gatherling\Views\Pages\AuthDebug;
 use Gatherling\Views\Pages\PromptLinkAccount;
+use League\OAuth2\Client\Token\AccessToken;
 use Wohali\OAuth2\Client\Provider\DiscordResourceOwner;
 use Wohali\OAuth2\Client\Provider\Exception\DiscordIdentityProviderException;
 use League\OAuth2\Client\Token\AccessTokenInterface;
@@ -28,24 +29,8 @@ function main(): never
 
     if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
         $token = load_cached_token();
+        $token = checkIfTokenExpired($token);
 
-        try {
-            if ($token->hasExpired()) {
-                $newAccessToken = $provider->getAccessToken('refresh_token', [
-                    'refresh_token' => $token->getRefreshToken(),
-                ]);
-
-                store_token($newAccessToken);
-                $token = $newAccessToken;
-            }
-        } catch (DiscordIdentityProviderException $e) {
-            if (isset($_REQUEST['scope'])) {
-                $scope = $_REQUEST['scope'];
-            } else {
-                $scope = null;
-            }
-            sendToDiscord($scope);
-        }
         // We might be here to upgrade our requested Discord permissions (Series Organizers setting up Discord Channels, for example)
         if (isset($_REQUEST['scope'])) {
             $needed = explode(' ', request()->string('scope', ''));
@@ -78,6 +63,29 @@ function main(): never
         store_token($token);
         doLogin($token);
     }
+}
+
+function checkIfTokenExpired(AccessToken $token): AccessToken
+{
+    global $provider;
+    try {
+        if ($token->hasExpired()) {
+            $newAccessToken = $provider->getAccessToken('refresh_token', [
+                'refresh_token' => $token->getRefreshToken(),
+            ]);
+
+            store_token($newAccessToken);
+            $token = $newAccessToken;
+        }
+    } catch (DiscordIdentityProviderException $e) {
+        if (isset($_REQUEST['scope'])) {
+            $scope = $_REQUEST['scope'];
+        } else {
+            $scope = null;
+        }
+        sendToDiscord($scope);
+    }
+    return $token;
 }
 
 function sendToDiscord(mixed $scope = null): never

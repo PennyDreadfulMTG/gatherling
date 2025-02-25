@@ -55,9 +55,10 @@ function main(): never
         }
 
         require __DIR__ . '/authlib.php';
-        global $provider;
 
         $token = load_cached_token();
+        $token = checkIfTokenExpired($token);
+
         $guilds = get_user_guilds($token);
         foreach ($guilds as $g) {
             if (intval($g['id']) == $series->discord_guild_id) {
