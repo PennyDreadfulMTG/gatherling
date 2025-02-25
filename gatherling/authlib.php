@@ -6,6 +6,7 @@ use Gatherling\Views\Components\AuthDebugInfo;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Token\AccessTokenInterface;
 use Wohali\OAuth2\Client\Provider\Discord;
+use Wohali\OAuth2\Client\Provider\Exception\DiscordIdentityProviderException;
 
 use function Gatherling\Helpers\config;
 
@@ -48,4 +49,27 @@ function get_user_guilds(AccessToken $token): array
 function debug_info(\League\OAuth2\Client\Token\AccessToken $token): string
 {
     return (new AuthDebugInfo($token))->render();
+}
+
+function checkIfTokenExpired(AccessToken $token): AccessToken
+{
+    global $provider;
+    try {
+        if ($token->hasExpired()) {
+            $newAccessToken = $provider->getAccessToken('refresh_token', [
+                'refresh_token' => $token->getRefreshToken(),
+            ]);
+
+            store_token($newAccessToken);
+            $token = $newAccessToken;
+        }
+    } catch (DiscordIdentityProviderException $e) {
+        if (isset($_REQUEST['scope'])) {
+            $scope = $_REQUEST['scope'];
+        } else {
+            $scope = null;
+        }
+        sendToDiscord($scope);
+    }
+    return $token;
 }

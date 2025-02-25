@@ -56,6 +56,7 @@ function main(): never
 
         require __DIR__ . '/authlib.php';
 
+
         $token = load_cached_token();
         $token = checkIfTokenExpired($token);
 

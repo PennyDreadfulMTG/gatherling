@@ -65,29 +65,6 @@ function main(): never
     }
 }
 
-function checkIfTokenExpired(AccessToken $token): AccessToken
-{
-    global $provider;
-    try {
-        if ($token->hasExpired()) {
-            $newAccessToken = $provider->getAccessToken('refresh_token', [
-                'refresh_token' => $token->getRefreshToken(),
-            ]);
-
-            store_token($newAccessToken);
-            $token = $newAccessToken;
-        }
-    } catch (DiscordIdentityProviderException $e) {
-        if (isset($_REQUEST['scope'])) {
-            $scope = $_REQUEST['scope'];
-        } else {
-            $scope = null;
-        }
-        sendToDiscord($scope);
-    }
-    return $token;
-}
-
 function sendToDiscord(mixed $scope = null): never
 {
     // Step 1. Get authorization code
