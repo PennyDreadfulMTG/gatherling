@@ -10,6 +10,11 @@ services:
     volumes:
       - ./:/var/www
       - /var/www/vendor  # Don't overwrite this, we want the version we copied over in build
+    develop:
+       watch:
+         - action: sync
+           path: ./gatherling
+           target: /var/www/gatherling
   db:
     image: mariadb
     env_file: .env
