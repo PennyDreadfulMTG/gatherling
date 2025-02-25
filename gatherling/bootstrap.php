@@ -37,7 +37,7 @@ if (file_exists('../.git/HEAD')) {
 set_exception_handler(fn (\Throwable $e) => (new ErrorHandler())->handle($e));
 
 Sentry\init([
-    'dsn'         => 'https://ed7243cbdd9e47c8bc2205d4ac36b764@sentry.redpoint.games/16',
+    'dsn'         => 'https://15d8086e6ca2459e912b942f7c1c15c8@errors.redpoint.games/12',
     'environment' => 'Gatherling',
     'release'     => $CONFIG['GIT_HASH'],
 ]);
