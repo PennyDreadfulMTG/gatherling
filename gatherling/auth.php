@@ -20,7 +20,7 @@ require __DIR__ . '/authlib.php';
 
 function main(): never
 {
-    global $provider;
+    $provider = getProvider();
 
     if (isset($_GET['debug']) && isset($_SESSION['DISCORD_TOKEN'])) {
         $token = load_cached_token();
@@ -68,7 +68,7 @@ function main(): never
 function sendToDiscord(mixed $scope = null): never
 {
     // Step 1. Get authorization code
-    global $provider;
+    $provider = getProvider();
     if (is_null($scope)) {
         $scope = 'identify email guilds';
     }
@@ -80,7 +80,7 @@ function sendToDiscord(mixed $scope = null): never
 
 function doLogin(AccessTokenInterface $token): never
 {
-    global $provider;
+    $provider = getProvider();
 
     $user = $provider->getResourceOwner($token);
     assert($user instanceof DiscordResourceOwner);

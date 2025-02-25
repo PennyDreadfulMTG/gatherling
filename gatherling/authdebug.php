@@ -18,7 +18,7 @@ require __DIR__ . '/authlib.php';
 
 function main(): never
 {
-    global $provider;
+    $provider = getProvider();
 
     $code = get()->optionalString('code');
     $token = session()->optionalString('DISCORD_TOKEN');
@@ -30,7 +30,7 @@ function main(): never
         }
     } elseif ($code === null) {
         // Step 1. Get authorization code
-        global $provider;
+        $provider = getProvider();
         $options = ['scope' => ['identify', 'email']];
         $authUrl = $provider->getAuthorizationUrl($options);
         $_SESSION['oauth2state'] = $provider->getState();

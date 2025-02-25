@@ -12,11 +12,17 @@ use function Gatherling\Helpers\config;
 
 require_once __DIR__ . '/lib.php';
 
-$provider = new Discord([
-    'clientId'     => config()->string('DISCORD_CLIENT_ID'),
-    'clientSecret' => config()->string('DISCORD_CLIENT_SECRET'),
-    'redirectUri'  => config()->string('base_url') . 'auth.php',
-]);
+function getProvider(): Discord
+{
+    static $provider;
+    if (!isset($provider))
+        $provider = new Discord([
+            'clientId'     => config()->string('DISCORD_CLIENT_ID'),
+            'clientSecret' => config()->string('DISCORD_CLIENT_SECRET'),
+            'redirectUri'  => config()->string('base_url') . 'auth.php',
+        ]);
+    return $provider;
+}
 
 function load_cached_token(): AccessToken
 {
@@ -39,7 +45,7 @@ function store_token(AccessTokenInterface $token): void
 /** @return list<array{id: string, name: string, icon: string, owner: bool, permissions: int}> */
 function get_user_guilds(AccessToken $token): array
 {
-    global $provider;
+    $provider = getProvider();
 
     $guildsRequest = $provider->getAuthenticatedRequest('GET', $provider->getResourceOwnerDetailsUrl($token) . '/guilds', $token);
 
@@ -53,7 +59,7 @@ function debug_info(\League\OAuth2\Client\Token\AccessToken $token): string
 
 function checkIfTokenExpired(AccessToken $token): AccessToken
 {
-    global $provider;
+    $provider = getProvider();
     try {
         if ($token->hasExpired()) {
             $newAccessToken = $provider->getAccessToken('refresh_token', [

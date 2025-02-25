@@ -24,7 +24,7 @@ class AuthDebugInfo extends Component
 
     public function __construct(AccessToken $token)
     {
-        global $provider;
+        $provider = getProvider();
 
         $this->token = $token->getToken();
         $this->refreshToken = $token->getRefreshToken();
