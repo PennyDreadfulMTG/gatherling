@@ -196,7 +196,7 @@ function postEvent(string $eventName): Page
     return eventFrame($event);
 }
 
-function eventFrame(Event $event = null, bool $forceNew = false): EventFrame
+function eventFrame(?Event $event = null, bool $forceNew = false): EventFrame
 {
     $edit = !$forceNew && $event !== null && $event->name !== '';
     if (is_null($event)) {
