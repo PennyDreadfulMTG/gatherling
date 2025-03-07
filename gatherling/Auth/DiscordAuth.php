@@ -14,16 +14,17 @@ use function Gatherling\Helpers\config;
 
 class DiscordAuth
 {
-
     public static function getProvider(): Discord
     {
-        static $provider;
-        if (!isset($provider))
+        static $provider = null;
+        if ($provider === null) {
             $provider = new Discord([
                 'clientId'     => config()->string('DISCORD_CLIENT_ID'),
                 'clientSecret' => config()->string('DISCORD_CLIENT_SECRET'),
                 'redirectUri'  => config()->string('base_url') . 'auth.php',
             ]);
+        }
+        /** @var Discord */
         return $provider;
     }
 
@@ -42,7 +43,11 @@ class DiscordAuth
         $_SESSION['DISCORD_TOKEN'] = $token->getToken();
         $_SESSION['DISCORD_REFRESH_TOKEN'] = $token->getRefreshToken();
         $_SESSION['DISCORD_EXPIRES'] = $token->getExpires();
-        $_SESSION['DISCORD_SCOPES'] = $token->getValues()['scope'];
+        $values = $token->getValues();
+        if (!isset($values['scope']) || !is_string($values['scope'])) {
+            throw new \InvalidArgumentException('Invalid scope in token values');
+        }
+        $_SESSION['DISCORD_SCOPES'] = $values['scope'];
     }
 
     /** @return list<array{id: string, name: string, icon: string, owner: bool, permissions: int}> */
@@ -92,5 +97,4 @@ class DiscordAuth
         $_SESSION['oauth2state'] = $provider->getState();
         (new Redirect($authUrl))->send();
     }
-
 }
