@@ -99,6 +99,11 @@
       <code><![CDATA[array<string, int|string>]]></code>
     </MixedReturnTypeCoercion>
   </file>
+  <file src="gatherling/Helpers/Request.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[dictInt]]></code>
+    </PossiblyUnusedMethod>
+  </file>
   <file src="gatherling/Helpers/cards.php">
     <PossiblyInvalidArgument>
       <code><![CDATA[$card]]></code>
@@ -1532,25 +1537,9 @@
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/Views/Components/AuthDebugInfo.php">
-    <MissingClosureParamType>
-      <code><![CDATA[$g]]></code>
-    </MissingClosureParamType>
-    <MixedArgument>
-      <code><![CDATA[$guilds]]></code>
-    </MixedArgument>
     <MixedAssignment>
-      <code><![CDATA[$guilds]]></code>
-      <code><![CDATA[$this->discriminator]]></code>
-      <code><![CDATA[$this->username]]></code>
-      <code><![CDATA[$user]]></code>
       <code><![CDATA[$value]]></code>
     </MixedAssignment>
-    <MixedMethodCall>
-      <code><![CDATA[getDiscriminator]]></code>
-      <code><![CDATA[getResourceOwner]]></code>
-      <code><![CDATA[getUsername]]></code>
-      <code><![CDATA[toArray]]></code>
-    </MixedMethodCall>
     <PropertyNotSetInConstructor>
       <code><![CDATA[$details]]></code>
       <code><![CDATA[$discriminator]]></code>
@@ -1558,12 +1547,6 @@
       <code><![CDATA[$guilds]]></code>
       <code><![CDATA[$username]]></code>
     </PropertyNotSetInConstructor>
-    <PropertyTypeCoercion>
-      <code><![CDATA[array_map(fn ($g) => var_export($g, true), $guilds)]]></code>
-    </PropertyTypeCoercion>
-    <UndefinedFunction>
-      <code><![CDATA[get_user_guilds($token)]]></code>
-    </UndefinedFunction>
   </file>
   <file src="gatherling/Views/Components/BAndR.php">
     <PropertyNotSetInConstructor>
@@ -2098,7 +2081,11 @@
     </MixedArrayAssignment>
     <MixedAssignment>
       <code><![CDATA[$array[$key]]]></code>
+      <code><![CDATA[$array[$key]]]></code>
     </MixedAssignment>
+    <MixedMethodCall>
+      <code><![CDATA[format]]></code>
+    </MixedMethodCall>
     <MixedReturnTypeCoercion>
       <code><![CDATA[$result]]></code>
       <code><![CDATA[$result]]></code>
@@ -2134,9 +2121,6 @@
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/auth.php">
-    <ArgumentTypeCoercion>
-      <code><![CDATA[$token]]></code>
-    </ArgumentTypeCoercion>
     <MixedArgument>
       <code><![CDATA[$token->getValues()['scope']]]></code>
     </MixedArgument>
@@ -2147,36 +2131,6 @@
       <code><![CDATA[empty($player->emailAddress)]]></code>
       <code><![CDATA[empty($player->emailAddress)]]></code>
     </RiskyTruthyFalsyComparison>
-  </file>
-  <file src="gatherling/authdebug.php">
-    <ArgumentTypeCoercion>
-      <code><![CDATA[$token]]></code>
-    </ArgumentTypeCoercion>
-    <InvalidGlobal>
-      <code><![CDATA[global $provider;]]></code>
-    </InvalidGlobal>
-    <MixedArgument>
-      <code><![CDATA[$authUrl]]></code>
-    </MixedArgument>
-    <MixedAssignment>
-      <code><![CDATA[$_SESSION['oauth2state']]]></code>
-      <code><![CDATA[$authUrl]]></code>
-    </MixedAssignment>
-    <MixedMethodCall>
-      <code><![CDATA[getAuthorizationUrl]]></code>
-      <code><![CDATA[getState]]></code>
-    </MixedMethodCall>
-  </file>
-  <file src="gatherling/authlib.php">
-    <MixedAssignment>
-      <code><![CDATA[$_SESSION['DISCORD_SCOPES']]]></code>
-    </MixedAssignment>
-    <MixedInferredReturnType>
-      <code><![CDATA[list<array{id: string, name: string, icon: string, owner: bool, permissions: int}>]]></code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement>
-      <code><![CDATA[$provider->getParsedResponse($guildsRequest)]]></code>
-    </MixedReturnStatement>
   </file>
   <file src="gatherling/bootstrap.php">
     <InvalidGlobal>
@@ -2322,16 +2276,10 @@
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/prereg.php">
-    <InvalidGlobal>
-      <code><![CDATA[global $provider;]]></code>
-    </InvalidGlobal>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[$series->discord_guild_id]]></code>
       <code><![CDATA[$series->discord_require_membership]]></code>
     </RiskyTruthyFalsyComparison>
-    <UnusedVariable>
-      <code><![CDATA[$provider]]></code>
-    </UnusedVariable>
   </file>
   <file src="gatherling/ratings.php">
     <LessSpecificReturnStatement>
