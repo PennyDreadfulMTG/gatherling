@@ -87,7 +87,7 @@ class Deck
 
         // Check for created date in entries if it isn't in the decks table
         if (is_null($this->created_date)) {
-            $sql = 'SELECT registered_at FROM entries where deck = :id';
+            $sql = 'SELECT registered_at FROM entries WHERE deck = :id';
             $this->created_date = db()->optionalString($sql, ['id' => $id]);
         }
 
