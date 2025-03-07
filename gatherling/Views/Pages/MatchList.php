@@ -38,7 +38,7 @@ class MatchList extends EventFrame
         parent::__construct($event);
         $matches = $event->getMatches();
         $roundLinks = [];
-        for ($n = 1; $n <= $event->current_round; $n++) {
+        for ($n = 1; $n < $event->current_round; $n++) {
             $roundLinks[] = [
                 'text' => "Round $n",
                 'link' => 'event.php?view=match&name=' . rawurlencode($event->name) . "#round-{$n}",
