@@ -21,11 +21,6 @@ parameters:
 			path: gatherling/Helpers/cards.php
 
 		-
-			message: "#^Function Gatherling\\\\Helpers\\\\arrayMapRecursive\\(\\) should return array\\<string, mixed\\> but returns array\\<int\\|string, mixed\\>\\.$#"
-			count: 1
-			path: gatherling/Helpers/templates.php
-
-		-
 			message: "#^Parameter \\#2 \\$arr of function Gatherling\\\\Helpers\\\\arrayMapRecursive expects array\\<string, mixed\\>, array given\\.$#"
 			count: 1
 			path: gatherling/Helpers/templates.php
@@ -491,11 +486,6 @@ parameters:
 			path: gatherling/Models/Ratings.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Ratings\\:\\:getEntryRatings\\(\\) should return array\\<string, array\\<string, int\\>\\> but returns array\\<int\\|string, array\\<string, mixed\\>\\>\\.$#"
-			count: 1
-			path: gatherling/Models/Ratings.php
-
-		-
 			message: "#^Binary operation \"\\+\" between mixed and int results in an error\\.$#"
 			count: 1
 			path: gatherling/Models/Series.php
@@ -532,41 +522,6 @@ parameters:
 
 		-
 			message: "#^Method Gatherling\\\\Models\\\\Series\\:\\:getBannedPlayerReason\\(\\) should return string\\|null but returns mixed\\.$#"
-			count: 1
-			path: gatherling/Models/Series.php
-
-		-
-			message: "#^Method Gatherling\\\\Models\\\\Series\\:\\:getDecklistPosteds\\(\\) should return array\\<string, array\\<string, int\\>\\> but returns array\\<int\\|string, array\\>\\.$#"
-			count: 1
-			path: gatherling/Models/Series.php
-
-		-
-			message: "#^Method Gatherling\\\\Models\\\\Series\\:\\:getParticipations\\(\\) should return array\\<string, array\\<string, int\\>\\> but returns array\\<int\\|string, array\\<int\\|string, int\\>\\>\\.$#"
-			count: 1
-			path: gatherling/Models/Series.php
-
-		-
-			message: "#^Method Gatherling\\\\Models\\\\Series\\:\\:getPlacePlayers\\(\\) should return array\\<string, array\\<string, int\\>\\> but returns array\\<int\\|string, array\\<int\\|string, int\\>\\>\\.$#"
-			count: 1
-			path: gatherling/Models/Series.php
-
-		-
-			message: "#^Method Gatherling\\\\Models\\\\Series\\:\\:getRoundsLost\\(\\) should return array\\<string, array\\<string, int\\>\\> but returns array\\<int\\|string, array\\>\\.$#"
-			count: 1
-			path: gatherling/Models/Series.php
-
-		-
-			message: "#^Method Gatherling\\\\Models\\\\Series\\:\\:getRoundsPlayed\\(\\) should return array\\<string, array\\<string, int\\>\\> but returns array\\<int\\|string, array\\>\\.$#"
-			count: 1
-			path: gatherling/Models/Series.php
-
-		-
-			message: "#^Method Gatherling\\\\Models\\\\Series\\:\\:getRoundsWon\\(\\) should return array\\<string, array\\<string, int\\>\\> but returns array\\<int\\|string, array\\>\\.$#"
-			count: 1
-			path: gatherling/Models/Series.php
-
-		-
-			message: "#^Method Gatherling\\\\Models\\\\Series\\:\\:seasonPointsTable\\(\\) should return array\\<string, array\\<string, array\\<string, int\\|string\\>\\|int\\>\\> but returns array\\<int\\|string, array\\>\\.$#"
 			count: 1
 			path: gatherling/Models/Series.php
 
