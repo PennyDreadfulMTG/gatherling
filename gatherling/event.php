@@ -538,12 +538,12 @@ function updateAdjustments(): void
 {
     $event = new Event(post()->string('name'));
 
-    $adjustments = post()->dictInt('adjustments');
+    $adjustments = post()->dictIntOrString('adjustments');
     $reasons = post()->dictString('reasons');
 
     foreach ($adjustments as $name => $points) {
         if ($points != '') {
-            $event->setSeasonPointAdjustment($name, $points, $reasons[$name]);
+            $event->setSeasonPointAdjustment($name, intval($points), $reasons[$name]);
         }
     }
 }
