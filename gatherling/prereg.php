@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Gatherling\Auth\DiscordAuth;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
@@ -54,13 +55,10 @@ function main(): never
             (new Redirect('auth.php'))->send();
         }
 
-        require __DIR__ . '/authlib.php';
+        $token = DiscordAuth::loadCachedToken();
+        $token = DiscordAuth::checkIfTokenExpired($token);
 
-
-        $token = load_cached_token();
-        $token = checkIfTokenExpired($token);
-
-        $guilds = get_user_guilds($token);
+        $guilds = DiscordAuth::getUserGuilds($token);
         foreach ($guilds as $g) {
             if (intval($g['id']) == $series->discord_guild_id) {
                 $found = true;

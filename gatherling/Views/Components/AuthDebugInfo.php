@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Components;
 
+use Gatherling\Auth\DiscordAuth;
 use Exception;
 use League\OAuth2\Client\Token\AccessToken;
+use Wohali\OAuth2\Client\Provider\DiscordResourceOwner;
 
 class AuthDebugInfo extends Component
 {
@@ -24,7 +26,7 @@ class AuthDebugInfo extends Component
 
     public function __construct(AccessToken $token)
     {
-        $provider = getProvider();
+        $provider = DiscordAuth::getProvider();
 
         $this->token = $token->getToken();
         $this->refreshToken = $token->getRefreshToken();
@@ -36,10 +38,11 @@ class AuthDebugInfo extends Component
 
         try {
             $user = $provider->getResourceOwner($token);
+            assert($user instanceof DiscordResourceOwner);
             $this->username = $user->getUsername();
             $this->discriminator = $user->getDiscriminator();
             $this->details = var_export($user->toArray(), true);
-            $guilds = get_user_guilds($token);
+            $guilds = DiscordAuth::getUserGuilds($token);
             $this->guilds = array_map(fn ($g) => var_export($g, true), $guilds);
         } catch (Exception $e) {
             // Failed to get user details
