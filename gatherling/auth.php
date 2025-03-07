@@ -2,34 +2,32 @@
 
 declare(strict_types=1);
 
+use Gatherling\Auth\DiscordAuth;
 use Gatherling\Models\Player;
 use Gatherling\Views\Redirect;
 use Gatherling\Views\Pages\AuthDebug;
 use Gatherling\Views\Pages\PromptLinkAccount;
-use League\OAuth2\Client\Token\AccessToken;
 use Wohali\OAuth2\Client\Provider\DiscordResourceOwner;
-use Wohali\OAuth2\Client\Provider\Exception\DiscordIdentityProviderException;
-use League\OAuth2\Client\Token\AccessTokenInterface;
+use League\OAuth2\Client\Token\AccessToken;
 
 use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\server;
 use function Gatherling\Helpers\session;
 
 require_once __DIR__ . '/lib.php';
-require __DIR__ . '/authlib.php';
 
 function main(): never
 {
-    $provider = getProvider();
+    $provider = DiscordAuth::getProvider();
 
     if (isset($_GET['debug']) && isset($_SESSION['DISCORD_TOKEN'])) {
-        $token = load_cached_token();
+        $token = DiscordAuth::loadCachedToken();
         (new AuthDebug($token))->send();
     }
 
     if (!isset($_GET['code']) && isset($_SESSION['DISCORD_TOKEN'])) {
-        $token = load_cached_token();
-        $token = checkIfTokenExpired($token);
+        $token = DiscordAuth::loadCachedToken();
+        $token = DiscordAuth::checkIfTokenExpired($token);
 
         // We might be here to upgrade our requested Discord permissions (Series Organizers setting up Discord Channels, for example)
         if (isset($_REQUEST['scope'])) {
@@ -38,7 +36,7 @@ function main(): never
 
             if (!empty(array_diff($needed, $current))) {
                 $scope = array_unique(array_merge($current, $needed));
-                sendToDiscord($scope);
+                DiscordAuth::sendToDiscord($scope);
             }
         }
         doLogin($token);
@@ -48,7 +46,7 @@ function main(): never
         } else {
             $scope = null;
         }
-        sendToDiscord($scope);
+        DiscordAuth::sendToDiscord($scope);
 
     // Check given state against previously stored one to mitigate CSRF attack
     } elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
@@ -59,28 +57,16 @@ function main(): never
         $token = $provider->getAccessToken('authorization_code', [
             'code' => $_GET['code'],
         ]);
+        assert($token instanceof AccessToken);
 
-        store_token($token);
+        DiscordAuth::storeToken($token);
         doLogin($token);
     }
 }
 
-function sendToDiscord(mixed $scope = null): never
+function doLogin(AccessToken $token): never
 {
-    // Step 1. Get authorization code
-    $provider = getProvider();
-    if (is_null($scope)) {
-        $scope = 'identify email guilds';
-    }
-    $options = ['scope' => $scope];
-    $authUrl = $provider->getAuthorizationUrl($options);
-    $_SESSION['oauth2state'] = $provider->getState();
-    (new Redirect($authUrl))->send();
-}
-
-function doLogin(AccessTokenInterface $token): never
-{
-    $provider = getProvider();
+    $provider = DiscordAuth::getProvider();
 
     $user = $provider->getResourceOwner($token);
     assert($user instanceof DiscordResourceOwner);
