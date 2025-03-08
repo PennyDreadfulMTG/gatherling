@@ -12,8 +12,8 @@ class ColorCheckboxMenu extends Component
     public bool $gChecked;
     public bool $rChecked;
 
-    /** @param ?array<string, string> $colors */
-    public function __construct(array $colors = null)
+    /** @param array<string, string> $colors */
+    public function __construct(array $colors)
     {
         $this->wChecked = isset($colors['w']);
         $this->bChecked = isset($colors['b']);
