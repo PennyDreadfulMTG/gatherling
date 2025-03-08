@@ -22,7 +22,7 @@ class TimeTest extends TestCase
         $this->assertEquals("just now", $html->filter('time')->text());
 
         $specificDate = new DateTimeImmutable("2024-02-01 12:00:00", $tz);
-        $oneYearPreviously = $specificDate->sub(DateInterval::createFromDateString('1 year'));
+        $oneYearPreviously = $specificDate->sub(new DateInterval('P1Y'));
         $timeComponent = new Time($oneYearPreviously, $specificDate);
         $expected = '<time datetime="2023-02-01T12:00:00+00:00">Feb 1st</time>' . "\n";
         $actual = $timeComponent->render();

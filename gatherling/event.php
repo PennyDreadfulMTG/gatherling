@@ -103,7 +103,7 @@ function newEventFromEventName(string $eventName, bool $newSeason = false): Even
     $newEvent = new Event('');
     $newEvent->season = $oldEvent->season + ($newSeason ? 1 : 0);
     $newEvent->number = $newSeason ? 1 : $oldEvent->number + 1;
-    $newEvent->start = $oldEvent->start->add(DateInterval::createFromDateString('1 week'));
+    $newEvent->start = $oldEvent->start->add(new DateInterval('P1W'));
     $newEvent->finalized = 0;
 
     $copiableFields = ['format', 'kvalue', 'prereg_allowed', 'threadurl', 'reporturl', 'metaurl',
