@@ -36,10 +36,10 @@
         "squizlabs/php_codesniffer": "3.*",
         "phpunit/phpunit": ">=10.0",
         "phpcompatibility/php-compatibility": "^9.3",
-        "phpstan/phpstan": "^1.12",
-        "vimeo/psalm": "^5.26",
-        "psalm/plugin-phpunit": "^0.19.0",
-        "shish/phpstan-safe-rule": "^1.3"
+        "phpstan/phpstan": "*",
+        "vimeo/psalm": "*",
+        "psalm/plugin-phpunit": "*",
+        "shish/phpstan-safe-rule": "*"
     },
     "autoload": {
         "psr-4": {
