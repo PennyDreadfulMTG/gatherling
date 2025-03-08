@@ -29,8 +29,7 @@
         "symfony/dom-crawler": "^7.1",
         "symfony/css-selector": "^7.1",
         "bakert/blossom-php": "^1.0",
-        "stefangabos/zebra_pagination": "^2.4",
-        "shish/safe": "^2.6"
+        "stefangabos/zebra_pagination": "^2.4"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "3.*",
@@ -39,7 +38,8 @@
         "phpstan/phpstan": "*",
         "vimeo/psalm": "*",
         "psalm/plugin-phpunit": "*",
-        "shish/phpstan-safe-rule": "*"
+        "thecodingmachine/phpstan-safe-rule": "*",
+        "thecodingmachine/safe": "*"
     },
     "autoload": {
         "psr-4": {
