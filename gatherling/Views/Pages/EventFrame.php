@@ -12,7 +12,7 @@ use function Gatherling\Helpers\getObjectVarsCamelCase;
 
 abstract class EventFrame extends Page
 {
-    /** @var array<string, mixed> */
+    /** @var array<int|string, mixed> */
     public array $event;
     /** @var list<array{link: string, text: string}> */
     public array $controlPanelLinks;

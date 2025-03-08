@@ -15,7 +15,6 @@ class Placing extends Component
 {
     public Medal $medal;
     public string $placing;
-    public bool $showPlayer;
     public string $day;
     public string $eventName;
     public ?PlayerLink $playerLink = null;
@@ -24,7 +23,7 @@ class Placing extends Component
 
     public function __construct(Event $event, Deck $deck)
     {
-        if (!$deck->playername) {
+        if ($deck->playername === null) {
             throw new InvalidArgumentException('Deck player name is required');
         }
         $this->medal = new Medal($deck->medal ?? 'dot');
@@ -39,19 +38,16 @@ class Placing extends Component
         } else {
             $this->placing = 'Played';
         }
-        $this->showPlayer = $deck->playername != null;
-        if ($this->showPlayer) {
-            $deckplayer = new Player($deck->playername);
-            $this->playerLink = new PlayerLink($deckplayer);
-            $targetUrl = 'eventreport';
-            $player = Player::loginName();
-            if ($player && $event->authCheck($player)) {
-                $targetUrl = 'event';
-            }
-            $this->eventLink = $targetUrl . '.php?event=' . rawurlencode($deck->eventname ?? '');
-            $this->day = $event->start->format('F j, Y');
-            $this->eventName = $deck->eventname ?? '';
+        $deckplayer = new Player($deck->playername);
+        $this->playerLink = new PlayerLink($deckplayer);
+        $targetUrl = 'eventreport';
+        $player = Player::loginName();
+        if ($player && $event->authCheck($player)) {
+            $targetUrl = 'event';
         }
+        $this->eventLink = $targetUrl . '.php?event=' . rawurlencode($deck->eventname ?? '');
+        $this->day = $event->start->format('F j, Y');
+        $this->eventName = $deck->eventname ?? '';
         $this->recordString = $deck->recordString();
     }
 }

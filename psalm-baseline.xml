@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
+<files psalm-version="6.5.0@38fc8444edf0cebc9205296ee6e30e906ade783b">
   <file src="gatherling/Auth/Session.php">
-    <MixedInferredReturnType>
-      <code><![CDATA[array<string, mixed>]]></code>
-    </MixedInferredReturnType>
     <MixedReturnStatement>
       <code><![CDATA[$details ? json_decode($details, true) : []]]></code>
       <code><![CDATA[$details ? json_decode($details, true) : []]]></code>
@@ -118,9 +115,6 @@
     </PossiblyNullArrayAccess>
   </file>
   <file src="gatherling/Helpers/database.php">
-    <MixedInferredReturnType>
-      <code><![CDATA[Db]]></code>
-    </MixedInferredReturnType>
     <MixedReturnStatement>
       <code><![CDATA[$db]]></code>
       <code><![CDATA[$db]]></code>
@@ -130,9 +124,6 @@
     <MixedArgument>
       <code><![CDATA[$CONFIG]]></code>
     </MixedArgument>
-    <MixedInferredReturnType>
-      <code><![CDATA[Logger]]></code>
-    </MixedInferredReturnType>
     <MixedReturnStatement>
       <code><![CDATA[$logger]]></code>
       <code><![CDATA[$logger]]></code>
@@ -145,9 +136,6 @@
     <MixedArgument>
       <code><![CDATA[$word]]></code>
     </MixedArgument>
-    <MixedArgumentTypeCoercion>
-      <code><![CDATA[$value]]></code>
-    </MixedArgumentTypeCoercion>
     <MixedArrayOffset>
       <code><![CDATA[$result[$newKey]]]></code>
       <code><![CDATA[$result[$newKey]]]></code>
@@ -158,10 +146,6 @@
       <code><![CDATA[$result[$newKey]]]></code>
       <code><![CDATA[$value]]></code>
     </MixedAssignment>
-    <MixedReturnTypeCoercion>
-      <code><![CDATA[$result]]></code>
-      <code><![CDATA[array<string, mixed>]]></code>
-    </MixedReturnTypeCoercion>
   </file>
   <file src="gatherling/Logger.php">
     <RiskyTruthyFalsyComparison>
@@ -247,10 +231,6 @@
     <MixedAssignment>
       <code><![CDATA[$list[]]]></code>
     </MixedAssignment>
-    <MixedInferredReturnType>
-      <code><![CDATA[PDO]]></code>
-      <code><![CDATA[mysqli]]></code>
-    </MixedInferredReturnType>
     <MixedReturnStatement>
       <code><![CDATA[$instance]]></code>
       <code><![CDATA[$instance]]></code>
@@ -431,9 +411,6 @@
       <code><![CDATA[$this->series]]></code>
       <code><![CDATA[$this->series]]></code>
     </MixedAssignment>
-    <MixedInferredReturnType>
-      <code><![CDATA[int]]></code>
-    </MixedInferredReturnType>
     <MixedReturnStatement>
       <code><![CDATA[Database::singleResultSingleParam('SELECT count(*) FROM entries WHERE event_id = ?', 'd', $this->id)]]></code>
     </MixedReturnStatement>
@@ -638,12 +615,6 @@
       <code><![CDATA[$tribe['name']]]></code>
       <code><![CDATA[$type]]></code>
     </MixedAssignment>
-    <MixedInferredReturnType>
-      <code><![CDATA[?int]]></code>
-      <code><![CDATA[?string]]></code>
-      <code><![CDATA[?string]]></code>
-      <code><![CDATA[string]]></code>
-    </MixedInferredReturnType>
     <MixedReturnStatement>
       <code><![CDATA[$cardType]]></code>
       <code><![CDATA[Database::singleResultSingleParam('SELECT id FROM cards WHERE name = ?', 's', $cardname)]]></code>
@@ -1079,13 +1050,6 @@
       <code><![CDATA[$this->name]]></code>
       <code><![CDATA[$this->name]]></code>
     </MixedAssignment>
-    <MixedInferredReturnType>
-      <code><![CDATA[?int]]></code>
-      <code><![CDATA[?int]]></code>
-      <code><![CDATA[?string]]></code>
-      <code><![CDATA[int]]></code>
-      <code><![CDATA[int]]></code>
-    </MixedInferredReturnType>
     <MixedReturnStatement>
       <code><![CDATA[$count]]></code>
       <code><![CDATA[$evcount]]></code>
@@ -1308,12 +1272,6 @@
       <code><![CDATA[$total_pointarray[$player]['.total']]]></code>
       <code><![CDATA[$value]]></code>
     </MixedAssignment>
-    <MixedInferredReturnType>
-      <code><![CDATA[?string]]></code>
-      <code><![CDATA[?string]]></code>
-      <code><![CDATA[int]]></code>
-      <code><![CDATA[int]]></code>
-    </MixedInferredReturnType>
     <MixedOperand>
       <code><![CDATA[$adjustment]]></code>
       <code><![CDATA[$points]]></code>
@@ -1730,12 +1688,7 @@
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/Views/Components/Placing.php">
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[$day]]></code>
-      <code><![CDATA[$eventName]]></code>
-    </PropertyNotSetInConstructor>
     <RiskyTruthyFalsyComparison>
-      <code><![CDATA[!$deck->playername]]></code>
       <code><![CDATA[$player]]></code>
     </RiskyTruthyFalsyComparison>
   </file>

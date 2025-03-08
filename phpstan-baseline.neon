@@ -1,821 +1,967 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method Gatherling\\\\Auth\\\\Session\\:\\:load\\(\\) should return array\\<string, mixed\\> but returns mixed\\.$#"
+			message: '#^Method Gatherling\\Auth\\Session\:\:load\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Auth/Session.php
 
 		-
-			message: "#^Parameter \\#2 \\$value of function setcookie expects string, mixed given\\.$#"
+			message: '#^Parameter \#2 \$value of function setcookie expects string, mixed given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Auth/Session.php
 
 		-
-			message: "#^Cannot access offset 1 on iterable\\<\\(int\\|string\\), string\\>\\|null\\.$#"
-			count: 1
-			path: gatherling/Helpers/cards.php
-
-		-
-			message: "#^Cannot access offset 2 on iterable\\<\\(int\\|string\\), string\\>\\|null\\.$#"
-			count: 1
-			path: gatherling/Helpers/cards.php
-
-		-
-			message: "#^Parameter \\#2 \\$arr of function Gatherling\\\\Helpers\\\\arrayMapRecursive expects array\\<string, mixed\\>, array given\\.$#"
-			count: 1
-			path: gatherling/Helpers/templates.php
-
-		-
-			message: "#^Cannot access property \\$data on mixed\\.$#"
+			message: '#^Cannot access property \$data on mixed\.$#'
+			identifier: property.nonObject
 			count: 1
 			path: gatherling/Models/CardSet.php
 
 		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/CardSet.php
 
 		-
-			message: "#^Parameter \\#4 \\$stmt of static method Gatherling\\\\Models\\\\CardSet\\:\\:insertCard\\(\\) expects mysqli_stmt, mysqli_stmt\\|false given\\.$#"
+			message: '#^Parameter \#4 \$stmt of static method Gatherling\\Models\\CardSet\:\:insertCard\(\) expects mysqli_stmt, mysqli_stmt\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Models/CardSet.php
 
 		-
-			message: "#^Cannot access property \\$num_rows on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot access property \$num_rows on mysqli_stmt\|false\.$#'
+			identifier: property.nonObject
 			count: 1
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Cannot call method fetch_assoc\\(\\) on bool\\|mysqli_result\\.$#"
+			message: '#^Cannot call method fetch_assoc\(\) on bool\|mysqli_result\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Cannot call method store_result\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method store_result\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$event_id of static method Gatherling\\\\Models\\\\Entry\\:\\:findByEventAndPlayer\\(\\) expects int, int\\|null given\\.$#"
+			message: '#^Parameter \#1 \$event_id of static method Gatherling\\Models\\Entry\:\:findByEventAndPlayer\(\) expects int, int\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$name of class Gatherling\\Models\\Player constructor expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function strtoupper expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$string of function strtoupper expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Parameter \\#2 \\$playername of static method Gatherling\\\\Models\\\\Entry\\:\\:findByEventAndPlayer\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$playername of static method Gatherling\\Models\\Entry\:\:findByEventAndPlayer\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Parameter \\#2 \\$string2 of function strcasecmp expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string2 of function strcasecmp expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/Models/Deck.php
 
 		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_param\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Decksearch.php
 
 		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_result\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Decksearch.php
 
 		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Decksearch.php
 
 		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Decksearch.php
 
 		-
-			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method fetch\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Decksearch.php
 
 		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:playerLost\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$player of method Gatherling\\Models\\Matchup\:\:playerLost\(\) expects Gatherling\\Models\\Player\|string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Models/Decksearch.php
 
 		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:playerWon\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$player of method Gatherling\\Models\\Matchup\:\:playerWon\(\) expects Gatherling\\Models\\Player\|string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Models/Decksearch.php
 
 		-
-			message: "#^Cannot access property \\$num_rows on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot access property \$num_rows on mysqli_stmt\|false\.$#'
+			identifier: property.nonObject
 			count: 1
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_param\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 20
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_result\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 12
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 20
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 20
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method fetch\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 12
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Cannot call method store_result\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method store_result\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Event\\:\\:getPlayerCount\\(\\) should return int but returns mixed\\.$#"
+			message: '#^Method Gatherling\\Models\\Event\:\:getPlayerCount\(\) should return int but returns mixed\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Parameter \\#1 \\$subevent_id of method Gatherling\\\\Models\\\\Event\\:\\:swissPairingBlossom\\(\\) expects int, int\\|null given\\.$#"
+			message: '#^Parameter \#1 \$subevent_id of method Gatherling\\Models\\Event\:\:swissPairingBlossom\(\) expects int, int\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Parameter \\#1 \\$win of method Gatherling\\\\Models\\\\Event\\:\\:setFinalists\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$win of method Gatherling\\Models\\Event\:\:setFinalists\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Parameter \\#2 \\$playername of static method Gatherling\\\\Models\\\\Standings\\:\\:writeSeed\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$playername of static method Gatherling\\Models\\Standings\:\:writeSeed\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 17
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Parameter \\#2 \\$subevent of static method Gatherling\\\\Models\\\\Standings\\:\\:updateStandings\\(\\) expects int, int\\|null given\\.$#"
+			message: '#^Parameter \#2 \$subevent of static method Gatherling\\Models\\Standings\:\:updateStandings\(\) expects int, int\|null given\.$#'
+			identifier: argument.type
 			count: 3
 			path: gatherling/Models/Event.php
 
 		-
-			message: "#^Cannot access property \\$affected_rows on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot access property \$affected_rows on mysqli_stmt\|false\.$#'
+			identifier: property.nonObject
 			count: 11
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Cannot access property \\$error on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot access property \$error on mysqli_stmt\|false\.$#'
+			identifier: property.nonObject
 			count: 9
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_param\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 27
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_result\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 3
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 27
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 27
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method fetch\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 3
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getBanList\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getBanList\(\) should return list\<string\> but returns list\<mixed\>\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getBlockCardsets\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getBlockCardsets\(\) should return list\<string\> but returns list\<mixed\>\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getCardID\\(\\) should return int\\|null but returns mixed\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getCardID\(\) should return int\|null but returns mixed\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getCardName\\(\\) should return string\\|null but returns mixed\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getCardName\(\) should return string\|null but returns mixed\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getCardNameFromPartialDFC\\(\\) should return string\\|null but returns mixed\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getCardNameFromPartialDFC\(\) should return string\|null but returns mixed\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getCardType\\(\\) should return string but returns mixed\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getCardType\(\) should return string but returns mixed\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getCoreCardsets\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getCoreCardsets\(\) should return list\<string\> but returns list\<mixed\>\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getExtraCardsets\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getExtraCardsets\(\) should return list\<string\> but returns list\<mixed\>\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getLegalCardsets\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getLegalCardsets\(\) should return list\<string\> but returns list\<mixed\>\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getLegalList\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getLegalList\(\) should return list\<string\> but returns list\<mixed\>\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getPublicFormats\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getPublicFormats\(\) should return list\<string\> but returns list\<mixed\>\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getRestrictedList\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getRestrictedList\(\) should return list\<string\> but returns list\<mixed\>\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getRestrictedToTribeList\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getRestrictedToTribeList\(\) should return list\<string\> but returns list\<mixed\>\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getSubTypesBanned\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getSubTypesBanned\(\) should return list\<string\> but returns list\<mixed\>\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getSystemFormats\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getSystemFormats\(\) should return list\<string\> but returns list\<mixed\>\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getTribe\\(\\) should return array\\{name\\: string, count\\: int\\} but returns array\\{name\\: non\\-empty\\-string\\|null, count\\: int\\}\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getTribe\(\) should return array\{name\: string, count\: int\} but returns array\{name\: non\-empty\-string\|null, count\: int\}\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Format\\:\\:getTribesBanned\\(\\) should return list\\<string\\> but returns list\\<mixed\\>\\.$#"
+			message: '#^Method Gatherling\\Models\\Format\:\:getTribesBanned\(\) should return list\<string\> but returns list\<mixed\>\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Parameter \\#1 \\$card of method Gatherling\\\\Models\\\\Format\\:\\:isCardOnBanList\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$card of method Gatherling\\Models\\Format\:\:isCardOnBanList\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 4
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Parameter \\#1 \\$card of method Gatherling\\\\Models\\\\Format\\:\\:isCardOnLegalList\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$card of method Gatherling\\Models\\Format\:\:isCardOnLegalList\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 3
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Parameter \\#1 \\$card of method Gatherling\\\\Models\\\\Format\\:\\:isCardOnRestrictedList\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$card of method Gatherling\\Models\\Format\:\:isCardOnRestrictedList\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Parameter \\#1 \\$card of method Gatherling\\\\Models\\\\Format\\:\\:isCardOnRestrictedToTribeList\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$card of method Gatherling\\Models\\Format\:\:isCardOnRestrictedToTribeList\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Parameter \\#1 \\$string1 of function strcasecmp expects string, mixed given\\.$#"
+			message: '#^Parameter \#1 \$string1 of function strcasecmp expects string, mixed given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Parameter \\#1 \\$typeString of static method Gatherling\\\\Models\\\\Format\\:\\:removeTypeCrap\\(\\) expects string, mixed given\\.$#"
+			message: '#^Parameter \#1 \$typeString of static method Gatherling\\Models\\Format\:\:removeTypeCrap\(\) expects string, mixed given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Models/Format.php
 
 		-
-			message: "#^Cannot access property \\$set on mixed\\.$#"
+			message: '#^Cannot access property \$set on mixed\.$#'
+			identifier: property.nonObject
 			count: 1
 			path: gatherling/Models/Formats.php
 
 		-
-			message: "#^Cannot access property \\$sets on mixed\\.$#"
+			message: '#^Cannot access property \$sets on mixed\.$#'
+			identifier: property.nonObject
 			count: 1
 			path: gatherling/Models/Formats.php
 
 		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_param\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Formats.php
 
 		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_result\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 2
 			path: gatherling/Models/Formats.php
 
 		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 2
 			path: gatherling/Models/Formats.php
 
 		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 2
 			path: gatherling/Models/Formats.php
 
 		-
-			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method fetch\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 2
 			path: gatherling/Models/Formats.php
 
 		-
-			message: "#^Binary operation \"\\+\\=\" between int\\|null and int\\|string results in an error\\.$#"
+			message: '#^Binary operation "\+\=" between int\|null and int\|string results in an error\.$#'
+			identifier: assignOp.invalid
 			count: 4
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Parameter \\#1 \\$event_id of class Gatherling\\\\Models\\\\Entry constructor expects int, int\\|null given\\.$#"
+			message: '#^Parameter \#1 \$event_id of class Gatherling\\Models\\Entry constructor expects int, int\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$name of class Gatherling\\Models\\Event constructor expects int\|string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:playerLost\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$player of method Gatherling\\Models\\Matchup\:\:playerLost\(\) expects Gatherling\\Models\\Player\|string, string\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:playerWon\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$player of method Gatherling\\Models\\Matchup\:\:playerWon\(\) expects Gatherling\\Models\\Player\|string, string\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Parameter \\#1 \\$season_number of method Gatherling\\\\Models\\\\Series\\:\\:getSeasonRules\\(\\) expects int, int\\|null given\\.$#"
+			message: '#^Parameter \#1 \$season_number of method Gatherling\\Models\\Series\:\:getSeasonRules\(\) expects int, int\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Parameter \\#1 \\$subevent of static method Gatherling\\\\Models\\\\Event\\:\\:getEventBySubevent\\(\\) expects int, int\\|null given\\.$#"
+			message: '#^Parameter \#1 \$subevent of static method Gatherling\\Models\\Event\:\:getEventBySubevent\(\) expects int, int\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Parameter \\#1 \\$winner of method Gatherling\\\\Models\\\\Matchup\\:\\:finalizeMatch\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$winner of method Gatherling\\Models\\Matchup\:\:finalizeMatch\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Parameter \\#2 \\$playername of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$playername of class Gatherling\\Models\\Standings constructor expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 4
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Parameter \\#2 \\$string2 of function strcasecmp expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string2 of function strcasecmp expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/Models/Matchup.php
 
 		-
-			message: "#^Cannot access property \\$num_rows on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot access property \$num_rows on mysqli_stmt\|false\.$#'
+			identifier: property.nonObject
 			count: 1
 			path: gatherling/Models/Player.php
 
 		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_param\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 34
 			path: gatherling/Models/Player.php
 
 		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_result\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 29
 			path: gatherling/Models/Player.php
 
 		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 32
 			path: gatherling/Models/Player.php
 
 		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 33
 			path: gatherling/Models/Player.php
 
 		-
-			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method fetch\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 29
 			path: gatherling/Models/Player.php
 
 		-
-			message: "#^Cannot call method store_result\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method store_result\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 2
 			path: gatherling/Models/Player.php
 
 		-
-			message: "#^Parameter \\#1 \\$string1 of function strcasecmp expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$string1 of function strcasecmp expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 4
 			path: gatherling/Models/Player.php
 
 		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_param\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Ratings.php
 
 		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_result\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Ratings.php
 
 		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Ratings.php
 
 		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Ratings.php
 
 		-
-			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method fetch\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Models/Ratings.php
 
 		-
-			message: "#^Binary operation \"\\+\" between mixed and int results in an error\\.$#"
+			message: '#^Binary operation "\+" between mixed and int results in an error\.$#'
+			identifier: binaryOp.invalid
 			count: 1
 			path: gatherling/Models/Series.php
 
 		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_param\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 9
 			path: gatherling/Models/Series.php
 
 		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_result\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 9
 			path: gatherling/Models/Series.php
 
 		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 7
 			path: gatherling/Models/Series.php
 
 		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 9
 			path: gatherling/Models/Series.php
 
 		-
-			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method fetch\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 9
 			path: gatherling/Models/Series.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Series\\:\\:getBannedPlayerDate\\(\\) should return string\\|null but returns mixed\\.$#"
+			message: '#^Method Gatherling\\Models\\Series\:\:getBannedPlayerDate\(\) should return string\|null but returns mixed\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Series.php
 
 		-
-			message: "#^Method Gatherling\\\\Models\\\\Series\\:\\:getBannedPlayerReason\\(\\) should return string\\|null but returns mixed\\.$#"
+			message: '#^Method Gatherling\\Models\\Series\:\:getBannedPlayerReason\(\) should return string\|null but returns mixed\.$#'
+			identifier: return.type
 			count: 1
 			path: gatherling/Models/Series.php
 
 		-
-			message: "#^Parameter \\#3 \\$multiplier of method Gatherling\\\\Models\\\\Series\\:\\:multiplyAndAddPoints\\(\\) expects int, int\\|string given\\.$#"
+			message: '#^Parameter \#3 \$multiplier of method Gatherling\\Models\\Series\:\:multiplyAndAddPoints\(\) expects int, int\|string given\.$#'
+			identifier: argument.type
 			count: 10
 			path: gatherling/Models/Series.php
 
 		-
-			message: "#^Cannot access property \\$data on mixed\\.$#"
+			message: '#^Cannot access property \$data on mixed\.$#'
+			identifier: property.nonObject
 			count: 1
 			path: gatherling/Models/SetScraper.php
 
 		-
-			message: "#^Cannot call method bind_param\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_param\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 2
 			path: gatherling/Models/Standings.php
 
 		-
-			message: "#^Cannot call method bind_result\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method bind_result\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 2
 			path: gatherling/Models/Standings.php
 
 		-
-			message: "#^Cannot call method close\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 2
 			path: gatherling/Models/Standings.php
 
 		-
-			message: "#^Cannot call method execute\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 2
 			path: gatherling/Models/Standings.php
 
 		-
-			message: "#^Cannot call method fetch\\(\\) on mysqli_stmt\\|false\\.$#"
+			message: '#^Cannot call method fetch\(\) on mysqli_stmt\|false\.$#'
+			identifier: method.nonObject
 			count: 2
 			path: gatherling/Models/Standings.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$name of class Gatherling\\Models\\Player constructor expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Views/Components/EventStandings.php
 
 		-
-			message: "#^Binary operation \"\\+\" between float\\|int\\|string\\|null and 1 results in an error\\.$#"
+			message: '#^Binary operation "\+" between float\|int\|string\|null and 1 results in an error\.$#'
+			identifier: binaryOp.invalid
 			count: 1
 			path: gatherling/Views/Components/SeasonDropMenu.php
 
 		-
-			message: "#^Cannot access offset 'm' on array\\<string, float\\|int\\|string\\|null\\>\\|false\\|null\\.$#"
+			message: '#^Cannot access offset ''m'' on array\<string, float\|int\|string\|null\>\|false\|null\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
 			path: gatherling/Views/Components/SeasonDropMenu.php
 
 		-
-			message: "#^Cannot call method close\\(\\) on mysqli_result\\|true\\.$#"
+			message: '#^Cannot call method close\(\) on mysqli_result\|true\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Views/Components/SeasonDropMenu.php
 
 		-
-			message: "#^Cannot call method fetch_assoc\\(\\) on mysqli_result\\|true\\.$#"
+			message: '#^Cannot call method fetch_assoc\(\) on mysqli_result\|true\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/Views/Components/SeasonDropMenu.php
 
 		-
-			message: "#^Property Gatherling\\\\Views\\\\Components\\\\SeasonStandings\\:\\:\\$players \\(list\\<array\\{classes\\: string, count\\: int, playerLink\\: Gatherling\\\\Views\\\\Components\\\\PlayerLink, totalPoints\\: int, events\\: list\\<array\\{points\\: int\\|null, why\\: string\\|null\\}\\>\\}\\>\\) does not accept list\\<array\\{classes\\: literal\\-string, count\\: int\\<1, max\\>, playerLink\\: Gatherling\\\\Views\\\\Components\\\\PlayerLink, totalPoints\\: array\\<string, int\\|string\\>\\|int, events\\: list\\<array\\{points\\: int\\|string\\|null, why\\: int\\|string\\|null\\}\\>\\}\\>\\.$#"
+			message: '#^Property Gatherling\\Views\\Components\\SeasonStandings\:\:\$players \(list\<array\{classes\: string, count\: int, playerLink\: Gatherling\\Views\\Components\\PlayerLink, totalPoints\: int, events\: list\<array\{points\: int\|null, why\: string\|null\}\>\}\>\) does not accept list\<array\{classes\: literal\-string, count\: int\<1, max\>, playerLink\: Gatherling\\Views\\Components\\PlayerLink, totalPoints\: array\<string, int\|string\>\|int, events\: list\<array\{points\: int\|string\|null, why\: int\|string\|null\}\>\}\>\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: gatherling/Views/Components/SeasonStandings.php
 
 		-
-			message: "#^Cannot cast mixed to string\\.$#"
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
 			count: 1
 			path: gatherling/Views/Components/TextInput.php
 
 		-
-			message: "#^Parameter \\#3 \\$limitTo of class Gatherling\\\\Views\\\\Components\\\\SeriesDropMenu constructor expects list\\<string\\>, array\\<int\\<0, max\\>, string\\> given\\.$#"
+			message: '#^Parameter \#3 \$limitTo of class Gatherling\\Views\\Components\\SeriesDropMenu constructor expects list\<string\>, array\<int\<0, max\>, string\> given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Views/Pages/EventForm.php
 
 		-
-			message: "#^Parameter \\#1 \\$player of function Gatherling\\\\Views\\\\Pages\\\\queryEvents expects Gatherling\\\\Models\\\\Player, Gatherling\\\\Models\\\\Player\\|null given\\.$#"
+			message: '#^Parameter \#1 \$player of function Gatherling\\Views\\Pages\\queryEvents expects Gatherling\\Models\\Player, Gatherling\\Models\\Player\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Views/Pages/EventList.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function rawurlencode expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$string of function rawurlencode expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Views/Pages/EventReport.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$name of class Gatherling\\Models\\Player constructor expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/Views/Pages/MatchList.php
 
 		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:getPlayerWins\\(\\) expects Gatherling\\\\Models\\\\Player\\|string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$player of method Gatherling\\Models\\Matchup\:\:getPlayerWins\(\) expects Gatherling\\Models\\Player\|string, string\|null given\.$#'
+			identifier: argument.type
 			count: 4
 			path: gatherling/Views/Pages/MatchList.php
 
 		-
-			message: "#^Parameter \\#1 \\$player of method Gatherling\\\\Models\\\\Matchup\\:\\:playerDropped\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$player of method Gatherling\\Models\\Matchup\:\:playerDropped\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/Views/Pages/MatchList.php
 
 		-
-			message: "#^Parameter \\#1 \\$string1 of function strcasecmp expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$string1 of function strcasecmp expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Views/Pages/MatchList.php
 
 		-
-			message: "#^Parameter \\#1 \\$datetime of function Safe\\\\strtotime expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$datetime of function Safe\\strtotime expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/Views/Pages/Series.php
 
 		-
-			message: "#^Cannot access property \\$deck on Gatherling\\\\Models\\\\Entry\\|null\\.$#"
+			message: '#^Cannot access property \$deck on Gatherling\\Models\\Entry\|null\.$#'
+			identifier: property.nonObject
 			count: 1
 			path: gatherling/action.php
 
 		-
-			message: "#^Cannot call method linkTo\\(\\) on Gatherling\\\\Models\\\\Deck\\|null\\.$#"
+			message: '#^Cannot call method linkTo\(\) on Gatherling\\Models\\Deck\|null\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/action.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$name of class Gatherling\\Models\\Player constructor expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/action.php
 
 		-
-			message: "#^Parameter \\#2 \\$string2 of function strcasecmp expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string2 of function strcasecmp expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/action.php
 
 		-
-			message: "#^Part \\$_SESSION\\['DISCORD_NAME'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			message: '#^Part \$_SESSION\[''DISCORD_NAME''\] \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
 			count: 1
 			path: gatherling/action.php
 
 		-
-			message: "#^Binary operation \"\\.\" between mixed and '\\:00' results in an error\\.$#"
+			message: '#^Binary operation "\." between mixed and ''\:00'' results in an error\.$#'
+			identifier: binaryOp.invalid
 			count: 1
 			path: gatherling/admincp.php
 
 		-
-			message: "#^Cannot cast mixed to int\\.$#"
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
 			count: 1
 			path: gatherling/admincp.php
 
 		-
-			message: "#^Property Gatherling\\\\Models\\\\Series\\:\\:\\$name \\(string\\) does not accept mixed\\.$#"
+			message: '#^Property Gatherling\\Models\\Series\:\:\$name \(string\) does not accept mixed\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: gatherling/admincp.php
 
 		-
-			message: "#^Property Gatherling\\\\Models\\\\Series\\:\\:\\$start_day \\(string\\|null\\) does not accept mixed\\.$#"
+			message: '#^Property Gatherling\\Models\\Series\:\:\$start_day \(string\|null\) does not accept mixed\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: gatherling/admincp.php
 
 		-
-			message: "#^Cannot access property \\$name on Gatherling\\\\Models\\\\Player\\|null\\.$#"
+			message: '#^Cannot access property \$name on Gatherling\\Models\\Player\|null\.$#'
+			identifier: property.nonObject
 			count: 1
 			path: gatherling/api.php
 
 		-
-			message: "#^Cannot call method setApiKey\\(\\) on Gatherling\\\\Models\\\\Player\\|null\\.$#"
+			message: '#^Cannot call method setApiKey\(\) on Gatherling\\Models\\Player\|null\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/api.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Player constructor expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$name of class Gatherling\\Models\\Player constructor expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/api_lib.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of method Gatherling\\\\Models\\\\Matchup\\:\\:reportSubmitted\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$name of method Gatherling\\Models\\Matchup\:\:reportSubmitted\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 6
 			path: gatherling/api_lib.php
 
 		-
-			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:addPlayer\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$playername of method Gatherling\\Models\\Event\:\:addPlayer\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/api_lib.php
 
 		-
-			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:dropPlayer\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$playername of method Gatherling\\Models\\Event\:\:dropPlayer\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/api_lib.php
 
 		-
-			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:removeEntry\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$playername of method Gatherling\\Models\\Event\:\:removeEntry\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/api_lib.php
 
 		-
-			message: "#^Parameter \\#2 \\$playername of class Gatherling\\\\Models\\\\Standings constructor expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$playername of class Gatherling\\Models\\Standings constructor expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/api_lib.php
 
 		-
-			message: "#^Property Gatherling\\\\Models\\\\Player\\:\\:\\$discord_handle \\(string\\|null\\) does not accept mixed\\.$#"
+			message: '#^Property Gatherling\\Models\\Player\:\:\$discord_handle \(string\|null\) does not accept mixed\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: gatherling/auth.php
 
 		-
-			message: "#^Property Gatherling\\\\Models\\\\Player\\:\\:\\$discord_id \\(string\\|null\\) does not accept mixed\\.$#"
+			message: '#^Property Gatherling\\Models\\Player\:\:\$discord_id \(string\|null\) does not accept mixed\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: gatherling/auth.php
 
 		-
-			message: "#^Cannot access property \\$name on Gatherling\\\\Models\\\\Event\\|null\\.$#"
+			message: '#^Cannot access property \$name on Gatherling\\Models\\Event\|null\.$#'
+			identifier: property.nonObject
 			count: 1
 			path: gatherling/deck.php
 
 		-
-			message: "#^Cannot call method canEdit\\(\\) on Gatherling\\\\Models\\\\Deck\\|null\\.$#"
+			message: '#^Cannot call method canEdit\(\) on Gatherling\\Models\\Deck\|null\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/deck.php
 
 		-
-			message: "#^Cannot call method getPlaceDeck\\(\\) on Gatherling\\\\Models\\\\Event\\|null\\.$#"
+			message: '#^Cannot call method getPlaceDeck\(\) on Gatherling\\Models\\Event\|null\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: gatherling/deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$deck of function updateDeck expects Gatherling\\\\Models\\\\Deck, Gatherling\\\\Models\\\\Deck\\|null given\\.$#"
+			message: '#^Parameter \#1 \$deck of function updateDeck expects Gatherling\\Models\\Deck, Gatherling\\Models\\Deck\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$event of function checkDeckAuth expects Gatherling\\\\Models\\\\Event, Gatherling\\\\Models\\\\Event\\|null given\\.$#"
+			message: '#^Parameter \#1 \$event of function checkDeckAuth expects Gatherling\\Models\\Event, Gatherling\\Models\\Event\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$event of function insertDeck expects Gatherling\\\\Models\\\\Event, Gatherling\\\\Models\\\\Event\\|null given\\.$#"
+			message: '#^Parameter \#1 \$event of function insertDeck expects Gatherling\\Models\\Event, Gatherling\\Models\\Event\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/deck.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class Gatherling\\\\Models\\\\Event constructor expects int\\|string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$name of class Gatherling\\Models\\Event constructor expects int\|string, string\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/deck.php
 
 		-
-			message: "#^Cannot access offset int\\<0, max\\> on mixed\\.$#"
+			message: '#^Cannot access offset int\<0, max\> on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
 			count: 2
 			path: gatherling/event.php
 
 		-
-			message: "#^Cannot cast mixed to int\\.$#"
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
 			count: 1
 			path: gatherling/event.php
 
 		-
-			message: "#^Parameter \\#1 \\$playername of method Gatherling\\\\Models\\\\Event\\:\\:undropPlayer\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$playername of method Gatherling\\Models\\Event\:\:undropPlayer\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/event.php
 
 		-
-			message: "#^Parameter \\#2 \\$playername of class Gatherling\\\\Models\\\\Entry constructor expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$playername of class Gatherling\\Models\\Entry constructor expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/event.php
 
 		-
-			message: "#^Parameter \\#2 \\$subevent of static method Gatherling\\\\Models\\\\Standings\\:\\:updateStandings\\(\\) expects int, int\\|null given\\.$#"
+			message: '#^Parameter \#2 \$subevent of static method Gatherling\\Models\\Standings\:\:updateStandings\(\) expects int, int\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: gatherling/event.php
 
 		-
-			message: "#^Part \\$_POST\\['day'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			message: '#^Part \$_POST\[''day''\] \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
 			count: 1
 			path: gatherling/event.php
 
 		-
-			message: "#^Part \\$_POST\\['hour'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			message: '#^Part \$_POST\[''hour''\] \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
 			count: 1
 			path: gatherling/event.php
 
 		-
-			message: "#^Part \\$_POST\\['month'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			message: '#^Part \$_POST\[''month''\] \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
 			count: 1
 			path: gatherling/event.php
 
 		-
-			message: "#^Part \\$_POST\\['year'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			message: '#^Part \$_POST\[''year''\] \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
 			count: 1
 			path: gatherling/event.php
 
 		-
-			message: "#^Parameter \\#1 \\$values of function updateFormat expects array\\<string, string\\>, array given\\.$#"
+			message: '#^Parameter \#1 \$values of function updateFormat expects array\<string, string\>, array\<mixed\> given\.$#'
+			identifier: argument.type
 			count: 1
 			path: gatherling/formatcp.php
 
 		-
-			message: "#^Cannot access property \\$super on Gatherling\\\\Models\\\\Player\\|null\\.$#"
+			message: '#^Cannot access property \$super on Gatherling\\Models\\Player\|null\.$#'
+			identifier: property.nonObject
 			count: 1
 			path: gatherling/seriescp.php

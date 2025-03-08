@@ -27,7 +27,7 @@ class Series extends Page
             $series = new SeriesModel($seriesName);
             $mostRecentEvent = $series->mostRecentEvent();
             $nextEvent = $series->nextEvent();
-            $mostRecentEventDoesntCount = !$mostRecentEvent || $mostRecentEvent->start->add(DateInterval::createFromDateString('4 weeks')) < $now;
+            $mostRecentEventDoesntCount = !$mostRecentEvent || $mostRecentEvent->start < $now->sub(new DateInterval('P4W'));
             if ($mostRecentEventDoesntCount && !$nextEvent) {
                 continue;
             }

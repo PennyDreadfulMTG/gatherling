@@ -6,11 +6,9 @@ namespace Gatherling\Views\Pages;
 
 use Gatherling\Models\Event;
 
-use function Gatherling\Helpers\getObjectVarsCamelCase;
-
 class PointsAdjustmentForm extends EventFrame
 {
-    /** @var list<array<string, mixed>> */
+    /** @var list<array{playerName: string, adjustment: int, reason: string, medalSrc: ?string, verifiedSrc: ?string}> */
     public array $entries;
 
     public function __construct(Event $event)
@@ -19,16 +17,14 @@ class PointsAdjustmentForm extends EventFrame
         $eventEntries = $event->getEntries();
         $entries = [];
         foreach ($eventEntries as $entry) {
-            $player = getObjectVarsCamelCase($entry);
-            $player['player'] = $entry->player;
-            $player['adjustment'] = $event->getSeasonPointAdjustment($entry->player->name);
-            if ($entry->medal != '') {
-                $player['medalSrc'] = "styles/images/{$entry->medal}.png";
-            }
-            if ($entry->deck != null) {
-                $player['verifiedSrc'] = 'styles/images/verified.png';
-            }
-            $entries[] = $player;
+            $adjustmentDetails = $event->getSeasonPointAdjustment($entry->player->name);
+            $entries[] = [
+                'playerName' => $entry->player->name,
+                'adjustment' => $adjustmentDetails['adjustment'],
+                'reason' => $adjustmentDetails['reason'],
+                'medalSrc' => $entry->medal ? "styles/images/{$entry->medal}.png" : null,
+                'verifiedSrc' => $entry->deck ? 'styles/images/verified.png' : null
+            ];
         }
         $this->entries = $entries;
     }

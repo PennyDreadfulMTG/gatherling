@@ -254,10 +254,7 @@ class Event
         }
         $event->mainrounds = $mainrounds;
         $event->mainstruct = $mainstruct;
-        if ($finalrounds == '') {
-            $finalrounds = 0;
-        }
-        if ($finalstruct == '') {
+        if ($finalstruct === '') {
             $finalstruct = 'Single Elimination';
         }
         $event->finalrounds = $finalrounds;
@@ -1045,7 +1042,7 @@ class Event
     }
 
     /** @return array{adjustment: int, reason: string} */
-    public function getSeasonPointAdjustment(string $player): ?array
+    public function getSeasonPointAdjustment(string $player): array
     {
         $db = Database::getConnection();
         $stmt = $db->prepare('SELECT adjustment, reason FROM season_points WHERE event = ? AND player = ?');
@@ -1058,7 +1055,7 @@ class Event
         if ($exists) {
             return ['adjustment' => $adjustment, 'reason' => $reason];
         }
-        return null;
+        return ['adjustment' => 0, 'reason' => ''];
     }
 
     // Adjusts the season points for $player for this event by $points, with the reason $reason

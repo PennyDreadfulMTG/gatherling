@@ -1,6 +1,6 @@
 includes:
     - phar://phpstan.phar/conf/bleedingEdge.neon
-    - vendor/shish/phpstan-safe-rule/phpstan-safe-rule.neon
+    - vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon
     - phpstan-baseline.neon
 parameters:
     level: 9
