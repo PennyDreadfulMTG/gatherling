@@ -17,7 +17,7 @@ use function Safe\preg_split;
 // than I hoped. Try not to use it anymore, I will remove it
 // at some point. Just pass what the template needs explicitly,
 // not the whole object.
-/** @return array<string, mixed> */
+/** @return array<string|int, mixed> */
 function getObjectVarsCamelCase(object $obj): array
 {
     $vars = get_object_vars($obj);
@@ -55,8 +55,8 @@ function toCamel(string $string): string
 }
 
 /**
- * @param array<string, mixed> $arr
- * @return array<string, mixed>
+ * @param array<string|int, mixed> $arr
+ * @return array<string|int, mixed>
  */
 function arrayMapRecursive(callable $func, array $arr): array
 {

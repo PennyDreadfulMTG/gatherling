@@ -11,7 +11,7 @@ use function Gatherling\Helpers\getObjectVarsCamelCase;
 class FormatSettings extends Component
 {
     public string $activeFormatName;
-    /** @var array<string, mixed> */
+    /** @var array<int|string, mixed> */
     public array $activeFormat;
     public StringField $minMainStringField;
     public bool $showMinMainWarning;

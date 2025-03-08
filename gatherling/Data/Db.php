@@ -165,8 +165,8 @@ class Db
             $stmt->execute();
             try {
                 $rows = $stmt->fetchAll(PDO::FETCH_CLASS, $class);
-            } catch (TypeError $e) {
-                throw new DatabaseException("Failed to fetch class $class", $e, $sql, $params);
+            } catch (PDOException $e) {
+                throw new DatabaseException("Failed to fetch using class $class", $e, $sql, $params);
             }
             return $rows;
         });

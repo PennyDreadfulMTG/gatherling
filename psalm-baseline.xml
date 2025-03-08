@@ -136,9 +136,6 @@
     <MixedArgument>
       <code><![CDATA[$word]]></code>
     </MixedArgument>
-    <MixedArgumentTypeCoercion>
-      <code><![CDATA[$value]]></code>
-    </MixedArgumentTypeCoercion>
     <MixedArrayOffset>
       <code><![CDATA[$result[$newKey]]]></code>
       <code><![CDATA[$result[$newKey]]]></code>
@@ -149,10 +146,6 @@
       <code><![CDATA[$result[$newKey]]]></code>
       <code><![CDATA[$value]]></code>
     </MixedAssignment>
-    <MixedReturnTypeCoercion>
-      <code><![CDATA[$result]]></code>
-      <code><![CDATA[array<string, mixed>]]></code>
-    </MixedReturnTypeCoercion>
   </file>
   <file src="gatherling/Logger.php">
     <RiskyTruthyFalsyComparison>
@@ -1695,12 +1688,7 @@
     </RiskyTruthyFalsyComparison>
   </file>
   <file src="gatherling/Views/Components/Placing.php">
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[$day]]></code>
-      <code><![CDATA[$eventName]]></code>
-    </PropertyNotSetInConstructor>
     <RiskyTruthyFalsyComparison>
-      <code><![CDATA[!$deck->playername]]></code>
       <code><![CDATA[$player]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
