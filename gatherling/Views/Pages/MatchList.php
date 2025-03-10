@@ -33,7 +33,7 @@ class MatchList extends EventFrame
     public string $structureSummary;
     public bool $isLeague;
 
-    public function __construct(Event $event, string|int|null $newMatchRound)
+    public function __construct(Event $event, int|string|null $newMatchRound)
     {
         parent::__construct($event);
         $matches = $event->getMatches();

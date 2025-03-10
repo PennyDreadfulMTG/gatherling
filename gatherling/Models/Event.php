@@ -744,7 +744,7 @@ class Event
     }
 
     /** @return list<Matchup> */
-    public function getRoundMatches(string|int $roundnum): array
+    public function getRoundMatches(int|string $roundnum): array
     {
         $all_rounds = $roundnum == 'ALL';
         $roundnum = intval($roundnum);

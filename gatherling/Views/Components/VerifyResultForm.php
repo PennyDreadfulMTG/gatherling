@@ -10,7 +10,7 @@ class VerifyResultForm extends Component
     public string $resultText = '';
     public bool $isDrop;
 
-    public function __construct(public string $report, public int $matchId, public string $playerName, public string|int $drop, public string $opponent, public string $eventName)
+    public function __construct(public string $report, public int $matchId, public string $playerName, public int|string $drop, public string $opponent, public string $eventName)
     {
         $this->showOpponent = $opponent != '0';
         switch ($report) {

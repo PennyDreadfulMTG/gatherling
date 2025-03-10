@@ -1301,7 +1301,7 @@
       <code><![CDATA[array<string, array<string, int>>]]></code>
       <code><![CDATA[array<string, array<string, int>>]]></code>
       <code><![CDATA[array<string, array<string, int>>]]></code>
-      <code><![CDATA[array<string, array<string, int|array<string, string|int>>>]]></code>
+      <code><![CDATA[array<string, array<string, int|array<string, int|string>>>]]></code>
       <code><![CDATA[list<string>]]></code>
     </MixedReturnTypeCoercion>
     <PossiblyInvalidArgument>

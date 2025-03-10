@@ -784,7 +784,7 @@ class Series
     }
 
     /**
-     * @return array<string, array<string, int|array<string, string|int>>>
+     * @return array<string, array<string, int|array<string, int|string>>>
      */
     public function seasonPointsTable(int $season_number): array
     {
