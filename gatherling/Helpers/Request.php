@@ -95,7 +95,7 @@ class Request
      */
     private function marshal(string $key, callable $f, bool $nullIfEmptyString = false): mixed
     {
-        /** @var string|int|float|null $value */
+        /** @var int|float|string|null $value */
         $value = $this->vars[$key] ?? null;
         if ($nullIfEmptyString && $value === '') {
             $value = null;

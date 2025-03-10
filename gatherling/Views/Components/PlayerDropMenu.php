@@ -8,7 +8,7 @@ use Gatherling\Models\Event;
 
 class PlayerDropMenu extends DropMenu
 {
-    public function __construct(Event $event, string|int $letter, string $def = "\n")
+    public function __construct(Event $event, int|string $letter, string $def = "\n")
     {
         // If the event is active, only list players who haven't already dropped.
         // Otherwise, list all registered players.
