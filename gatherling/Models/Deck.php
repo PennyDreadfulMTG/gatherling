@@ -617,7 +617,7 @@ class Deck
             array_keys($this->sideboard_cards)
         ));
 
-        $sql = 'UPDATE decks set deck_contents_cache = :deck_contents_cache WHERE id = :id';
+        $sql = 'UPDATE decks SET deck_contents_cache = :deck_contents_cache WHERE id = :id';
         $params = ['deck_contents_cache' => $this->deck_contents_cache, 'id' => $this->id];
         db()->execute($sql, $params);
 
@@ -670,7 +670,7 @@ class Deck
             } else {
                 $this->name = strtoupper($this->deck_color_str) . ' ' . $this->archetype;
             }
-            $sql = 'UPDATE decks set name = :name WHERE id = :id';
+            $sql = 'UPDATE decks SET name = :name WHERE id = :id';
             $params = ['name' => $this->name, 'id' => $this->id];
             db()->execute($sql, $params);
         }
