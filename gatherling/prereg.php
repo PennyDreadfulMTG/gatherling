@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Gatherling\Auth\DiscordAuth;
+use Gatherling\Exceptions\InvalidStateException;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
@@ -76,7 +77,12 @@ function main(): never
         $ename = $event->id;
         $location = "deck.php?player={$player->name}&event={$ename}&mode=create";
     } elseif ($_GET['action'] == 'unreg') {
-        $event->removeEntry($player->name);
+        try {
+            $event->removeEntry($player->name);
+        } catch (InvalidStateException $e) {
+            // You tried to unregister but you've gone too far for that, prompt you to drop instead
+            $location = "report.php?mode=drop_form&event={$event->name}";
+        }
     }
 
     (new Redirect($location))->send();
