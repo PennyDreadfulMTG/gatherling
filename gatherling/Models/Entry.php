@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use Exception;
-use Gatherling\Views\TemplateHelper;
+use Gatherling\Exceptions\InvalidStateException;
 use Gatherling\Exceptions\NotFoundException;
 
 use function Gatherling\Helpers\db;
@@ -142,6 +141,10 @@ class Entry
 
     public function removeEntry(): bool
     {
+        if (!$this->canDelete()) {
+            throw new InvalidStateException("Cannot remove entry for player {$this->player->name} in event {$this->event->name}");
+        }
+
         db()->begin('remove_entry');
 
         // if the player being unreg'd entered a deck list, remove it
