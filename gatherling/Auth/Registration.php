@@ -13,6 +13,8 @@ class Registration
     public const ERROR_PASSWORD_MISMATCH = -1;
     public const ERROR_PASSWORD_EMPTY = -4;
 
+    public const MIN_PASSWORD_LENGTH = 8;
+
     public static function register(string $username, string $pw1, string $pw2, string $email, int $emailStatus, float $timezone, ?string $discordId, ?string $discordName): int
     {
         $player = Player::findOrCreateByName(trim($username));
