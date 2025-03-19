@@ -6,6 +6,8 @@ namespace Gatherling\Views;
 
 class ICal extends TemplateResponse
 {
+    private const string ICAL_DATE_FORMAT = 'Ymd\THis';
+
     /** @var list<array{start: string, end: string, name: string, url: string|null}> */
     public array $events;
 
@@ -16,8 +18,8 @@ class ICal extends TemplateResponse
         $this->events = [];
         foreach ($inputEvents as $event) {
             $this->events[] = [
-                'start' => date('Ymd\THis', $event['start']),
-                'end' => date('Ymd\THis', $event['end']),
+                'start' => date(self::ICAL_DATE_FORMAT, $event['start']),
+                'end' => date(self::ICAL_DATE_FORMAT, $event['end']),
                 'name' => $event['name'],
                 'url' => $event['url'] ?? null,
             ];
