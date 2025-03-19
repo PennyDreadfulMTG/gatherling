@@ -297,6 +297,10 @@ table {
     text-align: right;
 }
 
+.top {
+    vertical-align: top;
+}
+
 .warning {
     color: var(--error-text-color);
 }

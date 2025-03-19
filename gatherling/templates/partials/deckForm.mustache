@@ -1,7 +1,7 @@
 <form action="deck.php" method="post">
     <table>
         <tr>
-            <th valign="top">
+            <th class="top">
                 <b>Directions:</b>
             </th>
             <td>
@@ -51,19 +51,19 @@
         {{/create}}
         {{#deckArchetypeDropMenu}}{{> selectInput}}{{/deckArchetypeDropMenu}}
        <tr>
-            <td valign="top"><b>Main Deck</b></td>
+            <td class="top"><b>Main Deck</b></td>
             <td>
                 <textarea id="deck-contents" class="inputbox" rows="20" cols="60" name="contents">{{contents}}</textarea>
             </td>
         </tr>
         <tr>
-            <td valign="top"><b>Sideboard</b></td>
+            <td class="top"><b>Sideboard</b></td>
             <td>
                 <textarea id="deck-sideboard" class="inputbox" rows="10" cols="60" name="sideboard">{{sideboard}}</textarea>
             </td>
         </tr>
         <tr>
-            <td valign="top"><b>Comments</b></td>
+            <td class="top"><b>Comments</b></td>
             <td>
                 <textarea class="inputbox" rows="10" cols="60" name="notes">{{desc}}</textarea>
             </td>
