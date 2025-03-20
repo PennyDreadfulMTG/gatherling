@@ -315,18 +315,6 @@ table {
     padding: var(--box-padding);
 }
 
-.truncate-text {
-    line-height: 1.5;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    line-clamp: 10;
-    -webkit-line-clamp: 10;
-    box-orient: vertical;
-    -webkit-box-orient: vertical;
-    white-space: normal;
-}
-
 /*
 Work around Mustache's trailing comma problem.
 See: https://bluebones.net/2024/09/avoid-trailing-comma-when-emitting-lists-in-mustache-templates/

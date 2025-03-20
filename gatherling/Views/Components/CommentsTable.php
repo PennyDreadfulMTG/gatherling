@@ -9,6 +9,7 @@ use function Safe\preg_replace;
 class CommentsTable extends Component
 {
     public string $notesSafe = '';
+    public string $shortNotesSafe = '';
 
     public function __construct(string $notes)
     {
@@ -19,6 +20,11 @@ class CommentsTable extends Component
         $notes = preg_replace("/\[\/b\]/", '</b>', $notes);
         $notes = preg_replace("/\[i\]/", '<i>', $notes);
         $notes = preg_replace("/\[\/i\]/", '</i>', $notes);
+        /** @var string $notes */
         $this->notesSafe = $notes;
+        $this->shortNotesSafe = substr($notes, 0, 100);
+        if (strlen($notes) > 100) {
+            $this->shortNotesSafe .= '…';
+        }
     }
 }
