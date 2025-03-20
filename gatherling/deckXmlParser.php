@@ -7,7 +7,7 @@ use Gatherling\Views\JsonResponse;
 use function Gatherling\Helpers\server;
 use function Safe\simplexml_load_string;
 
-require_once 'lib.php';
+require_once __DIR__ . '/bootstrap.php';
 
 function main(): never
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Auth;
 
-use Gatherling\Logger;
+use Gatherling\Auth\Registration;
 use Gatherling\Models\Player;
 
 class Login
@@ -28,7 +28,7 @@ class Login
         if (!$auth && !$admin) {
             return new LoginResult(false, [LoginError::INVALID_CREDENTIALS]);
         }
-        if (strlen($password) < 8 && !$admin) {
+        if (strlen($password) < Registration::MIN_PASSWORD_LENGTH && !$admin) {
             $errors[] = LoginError::PASSWORD_TOO_SHORT;
         }
         return new LoginResult(true, $errors);

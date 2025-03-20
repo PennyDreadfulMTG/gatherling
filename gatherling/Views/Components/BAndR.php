@@ -8,7 +8,7 @@ use Gatherling\Models\Format;
 
 class BAndR extends Component
 {
-    public string $activeFormatName;
+    public string $formatName;
     public int $restrictedCardCount;
     /** @var array<int, array{cardName: string, cardLink: ?CardLink}> */
     public array $restrictedCards;
@@ -22,11 +22,11 @@ class BAndR extends Component
     public array $legalCards;
     public NotAllowed $noLegalCards;
 
-    public function __construct(public string $seriesName, Format $activeFormat)
+    public function __construct(public string $seriesName, Format $format)
     {
-        $this->activeFormatName = $activeFormat->name;
+        $this->formatName = $format->name;
 
-        $restrictedCards = $activeFormat->getRestrictedList();
+        $restrictedCards = $format->getRestrictedList();
         $this->restrictedCardCount = count($restrictedCards);
         $this->restrictedCards = array_map(fn ($cardName) => [
             'cardName' => $cardName,
@@ -36,7 +36,7 @@ class BAndR extends Component
             $this->noRestrictedCards = new NotAllowed('No Restricted Cards To Delete');
         }
 
-        $bannedCards = $activeFormat->getBanList();
+        $bannedCards = $format->getBanList();
         $this->bannedCardCount = count($bannedCards);
         $this->bannedCards = array_map(fn ($cardName) => [
             'cardName' => $cardName,
@@ -46,7 +46,7 @@ class BAndR extends Component
             $this->noBannedCards = new NotAllowed('No Banned Cards To Delete');
         }
 
-        $legalCards = $activeFormat->getLegalList();
+        $legalCards = $format->getLegalList();
         $this->legalCardCount = count($legalCards);
         $this->legalCards = array_map(fn ($cardName) => [
             'cardName' => $cardName,

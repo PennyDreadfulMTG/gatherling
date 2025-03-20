@@ -1714,11 +1714,6 @@
       <code><![CDATA[empty($player->mtgo_username)]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
-  <file src="gatherling/Views/Components/RatingsTable.php">
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[$playerLink]]></code>
-    </PropertyNotSetInConstructor>
-  </file>
   <file src="gatherling/Views/Components/RecentDecksDropMenu.php">
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[$deck->name]]></code>

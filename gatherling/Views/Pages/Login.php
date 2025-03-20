@@ -8,7 +8,6 @@ class Login extends Page
 {
     public function __construct(
         public bool $loginFailed,
-        public bool $ipAddressChanged,
         public string $message,
         public string $username,
         public string $target,

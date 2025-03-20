@@ -1,6 +1,6 @@
 <form action="formatcp.php" method="post">
     <input type="hidden" name="view" value="bandr">
-    <input type="hidden" name="format" value="{{activeFormatName}}">
+    <input type="hidden" name="format" value="{{formatName}}">
     <input type="hidden" name="series" value="{{seriesName}}">
     <h3>Card Restricted List: {{restrictedCardCount}} Cards</h3>
     <table class="form c">
@@ -52,7 +52,7 @@
 
 <form action="formatcp.php" method="post">
     <input type="hidden" name="view" value="bandr">
-    <input type="hidden" name="format" value="{{activeFormatName}}">
+    <input type="hidden" name="format" value="{{formatName}}">
     <input type="hidden" name="series" value="{{seriesName}}">
     <h3>Card Banlist: {{bannedCardCount}} Cards</h3>
     <table class="form c">
@@ -103,7 +103,7 @@
 
 <form action="formatcp.php" method="post">
     <input type="hidden" name="view" value="bandr">
-    <input type="hidden" name="format" value="{{activeFormatName}}">
+    <input type="hidden" name="format" value="{{formatName}}">
     <input type="hidden" name="series" value="{{seriesName}}">
     <h3>Legal Card List: {{legalCardCount}} Cards</h3>
     <table class="form c">

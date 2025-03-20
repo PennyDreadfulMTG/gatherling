@@ -13,7 +13,7 @@ class InfoCell extends Component
     public string $eventName;
     public string $eventDate;
     public string $eventFormat;
-    public int $playerCount;
+    public string $playerCountText;
     public int $deckCount;
     public bool $isActive;
     public float $percentReported;
@@ -29,11 +29,12 @@ class InfoCell extends Component
         $this->eventName = $event->name;
         $this->eventDate = $event->start->format('j F Y');
         $this->eventFormat = $event->format;
-        $this->playerCount = $event->getPlayerCount();
+        $playerCount = $event->getPlayerCount();
+        $this->playerCountText = "$playerCount Player" . ($playerCount === 1 ? '' : 's');
         $this->deckCount = count($event->getDecks());
         $this->isActive = (bool) $event->active;
         if ($event->active) {
-            $this->percentReported = $this->playerCount === 0 ? 0 : round($this->deckCount * 100 / $this->playerCount);
+            $this->percentReported = $playerCount === 0 ? 0 : round($this->deckCount * 100 / $playerCount);
         }
         $this->subevents = [];
         foreach ($event->getSubevents() as $subevent) {

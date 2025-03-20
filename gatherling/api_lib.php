@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once 'lib.php';
+require_once __DIR__ . '/bootstrap.php';
 
 //## Helper Functions
 

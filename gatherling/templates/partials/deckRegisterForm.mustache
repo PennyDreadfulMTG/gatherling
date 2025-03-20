@@ -1,7 +1,7 @@
 <form action="deck.php?mode=addregdeck" method="post">
 <table>
     <tr>
-        <td valign="top"><b>Directions:</b></td>
+        <td class="top"><b>Directions:</b></td>
         <td>
             To enter your deck, please give it
             a name and select an archetype from the drop-down menu below. If
@@ -33,18 +33,19 @@
         </tr>
         {{#deckArchetypeDropMenu}}{{> selectInput}}{{/deckArchetypeDropMenu}}
         <tr>
-            <td valign="top"><b>Main Deck</b></td>
+            <td class="top"><b>Main Deck</b></td>
             <td>
                 <textarea id="deck-contents" class="inputbox" rows="20" cols="60" name="contents"></textarea>
             </td>
         </tr>
-        <tr><td valign="top"><b>Sideboard</b></td>
+        <tr>
+            <td class="top"><b>Sideboard</b></td>
             <td>
                 <textarea id="deck-sideboard" class="inputbox" rows="10" cols="60" name="sideboard"></textarea>
             </td>
         </tr>
         <tr>
-            <td valign="top"><b>Comments</td>
+            <td class="top"><b>Comments</b></td>
             <td>
                 <textarea class="inputbox" rows="10" cols="60" name="notes"></textarea>
             </td>

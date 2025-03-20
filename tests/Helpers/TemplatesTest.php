@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Tests\Helpers;
 
-require_once 'gatherling/lib.php';
+require_once __DIR__ . '/../../gatherling/bootstrap.php';
 
 use stdClass;
 use PHPUnit\Framework\TestCase;

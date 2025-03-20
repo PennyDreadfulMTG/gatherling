@@ -8,7 +8,7 @@ use function Gatherling\Helpers\get;
 use function Gatherling\Helpers\server;
 use function Safe\ini_set;
 
-require_once 'lib.php';
+require_once __DIR__ . '/bootstrap.php';
 
 // Some of the Pauper series seasons had 1000+ entrants and 256 tourneys.
 // We should find a better way to display that but for now make them work

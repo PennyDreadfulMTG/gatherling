@@ -24,7 +24,7 @@ use function Gatherling\Helpers\get;
 use function Gatherling\Helpers\post;
 use function Gatherling\Helpers\server;
 
-require_once 'lib.php';
+require_once __DIR__ . '/bootstrap.php';
 
 function main(): never
 {

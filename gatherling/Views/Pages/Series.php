@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gatherling\Views\Pages;
 
 use DateInterval;
+use Gatherling\Models\Event;
 use Gatherling\Views\Components\Time;
 use Gatherling\Views\Components\EventReportLink;
 use Gatherling\Models\Series as SeriesModel;
@@ -41,11 +42,12 @@ class Series extends Page
             }
             $season = $series->this_season_season;
             $nextEventStart = $nextEvent ? new Time($nextEvent->start, $now) : null;
+            $hosts = $this->getHosts($nextEvent, $mostRecentEvent, $series->organizers);
             $this->activeSeries[] = [
                 'seriesName' => $seriesName,
                 'logoSrc' => SeriesModel::logoSrc($seriesName),
                 'formatName' => $formatName,
-                'hosts' => implode(", ", array_slice($series->organizers, 0, 3)),
+                'hosts' => implode(", ", $hosts),
                 'regularTime' => $regularTime,
                 'masterDocumentLink' => $masterDocumentLink,
                 'season' => $season,
@@ -53,5 +55,30 @@ class Series extends Page
                 'nextEventStart' => $nextEventStart,
             ];
         }
+    }
+
+    /**
+     * @param list<string> $organizers
+     * @return list<string>
+     */
+    private function getHosts(?Event $nextEvent, ?Event $mostRecentEvent, array $organizers): array
+    {
+        $hosts = [];
+        if ($nextEvent !== null) {
+            $hosts = [$nextEvent->host];
+            if ($nextEvent->cohost !== null) {
+                $hosts[] = $nextEvent->cohost;
+            }
+        }
+        if ($mostRecentEvent !== null) {
+            $hosts = [...$hosts, $mostRecentEvent->host];
+            if ($mostRecentEvent->cohost !== null) {
+                $hosts[] = $mostRecentEvent->cohost;
+            }
+        }
+        if (empty($hosts)) {
+            $hosts = array_slice($organizers, 0, 3);
+        }
+        return $hosts;
     }
 }

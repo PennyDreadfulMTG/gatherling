@@ -8,20 +8,20 @@
     <input name="player" type="hidden" value="{{letter}}">
     <table class="form">
         <tr>
-            <td><input type="radio" name="report" value="W20"> I won the match 2-0</td>
+            <td><input type="radio" name="report" value="W20" id="w20"><label for="w20"> I won the match 2-0</label></td>
         </tr>
         <tr>
-            <td><input type="radio" name="report" value="W21">I won the match 2-1</td>
+            <td><input type="radio" name="report" value="W21" id="w21"><label for="w21"> I won the match 2-1</label></td>
         </tr>
         <tr>
-            <td><input type="radio" name="report" value="L20">I lost the match 0-2 </td>
+            <td><input type="radio" name="report" value="L20" id="l20"><label for="l20"> I lost the match 0-2</label></td>
         </tr>
         <tr>
-            <td><input type="radio" name="report" value="L21">I lost the match 1-2</td>
+            <td><input type="radio" name="report" value="L21" id="l21"><label for="l21"> I lost the match 1-2</label></td>
         </tr>
         {{#allowsPlayerReportedDraws}}
             <tr>
-                <td><input type="radio" name="report" value="D">The match was a draw</td>
+                <td><input type="radio" name="report" value="D" id="d"><label for="d"> The match was a draw</label></td>
             </tr>
         {{/allowsPlayerReportedDraws}}
         <tr>

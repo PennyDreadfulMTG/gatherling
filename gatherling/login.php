@@ -12,7 +12,7 @@ use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\server;
 use function Gatherling\Helpers\session;
 
-require_once 'lib.php';
+require_once __DIR__ . '/bootstrap.php';
 
 function main(): never
 {
@@ -38,11 +38,9 @@ function main(): never
     }
 
     $loginFailed = isset($_POST['mode']);
-    $ipAddressChanged = isset($_GET['ipaddresschanged']);
 
     $page = new Login(
         $loginFailed,
-        $ipAddressChanged,
         request()->string('message', ''),
         $username ?? '',
         $target ?? '',

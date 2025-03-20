@@ -28,7 +28,7 @@ use function Gatherling\Helpers\post;
 use function Gatherling\Helpers\server;
 use function Gatherling\Helpers\request;
 
-require_once 'lib.php';
+require_once __DIR__ . '/bootstrap.php';
 
 function main(): never
 {
@@ -125,29 +125,29 @@ function main(): never
 
     $format = request()->optionalString('format');
     if ($format && Format::doesFormatExist($format)) {
-        $activeFormat = new Format($format);
+        $format = new Format($format);
     } else {
-        $activeFormat = new Format('');
+        $format = new Format('');
     }
 
     switch (request()->string('view')) {
         case 'bandr':
-            $view = new BAndR($seriesName, $activeFormat);
+            $view = new BAndR($seriesName, $format);
             break;
         case 'tribal':
-            $view = new TribalBAndR($seriesName, $activeFormat);
+            $view = new TribalBAndR($seriesName, $format);
             break;
         case 'cardsets':
-            $view = new CardSets($seriesName, $activeFormat);
+            $view = new CardSets($seriesName, $format);
             break;
         case 'no_view':
             $view = new NullComponent();
             break;
         case 'settings':
         default:
-            $view = new FormatSettings($seriesName, $activeFormat);
+            $view = new FormatSettings($seriesName, $format);
     }
-    $page = new FormatAdmin(server()->string('PHP_SELF'), $playerSeries, $seriesName, $activeFormat, $actionResultComponent, $view);
+    $page = new FormatAdmin(server()->string('PHP_SELF'), $playerSeries, $seriesName, $format, $actionResultComponent, $view);
     $page->send();
 }
 
@@ -155,9 +155,9 @@ function main(): never
  * @param string|array<string> $addBanCards
  * @param array<string> $delBanCards
  */
-function updateBanlist(string $activeFormat, string|array $addBanCards, array $delBanCards): Component
+function updateBanlist(string $format, string|array $addBanCards, array $delBanCards): Component
 {
-    $format = new Format($activeFormat);
+    $format = new Format($format);
     if ($addBanCards) {
         $cards = parseCards($addBanCards);
         foreach ($cards as $card) {

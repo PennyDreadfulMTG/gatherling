@@ -36,7 +36,7 @@ use function Safe\fclose;
 use function Safe\fopen;
 use function Safe\preg_replace;
 
-require_once 'lib.php';
+require_once __DIR__ . '/bootstrap.php';
 
 function main(): never
 {

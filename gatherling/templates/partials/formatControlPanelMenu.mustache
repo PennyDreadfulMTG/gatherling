@@ -1,10 +1,10 @@
 <h2>Format Editor</h2>
-{{#activeFormatName}}
-    <p><b>Currently Editing: {{activeFormatName}}</b></p>
-{{/activeFormatName}}
+{{#formatName}}
+    <p><b>Currently Editing: {{formatName}}</b></p>
+{{/formatName}}
 <form action="formatcp.php" method="post">
     <input type="hidden" name="view" value="no_view">
-    <input type="hidden" name="format" value="{{activeFormatName}}">
+    <input type="hidden" name="format" value="{{formatName}}">
     <input type="hidden" name="series" value="{{seriesName}}">
     <table class="form c">
         <tr>
@@ -18,7 +18,7 @@
         </tr>
     </table>
 </form>
-{{#activeFormatName}}
+{{#formatName}}
     <table>
         <tr>
             <td colspan="2" align="center">
@@ -37,4 +37,4 @@
             </td>
         </tr>
     </table>
-{{/activeFormatName}}
+{{/formatName}}

@@ -7,7 +7,7 @@ use Gatherling\Views\Pages\Series;
 
 use function Gatherling\Helpers\server;
 
-require_once 'lib.php';
+require_once __DIR__ . '/bootstrap.php';
 
 function main(): never
 {

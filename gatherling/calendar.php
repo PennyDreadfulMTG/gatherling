@@ -8,7 +8,7 @@ use Gatherling\Views\ICal;
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\server;
 
-require_once 'lib.php';
+require_once __DIR__ . '/bootstrap.php';
 
 function main(): never
 {

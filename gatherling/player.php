@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Gatherling\Auth\Registration;
 use Gatherling\Models\Player;
 use Gatherling\Views\Components\AllDecks;
 use Gatherling\Views\Components\AllRatings;
@@ -24,7 +25,7 @@ use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\server;
 use function Safe\preg_match;
 
-require_once 'lib.php';
+require_once __DIR__ . '/bootstrap.php';
 
 function main(): never
 {
@@ -118,7 +119,7 @@ function changePassword(Player $player, string $oldPassword, string $newPassword
     if ($newPassword2 != $newPassword) {
         return 'Password *not* changed, your new passwords did not match!';
     }
-    if (strlen($newPassword) < 8) {
+    if (strlen($newPassword) < Registration::MIN_PASSWORD_LENGTH) {
         return 'Passsword *not* changed, your new password needs to be longer!';
     }
     $authenticated = Player::checkPassword($player->name, $oldPassword);
