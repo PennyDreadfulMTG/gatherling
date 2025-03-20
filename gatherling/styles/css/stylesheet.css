@@ -315,7 +315,6 @@ table {
     padding: var(--box-padding);
 }
 
-
 .truncate-text {
     line-height: 1.5;
     overflow: hidden;

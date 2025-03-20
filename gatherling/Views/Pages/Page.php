@@ -19,7 +19,7 @@ abstract class Page extends TemplateResponse
     public bool $isHost;
     public bool $isOrganizer;
     public bool $isSuper;
-    public ?Player $player;
+    public string $shortPlayerName = '';
     public string $versionTagline;
     public string $jsLink;
 
@@ -28,10 +28,17 @@ abstract class Page extends TemplateResponse
         $this->gitHash = substr(config()->string('GIT_HASH', ''), 0, 7);
         $this->cssLink = 'styles/css/stylesheet.css?v=' . rawurlencode($this->gitHash);
         $this->headerLogoSrc = 'styles/images/header_logo.png';
-        $this->player = Player::getSessionPlayer() ?? null;
-        $this->isHost = $this->player?->isHost() ?? false;
-        $this->isOrganizer = count($this->player?->organizersSeries() ?? []) > 0;
-        $this->isSuper = $this->player?->isSuper() ?? false;
+        $player = Player::getSessionPlayer();
+        if ($player !== null) {
+            $username_chars_to_show = 8;
+            $this->shortPlayerName = substr($player->name, 0, $username_chars_to_show);
+            if (strlen($player->name) > $username_chars_to_show) {
+                $this->shortPlayerName = $this->shortPlayerName . '…';
+            }
+        }
+        $this->isHost = $player?->isHost() ?? false;
+        $this->isOrganizer = count($player?->organizersSeries() ?? []) > 0;
+        $this->isSuper = $player?->isSuper() ?? false;
         $this->versionTagline = $this->version();
         $this->jsLink = 'gatherling.js?v=' . rawurlencode($this->gitHash);
     }
