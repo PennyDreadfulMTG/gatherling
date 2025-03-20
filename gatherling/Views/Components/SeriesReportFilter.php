@@ -6,7 +6,7 @@ namespace Gatherling\Views\Components;
 
 use Gatherling\Views\Components\Component;
 
-class SeasonSelect extends Component
+class SeriesReportFilter extends Component
 {
     public SeriesDropMenu $seriesDropMenu;
     public SeasonDropMenu $seasonDropMenu;
