@@ -9,7 +9,7 @@ use Gatherling\Views\Components\TribeBanDropMenu;
 
 class TribalBAndR extends Component
 {
-    public string $activeFormatName;
+    public string $formatName;
     public int $cardCount;
     /** @var list<array{cardName: string, cardLink: CardLink|null}> */
     public array $restrictedToTribe;
@@ -23,11 +23,11 @@ class TribalBAndR extends Component
     public TribeBanDropMenu $subTypeBanDropMenu;
     public ?NotAllowed $noSubTypesBanned;
 
-    public function __construct(public string $seriesName, Format $activeFormat)
+    public function __construct(public string $seriesName, Format $format)
     {
-        $this->activeFormatName = $activeFormat->name;
+        $this->formatName = $format->name;
 
-        $restrictedToTribe = $activeFormat->getRestrictedToTribeList();
+        $restrictedToTribe = $format->getRestrictedToTribeList();
         $this->cardCount = count($restrictedToTribe);
         $this->restrictedToTribe = array_map(fn (string $cardName) => [
             'cardName' => $cardName,
@@ -39,16 +39,16 @@ class TribalBAndR extends Component
 
         // tribe ban
         // tribe will be banned, subtype will still be allowed in other tribes decks
-        $this->tribesBanned = $activeFormat->getTribesBanned();
-        $this->tribeBanDropMenu = new TribeBanDropMenu($activeFormat, 'tribeban');
+        $this->tribesBanned = $format->getTribesBanned();
+        $this->tribeBanDropMenu = new TribeBanDropMenu($format, 'tribeban');
         if (count($this->tribesBanned) === 0) {
             $this->noTribesBanned = new NotAllowed('No Selected Tribe To Delete');
         }
 
         // subtype ban
         // subtype is banned and is not allowed to be used by any deck
-        $this->subTypesBanned = $activeFormat->getSubTypesBanned();
-        $this->subTypeBanDropMenu = new TribeBanDropMenu($activeFormat, 'subtypeban');
+        $this->subTypesBanned = $format->getSubTypesBanned();
+        $this->subTypeBanDropMenu = new TribeBanDropMenu($format, 'subtypeban');
         if (count($this->subTypesBanned) === 0) {
             $this->noSubTypesBanned = new NotAllowed('No Selected SubType To Delete');
         }

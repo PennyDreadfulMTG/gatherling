@@ -20,7 +20,7 @@ class FormatAdmin extends Page
      * @param list<string> $playerSeries
      * @param Component|array<Component> $actionResultComponent
      */
-    public function __construct(string $action, array $playerSeries, string $seriesName, Format $activeFormat, Component|array $actionResultComponent, ?Component $viewComponent = null)
+    public function __construct(string $action, array $playerSeries, string $seriesName, Format $format, Component|array $actionResultComponent, ?Component $viewComponent = null)
     {
         parent::__construct('Format Control Panel', true);
         $this->organizerSelect = count($playerSeries) > 1 ? new OrganizerSelect($action, $playerSeries, $seriesName) : null;
@@ -30,7 +30,7 @@ class FormatAdmin extends Page
             $this->actionResultSafe .= $actionResultComponent->render();
         }
 
-        $this->formatControlPanelMenu = new FormatControlPanelMenu($seriesName, $activeFormat);
+        $this->formatControlPanelMenu = new FormatControlPanelMenu($seriesName, $format);
 
         $this->viewSafe = $viewComponent ? $viewComponent->render() : '';
     }

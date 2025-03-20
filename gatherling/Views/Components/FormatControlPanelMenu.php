@@ -8,27 +8,27 @@ use Gatherling\Models\Format;
 
 class FormatControlPanelMenu extends Component
 {
-    public string $activeFormatName;
+    public string $formatName;
     public string $formatSettingsLink;
     public string $bAndRLink;
     public string $tribalLink = '';
     public string $cardsetsLink = '';
     public ?Tooltip $restrictedTooltip = null;
 
-    public function __construct(public string $seriesName, Format $activeFormat)
+    public function __construct(public string $seriesName, Format $format)
     {
-        $this->activeFormatName = $activeFormat->name;
-        $escaped = rawurlencode($activeFormat->name);
+        $this->formatName = $format->name;
+        $escaped = rawurlencode($format->name);
         $this->formatSettingsLink = "formatcp.php?view=settings&format={$escaped}";
         $this->bAndRLink = "formatcp.php?view=bandr&format={$escaped}";
-        if ($activeFormat->tribal) {
+        if ($format->tribal) {
             $this->tribalLink = "formatcp.php?view=tribal&format={$escaped}";
         }
-        if ($activeFormat->eternal) {
+        if ($format->eternal) {
             $this->restrictedTooltip = new Tooltip('Legal Sets', 'All sets are legal, as this is an Eternal format');
-        } elseif ($activeFormat->modern) {
+        } elseif ($format->modern) {
             $this->restrictedTooltip = new Tooltip('Legal Sets', 'This format uses Modern Legality to determine legal sets');
-        } elseif ($activeFormat->standard) {
+        } elseif ($format->standard) {
             $this->restrictedTooltip = new Tooltip('Legal Sets', 'This format uses Standard Legality to determine legal sets');
         } else {
             $this->cardsetsLink = "formatcp.php?view=cardsets&format={$escaped}";

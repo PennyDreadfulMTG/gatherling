@@ -14,14 +14,14 @@ and manage your own custom filters. That way you can have Alt Events that have s
 
 <form action="formatcp.php" method="post">
     <input type="hidden" name="view" value="settings">
-    <input type="hidden" name="format" value="{{activeFormatName}}">
+    <input type="hidden" name="format" value="{{formatName}}">
     <input type="hidden" name="series" value="{{seriesName}}">
 
     <h3>Format Description</h3>
     <table class="form c">
         <tr>
             <td>
-                <textarea class="inputbox" rows="10" cols="60" name="formatdescription">{{activeFormat.description}}</textarea>
+                <textarea class="inputbox" rows="10" cols="60" name="formatdescription">{{format.description}}</textarea>
             </td>
         </tr>
     </table>
@@ -64,22 +64,22 @@ and manage your own custom filters. That way you can have Alt Events that have s
         </tr>
         <tr>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="singleton" value="1" {{#activeFormat.singleton}}checked{{/activeFormat.singleton}}>
+                <input type="checkbox" name="singleton" value="1" {{#format.singleton}}checked{{/format.singleton}}>
             </td>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="commander" value="1" {{#activeFormat.commander}}checked{{/activeFormat.commander}}>
+                <input type="checkbox" name="commander" value="1" {{#format.commander}}checked{{/format.commander}}>
             </td>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="vanguard" value="1" {{#activeFormat.vanguard}}checked{{/activeFormat.vanguard}}>
+                <input type="checkbox" name="vanguard" value="1" {{#format.vanguard}}checked{{/format.vanguard}}>
             </td>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="planechase" value="1" {{#activeFormat.planechase}}checked{{/activeFormat.planechase}}>
+                <input type="checkbox" name="planechase" value="1" {{#format.planechase}}checked{{/format.planechase}}>
             </td>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="prismatic" value="1" {{#activeFormat.prismatic}}checked{{/activeFormat.prismatic}}>
+                <input type="checkbox" name="prismatic" value="1" {{#format.prismatic}}checked{{/format.prismatic}}>
             </td>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="tribal" value="1" {{#activeFormat.tribal}}checked{{/activeFormat.tribal}}>
+                <input type="checkbox" name="tribal" value="1" {{#format.tribal}}checked{{/format.tribal}}>
             </td>
         </tr>
     </table>
@@ -96,24 +96,24 @@ and manage your own custom filters. That way you can have Alt Events that have s
         </tr>
         <tr>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="allowcommons" value="1" {{#activeFormat.allowCommons}}checked{{/activeFormat.allowCommons}}>
+                <input type="checkbox" name="allowcommons" value="1" {{#format.allowCommons}}checked{{/format.allowCommons}}>
             </td>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="allowuncommons" value="1" {{#activeFormat.allowUncommons}}checked{{/activeFormat.allowUncommons}}>
+                <input type="checkbox" name="allowuncommons" value="1" {{#format.allowUncommons}}checked{{/format.allowUncommons}}>
             </td>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="allowrares" value="1" {{#activeFormat.allowRares}}checked{{/activeFormat.allowRares}}>
+                <input type="checkbox" name="allowrares" value="1" {{#format.allowRares}}checked{{/format.allowRares}}>
             </td>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="allowmythics" value="1" {{#activeFormat.allowMythics}}checked{{/activeFormat.allowMythics}}>
+                <input type="checkbox" name="allowmythics" value="1" {{#format.allowMythics}}checked{{/format.allowMythics}}>
             </td>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="allowtimeshifted" value="1" {{#activeFormat.allowTimeshifted}}checked{{/activeFormat.allowTimeshifted}}>
+                <input type="checkbox" name="allowtimeshifted" value="1" {{#format.allowTimeshifted}}checked{{/format.allowTimeshifted}}>
             </td>
         </tr>
     </table>
 
-    {{#activeFormat.tribal}}
+    {{#format.tribal}}
         <h3>Tribal Modifiers</h3>
         <table class="form c">
             <tr>
@@ -126,13 +126,13 @@ and manage your own custom filters. That way you can have Alt Events that have s
             </tr>
         <tr>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="underdog" value="1" {{#activeFormat.underdog}}checked{{/activeFormat.underdog}}>
+                <input type="checkbox" name="underdog" value="1" {{#format.underdog}}checked{{/format.underdog}}>
             </td>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="pure" value="1" {{#activeFormat.pure}}checked{{/activeFormat.pure}}>
+                <input type="checkbox" name="pure" value="1" {{#format.pure}}checked{{/format.pure}}>
             </td>
         </table>
-    {{/activeFormat.tribal}}
+    {{/format.tribal}}
 
     <h3>Format Modifiers</h3>
     <table class="form c">
@@ -149,13 +149,13 @@ and manage your own custom filters. That way you can have Alt Events that have s
         </tr>
         <tr>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="eternal" value="1" {{#activeFormat.eternal}}checked{{/activeFormat.eternal}}>
+                <input type="checkbox" name="eternal" value="1" {{#format.eternal}}checked{{/format.eternal}}>
             </td>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="modern" value="1" {{#activeFormat.modern}}checked{{/activeFormat.modern}}>
+                <input type="checkbox" name="modern" value="1" {{#format.modern}}checked{{/format.modern}}>
             </td>
             <td style="width: 100px; text-align: center;">
-                <input type="checkbox" name="standard" value="1" {{#activeFormat.standard}}checked{{/activeFormat.standard}}>
+                <input type="checkbox" name="standard" value="1" {{#format.standard}}checked{{/format.standard}}>
             </td>
         </tr>
         <tr>
