@@ -14,7 +14,7 @@ use function Safe\file_get_contents;
 use function Safe\preg_match;
 use function Safe\scandir;
 
-require_once __DIR__ . '/../lib.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 // Handles getting the database into the right state.
 //

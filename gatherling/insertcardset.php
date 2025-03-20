@@ -13,7 +13,7 @@ use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\server;
 use function Safe\set_time_limit;
 
-require_once __DIR__ . '/lib.php';
+require_once __DIR__ . '/bootstrap.php';
 
 try {
     set_time_limit(0);

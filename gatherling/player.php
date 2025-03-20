@@ -25,7 +25,7 @@ use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\server;
 use function Safe\preg_match;
 
-require_once 'lib.php';
+require_once __DIR__ . '/bootstrap.php';
 
 function main(): never
 {

@@ -11,7 +11,7 @@ use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\get;
 use function Gatherling\Helpers\server;
 
-require_once 'lib.php';
+require_once __DIR__ . '/bootstrap.php';
 
 function main(): never
 {

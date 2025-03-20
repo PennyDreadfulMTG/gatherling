@@ -3,8 +3,11 @@
 declare(strict_types=1);
 
 use Gatherling\Helpers\ErrorHandler;
+use Gatherling\Auth\Session;
 
 use function Safe\file_get_contents;
+use function Safe\ob_start;
+use function Safe\php_sapi_name;
 
 if (file_exists('/var/www/vendor/autoload.php')) {
     // Docker environment
@@ -41,3 +44,14 @@ Sentry\init([
     'environment' => 'Gatherling',
     'release'     => $CONFIG['GIT_HASH'],
 ]);
+
+ob_start();
+
+header('Strict-Transport-Security: max-age=63072000; includeSubDomains; preload');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+
+if (php_sapi_name() !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
+    Session::start();
+}
+
+date_default_timezone_set('US/Eastern'); // force time functions to use US/Eastern time

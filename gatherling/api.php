@@ -12,10 +12,9 @@ use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\get;
 use function Gatherling\Helpers\request;
 use function Gatherling\Helpers\server;
-use function Safe\json_encode;
 
-require_once 'lib.php';
-require_once 'api_lib.php';
+require_once __DIR__ . '/bootstrap.php';
+require_once __DIR__ . '/api_lib.php';
 
 function main(): never
 {
