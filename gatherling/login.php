@@ -38,11 +38,9 @@ function main(): never
     }
 
     $loginFailed = isset($_POST['mode']);
-    $ipAddressChanged = isset($_GET['ipaddresschanged']);
 
     $page = new Login(
         $loginFailed,
-        $ipAddressChanged,
         request()->string('message', ''),
         $username ?? '',
         $target ?? '',
