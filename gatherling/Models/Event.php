@@ -435,7 +435,7 @@ class Event
         $sql = 'SELECT deck FROM entries WHERE event_id = :event_id AND deck IS NOT NULL';
         $params = ['event_id' => $this->id];
         $deckIds = db()->ints($sql, $params);
-        return array_map(fn (int $deckid) => new Deck($deckid), $deckIds);
+        return array_map(fn(int $deckid) => new Deck($deckid), $deckIds);
     }
 
     /** @return list<array{medal: string, player: string, deck: ?int}> */
@@ -452,7 +452,14 @@ class Event
                 medal, player";
         $params = ['event_id' => $this->id];
         $finalists = db()->select($sql, FinalistDto::class, $params);
-        return array_map(fn (FinalistDto $finalist) => (array) $finalist, $finalists);
+        return array_map(
+            fn(FinalistDto $finalist) => [
+                'medal' => $finalist->medal,
+                'player' => $finalist->player,
+                'deck' => $finalist->deck,
+            ],
+            $finalists
+        );
     }
 
     /**

@@ -409,16 +409,13 @@
       <code><![CDATA[$this->series]]></code>
       <code><![CDATA[$this->series]]></code>
       <code><![CDATA[$this->series]]></code>
-      <code><![CDATA[$this->series]]></code>
     </MixedAssignment>
     <MixedReturnStatement>
       <code><![CDATA[Database::singleResultSingleParam('SELECT count(*) FROM entries WHERE event_id = ?', 'd', $this->id)]]></code>
     </MixedReturnStatement>
     <MixedReturnTypeCoercion>
       <code><![CDATA[['adjustment' => $adjustment, 'reason' => $reason]]]></code>
-      <code><![CDATA[array_map(fn (FinalistDto $finalist) => (array) $finalist, $finalists)]]></code>
       <code><![CDATA[array{adjustment: int, reason: string}]]></code>
-      <code><![CDATA[list<array{medal: string, player: string, deck: ?int}>]]></code>
     </MixedReturnTypeCoercion>
     <PossiblyNullArgument>
       <code><![CDATA[$playera->player]]></code>
