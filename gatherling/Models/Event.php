@@ -492,18 +492,14 @@ class Event
 
     public function isOrganizer(string $name): bool
     {
-        $isOrganizer = false;
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT player FROM series_organizers WHERE series = ? and player = ?');
-        $stmt->bind_param('ss', $this->series, $name);
-        $stmt->execute();
-        $stmt->bind_result($aname);
-        while ($stmt->fetch()) {
-            $isOrganizer = true;
+        if ($this->series === null || $this->series === '') {
+            return false;
         }
-        $stmt->close();
-
-        return $isOrganizer;
+        if (!Series::exists($this->series)) {
+            return false;
+        }
+        $series = new Series($this->series);
+        return $series->isOrganizer($name);
     }
 
     public function authCheck(?string $playername): bool
