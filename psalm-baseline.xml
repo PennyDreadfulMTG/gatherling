@@ -1532,11 +1532,6 @@
       <code><![CDATA[$this->castingCosts]]></code>
     </UninitializedProperty>
   </file>
-  <file src="gatherling/Views/Components/CommentsTable.php">
-    <PossiblyInvalidPropertyAssignmentValue>
-      <code><![CDATA[$notes]]></code>
-    </PossiblyInvalidPropertyAssignmentValue>
-  </file>
   <file src="gatherling/Views/Components/CreateDeckLink.php">
     <PossiblyFalseArgument>
       <code><![CDATA[Player::loginName()]]></code>
