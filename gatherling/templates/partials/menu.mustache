@@ -4,12 +4,12 @@
         <li><a href="player.php">Player CP</a></li>
         <li><a href="eventreport.php">Metagame</a></li>
         <li><a href="decksearch.php">Deck Search</a></li>
-        {{#shortPlayerName}}
-            <li class="last"><a href="logout.php">Logout [{{shortPlayerName}}]</a></li>
-        {{/shortPlayerName}}
-        {{^shortPlayerName}}
+        {{#playerDisplayName}}
+            <li class="last"><a href="logout.php">Logout [{{playerDisplayName}}]</a></li>
+        {{/playerDisplayName}}
+        {{^playerDisplayName}}
             <li class="last"><a href="login.php">Login</a></li>
-        {{/shortPlayerName}}
+        {{/playerDisplayName}}
         {{#isHost}}
             <li><a href="event.php">Host CP</a></li>
         {{/isHost}}
