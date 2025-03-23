@@ -199,4 +199,29 @@ class EventTest extends TestCase
             }
         }
     }
+
+    public function testIsOrganizer(): void
+    {
+        $series = new Series('');
+        $series->name = 'isOrganizer Test Series';
+        $series->active = 1;
+        $series->start_time = '00:00:00';
+        $series->start_day = 'Friday';
+        $series->save();
+
+        $host = Player::findOrCreateByName('TestHost');
+        $organizer = Player::findOrCreateByName('TestOrganizer');
+        $nonOrganizer = Player::findOrCreateByName('NonOrganizer');
+
+        $event = new Event('');
+        $event->name = 'isOrganizer Test Event';
+        $event->format = 'Standard';
+        $event->host = $host->name;
+        $event->series = $series->name;
+
+        $series->addOrganizer($organizer->name);
+
+        $this->assertTrue($event->isOrganizer($organizer->name), 'Series organizer should be recognized');
+        $this->assertFalse($event->isOrganizer($nonOrganizer->name), 'Non-organizer should not be recognized');
+    }
 }
