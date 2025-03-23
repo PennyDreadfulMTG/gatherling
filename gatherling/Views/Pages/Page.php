@@ -19,7 +19,7 @@ abstract class Page extends TemplateResponse
     public bool $isHost;
     public bool $isOrganizer;
     public bool $isSuper;
-    public string $shortPlayerName = '';
+    public string $playerDisplayName = '';
     public string $versionTagline;
     public string $jsLink;
 
@@ -31,9 +31,9 @@ abstract class Page extends TemplateResponse
         $player = Player::getSessionPlayer();
         if ($player !== null) {
             $username_chars_to_show = 8;
-            $this->shortPlayerName = substr($player->name, 0, $username_chars_to_show);
+            $this->playerDisplayName = substr($player->name, 0, $username_chars_to_show);
             if (strlen($player->name) > $username_chars_to_show) {
-                $this->shortPlayerName = $this->shortPlayerName . '…';
+                $this->playerDisplayName = $this->playerDisplayName . '…';
             }
         }
         $this->isHost = $player?->isHost() ?? false;
