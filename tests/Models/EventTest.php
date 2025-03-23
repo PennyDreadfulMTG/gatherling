@@ -208,4 +208,16 @@ class EventTest extends TestCase
         $this->assertTrue($event->isOrganizer($organizer->name), 'Series organizer should be recognized');
         $this->assertFalse($event->isOrganizer($nonOrganizer->name), 'Non-organizer should not be recognized');
     }
+
+    public function testHasRegistrant(): void
+    {
+        $player = Player::findOrCreateByName('TestPlayer');
+        $nonRegistrant = Player::findOrCreateByName('NonRegistrant');
+
+        $event = $this->createTestEvent(['name' => 'hasRegistrant Test Event']);
+        $event->addPlayer($player->name);
+
+        $this->assertTrue($event->hasRegistrant($player->name), 'Player should be recognized as registrant');
+        $this->assertFalse($event->hasRegistrant($nonRegistrant->name), 'Non-registrant should not be recognized');
+    }
 }
