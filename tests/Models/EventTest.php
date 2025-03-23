@@ -14,6 +14,67 @@ use Safe\DateTimeImmutable;
 
 class EventTest extends TestCase
 {
+    /**
+     * @param array{
+     *   series?: string,
+     *   host?: string,
+     *   cohost?: string,
+     *   name?: string,
+     *   start?: DateTimeImmutable,
+     *   kvalue?: int,
+     *   format?: string,
+     *   season?: int,
+     *   number?: int,
+     *   mainstruct?: string,
+     *   mainrounds?: int,
+     *   finalstruct?: string,
+     *   finalrounds?: int,
+     *   threadurl?: string,
+     *   reporturl?: string,
+     *   metaurl?: string
+     * } $overrides
+     */
+    private function createTestEvent(array $overrides = []): Event
+    {
+        /** @var ?Series */
+        static $series = null;
+        if (!isset($series)) {
+            $series = new Series('');
+            $series->name = 'Test Series for Test Event';
+            $series->start_day = 'Monday';
+            $series->start_time = '00:00:00';
+            $series->active = 1;
+            $series->save();
+        }
+
+        $host = Player::findOrCreateByName($overrides['host'] ?? 'Test Host');
+        $cohost = null;
+        if (isset($overrides['cohost'])) {
+            $cohost = Player::findOrCreateByName($overrides['cohost']);
+        }
+
+        $event = new Event('');
+        $event->name = $overrides['name'] ?? 'Test Event';
+        $event->host = $host->name;
+        $event->cohost = $cohost->name ?? null;
+        $event->start = $overrides['start'] ?? new DateTimeImmutable('2025-06-01');
+        $event->kvalue = $overrides['kvalue'] ?? 8;
+        $event->format = $overrides['format'] ?? 'Standard';
+        $event->series = $series->name;
+        $event->season = $overrides['season'] ?? 1;
+        $event->number = $overrides['number'] ?? 1;
+        $event->mainstruct = $overrides['mainstruct'] ?? 'Swiss';
+        $event->mainrounds = $overrides['mainrounds'] ?? 1;
+        $event->finalstruct = $overrides['finalstruct'] ?? 'Single Elimination';
+        $event->finalrounds = $overrides['finalrounds'] ?? 1;
+        $event->threadurl = $overrides['threadurl'] ?? '';
+        $event->reporturl = $overrides['reporturl'] ?? '';
+        $event->metaurl = $overrides['metaurl'] ?? '';
+        $event->save();
+        $event = new Event($event->name);
+        return $event;
+    }
+
     public function testStructureSummary(): void
     {
         $event = new Event('');
@@ -31,13 +92,6 @@ class EventTest extends TestCase
 
     public function testAssignTrophiesFromMatches(): void
     {
-        $series = new Series('');
-        $series->name = 'Test Trophy Series';
-        $series->active = 1;
-        $series->start_time = '00:00:00';
-        $series->start_day = 'Friday';
-        $series->save();
-
         $host = Player::findOrCreateByName('JimmyTheHost');
 
         $tests = [
@@ -59,32 +113,11 @@ class EventTest extends TestCase
         foreach ($tests as $expectedMedals) {
             $numPlayers = count($expectedMedals);
 
-            $event = new Event('');
-            $event->name = $numPlayers . '_person_event_with_knockout';
-            $event->host = $host->name;
-            $event->start = new DateTimeImmutable('2025-06-01');
-            $event->kvalue = 8;
-            $event->format = 'Standard';
-            $event->series = $series->name;
-            $event->season = 1;
-            $event->number = 1;
-            $event->mainstruct = 'Swiss';
-            $event->mainrounds = 1;
-            $event->finalstruct = 'Single Elimination';
-            if ($numPlayers <= 7) {
-                $event->finalrounds = 1;
-            } elseif ($numPlayers <= 16) {
-                $event->finalrounds = 2;
-            } else {
-                $event->finalrounds = 3;
-            }
-            $event->threadurl = '';
-            $event->reporturl = '';
-            $event->metaurl = '';
-            $event->save();
-
-            $event = new Event($event->name);
-
+            $event = $this->createTestEvent([
+                'name' => $numPlayers . '_person_event_with_knockout',
+                'host' => $host->name,
+                'finalrounds' => $numPlayers <= 7 ? 1 : ($numPlayers <= 16 ? 2 : 3)
+            ]);
             for ($i = 1; $i <= $numPlayers; $i++) {
                 $event->addPlayer("Player$i");
             }
@@ -130,48 +163,11 @@ class EventTest extends TestCase
             )
         ];
 
-        $series = new Series('');
-        $series->name = 'Test Series With Medals';
-        $series->active = 1;
-        $series->start_time = '00:00:00';
-        $series->start_day = 'Friday';
-        $series->save();
-
-        $host = Player::findOrCreateByName('JimmyTheHost');
-        $cohost = Player::findOrCreateByName('Nyarlothep');
-
         foreach ($tests as $expectedMedals) {
             $numPlayers = count($expectedMedals);
             $name = "{$numPlayers}_person_event";
 
-            Event::createEvent(
-                '2024',
-                '11',
-                '02',
-                '00',
-                $name,
-                $name,
-                'Standard',
-                $host->name,
-                $cohost->name,
-                '1',
-                $series->name,
-                'Season',
-                '1',
-                'ThreadURL',
-                'MetaURL',
-                'ReportURL',
-                '1',
-                '1',
-                '0',
-                '3',
-                1,
-                'Single Elimination',
-                1,
-                'Single Elimination',
-                '1'
-            );
-            $event = new Event($name);
+            $event = $this->createTestEvent(['name' => $name]);
 
             for ($i = 1; $i <= $numPlayers; $i++) {
                 $player = Player::findOrCreateByName("Player{$name}_$i");
@@ -202,23 +198,11 @@ class EventTest extends TestCase
 
     public function testIsOrganizer(): void
     {
-        $series = new Series('');
-        $series->name = 'isOrganizer Test Series';
-        $series->active = 1;
-        $series->start_time = '00:00:00';
-        $series->start_day = 'Friday';
-        $series->save();
-
-        $host = Player::findOrCreateByName('TestHost');
         $organizer = Player::findOrCreateByName('TestOrganizer');
         $nonOrganizer = Player::findOrCreateByName('NonOrganizer');
 
-        $event = new Event('');
-        $event->name = 'isOrganizer Test Event';
-        $event->format = 'Standard';
-        $event->host = $host->name;
-        $event->series = $series->name;
-
+        $event = $this->createTestEvent(['name' => 'isOrganizer Test Event']);
+        $series = new Series($event->series);
         $series->addOrganizer($organizer->name);
 
         $this->assertTrue($event->isOrganizer($organizer->name), 'Series organizer should be recognized');
