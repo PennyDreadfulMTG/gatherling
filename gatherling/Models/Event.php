@@ -1527,35 +1527,22 @@ class Event
 
     public function resetEvent(): void
     {
-        $db = Database::getConnection();
-
         $undropPlayer = $this->getPlayers();
         foreach ($undropPlayer as $player) {
             $this->undropPlayer($player);
         }
 
-        $stmt = $db->prepare('DELETE FROM standings WHERE event = ?');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->close();
+        $sql = 'DELETE FROM standings WHERE event = :event';
+        db()->execute($sql, ['event' => $this->name]);
 
-        $db = Database::getConnection();
-        $stmt = $db->prepare('DELETE FROM ratings WHERE event = ?');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->close();
+        $sql = 'DELETE FROM ratings WHERE event = :event';
+        db()->execute($sql, ['event' => $this->name]);
 
-        $db = Database::getConnection();
-        $stmt = $db->prepare('DELETE FROM matches WHERE subevent = ? OR subevent = ?');
-        $stmt->bind_param('ss', $this->mainid, $this->finalid);
-        $stmt->execute();
-        $stmt->close();
+        $sql = 'DELETE FROM matches WHERE subevent = :subevent1 OR subevent = :subevent2';
+        db()->execute($sql, ['subevent1' => $this->mainid, 'subevent2' => $this->finalid]);
 
-        $db = Database::getConnection();
-        $stmt = $db->prepare("UPDATE entries SET medal = 'dot' WHERE event_id = ?");
-        $stmt->bind_param('d', $this->id);
-        $stmt->execute();
-        $stmt->close();
+        $sql = "UPDATE entries SET medal = 'dot' WHERE event_id = :event_id";
+        db()->execute($sql, ['event_id' => $this->id]);
 
         $this->current_round = 0;
         $this->active = 0;
