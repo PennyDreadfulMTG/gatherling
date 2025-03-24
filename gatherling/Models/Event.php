@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use DateTimeZone;
+use Gatherling\Exceptions\InvalidStateException;
 use Gatherling\Exceptions\NotFoundException;
 use Gatherling\Exceptions\ValidationException;
 use Safe\DateTimeImmutable;
@@ -911,6 +911,10 @@ class Event
                     $t8[] = $loser;
                 }
             }
+        }
+
+        if ($win === null) {
+            throw new InvalidStateException("You cannot assign trophies if there is no winner");
         }
 
         $this->setFinalists($win, $sec, $t4, $t8);
