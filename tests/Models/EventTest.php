@@ -60,7 +60,7 @@ class EventTest extends TestCase
         $event->name = $overrides['name'] ?? 'Test Event';
         $event->host = $host->name;
         $event->cohost = $cohost->name ?? null;
-        $event->start = $overrides['start'] ?? new DateTimeImmutable('2025-06-01');
+        $event->start = $overrides['start'] ?? new DateTimeImmutable('2025-01-01');
         $event->kvalue = $overrides['kvalue'] ?? 8;
         $event->format = $overrides['format'] ?? 'Standard';
         $event->series = $series->name;
