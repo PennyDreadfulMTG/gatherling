@@ -1561,11 +1561,9 @@ class Event
             $subevent = $this->finalid;
         }
 
-        $db = Database::getConnection();
-        $stmt = $db->prepare('DELETE FROM matches WHERE subevent = ? AND round = ?');
-        $stmt->bind_param('dd', $subevent, $round);
-        $stmt->execute();
-        $stmt->close();
+        $sql = 'DELETE FROM matches WHERE subevent = :subevent AND round = :round';
+        $params = ['subevent' => $subevent, 'round' => $round];
+        db()->execute($sql, $params);
 
         $this->current_round--;
         $this->save();
