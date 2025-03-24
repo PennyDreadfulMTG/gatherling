@@ -138,35 +138,22 @@ class Standings
     }
 
     /** @return list<Standings> */
-    public static function getEventStandings(string $eventname, int $isactive): array
+    public static function getEventStandings(string $eventname, StandingsMode $mode = StandingsMode::STANDINGS): array
     {
-        $db = Database::getConnection();
+        $baseSelect = 'SELECT player FROM standings WHERE event = :event';
+        $sql = match ($mode) {
+            StandingsMode::STANDINGS => "{$baseSelect} ORDER BY score desc, OP_Match desc, PL_Game desc, OP_Game desc",
+            StandingsMode::NEXT_UNPAIRED => "{$baseSelect} AND active = 1 and matched = 0 ORDER BY score desc, byes desc, RAND() LIMIT 1",
+            StandingsMode::SEEDED => "{$baseSelect} AND active = 1 ORDER BY seed",
+            StandingsMode::ACTIVE_STANDINGS => "{$baseSelect} AND active = 1 ORDER BY score desc, OP_Match desc, PL_Game desc, OP_Game desc",
+        };
 
-        // Ordered by rand() is bad for speed and scalability reasons, but since this function
-        // only runs between rounds, it probably doesn't matter.
-        if ($isactive == 0) {
-            $stmt = $db->prepare('SELECT player FROM standings WHERE event = ? ORDER BY score desc, OP_Match desc, PL_Game desc, OP_Game desc');
-        } elseif ($isactive == 1) {
-            $stmt = $db->prepare('SELECT player FROM standings WHERE event = ? AND active = 1 and matched = 0 ORDER BY score desc, byes desc, RAND() LIMIT 1');
-        } elseif ($isactive == 2) {
-            $stmt = $db->prepare('SELECT player FROM standings WHERE event = ? AND active = 1 ORDER BY seed');
-        } elseif ($isactive == 3) {
-            $stmt = $db->prepare('SELECT player FROM standings WHERE event = ? AND active = 1 ORDER BY score desc, OP_Match desc, PL_Game desc, OP_Game desc');
-        } else {
-            throw new InvalidArgumentException("Invalid argument for isactive {$isactive}");
-        }
-        $stmt or exit($db->error);
-        $stmt->bind_param('s', $eventname);
-        $stmt->execute();
-        $stmt->bind_result($name);
-        $playernames = [];
-        while ($stmt->fetch()) {
-            $playernames[] = $name;
-        }
-        $stmt->close();
+        $params = ['event' => $eventname];
+        $playerNames = db()->strings($sql, $params);
+
         $event_standings = [];
-        foreach ($playernames as $playername) {
-            $event_standings[] = new self($eventname, $playername);
+        foreach ($playerNames as $playerName) {
+            $event_standings[] = new self($eventname, $playerName);
         }
 
         return $event_standings;
@@ -174,7 +161,7 @@ class Standings
 
     public static function updateStandings(string $eventname, int $subevent, int $round): void
     {
-        $players = self::getEventStandings($eventname, 0);
+        $players = self::getEventStandings($eventname);
         foreach ($players as $player) {
             $player->calculateStandings($eventname, $subevent, $round);
         }

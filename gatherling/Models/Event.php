@@ -1315,7 +1315,7 @@ class Event
 
     public function singleEliminationPairing(int $top_cut): void
     {
-        $players = $this->standing->getEventStandings($this->name, 2);
+        $players = $this->standing->getEventStandings($this->name, StandingsMode::SEEDED);
         $players = array_slice($players, 0, $top_cut);
         $counter = 0;
         while ($counter < (count($players) - 1)) {
@@ -1336,7 +1336,7 @@ class Event
     public function singleEliminationByeCheck(int $check, int $rounds): void
     {
         $seedcounter = 1;
-        $players = $this->standing->getEventStandings($this->name, 2);
+        $players = $this->standing->getEventStandings($this->name, StandingsMode::SEEDED);
         if (count($players) > $check) {
             $rounds++;
             $this->singleEliminationByeCheck($check * 2, $rounds);
@@ -1378,7 +1378,7 @@ class Event
     // But we would need something in order to "order" the middle matches first.
     public function top2Seeding(): void
     {
-        $players = $this->standing->getEventStandings($this->name, 3);
+        $players = $this->standing->getEventStandings($this->name, StandingsMode::ACTIVE_STANDINGS);
         if (count($players) < 2) {
             throw new InvalidStateException('Not enough players to seed');
         }
@@ -1389,7 +1389,7 @@ class Event
 
     public function top4Seeding(): void
     {
-        $players = $this->standing->getEventStandings($this->name, 3);
+        $players = $this->standing->getEventStandings($this->name, StandingsMode::ACTIVE_STANDINGS);
         if (count($players) < 4) {
             $this->top2Seeding();
         } else {
@@ -1404,7 +1404,7 @@ class Event
 
     public function top8Seeding(): void
     {
-        $players = $this->standing->getEventStandings($this->name, 3);
+        $players = $this->standing->getEventStandings($this->name, StandingsMode::ACTIVE_STANDINGS);
         if (count($players) < 8) {
             $this->top4Seeding();
         } else {
@@ -1515,7 +1515,7 @@ class Event
 
     public function resetScores(): void
     {
-        $standings = Standings::getEventStandings($this->name, 0);
+        $standings = Standings::getEventStandings($this->name);
         foreach ($standings as $standing) {
             $standing->score = 0;
             $standing->matches_played = 0;
@@ -1592,7 +1592,7 @@ class Event
 
     public function assignMedalsByStandings(): void
     {
-        $players = $this->standing->getEventStandings($this->name, 0);
+        $players = $this->standing->getEventStandings($this->name);
         $numberOfPlayers = count($players);
 
         $medalCount = $numberOfPlayers < 8 ? 2 : ($numberOfPlayers < 16 ? 4 : 8);

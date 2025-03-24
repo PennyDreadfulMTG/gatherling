@@ -8,6 +8,7 @@ use Gatherling\Models\Standings;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Models\Event;
+use Gatherling\Models\StandingsMode;
 use PHPUnit\Framework\TestCase;
 use Safe\DateTimeImmutable;
 
@@ -129,7 +130,7 @@ final class StandingsTest extends TestCase
         $standing5->save();
 
         // Test getting all standings (isactive = 0)
-        $standings = Standings::getEventStandings($eventName, 0);
+        $standings = Standings::getEventStandings($eventName);
         $this->assertCount(5, $standings);
         $this->assertEquals('Player2', $standings[0]->player); // Highest score
         $this->assertEquals('Player4', $standings[1]->player); // Same score, highest OP_Match
@@ -138,12 +139,12 @@ final class StandingsTest extends TestCase
         $this->assertEquals('Player1', $standings[4]->player); // Lowest score
 
         // Test getting unmatched active players (isactive = 1)
-        $standings = Standings::getEventStandings($eventName, 1);
+        $standings = Standings::getEventStandings($eventName, StandingsMode::NEXT_UNPAIRED);
         $this->assertCount(1, $standings);
         $this->assertContains($standings[0]->player, ['Player1', 'Player3', 'Player4', 'Player5']); // Only unmatched players
 
         // Test getting active players by seed (isactive = 2)
-        $standings = Standings::getEventStandings($eventName, 2);
+        $standings = Standings::getEventStandings($eventName, StandingsMode::SEEDED);
         $this->assertCount(5, $standings);
         $this->assertEquals('Player1', $standings[0]->player);
         $this->assertEquals('Player2', $standings[1]->player);
@@ -152,7 +153,7 @@ final class StandingsTest extends TestCase
         $this->assertEquals('Player5', $standings[4]->player);
 
         // Test getting active players by score (isactive = 3)
-        $standings = Standings::getEventStandings($eventName, 3);
+        $standings = Standings::getEventStandings($eventName, StandingsMode::ACTIVE_STANDINGS);
         $this->assertCount(5, $standings);
         $this->assertEquals('Player2', $standings[0]->player); // Highest score
         $this->assertEquals('Player4', $standings[1]->player); // Same score, highest OP_Match

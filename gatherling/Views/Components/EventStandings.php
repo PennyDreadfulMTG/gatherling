@@ -28,7 +28,7 @@ class EventStandings extends Component
         ?string $playerName = null,
     ) {
         $event = new Event($eventName);
-        $standings = Standings::getEventStandings($eventName, 0);
+        $standings = Standings::getEventStandings($eventName);
         $rank = 1;
         $standingInfoList = [];
         foreach ($standings as $standing) {
