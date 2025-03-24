@@ -141,31 +141,31 @@ parameters:
 		-
 			message: '#^Cannot call method bind_param\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 17
+			count: 16
 			path: gatherling/Models/Event.php
 
 		-
 			message: '#^Cannot call method bind_result\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 9
+			count: 8
 			path: gatherling/Models/Event.php
 
 		-
 			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 17
+			count: 16
 			path: gatherling/Models/Event.php
 
 		-
 			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 17
+			count: 16
 			path: gatherling/Models/Event.php
 
 		-
 			message: '#^Cannot call method fetch\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 9
+			count: 8
 			path: gatherling/Models/Event.php
 
 		-
