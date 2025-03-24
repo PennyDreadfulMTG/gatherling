@@ -538,4 +538,76 @@ class EventTest extends TestCase
         $result = $event->getSeasonPointAdjustment('NonExistentPlayer');
         $this->assertEquals(['adjustment' => 0, 'reason' => ''], $result);
     }
+
+    public function testResetEvent(): void
+    {
+        // Create an event with some players and start it
+        $event = $this->createTestEvent([
+            'name' => 'resetEvent Test Event',
+            'mainrounds' => 3,
+            'mainstruct' => 'Swiss'
+        ]);
+
+        // Add some players
+        $player1 = Player::findOrCreateByName('ResetTestPlayer1');
+        $player2 = Player::findOrCreateByName('ResetTestPlayer2');
+        $player3 = Player::findOrCreateByName('ResetTestPlayer3');
+        $event->addPlayer($player1->name);
+        $event->addPlayer($player2->name);
+        $event->addPlayer($player3->name);
+
+        // Start the event and create some matches/standings
+        $event->startEvent(false);
+        $this->assertEquals(1, $event->active);
+
+        // Drop a player to test undropping
+        $event->dropPlayer($player3->name);
+
+        // Create some matches
+        $matches = $event->getRoundMatches(1);
+        foreach ($matches as $match) {
+            Matchup::saveReport('W20', $match->id, 'a');
+            Matchup::saveReport('L20', $match->id, 'b');
+        }
+
+        // Set some medals
+        $event->setFinalists($player1->name, $player2->name, [], []);
+
+        // Verify initial state
+        $this->assertGreaterThan(0, count($event->getMatches()), 'Should have matches before reset');
+        $this->assertEquals('1st', $event->getEntries()[0]->medal, 'Should have medals before reset');
+
+        // Get initial state to verify changes
+        $initialMatches = $event->getMatches();
+        $this->assertNotEmpty($initialMatches, 'Should have matches before reset');
+
+        // Now reset the event
+        $event->resetEvent();
+
+        // Verify everything is reset:
+
+        // 1. Check event state
+        $this->assertEquals(0, $event->active);
+        $this->assertEquals(0, $event->current_round);
+
+        // 2. Check matches are deleted
+        $this->assertEmpty($event->getMatches(), 'All matches should be deleted');
+
+        // 3. Check medals are reset to 'dot'
+        $entries = $event->getEntries();
+        foreach ($entries as $entry) {
+            $this->assertEquals('dot', $entry->medal, 'All medals should be reset to dot');
+        }
+
+        // 4. Check players are undropped
+        $entries = $event->getEntries();
+        foreach ($entries as $entry) {
+            $this->assertEquals(0, $entry->drop_round, 'All players should be undropped');
+        }
+
+        // 5. Verify we can start a new event with these players
+        $event->startEvent(false);
+        $this->assertEquals(1, $event->active);
+        $this->assertGreaterThan(0, count($event->getMatches()), 'Should be able to create new matches after reset');
+    }
 }
