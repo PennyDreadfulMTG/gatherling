@@ -562,17 +562,9 @@ class Event
     /** @return list<Subevent> */
     public function getSubevents(): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT id FROM subevents WHERE parent = ? ORDER BY timing');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->bind_result($subeventid);
-
-        $subids = [];
-        while ($stmt->fetch()) {
-            $subids[] = $subeventid;
-        }
-        $stmt->close();
+        $sql = 'SELECT id FROM subevents WHERE parent = :parent ORDER BY timing';
+        $params = ['parent' => $this->name];
+        $subids = db()->ints($sql, $params);
 
         $subs = [];
         foreach ($subids as $subid) {
