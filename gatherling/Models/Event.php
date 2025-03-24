@@ -924,24 +924,13 @@ class Event
 
     public static function exists(string $name): bool
     {
-        $db = Database::getConnection();
-        $sql = 'SELECT name FROM events WHERE ';
+        $sql = 'SELECT COUNT(*) FROM events WHERE ';
         if (is_numeric($name)) {
-            $sql .= 'id = ?';
-            $pt = 'd';
+            $sql .= 'id = :name';
         } else {
-            $sql .= 'name = ?';
-            $pt = 's';
+            $sql .= 'name = :name';
         }
-
-        $stmt = $db->prepare($sql);
-        $stmt->bind_param($pt, $name);
-        $stmt->execute();
-        $stmt->store_result();
-        $event_exists = $stmt->num_rows > 0;
-        $stmt->close();
-
-        return $event_exists;
+        return db()->int($sql, ['name' => $name]) > 0;
     }
 
     public static function findMostRecentByHost(string $host_name): ?self
