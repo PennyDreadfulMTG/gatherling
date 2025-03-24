@@ -255,43 +255,40 @@ class Standings
     /** @return list<string> */
     public function getAvailableLeagueOpponents(int $subevent, int $round, int $league_length): array
     {
-        $opponentsAlreadyFaced = [];
-
         if ($round == '0') {
             return [];
-        } else {
-            $db = Database::getConnection();
-            $stmt = $db->prepare('SELECT playera, playerb FROM matches where subevent = ? AND (playera = ? OR playerb = ?) AND round = ?');
-            $stmt->bind_param('dssd', $subevent, $this->player, $this->player, $round);
-
-            //Find existing opponents
-            $stmt->execute();
-            $stmt->bind_result($playera, $playerb);
-
-            while ($stmt->fetch()) {
-                if ($playera == $this->player) {
-                    $opponent_name = $playerb;
-                } else {
-                    $opponent_name = $playera;
-                }
-                if ($opponent_name != $this->player) {
-                    $opponentsAlreadyFaced[] = $opponent_name;
-                }
-            }
-            $stmt->close();
         }
-        $structure = Database::singleResultSingleParam('SELECT `type` FROM subevents WHERE id = ?', 'd', $subevent);
+
+        $sql = 'SELECT playera, playerb FROM matches WHERE subevent = :subevent AND (playera = :player OR playerb = :player) AND round = :round';
+        $params = [
+            'subevent' => $subevent,
+            'player' => $this->player,
+            'round' => $round
+        ];
+        $rows = db()->select($sql, MatchDto::class, $params);
+
+        $opponentsAlreadyFaced = [];
+        foreach ($rows as $row) {
+            $opponent_name = ($row->playera == $this->player) ? $row->playerb : $row->playera;
+            if ($opponent_name != $this->player) {
+                $opponentsAlreadyFaced[] = $opponent_name;
+            }
+        }
+
+        $sql = 'SELECT type FROM subevents WHERE id = :id';
+        $structure = db()->string($sql, ['id' => $subevent]);
+
         if ($structure == 'League Match' && count($opponentsAlreadyFaced) >= 1) {
             return [];
         }
         if (count($opponentsAlreadyFaced) >= $league_length) {
             return [];
         }
-        // Get all opponents who haven't dropped from event and exclude myself
+
         $sql = 'SELECT player FROM standings WHERE event = :event AND active = 1 AND player <> :player ORDER BY player';
         $params = ['event' => $this->event, 'player' => $this->player];
         $allPlayers = db()->strings($sql, $params);
-        // prune all opponents by opponents I have already played
+
         $opponentNames = array_diff($allPlayers, $opponentsAlreadyFaced);
         return array_values($opponentNames);
     }

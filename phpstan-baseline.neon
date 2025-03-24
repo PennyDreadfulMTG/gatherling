@@ -583,36 +583,6 @@ parameters:
 			path: gatherling/Models/SetScraper.php
 
 		-
-			message: '#^Cannot call method bind_param\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: gatherling/Models/Standings.php
-
-		-
-			message: '#^Cannot call method bind_result\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: gatherling/Models/Standings.php
-
-		-
-			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: gatherling/Models/Standings.php
-
-		-
-			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: gatherling/Models/Standings.php
-
-		-
-			message: '#^Cannot call method fetch\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: gatherling/Models/Standings.php
-
-		-
 			message: '#^Parameter \#1 \$name of class Gatherling\\Models\\Player constructor expects string, string\|null given\.$#'
 			identifier: argument.type
 			count: 1

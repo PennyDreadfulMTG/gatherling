@@ -971,12 +971,6 @@
   </file>
   <file src="gatherling/Models/Standings.php">
     <MixedAssignment>
-      <code><![CDATA[$opponent_name]]></code>
-      <code><![CDATA[$opponent_name]]></code>
-      <code><![CDATA[$opponentsAlreadyFaced[]]]></code>
-      <code><![CDATA[$structure]]></code>
-      <code><![CDATA[$this->player]]></code>
-      <code><![CDATA[$this->player]]></code>
       <code><![CDATA[$value]]></code>
     </MixedAssignment>
     <PossiblyNullOperand>
