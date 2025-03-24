@@ -639,4 +639,58 @@ class EventTest extends TestCase
         $matches = $event->getRoundMatches(1);
         $this->assertCount(0, $matches, 'All matches should be deleted after repair');
     }
+
+    public function testMatchesOfType(): void
+    {
+        // Create test event with 4 players
+        $event = $this->createTestEvent([
+            'name' => 'matchesOfType_test_event',
+            'mainrounds' => 3,
+            'mainstruct' => 'Swiss'
+        ]);
+
+        // Add 4 players
+        for ($i = 1; $i <= 4; $i++) {
+            $event->addPlayer("Player$i");
+        }
+
+        // Start event which will create initial pairings
+        $event->startEvent(false);
+
+        // Initially all matches should be unfinished
+        $unfinishedMatches = $event->matchesOfType('unfinished');
+        $this->assertCount(2, $unfinishedMatches, 'Should have 2 unfinished matches initially');
+        $finishedMatches = $event->matchesOfType('finished');
+        $this->assertCount(0, $finishedMatches, 'Should have no finished matches initially');
+
+        // Complete one match
+        $firstMatch = $unfinishedMatches[0];
+        Matchup::saveReport('W20', $firstMatch->id, 'a');
+        Matchup::saveReport('L20', $firstMatch->id, 'b');
+
+        // Now should have one finished and one unfinished match
+        $unfinishedMatches = $event->matchesOfType('unfinished');
+        $this->assertCount(1, $unfinishedMatches, 'Should have 1 unfinished match after completing one');
+        $finishedMatches = $event->matchesOfType('finished');
+        $this->assertCount(1, $finishedMatches, 'Should have 1 finished match after completing one');
+
+        // Complete the second match
+        $secondMatch = $unfinishedMatches[0];
+        Matchup::saveReport('W20', $secondMatch->id, 'a');
+        Matchup::saveReport('L20', $secondMatch->id, 'b');
+
+        // Now all matches should be finished
+        $unfinishedMatches = $event->matchesOfType('unfinished');
+        $this->assertCount(0, $unfinishedMatches, 'Should have no unfinished matches after completing all');
+        $finishedMatches = $event->matchesOfType('finished');
+        $this->assertCount(2, $finishedMatches, 'Should have all matches finished after completing all');
+
+        // Verify match properties
+        foreach ($finishedMatches as $match) {
+            $this->assertEquals('verified', $match->verification, 'Finished match should have verified status');
+            $this->assertEquals(1, $match->round, 'Match should be from round 1');
+            $this->assertNotNull($match->playera, 'Match should have player A');
+            $this->assertNotNull($match->playerb, 'Match should have player B');
+        }
+    }
 }
