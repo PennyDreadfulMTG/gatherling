@@ -10,12 +10,12 @@ use Gatherling\Models\Matchup;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Models\Standings;
-use PHPUnit\Framework\TestCase;
+use Gatherling\Tests\Support\TestCases\DatabaseCase;
 use Safe\DateTimeImmutable;
 
 use function Gatherling\Helpers\parseCardsWithQuantity;
 
-class EventTest extends TestCase
+class EventTest extends DatabaseCase
 {
     /**
      * @param array{
@@ -39,9 +39,9 @@ class EventTest extends TestCase
      */
     private function createTestEvent(array $overrides = []): Event
     {
-        /** @var ?Series */
-        static $series = null;
-        if (!isset($series)) {
+        if (Series::exists('Test Series for Test Event')) {
+            $series = new Series('Test Series for Test Event');
+        } else {
             $series = new Series('');
             $series->name = 'Test Series for Test Event';
             $series->start_day = 'Monday';
