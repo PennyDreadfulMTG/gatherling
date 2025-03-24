@@ -990,22 +990,23 @@ class Event
     /** @return list<self> */
     public static function getNextPreRegister(int $num = 20): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE prereg_allowed = 1 AND active = 0 AND finalized = 0 AND private = 0 AND DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() ORDER BY start LIMIT ?');
-        // 180 minute interal in Date_Sub is to compensate for time zone difference from Server and Eastern Standard Time which is what all events are quoted in
-        $stmt->bind_param('d', $num);
-        $stmt->execute();
-        $stmt->bind_result($nextevent);
-        $event_names = [];
-        while ($stmt->fetch()) {
-            $event_names[] = $nextevent;
-        }
-        $stmt->close();
-        $events = [];
-        foreach ($event_names as $eventname) {
-            $events[] = new self($eventname);
-        }
+        $sql = '
+           SELECT name
+             FROM events
+            WHERE prereg_allowed = 1
+              AND active = 0
+              AND finalized = 0
+              AND private = 0
+              AND DATE_SUB(start, INTERVAL 0 MINUTE) > NOW()
+         ORDER BY start
+            LIMIT :limit';
 
+        $event_names = db()->strings($sql, ['limit' => $num]);
+
+        $events = [];
+        foreach ($event_names as $event_name) {
+            $events[] = new self($event_name);
+        }
         return $events;
     }
 

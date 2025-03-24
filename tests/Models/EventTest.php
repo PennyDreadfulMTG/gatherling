@@ -447,4 +447,71 @@ class EventTest extends TestCase
         $this->assertEquals(1, $finalMatch->round); // Should be round 1 of finals
         $this->assertEquals('B', $finalMatch->result);
     }
+
+    public function testGetNextPreRegister(): void
+    {
+        // Create events with different dates and states
+        $past = $this->createTestEvent([
+            'name' => 'Past Event',
+            'start' => new DateTimeImmutable('-1 day')
+        ]);
+        $past->prereg_allowed = 1;
+        $past->save();
+
+        $future1 = $this->createTestEvent([
+            'name' => 'Future Event 1',
+            'start' => new DateTimeImmutable('+1 day')
+        ]);
+        $future1->prereg_allowed = 1;
+        $future1->save();
+
+        $future2 = $this->createTestEvent([
+            'name' => 'Future Event 2',
+            'start' => new DateTimeImmutable('+2 days')
+        ]);
+        $future2->prereg_allowed = 1;
+        $future2->save();
+
+        $private = $this->createTestEvent([
+            'name' => 'Private Event',
+            'start' => new DateTimeImmutable('+1 hour')
+        ]);
+        $private->prereg_allowed = 1;
+        $private->private = 1;
+        $private->save();
+
+        $active = $this->createTestEvent([
+            'name' => 'Active Event',
+            'start' => new DateTimeImmutable('+3 days')
+        ]);
+        $active->prereg_allowed = 1;
+        $active->active = 1;
+        $active->save();
+
+        $finalized = $this->createTestEvent([
+            'name' => 'Finalized Event',
+            'start' => new DateTimeImmutable('+4 days')
+        ]);
+        $finalized->prereg_allowed = 1;
+        $finalized->finalized = 1;
+        $finalized->save();
+
+        $noPreReg = $this->createTestEvent([
+            'name' => 'No PreReg Event',
+            'start' => new DateTimeImmutable('+5 days')
+        ]);
+        $noPreReg->prereg_allowed = 0;
+        $noPreReg->save();
+
+        // Test getting all events
+        $events = Event::getNextPreRegister(10);
+        $this->assertCount(2, $events, 'Should only get 2 valid upcoming pre-reg events');
+        $this->assertEquals('Future Event 1', $events[0]->name, 'First event should be the soonest future event');
+        $this->assertEquals('Future Event 2', $events[1]->name, 'Second event should be the later future event');
+
+        // Test limit
+        $limitedEvents = Event::getNextPreRegister(1);
+        $this->assertCount(1, $limitedEvents, 'Should respect the limit parameter');
+        $this->assertEquals('Future Event 1', $limitedEvents[0]->name, 'Should get the soonest future event when limited');
+    }
 }
