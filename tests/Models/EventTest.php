@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Tests\Models;
 
+use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Matchup;
 use Gatherling\Models\Player;
@@ -11,6 +12,8 @@ use Gatherling\Models\Series;
 use Gatherling\Models\Standings;
 use PHPUnit\Framework\TestCase;
 use Safe\DateTimeImmutable;
+
+use function Gatherling\Helpers\parseCardsWithQuantity;
 
 class EventTest extends TestCase
 {
@@ -116,21 +119,26 @@ class EventTest extends TestCase
             $event = $this->createTestEvent([
                 'name' => $numPlayers . '_person_event_with_knockout',
                 'host' => $host->name,
+                'mainrounds' => 3,
                 'finalrounds' => $numPlayers <= 7 ? 1 : ($numPlayers <= 16 ? 2 : 3)
             ]);
+
             for ($i = 1; $i <= $numPlayers; $i++) {
                 $event->addPlayer("Player$i");
+                $deck = new Deck(0);
+                $deck->playername = "Player$i";
+                $deck->eventname = $event->name;
+                $deck->event_id = $event->id;
+                $deck->maindeck_cards = parseCardsWithQuantity('60 Swamp');
+                $deck->save();
             }
-            $event->startEvent(false);
+
+            $event->startEvent(true);
             $this->assertSame($numPlayers, count($event->getEntries()));
 
             $matches = $event->getRoundMatches(1);
             $this->assertEquals(ceil($numPlayers / 2), count($matches));
-            foreach ($matches as $match) {
-                Matchup::saveReport('W20', $match->id, 'a');
-                Matchup::saveReport('L20', $match->id, 'b');
-            }
-            for ($i = 2; $i <= $event->mainrounds + $event->finalrounds; $i++) {
+            for ($i = 1; $i <= $event->mainrounds + $event->finalrounds; $i++) {
                 $matches = $event->getRoundMatches($i);
                 foreach ($matches as $match) {
                     Matchup::saveReport('W20', $match->id, 'a');
