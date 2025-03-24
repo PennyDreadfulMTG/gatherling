@@ -222,32 +222,28 @@ class Standings
 
         $this->save();
     }
-
     /** @return list<Standings> */
     public function getOpponents(string $eventname, int $subevent, int $round): array
     {
         if ($round == '0') {
             return [];
         }
-        $db = Database::getConnection();
-        $stmt = $db->prepare("SELECT playera, playerb FROM matches where subevent = ? AND result <> 'P' AND (playera = ? OR playerb = ?)");
-        $stmt->bind_param('dss', $subevent, $this->player, $this->player);
 
-        $stmt->execute();
-        $stmt->bind_result($playera, $playerb);
+        $sql = "SELECT playera, playerb FROM matches where subevent = :subevent AND result <> 'P' AND (playera = :player OR playerb = :player)";
+        $params = [
+            'subevent' => $subevent,
+            'player' => $this->player
+        ];
+        $rows = db()->select($sql, MatchDto::class, $params);
+
         $playernames = [];
-        while ($stmt->fetch()) {
-            if ($playera == $this->player) {
-                $opponent_name = $playerb;
-            } else {
-                $opponent_name = $playera;
-            }
+        foreach ($rows as $row) {
+            $opponent_name = ($row->playera == $this->player) ? $row->playerb : $row->playera;
             if ($opponent_name != $this->player) {
                 $playernames[] = $opponent_name;
             }
         }
 
-        $stmt->close();
         $opponents = [];
         foreach ($playernames as $playername) {
             $opponents[] = new self($eventname, $playername);

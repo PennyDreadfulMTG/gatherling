@@ -970,20 +970,11 @@
     </MixedReturnTypeCoercion>
   </file>
   <file src="gatherling/Models/Standings.php">
-    <MixedArgument>
-      <code><![CDATA[$playername]]></code>
-    </MixedArgument>
     <MixedAssignment>
       <code><![CDATA[$opponent_name]]></code>
       <code><![CDATA[$opponent_name]]></code>
-      <code><![CDATA[$opponent_name]]></code>
-      <code><![CDATA[$opponent_name]]></code>
       <code><![CDATA[$opponentsAlreadyFaced[]]]></code>
-      <code><![CDATA[$playername]]></code>
-      <code><![CDATA[$playernames[]]]></code>
       <code><![CDATA[$structure]]></code>
-      <code><![CDATA[$this->player]]></code>
-      <code><![CDATA[$this->player]]></code>
       <code><![CDATA[$this->player]]></code>
       <code><![CDATA[$this->player]]></code>
       <code><![CDATA[$value]]></code>
