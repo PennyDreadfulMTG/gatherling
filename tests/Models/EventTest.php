@@ -313,4 +313,55 @@ class EventTest extends TestCase
             }
         }
     }
+
+    public function testAddPairing(): void
+    {
+        $event = $this->createTestEvent([
+            'name' => 'addPairing Test Event',
+            'mainrounds' => 3,
+            'finalrounds' => 2
+        ]);
+
+        // Add some players
+        $player1 = Player::findOrCreateByName('Player1');
+        $player2 = Player::findOrCreateByName('Player2');
+        $event->addPlayer($player1->name);
+        $event->addPlayer($player2->name);
+
+        // Create standings for the players
+        $standings1 = new Standings($event->name, $player1->name);
+        $standings1->event = $event->name;
+        $standings1->player = $player1->name;
+        $standings1->active = 1;
+        $standings1->save();
+
+        $standings2 = new Standings($event->name, $player2->name);
+        $standings2->event = $event->name;
+        $standings2->player = $player2->name;
+        $standings2->active = 1;
+        $standings2->save();
+
+        // Test main round pairing
+        $matchId = $event->addPairing($standings1, $standings2, 2, 'P');
+        $match = new Matchup($matchId);
+        $this->assertEquals($event->mainid, $match->subevent);
+        $this->assertEquals(2, $match->round);
+        $this->assertEquals('unverified', $match->verification);
+        $this->assertEquals($player1->name, $match->playera);
+        $this->assertEquals($player2->name, $match->playerb);
+
+        // Test final round pairing (round > mainrounds)
+        $matchId = $event->addPairing($standings1, $standings2, 4, 'P');
+        $match = new Matchup($matchId);
+        $this->assertEquals($event->finalid, $match->subevent);
+        $this->assertEquals(1, $match->round); // Should be round 1 of finals
+        $this->assertEquals('unverified', $match->verification);
+
+        // Test BYE pairing
+        $matchId = $event->addPairing($standings1, $standings1, 1, 'BYE');
+        $match = new Matchup($matchId);
+        $this->assertEquals('verified', $match->verification);
+        $this->assertEquals($player1->name, $match->playera);
+        $this->assertEquals($player1->name, $match->playerb);
+    }
 }
