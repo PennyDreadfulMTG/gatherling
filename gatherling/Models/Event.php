@@ -1623,32 +1623,35 @@ class Event
             $verification = 'verified';
         }
 
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT m.id FROM matches m, subevents s, events e
-        WHERE m.subevent = s.id AND s.parent = e.name AND e.name = ? AND
-        m.verification = ? AND m.round = ? AND s.timing = ? ORDER BY m.verification');
         $current_round = $this->current_round;
         $timing = 1;
         if ($current_round > $this->mainrounds) {
             $current_round -= $this->mainrounds;
             $timing = 2;
         }
-        $stmt->bind_param('ssdd', $this->name, $verification, $current_round, $timing);
-        $stmt->execute();
-        $stmt->bind_result($matchid);
 
-        $mids = [];
-        while ($stmt->fetch()) {
-            $mids[] = $matchid;
-        }
-        $stmt->close();
+        $sql = '
+            SELECT m.id
+              FROM matches m
+              JOIN subevents s
+                ON s.id = m.subevent
+              JOIN events e
+                ON e.name = s.parent
+             WHERE e.name = :name
+               AND m.verification = :verification
+               AND m.round = :round
+               AND s.timing = :timing
+          ORDER BY m.verification';
 
-        $matches = [];
-        foreach ($mids as $mid) {
-            $matches[] = new Matchup($mid);
-        }
+        $params = [
+            'name' => $this->name,
+            'verification' => $verification,
+            'round' => $current_round,
+            'timing' => $timing
+        ];
 
-        return $matches;
+        $matchIds = db()->ints($sql, $params);
+        return array_map(fn(int $id) => new Matchup($id), $matchIds);
     }
 
     /** @return list<Matchup> */
