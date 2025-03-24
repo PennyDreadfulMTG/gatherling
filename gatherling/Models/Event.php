@@ -1041,22 +1041,31 @@ class Event
     // Adjusts the season points for $player for this event by $points, with the reason $reason
     public function setSeasonPointAdjustment(string $player, int $points, string $reason): void
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT player FROM season_points WHERE event = ? AND player = ?');
-        $stmt or exit($db->error);
-        $stmt->bind_param('ss', $this->name, $player);
-        $stmt->execute();
-        $exists = $stmt->fetch() != null;
-        $stmt->close();
+        $sql = 'SELECT player FROM season_points WHERE event = :event AND player = :player';
+        $args = ['event' => $this->name, 'player' => $player];
+        $exists = db()->optionalString($sql, $args) !== null;
+
         if ($exists) {
-            $stmt = $db->prepare('UPDATE season_points SET reason = ?, adjustment = ? WHERE event = ? AND player = ?');
-            $stmt->bind_param('sdss', $reason, $points, $this->name, $player);
+            $sql = 'UPDATE season_points SET reason = :reason, adjustment = :points WHERE event = :event AND player = :player';
+            $args = [
+                'reason' => $reason,
+                'points' => $points,
+                'event' => $this->name,
+                'player' => $player
+            ];
+            db()->execute($sql, $args);
         } else {
-            $stmt = $db->prepare('INSERT INTO season_points(series, season, event, player, adjustment, reason) values(?, ?, ?, ?, ?, ?)');
-            $stmt->bind_param('sdssds', $this->series, $this->season, $this->name, $player, $points, $reason);
+            $sql = 'INSERT INTO season_points (series, season, event, player, adjustment, reason) VALUES (:series, :season, :event, :player, :points, :reason)';
+            $args = [
+                'series' => $this->series,
+                'season' => $this->season,
+                'event' => $this->name,
+                'player' => $player,
+                'points' => $points,
+                'reason' => $reason
+            ];
+            db()->execute($sql, $args);
         }
-        $stmt->execute();
-        $stmt->close();
     }
 
     public static function trophySrc(string $eventname): string
