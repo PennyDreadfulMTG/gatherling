@@ -847,11 +847,34 @@ class Event
             $verification = 'unverified';
         }
 
-        $db = Database::getConnection();
-        $stmt = $db->prepare('INSERT INTO matches(playera, playerb, round, subevent, result, playera_wins, playera_losses, playera_draws, playerb_wins, playerb_losses, playerb_draws, verification) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-        $stmt->bind_param('ssddsdddddds', $playera->player, $playerb->player, $round, $id, $result, $playera_wins, $playerb_wins, $draws, $playerb_wins, $playera_wins, $draws, $verification); // draws have not been implemented yet so I just assign a zero for now
-        $stmt->execute();
-        $stmt->close();
+        $sql = '
+            INSERT INTO matches
+                (playera, playerb, round, subevent, result,
+                playera_wins, playera_losses, playera_draws,
+                playerb_wins, playerb_losses, playerb_draws,
+                verification)
+            VALUES
+                (:playera, :playerb, :round, :subevent, :result,
+                :playera_wins, :playera_losses, :playera_draws,
+                :playerb_wins, :playerb_losses, :playerb_draws,
+                :verification)';
+
+        $params = [
+            'playera' => $playera->player,
+            'playerb' => $playerb->player,
+            'round' => $round,
+            'subevent' => $id,
+            'result' => $result,
+            'playera_wins' => $playera_wins,
+            'playera_losses' => $playerb_wins,
+            'playera_draws' => $draws,
+            'playerb_wins' => $playerb_wins,
+            'playerb_losses' => $playera_wins,
+            'playerb_draws' => $draws,
+            'verification' => $verification
+        ];
+
+        db()->execute($sql, $params);
     }
 
     // Assigns trophies based on the finals matches which are entered.

@@ -141,7 +141,7 @@ parameters:
 		-
 			message: '#^Cannot call method bind_param\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 16
+			count: 15
 			path: gatherling/Models/Event.php
 
 		-
@@ -153,13 +153,13 @@ parameters:
 		-
 			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 16
+			count: 15
 			path: gatherling/Models/Event.php
 
 		-
 			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 16
+			count: 15
 			path: gatherling/Models/Event.php
 
 		-

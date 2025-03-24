@@ -382,8 +382,6 @@
       <code><![CDATA[$eventname]]></code>
       <code><![CDATA[$mid]]></code>
       <code><![CDATA[$mids[]]]></code>
-      <code><![CDATA[$playera->player]]></code>
-      <code><![CDATA[$playerb->player]]></code>
       <code><![CDATA[$this->finalid]]></code>
       <code><![CDATA[$this->id]]></code>
       <code><![CDATA[$this->mainid]]></code>
