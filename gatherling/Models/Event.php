@@ -742,12 +742,9 @@ class Event
 
         if ($all_rounds) {
             $sql = "
-                SELECT
-                    m.id
-                FROM
-                    matches m, subevents s, events e
-                WHERE
-                    m.subevent = s.id AND s.parent = e.name AND e.name = :name AND s.timing = :timing AND m.result <> 'P'";
+                SELECT m.id
+                  FROM matches m, subevents s, events e
+                 WHERE m.subevent = s.id AND s.parent = e.name AND e.name = :name AND s.timing = :timing AND m.result <> 'P'";
             $params = ['name' => $this->name, 'timing' => $subevnum];
         } else {
             $sql = '
@@ -784,13 +781,10 @@ class Event
             $roundnum = $this->current_round;
         }
         $sql = '
-            SELECT
-                COUNT(m.id)
-            FROM
-                matches m, subevents s, events e
-            WHERE
-                m.subevent = s.id AND s.parent = e.name AND e.name = :name AND
-                s.timing = :timing AND m.round = :round AND (m.playera = :player OR m.playerb = :player)';
+            SELECT COUNT(m.id)
+              FROM matches m, subevents s, events e
+             WHERE m.subevent = s.id AND s.parent = e.name AND e.name = :name AND
+                   s.timing = :timing AND m.round = :round AND (m.playera = :player OR m.playerb = :player)';
         $params = ['name' => $this->name, 'timing' => $subevnum, 'round' => $roundnum, 'player' => $player_name];
         return db()->int($sql, $params);
     }
@@ -936,9 +930,10 @@ class Event
     public static function findMostRecentByHost(string $host_name): ?self
     {
         $sql = 'SELECT name FROM events
-                WHERE (host = :host OR cohost = :host)
-                AND finalized = 0
-                ORDER BY start ASC LIMIT 1';
+                 WHERE (host = :host OR cohost = :host)
+                   AND finalized = 0
+              ORDER BY start ASC
+                 LIMIT 1';
         $event_name = db()->optionalString($sql, ['host' => $host_name]);
         if ($event_name !== null) {
             return new self($event_name);
