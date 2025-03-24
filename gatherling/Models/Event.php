@@ -1422,28 +1422,21 @@ class Event
     }
 
     /** @return list<Event> */
+    /** @return list<self> */
     public static function getActiveEvents(bool $include_private = true): array
     {
-        $db = Database::getConnection();
-        if ($include_private) {
-            $stmt = $db->prepare('SELECT name FROM events WHERE active = 1 ORDER BY start ASC');
-        } else {
-            $stmt = $db->prepare('SELECT name FROM events WHERE active = 1 AND `private` = 0 ORDER BY start ASC');
+        $sql = 'SELECT name FROM events WHERE active = 1';
+        if (!$include_private) {
+            $sql .= ' AND private = 0';
         }
+        $sql .= ' ORDER BY start ASC';
 
-        $stmt->execute();
-        $stmt->bind_result($nextevent);
-        $event_names = [];
-        while ($stmt->fetch()) {
-            $event_names[] = $nextevent;
-        }
-        $stmt->close();
+        $event_names = db()->strings($sql);
 
         $events = [];
-        foreach ($event_names as $eventname) {
-            $events[] = new self($eventname);
+        foreach ($event_names as $event_name) {
+            $events[] = new self($event_name);
         }
-
         return $events;
     }
 
