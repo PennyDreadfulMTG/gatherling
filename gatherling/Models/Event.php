@@ -1013,21 +1013,21 @@ class Event
     /** @return list<self> */
     public static function getUpcomingEvents(string $playername): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT e.name FROM events e, entries n WHERE n.event_id = e.id AND n.player = ? AND active = 0 AND finalized = 0 ORDER BY start');
-        $stmt->bind_param('s', $playername);
-        $stmt->execute();
-        $stmt->bind_result($nextevent);
-        $event_names = [];
-        while ($stmt->fetch()) {
-            $event_names[] = $nextevent;
-        }
-        $stmt->close();
-        $events = [];
-        foreach ($event_names as $eventname) {
-            $events[] = new self($eventname);
-        }
+        $sql = '
+            SELECT e.name
+              FROM events e
+              JOIN entries n ON n.event_id = e.id
+             WHERE n.player = :player
+               AND active = 0
+               AND finalized = 0
+          ORDER BY start';
 
+        $event_names = db()->strings($sql, ['player' => $playername]);
+
+        $events = [];
+        foreach ($event_names as $event_name) {
+            $events[] = new self($event_name);
+        }
         return $events;
     }
 
