@@ -514,4 +514,28 @@ class EventTest extends TestCase
         $this->assertCount(1, $limitedEvents, 'Should respect the limit parameter');
         $this->assertEquals('Future Event 1', $limitedEvents[0]->name, 'Should get the soonest future event when limited');
     }
+
+    public function testGetSeasonPointAdjustment(): void
+    {
+        $event = $this->createTestEvent(['name' => 'Test Event for Season Points']);
+        $player = Player::findOrCreateByName('Test Player');
+
+        // Test getting season points when none exist
+        $result = $event->getSeasonPointAdjustment($player->name);
+        $this->assertEquals(['adjustment' => 0, 'reason' => ''], $result);
+
+        // Test getting season points after setting them
+        $event->setSeasonPointAdjustment($player->name, 5, 'Test reason');
+        $result = $event->getSeasonPointAdjustment($player->name);
+        $this->assertEquals(['adjustment' => 5, 'reason' => 'Test reason'], $result);
+
+        // Test updating existing season points
+        $event->setSeasonPointAdjustment($player->name, 10, 'Updated reason');
+        $result = $event->getSeasonPointAdjustment($player->name);
+        $this->assertEquals(['adjustment' => 10, 'reason' => 'Updated reason'], $result);
+
+        // Test getting season points for non-existent player
+        $result = $event->getSeasonPointAdjustment('NonExistentPlayer');
+        $this->assertEquals(['adjustment' => 0, 'reason' => ''], $result);
+    }
 }
