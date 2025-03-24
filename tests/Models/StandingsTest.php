@@ -18,14 +18,14 @@ final class StandingsTest extends TestCase
     {
         $host = Player::findOrCreateByName('TestHost');
         $series = new Series('');
-        $series->name = 'Test Series';
+        $series->name = 'getEventStandings Test Series';
         $series->start_day = 'Monday';
         $series->start_time = '00:00:00';
         $series->active = 1;
         $series->save();
 
-        $event = new Event('');
-        $event->name = 'Test Event';
+        $event = new Event();
+        $event->name = 'getEventStandings Test Event';
         $event->host = $host->name;
         $event->start = new DateTimeImmutable('2025-01-01');
         $event->series = $series->name;
@@ -160,5 +160,123 @@ final class StandingsTest extends TestCase
         $this->assertEquals('Player5', $standings[2]->player); // Same score, lower OP_Match but higher PL_Game
         $this->assertEquals('Player3', $standings[3]->player); // Same score, lowest tiebreakers
         $this->assertEquals('Player1', $standings[4]->player); // Lowest score
+    }
+
+    public function testGetOpponents(): void
+    {
+        $host = Player::findOrCreateByName('TestHost');
+        $series = new Series('');
+        $series->name = 'getOpponents Test Series';
+        $series->start_day = 'Monday';
+        $series->start_time = '00:00:00';
+        $series->active = 1;
+        $series->save();
+
+        $event = new Event();
+        $event->name = 'getOpponents Test Event';
+        $event->host = $host->name;
+        $event->start = new DateTimeImmutable('2025-01-01');
+        $event->series = $series->name;
+        $event->format = 'Standard';
+        $event->client = 1;
+        $event->mainrounds = 3;
+        $event->mainstruct = 'Swiss';
+        $event->finalrounds = 1;
+        $event->finalstruct = 'Single Elimination';
+        $event->save();
+        $event = new Event($event->name);
+
+        $eventName = $event->name;
+        $players = ['Player1', 'Player2', 'Player3'];
+
+        foreach ($players as $player) {
+            Player::findOrCreateByName($player);
+        }
+
+        // Create test standings
+        $standing1 = new Standings($eventName, 'Player1', 1);
+        $standing1->save();
+        $standing2 = new Standings($eventName, 'Player2', 2);
+        $standing2->save();
+        $standing3 = new Standings($eventName, 'Player3', 3);
+        $standing3->save();
+
+        // Create test matches using Event model
+        $event->addMatch($standing1, $standing2, 1, 'A', 2, 0);
+        $event->addMatch($standing1, $standing3, 2, 'B', 0, 2);
+
+        $this->assertNotNull($event->mainid);
+        $this->assertNotNull($event->finalid);
+
+        // Test getting opponents
+        $opponents = $standing1->getOpponents($eventName, $event->mainid, 1);
+        $this->assertCount(2, $opponents);
+        $this->assertContains('Player2', array_map(fn($o) => $o->player, $opponents));
+        $this->assertContains('Player3', array_map(fn($o) => $o->player, $opponents));
+
+        // Test with no matches
+        $opponents = $standing1->getOpponents($eventName, $event->mainid, 0);
+        $this->assertCount(0, $opponents);
+    }
+
+    public function testGetAvailableLeagueOpponents(): void
+    {
+        $host = Player::findOrCreateByName('TestHost');
+        $series = new Series('');
+        $series->name = 'Test Series';
+        $series->start_day = 'Monday';
+        $series->start_time = '00:00:00';
+        $series->active = 1;
+        $series->save();
+
+        $event = new Event();
+        $event->name = 'getAvailableLeagueOpponents Test Event';
+        $event->host = $host->name;
+        $event->start = new DateTimeImmutable('2025-01-01');
+        $event->series = $series->name;
+        $event->format = 'Standard';
+        $event->client = 1;
+        $event->mainrounds = 3;
+        $event->mainstruct = 'League';
+        $event->finalrounds = 1;
+        $event->finalstruct = 'Single Elimination';
+        $event->save();
+        $event = new Event($event->name);
+
+        $eventName = $event->name;
+        $players = ['Player1', 'Player2', 'Player3', 'Player4'];
+
+        foreach ($players as $player) {
+            Player::findOrCreateByName($player);
+        }
+
+        // Create test standings
+        $standing1 = new Standings($eventName, 'Player1', 1);
+        $standing1->save();
+        $standing2 = new Standings($eventName, 'Player2', 2);
+        $standing2->save();
+        $standing3 = new Standings($eventName, 'Player3', 3);
+        $standing3->save();
+        $standing4 = new Standings($eventName, 'Player4', 4);
+        $standing4->save();
+
+        // Create test matches using Event model
+        $event->addMatch($standing1, $standing2, 1, 'A', 2, 0);
+
+        $this->assertNotNull($event->mainid);
+
+        // Test getting available opponents
+        $opponents = $standing1->getAvailableLeagueOpponents($event->mainid, 1, 3);
+        $this->assertCount(2, $opponents);
+        $this->assertContains('Player3', $opponents);
+        $this->assertContains('Player4', $opponents);
+
+        // Test with league length reached
+        $opponents = $standing1->getAvailableLeagueOpponents($event->mainid, 1, 1);
+        $this->assertCount(0, $opponents);
+
+        // Test with no matches
+        $opponents = $standing1->getAvailableLeagueOpponents($event->mainid, 0, 3);
+        $this->assertCount(0, $opponents);
     }
 }
