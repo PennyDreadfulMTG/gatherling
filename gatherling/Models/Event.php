@@ -935,16 +935,12 @@ class Event
 
     public static function findMostRecentByHost(string $host_name): ?self
     {
-        // TODO: This should show the closest non-finalized event.
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE host = ? OR cohost = ? ORDER BY start DESC LIMIT 1');
-        $stmt->bind_param('ss', $host_name, $host_name);
-        $stmt->execute();
-        $event_name = '';
-        $stmt->bind_result($event_name);
-        $event_exists = $stmt->fetch();
-        $stmt->close();
-        if ($event_exists) {
+        $sql = 'SELECT name FROM events
+                WHERE (host = :host OR cohost = :host)
+                AND finalized = 0
+                ORDER BY start ASC LIMIT 1';
+        $event_name = db()->optionalString($sql, ['host' => $host_name]);
+        if ($event_name !== null) {
             return new self($event_name);
         }
         return null;
