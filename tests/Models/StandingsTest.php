@@ -9,10 +9,10 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Models\Event;
 use Gatherling\Models\StandingsMode;
-use PHPUnit\Framework\TestCase;
+use Gatherling\Tests\Support\TestCases\DatabaseCase;
 use Safe\DateTimeImmutable;
 
-final class StandingsTest extends TestCase
+final class StandingsTest extends DatabaseCase
 {
     public function testGetEventStandings(): void
     {
