@@ -220,4 +220,30 @@ class EventTest extends TestCase
         $this->assertTrue($event->hasRegistrant($player->name), 'Player should be recognized as registrant');
         $this->assertFalse($event->hasRegistrant($nonRegistrant->name), 'Non-registrant should not be recognized');
     }
+
+    public function testGetSubevents(): void
+    {
+        $event = $this->createTestEvent([
+            'name' => 'getSubevents Test Event',
+            'mainrounds' => 3,
+            'mainstruct' => 'Swiss',
+            'finalrounds' => 2,
+            'finalstruct' => 'Single Elimination'
+        ]);
+
+        $subevents = $event->getSubevents();
+        $this->assertCount(2, $subevents, 'Event should have exactly two subevents');
+
+        // First subevent should be main event (timing = 1)
+        $this->assertEquals(1, $subevents[0]->timing);
+        $this->assertEquals(3, $subevents[0]->rounds);
+        $this->assertEquals('Swiss', $subevents[0]->type);
+        $this->assertEquals($event->name, $subevents[0]->parent);
+
+        // Second subevent should be finals (timing = 2)
+        $this->assertEquals(2, $subevents[1]->timing);
+        $this->assertEquals(2, $subevents[1]->rounds);
+        $this->assertEquals('Single Elimination', $subevents[1]->type);
+        $this->assertEquals($event->name, $subevents[1]->parent);
+    }
 }
