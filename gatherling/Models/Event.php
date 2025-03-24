@@ -554,15 +554,9 @@ class Event
 
     public function hasRegistrant(string $playername): bool
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT count(player) FROM entries WHERE event_id = ? AND player = ?');
-        $stmt->bind_param('ds', $this->id, $playername);
-        $stmt->execute();
-        $stmt->bind_result($isPlaying);
-        $stmt->fetch();
-        $stmt->close();
-
-        return $isPlaying > 0;
+        $sql = 'SELECT COUNT(player) FROM entries WHERE event_id = :event_id AND player = :player';
+        $params = ['event_id' => $this->id, 'player' => $playername];
+        return db()->int($sql, $params) > 0;
     }
 
     /** @return list<Subevent> */
