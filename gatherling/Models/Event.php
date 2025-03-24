@@ -1029,18 +1029,13 @@ class Event
     /** @return array{adjustment: int, reason: string} */
     public function getSeasonPointAdjustment(string $player): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT adjustment, reason FROM season_points WHERE event = ? AND player = ?');
-        $stmt or exit($db->error);
-        $stmt->bind_param('ss', $this->name, $player);
-        $stmt->execute();
-        $stmt->bind_result($adjustment, $reason);
-        $exists = $stmt->fetch() != null;
-        $stmt->close();
-        if ($exists) {
-            return ['adjustment' => $adjustment, 'reason' => $reason];
+        $sql = 'SELECT adjustment, reason FROM season_points WHERE event = :event AND player = :player';
+        $params = ['event' => $this->name, 'player' => $player];
+        $result = db()->selectOnlyOrNull($sql, SeasonPointAdjustmentDto::class, $params);
+        if ($result === null) {
+            return ['adjustment' => 0, 'reason' => ''];
         }
-        return ['adjustment' => 0, 'reason' => ''];
+        return ['adjustment' => $result->adjustment, 'reason' => $result->reason];
     }
 
     // Adjusts the season points for $player for this event by $points, with the reason $reason
