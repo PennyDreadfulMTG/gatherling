@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Gatherling\Tests\Support\Listeners;
 
 use Gatherling\Data\Setup;
-use PHPUnit\Event\TestRunner\Finished;
-use PHPUnit\Event\TestRunner\FinishedSubscriber;
+use PHPUnit\Event\TestRunner\ExecutionFinished;
+use PHPUnit\Event\TestRunner\ExecutionFinishedSubscriber;
 use PHPUnit\Event\TestRunner\Started;
 use PHPUnit\Event\TestRunner\StartedSubscriber;
 use PHPUnit\Runner\Extension\Extension;
@@ -28,8 +28,8 @@ class DatabaseTestListener implements Extension
             }
         });
 
-        $facade->registerSubscriber(new class implements FinishedSubscriber {
-            public function notify(Finished $event): void
+        $facade->registerSubscriber(new class implements ExecutionFinishedSubscriber {
+            public function notify(ExecutionFinished $event): void
             {
                 logger()->info('Tests ended, dropping test database');
                 Setup::dropTestDatabase();
