@@ -610,4 +610,33 @@ class EventTest extends TestCase
         $this->assertEquals(1, $event->active);
         $this->assertGreaterThan(0, count($event->getMatches()), 'Should be able to create new matches after reset');
     }
+
+    public function testRepairRound(): void
+    {
+        // Create test event with 4 players
+        $event = $this->createTestEvent([
+            'name' => 'repairRound_test_event',
+            'mainrounds' => 3,
+            'mainstruct' => 'Swiss'
+        ]);
+
+        // Add 4 players
+        for ($i = 1; $i <= 4; $i++) {
+            $event->addPlayer("Player$i");
+        }
+
+        // Start event which will create initial pairings
+        $event->startEvent(false);
+
+        // Verify matches exist for round 1
+        $matches = $event->getRoundMatches(1);
+        $this->assertCount(2, $matches, 'Should have 2 matches for 4 players before repair');
+
+        // Call repairRound
+        $event->repairRound();
+
+        // Verify the matches were deleted
+        $matches = $event->getRoundMatches(1);
+        $this->assertCount(0, $matches, 'All matches should be deleted after repair');
+    }
 }
