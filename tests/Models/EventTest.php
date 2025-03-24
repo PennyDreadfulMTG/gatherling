@@ -246,4 +246,71 @@ class EventTest extends TestCase
         $this->assertEquals('Single Elimination', $subevents[1]->type);
         $this->assertEquals($event->name, $subevents[1]->parent);
     }
+
+    public function testGetMatches(): void
+    {
+        $event = $this->createTestEvent([
+            'name' => 'getMatches Test Event',
+            'mainrounds' => 2,
+            'mainstruct' => 'Swiss',
+            'finalrounds' => 1,
+            'finalstruct' => 'Single Elimination'
+        ]);
+
+        // Add some players
+        $player1 = Player::findOrCreateByName('Player1');
+        $player2 = Player::findOrCreateByName('Player2');
+        $player3 = Player::findOrCreateByName('Player3');
+        $player4 = Player::findOrCreateByName('Player4');
+        $event->addPlayer($player1->name);
+        $event->addPlayer($player2->name);
+        $event->addPlayer($player3->name);
+        $event->addPlayer($player4->name);
+
+        // Start the event to create initial pairings
+        $event->startEvent(false);
+
+        // Get all matches and verify they are ordered correctly
+        $matches = $event->getMatches();
+        $this->assertGreaterThan(0, count($matches), 'Event should have matches after starting');
+
+        // Verify matches have correct properties
+        foreach ($matches as $match) {
+            $this->assertNotNull($match->subevent, 'Match should have a subevent');
+            $this->assertNotNull($match->round, 'Match should have a round number');
+            $this->assertNotNull($match->playera, 'Match should have player A');
+            $this->assertNotNull($match->playerb, 'Match should have player B');
+            $this->assertEquals($event->name, $match->eventname, 'Match should reference correct event');
+
+            // Verify match is either in main event or finals
+            $this->assertContains($match->timing, [1, 2], 'Match timing should be either 1 (main) or 2 (finals)');
+
+            // Verify round number is valid
+            if ($match->timing === 1) {
+                $this->assertLessThanOrEqual($event->mainrounds, $match->round, 'Main event match round should not exceed mainrounds');
+            } else {
+                $this->assertLessThanOrEqual($event->finalrounds, $match->round, 'Finals match round should not exceed finalrounds');
+            }
+        }
+
+        // Verify matches are ordered by timing and round
+        for ($i = 1; $i < count($matches); $i++) {
+            $curr = $matches[$i];
+            $prev = $matches[$i - 1];
+
+            if ($curr->timing === $prev->timing) {
+                $this->assertGreaterThanOrEqual(
+                    $prev->round,
+                    $curr->round,
+                    'Matches with same timing should be ordered by round'
+                );
+            } else {
+                $this->assertGreaterThan(
+                    $prev->timing,
+                    $curr->timing,
+                    'Matches should be ordered by timing (main event before finals)'
+                );
+            }
+        }
+    }
 }
