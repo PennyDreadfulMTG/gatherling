@@ -1486,17 +1486,15 @@ class Event
 
     public static function getEventBySubevent(int $subevent): self
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT e.name FROM events e, subevents s
-        WHERE s.parent = e.name AND s.id = ? LIMIT 1');
-        $stmt->bind_param('s', $subevent);
-        $stmt->execute();
-        $stmt->bind_result($event);
-        $stmt->fetch();
-        $stmt->close();
-        $event = new self($event);
+        $sql = '
+            SELECT e.name
+              FROM events e
+              JOIN subevents s ON s.parent = e.name
+             WHERE s.id = :subevent
+             LIMIT 1';
 
-        return $event;
+        $event_name = db()->string($sql, ['subevent' => $subevent]);
+        return new self($event_name);
     }
 
     public function recalculateScores(string $structure): void
