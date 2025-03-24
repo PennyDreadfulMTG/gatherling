@@ -1379,6 +1379,9 @@ class Event
     public function top2Seeding(): void
     {
         $players = $this->standing->getEventStandings($this->name, 3);
+        if (count($players) < 2) {
+            throw new InvalidStateException('Not enough players to seed');
+        }
         $this->addPairing($players[0], $players[1], $this->current_round + 1, 'P');
         Standings::writeSeed($this->name, $players[0]->player, 1);
         Standings::writeSeed($this->name, $players[1]->player, 2);
