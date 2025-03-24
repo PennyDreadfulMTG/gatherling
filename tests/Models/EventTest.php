@@ -701,4 +701,171 @@ class EventTest extends TestCase
             $this->assertNotNull($match->playerb, 'Match should have player B');
         }
     }
+
+    public function testTop2Seeding(): void
+    {
+        $event = $this->createTestEvent([
+            'name' => 'top2Seeding_test_event',
+            'mainrounds' => 3,
+            'mainstruct' => 'Swiss',
+            'finalrounds' => 3,
+            'finalstruct' => 'Single Elimination'
+        ]);
+
+        // Add 8 players with different scores
+        $players = [];
+        for ($i = 1; $i <= 8; $i++) {
+            $player = Player::findOrCreateByName("Player$i");
+            $event->addPlayer($player->name);
+            $players[] = $player;
+
+            $standing = new Standings($event->name, $player->name);
+            $standing->event = $event->name;
+            $standing->player = $player->name;
+            $standing->active = 1;
+            $standing->score = 9 - $i; // Player1 gets 8 points, Player2 gets 7, etc.
+            $standing->save();
+        }
+
+        $event->top2Seeding();
+        $matches = $event->getRoundMatches(1);
+        $this->assertCount(1, $matches, 'Top 2 seeding should create 1 match');
+        $this->assertEquals($players[0]->name, $matches[0]->playera, 'Player1 should be player A');
+        $this->assertEquals($players[1]->name, $matches[0]->playerb, 'Player2 should be player B');
+    }
+
+    public function testTop4Seeding(): void
+    {
+        $event = $this->createTestEvent([
+            'name' => 'top4Seeding_test_event',
+            'mainrounds' => 3,
+            'mainstruct' => 'Swiss',
+            'finalrounds' => 3,
+            'finalstruct' => 'Single Elimination'
+        ]);
+
+        // Add 8 players with different scores
+        $players = [];
+        for ($i = 1; $i <= 8; $i++) {
+            $player = Player::findOrCreateByName("Player$i");
+            $event->addPlayer($player->name);
+            $players[] = $player;
+
+            $standing = new Standings($event->name, $player->name);
+            $standing->event = $event->name;
+            $standing->player = $player->name;
+            $standing->active = 1;
+            $standing->score = 9 - $i;
+            $standing->save();
+        }
+
+        $event->top4Seeding();
+        $matches = $event->getRoundMatches(1);
+        $this->assertCount(2, $matches, 'Top 4 seeding should create 2 matches');
+        $this->assertEquals($players[0]->name, $matches[0]->playera, 'Player1 should be player A in first match');
+        $this->assertEquals($players[3]->name, $matches[0]->playerb, 'Player4 should be player B in first match');
+        $this->assertEquals($players[1]->name, $matches[1]->playera, 'Player2 should be player A in second match');
+        $this->assertEquals($players[2]->name, $matches[1]->playerb, 'Player3 should be player B in second match');
+    }
+
+    public function testTop8Seeding(): void
+    {
+        $event = $this->createTestEvent([
+            'name' => 'top8Seeding_test_event',
+            'mainrounds' => 3,
+            'mainstruct' => 'Swiss',
+            'finalrounds' => 3,
+            'finalstruct' => 'Single Elimination'
+        ]);
+
+        // Add 8 players with different scores
+        $players = [];
+        for ($i = 1; $i <= 8; $i++) {
+            $player = Player::findOrCreateByName("Player$i");
+            $event->addPlayer($player->name);
+            $players[] = $player;
+
+            $standing = new Standings($event->name, $player->name);
+            $standing->event = $event->name;
+            $standing->player = $player->name;
+            $standing->active = 1;
+            $standing->score = 9 - $i;
+            $standing->save();
+        }
+
+        $event->top8Seeding();
+        $matches = $event->getRoundMatches(1);
+        $this->assertCount(4, $matches, 'Top 8 seeding should create 4 matches');
+        $this->assertEquals($players[0]->name, $matches[0]->playera, 'Player1 should be player A in first match');
+        $this->assertEquals($players[7]->name, $matches[0]->playerb, 'Player8 should be player B in first match');
+        $this->assertEquals($players[3]->name, $matches[1]->playera, 'Player4 should be player A in second match');
+        $this->assertEquals($players[4]->name, $matches[1]->playerb, 'Player5 should be player B in second match');
+        $this->assertEquals($players[1]->name, $matches[2]->playera, 'Player2 should be player A in third match');
+        $this->assertEquals($players[6]->name, $matches[2]->playerb, 'Player7 should be player B in third match');
+        $this->assertEquals($players[2]->name, $matches[3]->playera, 'Player3 should be player A in fourth match');
+        $this->assertEquals($players[5]->name, $matches[3]->playerb, 'Player6 should be player B in fourth match');
+    }
+
+    public function testTopSeedingFallback(): void
+    {
+        $event = $this->createTestEvent([
+            'name' => 'topSeeding_fallback_test_event',
+            'mainrounds' => 3,
+            'mainstruct' => 'Swiss',
+            'finalrounds' => 3,
+            'finalstruct' => 'Single Elimination'
+        ]);
+
+        // Add only 3 players
+        $players = [];
+        for ($i = 1; $i <= 3; $i++) {
+            $player = Player::findOrCreateByName("FallbackPlayer$i");
+            $event->addPlayer($player->name);
+            $players[] = $player;
+
+            $standing = new Standings($event->name, $player->name);
+            $standing->event = $event->name;
+            $standing->player = $player->name;
+            $standing->active = 1;
+            $standing->score = 4 - $i;
+            $standing->save();
+        }
+
+        // Test top4Seeding with 3 players should fall back to top2Seeding
+        $event->top4Seeding();
+        $matches = $event->getRoundMatches(1);
+        $this->assertCount(1, $matches, 'Top 4 seeding with 3 players should create 1 match');
+        $this->assertEquals($players[0]->name, $matches[0]->playera, 'FallbackPlayer1 should be player A');
+        $this->assertEquals($players[1]->name, $matches[0]->playerb, 'FallbackPlayer2 should be player B');
+
+        // Test top8Seeding with 3 players should fall back to top4Seeding then top2Seeding
+        $event = $this->createTestEvent([
+            'name' => 'topSeeding_fallback_test_event_2',
+            'mainrounds' => 3,
+            'mainstruct' => 'Swiss',
+            'finalrounds' => 3,
+            'finalstruct' => 'Single Elimination'
+        ]);
+
+        // Add only 3 players
+        $players = [];
+        for ($i = 1; $i <= 3; $i++) {
+            $player = Player::findOrCreateByName("FallbackPlayer{$i}_2");
+            $event->addPlayer($player->name);
+            $players[] = $player;
+
+            $standing = new Standings($event->name, $player->name);
+            $standing->event = $event->name;
+            $standing->player = $player->name;
+            $standing->active = 1;
+            $standing->score = 4 - $i;
+            $standing->save();
+        }
+
+        $event->top8Seeding();
+        $matches = $event->getRoundMatches(1);
+        $this->assertCount(1, $matches, 'Top 8 seeding with 3 players should create 1 match');
+        $this->assertEquals($players[0]->name, $matches[0]->playera, 'FallbackPlayer1 should be player A');
+        $this->assertEquals($players[1]->name, $matches[0]->playerb, 'FallbackPlayer2 should be player B');
+    }
 }
