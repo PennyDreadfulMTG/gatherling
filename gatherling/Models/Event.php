@@ -965,15 +965,13 @@ class Event
 
     public function findNext(): ?self
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE series = ? AND season = ? AND number = ? LIMIT 1');
-        $num = $this->number + 1;
-        $stmt->bind_param('sdd', $this->series, $this->season, $num);
-        $stmt->execute();
-        $stmt->bind_result($event_name);
-        $exists = $stmt->fetch();
-        $stmt->close();
-        if ($exists) {
+        $sql = 'SELECT name FROM events WHERE series = :series AND season = :season AND number = :number LIMIT 1';
+        $event_name = db()->optionalString($sql, [
+            'series' => $this->series,
+            'season' => $this->season,
+            'number' => $this->number + 1
+        ]);
+        if ($event_name !== null) {
             return new self($event_name);
         }
         return null;
