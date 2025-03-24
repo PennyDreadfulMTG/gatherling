@@ -448,21 +448,20 @@ class Player
     /** @return list<Matchup> */
     public function getMatchesEvent(string $eventname): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT m.id
-      FROM matches m, subevents s
-      WHERE m.subevent = s.id AND s.parent = ?
-      AND (m.playera = ? OR m.playerb = ?)
-      ORDER BY s.timing, m.round');
-        $stmt->bind_param('sss', $eventname, $this->name, $this->name);
-        $stmt->execute();
-        $stmt->bind_result($matchid);
+        $sql = '
+            SELECT m.id
+              FROM matches m
+              JOIN subevents s ON m.subevent = s.id
+             WHERE s.parent = :event
+               AND (m.playera = :player OR m.playerb = :player)
+          ORDER BY s.timing, m.round';
 
-        $matchids = [];
-        while ($stmt->fetch()) {
-            $matchids[] = $matchid;
-        }
-        $stmt->close();
+        $params = [
+            'event' => $eventname,
+            'player' => $this->name
+        ];
+
+        $matchids = db()->ints($sql, $params);
 
         $matches = [];
         foreach ($matchids as $matchid) {

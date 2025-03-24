@@ -6,15 +6,15 @@ namespace Gatherling\Tests\Models;
 
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
+use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Standings;
+use Gatherling\Tests\Support\TestCases\DatabaseCase;
 use Safe\DateTimeImmutable;
-use Gatherling\Models\Deck;
-use PHPUnit\Framework\TestCase;
 
 use function Gatherling\Helpers\parseCardsWithQuantity;
 
-final class PlayerTest extends TestCase
+final class PlayerTest extends DatabaseCase
 {
     private function insertDeck(string $player, Event $event): void
     {

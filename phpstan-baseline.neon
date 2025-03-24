@@ -453,31 +453,31 @@ parameters:
 		-
 			message: '#^Cannot call method bind_param\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 34
+			count: 33
 			path: gatherling/Models/Player.php
 
 		-
 			message: '#^Cannot call method bind_result\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 29
+			count: 28
 			path: gatherling/Models/Player.php
 
 		-
 			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 32
+			count: 31
 			path: gatherling/Models/Player.php
 
 		-
 			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 33
+			count: 32
 			path: gatherling/Models/Player.php
 
 		-
 			message: '#^Cannot call method fetch\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 29
+			count: 28
 			path: gatherling/Models/Player.php
 
 		-

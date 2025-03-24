@@ -646,7 +646,6 @@
       <code><![CDATA[$matchid]]></code>
       <code><![CDATA[$matchid]]></code>
       <code><![CDATA[$matchid]]></code>
-      <code><![CDATA[$matchid]]></code>
       <code><![CDATA[$mid]]></code>
       <code><![CDATA[$resname]]></code>
       <code><![CDATA[$resname]]></code>
@@ -670,8 +669,6 @@
       <code><![CDATA[$matchid]]></code>
       <code><![CDATA[$matchid]]></code>
       <code><![CDATA[$matchid]]></code>
-      <code><![CDATA[$matchid]]></code>
-      <code><![CDATA[$matchids[]]]></code>
       <code><![CDATA[$matchids[]]]></code>
       <code><![CDATA[$matchids[]]]></code>
       <code><![CDATA[$matchids[]]]></code>
@@ -681,8 +678,6 @@
       <code><![CDATA[$res]]></code>
       <code><![CDATA[$result[]]]></code>
       <code><![CDATA[$seasons[]]]></code>
-      <code><![CDATA[$this->name]]></code>
-      <code><![CDATA[$this->name]]></code>
       <code><![CDATA[$this->name]]></code>
       <code><![CDATA[$this->name]]></code>
       <code><![CDATA[$this->name]]></code>
