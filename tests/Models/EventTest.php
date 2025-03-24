@@ -364,4 +364,87 @@ class EventTest extends TestCase
         $this->assertEquals($player1->name, $match->playera);
         $this->assertEquals($player1->name, $match->playerb);
     }
+
+    public function testAddMatch(): void
+    {
+        $event = $this->createTestEvent([
+            'name' => 'addMatch Test Event',
+            'mainrounds' => 3,
+            'finalrounds' => 2
+        ]);
+
+        // Add some players
+        $player1 = Player::findOrCreateByName('Player1');
+        $player2 = Player::findOrCreateByName('Player2');
+        $event->addPlayer($player1->name);
+        $event->addPlayer($player2->name);
+
+        // Create standings for the players
+        $standings1 = new Standings($event->name, $player1->name);
+        $standings1->event = $event->name;
+        $standings1->player = $player1->name;
+        $standings1->active = 1;
+        $standings1->save();
+
+        $standings2 = new Standings($event->name, $player2->name);
+        $standings2->event = $event->name;
+        $standings2->player = $player2->name;
+        $standings2->active = 1;
+        $standings2->save();
+
+        // Test BYE match (round 1)
+        $event->addMatch($standings1, $standings1, 1, 'BYE');
+
+        // Test match in progress (round 2)
+        $event->addMatch($standings1, $standings2, 2, 'P');
+
+        // Test regular match in main rounds (round 2)
+        $event->addMatch($standings1, $standings2, 2, 'A', 2, 0);
+
+        // Test draw match (round 3)
+        $event->addMatch($standings1, $standings2, 3, 'D', 1, 1);
+
+        // Test match in finals (round > mainrounds)
+        $event->addMatch($standings1, $standings2, 4, 'B', 0, 2);
+
+        $matches = $event->getMatches();
+        $this->assertCount(5, $matches);
+
+        // BYE match should be first (round 1)
+        $byeMatch = $matches[0];
+        $this->assertEquals('BYE', $byeMatch->result);
+        $this->assertEquals('verified', $byeMatch->verification);
+        $this->assertEquals($player1->name, $byeMatch->playera);
+        $this->assertEquals($player1->name, $byeMatch->playerb);
+
+        // In progress match should be second (round 2)
+        $progressMatch = $matches[1];
+        $this->assertEquals('P', $progressMatch->result);
+        $this->assertEquals('unverified', $progressMatch->verification);
+        $this->assertEquals(0, $progressMatch->playera_wins);
+        $this->assertEquals(0, $progressMatch->playerb_wins);
+
+        // Regular match should be third (round 2)
+        $match = $matches[2];
+        $this->assertEquals($event->mainid, $match->subevent);
+        $this->assertEquals(2, $match->round);
+        $this->assertEquals('verified', $match->verification);
+        $this->assertEquals($player1->name, $match->playera);
+        $this->assertEquals($player2->name, $match->playerb);
+        $this->assertEquals(2, $match->playera_wins);
+        $this->assertEquals(0, $match->playerb_wins);
+        $this->assertEquals('A', $match->result);
+
+        // Draw match should be fourth (round 3)
+        $drawMatch = $matches[3];
+        $this->assertEquals('D', $drawMatch->result);
+        $this->assertEquals(1, $drawMatch->playera_wins);
+        $this->assertEquals(1, $drawMatch->playerb_wins);
+
+        // Finals match should be last (timing=2)
+        $finalMatch = $matches[4];
+        $this->assertEquals($event->finalid, $finalMatch->subevent);
+        $this->assertEquals(1, $finalMatch->round); // Should be round 1 of finals
+        $this->assertEquals('B', $finalMatch->result);
+    }
 }
