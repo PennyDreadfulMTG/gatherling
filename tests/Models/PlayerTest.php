@@ -19,39 +19,39 @@ final class PlayerTest extends DatabaseCase
     public function testFindOrCreateByName(): void
     {
         $player = Player::findOrCreateByName('test');
-        $this->assertEquals('test', $player->name);
-        $this->assertNull($player->password);
+        self::assertEquals('test', $player->name);
+        self::assertNull($player->password);
 
         $player->password = 'password';
         $player->save();
-        $this->assertEquals('password', $player->password);
+        self::assertEquals('password', $player->password);
 
         $player2 = Player::findOrCreateByName('test');
-        $this->assertEquals($player, $player2);
-        $this->assertEquals('password', $player2->password);
+        self::assertEquals($player, $player2);
+        self::assertEquals('password', $player2->password);
     }
 
     public function testFindByName(): void
     {
         $player = Player::findByName('foo');
-        $this->assertNull($player);
+        self::assertNull($player);
 
         Player::findOrCreateByName('foo');
 
         $player = Player::findByName('foo');
-        $this->assertNotNull($player);
+        self::assertNotNull($player);
 
         $player2 = Player::findByName('bar');
-        $this->assertNull($player2);
+        self::assertNull($player2);
     }
 
     public function testOrganizersSeries(): void
     {
         $player = Player::findOrCreateByName('An Organizer');
-        $this->assertEmpty($player->organizersSeries());
+        self::assertEmpty($player->organizersSeries());
 
         $player->save();
-        $this->assertEmpty($player->organizersSeries());
+        self::assertEmpty($player->organizersSeries());
 
         $series = new Series('');
         $series->name = 'My Test Series';
@@ -59,19 +59,19 @@ final class PlayerTest extends DatabaseCase
         $series->start_time = '12:00:00';
         $series->active = 1;
         $series->save();
-        $this->assertEmpty($player->organizersSeries());
+        self::assertEmpty($player->organizersSeries());
 
         $player->super = 1;
         $player->save();
-        $this->assertContains($series->name, $player->organizersSeries());
+        self::assertContains($series->name, $player->organizersSeries());
 
         $player->super = 0;
         $player->save();
-        $this->assertEmpty($player->organizersSeries());
+        self::assertEmpty($player->organizersSeries());
 
-        $this->assertNotEmpty($player->name);
+        self::assertNotEmpty($player->name);
         $series->addOrganizer($player->name);
-        $this->assertEquals([$series->name], $player->organizersSeries());
+        self::assertEquals([$series->name], $player->organizersSeries());
     }
 
     public function testGetMatchesEvent(): void
@@ -92,22 +92,22 @@ final class PlayerTest extends DatabaseCase
 
         // Verify no matches exist yet
         $matches = $player1->getMatchesEvent($event->name);
-        $this->assertCount(0, $matches, 'Player should have no matches before event starts');
+        self::assertCount(0, $matches, 'Player should have no matches before event starts');
 
         // Start event
         $event->startEvent(true);
 
         // Get matches for player1
         $matches = $player1->getMatchesEvent($event->name);
-        $this->assertGreaterThan(0, count($matches), 'Player should have matches after event starts');
+        self::assertGreaterThan(0, count($matches), 'Player should have matches after event starts');
 
         // Verify match properties
         foreach ($matches as $match) {
-            $this->assertTrue(
+            self::assertTrue(
                 $match->playera === $player1->name || $match->playerb === $player1->name,
                 'Match should involve the player'
             );
-            $this->assertEquals($event->mainid, $match->subevent, 'Match should be in main event');
+            self::assertEquals($event->mainid, $match->subevent, 'Match should be in main event');
         }
 
         // Create a match in finals
@@ -120,13 +120,13 @@ final class PlayerTest extends DatabaseCase
 
         // Get matches again and verify ordering
         $matches = $player1->getMatchesEvent($event->name);
-        $this->assertGreaterThan(1, count($matches), 'Player should have multiple matches');
+        self::assertGreaterThan(1, count($matches), 'Player should have multiple matches');
 
         // Verify matches are ordered by subevent timing and round
         $lastMatch = null;
         foreach ($matches as $match) {
             if ($lastMatch !== null) {
-                $this->assertLessThanOrEqual(
+                self::assertLessThanOrEqual(
                     $match->round,
                     $lastMatch->round,
                     'Matches should be ordered by round'

@@ -13,7 +13,7 @@ class RequestTest extends TestCase
     public function testInt(): void
     {
         $request = new Request(['foo' => '123', 'bar' => '123.4']);
-        $this->assertEquals(123, $request->int('foo'));
+        self::assertEquals(123, $request->int('foo'));
         $this->expectException(RequestException::class);
         $request->int('bar');
     }
@@ -35,8 +35,8 @@ class RequestTest extends TestCase
     public function testOptionalInt(): void
     {
         $request = new Request(['foo' => '123', 'bar' => '123.4']);
-        $this->assertEquals(123, $request->optionalInt('foo'));
-        $this->assertNull($request->optionalInt('baz'));
+        self::assertEquals(123, $request->optionalInt('foo'));
+        self::assertNull($request->optionalInt('baz'));
         $this->expectException(RequestException::class);
         $request->optionalInt('bar');
     }
@@ -44,21 +44,21 @@ class RequestTest extends TestCase
     public function testOptionalIntReturnsNullOnEmptyString(): void
     {
         $request = new Request(['foo' => '']);
-        $this->assertNull($request->optionalInt('foo'));
+        self::assertNull($request->optionalInt('foo'));
     }
 
     public function testFloat(): void
     {
         $request = new Request(['foo' => '123.45']);
-        $this->assertEquals(123.45, $request->float('foo'));
+        self::assertEquals(123.45, $request->float('foo'));
     }
 
     public function testString(): void
     {
         $request = new Request(['foo' => 'hello']);
-        $this->assertEquals('hello', $request->string('foo'));
-        $this->assertEquals('hello', $request->string('foo', 'other'));
-        $this->assertEquals('hello', $request->string('bar', 'hello'));
+        self::assertEquals('hello', $request->string('foo'));
+        self::assertEquals('hello', $request->string('foo', 'other'));
+        self::assertEquals('hello', $request->string('bar', 'hello'));
         $this->expectException(RequestException::class);
         $request->string('bar');
     }
@@ -66,15 +66,15 @@ class RequestTest extends TestCase
     public function testOptionalString(): void
     {
         $request = new Request(['foo' => 'hello']);
-        $this->assertEquals('hello', $request->optionalString('foo'));
-        $this->assertNull($request->optionalString('bar'));
+        self::assertEquals('hello', $request->optionalString('foo'));
+        self::assertNull($request->optionalString('bar'));
     }
 
     public function testListInt(): void
     {
         $request = new Request(['foo' => ['1', '2', '3'], 'bar' => ['a', 'b', 'c']]);
-        $this->assertEquals([1, 2, 3], $request->listInt('foo'));
-        $this->assertEquals([], $request->listInt('baz'));
+        self::assertEquals([1, 2, 3], $request->listInt('foo'));
+        self::assertEquals([], $request->listInt('baz'));
         $this->expectException(RequestException::class);
         $request->listInt('bar');
     }
@@ -82,22 +82,22 @@ class RequestTest extends TestCase
     public function testListString(): void
     {
         $request = new Request(['foo' => ['1', '2', '3'], 'bar' => ['a', 'b', 'c']]);
-        $this->assertEquals(['1', '2', '3'], $request->listString('foo'));
-        $this->assertEquals(['a', 'b', 'c'], $request->listString('bar'));
-        $this->assertEquals([], $request->listString('baz'));
+        self::assertEquals(['1', '2', '3'], $request->listString('foo'));
+        self::assertEquals(['a', 'b', 'c'], $request->listString('bar'));
+        self::assertEquals([], $request->listString('baz'));
     }
 
     public function testDictIntOrString(): void
     {
         $request = new Request(['foo' => ['a' => '1', 'b' => '2', 'c' => 'hello']]);
-        $this->assertEquals(['a' => 1, 'b' => 2, 'c' => 'hello'], $request->dictIntOrString('foo'));
-        $this->assertEquals([], $request->dictIntOrString('bar'));
+        self::assertEquals(['a' => 1, 'b' => 2, 'c' => 'hello'], $request->dictIntOrString('foo'));
+        self::assertEquals([], $request->dictIntOrString('bar'));
     }
 
     public function testDictString(): void
     {
         $request = new Request(['foo' => ['w' => 'w', 'b' => 'b', 'u' => 'u']]);
-        $this->assertEquals(['w' => 'w', 'b' => 'b', 'u' => 'u'], $request->dictString('foo'));
-        $this->assertEquals([], $request->dictString('bar'));
+        self::assertEquals(['w' => 'w', 'b' => 'b', 'u' => 'u'], $request->dictString('foo'));
+        self::assertEquals([], $request->dictString('bar'));
     }
 }

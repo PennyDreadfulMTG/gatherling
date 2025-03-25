@@ -34,8 +34,8 @@ class DbTest extends DatabaseCase
         $params = [':name' => 'Test Name'];
         db()->execute($sql, $params);
         $rows = db()->select('SELECT name FROM test_table WHERE name = :name', TestDto::class, ['name' => 'Test Name']);
-        $this->assertCount(1, $rows);
-        $this->assertEquals('Test Name', $rows[0]->name);
+        self::assertCount(1, $rows);
+        self::assertEquals('Test Name', $rows[0]->name);
     }
 
     public function testInsert(): void
@@ -43,10 +43,10 @@ class DbTest extends DatabaseCase
         $sql = 'INSERT INTO test_table (name) VALUES (:name)';
         $params = [':name' => 'Test Insert'];
         $id = db()->insert($sql, $params);
-        $this->assertGreaterThan(0, $id);
+        self::assertGreaterThan(0, $id);
 
         $row = db()->selectOnly('SELECT * FROM test_table WHERE id = :id', TestDto::class, ['id' => $id]);
-        $this->assertEquals('Test Insert', $row->name);
+        self::assertEquals('Test Insert', $row->name);
     }
 
     public function testInsertMany(): void
@@ -59,12 +59,12 @@ class DbTest extends DatabaseCase
         ];
         $ids = db()->insertMany($sql, $params);
 
-        $this->assertCount(3, $ids);
+        self::assertCount(3, $ids);
         foreach ($ids as $id) {
-            $this->assertGreaterThan(0, $id);
+            self::assertGreaterThan(0, $id);
             $params = ['id' => $id];
             $rows = db()->select('SELECT * FROM test_table WHERE id = :id', TestDto::class, $params);
-            $this->assertCount(1, $rows);
+            self::assertCount(1, $rows);
         }
     }
 
@@ -76,20 +76,20 @@ class DbTest extends DatabaseCase
         $sql = 'UPDATE test_table SET name = :name WHERE id = :id';
         $params = [':name' => 'Updated Name', ':id' => $initialId];
         $affectedRows = db()->modify($sql, $params);
-        $this->assertEquals(1, $affectedRows);
+        self::assertEquals(1, $affectedRows);
 
         $updatedRow = db()->selectOnly('SELECT * FROM test_table WHERE id = :id', TestDto::class, ['id' => $initialId]);
-        $this->assertEquals('Updated Name', $updatedRow->name);
+        self::assertEquals('Updated Name', $updatedRow->name);
 
         $nonExistentId = $initialId + 1;
         $sql = 'UPDATE test_table SET name = :name WHERE id = :id';
         $params = [':name' => 'This Should Not Update', ':id' => $nonExistentId];
         $affectedRows = db()->modify($sql, $params);
-        $this->assertEquals(0, $affectedRows);
+        self::assertEquals(0, $affectedRows);
 
         $rows = db()->select('SELECT * FROM test_table', TestDto::class);
-        $this->assertCount(1, $rows);
-        $this->assertEquals('Updated Name', $rows[0]->name);
+        self::assertCount(1, $rows);
+        self::assertEquals('Updated Name', $rows[0]->name);
     }
 
     public function testSelect(): void
@@ -98,9 +98,9 @@ class DbTest extends DatabaseCase
         db()->execute("INSERT INTO test_table (name) VALUES ('Test2')");
 
         $rows = db()->select('SELECT name FROM test_table', TestDto::class);
-        $this->assertCount(2, $rows);
-        $this->assertEquals('Test1', $rows[0]->name);
-        $this->assertEquals('Test2', $rows[1]->name);
+        self::assertCount(2, $rows);
+        self::assertEquals('Test1', $rows[0]->name);
+        self::assertEquals('Test2', $rows[1]->name);
     }
 
     public function testSelectOnlyNoData(): void
@@ -114,7 +114,7 @@ class DbTest extends DatabaseCase
         db()->execute("INSERT INTO test_table (name) VALUES ('Test1')");
         db()->execute("INSERT INTO test_table (name) VALUES ('Test2')");
         $row = db()->selectOnly('SELECT name FROM test_table WHERE id = 1', TestDto::class);
-        $this->assertEquals('Test1', $row->name);
+        self::assertEquals('Test1', $row->name);
         $this->expectException(DatabaseException::class);
         db()->selectOnly('SELECT * FROM test_table', TestDto::class);
     }
@@ -122,12 +122,12 @@ class DbTest extends DatabaseCase
     public function testSelectOnlyOrNull(): void
     {
         $row = db()->selectOnlyOrNull('SELECT * FROM test_table WHERE id = 1', TestDto::class);
-        $this->assertNull($row);
+        self::assertNull($row);
         db()->execute("INSERT INTO test_table (name) VALUES ('Test1')");
         db()->execute("INSERT INTO test_table (name) VALUES ('Test2')");
         $row = db()->selectOnlyOrNull('SELECT name FROM test_table WHERE id = 1', TestDto::class);
-        $this->assertNotNull($row);
-        $this->assertEquals('Test1', $row->name);
+        self::assertNotNull($row);
+        self::assertEquals('Test1', $row->name);
         $this->expectException(DatabaseException::class);
         db()->selectOnlyOrNull('SELECT * FROM test_table', TestDto::class);
     }
@@ -135,7 +135,7 @@ class DbTest extends DatabaseCase
     {
         db()->execute("INSERT INTO test_table (id, name) VALUES (1, 'Test1')");
         $value = db()->int('SELECT id FROM test_table WHERE id = 1');
-        $this->assertSame(1, $value);
+        self::assertSame(1, $value);
         $this->expectException(DatabaseException::class);
         db()->int('SELECT id FROM test_table WHERE id = 9999');
     }
@@ -144,16 +144,16 @@ class DbTest extends DatabaseCase
     {
         db()->execute("INSERT INTO test_table (id, name) VALUES (1, 'Test1')");
         $value = db()->optionalInt('SELECT id FROM test_table WHERE id = 1');
-        $this->assertSame(1, $value);
+        self::assertSame(1, $value);
         $value = db()->optionalInt('SELECT id FROM test_table WHERE id = 9999');
-        $this->assertNull($value);
+        self::assertNull($value);
     }
 
     public function testString(): void
     {
         db()->execute("INSERT INTO test_table (id, name) VALUES (1, 'Test1')");
         $value = db()->string('SELECT name FROM test_table WHERE id = 1');
-        $this->assertSame('Test1', $value);
+        self::assertSame('Test1', $value);
         $this->expectException(DatabaseException::class);
         db()->string('SELECT name FROM test_table WHERE id = 9999');
     }
@@ -162,16 +162,16 @@ class DbTest extends DatabaseCase
     {
         db()->execute("INSERT INTO test_table (id, name) VALUES (1, 'Test1')");
         $value = db()->optionalString('SELECT name FROM test_table WHERE id = 1');
-        $this->assertSame('Test1', $value);
+        self::assertSame('Test1', $value);
         $value = db()->optionalString('SELECT name FROM test_table WHERE id = 9999');
-        $this->assertNull($value);
+        self::assertNull($value);
     }
 
     public function testFloat(): void
     {
         db()->execute("INSERT INTO test_table (id, value) VALUES (1, 3.14)");
         $value = db()->float('SELECT value FROM test_table WHERE id = 1');
-        $this->assertSame(3.14, $value);
+        self::assertSame(3.14, $value);
         $this->expectException(DatabaseException::class);
         db()->float('SELECT value FROM test_table WHERE id = 9999');
     }
@@ -180,16 +180,16 @@ class DbTest extends DatabaseCase
     {
         db()->execute("INSERT INTO test_table (id, value) VALUES (1, 3.14)");
         $value = db()->optionalFloat('SELECT value FROM test_table WHERE id = 1');
-        $this->assertSame(3.14, $value);
+        self::assertSame(3.14, $value);
         $value = db()->optionalFloat('SELECT value FROM test_table WHERE id = 9999');
-        $this->assertNull($value);
+        self::assertNull($value);
     }
 
     public function testBool(): void
     {
         db()->execute("INSERT INTO test_table (id, is_active) VALUES (1, true)");
         $value = db()->bool('SELECT is_active FROM test_table WHERE id = 1');
-        $this->assertSame(true, $value);
+        self::assertSame(true, $value);
         $this->expectException(DatabaseException::class);
         db()->bool('SELECT is_active FROM test_table WHERE id = 9999');
     }
@@ -198,9 +198,9 @@ class DbTest extends DatabaseCase
     {
         db()->execute("INSERT INTO test_table (id, is_active) VALUES (1, true)");
         $value = db()->optionalBool('SELECT is_active FROM test_table WHERE id = 1');
-        $this->assertSame(true, $value);
+        self::assertSame(true, $value);
         $value = db()->optionalBool('SELECT is_active FROM test_table WHERE id = 9999');
-        $this->assertNull($value);
+        self::assertNull($value);
     }
 
     public function testValues(): void
@@ -208,9 +208,9 @@ class DbTest extends DatabaseCase
         db()->execute("INSERT INTO test_table (name) VALUES ('Test1')");
         db()->execute("INSERT INTO test_table (name) VALUES ('Test2')");
         $values = db()->strings('SELECT name FROM test_table');
-        $this->assertEquals(['Test1', 'Test2'], $values);
+        self::assertEquals(['Test1', 'Test2'], $values);
         $values = db()->ints('SELECT id FROM test_table');
-        $this->assertEquals([1, 2], $values);
+        self::assertEquals([1, 2], $values);
     }
 
     public function testStringsThrowsOnInts(): void
@@ -236,7 +236,7 @@ class DbTest extends DatabaseCase
         db()->commit('my_transaction');
 
         $rows = db()->select("SELECT * FROM test_table WHERE name = 'Test for Commit'", TestDto::class);
-        $this->assertCount(1, $rows);
+        self::assertCount(1, $rows);
     }
 
     public function testRollback(): void
@@ -246,7 +246,7 @@ class DbTest extends DatabaseCase
         db()->rollback('test_rollback');
 
         $rows = db()->select("SELECT * FROM test_table WHERE name = 'Test for Rollback'", TestDto::class);
-        $this->assertCount(0, $rows);
+        self::assertCount(0, $rows);
     }
 
     public function testNestedTransaction(): void
@@ -259,21 +259,21 @@ class DbTest extends DatabaseCase
         db()->commit('test_nested_transaction');
 
         $rows = db()->select("SELECT * FROM test_table WHERE name = 'Test for Nested Transaction'", TestDto::class);
-        $this->assertCount(1, $rows);
+        self::assertCount(1, $rows);
     }
 
     public function testLikeEscape(): void
     {
-        $this->assertEquals('\\%', db()->likeEscape('%'));
-        $this->assertEquals('\\_', db()->likeEscape('_'));
-        $this->assertEquals('\\%\\_\\%', db()->likeEscape('%_%'));
-        $this->assertEquals('\\%StartMiddle\\_End', db()->likeEscape('%StartMiddle_End'));
-        $this->assertEquals('Test!@#$^&*()', db()->likeEscape('Test!@#$^&*()'));
-        $this->assertEquals('Complex\\%Test\\_Case!', db()->likeEscape('Complex%Test_Case!'));
-        $this->assertEquals('', db()->likeEscape(''));
+        self::assertEquals('\\%', db()->likeEscape('%'));
+        self::assertEquals('\\_', db()->likeEscape('_'));
+        self::assertEquals('\\%\\_\\%', db()->likeEscape('%_%'));
+        self::assertEquals('\\%StartMiddle\\_End', db()->likeEscape('%StartMiddle_End'));
+        self::assertEquals('Test!@#$^&*()', db()->likeEscape('Test!@#$^&*()'));
+        self::assertEquals('Complex\\%Test\\_Case!', db()->likeEscape('Complex%Test_Case!'));
+        self::assertEquals('', db()->likeEscape(''));
         $longString = str_repeat('%_', 100);
         $expectedLongString = str_repeat('\\%\\_', 100);
-        $this->assertEquals($expectedLongString, db()->likeEscape($longString));
+        self::assertEquals($expectedLongString, db()->likeEscape($longString));
     }
 
     public function testIn(): void
@@ -283,14 +283,14 @@ class DbTest extends DatabaseCase
         db()->execute("INSERT INTO test_table (name) VALUES ('Test3')");
 
         $ids = db()->ints("SELECT id FROM test_table WHERE name IN (:names)", ['names' => ['Test2', 'Test3', 'Test99', "O'Leary"]]);
-        $this->assertEquals([2, 3], $ids);
+        self::assertEquals([2, 3], $ids);
 
         db()->execute("UPDATE test_table SET name = 'Test4' WHERE id IN (:ids)", ['ids' => [1, 3]]);
         $results = db()->select("SELECT name FROM test_table WHERE id IN (:ids)", TestDto::class, ['ids' => [1, 2, 3, 99]]);
-        $this->assertEquals(['Test4', 'Test2', 'Test4'], array_map(fn (TestDto $dto) => $dto->name, $results));
+        self::assertEquals(['Test4', 'Test2', 'Test4'], array_map(fn (TestDto $dto) => $dto->name, $results));
 
         $ids = db()->ints("SELECT id FROM test_table WHERE name IN (:names)", ['names' => ['Test2', "Smith, John"]]);
-        $this->assertEquals([2], $ids);
+        self::assertEquals([2], $ids);
     }
 
     public function testModify(): void
@@ -299,15 +299,15 @@ class DbTest extends DatabaseCase
         db()->execute("INSERT INTO test_table (name) VALUES ('Test2')");
 
         $affectedRows = db()->modify('UPDATE test_table SET name = :name WHERE id = :id', ['name' => 'Test Modify', 'id' => 1]);
-        $this->assertEquals(1, $affectedRows);
+        self::assertEquals(1, $affectedRows);
 
         $affectedRows = db()->modify('DELETE FROM test_table WHERE id = :id', ['id' => 99]);
-        $this->assertEquals(0, $affectedRows);
+        self::assertEquals(0, $affectedRows);
 
         $affectedRows = db()->modify('DELETE FROM test_table WHERE id = :id', ['id' => 1]);
-        $this->assertEquals(1, $affectedRows);
+        self::assertEquals(1, $affectedRows);
 
         $affectedRows = db()->modify('UPDATE test_table SET name = :name WHERE id = :id', ['name' => 'Test Modify', 'id' => 1]);
-        $this->assertEquals(0, $affectedRows);
+        self::assertEquals(0, $affectedRows);
     }
 }

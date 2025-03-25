@@ -12,7 +12,7 @@ class SeriesTest extends DatabaseCase
     public function testSave(): void
     {
         $series = new Series('');
-        $this->assertTrue($series->new);
+        self::assertTrue($series->new);
         $series->name = 'Test Series';
         $series->start_day = 'Monday';
         $series->start_time = '12:00:00';
@@ -22,12 +22,12 @@ class SeriesTest extends DatabaseCase
         $series->save();
 
         $series = new Series('Test Series');
-        $this->assertFalse($series->new);
-        $this->assertEquals('Test Series', $series->name);
-        $this->assertEquals('Monday', $series->start_day);
-        $this->assertEquals('12:00:00', $series->start_time);
-        $this->assertEquals(1, $series->active);
-        $this->assertEquals(1, $series->prereg_default);
-        $this->assertEquals('testroom', $series->mtgo_room);
+        self::assertFalse($series->new);
+        self::assertEquals('Test Series', $series->name);
+        self::assertEquals('Monday', $series->start_day);
+        self::assertEquals('12:00:00', $series->start_time);
+        self::assertEquals(1, $series->active);
+        self::assertEquals(1, $series->prereg_default);
+        self::assertEquals('testroom', $series->mtgo_room);
     }
 }

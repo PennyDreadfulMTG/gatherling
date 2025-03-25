@@ -33,7 +33,7 @@ class DeckTest extends DatabaseCase
         $this->player->name = 'testplayer';
         $this->player->save();
 
-        $this->assertTrue($this->event->addPlayer($this->player->name));
+        self::assertTrue($this->event->addPlayer($this->player->name));
     }
 
     public function testSaveWithInvalidDecklist(): void
@@ -63,8 +63,8 @@ class DeckTest extends DatabaseCase
         $deck->save();
 
         $deck = new Deck($deck->id);
-        $this->assertFalse($deck->new);
-        $this->assertEquals($deck->playername, $this->player->name);
-        $this->assertEquals($deck->eventname, $this->event->name);
+        self::assertFalse($deck->new);
+        self::assertEquals($deck->playername, $this->player->name);
+        self::assertEquals($deck->eventname, $this->event->name);
     }
 }

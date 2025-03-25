@@ -111,35 +111,35 @@ final class StandingsTest extends DatabaseCase
 
         // Test getting all standings (isactive = 0)
         $standings = Standings::getEventStandings($eventName);
-        $this->assertCount(5, $standings);
-        $this->assertEquals('Player2', $standings[0]->player); // Highest score
-        $this->assertEquals('Player4', $standings[1]->player); // Same score, highest OP_Match
-        $this->assertEquals('Player5', $standings[2]->player); // Same score, lower OP_Match but higher PL_Game
-        $this->assertEquals('Player3', $standings[3]->player); // Same score, lowest tiebreakers
-        $this->assertEquals('Player1', $standings[4]->player); // Lowest score
+        self::assertCount(5, $standings);
+        self::assertEquals('Player2', $standings[0]->player); // Highest score
+        self::assertEquals('Player4', $standings[1]->player); // Same score, highest OP_Match
+        self::assertEquals('Player5', $standings[2]->player); // Same score, lower OP_Match but higher PL_Game
+        self::assertEquals('Player3', $standings[3]->player); // Same score, lowest tiebreakers
+        self::assertEquals('Player1', $standings[4]->player); // Lowest score
 
         // Test getting unmatched active players (isactive = 1)
         $standings = Standings::getEventStandings($eventName, StandingsMode::NEXT_UNPAIRED);
-        $this->assertCount(1, $standings);
-        $this->assertContains($standings[0]->player, ['Player1', 'Player3', 'Player4', 'Player5']); // Only unmatched players
+        self::assertCount(1, $standings);
+        self::assertContains($standings[0]->player, ['Player1', 'Player3', 'Player4', 'Player5']); // Only unmatched players
 
         // Test getting active players by seed (isactive = 2)
         $standings = Standings::getEventStandings($eventName, StandingsMode::SEEDED);
-        $this->assertCount(5, $standings);
-        $this->assertEquals('Player1', $standings[0]->player);
-        $this->assertEquals('Player2', $standings[1]->player);
-        $this->assertEquals('Player3', $standings[2]->player);
-        $this->assertEquals('Player4', $standings[3]->player);
-        $this->assertEquals('Player5', $standings[4]->player);
+        self::assertCount(5, $standings);
+        self::assertEquals('Player1', $standings[0]->player);
+        self::assertEquals('Player2', $standings[1]->player);
+        self::assertEquals('Player3', $standings[2]->player);
+        self::assertEquals('Player4', $standings[3]->player);
+        self::assertEquals('Player5', $standings[4]->player);
 
         // Test getting active players by score (isactive = 3)
         $standings = Standings::getEventStandings($eventName, StandingsMode::ACTIVE_STANDINGS);
-        $this->assertCount(5, $standings);
-        $this->assertEquals('Player2', $standings[0]->player); // Highest score
-        $this->assertEquals('Player4', $standings[1]->player); // Same score, highest OP_Match
-        $this->assertEquals('Player5', $standings[2]->player); // Same score, lower OP_Match but higher PL_Game
-        $this->assertEquals('Player3', $standings[3]->player); // Same score, lowest tiebreakers
-        $this->assertEquals('Player1', $standings[4]->player); // Lowest score
+        self::assertCount(5, $standings);
+        self::assertEquals('Player2', $standings[0]->player); // Highest score
+        self::assertEquals('Player4', $standings[1]->player); // Same score, highest OP_Match
+        self::assertEquals('Player5', $standings[2]->player); // Same score, lower OP_Match but higher PL_Game
+        self::assertEquals('Player3', $standings[3]->player); // Same score, lowest tiebreakers
+        self::assertEquals('Player1', $standings[4]->player); // Lowest score
     }
 
     public function testGetOpponents(): void
@@ -174,18 +174,18 @@ final class StandingsTest extends DatabaseCase
         $event->addMatch($standing1, $standing2, 1, 'A', 2, 0);
         $event->addMatch($standing1, $standing3, 2, 'B', 0, 2);
 
-        $this->assertNotNull($event->mainid);
-        $this->assertNotNull($event->finalid);
+        self::assertNotNull($event->mainid);
+        self::assertNotNull($event->finalid);
 
         // Test getting opponents
         $opponents = $standing1->getOpponents($eventName, $event->mainid);
-        $this->assertCount(2, $opponents);
-        $this->assertContains('Player2', array_map(fn($o) => $o->player, $opponents));
-        $this->assertContains('Player3', array_map(fn($o) => $o->player, $opponents));
+        self::assertCount(2, $opponents);
+        self::assertContains('Player2', array_map(fn($o) => $o->player, $opponents));
+        self::assertContains('Player3', array_map(fn($o) => $o->player, $opponents));
 
         // Test with no matches
         $opponents = $standing4->getOpponents($eventName, $event->mainid);
-        $this->assertCount(0, $opponents);
+        self::assertCount(0, $opponents);
     }
 
     public function testGetAvailableLeagueOpponents(): void
@@ -221,20 +221,20 @@ final class StandingsTest extends DatabaseCase
         // Create test matches using Event model
         $event->addMatch($standing1, $standing2, 1, 'A', 2, 0);
 
-        $this->assertNotNull($event->mainid);
+        self::assertNotNull($event->mainid);
 
         // Test getting available opponents
         $opponents = $standing1->getAvailableLeagueOpponents($event->mainid, 1, 3);
-        $this->assertCount(2, $opponents);
-        $this->assertContains('Player3', $opponents);
-        $this->assertContains('Player4', $opponents);
+        self::assertCount(2, $opponents);
+        self::assertContains('Player3', $opponents);
+        self::assertContains('Player4', $opponents);
 
         // Test with league length reached
         $opponents = $standing1->getAvailableLeagueOpponents($event->mainid, 1, 1);
-        $this->assertCount(0, $opponents);
+        self::assertCount(0, $opponents);
 
         // Test with no matches
         $opponents = $standing1->getAvailableLeagueOpponents($event->mainid, 0, 3);
-        $this->assertCount(0, $opponents);
+        self::assertCount(0, $opponents);
     }
 }

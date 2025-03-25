@@ -14,13 +14,13 @@ final class NamesTest extends TestCase
 {
     public function testNames(): void
     {
-        $this->assertEquals(normaliseCardName('Æther'), 'Aether');
-        $this->assertEquals(normaliseCardName('Jötun Grunt'), 'Jotun Grunt');
-        $this->assertEquals(normaliseCardName('Jötun Grunt', true), 'jotun grunt');
-        $this->assertEquals(normaliseCardName('Dandân'), 'Dandan');
-        $this->assertEquals(normaliseCardName('Déjà Vu'), 'Deja Vu');
-        $this->assertEquals(normaliseCardName('Ifh-Bíff Efreet'), 'Ifh-Biff Efreet');
-        $this->assertEquals(normaliseCardName('Ifh-Bíff Efreet'), 'Ifh-Biff Efreet');
-        $this->assertEquals(normaliseCardName('Lim-Dûl'), 'Lim-Dul');
+        self::assertEquals(normaliseCardName('Æther'), 'Aether');
+        self::assertEquals(normaliseCardName('Jötun Grunt'), 'Jotun Grunt');
+        self::assertEquals(normaliseCardName('Jötun Grunt', true), 'jotun grunt');
+        self::assertEquals(normaliseCardName('Dandân'), 'Dandan');
+        self::assertEquals(normaliseCardName('Déjà Vu'), 'Deja Vu');
+        self::assertEquals(normaliseCardName('Ifh-Bíff Efreet'), 'Ifh-Biff Efreet');
+        self::assertEquals(normaliseCardName('Ifh-Bíff Efreet'), 'Ifh-Biff Efreet');
+        self::assertEquals(normaliseCardName('Lim-Dûl'), 'Lim-Dul');
     }
 }

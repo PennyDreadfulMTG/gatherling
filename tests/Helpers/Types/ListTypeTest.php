@@ -11,7 +11,7 @@ class ListTypeTest extends TestCase
 {
     public function testDisplayNames(): void
     {
-        $this->assertEquals('a list of numbers', ListType::int()->getDisplayName());
-        $this->assertEquals('lists of numbers', ListType::int()->getPluralDisplayName());
+        self::assertEquals('a list of numbers', ListType::int()->getDisplayName());
+        self::assertEquals('lists of numbers', ListType::int()->getPluralDisplayName());
     }
 }

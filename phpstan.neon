@@ -26,7 +26,7 @@ parameters:
         matchingInheritedMethodNames: true
         numericOperandsInArithmeticOperators: false
         strictFunctionCalls: true
-        dynamicCallOnStaticMethod: false
+        dynamicCallOnStaticMethod: true
         switchConditionsMatchingType: false
         noVariableVariables: false
         strictArrayFilter: false

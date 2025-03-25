@@ -16,11 +16,11 @@ class UnionTypeTest extends TestCase
         $intFloat = new UnionType(SimpleType::INT, SimpleType::FLOAT);
         $stringInt = new UnionType(SimpleType::STRING, SimpleType::INT);
         $heckaMonster = new UnionType($stringInt, SimpleType::BOOL, DictType::intOrString());
-        $this->assertEquals('a number', $intFloat->getDisplayName());
-        $this->assertEquals('numbers', $intFloat->getPluralDisplayName());
-        $this->assertEquals('some text or a number', $stringInt->getDisplayName());
-        $this->assertEquals('text or numbers', $stringInt->getPluralDisplayName());
-        $this->assertEquals('some text or a number or true or false or a labeled list of numbers or text', $heckaMonster->getDisplayName());
-        $this->assertEquals('text or numbers or true/false values or labeled lists of numbers or text', $heckaMonster->getPluralDisplayName());
+        self::assertEquals('a number', $intFloat->getDisplayName());
+        self::assertEquals('numbers', $intFloat->getPluralDisplayName());
+        self::assertEquals('some text or a number', $stringInt->getDisplayName());
+        self::assertEquals('text or numbers', $stringInt->getPluralDisplayName());
+        self::assertEquals('some text or a number or true or false or a labeled list of numbers or text', $heckaMonster->getDisplayName());
+        self::assertEquals('text or numbers or true/false values or labeled lists of numbers or text', $heckaMonster->getPluralDisplayName());
     }
 }

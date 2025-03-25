@@ -14,21 +14,21 @@ class NumDropMenuTest extends TestCase
     {
         $numDropMenu = new NumDropMenu('test', 'Test', 10, 5);
         $html = new Crawler($numDropMenu->render());
-        $this->assertEquals('test', $html->filter('select')->attr('name'));
-        $this->assertCount(12, $html->filter('select')->filter('option'));
-        $this->assertEquals('5', $html->filter('select')->filter('option[selected]')->attr('value'));
+        self::assertEquals('test', $html->filter('select')->attr('name'));
+        self::assertCount(12, $html->filter('select')->filter('option'));
+        self::assertEquals('5', $html->filter('select')->filter('option[selected]')->attr('value'));
 
         $numDropMenu = new NumDropMenu('test', 'Test', 10, null);
         $html = new Crawler($numDropMenu->render());
-        $this->assertEquals('test', $html->filter('select')->attr('name'));
-        $this->assertCount(12, $html->filter('select')->filter('option'));
+        self::assertEquals('test', $html->filter('select')->attr('name'));
+        self::assertCount(12, $html->filter('select')->filter('option'));
         // Nothing is explicitly marked as selected, not even the default option
-        $this->assertEquals(0, $html->filter('select')->filter('option[selected]')->count());
+        self::assertEquals(0, $html->filter('select')->filter('option[selected]')->count());
 
         $numDropMenu = new NumDropMenu('test', 'Test', 10, 0);
         $html = new Crawler($numDropMenu->render());
-        $this->assertEquals('test', $html->filter('select')->attr('name'));
-        $this->assertCount(12, $html->filter('select')->filter('option'));
-        $this->assertEquals('0', $html->filter('select')->filter('option[selected]')->attr('value'));
+        self::assertEquals('test', $html->filter('select')->attr('name'));
+        self::assertCount(12, $html->filter('select')->filter('option'));
+        self::assertEquals('0', $html->filter('select')->filter('option[selected]')->attr('value'));
     }
 }

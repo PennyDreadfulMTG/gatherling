@@ -13,11 +13,11 @@ class CommentsTableTest extends TestCase
     {
         $commentsTable = new CommentsTable('');
         $html = $commentsTable->render();
-        $this->assertStringContainsString('No comments have been recorded for this deck.', $html);
+        self::assertStringContainsString('No comments have been recorded for this deck.', $html);
 
         $commentsTable = new CommentsTable('Hello & goodbye <br> [b]Bold[/b]');
         $html = $commentsTable->render();
-        $this->assertStringContainsString('Hello &amp; goodbye', $html);
-        $this->assertStringContainsString('<b>Bold</b>', $html);
+        self::assertStringContainsString('Hello &amp; goodbye', $html);
+        self::assertStringContainsString('<b>Bold</b>', $html);
     }
 }

@@ -11,9 +11,9 @@ class DictTypeTest extends TestCase
 {
     public function testDisplayNames(): void
     {
-        $this->assertEquals('a labeled list of numbers', DictType::int()->getDisplayName());
-        $this->assertEquals('labeled lists of numbers', DictType::int()->getPluralDisplayName());
-        $this->assertEquals('a labeled list of numbers or text', DictType::intOrString()->getDisplayName());
-        $this->assertEquals('labeled lists of numbers or text', DictType::intOrString()->getPluralDisplayName());
+        self::assertEquals('a labeled list of numbers', DictType::int()->getDisplayName());
+        self::assertEquals('labeled lists of numbers', DictType::int()->getPluralDisplayName());
+        self::assertEquals('a labeled list of numbers or text', DictType::intOrString()->getDisplayName());
+        self::assertEquals('labeled lists of numbers or text', DictType::intOrString()->getPluralDisplayName());
     }
 }

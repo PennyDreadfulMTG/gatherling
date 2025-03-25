@@ -1139,7 +1139,7 @@ class Format
     public function insertCardIntoBanlist(string $card): bool
     {
         $card = normaliseCardName($card);
-        $card = $this->getCardName($card);
+        $card = self::getCardName($card);
         $cardID = $this->getCardID($card);
         if (is_null($cardID)) {
             return false; // card not found in database
@@ -1301,9 +1301,9 @@ class Format
     public function insertCardIntoLegallist(string $card): bool
     {
         $card = normaliseCardName($card);
-        $testcard = $this->getCardName($card);
+        $testcard = self::getCardName($card);
         if (is_null($testcard)) {
-            $testcard = $this->getCardNameFromPartialDFC($card);
+            $testcard = self::getCardNameFromPartialDFC($card);
         }
         $card = $testcard;
         $cardID = $this->getCardID($card);
@@ -1329,7 +1329,7 @@ class Format
     public function insertCardIntoRestrictedlist(string $card): bool
     {
         $card = normaliseCardName($card);
-        $card = $this->getCardName($card);
+        $card = self::getCardName($card);
         $cardID = $this->getCardID($card);
         if (is_null($cardID)) {
             return false; // card not found in database
@@ -1352,7 +1352,7 @@ class Format
 
     public function insertCardIntoRestrictedToTribeList(string $card): bool
     {
-        $card = $this->getCardName($card);
+        $card = self::getCardName($card);
         $cardID = $this->getCardID($card);
         if (is_null($cardID)) {
             return false; // card not found in database
