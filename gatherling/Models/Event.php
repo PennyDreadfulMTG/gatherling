@@ -1106,9 +1106,8 @@ class Event
         //Check if all matches in the current round are finished
         if (count($this->unfinishedMatches()) === 0) {
             //Check to see if we are main rounds or final, get structure
-            $test = $this->current_round;
-            if ($test < ($this->finalrounds + $this->mainrounds)) {
-                if ($test >= $this->mainrounds) {
+            if ($this->current_round < ($this->finalrounds + $this->mainrounds)) {
+                if ($this->current_round >= $this->mainrounds) {
                     // In the final rounds.
                     $structure = $this->finalstruct;
                     $subevent_id = $this->finalid;
