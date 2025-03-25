@@ -14,3 +14,4 @@ parameters:
         allRules: false
         uselessCast: true
         disallowedBacktick: true
+        disallowedImplicitArrayCreation: true
