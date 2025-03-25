@@ -1183,8 +1183,8 @@ class Format
 
         $missingAdd = $missingRemove = $banned = $unchanged = $toAdd = $toRemove = $both = [];
         foreach ($results as $card) {
-            $shouldAdd = in_array($card->original_name, $addCards);
-            $shouldRemove = in_array($card->original_name, $delCards);
+            $shouldAdd = in_array($card->original_name, $addCards, true);
+            $shouldRemove = in_array($card->original_name, $delCards, true);
             if ($card->name === null) {
                 if ($shouldAdd) {
                     $missingAdd[] = $card->original_name;

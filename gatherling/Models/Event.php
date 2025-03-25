@@ -1582,7 +1582,7 @@ class Event
     {
         $structure = $this->current_round > $this->mainrounds ? $this->finalstruct : $this->mainstruct;
 
-        if (in_array($structure, ['Swiss', 'Swiss (Blossom)', 'League', 'League Match'])) {
+        if (in_array($structure, ['Swiss', 'Swiss (Blossom)', 'League', 'League Match'], true)) {
             $this->assignMedalsByStandings();
         } elseif ($structure === 'Single Elimination') {
             $this->assignTrophiesFromMatches();

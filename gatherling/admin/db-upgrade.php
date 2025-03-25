@@ -22,7 +22,7 @@ try {
 function main(): never
 {
     global $argv;
-    if (in_array('--test-database', $argv ?? [])) {
+    if (in_array('--test-database', $argv ?? [], true)) {
         echo "Updating test database\n";
         Setup::setupTestDatabase();
     } else {

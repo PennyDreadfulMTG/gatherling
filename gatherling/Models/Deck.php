@@ -371,7 +371,7 @@ class Deck
         $this->errors = [];
 
         $this->name = $this->name ?: 'Temp';
-        if ($this->archetype != 'Unclassified' && !in_array($this->archetype, self::getArchetypes())) {
+        if ($this->archetype != 'Unclassified' && !in_array($this->archetype, self::getArchetypes(), true)) {
             $this->archetype = 'Unclassified';
         }
 

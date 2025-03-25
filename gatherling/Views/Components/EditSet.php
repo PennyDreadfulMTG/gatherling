@@ -47,7 +47,7 @@ class EditSet extends Component
 
         $names = [];
         foreach ($cards as $card) {
-            $checked = in_array($card->name, $names) && $card->count == 0;
+            $checked = in_array($card->name, $names, true) && $card->count == 0;
             $names[] = $card->name;
             $this->cards[] = [
                 'id' => $card->id,

@@ -48,7 +48,7 @@ function main(): never
 
     $seriesName = request()->optionalString('series') ?? $playerSeries[0] ?? '';
 
-    if (!in_array($seriesName, $playerSeries)) {
+    if (!in_array($seriesName, $playerSeries, true)) {
         (new InsufficientPermissions($player->isOrganizer()))->send();
     }
 

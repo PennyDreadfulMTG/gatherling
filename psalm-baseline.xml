@@ -214,7 +214,6 @@
       <code><![CDATA[$this->playername]]></code>
     </PossiblyNullArgument>
     <PossiblyNullOperand>
-      <code><![CDATA[$this->archetype]]></code>
       <code><![CDATA[$this->eventname]]></code>
       <code><![CDATA[$this->playername]]></code>
       <code><![CDATA[$this->tribe]]></code>

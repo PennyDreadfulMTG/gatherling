@@ -409,7 +409,7 @@ function updateReg(): void
                 $bye_qty = intval($array_data[count($array_data) - 1]);
                 unset($array_data[count($array_data) - 1]);
                 $playername = implode(' ', $array_data);
-                if (in_array($playername, $dropped)) {
+                if (in_array($playername, $dropped, true)) {
                     continue;
                 }
                 $entry = new Entry($event->id, $playername);
@@ -425,7 +425,7 @@ function updateReg(): void
                 $seed = intval($array_data[count($array_data) - 1]);
                 unset($array_data[count($array_data) - 1]);
                 $playername = implode(' ', $array_data);
-                if (in_array($playername, $dropped)) {
+                if (in_array($playername, $dropped, true)) {
                     continue;
                 }
                 $entry = new Entry($event->id, $playername);

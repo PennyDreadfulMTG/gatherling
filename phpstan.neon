@@ -11,7 +11,7 @@ parameters:
         - node_modules
         - vendor
     strictRules:
-        allRules: false
+        allRules: true
         disallowedLooseComparison: false
         booleansInConditions: false
         booleansInLoopConditions: false
@@ -23,3 +23,11 @@ parameters:
         disallowedShortTernary: false
         overwriteVariablesWithLoop: false
         closureUsesThis: true
+        matchingInheritedMethodNames: true
+        numericOperandsInArithmeticOperators: false
+        strictFunctionCalls: true
+        dynamicCallOnStaticMethod: false
+        switchConditionsMatchingType: false
+        noVariableVariables: false
+        strictArrayFilter: false
+        illegalConstructorMethodCall: false
