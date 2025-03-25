@@ -247,7 +247,7 @@ class Standings
     /** @return list<string> */
     public function getAvailableLeagueOpponents(int $subevent, int $round, int $league_length): array
     {
-        if ($round == '0') {
+        if ($round === 0) {
             return [];
         }
 
