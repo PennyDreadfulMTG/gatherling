@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Gatherling\Views\Pages;
 
-use DateTime;
 use Gatherling\Models\Player;
 use Gatherling\Views\Components\PlayerLink;
 use Gatherling\Views\Components\RatingsTable;
 use Gatherling\Views\Components\FormatDropMenuR;
+use Safe\DateTime;
 use Zebra_Pagination as Pagination;
 
 use function Safe\ob_start;
