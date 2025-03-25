@@ -13,3 +13,4 @@ parameters:
     strictRules:
         allRules: false
         uselessCast: true
+        disallowedBacktick: true
