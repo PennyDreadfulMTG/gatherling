@@ -10,6 +10,7 @@ use Gatherling\Exceptions\DatabaseException;
 use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\logger;
+use function Safe\exec;
 use function Safe\file_get_contents;
 use function Safe\preg_match;
 use function Safe\scandir;
@@ -113,11 +114,26 @@ class Setup
         if (config()->string('env') === 'prod') {
             throw new DatabaseException('Refusing to restore dump in production environment');
         }
-        $s = file_get_contents($path);
-        $commands = explode(';', $s);
-        foreach ($commands as $sql) {
-            db()->execute($sql);
+
+        $host = config()->string('db_hostname');
+        $user = config()->string('db_username');
+        $pass = config()->string('db_password');
+        $db = config()->string('db_database');
+
+        $cmd = sprintf(
+            'mysql -h%s -u%s -p%s %s < %s',
+            escapeshellarg($host),
+            escapeshellarg($user),
+            escapeshellarg($pass),
+            escapeshellarg($db),
+            escapeshellarg($path)
+        );
+
+        exec($cmd, $output, $returnVar);
+        if ($returnVar !== 0) {
+            throw new DatabaseException('Failed to restore database dump');
         }
+
         logger()->info('Database restored from dump.');
     }
 
