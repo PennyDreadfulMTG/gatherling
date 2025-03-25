@@ -86,26 +86,7 @@ final class PlayerTest extends DatabaseCase
 
     public function testGetMatchesEvent(): void
     {
-        $series = new Series('');
-        $series->name = 'getMatchesEvent Test Series';
-        $series->start_day = 'Monday';
-        $series->start_time = '12:00:00';
-        $series->active = 1;
-        $series->save();
-
-        $event = new Event('');
-        $event->name = 'getMatchesEvent Test Event';
-        $host = Player::findOrCreateByName('TestHost');
-        $event->host = $host->name;
-        $event->start = new DateTimeImmutable('2025-01-01');
-        $event->series = $series->name;
-        $event->format = 'Standard';
-        $event->mainrounds = 3;
-        $event->mainstruct = 'Swiss';
-        $event->finalrounds = 1;
-        $event->finalstruct = 'Single Elimination';
-        $event->save();
-        $event = new Event($event->name);
+        $event = $this->createTestEvent(['mainrounds' => 3, 'finalrounds' => 1]);
 
         // Create test players
         $player1 = Player::findOrCreateByName('TestPlayer1');
