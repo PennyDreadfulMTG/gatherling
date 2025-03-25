@@ -16,27 +16,7 @@ final class StandingsTest extends DatabaseCase
 {
     public function testGetEventStandings(): void
     {
-        $host = Player::findOrCreateByName('TestHost');
-        $series = new Series('');
-        $series->name = 'getEventStandings Test Series';
-        $series->start_day = 'Monday';
-        $series->start_time = '00:00:00';
-        $series->active = 1;
-        $series->save();
-
-        $event = new Event();
-        $event->name = 'getEventStandings Test Event';
-        $event->host = $host->name;
-        $event->start = new DateTimeImmutable('2025-01-01');
-        $event->series = $series->name;
-        $event->format = 'Standard';
-        $event->client = 1;
-        $event->mainrounds = 3;
-        $event->mainstruct = 'Swiss';
-        $event->finalrounds = 1;
-        $event->finalstruct = 'Single Elimination';
-        $event->save();
-
+        $event = $this->createTestEvent(['name' => 'getEventStandings Test Event']);
         $eventName = $event->name;
         $players = ['Player1', 'Player2', 'Player3', 'Player4', 'Player5'];
 
