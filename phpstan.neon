@@ -30,4 +30,4 @@ parameters:
         switchConditionsMatchingType: true
         noVariableVariables: false
         strictArrayFilter: false
-        illegalConstructorMethodCall: false
+        illegalConstructorMethodCall: true
