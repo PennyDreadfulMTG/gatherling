@@ -1,2 +1,11 @@
 {
+    "phpSniffer.standard": "phpcs.xml",
+    "phpSniffer.executablesFolder": "vendor/bin",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.php": "always"
+    },
+    "[php]": {
+        "editor.defaultFormatter": "wongjn.php-sniffer",
+    }
 }
