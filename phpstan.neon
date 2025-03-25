@@ -27,7 +27,7 @@ parameters:
         numericOperandsInArithmeticOperators: false
         strictFunctionCalls: true
         dynamicCallOnStaticMethod: true
-        switchConditionsMatchingType: false
+        switchConditionsMatchingType: true
         noVariableVariables: false
         strictArrayFilter: false
         illegalConstructorMethodCall: false

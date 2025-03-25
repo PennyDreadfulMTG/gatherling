@@ -298,85 +298,85 @@ class Player
     public function timeZone(): ?string
     {
         switch ($this->timezone) {
-            case -12:
+            case -12.0:
                 return '[UTC - 12] Baker Island Time';
-            case -11:
+            case -11.0:
                 return '[UTC - 11] Niue Time, Samoa Standard Time';
-            case -10:
+            case -10.0:
                 return '[UTC - 10] Hawaii-Aleutian Standard Time, Cook Island Time';
             case -9.5:
                 return ':[UTC - 9:30] Marquesas Islands Time';
-            case -9:
+            case -9.0:
                 return '[UTC - 9] Alaska Standard Time, Gambier Island Time';
-            case -8:
+            case -8.0:
                 return '[UTC - 8] Pacific Standard Time';
-            case -7:
+            case -7.0:
                 return '[UTC - 7] Mountain Standard Time';
-            case -6:
+            case -6.0:
                 return '[UTC - 6] Central Standard Time';
-            case -5:
+            case -5.0:
                 return '[UTC - 5] Eastern Standard Time (Gatherling.com Default Time)';
             case -4.5:
                 return '[UTC - 4:30] Venezuelan Standard Time';
-            case -4:
+            case -4.0:
                 return '[UTC - 4] Atlantic Standard Time';
             case -3.5:
                 return '[UTC - 3:30] Newfoundland Standard Time';
-            case -3:
+            case -3.0:
                 return '[UTC - 3] Amazon Standard Time, Central Greenland Time';
-            case -2:
+            case -2.0:
                 return '[UTC - 2] Fernando de Noronha Time, South Georgia &amp; the South Sandwich Islands Time';
-            case -1:
+            case -1.0:
                 return '[UTC - 1] Azores Standard Time, Cape Verde Time, Eastern Greenland Time';
-            case 0:
+            case 0.0:
                 return '[UTC] Western European Time, Greenwich Mean Time';
-            case 1:
+            case 1.0:
                 return '[UTC + 1] Central European Time, West African Time';
-            case 2:
+            case 2.0:
                 return '[UTC + 2] Eastern European Time, Central African Time';
-            case 3:
+            case 3.0:
                 return '[UTC + 3] Moscow Standard Time, Eastern African Time';
             case 3.5:
                 return '[UTC + 3:30] Iran Standard Time';
-            case 4:
+            case 4.0:
                 return '[UTC + 4] Gulf Standard Time, Samara Standard Time';
             case 4.5:
                 return '[UTC + 4:30] Afghanistan Time';
-            case 5:
+            case 5.0:
                 return '[UTC + 5] Pakistan Standard Time, Yekaterinburg Standard Time';
             case 5.5:
                 return '[UTC + 5:30] Indian Standard Time, Sri Lanka Time';
             case 5.75:
                 return '[UTC + 5:45] Nepal Time';
-            case 6:
+            case 6.0:
                 return '[UTC + 6] Bangladesh Time, Bhutan Time, Novosibirsk Standard Time';
             case 6.5:
                 return '[UTC + 6:30] Cocos Islands Time, Myanmar Time';
-            case 7:
+            case 7.0:
                 return '[UTC + 7] Indochina Time, Krasnoyarsk Standard Time';
-            case 8:
+            case 8.0:
                 return '[UTC + 8] Chinese Standard Time, Australian Western Standard Time, Irkutsk Standard Time';
             case 8.75:
                 return '[UTC + 8:45] Southeastern Western Australia Standard Time';
-            case 9:
+            case 9.0:
                 return '[UTC + 9] Japan Standard Time, Korea Standard Time, Chita Standard Time';
             case 9.5:
                 return '[UTC + 9:30] Australian Central Standard Time';
-            case 10:
+            case 10.0:
                 return '[UTC + 10] Australian Eastern Standard Time, Vladivostok Standard Time';
             case 10.5:
                 return '[UTC + 10:30] Lord Howe Standard Time';
-            case 11:
+            case 11.0:
                 return '[UTC + 11] Solomon Island Time, Magadan Standard Time';
             case 11.5:
                 return '[UTC + 11:30] Norfolk Island Time';
-            case 12:
+            case 12.0:
                 return '[UTC + 12] New Zealand Time, Fiji Time, Kamchatka Standard Time';
             case 12.75:
                 return '[UTC + 12:45] Chatham Islands Time';
-            case 13:
+            case 13.0:
                 return '[UTC + 13] Tonga Time, Phoenix Islands Time';
-            case 14:
+            case 14.0:
                 return '[UTC + 14] Line Island Time';
         }
         return null;
