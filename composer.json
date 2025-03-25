@@ -43,7 +43,8 @@
         "vimeo/psalm": "*",
         "psalm/plugin-phpunit": "*",
         "thecodingmachine/phpstan-safe-rule": "*",
-        "thecodingmachine/safe": "*"
+        "thecodingmachine/safe": "*",
+        "phpstan/phpstan-strict-rules": "^2.0"
     },
     "autoload": {
         "psr-4": {

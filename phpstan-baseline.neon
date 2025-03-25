@@ -613,6 +613,12 @@ parameters:
 			path: gatherling/Views/Components/SeasonDropMenu.php
 
 		-
+			message: '#^Casting to string something that''s already string\.$#'
+			identifier: cast.useless
+			count: 1
+			path: gatherling/Views/Components/SeasonStandings.php
+
+		-
 			message: '#^Property Gatherling\\Views\\Components\\SeasonStandings\:\:\$players \(list\<array\{classes\: string, count\: int, playerLink\: Gatherling\\Views\\Components\\PlayerLink, totalPoints\: int, events\: list\<array\{points\: int\|null, why\: string\|null\}\>\}\>\) does not accept list\<array\{classes\: literal\-string, count\: int\<1, max\>, playerLink\: Gatherling\\Views\\Components\\PlayerLink, totalPoints\: array\<string, int\|string\>\|int, events\: list\<array\{points\: int\|string\|null, why\: int\|string\|null\}\>\}\>\.$#'
 			identifier: assign.propertyType
 			count: 1

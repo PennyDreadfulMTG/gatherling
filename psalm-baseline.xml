@@ -55,9 +55,6 @@
     <PossiblyInvalidArgument>
       <code><![CDATA[$safeName]]></code>
     </PossiblyInvalidArgument>
-    <RedundantCastGivenDocblockType>
-      <code><![CDATA[(string)$value]]></code>
-    </RedundantCastGivenDocblockType>
     <RedundantCondition>
       <code><![CDATA[isset($this->pdo) && ($this->connected || !$connectToDatabase)]]></code>
     </RedundantCondition>
@@ -222,10 +219,6 @@
       <code><![CDATA[$this->playername]]></code>
       <code><![CDATA[$this->tribe]]></code>
     </PossiblyNullOperand>
-    <RedundantCastGivenDocblockType>
-      <code><![CDATA[(int) $amt]]></code>
-      <code><![CDATA[(int) $amt]]></code>
-    </RedundantCastGivenDocblockType>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[!$this->format]]></code>
       <code><![CDATA[$this->name]]></code>
@@ -634,11 +627,6 @@
     <MixedAssignment>
       <code><![CDATA[$this->pairing]]></code>
     </MixedAssignment>
-    <RedundantCastGivenDocblockType>
-      <code><![CDATA[(int) $players[$i]['score']]]></code>
-      <code><![CDATA[(int) $players[$i]['score']]]></code>
-      <code><![CDATA[(int) $players[$i]['score']]]></code>
-    </RedundantCastGivenDocblockType>
   </file>
   <file src="gatherling/Models/Player.php">
     <MixedArgument>

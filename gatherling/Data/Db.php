@@ -464,7 +464,7 @@ class Db
                 $values[$key] = $value ? 'true' : 'false';
             } elseif (is_string($value)) {
                 $value = str_replace('\\', '\\\\', $value);
-                $values[$key] = $this->pdo->quote((string)$value);
+                $values[$key] = $this->pdo->quote($value);
             } else {
                 throw new DatabaseException("Unsupported value type for $key: " . gettype($value));
             }

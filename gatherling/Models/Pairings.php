@@ -23,14 +23,14 @@ class Pairings
         // $highest_points = 0;
         $byeExist = $bye_data !== null;
         for ($i = 0; $i < count($players); $i++) {
-            $this->highest_points = max($this->highest_points, (int) $players[$i]['score']);
+            $this->highest_points = max($this->highest_points, $players[$i]['score']);
             if ($byeExist) {
                 $this->byeName = $bye_data['player'];
                 if (!in_array($this->byeName, $players[$i]['opponents'])) {
                     if ($this->lowestScoreWithoutBye < 0) {
-                        $this->lowestScoreWithoutBye = (int) $players[$i]['score'];
+                        $this->lowestScoreWithoutBye = $players[$i]['score'];
                     } else {
-                        $this->lowestScoreWithoutBye = min($this->lowestScoreWithoutBye, (int) $players[$i]['score']);
+                        $this->lowestScoreWithoutBye = min($this->lowestScoreWithoutBye, $players[$i]['score']);
                     }
                 }
             }

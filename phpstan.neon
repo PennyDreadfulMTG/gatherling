@@ -1,6 +1,7 @@
 includes:
     - phar://phpstan.phar/conf/bleedingEdge.neon
     - vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
     - phpstan-baseline.neon
 parameters:
     level: 9
@@ -9,3 +10,6 @@ parameters:
     excludePaths:
         - node_modules
         - vendor
+    strictRules:
+        allRules: false
+        uselessCast: true
