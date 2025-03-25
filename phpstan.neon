@@ -15,9 +15,11 @@ parameters:
         disallowedLooseComparison: false
         booleansInConditions: false
         booleansInLoopConditions: false
+        uselessCast: true
+        requireParentConstructorCall: false
         disallowedBacktick: true
         disallowedEmpty: false
         disallowedImplicitArrayCreation: true
         disallowedShortTernary: false
-        requireParentConstructorCall: false
-        uselessCast: true
+        overwriteVariablesWithLoop: false
+        closureUsesThis: true
