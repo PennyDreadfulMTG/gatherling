@@ -23,8 +23,6 @@ class Player
     public ?string $password;
     public int $host = 0;
     public int $super;
-    public int $rememberMe; // if selected will record IP address. Gatherling will automatically log players in of known IP addresses.
-    public ?string $ipAddress;
     public ?string $emailAddress = null;
     public int $emailPrivacy = 0;
     public float $timezone = -5.0;
@@ -41,16 +39,13 @@ class Player
             $this->name = '';
             $this->password = null;
             $this->super = 0;
-            $this->rememberMe = 0;
             $this->verified = 0;
             return;
         }
         $sql = '
-            SELECT name, password, rememberme AS rememberMe, INET_NTOA(ipaddress) AS ipAddress,
-                   host, super, mtgo_confirmed AS verified, email AS emailAddress,
-                   email_privacy as emailPrivacy, mtgo_confirmed AS verified,
-                   email AS emailAddress, email_privacy as emailPrivacy, timezone, discord_id,
-                   discord_handle, api_key, mtga_username, mtgo_username
+            SELECT name, password, host, super, mtgo_confirmed AS verified,
+                   email AS emailAddress, email_privacy as emailPrivacy, mtgo_confirmed AS verified,
+                   timezone, discord_id, discord_handle, api_key, mtga_username, mtgo_username
               FROM players
              WHERE name = :name';
         $params = ['name' => $name];
@@ -59,8 +54,6 @@ class Player
         $this->password = $result->password;
         $this->host = $result->host;
         $this->super = $result->super;
-        $this->rememberMe = $result->rememberMe;
-        $this->ipAddress = $result->ipAddress;
         $this->emailAddress = $result->emailAddress;
         $this->emailPrivacy = $result->emailPrivacy;
         $this->timezone = $result->timezone;
@@ -277,14 +270,12 @@ class Player
         $this->validate();
         $sql = '
             UPDATE players
-               SET password = :password, rememberme = :remember_me, host = :host, super = :super,
-                   email = :email_address, email_privacy = :email_privacy, timezone = :timezone,
+               SET password = :password, host = :host, super = :super, email = :email_address,
                    email_privacy = :email_privacy, timezone = :timezone, discord_id = :discord_id,
                    discord_handle = :discord_handle, mtga_username = :mtga_username, mtgo_username = :mtgo_username
              WHERE name = :name';
         $params = [
             'password' => $this->password,
-            'remember_me' => $this->rememberMe,
             'host' => $this->host,
             'super' => $this->super,
             'email_address' => $this->emailAddress,
