@@ -22,30 +22,12 @@ class DeckTest extends DatabaseCase
     {
         parent::setUp();
 
-        $series = new Series('');
-        $series->name = 'Test Series';
-        $series->start_day = 'Monday';
-        $series->start_time = '12:00:00';
-        $series->active = 1;
-        $series->save();
-
-        $host = Player::findOrCreateByName('JimmyTheHost');
-
-        $event = new Event('');
-        $event->name = 'Test Event';
-        $event->host = $host->name;
-        $event->start = new DateTimeImmutable('2024-01-01');
-        $event->kvalue = 16;
-        $event->format = 'Standard';
-        $event->series = 'Test Series';
-        $event->season = 1;
-        $event->number = 1;
-        $event->mainstruct = 'Swiss';
-        $event->finalstruct = 'Single Elimination';
-        $event->threadurl = '';
-        $event->reporturl = '';
-        $event->metaurl = '';
-        $event->save();
+        $event = $this->createTestEvent([
+            'name' => 'Test Event',
+            'series' => 'Test Series',
+            'start' => new DateTimeImmutable('2024-01-01'),
+            'host' => 'JimmyTheHost'
+        ]);
 
         $this->event = new Event($event->name);
 
