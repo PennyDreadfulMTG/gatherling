@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use InvalidArgumentException;
-
 use function Gatherling\Helpers\db;
 
 class Standings
 {
-    public int $id;
     public ?string $event = null;  // belongs_to event
     public ?string $player = null; // belongs_to player
     public ?int $active = null;
@@ -30,9 +27,8 @@ class Standings
 
     public function __construct(string $eventname, string $playername, int $initial_seed = 127)
     {
-        // Check to see if we are doing event standings of player standings
+        // Check to see if we are doing event standings or player standings
         if ($playername == '0') {
-            $this->id = 0;
             $this->new = true;
 
             return;

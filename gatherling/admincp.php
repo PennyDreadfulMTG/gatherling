@@ -6,7 +6,6 @@ use Gatherling\Models\Format;
 use Gatherling\Models\Player;
 use Gatherling\Models\Ratings;
 use Gatherling\Models\Series;
-use Gatherling\Models\SetScraper;
 use Gatherling\Views\Components\NullComponent;
 use Gatherling\Views\Components\ChangePasswordForm;
 use Gatherling\Views\Components\CreateNewSeriesForm;

@@ -610,6 +610,10 @@
       <code><![CDATA[$playerb_standing->score]]></code>
       <code><![CDATA[$playerb_standing->score]]></code>
     </PossiblyNullOperand>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$playera_draws]]></code>
+      <code><![CDATA[$playerb_draws]]></code>
+    </PossiblyUnusedProperty>
     <PropertyNotSetInConstructor>
       <code><![CDATA[$event_id]]></code>
       <code><![CDATA[$eventname]]></code>
@@ -752,6 +756,9 @@
       <code><![CDATA[$match->series]]></code>
       <code><![CDATA[$otherplayer]]></code>
     </PossiblyNullArgument>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$ipAddress]]></code>
+    </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Models/Ratings.php">
     <MixedArrayOffset>
@@ -769,6 +776,14 @@
       <code><![CDATA[array<string, array<string, int>>]]></code>
       <code><![CDATA[list<array{playera: string, playerb: string, result: string, kvalue: int}>]]></code>
     </MixedReturnTypeCoercion>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$format]]></code>
+      <code><![CDATA[$losses]]></code>
+      <code><![CDATA[$player]]></code>
+      <code><![CDATA[$rating]]></code>
+      <code><![CDATA[$updated]]></code>
+      <code><![CDATA[$wins]]></code>
+    </PossiblyUnusedProperty>
     <PropertyNotSetInConstructor>
       <code><![CDATA[$format]]></code>
       <code><![CDATA[$losses]]></code>
@@ -919,6 +934,11 @@
       <code><![CDATA[$rules['semi_pts']]]></code>
       <code><![CDATA[$rules['win_pts']]]></code>
     </PossiblyInvalidArgument>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$discord_channel_id]]></code>
+      <code><![CDATA[$discord_guild_invite]]></code>
+      <code><![CDATA[$this_season_format]]></code>
+    </PossiblyUnusedProperty>
     <PropertyNotSetInConstructor>
       <code><![CDATA[$discord_channel_id]]></code>
       <code><![CDATA[$discord_channel_name]]></code>
@@ -990,7 +1010,6 @@
       <code><![CDATA[$draws]]></code>
       <code><![CDATA[$games_played]]></code>
       <code><![CDATA[$games_won]]></code>
-      <code><![CDATA[$id]]></code>
       <code><![CDATA[$matched]]></code>
       <code><![CDATA[$matches_played]]></code>
       <code><![CDATA[$matches_won]]></code>

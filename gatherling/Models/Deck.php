@@ -27,7 +27,6 @@ class Deck
     public ?string $playername = null; // Belongs to player through entries, now held in decks table
     public ?string $eventname = null; // Belongs to event through entries
     public ?int $event_id = null; // Belongs to event through entries
-    public ?int $subeventid; // Belongs to event
     public ?string $format = null; // Belongs to event..  now held in decks table
     public ?string $tribe = null; // used only for tribal events
     public ?string $deck_color_str = null;  // Holds the final string color string
@@ -122,11 +121,9 @@ class Deck
             $this->event_id = $event->id;
         }
 
-        // Retrieve format - LI: added subeventid holder
+        // Retrieve format
         // The entire constructor does not run when a new deck is created, so this has to be duplicated
         // later in the save() function
-        //     l
-        // Find subevent id     - ignores sub-subevents like finals, which have the same name but different subevent id
         if (!is_null($this->eventname)) {
             $sql = '
                 SELECT events.format
@@ -134,11 +131,8 @@ class Deck
             INNER JOIN events ON entries.event_id = events.id
                  WHERE entries.deck = :id';
             $this->format = db()->optionalString($sql, ['id' => $id]);
-            $sql = 'SELECT MIN(id) FROM subevents WHERE parent = :eventname';
-            $this->subeventid = db()->optionalInt($sql, ['eventname' => $this->eventname]);
         } else {
             $this->format = '';
-            $this->subeventid = null;
         }
 
         // Retrieve medal
