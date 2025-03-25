@@ -1276,7 +1276,7 @@ class Event
         $list_opponents = [];
 
         $standing = new Standings($this->name, $playername);
-        $opponents = $standing->getOpponents($this->name, $subevent, 1);
+        $opponents = $standing->getOpponents($this->name, $subevent);
         foreach ($opponents as $opponent) {
             if ($opponent->active === 1 && $opponent->player !== null) {
                 $list_opponents[] = $opponent->player;
@@ -1472,10 +1472,10 @@ class Event
                 }
                 if (strpos($structure, 'Swiss') === 0) {
                     $this->recalculateScores($structure);
-                    Standings::updateStandings($this->name, $this->mainid, 1);
+                    Standings::updateStandings($this->name, $this->mainid);
                 } elseif ($structure == 'League') {
                     $this->recalculateScores('League');
-                    Standings::updateStandings($this->name, $this->mainid, 1);
+                    Standings::updateStandings($this->name, $this->mainid);
                 }
 
                 //We are at the end of the swiss round
@@ -1574,7 +1574,7 @@ class Event
         $this->current_round--;
         $this->save();
         $this->recalculateScores('Swiss');
-        Standings::updateStandings($this->name, $this->mainid, 1);
+        Standings::updateStandings($this->name, $this->mainid);
         $this->pairCurrentRound(true);
     }
 

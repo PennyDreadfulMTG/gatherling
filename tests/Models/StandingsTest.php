@@ -154,7 +154,7 @@ final class StandingsTest extends DatabaseCase
         ]);
 
         $eventName = $event->name;
-        $players = ['Player1', 'Player2', 'Player3'];
+        $players = ['Player1', 'Player2', 'Player3', 'Player4'];
 
         foreach ($players as $player) {
             Player::findOrCreateByName($player);
@@ -167,6 +167,8 @@ final class StandingsTest extends DatabaseCase
         $standing2->save();
         $standing3 = new Standings($eventName, 'Player3', 3);
         $standing3->save();
+        $standing4 = new Standings($eventName, 'Player4', 4);
+        $standing4->save();
 
         // Create test matches using Event model
         $event->addMatch($standing1, $standing2, 1, 'A', 2, 0);
@@ -176,13 +178,13 @@ final class StandingsTest extends DatabaseCase
         $this->assertNotNull($event->finalid);
 
         // Test getting opponents
-        $opponents = $standing1->getOpponents($eventName, $event->mainid, 1);
+        $opponents = $standing1->getOpponents($eventName, $event->mainid);
         $this->assertCount(2, $opponents);
         $this->assertContains('Player2', array_map(fn($o) => $o->player, $opponents));
         $this->assertContains('Player3', array_map(fn($o) => $o->player, $opponents));
 
         // Test with no matches
-        $opponents = $standing1->getOpponents($eventName, $event->mainid, 0);
+        $opponents = $standing4->getOpponents($eventName, $event->mainid);
         $this->assertCount(0, $opponents);
     }
 

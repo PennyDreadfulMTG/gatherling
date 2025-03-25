@@ -158,10 +158,10 @@ function postEvent(string $eventName): Page
     } elseif ($mode === 'Recalculate Standings') {
         $structure = $event->mainstruct;
         $event->recalculateScores($structure);
-        Standings::updateStandings($event->name, $event->mainid, 1);
+        Standings::updateStandings($event->name, $event->mainid);
     } elseif ($mode === 'End Current League Round') {
         $event->recalculateScores('League');
-        Standings::updateStandings($event->name, $event->mainid, 1);
+        Standings::updateStandings($event->name, $event->mainid);
         $event->pairCurrentRound();
     } elseif ($mode === 'Reset Event') {
         $event->resetEvent();

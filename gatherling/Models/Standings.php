@@ -155,17 +155,17 @@ class Standings
         return $event_standings;
     }
 
-    public static function updateStandings(string $eventname, int $subevent, int $round): void
+    public static function updateStandings(string $eventname, int $subevent): void
     {
         $players = self::getEventStandings($eventname);
         foreach ($players as $player) {
-            $player->calculateStandings($eventname, $subevent, $round);
+            $player->calculateStandings($eventname, $subevent);
         }
     }
 
-    public function calculateStandings(string $eventname, int $subevent, int $round): void
+    public function calculateStandings(string $eventname, int $subevent): void
     {
-        $opponents = $this->getOpponents($eventname, $subevent, $round);
+        $opponents = $this->getOpponents($eventname, $subevent);
         $OMW = 0;
         $OGW = 0;
         $number_of_opponents = 0;
@@ -219,12 +219,8 @@ class Standings
         $this->save();
     }
     /** @return list<Standings> */
-    public function getOpponents(string $eventname, int $subevent, int $round): array
+    public function getOpponents(string $eventname, int $subevent): array
     {
-        if ($round == '0') {
-            return [];
-        }
-
         $sql = "SELECT playera, playerb FROM matches where subevent = :subevent AND result <> 'P' AND (playera = :player OR playerb = :player)";
         $params = [
             'subevent' => $subevent,
