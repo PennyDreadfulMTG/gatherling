@@ -756,9 +756,6 @@
       <code><![CDATA[$match->series]]></code>
       <code><![CDATA[$otherplayer]]></code>
     </PossiblyNullArgument>
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$ipAddress]]></code>
-    </PossiblyUnusedProperty>
   </file>
   <file src="gatherling/Models/Ratings.php">
     <MixedArrayOffset>
