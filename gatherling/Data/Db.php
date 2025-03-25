@@ -12,7 +12,6 @@ use Gatherling\Models\Dto;
 use PDOException;
 use PDOStatement;
 use PDO;
-use TypeError;
 use Safe\DateTimeImmutable;
 
 use function Gatherling\Helpers\config;

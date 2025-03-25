@@ -7,7 +7,6 @@ namespace Gatherling\Tests\Models;
 use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
-use Gatherling\Models\Series;
 use Gatherling\Tests\Support\TestCases\DatabaseCase;
 use Safe\DateTimeImmutable;
 
@@ -66,5 +65,49 @@ class DeckTest extends DatabaseCase
         self::assertFalse($deck->new);
         self::assertEquals($deck->playername, $this->player->name);
         self::assertEquals($deck->eventname, $this->event->name);
+    }
+
+    public function testGetCastingCosts(): void
+    {
+        $deck = new Deck(0);
+        $deck->name = 'Test Deck';
+        $deck->archetype = 'Aggro';
+        $deck->notes = '';
+        $deck->playername = $this->player->name;
+        $deck->eventname = $this->event->name;
+        $deck->event_id = $this->event->id;
+        $deck->format = 'Modern';
+
+        // Add some cards with different converted mana costs
+        $deck->maindeck_cards = [
+            'Mountain' => 46, // Lands have CMC 0
+            'Lightning Bolt' => 4, // CMC 1
+            'Burning Inquiry' => 2, // CMC 1
+            'Smuggler\'s Copter' => 2, // CMC 2
+            'Dragon Whelp' => 4, // CMC 4
+            'Metalwork Colossus' => 2, // CMC 11
+        ];
+
+        // Add some sideboard cards that shouldn't be counted
+        $deck->sideboard_cards = [
+            'Burning Inquiry' => 2, // Shouldn't be counted
+            'Smuggler\'s Copter' => 2, // Shouldn't be counted
+        ];
+
+        $deck->save();
+
+        self::assertEmpty($deck->errors);
+
+        $costs = $deck->getCastingCosts();
+
+        // Verify only non-zero CMC cards are included
+        self::assertArrayNotHasKey(0, $costs, 'Lands should not be included');
+        self::assertArrayNotHasKey(3, $costs, 'No three-mana spells');
+
+        // Verify correct quantities for each CMC, without sideboard cards
+        self::assertEquals(6, $costs[1], 'Should have 6 one-mana spells');
+        self::assertEquals(2, $costs[2], 'Should have 2 two-mana spells');
+        self::assertEquals(4, $costs[4], 'Should have 4 four-mana spells');
+        self::assertEquals(2, $costs[11], 'Should have 2 eleven-mana spells');
     }
 }

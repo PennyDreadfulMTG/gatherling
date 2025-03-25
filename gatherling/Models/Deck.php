@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Gatherling\Exceptions\NotFoundException;
-use InvalidArgumentException;
+use Gatherling\Models\DeckCastingCostDto;
 use Gatherling\Views\Components\DeckLink;
+use InvalidArgumentException;
 
 use function Gatherling\Helpers\db;
 
@@ -215,22 +216,17 @@ class Deck
     /** @return array<int, int> */
     public function getCastingCosts(): array
     {
-        $db = Database::getConnection();
-        $result = $db->query("SELECT convertedcost
-                          AS cc, sum(qty)
-                          AS s
-                          FROM cards c, deckcontents d
-                          WHERE d.deck = {$this->id}
-                          AND c.id = d.card
-                          AND d.issideboard = 0
-                          GROUP BY c.convertedcost
-                          HAVING cc > 0");
-
+            $sql = '
+                SELECT convertedcost, SUM(qty) AS total
+                  FROM cards c, deckcontents d
+                 WHERE d.deck = :id AND c.id = d.card AND d.issideboard = 0
+              GROUP BY c.convertedcost
+                HAVING convertedcost > 0';
+        $results = db()->select($sql, DeckCastingCostDto::class, ['id' => $this->id]);
         $convertedcosts = [];
-        while ($res = $result->fetch_assoc()) {
-            $convertedcosts[(int) $res['cc']] = (int) $res['s'];
+        foreach ($results as $row) {
+            $convertedcosts[$row->convertedcost] = $row->total;
         }
-
         return $convertedcosts;
     }
 

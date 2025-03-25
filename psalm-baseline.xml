@@ -201,9 +201,6 @@
       <code><![CDATA[(array) $count]]></code>
       <code><![CDATA[array<string, int>]]></code>
     </MixedReturnTypeCoercion>
-    <PossiblyInvalidMethodCall>
-      <code><![CDATA[fetch_assoc]]></code>
-    </PossiblyInvalidMethodCall>
     <PossiblyNullArgument>
       <code><![CDATA[$this->deck_color_str]]></code>
       <code><![CDATA[$this->deck_color_str]]></code>
