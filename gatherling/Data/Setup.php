@@ -25,11 +25,16 @@ require_once __DIR__ . '/../bootstrap.php';
 // into schema.sql at version 51. If you ever want to do this again it looks something like this:
 //
 // $ export OUTFILE=gatherling/Data/sql/schema.sql
-// $ export DATABASE=gatherling
+// $ export DATABASE=gatherli_gatherling
 // $ export FORMATSWHERE="name IN ('Standard', 'Modern', 'Penny Dreadful')"
-// $ mysqldump --no-data --single-transaction gatherling>$OUTFILE
+// $ mysqldump --no-data --single-transaction $DATABASE >$OUTFILE
 // $ mysqldump --no-create-info --single-transaction $DATABASE archetypes db_version client >>$OUTFILE
 // $ mysqldump --no-create-info --single-transaction $DATABASE formats --where=$FORMATSWHERE >>$OUTFILE
+
+// Checkpointing the test database (probably more important as it speeds up test runs) is simpler:
+// $ export TEST_DATABASE=gatherling_test
+// $ php -f gatherling/admin/db-upgrade.php -- --test-database
+// $ mysqldump $TEST_DATABASE >gatherling/Data/sql/test-db.sql
 //
 // The first command dumps the schema, the second command makes sure the archetypes, client and
 // db_version table are populated, and the third dumps the data for the most common formats.
