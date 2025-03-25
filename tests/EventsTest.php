@@ -6,7 +6,6 @@ namespace Gatherling\Tests;
 
 require_once __DIR__ . '/../gatherling/bootstrap.php';
 
-use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
@@ -14,7 +13,6 @@ use Gatherling\Models\Matchup;
 use Gatherling\Tests\Support\TestCases\DatabaseCase;
 use Safe\DateTimeImmutable;
 
-use function Gatherling\Helpers\parseCardsWithQuantity;
 use function Safe\json_encode;
 
 final class EventsTest extends DatabaseCase
@@ -97,21 +95,21 @@ final class EventsTest extends DatabaseCase
         // No players have filled out decklists.
         $this->assertEquals(0, count($event->getRegisteredEntries(false, true)));
 
-        $deck = insertDeck('testplayer0', $event, '60 Plains', '');
+        $deck = $this->insertDeck('testplayer0', $event, '60 Plains', '');
         $this->assertEmpty($deck->errors, json_encode($deck->errors));
-        $deck = insertDeck('testplayer1', $event, '60 Island', '');
+        $deck = $this->insertDeck('testplayer1', $event, '60 Island', '');
         $this->assertEmpty($deck->errors, json_encode($deck->errors));
-        $deck = insertDeck('testplayer2', $event, '40 Swamp', '');
+        $deck = $this->insertDeck('testplayer2', $event, '40 Swamp', '');
         $this->assertNotEmpty($deck->errors, 'No errors for a 40 card deck.');
-        $deck = insertDeck('testplayer3', $event, "60 Swamp\n100 Relentless Rats", '15 Swamp');
+        $deck = $this->insertDeck('testplayer3', $event, "60 Swamp\n100 Relentless Rats", '15 Swamp');
         $this->assertEmpty($deck->errors, json_encode($deck->errors));
-        $deck = insertDeck('testplayer4', $event, "20 Mountain\n20 Forest\n\n\n\n\n\n\n\n\n\n\n\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n\n\n", '');
+        $deck = $this->insertDeck('testplayer4', $event, "20 Mountain\n20 Forest\n\n\n\n\n\n\n\n\n\n\n\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n\n\n", '');
         $this->assertEmpty($deck->errors, json_encode($deck->errors));
-        $deck = insertDeck('testplayer5', $event, "54 Mountain\n6 Seven Dwarves", '1 Seven Dwarves');
+        $deck = $this->insertDeck('testplayer5', $event, "54 Mountain\n6 Seven Dwarves", '1 Seven Dwarves');
         $this->assertEmpty($deck->errors, json_encode($deck->errors));
-        $deck = insertDeck('testplayer6', $event, "50 Mountain\n10 Seven Dwarves", '');
+        $deck = $this->insertDeck('testplayer6', $event, "50 Mountain\n10 Seven Dwarves", '');
         $this->assertNotEmpty($deck->errors, json_encode($deck->errors));
-        $deck = insertDeck('testplayer7', $event, "55 Mountain\n5 Seven Dwarves", '5 Seven Dwarves');
+        $deck = $this->insertDeck('testplayer7', $event, "55 Mountain\n5 Seven Dwarves", '5 Seven Dwarves');
         $this->assertNotEmpty($deck->errors, json_encode($deck->errors));
         // None of this changes entry status.
         $this->assertEquals(10, count($event->getEntries()));
@@ -163,17 +161,4 @@ final class EventsTest extends DatabaseCase
         $this->assertEquals('verified', $matches[1]->verification);
         return $event;
     }
-}
-
-function insertDeck(string $player, Event $event, string $main, string $side): Deck
-{
-    $deck = new Deck(0);
-    $deck->playername = $player;
-    $deck->eventname = $event->name;
-    $deck->event_id = $event->id;
-    $deck->maindeck_cards = parseCardsWithQuantity($main);
-    $deck->sideboard_cards = parseCardsWithQuantity($side);
-    $deck->save();
-
-    return $deck;
 }

@@ -64,12 +64,7 @@ class EventTest extends DatabaseCase
 
             for ($i = 1; $i <= $numPlayers; $i++) {
                 $event->addPlayer("Player$i");
-                $deck = new Deck(0);
-                $deck->playername = "Player$i";
-                $deck->eventname = $event->name;
-                $deck->event_id = $event->id;
-                $deck->maindeck_cards = parseCardsWithQuantity('60 Swamp');
-                $deck->save();
+                $this->insertDeck("Player$i", $event, '60 Swamp', '');
             }
 
             $event->startEvent(true);

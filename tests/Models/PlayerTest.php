@@ -16,16 +16,6 @@ use function Gatherling\Helpers\parseCardsWithQuantity;
 
 final class PlayerTest extends DatabaseCase
 {
-    private function insertDeck(string $player, Event $event): void
-    {
-        $deck = new Deck(0);
-        $deck->playername = $player;
-        $deck->eventname = $event->name;
-        $deck->event_id = $event->id;
-        $deck->maindeck_cards = parseCardsWithQuantity('60 Swamp');
-        $deck->save();
-    }
-
     public function testFindOrCreateByName(): void
     {
         $player = Player::findOrCreateByName('test');
@@ -97,8 +87,8 @@ final class PlayerTest extends DatabaseCase
         $event->addPlayer($player2->name);
 
         // Create and assign decks to players
-        $this->insertDeck($player1->name, $event);
-        $this->insertDeck($player2->name, $event);
+        $this->insertDeck($player1->name, $event, '60 Swamp', '');
+        $this->insertDeck($player2->name, $event, '60 Island', '');
 
         // Verify no matches exist yet
         $matches = $player1->getMatchesEvent($event->name);

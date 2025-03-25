@@ -7,10 +7,12 @@ namespace Gatherling\Tests\Support\TestCases;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
+use Gatherling\Models\Deck;
 use PHPUnit\Framework\TestCase;
 use Safe\DateTimeImmutable;
 
 use function Gatherling\Helpers\db;
+use function Gatherling\Helpers\parseCardsWithQuantity;
 
 // Slightly odd name because PHPUnit issues a warning if "Test" is in the name.
 abstract class DatabaseCase extends TestCase
@@ -99,5 +101,18 @@ abstract class DatabaseCase extends TestCase
         $event->save();
         $event = new Event($event->name);
         return $event;
+    }
+
+    protected function insertDeck(string $player, Event $event, string $main, string $side): Deck
+    {
+        $deck = new Deck(0);
+        $deck->playername = $player;
+        $deck->eventname = $event->name;
+        $deck->event_id = $event->id;
+        $deck->maindeck_cards = parseCardsWithQuantity($main);
+        $deck->sideboard_cards = parseCardsWithQuantity($side);
+        $deck->save();
+
+        return $deck;
     }
 }
