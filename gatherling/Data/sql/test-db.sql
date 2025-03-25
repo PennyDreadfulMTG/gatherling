@@ -1,9 +1,9 @@
 /*M!999999\- enable the sandbox mode */ 
--- MariaDB dump 10.19-11.5.2-MariaDB, for osx10.19 (arm64)
+-- MariaDB dump 10.19-11.7.2-MariaDB, for osx10.19 (arm64)
 --
--- Host: 127.0.0.1    Database: gatherling
+-- Host: localhost    Database: gatherling_test
 -- ------------------------------------------------------
--- Server version	11.5.2-MariaDB-ubu2404
+-- Server version	11.6.2-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -22,7 +22,7 @@
 
 DROP TABLE IF EXISTS `archetypes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `archetypes` (
   `name` varchar(40) NOT NULL,
   `description` mediumtext DEFAULT NULL,
@@ -56,16 +56,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bans`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bans` (
   `card_name` varchar(160) NOT NULL,
   `card` bigint(20) unsigned NOT NULL,
   `format` varchar(40) NOT NULL,
   `allowed` tinyint(3) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`card`,`format`),
+  UNIQUE KEY `unique_card_format` (`card_name`,`format`),
   KEY `format` (`format`),
   CONSTRAINT `bans_ibfk_1` FOREIGN KEY (`card`) REFERENCES `cards` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `bans_ibfk_2` FOREIGN KEY (`format`) REFERENCES `formats` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `bans_ibfk_2` FOREIGN KEY (`format`) REFERENCES `formats` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `bans_ibfk_3` FOREIGN KEY (`format`) REFERENCES `formats` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -581,21 +583,21 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `cards`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cards` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `cost` varchar(40) DEFAULT NULL,
   `convertedcost` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `isw` tinyint(1) DEFAULT 0,
-  `isr` tinyint(1) DEFAULT 0,
-  `isg` tinyint(1) DEFAULT 0,
-  `isu` tinyint(1) DEFAULT 0,
-  `isb` tinyint(1) DEFAULT 0,
-  `isp` tinyint(1) DEFAULT 0,
+  `isw` tinyint(1) NOT NULL DEFAULT 0,
+  `isr` tinyint(1) NOT NULL DEFAULT 0,
+  `isg` tinyint(1) NOT NULL DEFAULT 0,
+  `isu` tinyint(1) NOT NULL DEFAULT 0,
+  `isb` tinyint(1) NOT NULL DEFAULT 0,
+  `isp` tinyint(1) NOT NULL DEFAULT 0,
   `name` varchar(160) NOT NULL,
   `cardset` varchar(60) NOT NULL,
   `type` varchar(80) NOT NULL,
-  `rarity` varchar(40) DEFAULT NULL,
+  `rarity` varchar(40) NOT NULL,
   `scryfallId` varchar(36) DEFAULT NULL,
   `is_changeling` tinyint(1) DEFAULT NULL,
   `is_online` tinyint(1) DEFAULT NULL,
@@ -1686,14 +1688,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `cardsets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cardsets` (
   `released` date NOT NULL,
   `name` varchar(60) NOT NULL,
-  `type` enum('Core','Block','Extra') DEFAULT 'Block',
+  `type` enum('Core','Block','Extra') NOT NULL,
   `code` varchar(7) DEFAULT NULL,
-  `standard_legal` tinyint(1) DEFAULT 0,
-  `modern_legal` tinyint(1) DEFAULT 0,
+  `standard_legal` tinyint(1) NOT NULL,
+  `modern_legal` tinyint(1) NOT NULL,
   `last_updated` int(11) DEFAULT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1719,7 +1721,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `client`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `client` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
@@ -1746,9 +1748,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `db_version`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `db_version` (
-  `version` int(11) DEFAULT NULL
+  `version` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1759,7 +1761,7 @@ CREATE TABLE `db_version` (
 LOCK TABLES `db_version` WRITE;
 /*!40000 ALTER TABLE `db_version` DISABLE KEYS */;
 INSERT INTO `db_version` VALUES
-(53);
+(87);
 /*!40000 ALTER TABLE `db_version` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1769,7 +1771,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `deckcontents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `deckcontents` (
   `card` bigint(20) unsigned NOT NULL,
   `deck` bigint(20) unsigned NOT NULL,
@@ -1897,10 +1899,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `deckerrors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `deckerrors` (
   `deck` bigint(20) unsigned NOT NULL,
-  `error` varchar(250) NOT NULL,
+  `error` text DEFAULT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=42258 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1921,27 +1923,28 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `decks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `decks` (
-  `archetype` varchar(40) DEFAULT NULL,
+  `archetype` varchar(40) NOT NULL,
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(120) NOT NULL,
   `playername` varchar(40) NOT NULL,
   `deck_colors` varchar(6) DEFAULT NULL,
-  `format` varchar(40) DEFAULT NULL,
+  `format` varchar(40) NOT NULL,
   `tribe` varchar(40) DEFAULT NULL,
   `notes` mediumtext DEFAULT NULL,
   `deck_hash` varchar(40) DEFAULT NULL,
   `sideboard_hash` varchar(40) DEFAULT NULL,
   `whole_hash` varchar(40) DEFAULT NULL,
   `deck_contents_cache` mediumtext DEFAULT NULL,
-  `created_date` datetime DEFAULT NULL,
+  `created_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `archetype` (`archetype`),
   KEY `FK_decks_players` (`playername`),
   KEY `FK_decks_formats` (`format`),
   CONSTRAINT `FK_decks_formats` FOREIGN KEY (`format`) REFERENCES `formats` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `decks_ibfk_1` FOREIGN KEY (`playername`) REFERENCES `players` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `decks_ibfk_1` FOREIGN KEY (`playername`) REFERENCES `players` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `decks_ibfk_2` FOREIGN KEY (`archetype`) REFERENCES `archetypes` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=131899 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2001,44 +2004,21 @@ INSERT INTO `decks` VALUES
 UNLOCK TABLES;
 
 --
--- Table structure for table `decktypes`
---
-
-DROP TABLE IF EXISTS `decktypes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `decktypes` (
-  `name` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `decktypes`
---
-
-LOCK TABLES `decktypes` WRITE;
-/*!40000 ALTER TABLE `decktypes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `decktypes` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `entries`
 --
 
 DROP TABLE IF EXISTS `entries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `entries` (
   `event_id` int(11) NOT NULL DEFAULT 0,
   `player` varchar(40) NOT NULL,
   `medal` enum('1st','2nd','t4','t8','dot') NOT NULL DEFAULT 'dot',
   `deck` bigint(20) unsigned DEFAULT NULL,
-  `ignored` tinyint(1) DEFAULT NULL,
   `drop_round` smallint(5) unsigned NOT NULL DEFAULT 0,
-  `notes` mediumtext DEFAULT NULL,
   `registered_at` datetime NOT NULL,
   `initial_byes` tinyint(4) NOT NULL DEFAULT 0,
-  `initial_seed` int(11) DEFAULT 127,
+  `initial_seed` int(11) NOT NULL DEFAULT 127,
   PRIMARY KEY (`event_id`,`player`) USING BTREE,
   KEY `player` (`player`),
   KEY `deck` (`deck`),
@@ -2055,53 +2035,76 @@ CREATE TABLE `entries` (
 LOCK TABLES `entries` WRITE;
 /*!40000 ALTER TABLE `entries` DISABLE KEYS */;
 INSERT INTO `entries` VALUES
-(6871,'testplayer0','dot',131827,NULL,0,NULL,'2024-09-04 21:27:26',0,127),
-(6871,'testplayer1','dot',131828,NULL,0,NULL,'2024-09-04 21:27:26',0,127),
-(6871,'testplayer3','dot',131830,NULL,0,NULL,'2024-09-04 21:27:26',0,127),
-(6871,'testplayer4','dot',131831,NULL,0,NULL,'2024-09-04 21:27:26',0,127),
-(6871,'testplayer5','dot',131832,NULL,0,NULL,'2024-09-04 21:27:26',0,127),
-(6872,'testplayer0','dot',131835,NULL,0,NULL,'2024-09-04 21:31:44',0,127),
-(6872,'testplayer1','dot',131836,NULL,0,NULL,'2024-09-04 21:31:44',0,127),
-(6872,'testplayer3','dot',131838,NULL,0,NULL,'2024-09-04 21:31:44',0,127),
-(6872,'testplayer4','dot',131839,NULL,0,NULL,'2024-09-04 21:31:44',0,127),
-(6872,'testplayer5','dot',131840,NULL,0,NULL,'2024-09-04 21:31:44',0,127),
-(6873,'testplayer0','dot',131843,NULL,0,NULL,'2024-09-04 21:34:29',0,127),
-(6873,'testplayer1','dot',131844,NULL,0,NULL,'2024-09-04 21:34:29',0,127),
-(6873,'testplayer3','dot',131846,NULL,0,NULL,'2024-09-04 21:34:29',0,127),
-(6873,'testplayer4','dot',131847,NULL,0,NULL,'2024-09-04 21:34:29',0,127),
-(6873,'testplayer5','dot',131848,NULL,0,NULL,'2024-09-04 21:34:29',0,127),
-(6874,'testplayer0','dot',131851,NULL,0,NULL,'2024-09-04 21:35:43',0,127),
-(6874,'testplayer1','dot',131852,NULL,0,NULL,'2024-09-04 21:35:43',0,127),
-(6874,'testplayer3','dot',131854,NULL,0,NULL,'2024-09-04 21:35:43',0,127),
-(6874,'testplayer4','dot',131855,NULL,0,NULL,'2024-09-04 21:35:43',0,127),
-(6874,'testplayer5','dot',131856,NULL,0,NULL,'2024-09-04 21:35:43',0,127),
-(6875,'testplayer0','dot',131859,NULL,0,NULL,'2024-09-04 21:36:01',0,127),
-(6875,'testplayer1','dot',131860,NULL,0,NULL,'2024-09-04 21:36:01',0,127),
-(6875,'testplayer3','dot',131862,NULL,0,NULL,'2024-09-04 21:36:01',0,127),
-(6875,'testplayer4','dot',131863,NULL,0,NULL,'2024-09-04 21:36:01',0,127),
-(6875,'testplayer5','dot',131864,NULL,0,NULL,'2024-09-04 21:36:01',0,127),
-(6876,'testplayer0','dot',131867,NULL,0,NULL,'2024-09-04 21:36:16',0,127),
-(6876,'testplayer1','dot',131868,NULL,0,NULL,'2024-09-04 21:36:16',0,127),
-(6876,'testplayer3','dot',131870,NULL,0,NULL,'2024-09-04 21:36:16',0,127),
-(6876,'testplayer4','dot',131871,NULL,0,NULL,'2024-09-04 21:36:16',0,127),
-(6876,'testplayer5','dot',131872,NULL,0,NULL,'2024-09-04 21:36:16',0,127),
-(6877,'testplayer0','dot',131875,NULL,0,NULL,'2024-09-04 21:36:50',0,127),
-(6877,'testplayer1','dot',131876,NULL,0,NULL,'2024-09-04 21:36:50',0,127),
-(6877,'testplayer3','dot',131878,NULL,0,NULL,'2024-09-04 21:36:50',0,127),
-(6877,'testplayer4','dot',131879,NULL,0,NULL,'2024-09-04 21:36:50',0,127),
-(6877,'testplayer5','dot',131880,NULL,0,NULL,'2024-09-04 21:36:50',0,127),
-(6878,'testplayer0','dot',131883,NULL,0,NULL,'2024-09-04 21:38:25',0,127),
-(6878,'testplayer1','dot',131884,NULL,0,NULL,'2024-09-04 21:38:25',0,127),
-(6878,'testplayer3','dot',131886,NULL,0,NULL,'2024-09-04 21:38:25',0,127),
-(6878,'testplayer4','dot',131887,NULL,0,NULL,'2024-09-04 21:38:25',0,127),
-(6878,'testplayer5','dot',131888,NULL,0,NULL,'2024-09-04 21:38:25',0,127),
-(6879,'testplayer0','dot',131891,NULL,0,NULL,'2024-09-04 21:38:54',0,127),
-(6879,'testplayer1','dot',131892,NULL,0,NULL,'2024-09-04 21:38:54',0,127),
-(6879,'testplayer3','dot',131894,NULL,0,NULL,'2024-09-04 21:38:54',0,127),
-(6879,'testplayer4','dot',131895,NULL,0,NULL,'2024-09-04 21:38:54',0,127),
-(6879,'testplayer5','dot',131896,NULL,0,NULL,'2024-09-04 21:38:54',0,127);
+(6871,'testplayer0','dot',131827,0,'2024-09-04 21:27:26',0,127),
+(6871,'testplayer1','dot',131828,0,'2024-09-04 21:27:26',0,127),
+(6871,'testplayer3','dot',131830,0,'2024-09-04 21:27:26',0,127),
+(6871,'testplayer4','dot',131831,0,'2024-09-04 21:27:26',0,127),
+(6871,'testplayer5','dot',131832,0,'2024-09-04 21:27:26',0,127),
+(6872,'testplayer0','dot',131835,0,'2024-09-04 21:31:44',0,127),
+(6872,'testplayer1','dot',131836,0,'2024-09-04 21:31:44',0,127),
+(6872,'testplayer3','dot',131838,0,'2024-09-04 21:31:44',0,127),
+(6872,'testplayer4','dot',131839,0,'2024-09-04 21:31:44',0,127),
+(6872,'testplayer5','dot',131840,0,'2024-09-04 21:31:44',0,127),
+(6873,'testplayer0','dot',131843,0,'2024-09-04 21:34:29',0,127),
+(6873,'testplayer1','dot',131844,0,'2024-09-04 21:34:29',0,127),
+(6873,'testplayer3','dot',131846,0,'2024-09-04 21:34:29',0,127),
+(6873,'testplayer4','dot',131847,0,'2024-09-04 21:34:29',0,127),
+(6873,'testplayer5','dot',131848,0,'2024-09-04 21:34:29',0,127),
+(6874,'testplayer0','dot',131851,0,'2024-09-04 21:35:43',0,127),
+(6874,'testplayer1','dot',131852,0,'2024-09-04 21:35:43',0,127),
+(6874,'testplayer3','dot',131854,0,'2024-09-04 21:35:43',0,127),
+(6874,'testplayer4','dot',131855,0,'2024-09-04 21:35:43',0,127),
+(6874,'testplayer5','dot',131856,0,'2024-09-04 21:35:43',0,127),
+(6875,'testplayer0','dot',131859,0,'2024-09-04 21:36:01',0,127),
+(6875,'testplayer1','dot',131860,0,'2024-09-04 21:36:01',0,127),
+(6875,'testplayer3','dot',131862,0,'2024-09-04 21:36:01',0,127),
+(6875,'testplayer4','dot',131863,0,'2024-09-04 21:36:01',0,127),
+(6875,'testplayer5','dot',131864,0,'2024-09-04 21:36:01',0,127),
+(6876,'testplayer0','dot',131867,0,'2024-09-04 21:36:16',0,127),
+(6876,'testplayer1','dot',131868,0,'2024-09-04 21:36:16',0,127),
+(6876,'testplayer3','dot',131870,0,'2024-09-04 21:36:16',0,127),
+(6876,'testplayer4','dot',131871,0,'2024-09-04 21:36:16',0,127),
+(6876,'testplayer5','dot',131872,0,'2024-09-04 21:36:16',0,127),
+(6877,'testplayer0','dot',131875,0,'2024-09-04 21:36:50',0,127),
+(6877,'testplayer1','dot',131876,0,'2024-09-04 21:36:50',0,127),
+(6877,'testplayer3','dot',131878,0,'2024-09-04 21:36:50',0,127),
+(6877,'testplayer4','dot',131879,0,'2024-09-04 21:36:50',0,127),
+(6877,'testplayer5','dot',131880,0,'2024-09-04 21:36:50',0,127),
+(6878,'testplayer0','dot',131883,0,'2024-09-04 21:38:25',0,127),
+(6878,'testplayer1','dot',131884,0,'2024-09-04 21:38:25',0,127),
+(6878,'testplayer3','dot',131886,0,'2024-09-04 21:38:25',0,127),
+(6878,'testplayer4','dot',131887,0,'2024-09-04 21:38:25',0,127),
+(6878,'testplayer5','dot',131888,0,'2024-09-04 21:38:25',0,127),
+(6879,'testplayer0','dot',131891,0,'2024-09-04 21:38:54',0,127),
+(6879,'testplayer1','dot',131892,0,'2024-09-04 21:38:54',0,127),
+(6879,'testplayer3','dot',131894,0,'2024-09-04 21:38:54',0,127),
+(6879,'testplayer4','dot',131895,0,'2024-09-04 21:38:54',0,127),
+(6879,'testplayer5','dot',131896,0,'2024-09-04 21:38:54',0,127);
 /*!40000 ALTER TABLE `entries` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`gatherling`@`localhost`*/ /*!50003 TRIGGER prevent_null_deck
+BEFORE UPDATE ON entries
+FOR EACH ROW
+BEGIN
+    IF OLD.deck IS NOT NULL AND NEW.deck IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Error: Attempt to set entries.deck to NULL';
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `events`
@@ -2109,24 +2112,23 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `start` datetime NOT NULL,
   `format` varchar(40) NOT NULL,
-  `host` varchar(40) DEFAULT NULL,
+  `host` varchar(40) NOT NULL,
   `kvalue` tinyint(3) unsigned NOT NULL DEFAULT 16,
-  `metaurl` varchar(240) DEFAULT NULL,
+  `metaurl` varchar(240) NOT NULL,
   `name` varchar(80) NOT NULL DEFAULT '',
-  `number` tinyint(3) unsigned DEFAULT NULL,
-  `season` tinyint(3) unsigned DEFAULT NULL,
-  `series` varchar(40) DEFAULT NULL,
-  `threadurl` varchar(240) DEFAULT NULL,
-  `reporturl` varchar(240) DEFAULT NULL,
+  `number` tinyint(3) unsigned NOT NULL,
+  `season` int(11) NOT NULL,
+  `series` varchar(40) NOT NULL,
+  `threadurl` varchar(240) NOT NULL,
+  `reporturl` varchar(240) NOT NULL,
   `finalized` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `prereg_allowed` int(11) DEFAULT 0,
+  `prereg_allowed` int(11) NOT NULL DEFAULT 0,
   `prereg_cap` int(11) NOT NULL DEFAULT 0,
-  `pkonly` tinyint(4) DEFAULT 0,
   `cohost` varchar(40) DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 0,
   `current_round` tinyint(3) NOT NULL DEFAULT 0,
@@ -2160,15 +2162,15 @@ CREATE TABLE `events` (
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
 INSERT INTO `events` VALUES
-(6871,'2024-09-04 21:00:00','Modern',NULL,16,'','Test 1.01',1,1,'Test','','',0,1,0,0,NULL,1,2,1,0,1,1,1,0,0,1),
-(6872,'2024-09-04 21:00:00','Modern',NULL,16,'','Test 1.02',2,1,'Test','','',0,1,0,0,NULL,1,2,1,0,1,1,1,0,0,1),
-(6873,'2024-09-04 21:00:00','Modern',NULL,16,'','Test 1.03',3,1,'Test','','',0,1,0,0,NULL,1,2,1,0,1,1,1,0,0,1),
-(6874,'2024-09-04 21:00:00','Modern',NULL,16,'','Test 1.04',4,1,'Test','','',0,1,0,0,NULL,1,2,1,0,1,1,1,0,0,1),
-(6875,'2024-09-04 21:00:00','Modern',NULL,16,'','Test 1.05',5,1,'Test','','',0,1,0,0,NULL,1,2,1,0,1,1,1,0,0,1),
-(6876,'2024-09-04 21:00:00','Modern',NULL,16,'','Test 1.06',6,1,'Test','','',0,1,0,0,NULL,1,2,1,0,1,1,1,0,0,1),
-(6877,'2024-09-04 21:00:00','Modern',NULL,16,'','Test 1.07',7,1,'Test','','',0,1,0,0,NULL,1,2,1,0,1,1,1,0,0,1),
-(6878,'2024-09-04 21:00:00','Modern',NULL,16,'','Test 1.08',8,1,'Test','','',0,1,0,0,NULL,1,2,1,0,1,1,1,0,0,1),
-(6879,'2024-09-04 21:00:00','Modern',NULL,16,'','Test 1.09',9,1,'Test','','',0,1,0,0,NULL,1,2,1,0,1,1,1,0,0,1);
+(6871,'2024-09-04 21:00:00','Modern','bakert99',16,'','Test 1.01',1,1,'Test','','',0,1,0,NULL,1,2,1,0,1,1,1,0,0,1),
+(6872,'2024-09-04 21:00:00','Modern','bakert99',16,'','Test 1.02',2,1,'Test','','',0,1,0,NULL,1,2,1,0,1,1,1,0,0,1),
+(6873,'2024-09-04 21:00:00','Modern','bakert99',16,'','Test 1.03',3,1,'Test','','',0,1,0,NULL,1,2,1,0,1,1,1,0,0,1),
+(6874,'2024-09-04 21:00:00','Modern','bakert99',16,'','Test 1.04',4,1,'Test','','',0,1,0,NULL,1,2,1,0,1,1,1,0,0,1),
+(6875,'2024-09-04 21:00:00','Modern','bakert99',16,'','Test 1.05',5,1,'Test','','',0,1,0,NULL,1,2,1,0,1,1,1,0,0,1),
+(6876,'2024-09-04 21:00:00','Modern','bakert99',16,'','Test 1.06',6,1,'Test','','',0,1,0,NULL,1,2,1,0,1,1,1,0,0,1),
+(6877,'2024-09-04 21:00:00','Modern','bakert99',16,'','Test 1.07',7,1,'Test','','',0,1,0,NULL,1,2,1,0,1,1,1,0,0,1),
+(6878,'2024-09-04 21:00:00','Modern','bakert99',16,'','Test 1.08',8,1,'Test','','',0,1,0,NULL,1,2,1,0,1,1,1,0,0,1),
+(6879,'2024-09-04 21:00:00','Modern','bakert99',16,'','Test 1.09',9,1,'Test','','',0,1,0,NULL,1,2,1,0,1,1,1,0,0,1);
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2178,10 +2180,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `formats`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `formats` (
   `name` varchar(40) NOT NULL,
-  `description` mediumtext DEFAULT NULL,
+  `description` mediumtext NOT NULL,
   `type` varchar(40) NOT NULL,
   `series_name` varchar(40) NOT NULL,
   `singleton` tinyint(3) NOT NULL DEFAULT 0,
@@ -2192,7 +2194,7 @@ CREATE TABLE `formats` (
   `tribal` tinyint(3) NOT NULL DEFAULT 0,
   `pure` tinyint(3) NOT NULL DEFAULT 0,
   `underdog` tinyint(3) NOT NULL DEFAULT 0,
-  `limitless` tinyint(3) DEFAULT NULL,
+  `limitless` tinyint(3) NOT NULL,
   `eternal` tinyint(3) NOT NULL DEFAULT 0,
   `standard` tinyint(4) NOT NULL DEFAULT 0,
   `modern` tinyint(4) NOT NULL DEFAULT 0,
@@ -2201,12 +2203,11 @@ CREATE TABLE `formats` (
   `allow_rares` tinyint(3) NOT NULL DEFAULT 0,
   `allow_mythics` tinyint(3) NOT NULL DEFAULT 0,
   `allow_timeshifted` tinyint(3) NOT NULL DEFAULT 0,
-  `priority` tinyint(3) unsigned DEFAULT 1,
+  `priority` tinyint(3) unsigned NOT NULL DEFAULT 1,
   `min_main_cards_allowed` int(10) unsigned NOT NULL DEFAULT 0,
   `max_main_cards_allowed` int(10) unsigned NOT NULL DEFAULT 0,
   `min_side_cards_allowed` int(10) unsigned NOT NULL DEFAULT 0,
   `max_side_cards_allowed` int(10) unsigned NOT NULL DEFAULT 0,
-  `is_meta_format` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -2218,11 +2219,11 @@ CREATE TABLE `formats` (
 LOCK TABLES `formats` WRITE;
 /*!40000 ALTER TABLE `formats` DISABLE KEYS */;
 INSERT INTO `formats` VALUES
-('Modern','','System','System',0,0,0,0,0,0,0,0,NULL,0,0,1,1,1,1,1,1,1,60,2000,0,15,0),
-('Old School 93/94','','System','System',0,0,0,0,0,0,0,0,NULL,0,0,0,1,1,1,1,1,1,0,2000,0,15,0),
-('Penny Dreadful','','System','System',0,0,0,0,0,0,0,0,NULL,0,0,0,1,1,1,1,1,1,60,2000,0,15,0),
-('Standard','Monkeys.','System','System',0,0,0,0,0,0,0,0,NULL,0,0,1,1,1,1,1,1,1,60,2000,0,15,0),
-('Test Format','','System','System',0,0,0,0,0,0,0,0,NULL,0,0,0,1,1,1,1,1,1,0,2000,0,15,0);
+('Modern','','System','System',0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,60,2000,0,15),
+('Old School 93/94','','System','System',0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,2000,0,15),
+('Penny Dreadful','','System','System',0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,60,2000,0,15),
+('Standard','Monkeys.','System','System',0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,60,2000,0,15),
+('Test Format','','System','System',0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,2000,0,15);
 /*!40000 ALTER TABLE `formats` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2232,11 +2233,11 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `matches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `matches` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `playera` varchar(40) NOT NULL,
-  `playerb` varchar(40) DEFAULT NULL,
+  `playerb` varchar(40) NOT NULL,
   `round` tinyint(3) unsigned NOT NULL,
   `subevent` bigint(20) unsigned NOT NULL,
   `result` enum('A','B','D','BYE','P') NOT NULL DEFAULT 'P',
@@ -2327,13 +2328,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `playerbans`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `playerbans` (
   `series` varchar(40) NOT NULL DEFAULT 'All',
   `player` varchar(40) NOT NULL,
   `date` date NOT NULL,
   `reason` mediumtext NOT NULL,
-  KEY `PBIndex` (`series`,`player`)
+  KEY `PBIndex` (`series`,`player`),
+  KEY `player` (`player`),
+  CONSTRAINT `playerbans_ibfk_1` FOREIGN KEY (`series`) REFERENCES `series` (`name`),
+  CONSTRAINT `playerbans_ibfk_2` FOREIGN KEY (`player`) REFERENCES `players` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2352,7 +2356,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `players`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `players` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL,
@@ -2361,13 +2365,10 @@ CREATE TABLE `players` (
   `pkmember` tinyint(4) NOT NULL DEFAULT 0,
   `host` tinyint(3) unsigned NOT NULL DEFAULT 0,
   `password` varchar(80) DEFAULT NULL,
-  `rememberme` tinyint(4) NOT NULL DEFAULT 0,
-  `ipaddress` int(10) unsigned DEFAULT NULL,
   `timezone` decimal(10,0) NOT NULL DEFAULT -5,
   `super` tinyint(3) unsigned NOT NULL DEFAULT 0,
   `mtgo_confirmed` tinyint(1) DEFAULT NULL,
   `mtgo_challenge` varchar(5) DEFAULT NULL,
-  `theme` varchar(45) DEFAULT NULL,
   `discord_id` varchar(20) DEFAULT NULL,
   `discord_handle` varchar(37) DEFAULT NULL,
   `mtga_username` varchar(32) DEFAULT NULL,
@@ -2388,17 +2389,17 @@ CREATE TABLE `players` (
 LOCK TABLES `players` WRITE;
 /*!40000 ALTER TABLE `players` DISABLE KEYS */;
 INSERT INTO `players` VALUES
-(38018,'testplayer0',NULL,0,0,0,NULL,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(38019,'testplayer1',NULL,0,0,0,NULL,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(38020,'testplayer2',NULL,0,0,0,NULL,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(38021,'testplayer3',NULL,0,0,0,NULL,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(38022,'testplayer4',NULL,0,0,0,NULL,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(38023,'testplayer5',NULL,0,0,0,NULL,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(38024,'testplayer6',NULL,0,0,0,NULL,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(38025,'testplayer7',NULL,0,0,0,NULL,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(38026,'testplayer8',NULL,0,0,0,NULL,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(38027,'testplayer9',NULL,0,0,0,NULL,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(38028,'bakert99','bakert@example.com',0,0,0,'8105fe3505edbd72e376c2d10819619e7b4c1b088190e1fac208b527641d9165',0,NULL,-12,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+(38018,'testplayer0',NULL,0,0,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(38019,'testplayer1',NULL,0,0,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(38020,'testplayer2',NULL,0,0,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(38021,'testplayer3',NULL,0,0,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(38022,'testplayer4',NULL,0,0,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(38023,'testplayer5',NULL,0,0,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(38024,'testplayer6',NULL,0,0,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(38025,'testplayer7',NULL,0,0,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(38026,'testplayer8',NULL,0,0,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(38027,'testplayer9',NULL,0,0,0,NULL,-5,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(38028,'bakert99','bakert@example.com',0,0,0,'8105fe3505edbd72e376c2d10819619e7b4c1b088190e1fac208b527641d9165',-12,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `players` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2408,7 +2409,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `ratings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ratings` (
   `event` varchar(80) NOT NULL,
   `player` varchar(40) NOT NULL,
@@ -2417,7 +2418,10 @@ CREATE TABLE `ratings` (
   `updated` datetime NOT NULL,
   `wins` bigint(20) unsigned NOT NULL,
   `losses` bigint(20) unsigned NOT NULL,
-  KEY `player` (`player`)
+  KEY `player` (`player`),
+  KEY `ratings_ibfk_1` (`event`),
+  CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`event`) REFERENCES `events` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `ratings_ibfk_2` FOREIGN KEY (`player`) REFERENCES `players` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2436,14 +2440,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `restricted`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `restricted` (
   `card_name` varchar(40) NOT NULL,
   `card` bigint(20) unsigned NOT NULL,
   `format` varchar(40) NOT NULL,
   `allowed` tinyint(3) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`card`,`format`),
-  KEY `format` (`format`)
+  UNIQUE KEY `unique_card_format` (`card_name`,`format`),
+  KEY `format` (`format`),
+  CONSTRAINT `restricted_ibfk_1` FOREIGN KEY (`format`) REFERENCES `formats` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2462,13 +2468,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `restrictedtotribe`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `restrictedtotribe` (
   `card_name` varchar(40) NOT NULL,
   `card` bigint(20) unsigned NOT NULL,
   `format` varchar(40) NOT NULL,
   `allowed` tinyint(3) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`card`,`format`),
+  UNIQUE KEY `unique_card_format` (`card_name`,`format`),
   KEY `format` (`format`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -2488,17 +2495,19 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `season_points`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `season_points` (
-  `series` varchar(40) DEFAULT NULL,
-  `season` int(11) DEFAULT NULL,
-  `event` varchar(80) DEFAULT NULL,
-  `player` varchar(40) DEFAULT NULL,
-  `adjustment` int(11) DEFAULT NULL,
-  `reason` varchar(140) DEFAULT NULL,
+  `series` varchar(40) NOT NULL,
+  `season` int(11) NOT NULL,
+  `event` varchar(80) NOT NULL,
+  `player` varchar(40) NOT NULL,
+  `adjustment` int(11) NOT NULL,
+  `reason` varchar(140) NOT NULL,
   KEY `series` (`series`),
   KEY `event` (`event`),
-  KEY `player` (`player`)
+  KEY `player` (`player`),
+  CONSTRAINT `fk_players_name` FOREIGN KEY (`player`) REFERENCES `players` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `season_points_ibfk_1` FOREIGN KEY (`series`) REFERENCES `series` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2517,17 +2526,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `series`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `series` (
   `name` varchar(40) NOT NULL,
-  `isactive` tinyint(1) DEFAULT 0,
+  `isactive` tinyint(1) NOT NULL,
   `logo` mediumblob DEFAULT NULL,
   `imgtype` varchar(40) DEFAULT NULL,
   `imgsize` bigint(20) unsigned DEFAULT NULL,
-  `day` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday') DEFAULT NULL,
-  `normalstart` time DEFAULT NULL,
-  `prereg_default` int(11) DEFAULT 0,
-  `pkonly_default` tinyint(4) NOT NULL DEFAULT 0,
+  `day` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday') NOT NULL,
+  `normalstart` time NOT NULL,
+  `prereg_default` tinyint(1) NOT NULL,
   `mtgo_room` varchar(20) DEFAULT NULL,
   `discord_guild_id` varchar(20) DEFAULT NULL,
   `discord_channel_id` varchar(20) DEFAULT NULL,
@@ -2546,7 +2554,7 @@ CREATE TABLE `series` (
 LOCK TABLES `series` WRITE;
 /*!40000 ALTER TABLE `series` DISABLE KEYS */;
 INSERT INTO `series` VALUES
-('Test',1,NULL,NULL,NULL,'Friday','00:00:00',1,0,'',NULL,NULL,NULL,NULL,NULL,NULL);
+('Test',1,NULL,NULL,NULL,'Friday','00:00:00',1,'',NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `series` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2556,12 +2564,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `series_organizers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `series_organizers` (
-  `player` varchar(40) DEFAULT NULL,
-  `series` varchar(40) DEFAULT NULL,
+  `player` varchar(40) NOT NULL,
+  `series` varchar(40) NOT NULL,
   KEY `player` (`player`),
-  KEY `series` (`series`)
+  KEY `series` (`series`),
+  CONSTRAINT `series_organizers_ibfk_1` FOREIGN KEY (`series`) REFERENCES `series` (`name`),
+  CONSTRAINT `series_organizers_ibfk_2` FOREIGN KEY (`player`) REFERENCES `players` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2580,25 +2590,26 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `series_seasons`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `series_seasons` (
   `series` varchar(40) NOT NULL DEFAULT '',
   `season` int(11) NOT NULL DEFAULT 0,
-  `first_pts` int(11) DEFAULT NULL,
-  `second_pts` int(11) DEFAULT NULL,
-  `semi_pts` int(11) DEFAULT NULL,
-  `quarter_pts` int(11) DEFAULT NULL,
-  `participation_pts` int(11) DEFAULT NULL,
-  `rounds_pts` int(11) DEFAULT NULL,
-  `decklist_pts` int(11) DEFAULT NULL,
-  `win_pts` int(11) DEFAULT NULL,
-  `loss_pts` int(11) DEFAULT NULL,
-  `bye_pts` int(11) DEFAULT NULL,
+  `first_pts` int(11) NOT NULL,
+  `second_pts` int(11) NOT NULL,
+  `semi_pts` int(11) NOT NULL,
+  `quarter_pts` int(11) NOT NULL,
+  `participation_pts` int(11) NOT NULL,
+  `rounds_pts` int(11) NOT NULL,
+  `decklist_pts` int(11) NOT NULL,
+  `win_pts` int(11) NOT NULL,
+  `loss_pts` int(11) NOT NULL,
+  `bye_pts` int(11) NOT NULL,
   `must_decklist` int(11) DEFAULT NULL,
-  `cutoff_ord` int(11) DEFAULT NULL,
-  `format` varchar(40) DEFAULT NULL,
-  `master_link` varchar(140) DEFAULT NULL,
-  PRIMARY KEY (`series`,`season`)
+  `cutoff_ord` int(11) NOT NULL,
+  `format` varchar(40) NOT NULL,
+  `master_link` varchar(140) NOT NULL,
+  PRIMARY KEY (`series`,`season`),
+  CONSTRAINT `series_seasons_ibfk_1` FOREIGN KEY (`series`) REFERENCES `series` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2612,27 +2623,29 @@ LOCK TABLES `series_seasons` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `series_stewards`
+-- Table structure for table `sessions`
 --
 
-DROP TABLE IF EXISTS `series_stewards`;
+DROP TABLE IF EXISTS `sessions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `series_stewards` (
-  `player` varchar(40) DEFAULT NULL,
-  `series` varchar(40) DEFAULT NULL,
-  KEY `player` (`player`),
-  KEY `series` (`series`)
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sessions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `token` varchar(64) NOT NULL,
+  `details` longtext NOT NULL,
+  `expiry` timestamp NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `token` (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `series_stewards`
+-- Dumping data for table `sessions`
 --
 
-LOCK TABLES `series_stewards` WRITE;
-/*!40000 ALTER TABLE `series_stewards` DISABLE KEYS */;
-/*!40000 ALTER TABLE `series_stewards` ENABLE KEYS */;
+LOCK TABLES `sessions` WRITE;
+/*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2641,14 +2654,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `setlegality`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `setlegality` (
   `format` varchar(40) NOT NULL,
   `cardset` varchar(40) NOT NULL,
   PRIMARY KEY (`format`,`cardset`),
   KEY `cardset` (`cardset`),
   CONSTRAINT `setlegality_ibfk_1` FOREIGN KEY (`format`) REFERENCES `formats` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `setlegality_ibfk_2` FOREIGN KEY (`cardset`) REFERENCES `cardsets` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `setlegality_ibfk_2` FOREIGN KEY (`cardset`) REFERENCES `cardsets` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `setlegality_ibfk_3` FOREIGN KEY (`format`) REFERENCES `formats` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2671,19 +2685,19 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `standings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `standings` (
-  `player` varchar(40) DEFAULT NULL,
-  `event` varchar(80) DEFAULT NULL,
-  `active` tinyint(3) DEFAULT 0,
-  `matches_played` tinyint(3) DEFAULT 0,
-  `games_won` tinyint(3) DEFAULT 0,
-  `games_played` tinyint(3) DEFAULT 0,
-  `byes` tinyint(3) DEFAULT 0,
-  `OP_Match` decimal(4,3) DEFAULT 0.000,
-  `PL_Game` decimal(4,3) DEFAULT 0.000,
-  `OP_Game` decimal(4,3) DEFAULT 0.000,
-  `score` tinyint(3) DEFAULT 0,
+  `player` varchar(40) NOT NULL,
+  `event` varchar(80) NOT NULL,
+  `active` tinyint(3) NOT NULL DEFAULT 0,
+  `matches_played` tinyint(3) NOT NULL DEFAULT 0,
+  `games_won` tinyint(3) NOT NULL DEFAULT 0,
+  `games_played` tinyint(3) NOT NULL DEFAULT 0,
+  `byes` tinyint(3) NOT NULL DEFAULT 0,
+  `OP_Match` decimal(4,3) NOT NULL DEFAULT 0.000,
+  `PL_Game` decimal(4,3) NOT NULL DEFAULT 0.000,
+  `OP_Game` decimal(4,3) NOT NULL DEFAULT 0.000,
+  `score` tinyint(3) NOT NULL DEFAULT 0,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `seed` tinyint(3) NOT NULL,
   `matched` tinyint(1) NOT NULL,
@@ -2753,43 +2767,20 @@ INSERT INTO `standings` VALUES
 UNLOCK TABLES;
 
 --
--- Table structure for table `stewards`
---
-
-DROP TABLE IF EXISTS `stewards`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `stewards` (
-  `event` varchar(80) DEFAULT NULL,
-  `player` varchar(40) NOT NULL,
-  KEY `event` (`event`),
-  KEY `player` (`player`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `stewards`
---
-
-LOCK TABLES `stewards` WRITE;
-/*!40000 ALTER TABLE `stewards` DISABLE KEYS */;
-/*!40000 ALTER TABLE `stewards` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `subevents`
 --
 
 DROP TABLE IF EXISTS `subevents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subevents` (
-  `parent` varchar(80) DEFAULT NULL,
+  `parent` varchar(80) NOT NULL,
   `rounds` tinyint(3) unsigned NOT NULL DEFAULT 3,
   `timing` tinyint(3) unsigned NOT NULL DEFAULT 1,
-  `type` enum('Swiss','Swiss (Blossom)','Single Elimination','League','Round Robin','League Match') NOT NULL,
+  `type` enum('Swiss','Swiss (Blossom)','Single Elimination','League','League Match') NOT NULL,
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_timing_parent` (`timing`,`parent`),
   KEY `parent` (`parent`),
   CONSTRAINT `subevents_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `events` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=17396 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2824,38 +2815,12 @@ INSERT INTO `subevents` VALUES
 UNLOCK TABLES;
 
 --
--- Table structure for table `subformats`
---
-
-DROP TABLE IF EXISTS `subformats`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `subformats` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `parentformat` varchar(40) NOT NULL,
-  `childformat` varchar(40) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `_idx` (`parentformat`,`childformat`),
-  KEY `childformat` (`childformat`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `subformats`
---
-
-LOCK TABLES `subformats` WRITE;
-/*!40000 ALTER TABLE `subformats` DISABLE KEYS */;
-/*!40000 ALTER TABLE `subformats` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `subtype_bans`
 --
 
 DROP TABLE IF EXISTS `subtype_bans`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subtype_bans` (
   `name` varchar(40) NOT NULL,
   `format` varchar(40) NOT NULL,
@@ -2878,7 +2843,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tribe_bans`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tribe_bans` (
   `name` varchar(40) NOT NULL,
   `format` varchar(40) NOT NULL,
@@ -2902,7 +2867,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tribes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tribes` (
   `name` varchar(40) NOT NULL,
   UNIQUE KEY `name_2` (`name`),
@@ -3052,12 +3017,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `trophies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `trophies` (
   `event` varchar(80) NOT NULL DEFAULT '',
-  `image` mediumblob DEFAULT NULL,
-  `type` varchar(40) DEFAULT NULL,
-  `size` bigint(20) unsigned DEFAULT NULL,
+  `image` mediumblob NOT NULL,
+  `type` varchar(40) NOT NULL,
+  `size` bigint(20) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`event`),
   CONSTRAINT `trophies_ibfk_1` FOREIGN KEY (`event`) REFERENCES `events` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3081,4 +3046,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2024-09-07 13:52:22
+-- Dump completed on 2025-03-25 13:12:35
