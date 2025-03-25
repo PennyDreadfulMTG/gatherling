@@ -61,11 +61,12 @@ abstract class DatabaseCase extends TestCase
      */
     protected function createTestEvent(array $overrides = []): Event
     {
-        if (Series::exists('Test Series for Test Event')) {
-            $series = new Series('Test Series for Test Event');
+        $seriesName = $overrides['series'] ?? 'Test Series for Test Event';
+        if (Series::exists($seriesName)) {
+            $series = new Series($seriesName);
         } else {
             $series = new Series('');
-            $series->name = 'Test Series for Test Event';
+            $series->name = $seriesName;
             $series->start_day = 'Monday';
             $series->start_time = '00:00:00';
             $series->active = 1;
@@ -89,9 +90,9 @@ abstract class DatabaseCase extends TestCase
         $event->season = $overrides['season'] ?? 1;
         $event->number = $overrides['number'] ?? 1;
         $event->mainstruct = $overrides['mainstruct'] ?? 'Swiss';
-        $event->mainrounds = $overrides['mainrounds'] ?? 1;
+        $event->mainrounds = $overrides['mainrounds'] ?? 4;
         $event->finalstruct = $overrides['finalstruct'] ?? 'Single Elimination';
-        $event->finalrounds = $overrides['finalrounds'] ?? 1;
+        $event->finalrounds = $overrides['finalrounds'] ?? 2;
         $event->threadurl = $overrides['threadurl'] ?? '';
         $event->reporturl = $overrides['reporturl'] ?? '';
         $event->metaurl = $overrides['metaurl'] ?? '';
