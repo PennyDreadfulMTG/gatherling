@@ -144,27 +144,14 @@ final class StandingsTest extends DatabaseCase
 
     public function testGetOpponents(): void
     {
-        $host = Player::findOrCreateByName('TestHost');
-        $series = new Series('');
-        $series->name = 'getOpponents Test Series';
-        $series->start_day = 'Monday';
-        $series->start_time = '00:00:00';
-        $series->active = 1;
-        $series->save();
-
-        $event = new Event();
-        $event->name = 'getOpponents Test Event';
-        $event->host = $host->name;
-        $event->start = new DateTimeImmutable('2025-01-01');
-        $event->series = $series->name;
-        $event->format = 'Standard';
-        $event->client = 1;
-        $event->mainrounds = 3;
-        $event->mainstruct = 'Swiss';
-        $event->finalrounds = 1;
-        $event->finalstruct = 'Single Elimination';
-        $event->save();
-        $event = new Event($event->name);
+        $event = $this->createTestEvent([
+            'name' => 'getOpponents Test Event',
+            'series' => 'getOpponents Test Series',
+            'start' => new DateTimeImmutable('2025-01-01'),
+            'host' => 'TestHost',
+            'mainrounds' => 3,
+            'finalrounds' => 1
+        ]);
 
         $eventName = $event->name;
         $players = ['Player1', 'Player2', 'Player3'];
@@ -201,27 +188,16 @@ final class StandingsTest extends DatabaseCase
 
     public function testGetAvailableLeagueOpponents(): void
     {
-        $host = Player::findOrCreateByName('TestHost');
-        $series = new Series('');
-        $series->name = 'Test Series';
-        $series->start_day = 'Monday';
-        $series->start_time = '00:00:00';
-        $series->active = 1;
-        $series->save();
-
-        $event = new Event();
-        $event->name = 'getAvailableLeagueOpponents Test Event';
-        $event->host = $host->name;
-        $event->start = new DateTimeImmutable('2025-01-01');
-        $event->series = $series->name;
-        $event->format = 'Standard';
-        $event->client = 1;
-        $event->mainrounds = 3;
-        $event->mainstruct = 'League';
-        $event->finalrounds = 1;
-        $event->finalstruct = 'Single Elimination';
-        $event->save();
-        $event = new Event($event->name);
+        $event = $this->createTestEvent([
+            'name' => 'getAvailableLeagueOpponents Test Event',
+            'series' => 'Test Series',
+            'start' => new DateTimeImmutable('2025-01-01'),
+            'host' => 'TestHost',
+            'mainrounds' => 3,
+            'finalrounds' => 1,
+            'mainstruct' => 'League',
+            'finalstruct' => 'Single Elimination'
+        ]);
 
         $eventName = $event->name;
         $players = ['Player1', 'Player2', 'Player3', 'Player4'];

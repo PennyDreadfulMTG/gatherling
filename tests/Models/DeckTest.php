@@ -22,14 +22,12 @@ class DeckTest extends DatabaseCase
     {
         parent::setUp();
 
-        $event = $this->createTestEvent([
+        $this->event = $this->createTestEvent([
             'name' => 'Test Event',
             'series' => 'Test Series',
             'start' => new DateTimeImmutable('2024-01-01'),
             'host' => 'JimmyTheHost'
         ]);
-
-        $this->event = new Event($event->name);
 
         $this->player = new Player('');
         $this->player->name = 'testplayer';
