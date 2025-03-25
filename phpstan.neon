@@ -12,6 +12,12 @@ parameters:
         - vendor
     strictRules:
         allRules: false
-        uselessCast: true
+        disallowedLooseComparison: false
+        booleansInConditions: false
+        booleansInLoopConditions: false
         disallowedBacktick: true
+        disallowedEmpty: false
         disallowedImplicitArrayCreation: true
+        disallowedShortTernary: false
+        requireParentConstructorCall: false
+        uselessCast: true

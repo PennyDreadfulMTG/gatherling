@@ -1564,12 +1564,6 @@
     <MixedMethodCall>
       <code><![CDATA[format]]></code>
     </MixedMethodCall>
-    <MixedReturnTypeCoercion>
-      <code><![CDATA[$result]]></code>
-      <code><![CDATA[$result]]></code>
-      <code><![CDATA[array<string, mixed>]]></code>
-      <code><![CDATA[array<string, mixed>]]></code>
-    </MixedReturnTypeCoercion>
     <NoValue>
       <code><![CDATA[return error("Missing argument '$key'");]]></code>
     </NoValue>
@@ -1588,11 +1582,6 @@
       <code><![CDATA[$m->round]]></code>
       <code><![CDATA[$roundnum]]></code>
     </PossiblyNullOperand>
-    <PossiblyUndefinedVariable>
-      <code><![CDATA[$result]]></code>
-      <code><![CDATA[$result]]></code>
-      <code><![CDATA[$result]]></code>
-    </PossiblyUndefinedVariable>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[!$username]]></code>
       <code><![CDATA[empty($decklist)]]></code>
