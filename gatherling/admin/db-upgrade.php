@@ -21,8 +21,15 @@ try {
 
 function main(): never
 {
-    Setup::setupDatabase();
-    echo 'done';
+    global $argv;
+    if (in_array('--test-database', $argv ?? [], true)) {
+        echo "Updating test database\n";
+        Setup::setupTestDatabase();
+    } else {
+        echo "Updating production database\n";
+        Setup::setupDatabase();
+    }
+    echo "Done\n";
     exit;
 }
 

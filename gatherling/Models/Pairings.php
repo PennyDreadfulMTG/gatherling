@@ -23,14 +23,14 @@ class Pairings
         // $highest_points = 0;
         $byeExist = $bye_data !== null;
         for ($i = 0; $i < count($players); $i++) {
-            $this->highest_points = max($this->highest_points, (int) $players[$i]['score']);
+            $this->highest_points = max($this->highest_points, $players[$i]['score']);
             if ($byeExist) {
                 $this->byeName = $bye_data['player'];
-                if (!in_array($this->byeName, $players[$i]['opponents'])) {
+                if (!in_array($this->byeName, $players[$i]['opponents'], true)) {
                     if ($this->lowestScoreWithoutBye < 0) {
-                        $this->lowestScoreWithoutBye = (int) $players[$i]['score'];
+                        $this->lowestScoreWithoutBye = $players[$i]['score'];
                     } else {
-                        $this->lowestScoreWithoutBye = min($this->lowestScoreWithoutBye, (int) $players[$i]['score']);
+                        $this->lowestScoreWithoutBye = min($this->lowestScoreWithoutBye, $players[$i]['score']);
                     }
                 }
             }
@@ -81,7 +81,7 @@ class Pairings
         // This will stave off re-pairs and second byes for as long as possible, and then re-re-pairs and third byes, and so on …
         // $counter = count($player1['opponents']);
 
-        if (!in_array($player2['player'], $player1['opponents'])) {
+        if (!in_array($player2['player'], $player1['opponents'], true)) {
             $weight += $this->quality($highest_points, $highest_points) + 1;
             if ($player2['player'] == $this->byeName && $player1['score'] == $this->lowestScoreWithoutBye) {
                 $weight += $this->quality($highest_points, $highest_points) + 1;

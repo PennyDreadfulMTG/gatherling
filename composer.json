@@ -7,11 +7,15 @@
         "tests": "vendor/bin/phpunit --stop-on-defect tests",
         "lint": "vendor/bin/phpcs -d memory_limit=2G --runtime-set testVersion 8.2 .",
         "autofix": "vendor/bin/phpcbf -d memory_limit=2G --runtime-set testVersion 8.2 .",
-        "analyze": "vendor/bin/phpstan --memory-limit=2G && vendor/bin/psalm --no-cache --threads=1",
+        "phpstan": "vendor/bin/phpstan --memory-limit=2G",
+        "psalm": "vendor/bin/psalm --no-cache --threads=1",
+        "analyze": ["@phpstan", "@psalm"],
+        "phpstan-baseline": "vendor/bin/phpstan analyse --generate-baseline",
+        "psalm-baseline": "vendor/bin/psalm --set-baseline=psalm-baseline.xml",
         "jstests": "bun test",
-		"csslint": "npx stylelint '**/*.css' '!vendor/**/*.css' && npx prettier --write '**/*.css' '!vendor/**/*.css'",
-		"cssfix": "npx stylelint --fix '**/*.css' '!vendor/**/*.css'",
-		"du": "composer dump-autoload --verbose"
+        "csslint": "npx stylelint '**/*.css' '!vendor/**/*.css' && npx prettier --write '**/*.css' '!vendor/**/*.css'",
+        "cssfix": "npx stylelint --fix '**/*.css' '!vendor/**/*.css'",
+        "du": "composer dump-autoload --verbose"
     },
     "require": {
         "php": "^8.2",
@@ -39,7 +43,8 @@
         "vimeo/psalm": "*",
         "psalm/plugin-phpunit": "*",
         "thecodingmachine/phpstan-safe-rule": "*",
-        "thecodingmachine/safe": "*"
+        "thecodingmachine/safe": "*",
+        "phpstan/phpstan-strict-rules": "^2.0"
     },
     "autoload": {
         "psr-4": {

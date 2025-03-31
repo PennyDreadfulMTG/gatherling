@@ -30,7 +30,7 @@ class Logger implements LoggerInterface
                 new StreamHandler('php://stderr', Level::Debug),
                 0, // No buffer limit
                 Level::Debug, // Minimum log level to buffer
-                false, // Don't flush when script ends (flushgg manually)
+                false, // Don't flush when script ends (flush manually)
                 false // Do NOT flush on overflow
             );
             $this->logger->pushHandler($bufferHandler);

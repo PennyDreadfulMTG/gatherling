@@ -20,18 +20,18 @@ final class FormatTest extends DatabaseCase
     public function testGetCoreCardsets(): void
     {
         $coreSets = $this->model->getCoreCardsets();
-        $this->assertEquals(['Magic 2010'], $coreSets);
+        self::assertEquals(['Magic 2010'], $coreSets);
     }
 
     public function testGetBlockCardsets(): void
     {
         $blockSets = $this->model->getBlockCardsets();
-        $this->assertEqualsCanonicalizing(['Kaladesh', 'Throne of Eldraine'], $blockSets);
+        self::assertEqualsCanonicalizing(['Kaladesh', 'Throne of Eldraine'], $blockSets);
     }
 
     public function testGetExtraCardsets(): void
     {
         $extraSets = $this->model->getExtraCardsets();
-        $this->assertEmpty($extraSets);
+        self::assertEmpty($extraSets);
     }
 }

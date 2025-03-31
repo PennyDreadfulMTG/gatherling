@@ -1,6 +1,7 @@
 includes:
     - phar://phpstan.phar/conf/bleedingEdge.neon
     - vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
     - phpstan-baseline.neon
 parameters:
     level: 9
@@ -9,3 +10,24 @@ parameters:
     excludePaths:
         - node_modules
         - vendor
+    strictRules:
+        allRules: true
+        disallowedLooseComparison: false
+        booleansInConditions: false
+        booleansInLoopConditions: false
+        uselessCast: true
+        requireParentConstructorCall: false
+        disallowedBacktick: true
+        disallowedEmpty: false
+        disallowedImplicitArrayCreation: true
+        disallowedShortTernary: false
+        overwriteVariablesWithLoop: false
+        closureUsesThis: true
+        matchingInheritedMethodNames: true
+        numericOperandsInArithmeticOperators: false
+        strictFunctionCalls: true
+        dynamicCallOnStaticMethod: true
+        switchConditionsMatchingType: true
+        noVariableVariables: false
+        strictArrayFilter: false
+        illegalConstructorMethodCall: true

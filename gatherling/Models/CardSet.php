@@ -116,7 +116,7 @@ class CardSet
             $changeling = 1;
         }
 
-        $online = in_array('mtgo', $card->availability);
+        $online = in_array('mtgo', $card->availability, true);
 
         if (property_exists($card, 'manaCost')) {
             $stmt->bind_param('sdsssddddddssdd', $card->manaCost, $card->convertedManaCost, $name, $set, $typeline, $isw, $isu, $isb, $isr, $isg, $isp, $rarity, $card->scryfallId, $changeling, $online);

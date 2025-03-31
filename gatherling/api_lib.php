@@ -198,7 +198,7 @@ function repr_json_event(Event $event): array
     $json['finalists'] = $event->getFinalists();
     $json['standings'] = [];
     $json['players'] = [];
-    foreach (Standings::getEventStandings($event->name, 0) as $s) {
+    foreach (Standings::getEventStandings($event->name) as $s) {
         $json['standings'][] = populate([], $s, ['player', 'active', 'score', 'matches_played', 'matches_won', 'draws', 'games_won', 'games_played', 'byes', 'OP_Match', 'PL_Game', 'OP_Game', 'seed']);
         $json['players'][] = repr_json_player(new Player($s->player), $event->client);
     }
@@ -286,9 +286,9 @@ function add_player_to_event(Event $event, ?string $name, ?string $decklist): ar
 /** @return array<string, mixed> */
 function delete_player_from_event(Event $event, ?string $name): array
 {
+    $result = [];
     $username = session()->string('username', '');
     if ($username && $event->authCheck($username)) {
-        $result = [];
         $result['success'] = $event->removeEntry($name);
         $result['player'] = $name;
     } else {
@@ -302,6 +302,7 @@ function delete_player_from_event(Event $event, ?string $name): array
 /** @return array<string, mixed> */
 function drop_player_from_event(Event $event, ?string $name): array
 {
+    $result = [];
     $username = session()->string('username', '');
     if ($username && $event->authCheck($username)) {
         $event->dropPlayer($name);

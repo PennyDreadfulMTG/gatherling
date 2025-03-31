@@ -27,7 +27,7 @@ final class TemplatesTest extends TestCase
         $parent->OP_Match = 1;
         $child->list = [1, 2, 3, 4, 5];
         $arr = getObjectVarsCamelCase($parent);
-        $this->assertEquals([
+        self::assertEquals([
             'monkey' => 'business',
             'opMatch' => 1,
             'child'  => [
@@ -42,11 +42,11 @@ final class TemplatesTest extends TestCase
 
     public function testToCamel(): void
     {
-        $this->assertEquals('fooBar', toCamel('foo_bar'));
-        $this->assertEquals('opMatch', toCamel('OP_Match'));
-        $this->assertEquals('adWords', toCamel('AdWords'));
-        $this->assertEquals('alreadyCamelCase', toCamel('alreadyCamelCase'));
-        $this->assertEquals('xmlHttpRequest', toCamel('XMLHttpRequest'));
-        $this->assertEquals('userDto', toCamel('userDTO'));
+        self::assertEquals('fooBar', toCamel('foo_bar'));
+        self::assertEquals('opMatch', toCamel('OP_Match'));
+        self::assertEquals('adWords', toCamel('AdWords'));
+        self::assertEquals('alreadyCamelCase', toCamel('alreadyCamelCase'));
+        self::assertEquals('xmlHttpRequest', toCamel('XMLHttpRequest'));
+        self::assertEquals('userDto', toCamel('userDTO'));
     }
 }

@@ -10,6 +10,7 @@ use Gatherling\Exceptions\DatabaseException;
 use function Gatherling\Helpers\config;
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\logger;
+use function Safe\exec;
 use function Safe\file_get_contents;
 use function Safe\preg_match;
 use function Safe\scandir;
@@ -25,11 +26,16 @@ require_once __DIR__ . '/../bootstrap.php';
 // into schema.sql at version 51. If you ever want to do this again it looks something like this:
 //
 // $ export OUTFILE=gatherling/Data/sql/schema.sql
-// $ export DATABASE=gatherling
+// $ export DATABASE=gatherli_gatherling
 // $ export FORMATSWHERE="name IN ('Standard', 'Modern', 'Penny Dreadful')"
-// $ mysqldump --no-data --single-transaction gatherling>$OUTFILE
+// $ mysqldump --no-data --single-transaction $DATABASE >$OUTFILE
 // $ mysqldump --no-create-info --single-transaction $DATABASE archetypes db_version client >>$OUTFILE
 // $ mysqldump --no-create-info --single-transaction $DATABASE formats --where=$FORMATSWHERE >>$OUTFILE
+
+// Checkpointing the test database (probably more important as it speeds up test runs) is simpler:
+// $ export TEST_DATABASE=gatherling_test
+// $ php -f gatherling/admin/db-upgrade.php -- --test-database
+// $ mysqldump $TEST_DATABASE >gatherling/Data/sql/test-db.sql
 //
 // The first command dumps the schema, the second command makes sure the archetypes, client and
 // db_version table are populated, and the third dumps the data for the most common formats.
@@ -108,11 +114,26 @@ class Setup
         if (config()->string('env') === 'prod') {
             throw new DatabaseException('Refusing to restore dump in production environment');
         }
-        $s = file_get_contents($path);
-        $commands = explode(';', $s);
-        foreach ($commands as $sql) {
-            db()->execute($sql);
+
+        $host = config()->string('db_hostname');
+        $user = config()->string('db_username');
+        $pass = config()->string('db_password');
+        $db = config()->string('db_database');
+
+        $cmd = sprintf(
+            'mysql -h%s -u%s -p%s %s < %s',
+            escapeshellarg($host),
+            escapeshellarg($user),
+            escapeshellarg($pass),
+            escapeshellarg($db),
+            escapeshellarg($path)
+        );
+
+        exec($cmd, $output, $returnVar);
+        if ($returnVar !== 0) {
+            throw new DatabaseException('Failed to restore database dump');
         }
+
         logger()->info('Database restored from dump.');
     }
 

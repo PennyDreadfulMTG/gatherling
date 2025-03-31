@@ -8,8 +8,6 @@ class PlayerDto extends Dto
 {
     public string $name;
     public ?string $password;
-    public int $rememberMe;
-    public ?string $ipAddress;
     public int $host;
     public int $super;
     public ?int $verified;

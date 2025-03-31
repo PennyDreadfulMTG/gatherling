@@ -6,7 +6,6 @@ namespace Gatherling\Tests;
 
 require_once __DIR__ . '/../gatherling/bootstrap.php';
 
-use Gatherling\Models\Deck;
 use Gatherling\Models\Event;
 use Gatherling\Models\Player;
 use Gatherling\Models\Series;
@@ -14,7 +13,6 @@ use Gatherling\Models\Matchup;
 use Gatherling\Tests\Support\TestCases\DatabaseCase;
 use Safe\DateTimeImmutable;
 
-use function Gatherling\Helpers\parseCardsWithQuantity;
 use function Safe\json_encode;
 
 final class EventsTest extends DatabaseCase
@@ -31,7 +29,7 @@ final class EventsTest extends DatabaseCase
         }
 
         $series = new Series('Test');
-        $this->assertEquals($series->name, 'Test');
+        self::assertEquals($series->name, 'Test');
 
         return $series;
     }
@@ -80,8 +78,8 @@ final class EventsTest extends DatabaseCase
         $event->save();
 
         $event = new Event($name);
-        $this->assertEquals($event->name, $name);
-        $this->assertEquals($event->start, $start);
+        self::assertEquals($event->name, $name);
+        self::assertEquals($event->start, $start);
 
         return $event;
     }
@@ -93,31 +91,31 @@ final class EventsTest extends DatabaseCase
             $event->addPlayer('testplayer' . $i);
         }
         // 10 players have expressed interest in the event.
-        $this->assertEquals(10, count($event->getEntries()));
+        self::assertEquals(10, count($event->getEntries()));
         // No players have filled out decklists.
-        $this->assertEquals(0, count($event->getRegisteredEntries(false, true)));
+        self::assertEquals(0, count($event->getRegisteredEntries(false, true)));
 
-        $deck = insertDeck('testplayer0', $event, '60 Plains', '');
-        $this->assertEmpty($deck->errors, json_encode($deck->errors));
-        $deck = insertDeck('testplayer1', $event, '60 Island', '');
-        $this->assertEmpty($deck->errors, json_encode($deck->errors));
-        $deck = insertDeck('testplayer2', $event, '40 Swamp', '');
-        $this->assertNotEmpty($deck->errors, 'No errors for a 40 card deck.');
-        $deck = insertDeck('testplayer3', $event, "60 Swamp\n100 Relentless Rats", '15 Swamp');
-        $this->assertEmpty($deck->errors, json_encode($deck->errors));
-        $deck = insertDeck('testplayer4', $event, "20 Mountain\n20 Forest\n\n\n\n\n\n\n\n\n\n\n\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n\n\n", '');
-        $this->assertEmpty($deck->errors, json_encode($deck->errors));
-        $deck = insertDeck('testplayer5', $event, "54 Mountain\n6 Seven Dwarves", '1 Seven Dwarves');
-        $this->assertEmpty($deck->errors, json_encode($deck->errors));
-        $deck = insertDeck('testplayer6', $event, "50 Mountain\n10 Seven Dwarves", '');
-        $this->assertNotEmpty($deck->errors, json_encode($deck->errors));
-        $deck = insertDeck('testplayer7', $event, "55 Mountain\n5 Seven Dwarves", '5 Seven Dwarves');
-        $this->assertNotEmpty($deck->errors, json_encode($deck->errors));
+        $deck = $this->insertDeck('testplayer0', $event, '60 Plains', '');
+        self::assertEmpty($deck->errors, json_encode($deck->errors));
+        $deck = $this->insertDeck('testplayer1', $event, '60 Island', '');
+        self::assertEmpty($deck->errors, json_encode($deck->errors));
+        $deck = $this->insertDeck('testplayer2', $event, '40 Swamp', '');
+        self::assertNotEmpty($deck->errors, 'No errors for a 40 card deck.');
+        $deck = $this->insertDeck('testplayer3', $event, "60 Swamp\n100 Relentless Rats", '15 Swamp');
+        self::assertEmpty($deck->errors, json_encode($deck->errors));
+        $deck = $this->insertDeck('testplayer4', $event, "20 Mountain\n20 Forest\n\n\n\n\n\n\n\n\n\n\n\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n4 Plains\n\n\n", '');
+        self::assertEmpty($deck->errors, json_encode($deck->errors));
+        $deck = $this->insertDeck('testplayer5', $event, "54 Mountain\n6 Seven Dwarves", '1 Seven Dwarves');
+        self::assertEmpty($deck->errors, json_encode($deck->errors));
+        $deck = $this->insertDeck('testplayer6', $event, "50 Mountain\n10 Seven Dwarves", '');
+        self::assertNotEmpty($deck->errors, json_encode($deck->errors));
+        $deck = $this->insertDeck('testplayer7', $event, "55 Mountain\n5 Seven Dwarves", '5 Seven Dwarves');
+        self::assertNotEmpty($deck->errors, json_encode($deck->errors));
         // None of this changes entry status.
-        $this->assertEquals(10, count($event->getEntries()));
+        self::assertEquals(10, count($event->getEntries()));
         // 5 Valid decks (0, 1, 3, 4, 5), 3 invalid decks (2, 6, 7), and 2 not submitted decks (8, 9).
         $registeredEntries = $event->getRegisteredEntries(false, true);
-        $this->assertEquals(5, count($registeredEntries));
+        self::assertEquals(5, count($registeredEntries));
 
         return $event;
     }
@@ -125,23 +123,23 @@ final class EventsTest extends DatabaseCase
     /** @depends testRegistration */
     public function testEventStart(Event $event): Event
     {
-        $this->assertEquals($event->active, 0);
-        $this->assertEquals($event->current_round, 0);
+        self::assertEquals($event->active, 0);
+        self::assertEquals($event->current_round, 0);
 
-        $this->assertEquals(10, count($event->getEntries()));
+        self::assertEquals(10, count($event->getEntries()));
         $event->startEvent(true);
         // The five invalid or unentered decks are pruned at start time.
-        $this->assertEquals(5, count($event->getEntries()));
-        $this->assertEquals(3, count($event->getRoundMatches(1)));
+        self::assertEquals(5, count($event->getEntries()));
+        self::assertEquals(3, count($event->getRoundMatches(1)));
 
         $event = new Event($event->name);
-        $this->assertEquals($event->active, 1);
-        $this->assertEquals($event->current_round, 1);
+        self::assertEquals($event->active, 1);
+        self::assertEquals($event->current_round, 1);
 
         $matches = $event->getRoundMatches(1);
-        $this->assertEquals(count($matches), 3);
-        $this->assertNotEmpty($matches[0]->playera);
-        $this->assertNotEmpty($matches[0]->playerb);
+        self::assertEquals(count($matches), 3);
+        self::assertNotEmpty($matches[0]->playera);
+        self::assertNotEmpty($matches[0]->playerb);
 
         return $event;
     }
@@ -150,30 +148,17 @@ final class EventsTest extends DatabaseCase
     public function testReporting(Event $event): Event
     {
         $matches = $event->getRoundMatches(1);
-        $this->assertEquals(count($matches), 3);
+        self::assertEquals(count($matches), 3);
         Matchup::saveReport('W20', $matches[0]->id, 'a');
         Matchup::saveReport('L20', $matches[0]->id, 'b');
         Matchup::saveReport('W20', $matches[1]->id, 'a');
         Matchup::saveReport('W20', $matches[1]->id, 'b');
         $matches = $event->getRoundMatches(1);
-        $this->assertEquals('verified', $matches[0]->verification);
-        $this->assertEquals('failed', $matches[1]->verification);
+        self::assertEquals('verified', $matches[0]->verification);
+        self::assertEquals('failed', $matches[1]->verification);
         Matchup::saveReport('L20', $matches[1]->id, 'b');
         $matches = $event->getRoundMatches(1);
-        $this->assertEquals('verified', $matches[1]->verification);
+        self::assertEquals('verified', $matches[1]->verification);
         return $event;
     }
-}
-
-function insertDeck(string $player, Event $event, string $main, string $side): Deck
-{
-    $deck = new Deck(0);
-    $deck->playername = $player;
-    $deck->eventname = $event->name;
-    $deck->event_id = $event->id;
-    $deck->maindeck_cards = parseCardsWithQuantity($main);
-    $deck->sideboard_cards = parseCardsWithQuantity($side);
-    $deck->save();
-
-    return $deck;
 }

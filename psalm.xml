@@ -12,18 +12,27 @@
     <projectFiles>
         <directory name="gatherling" />
         <directory name="tests" />
-        <ignoreFiles>
-            <directory name="vendor" />
-        </ignoreFiles>
     </projectFiles>
-	<plugins>
-		<pluginClass class="Psalm\PhpUnitPlugin\Plugin" />
-	</plugins>
-	<issueHandlers>
-		<!-- Both Components (which use the properties invisibly in the Mustache
-             templates) and Dtos (which aren't so thoroughly wired up as to be
-			 obvious to Psalm) trigger this one so rather than having hundreds
-             of them in the baseline I'll just suppress it entirely. -->
-        <PossiblyUnusedProperty errorLevel="suppress" />
+    <plugins>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin" />
+    </plugins>
+    <issueHandlers>
+        <MissingConstructor errorLevel="suppress">
+            <errorLevel type="suppress">
+                <!-- PDO::FETCH_CLASS cannot use constructors -->
+                <file name="gatherling/Models/*Dto.php" />
+            </errorLevel>
+        </MissingConstructor>
+        <PossiblyUnusedProperty>
+            <errorLevel type="suppress" errorLevel="suppress">
+                <!-- Psalm can't see that we use of properties in mustache templates -->
+                <file name="gatherling/Views/*.php" />
+                <file name="gatherling/Views/Pages/*.php" />
+                <file name="gatherling/Views/Components/*.php" />
+                <!-- Psalm can't trace Dto instantiation via PDO::FETCH_CLASS -->
+                <file name="gatherling/Models/*Dto.php" />
+                <file name="tests/Support/TestDto.php" />
+            </errorLevel>
+        </PossiblyUnusedProperty>
     </issueHandlers>
 </psalm>

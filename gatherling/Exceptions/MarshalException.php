@@ -10,9 +10,9 @@ use Gatherling\Helpers\Types\TypeMismatch;
 class MarshalException extends GatherlingException
 {
     public function __construct(
-        public readonly mixed $value,
+        mixed $value,
         public readonly Type $expectedType,
-        public readonly TypeMismatch $typeMismatch
+        TypeMismatch $typeMismatch
     ) {
         $type = gettype($value);
         $repr = var_export($value, true);

@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use InvalidArgumentException;
-
 use function Gatherling\Helpers\db;
 
 class Standings
 {
-    public int $id;
     public ?string $event = null;  // belongs_to event
     public ?string $player = null; // belongs_to player
     public ?int $active = null;
@@ -30,9 +27,8 @@ class Standings
 
     public function __construct(string $eventname, string $playername, int $initial_seed = 127)
     {
-        // Check to see if we are doing event standings of player standings
+        // Check to see if we are doing event standings or player standings
         if ($playername == '0') {
-            $this->id = 0;
             $this->new = true;
 
             return;
@@ -138,51 +134,38 @@ class Standings
     }
 
     /** @return list<Standings> */
-    public static function getEventStandings(string $eventname, int $isactive): array
+    public static function getEventStandings(string $eventname, StandingsMode $mode = StandingsMode::STANDINGS): array
     {
-        $db = Database::getConnection();
+        $baseSelect = 'SELECT player FROM standings WHERE event = :event';
+        $sql = match ($mode) {
+            StandingsMode::STANDINGS => "{$baseSelect} ORDER BY score desc, OP_Match desc, PL_Game desc, OP_Game desc",
+            StandingsMode::NEXT_UNPAIRED => "{$baseSelect} AND active = 1 and matched = 0 ORDER BY score desc, byes desc, RAND() LIMIT 1",
+            StandingsMode::SEEDED => "{$baseSelect} AND active = 1 ORDER BY seed",
+            StandingsMode::ACTIVE_STANDINGS => "{$baseSelect} AND active = 1 ORDER BY score desc, OP_Match desc, PL_Game desc, OP_Game desc",
+        };
 
-        // Ordered by rand() is bad for speed and scalability reasons, but since this function
-        // only runs between rounds, it probably doesn't matter.
-        if ($isactive == 0) {
-            $stmt = $db->prepare('SELECT player FROM standings WHERE event = ? ORDER BY score desc, OP_Match desc, PL_Game desc, OP_Game desc');
-        } elseif ($isactive == 1) {
-            $stmt = $db->prepare('SELECT player FROM standings WHERE event = ? AND active = 1 and matched = 0 ORDER BY score desc, byes desc, RAND() LIMIT 1');
-        } elseif ($isactive == 2) {
-            $stmt = $db->prepare('SELECT player FROM standings WHERE event = ? AND active = 1 ORDER BY seed');
-        } elseif ($isactive == 3) {
-            $stmt = $db->prepare('SELECT player FROM standings WHERE event = ? AND active = 1 ORDER BY score desc, OP_Match desc, PL_Game desc, OP_Game desc');
-        } else {
-            throw new InvalidArgumentException("Invalid argument for isactive {$isactive}");
-        }
-        $stmt or exit($db->error);
-        $stmt->bind_param('s', $eventname);
-        $stmt->execute();
-        $stmt->bind_result($name);
-        $playernames = [];
-        while ($stmt->fetch()) {
-            $playernames[] = $name;
-        }
-        $stmt->close();
+        $params = ['event' => $eventname];
+        $playerNames = db()->strings($sql, $params);
+
         $event_standings = [];
-        foreach ($playernames as $playername) {
-            $event_standings[] = new self($eventname, $playername);
+        foreach ($playerNames as $playerName) {
+            $event_standings[] = new self($eventname, $playerName);
         }
 
         return $event_standings;
     }
 
-    public static function updateStandings(string $eventname, int $subevent, int $round): void
+    public static function updateStandings(string $eventname, int $subevent): void
     {
-        $players = self::getEventStandings($eventname, 0);
+        $players = self::getEventStandings($eventname);
         foreach ($players as $player) {
-            $player->calculateStandings($eventname, $subevent, $round);
+            $player->calculateStandings($eventname, $subevent);
         }
     }
 
-    public function calculateStandings(string $eventname, int $subevent, int $round): void
+    public function calculateStandings(string $eventname, int $subevent): void
     {
-        $opponents = $this->getOpponents($eventname, $subevent, $round);
+        $opponents = $this->getOpponents($eventname, $subevent);
         $OMW = 0;
         $OGW = 0;
         $number_of_opponents = 0;
@@ -235,32 +218,24 @@ class Standings
 
         $this->save();
     }
-
     /** @return list<Standings> */
-    public function getOpponents(string $eventname, int $subevent, int $round): array
+    public function getOpponents(string $eventname, int $subevent): array
     {
-        if ($round == '0') {
-            return [];
-        }
-        $db = Database::getConnection();
-        $stmt = $db->prepare("SELECT playera, playerb FROM matches where subevent = ? AND result <> 'P' AND (playera = ? OR playerb = ?)");
-        $stmt->bind_param('dss', $subevent, $this->player, $this->player);
+        $sql = "SELECT playera, playerb FROM matches where subevent = :subevent AND result <> 'P' AND (playera = :player OR playerb = :player)";
+        $params = [
+            'subevent' => $subevent,
+            'player' => $this->player
+        ];
+        $rows = db()->select($sql, MatchDto::class, $params);
 
-        $stmt->execute();
-        $stmt->bind_result($playera, $playerb);
         $playernames = [];
-        while ($stmt->fetch()) {
-            if ($playera == $this->player) {
-                $opponent_name = $playerb;
-            } else {
-                $opponent_name = $playera;
-            }
+        foreach ($rows as $row) {
+            $opponent_name = ($row->playera == $this->player) ? $row->playerb : $row->playera;
             if ($opponent_name != $this->player) {
                 $playernames[] = $opponent_name;
             }
         }
 
-        $stmt->close();
         $opponents = [];
         foreach ($playernames as $playername) {
             $opponents[] = new self($eventname, $playername);
@@ -272,43 +247,40 @@ class Standings
     /** @return list<string> */
     public function getAvailableLeagueOpponents(int $subevent, int $round, int $league_length): array
     {
-        $opponentsAlreadyFaced = [];
-
-        if ($round == '0') {
+        if ($round === 0) {
             return [];
-        } else {
-            $db = Database::getConnection();
-            $stmt = $db->prepare('SELECT playera, playerb FROM matches where subevent = ? AND (playera = ? OR playerb = ?) AND round = ?');
-            $stmt->bind_param('dssd', $subevent, $this->player, $this->player, $round);
-
-            //Find existing opponents
-            $stmt->execute();
-            $stmt->bind_result($playera, $playerb);
-
-            while ($stmt->fetch()) {
-                if ($playera == $this->player) {
-                    $opponent_name = $playerb;
-                } else {
-                    $opponent_name = $playera;
-                }
-                if ($opponent_name != $this->player) {
-                    $opponentsAlreadyFaced[] = $opponent_name;
-                }
-            }
-            $stmt->close();
         }
-        $structure = Database::singleResultSingleParam('SELECT `type` FROM subevents WHERE id = ?', 'd', $subevent);
+
+        $sql = 'SELECT playera, playerb FROM matches WHERE subevent = :subevent AND (playera = :player OR playerb = :player) AND round = :round';
+        $params = [
+            'subevent' => $subevent,
+            'player' => $this->player,
+            'round' => $round
+        ];
+        $rows = db()->select($sql, MatchDto::class, $params);
+
+        $opponentsAlreadyFaced = [];
+        foreach ($rows as $row) {
+            $opponent_name = ($row->playera == $this->player) ? $row->playerb : $row->playera;
+            if ($opponent_name != $this->player) {
+                $opponentsAlreadyFaced[] = $opponent_name;
+            }
+        }
+
+        $sql = 'SELECT type FROM subevents WHERE id = :id';
+        $structure = db()->string($sql, ['id' => $subevent]);
+
         if ($structure == 'League Match' && count($opponentsAlreadyFaced) >= 1) {
             return [];
         }
         if (count($opponentsAlreadyFaced) >= $league_length) {
             return [];
         }
-        // Get all opponents who haven't dropped from event and exclude myself
+
         $sql = 'SELECT player FROM standings WHERE event = :event AND active = 1 AND player <> :player ORDER BY player';
         $params = ['event' => $this->event, 'player' => $this->player];
         $allPlayers = db()->strings($sql, $params);
-        // prune all opponents by opponents I have already played
+
         $opponentNames = array_diff($allPlayers, $opponentsAlreadyFaced);
         return array_values($opponentNames);
     }

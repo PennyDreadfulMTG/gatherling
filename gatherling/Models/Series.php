@@ -142,12 +142,12 @@ class Series
 
     public function isOrganizer(string $name): bool
     {
-        return in_array(strtolower($name), array_map('strtolower', $this->organizers));
+        return in_array(strtolower($name), array_map('strtolower', $this->organizers), true);
     }
 
     public function isPlayerBanned(string $name): bool
     {
-        return in_array(strtolower($name), array_map('strtolower', $this->bannedplayers));
+        return in_array(strtolower($name), array_map('strtolower', $this->bannedplayers), true);
     }
 
     public function addOrganizer(string $name): void

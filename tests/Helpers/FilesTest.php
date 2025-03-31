@@ -13,7 +13,7 @@ class FilesTest extends TestCase
 {
     public function testWithoutSetting(): void
     {
-        $this->assertNull(files()->optionalFile('userfile'));
+        self::assertNull(files()->optionalFile('userfile'));
         $this->expectException(InvalidArgumentException::class);
         files()->file('userfile');
     }
@@ -21,7 +21,7 @@ class FilesTest extends TestCase
     public function testNullFiles(): void
     {
         $_FILES = [];
-        $this->assertNull(files()->optionalFile('userfile'));
+        self::assertNull(files()->optionalFile('userfile'));
         $this->expectException(InvalidArgumentException::class);
         files()->file('userfile');
     }
@@ -29,7 +29,7 @@ class FilesTest extends TestCase
     public function testEmptyFiles(): void
     {
         $_FILES = ['userfile' => []];
-        $this->assertNull(files()->optionalFile('userfile'));
+        self::assertNull(files()->optionalFile('userfile'));
         $this->expectException(InvalidArgumentException::class);
         files()->file('userfile');
     }
@@ -37,7 +37,7 @@ class FilesTest extends TestCase
     public function testIncompleteFiles(): void
     {
         $_FILES = ['userfile' => ['name' => 'test.txt']];
-        $this->assertNull(files()->optionalFile('userfile'));
+        self::assertNull(files()->optionalFile('userfile'));
         $this->expectException(InvalidArgumentException::class);
         files()->file('userfile');
     }
@@ -53,13 +53,13 @@ class FilesTest extends TestCase
             'full_path' => '/tmp/test.txt',
         ]];
         foreach ([files()->optionalFile('userfile'), files()->file('userfile')] as $file) {
-            $this->assertNotNull($file);
-            $this->assertSame('test.txt', $file->name);
-            $this->assertSame('text/plain', $file->type);
-            $this->assertSame(100, $file->size);
-            $this->assertSame('jkfd93jkfjsofhjaifjasklfjdkla.txt', $file->tmp_name);
-            $this->assertSame(UPLOAD_ERR_OK, $file->error);
-            $this->assertSame('/tmp/test.txt', $file->full_path);
+            self::assertNotNull($file);
+            self::assertSame('test.txt', $file->name);
+            self::assertSame('text/plain', $file->type);
+            self::assertSame(100, $file->size);
+            self::assertSame('jkfd93jkfjsofhjaifjasklfjdkla.txt', $file->tmp_name);
+            self::assertSame(UPLOAD_ERR_OK, $file->error);
+            self::assertSame('/tmp/test.txt', $file->full_path);
         }
     }
 
@@ -74,13 +74,13 @@ class FilesTest extends TestCase
             'full_path' => '/tmp/test.txt',
         ]];
         foreach ([files()->optionalFile('userfile'), files()->file('userfile')] as $file) {
-            $this->assertNotNull($file);
-            $this->assertSame('test.txt', $file->name);
-            $this->assertSame('text/plain', $file->type);
-            $this->assertSame(100, $file->size);
-            $this->assertSame('jkfd93jkfjsofhjaifjasklfjdkla.txt', $file->tmp_name);
-            $this->assertSame(UPLOAD_ERR_NO_FILE, $file->error);
-            $this->assertSame('/tmp/test.txt', $file->full_path);
+            self::assertNotNull($file);
+            self::assertSame('test.txt', $file->name);
+            self::assertSame('text/plain', $file->type);
+            self::assertSame(100, $file->size);
+            self::assertSame('jkfd93jkfjsofhjaifjasklfjdkla.txt', $file->tmp_name);
+            self::assertSame(UPLOAD_ERR_NO_FILE, $file->error);
+            self::assertSame('/tmp/test.txt', $file->full_path);
         }
     }
 }

@@ -20,7 +20,7 @@ class SeriesOrganizersForm extends Component
         foreach ($series->organizers as $organizer) {
             $this->organizers[] = [
                 'name' => $organizer,
-                'isDisabled' => $player && ($organizer == $player->loginName() && !$player->isSuper()),
+                'isDisabled' => $player && ($organizer == $player->name && !$player->isSuper()),
             ];
         }
     }

@@ -12,7 +12,6 @@ use Gatherling\Models\Dto;
 use PDOException;
 use PDOStatement;
 use PDO;
-use TypeError;
 use Safe\DateTimeImmutable;
 
 use function Gatherling\Helpers\config;
@@ -464,7 +463,7 @@ class Db
                 $values[$key] = $value ? 'true' : 'false';
             } elseif (is_string($value)) {
                 $value = str_replace('\\', '\\\\', $value);
-                $values[$key] = $this->pdo->quote((string)$value);
+                $values[$key] = $this->pdo->quote($value);
             } else {
                 throw new DatabaseException("Unsupported value type for $key: " . gettype($value));
             }

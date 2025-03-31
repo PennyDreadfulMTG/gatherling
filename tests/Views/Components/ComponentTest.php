@@ -58,6 +58,6 @@ class ComponentTest extends TestCase
             . '        <li><img alt="icon2 icon" src="src2"> Bat &amp; Ball</li>'
             . '        <li>Crossbow</li>'
             . "</ul>";
-        $this->assertEquals($expected, str_replace("\n", '', $actual));
+        self::assertEquals($expected, str_replace("\n", '', $actual));
     }
 }

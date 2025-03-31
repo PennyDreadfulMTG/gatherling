@@ -28,7 +28,7 @@ class Preregistration extends Component
         $series = [];
 
         foreach ($events as $event) {
-            if (in_array($event->series, $series)) {
+            if (in_array($event->series, $series, true)) {
                 continue;
             }
             $series[] = $event->series;

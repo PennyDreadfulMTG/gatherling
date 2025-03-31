@@ -14,9 +14,9 @@ class MarshallerTest extends TestCase
 {
     public function testInt(): void
     {
-        $this->assertEquals(123, marshal(123)->int());
-        $this->assertEquals(456, marshal('456')->int());
-        $this->assertEquals(789, marshal(null)->int(789));
+        self::assertEquals(123, marshal(123)->int());
+        self::assertEquals(456, marshal('456')->int());
+        self::assertEquals(789, marshal(null)->int(789));
         $this->expectException(MarshalException::class);
         marshal('abc')->int();
         $this->expectException(MarshalException::class);
@@ -27,9 +27,9 @@ class MarshallerTest extends TestCase
 
     public function testOptionalInt(): void
     {
-        $this->assertEquals(123, marshal(123)->optionalInt());
-        $this->assertEquals(456, marshal('456')->optionalInt());
-        $this->assertNull(marshal(null)->optionalInt());
+        self::assertEquals(123, marshal(123)->optionalInt());
+        self::assertEquals(456, marshal('456')->optionalInt());
+        self::assertNull(marshal(null)->optionalInt());
         $this->expectException(MarshalException::class);
         marshal('abc')->optionalInt();
         $this->expectException(MarshalException::class);
@@ -44,8 +44,8 @@ class MarshallerTest extends TestCase
 
     public function testString(): void
     {
-        $this->assertEquals('hello', marshal('hello')->string('key'));
-        $this->assertEquals('default', marshal(null)->string('default'));
+        self::assertEquals('hello', marshal('hello')->string('key'));
+        self::assertEquals('default', marshal(null)->string('default'));
         $this->expectException(MarshalException::class);
         marshal(123)->string();
         $this->expectException(MarshalException::class);
@@ -54,8 +54,8 @@ class MarshallerTest extends TestCase
 
     public function testOptionalString(): void
     {
-        $this->assertEquals('hello', marshal('hello')->optionalString());
-        $this->assertNull(marshal(null)->optionalString());
+        self::assertEquals('hello', marshal('hello')->optionalString());
+        self::assertNull(marshal(null)->optionalString());
     }
 
     public function testOptionalStringThrowsOnInt(): void
@@ -72,8 +72,8 @@ class MarshallerTest extends TestCase
 
     public function testInts(): void
     {
-        $this->assertEquals([1, 2, 3], marshal([1, 2, 3])->ints());
-        $this->assertEquals([], marshal(null)->ints());
+        self::assertEquals([1, 2, 3], marshal([1, 2, 3])->ints());
+        self::assertEquals([], marshal(null)->ints());
     }
 
     public function testIntsThrowsOnString(): void
@@ -102,12 +102,12 @@ class MarshallerTest extends TestCase
 
     public function testStrings(): void
     {
-        $this->assertEquals(['a', 'b', 'c'], marshal(['a', 'b', 'c'])->strings());
+        self::assertEquals(['a', 'b', 'c'], marshal(['a', 'b', 'c'])->strings());
     }
 
     public function testDictInt(): void
     {
-        $this->assertEquals(['a' => 1, 'b' => 2], marshal(['a' => 1, 'b' => 2])->dictInt());
+        self::assertEquals(['a' => 1, 'b' => 2], marshal(['a' => 1, 'b' => 2])->dictInt());
         $this->expectException(MarshalException::class);
         marshal('not an array')->dictInt();
         $this->expectException(MarshalException::class);
@@ -116,7 +116,7 @@ class MarshallerTest extends TestCase
 
     public function testDictString(): void
     {
-        $this->assertEquals(['a' => 'hello', 'b' => 'world'], marshal(['a' => 'hello', 'b' => 'world'])->dictString());
+        self::assertEquals(['a' => 'hello', 'b' => 'world'], marshal(['a' => 'hello', 'b' => 'world'])->dictString());
         $this->expectException(MarshalException::class);
         marshal('not an array')->dictString();
         $this->expectException(MarshalException::class);
@@ -132,7 +132,7 @@ class MarshallerTest extends TestCase
     public function testDictIntOrString(): void
     {
         $input = ['a' => 1, 'b' => 'hello', 'c' => '99'];
-        $this->assertSame(['a' => 1, 'b' => 'hello', 'c' => 99], marshal($input)->dictIntOrString());
+        self::assertSame(['a' => 1, 'b' => 'hello', 'c' => 99], marshal($input)->dictIntOrString());
     }
 
     public function testDictIntOrStringThrowsOnFloat(): void

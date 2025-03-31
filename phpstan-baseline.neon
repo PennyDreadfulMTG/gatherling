@@ -49,12 +49,6 @@ parameters:
 			path: gatherling/Models/Deck.php
 
 		-
-			message: '#^Cannot call method fetch_assoc\(\) on bool\|mysqli_result\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: gatherling/Models/Deck.php
-
-		-
 			message: '#^Cannot call method store_result\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
 			count: 1
@@ -133,48 +127,6 @@ parameters:
 			path: gatherling/Models/Decksearch.php
 
 		-
-			message: '#^Cannot access property \$num_rows on mysqli_stmt\|false\.$#'
-			identifier: property.nonObject
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
-			message: '#^Cannot call method bind_param\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 20
-			path: gatherling/Models/Event.php
-
-		-
-			message: '#^Cannot call method bind_result\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 12
-			path: gatherling/Models/Event.php
-
-		-
-			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 20
-			path: gatherling/Models/Event.php
-
-		-
-			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 20
-			path: gatherling/Models/Event.php
-
-		-
-			message: '#^Cannot call method fetch\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 12
-			path: gatherling/Models/Event.php
-
-		-
-			message: '#^Cannot call method store_result\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: gatherling/Models/Event.php
-
-		-
 			message: '#^Method Gatherling\\Models\\Event\:\:getPlayerCount\(\) should return int but returns mixed\.$#'
 			identifier: return.type
 			count: 1
@@ -189,7 +141,7 @@ parameters:
 		-
 			message: '#^Parameter \#1 \$win of method Gatherling\\Models\\Event\:\:setFinalists\(\) expects string, string\|null given\.$#'
 			identifier: argument.type
-			count: 2
+			count: 1
 			path: gatherling/Models/Event.php
 
 		-
@@ -495,31 +447,31 @@ parameters:
 		-
 			message: '#^Cannot call method bind_param\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 34
+			count: 33
 			path: gatherling/Models/Player.php
 
 		-
 			message: '#^Cannot call method bind_result\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 29
+			count: 28
 			path: gatherling/Models/Player.php
 
 		-
 			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 32
+			count: 31
 			path: gatherling/Models/Player.php
 
 		-
 			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 33
+			count: 32
 			path: gatherling/Models/Player.php
 
 		-
 			message: '#^Cannot call method fetch\(\) on mysqli_stmt\|false\.$#'
 			identifier: method.nonObject
-			count: 29
+			count: 28
 			path: gatherling/Models/Player.php
 
 		-
@@ -625,36 +577,6 @@ parameters:
 			path: gatherling/Models/SetScraper.php
 
 		-
-			message: '#^Cannot call method bind_param\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 2
-			path: gatherling/Models/Standings.php
-
-		-
-			message: '#^Cannot call method bind_result\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 2
-			path: gatherling/Models/Standings.php
-
-		-
-			message: '#^Cannot call method close\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 2
-			path: gatherling/Models/Standings.php
-
-		-
-			message: '#^Cannot call method execute\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 2
-			path: gatherling/Models/Standings.php
-
-		-
-			message: '#^Cannot call method fetch\(\) on mysqli_stmt\|false\.$#'
-			identifier: method.nonObject
-			count: 2
-			path: gatherling/Models/Standings.php
-
-		-
 			message: '#^Parameter \#1 \$name of class Gatherling\\Models\\Player constructor expects string, string\|null given\.$#'
 			identifier: argument.type
 			count: 1
@@ -683,6 +605,12 @@ parameters:
 			identifier: method.nonObject
 			count: 1
 			path: gatherling/Views/Components/SeasonDropMenu.php
+
+		-
+			message: '#^Casting to string something that''s already string\.$#'
+			identifier: cast.useless
+			count: 1
+			path: gatherling/Views/Components/SeasonStandings.php
 
 		-
 			message: '#^Property Gatherling\\Views\\Components\\SeasonStandings\:\:\$players \(list\<array\{classes\: string, count\: int, playerLink\: Gatherling\\Views\\Components\\PlayerLink, totalPoints\: int, events\: list\<array\{points\: int\|null, why\: string\|null\}\>\}\>\) does not accept list\<array\{classes\: literal\-string, count\: int\<1, max\>, playerLink\: Gatherling\\Views\\Components\\PlayerLink, totalPoints\: array\<string, int\|string\>\|int, events\: list\<array\{points\: int\|string\|null, why\: int\|string\|null\}\>\}\>\.$#'
@@ -857,6 +785,12 @@ parameters:
 			identifier: assign.propertyType
 			count: 1
 			path: gatherling/auth.php
+
+		-
+			message: '#^Implicit array creation is not allowed \- variable \$CONFIG might not exist\.$#'
+			identifier: variable.implicitArray
+			count: 1
+			path: gatherling/config.php
 
 		-
 			message: '#^Cannot access property \$name on Gatherling\\Models\\Event\|null\.$#'

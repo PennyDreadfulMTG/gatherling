@@ -145,7 +145,7 @@ class Formats
         }
         $i = 0;
         foreach ($legal_cards as $card) {
-            if (!in_array($card, $fmt->card_legallist)) {
+            if (!in_array($card, $fmt->card_legallist, true)) {
                 if ($fmt->isCardOnBanList($card)) {
                     logger()->info("{$card} is banned");
                     continue;

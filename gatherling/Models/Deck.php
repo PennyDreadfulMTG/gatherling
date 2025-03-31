@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Gatherling\Models;
 
 use Gatherling\Exceptions\NotFoundException;
-use InvalidArgumentException;
+use Gatherling\Models\DeckCastingCostDto;
 use Gatherling\Views\Components\DeckLink;
+use InvalidArgumentException;
 
 use function Gatherling\Helpers\db;
 
@@ -27,7 +28,6 @@ class Deck
     public ?string $playername = null; // Belongs to player through entries, now held in decks table
     public ?string $eventname = null; // Belongs to event through entries
     public ?int $event_id = null; // Belongs to event through entries
-    public ?int $subeventid; // Belongs to event
     public ?string $format = null; // Belongs to event..  now held in decks table
     public ?string $tribe = null; // used only for tribal events
     public ?string $deck_color_str = null;  // Holds the final string color string
@@ -122,11 +122,9 @@ class Deck
             $this->event_id = $event->id;
         }
 
-        // Retrieve format - LI: added subeventid holder
+        // Retrieve format
         // The entire constructor does not run when a new deck is created, so this has to be duplicated
         // later in the save() function
-        //     l
-        // Find subevent id     - ignores sub-subevents like finals, which have the same name but different subevent id
         if (!is_null($this->eventname)) {
             $sql = '
                 SELECT events.format
@@ -134,11 +132,8 @@ class Deck
             INNER JOIN events ON entries.event_id = events.id
                  WHERE entries.deck = :id';
             $this->format = db()->optionalString($sql, ['id' => $id]);
-            $sql = 'SELECT MIN(id) FROM subevents WHERE parent = :eventname';
-            $this->subeventid = db()->optionalInt($sql, ['eventname' => $this->eventname]);
         } else {
             $this->format = '';
-            $this->subeventid = null;
         }
 
         // Retrieve medal
@@ -221,22 +216,17 @@ class Deck
     /** @return array<int, int> */
     public function getCastingCosts(): array
     {
-        $db = Database::getConnection();
-        $result = $db->query("SELECT convertedcost
-                          AS cc, sum(qty)
-                          AS s
-                          FROM cards c, deckcontents d
-                          WHERE d.deck = {$this->id}
-                          AND c.id = d.card
-                          AND d.issideboard = 0
-                          GROUP BY c.convertedcost
-                          HAVING cc > 0");
-
+            $sql = '
+                SELECT convertedcost, SUM(qty) AS total
+                  FROM cards c, deckcontents d
+                 WHERE d.deck = :id AND c.id = d.card AND d.issideboard = 0
+              GROUP BY c.convertedcost
+                HAVING convertedcost > 0';
+        $results = db()->select($sql, DeckCastingCostDto::class, ['id' => $this->id]);
         $convertedcosts = [];
-        while ($res = $result->fetch_assoc()) {
-            $convertedcosts[(int) $res['cc']] = (int) $res['s'];
+        foreach ($results as $row) {
+            $convertedcosts[$row->convertedcost] = $row->total;
         }
-
         return $convertedcosts;
     }
 
@@ -377,7 +367,7 @@ class Deck
         $this->errors = [];
 
         $this->name = $this->name ?: 'Temp';
-        if ($this->archetype != 'Unclassified' && !in_array($this->archetype, self::getArchetypes())) {
+        if ($this->archetype != 'Unclassified' && !in_array($this->archetype, self::getArchetypes(), true)) {
             $this->archetype = 'Unclassified';
         }
 
@@ -452,7 +442,6 @@ class Deck
         $this->maindeck_cardcount = 0;
 
         foreach ($this->maindeck_cards as $card => $amt) {
-            $amt = (int) $amt;
             $testcard = Format::getCardName($card);
             if (is_null($testcard)) {
                 $testcard = Format::getCardNameFromPartialDFC($card);
@@ -520,7 +509,6 @@ class Deck
         $this->sideboard_cardcount = 0;
 
         foreach ($this->sideboard_cards as $card => $amt) {
-            $amt = (int) $amt;
             $testcard = Format::getCardName($card);
             if (is_null($testcard)) {
                 $testcard = Format::getCardNameFromPartialDFC($card);

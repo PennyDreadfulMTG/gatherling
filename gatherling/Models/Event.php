@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gatherling\Models;
 
-use DateTimeZone;
+use Gatherling\Exceptions\InvalidStateException;
 use Gatherling\Exceptions\NotFoundException;
 use Gatherling\Exceptions\ValidationException;
 use Safe\DateTimeImmutable;
@@ -50,7 +50,6 @@ class Event
 
     // Pairing/event related
     public int $current_round;
-    public Standings $standing;
     public int $player_reportable;
     public int $player_reported_draws;
     public int $prereg_cap; // Cap on player initiated registration
@@ -142,8 +141,6 @@ class Event
         $this->late_entry_limit = $event->late_entry_limit;
         $this->private = $event->private;
         $this->client = $event->client;
-
-        $this->standing = new Standings($this->name, '0');
 
         // Main rounds
         $this->mainid = null;
@@ -435,7 +432,7 @@ class Event
         $sql = 'SELECT deck FROM entries WHERE event_id = :event_id AND deck IS NOT NULL';
         $params = ['event_id' => $this->id];
         $deckIds = db()->ints($sql, $params);
-        return array_map(fn (int $deckid) => new Deck($deckid), $deckIds);
+        return array_map(fn(int $deckid) => new Deck($deckid), $deckIds);
     }
 
     /** @return list<array{medal: string, player: string, deck: ?int}> */
@@ -452,7 +449,14 @@ class Event
                 medal, player";
         $params = ['event_id' => $this->id];
         $finalists = db()->select($sql, FinalistDto::class, $params);
-        return array_map(fn (FinalistDto $finalist) => (array) $finalist, $finalists);
+        return array_map(
+            fn(FinalistDto $finalist) => [
+                'medal' => $finalist->medal,
+                'player' => $finalist->player,
+                'deck' => $finalist->deck,
+            ],
+            $finalists
+        );
     }
 
     /**
@@ -485,18 +489,14 @@ class Event
 
     public function isOrganizer(string $name): bool
     {
-        $isOrganizer = false;
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT player FROM series_organizers WHERE series = ? and player = ?');
-        $stmt->bind_param('ss', $this->series, $name);
-        $stmt->execute();
-        $stmt->bind_result($aname);
-        while ($stmt->fetch()) {
-            $isOrganizer = true;
+        if ($this->series === null || $this->series === '') {
+            return false;
         }
-        $stmt->close();
-
-        return $isOrganizer;
+        if (!Series::exists($this->series)) {
+            return false;
+        }
+        $series = new Series($this->series);
+        return $series->isOrganizer($name);
     }
 
     public function authCheck(?string $playername): bool
@@ -551,31 +551,17 @@ class Event
 
     public function hasRegistrant(string $playername): bool
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT count(player) FROM entries WHERE event_id = ? AND player = ?');
-        $stmt->bind_param('ds', $this->id, $playername);
-        $stmt->execute();
-        $stmt->bind_result($isPlaying);
-        $stmt->fetch();
-        $stmt->close();
-
-        return $isPlaying > 0;
+        $sql = 'SELECT COUNT(player) FROM entries WHERE event_id = :event_id AND player = :player';
+        $params = ['event_id' => $this->id, 'player' => $playername];
+        return db()->int($sql, $params) > 0;
     }
 
     /** @return list<Subevent> */
     public function getSubevents(): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT id FROM subevents WHERE parent = ? ORDER BY timing');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->bind_result($subeventid);
-
-        $subids = [];
-        while ($stmt->fetch()) {
-            $subids[] = $subeventid;
-        }
-        $stmt->close();
+        $sql = 'SELECT id FROM subevents WHERE parent = :parent ORDER BY timing';
+        $params = ['parent' => $this->name];
+        $subids = db()->ints($sql, $params);
 
         $subs = [];
         foreach ($subids as $subid) {
@@ -721,19 +707,15 @@ class Event
     /** @return list<Matchup> */
     public function getMatches(): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT m.id FROM matches m, subevents s, events e
-      WHERE m.subevent = s.id AND s.parent = e.name AND e.name = ?
-      ORDER BY s.timing, m.round, m.id');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->bind_result($matchid);
-
-        $mids = [];
-        while ($stmt->fetch()) {
-            $mids[] = $matchid;
-        }
-        $stmt->close();
+        $sql = '
+            SELECT m.id
+              FROM matches m, subevents s, events e
+             WHERE m.subevent = s.id
+               AND s.parent = e.name
+               AND e.name = :name
+          ORDER BY s.timing, m.round, m.id';
+        $params = ['name' => $this->name];
+        $mids = db()->ints($sql, $params);
 
         $matches = [];
         foreach ($mids as $mid) {
@@ -757,12 +739,9 @@ class Event
 
         if ($all_rounds) {
             $sql = "
-                SELECT
-                    m.id
-                FROM
-                    matches m, subevents s, events e
-                WHERE
-                    m.subevent = s.id AND s.parent = e.name AND e.name = :name AND s.timing = :timing AND m.result <> 'P'";
+                SELECT m.id
+                  FROM matches m, subevents s, events e
+                 WHERE m.subevent = s.id AND s.parent = e.name AND e.name = :name AND s.timing = :timing AND m.result <> 'P'";
             $params = ['name' => $this->name, 'timing' => $subevnum];
         } else {
             $sql = '
@@ -799,13 +778,10 @@ class Event
             $roundnum = $this->current_round;
         }
         $sql = '
-            SELECT
-                COUNT(m.id)
-            FROM
-                matches m, subevents s, events e
-            WHERE
-                m.subevent = s.id AND s.parent = e.name AND e.name = :name AND
-                s.timing = :timing AND m.round = :round AND (m.playera = :player OR m.playerb = :player)';
+            SELECT COUNT(m.id)
+              FROM matches m, subevents s, events e
+             WHERE m.subevent = s.id AND s.parent = e.name AND e.name = :name AND
+                   s.timing = :timing AND m.round = :round AND (m.playera = :player OR m.playerb = :player)';
         $params = ['name' => $this->name, 'timing' => $subevnum, 'round' => $roundnum, 'player' => $player_name];
         return db()->int($sql, $params);
     }
@@ -862,11 +838,34 @@ class Event
             $verification = 'unverified';
         }
 
-        $db = Database::getConnection();
-        $stmt = $db->prepare('INSERT INTO matches(playera, playerb, round, subevent, result, playera_wins, playera_losses, playera_draws, playerb_wins, playerb_losses, playerb_draws, verification) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-        $stmt->bind_param('ssddsdddddds', $playera->player, $playerb->player, $round, $id, $result, $playera_wins, $playerb_wins, $draws, $playerb_wins, $playera_wins, $draws, $verification); // draws have not been implemented yet so I just assign a zero for now
-        $stmt->execute();
-        $stmt->close();
+        $sql = '
+            INSERT INTO matches
+                (playera, playerb, round, subevent, result,
+                playera_wins, playera_losses, playera_draws,
+                playerb_wins, playerb_losses, playerb_draws,
+                verification)
+            VALUES
+                (:playera, :playerb, :round, :subevent, :result,
+                :playera_wins, :playera_losses, :playera_draws,
+                :playerb_wins, :playerb_losses, :playerb_draws,
+                :verification)';
+
+        $params = [
+            'playera' => $playera->player,
+            'playerb' => $playerb->player,
+            'round' => $round,
+            'subevent' => $id,
+            'result' => $result,
+            'playera_wins' => $playera_wins,
+            'playera_losses' => $playerb_wins,
+            'playera_draws' => $draws,
+            'playerb_wins' => $playerb_wins,
+            'playerb_losses' => $playera_wins,
+            'playerb_draws' => $draws,
+            'verification' => $verification
+        ];
+
+        db()->execute($sql, $params);
     }
 
     // Assigns trophies based on the finals matches which are entered.
@@ -911,43 +910,33 @@ class Event
             }
         }
 
+        if ($win === null) {
+            throw new InvalidStateException("You cannot assign trophies if there is no winner");
+        }
+
         $this->setFinalists($win, $sec, $t4, $t8);
     }
 
     public static function exists(string $name): bool
     {
-        $db = Database::getConnection();
-        $sql = 'SELECT name FROM events WHERE ';
+        $sql = 'SELECT COUNT(*) FROM events WHERE ';
         if (is_numeric($name)) {
-            $sql .= 'id = ?';
-            $pt = 'd';
+            $sql .= 'id = :name';
         } else {
-            $sql .= 'name = ?';
-            $pt = 's';
+            $sql .= 'name = :name';
         }
-
-        $stmt = $db->prepare($sql);
-        $stmt->bind_param($pt, $name);
-        $stmt->execute();
-        $stmt->store_result();
-        $event_exists = $stmt->num_rows > 0;
-        $stmt->close();
-
-        return $event_exists;
+        return db()->int($sql, ['name' => $name]) > 0;
     }
 
     public static function findMostRecentByHost(string $host_name): ?self
     {
-        // TODO: This should show the closest non-finalized event.
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE host = ? OR cohost = ? ORDER BY start DESC LIMIT 1');
-        $stmt->bind_param('ss', $host_name, $host_name);
-        $stmt->execute();
-        $event_name = '';
-        $stmt->bind_result($event_name);
-        $event_exists = $stmt->fetch();
-        $stmt->close();
-        if ($event_exists) {
+        $sql = 'SELECT name FROM events
+                 WHERE (host = :host OR cohost = :host)
+                   AND finalized = 0
+              ORDER BY start ASC
+                 LIMIT 1';
+        $event_name = db()->optionalString($sql, ['host' => $host_name]);
+        if ($event_name !== null) {
             return new self($event_name);
         }
         return null;
@@ -958,15 +947,13 @@ class Event
         if ($this->number == 0) {
             return null;
         }
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE series = ? AND season = ? AND number = ? LIMIT 1');
-        $num = $this->number - 1;
-        $stmt->bind_param('sdd', $this->series, $this->season, $num);
-        $stmt->execute();
-        $stmt->bind_result($event_name);
-        $exists = $stmt->fetch();
-        $stmt->close();
-        if ($exists) {
+        $sql = 'SELECT name FROM events WHERE series = :series AND season = :season AND number = :number LIMIT 1';
+        $event_name = db()->optionalString($sql, [
+            'series' => $this->series,
+            'season' => $this->season,
+            'number' => $this->number - 1
+        ]);
+        if ($event_name !== null) {
             return new self($event_name);
         }
         return null;
@@ -974,15 +961,13 @@ class Event
 
     public function findNext(): ?self
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE series = ? AND season = ? AND number = ? LIMIT 1');
-        $num = $this->number + 1;
-        $stmt->bind_param('sdd', $this->series, $this->season, $num);
-        $stmt->execute();
-        $stmt->bind_result($event_name);
-        $exists = $stmt->fetch();
-        $stmt->close();
-        if ($exists) {
+        $sql = 'SELECT name FROM events WHERE series = :series AND season = :season AND number = :number LIMIT 1';
+        $event_name = db()->optionalString($sql, [
+            'series' => $this->series,
+            'season' => $this->season,
+            'number' => $this->number + 1
+        ]);
+        if ($event_name !== null) {
             return new self($event_name);
         }
         return null;
@@ -1001,82 +986,87 @@ class Event
     /** @return list<self> */
     public static function getNextPreRegister(int $num = 20): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT name FROM events WHERE prereg_allowed = 1 AND active = 0 AND finalized = 0 AND private = 0 AND DATE_SUB(start, INTERVAL 0 MINUTE) > NOW() ORDER BY start LIMIT ?');
-        // 180 minute interal in Date_Sub is to compensate for time zone difference from Server and Eastern Standard Time which is what all events are quoted in
-        $stmt->bind_param('d', $num);
-        $stmt->execute();
-        $stmt->bind_result($nextevent);
-        $event_names = [];
-        while ($stmt->fetch()) {
-            $event_names[] = $nextevent;
-        }
-        $stmt->close();
-        $events = [];
-        foreach ($event_names as $eventname) {
-            $events[] = new self($eventname);
-        }
+        $sql = '
+           SELECT name
+             FROM events
+            WHERE prereg_allowed = 1
+              AND active = 0
+              AND finalized = 0
+              AND private = 0
+              AND DATE_SUB(start, INTERVAL 0 MINUTE) > NOW()
+         ORDER BY start
+            LIMIT :limit';
 
+        $event_names = db()->strings($sql, ['limit' => $num]);
+
+        $events = [];
+        foreach ($event_names as $event_name) {
+            $events[] = new self($event_name);
+        }
         return $events;
     }
 
     /** @return list<self> */
     public static function getUpcomingEvents(string $playername): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT e.name FROM events e, entries n WHERE n.event_id = e.id AND n.player = ? AND active = 0 AND finalized = 0 ORDER BY start');
-        $stmt->bind_param('s', $playername);
-        $stmt->execute();
-        $stmt->bind_result($nextevent);
-        $event_names = [];
-        while ($stmt->fetch()) {
-            $event_names[] = $nextevent;
-        }
-        $stmt->close();
-        $events = [];
-        foreach ($event_names as $eventname) {
-            $events[] = new self($eventname);
-        }
+        $sql = '
+            SELECT e.name
+              FROM events e
+              JOIN entries n ON n.event_id = e.id
+             WHERE n.player = :player
+               AND active = 0
+               AND finalized = 0
+          ORDER BY start';
 
+        $event_names = db()->strings($sql, ['player' => $playername]);
+
+        $events = [];
+        foreach ($event_names as $event_name) {
+            $events[] = new self($event_name);
+        }
         return $events;
     }
 
     /** @return array{adjustment: int, reason: string} */
     public function getSeasonPointAdjustment(string $player): array
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT adjustment, reason FROM season_points WHERE event = ? AND player = ?');
-        $stmt or exit($db->error);
-        $stmt->bind_param('ss', $this->name, $player);
-        $stmt->execute();
-        $stmt->bind_result($adjustment, $reason);
-        $exists = $stmt->fetch() != null;
-        $stmt->close();
-        if ($exists) {
-            return ['adjustment' => $adjustment, 'reason' => $reason];
+        $sql = 'SELECT adjustment, reason FROM season_points WHERE event = :event AND player = :player';
+        $params = ['event' => $this->name, 'player' => $player];
+        $result = db()->selectOnlyOrNull($sql, SeasonPointAdjustmentDto::class, $params);
+        if ($result === null) {
+            return ['adjustment' => 0, 'reason' => ''];
         }
-        return ['adjustment' => 0, 'reason' => ''];
+        return ['adjustment' => $result->adjustment, 'reason' => $result->reason];
     }
 
     // Adjusts the season points for $player for this event by $points, with the reason $reason
     public function setSeasonPointAdjustment(string $player, int $points, string $reason): void
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT player FROM season_points WHERE event = ? AND player = ?');
-        $stmt or exit($db->error);
-        $stmt->bind_param('ss', $this->name, $player);
-        $stmt->execute();
-        $exists = $stmt->fetch() != null;
-        $stmt->close();
+        $sql = 'SELECT player FROM season_points WHERE event = :event AND player = :player';
+        $args = ['event' => $this->name, 'player' => $player];
+        $exists = db()->optionalString($sql, $args) !== null;
+
         if ($exists) {
-            $stmt = $db->prepare('UPDATE season_points SET reason = ?, adjustment = ? WHERE event = ? AND player = ?');
-            $stmt->bind_param('sdss', $reason, $points, $this->name, $player);
+            $sql = 'UPDATE season_points SET reason = :reason, adjustment = :points WHERE event = :event AND player = :player';
+            $args = [
+                'reason' => $reason,
+                'points' => $points,
+                'event' => $this->name,
+                'player' => $player
+            ];
+            db()->execute($sql, $args);
         } else {
-            $stmt = $db->prepare('INSERT INTO season_points(series, season, event, player, adjustment, reason) values(?, ?, ?, ?, ?, ?)');
-            $stmt->bind_param('sdssds', $this->series, $this->season, $this->name, $player, $points, $reason);
+            $sql = 'INSERT INTO season_points (series, season, event, player, adjustment, reason) VALUES (:series, :season, :event, :player, :points, :reason)';
+            $args = [
+                'series' => $this->series,
+                'season' => $this->season,
+                'event' => $this->name,
+                'player' => $player,
+                'points' => $points,
+                'reason' => $reason
+            ];
+            db()->execute($sql, $args);
         }
-        $stmt->execute();
-        $stmt->close();
     }
 
     public static function trophySrc(string $eventname): string
@@ -1113,9 +1103,8 @@ class Event
         //Check if all matches in the current round are finished
         if (count($this->unfinishedMatches()) === 0) {
             //Check to see if we are main rounds or final, get structure
-            $test = $this->current_round;
-            if ($test < ($this->finalrounds + $this->mainrounds)) {
-                if ($test >= $this->mainrounds) {
+            if ($this->current_round < ($this->finalrounds + $this->mainrounds)) {
+                if ($this->current_round >= $this->mainrounds) {
                     // In the final rounds.
                     $structure = $this->finalstruct;
                     $subevent_id = $this->finalid;
@@ -1284,7 +1273,7 @@ class Event
         $list_opponents = [];
 
         $standing = new Standings($this->name, $playername);
-        $opponents = $standing->getOpponents($this->name, $subevent, 1);
+        $opponents = $standing->getOpponents($this->name, $subevent);
         foreach ($opponents as $opponent) {
             if ($opponent->active === 1 && $opponent->player !== null) {
                 $list_opponents[] = $opponent->player;
@@ -1322,7 +1311,7 @@ class Event
 
     public function singleEliminationPairing(int $top_cut): void
     {
-        $players = $this->standing->getEventStandings($this->name, 2);
+        $players = Standings::getEventStandings($this->name, StandingsMode::SEEDED);
         $players = array_slice($players, 0, $top_cut);
         $counter = 0;
         while ($counter < (count($players) - 1)) {
@@ -1343,7 +1332,7 @@ class Event
     public function singleEliminationByeCheck(int $check, int $rounds): void
     {
         $seedcounter = 1;
-        $players = $this->standing->getEventStandings($this->name, 2);
+        $players = Standings::getEventStandings($this->name, StandingsMode::SEEDED);
         if (count($players) > $check) {
             $rounds++;
             $this->singleEliminationByeCheck($check * 2, $rounds);
@@ -1385,7 +1374,10 @@ class Event
     // But we would need something in order to "order" the middle matches first.
     public function top2Seeding(): void
     {
-        $players = $this->standing->getEventStandings($this->name, 3);
+        $players = Standings::getEventStandings($this->name, StandingsMode::ACTIVE_STANDINGS);
+        if (count($players) < 2) {
+            throw new InvalidStateException('Not enough players to seed');
+        }
         $this->addPairing($players[0], $players[1], $this->current_round + 1, 'P');
         Standings::writeSeed($this->name, $players[0]->player, 1);
         Standings::writeSeed($this->name, $players[1]->player, 2);
@@ -1393,7 +1385,7 @@ class Event
 
     public function top4Seeding(): void
     {
-        $players = $this->standing->getEventStandings($this->name, 3);
+        $players = Standings::getEventStandings($this->name, StandingsMode::ACTIVE_STANDINGS);
         if (count($players) < 4) {
             $this->top2Seeding();
         } else {
@@ -1408,7 +1400,7 @@ class Event
 
     public function top8Seeding(): void
     {
-        $players = $this->standing->getEventStandings($this->name, 3);
+        $players = Standings::getEventStandings($this->name, StandingsMode::ACTIVE_STANDINGS);
         if (count($players) < 8) {
             $this->top4Seeding();
         } else {
@@ -1433,28 +1425,21 @@ class Event
     }
 
     /** @return list<Event> */
+    /** @return list<self> */
     public static function getActiveEvents(bool $include_private = true): array
     {
-        $db = Database::getConnection();
-        if ($include_private) {
-            $stmt = $db->prepare('SELECT name FROM events WHERE active = 1 ORDER BY start ASC');
-        } else {
-            $stmt = $db->prepare('SELECT name FROM events WHERE active = 1 AND `private` = 0 ORDER BY start ASC');
+        $sql = 'SELECT name FROM events WHERE active = 1';
+        if (!$include_private) {
+            $sql .= ' AND private = 0';
         }
+        $sql .= ' ORDER BY start ASC';
 
-        $stmt->execute();
-        $stmt->bind_result($nextevent);
-        $event_names = [];
-        while ($stmt->fetch()) {
-            $event_names[] = $nextevent;
-        }
-        $stmt->close();
+        $event_names = db()->strings($sql);
 
         $events = [];
-        foreach ($event_names as $eventname) {
-            $events[] = new self($eventname);
+        foreach ($event_names as $event_name) {
+            $events[] = new self($event_name);
         }
-
         return $events;
     }
 
@@ -1484,10 +1469,10 @@ class Event
                 }
                 if (strpos($structure, 'Swiss') === 0) {
                     $this->recalculateScores($structure);
-                    Standings::updateStandings($this->name, $this->mainid, 1);
+                    Standings::updateStandings($this->name, $this->mainid);
                 } elseif ($structure == 'League') {
                     $this->recalculateScores('League');
-                    Standings::updateStandings($this->name, $this->mainid, 1);
+                    Standings::updateStandings($this->name, $this->mainid);
                 }
 
                 //We are at the end of the swiss round
@@ -1504,17 +1489,15 @@ class Event
 
     public static function getEventBySubevent(int $subevent): self
     {
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT e.name FROM events e, subevents s
-        WHERE s.parent = e.name AND s.id = ? LIMIT 1');
-        $stmt->bind_param('s', $subevent);
-        $stmt->execute();
-        $stmt->bind_result($event);
-        $stmt->fetch();
-        $stmt->close();
-        $event = new self($event);
+        $sql = '
+            SELECT e.name
+              FROM events e
+              JOIN subevents s ON s.parent = e.name
+             WHERE s.id = :subevent
+             LIMIT 1';
 
-        return $event;
+        $event_name = db()->string($sql, ['subevent' => $subevent]);
+        return new self($event_name);
     }
 
     public function recalculateScores(string $structure): void
@@ -1528,7 +1511,7 @@ class Event
 
     public function resetScores(): void
     {
-        $standings = Standings::getEventStandings($this->name, 0);
+        $standings = Standings::getEventStandings($this->name);
         foreach ($standings as $standing) {
             $standing->score = 0;
             $standing->matches_played = 0;
@@ -1547,35 +1530,22 @@ class Event
 
     public function resetEvent(): void
     {
-        $db = Database::getConnection();
-
         $undropPlayer = $this->getPlayers();
         foreach ($undropPlayer as $player) {
             $this->undropPlayer($player);
         }
 
-        $stmt = $db->prepare('DELETE FROM standings WHERE event = ?');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->close();
+        $sql = 'DELETE FROM standings WHERE event = :event';
+        db()->execute($sql, ['event' => $this->name]);
 
-        $db = Database::getConnection();
-        $stmt = $db->prepare('DELETE FROM ratings WHERE event = ?');
-        $stmt->bind_param('s', $this->name);
-        $stmt->execute();
-        $stmt->close();
+        $sql = 'DELETE FROM ratings WHERE event = :event';
+        db()->execute($sql, ['event' => $this->name]);
 
-        $db = Database::getConnection();
-        $stmt = $db->prepare('DELETE FROM matches WHERE subevent = ? OR subevent = ?');
-        $stmt->bind_param('ss', $this->mainid, $this->finalid);
-        $stmt->execute();
-        $stmt->close();
+        $sql = 'DELETE FROM matches WHERE subevent = :subevent1 OR subevent = :subevent2';
+        db()->execute($sql, ['subevent1' => $this->mainid, 'subevent2' => $this->finalid]);
 
-        $db = Database::getConnection();
-        $stmt = $db->prepare("UPDATE entries SET medal = 'dot' WHERE event_id = ?");
-        $stmt->bind_param('d', $this->id);
-        $stmt->execute();
-        $stmt->close();
+        $sql = "UPDATE entries SET medal = 'dot' WHERE event_id = :event_id";
+        db()->execute($sql, ['event_id' => $this->id]);
 
         $this->current_round = 0;
         $this->active = 0;
@@ -1594,16 +1564,14 @@ class Event
             $subevent = $this->finalid;
         }
 
-        $db = Database::getConnection();
-        $stmt = $db->prepare('DELETE FROM matches WHERE subevent = ? AND round = ?');
-        $stmt->bind_param('dd', $subevent, $round);
-        $stmt->execute();
-        $stmt->close();
+        $sql = 'DELETE FROM matches WHERE subevent = :subevent AND round = :round';
+        $params = ['subevent' => $subevent, 'round' => $round];
+        db()->execute($sql, $params);
 
         $this->current_round--;
         $this->save();
         $this->recalculateScores('Swiss');
-        Standings::updateStandings($this->name, $this->mainid, 1);
+        Standings::updateStandings($this->name, $this->mainid);
         $this->pairCurrentRound(true);
     }
 
@@ -1611,7 +1579,7 @@ class Event
     {
         $structure = $this->current_round > $this->mainrounds ? $this->finalstruct : $this->mainstruct;
 
-        if (in_array($structure, ['Swiss', 'Swiss (Blossom)', 'League', 'League Match'])) {
+        if (in_array($structure, ['Swiss', 'Swiss (Blossom)', 'League', 'League Match'], true)) {
             $this->assignMedalsByStandings();
         } elseif ($structure === 'Single Elimination') {
             $this->assignTrophiesFromMatches();
@@ -1620,7 +1588,7 @@ class Event
 
     public function assignMedalsByStandings(): void
     {
-        $players = $this->standing->getEventStandings($this->name, 0);
+        $players = Standings::getEventStandings($this->name);
         $numberOfPlayers = count($players);
 
         $medalCount = $numberOfPlayers < 8 ? 2 : ($numberOfPlayers < 16 ? 4 : 8);
@@ -1658,32 +1626,35 @@ class Event
             $verification = 'verified';
         }
 
-        $db = Database::getConnection();
-        $stmt = $db->prepare('SELECT m.id FROM matches m, subevents s, events e
-        WHERE m.subevent = s.id AND s.parent = e.name AND e.name = ? AND
-        m.verification = ? AND m.round = ? AND s.timing = ? ORDER BY m.verification');
         $current_round = $this->current_round;
         $timing = 1;
         if ($current_round > $this->mainrounds) {
             $current_round -= $this->mainrounds;
             $timing = 2;
         }
-        $stmt->bind_param('ssdd', $this->name, $verification, $current_round, $timing);
-        $stmt->execute();
-        $stmt->bind_result($matchid);
 
-        $mids = [];
-        while ($stmt->fetch()) {
-            $mids[] = $matchid;
-        }
-        $stmt->close();
+        $sql = '
+            SELECT m.id
+              FROM matches m
+              JOIN subevents s
+                ON s.id = m.subevent
+              JOIN events e
+                ON e.name = s.parent
+             WHERE e.name = :name
+               AND m.verification = :verification
+               AND m.round = :round
+               AND s.timing = :timing
+          ORDER BY m.verification';
 
-        $matches = [];
-        foreach ($mids as $mid) {
-            $matches[] = new Matchup($mid);
-        }
+        $params = [
+            'name' => $this->name,
+            'verification' => $verification,
+            'round' => $current_round,
+            'timing' => $timing
+        ];
 
-        return $matches;
+        $matchIds = db()->ints($sql, $params);
+        return array_map(fn(int $id) => new Matchup($id), $matchIds);
     }
 
     /** @return list<Matchup> */
