@@ -227,7 +227,7 @@ CREATE TABLE `entries` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`gatherling`@`localhost`*/ /*!50003 TRIGGER prevent_null_deck
+/*!50003 CREATE*/ /*!50003 TRIGGER prevent_null_deck
 BEFORE UPDATE ON entries
 FOR EACH ROW
 BEGIN
