@@ -76,7 +76,7 @@ function main(): never
         // part of the reg-decklist feature. both "register" and "addregdeck" switches
         if ($requestMode === 'register') {
             $playerName = isset($_POST['player']) ? post()->string('player') : get()->string('player');
-            $eventName = isset($_POST['player']) ? post()->string('event') : get()->string('event');
+            $eventName = isset($_POST['event']) ? post()->string('event') : get()->string('event');
             $viewComponent = new DeckRegisterForm($playerName, $eventName);
         } elseif ($requestMode === 'addregdeck') {
             $deck = insertDeck($event, post()->string('name'), post()->string('archetype'), post()->string('notes'), post()->string('player'), post()->string('contents', ''), post()->string('sideboard', ''));
