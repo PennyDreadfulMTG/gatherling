@@ -39,14 +39,14 @@ To see DEBUG log output for a failed test, set env var DEBUG=1
 - $ DEBUG=1 composer test
 
 ## Lint
-$ composer lint # phpcs
-$ composer autofix # phpcbf
-$ composer static # phpstan and psalm
-$ composer csslint # stylelint
+- $ composer lint # phpcs
+- $ composer autofix # phpcbf
+- $ composer static # phpstan and psalm
+- $ composer csslint # stylelint
 
-- To ignore all current errors in the static checkers regenerate the baseline:
-$ vendor/bin/phpstan analyse --generate-baseline
-$ vendor/bin/psalm --set-baseline=psalm-baseline.xml
+To ignore all current errors in the static checkers regenerate the baseline:
+- $ vendor/bin/phpstan analyse --generate-baseline
+- $ vendor/bin/psalm --set-baseline=psalm-baseline.xml
 
 ## JavaScript Tests
 
