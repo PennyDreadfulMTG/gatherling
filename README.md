@@ -31,7 +31,9 @@ You can change the ports in docker-composer.yml.
 ## Tests
 
 - $ composer test
+
 or with a dockerized setup:
+
 - $ docker exec -it gatherling-web-1 sh -c "cd /var/www && vendor/bin/phpunit tests"
 
 To see DEBUG log output for a failed test, set env var DEBUG=1
