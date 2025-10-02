@@ -17,12 +17,12 @@ A website for running Magic: the Gathering tournaments.
 
 ## Docker Setup
 
-- Install Docker.
-- $ cp config.php.docker config.php
-- $ docker-compose up
-- $ docker exec -it gatherling-web-1 sh -c "cd /var/www && php gatherling/admin/db-upgrade.php"
-This brings up the website on ports 80 and 81, mysql on port 3307, and adminer on port 8080.
-You can change the ports in docker-composer.yml.
+- Install [Docker](https://docs.docker.com/get-started/get-docker/) and [Docker Compose](https://docs.docker.com/compose/)
+- `docker-compose up`
+- `docker-compose exec web sh -c "cd /var/www && php gatherling/admin/db-upgrade.php"`
+
+This brings up the website on ports 80 and 81, mysql on port 3307, and adminer
+on port 8080.  You can change the ports in `docker-compose.yml`.
 
 ## Dev
 

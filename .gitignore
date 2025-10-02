@@ -7,7 +7,6 @@ vendor/
 
 /backups/*.sql.gz
 /backups/*.sql
-/.env
 
 .DS_Store
 node_modules
