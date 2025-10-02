@@ -10,7 +10,14 @@ RUN php composer.phar --version && php composer.phar install
 
 FROM php:8.2-apache
 LABEL maintainer="Katelyn Gigante"
-RUN apt-get update && apt-get install -y git zip unzip
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+      git \
+      mariadb-client \
+      unzip \
+      zip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable mysqli
 
