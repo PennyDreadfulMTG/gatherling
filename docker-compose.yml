@@ -6,7 +6,7 @@ services:
       - "81:80"
     depends_on:
       - db
-    env_file: .env
+    env_file: .env.docker
     volumes:
       - ./:/var/www
       - /var/www/vendor  # Don't overwrite this, we want the version we copied over in build
@@ -17,7 +17,7 @@ services:
            target: /var/www/gatherling
   db:
     image: mariadb
-    env_file: .env
+    env_file: .env.docker
     ports:
       - "3307:3306"
     volumes:
