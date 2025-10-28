@@ -107,9 +107,9 @@ function main(): never
                 FROM events e
                 WHERE e.finalized AND e.start < NOW()
                 ORDER BY e.start DESC
-                LIMIT $count";
+                LIMIT ?";
 
-            $eventNames = db()->strings($sql);
+            $eventNames = db()->strings($sql, [$count]);
             foreach ($eventNames as $eventName) {
                 $event = new Event($eventName);
                 $result[$event->name] = repr_json_event($event);
