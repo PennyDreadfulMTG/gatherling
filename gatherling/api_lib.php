@@ -117,6 +117,15 @@ function argStr(string $key, string|false $default = false): string
     }
 }
 
+function argInt(string $key, int|false $default = false): int
+{
+    try {
+        return request()->int($key, $default);
+    } catch (InvalidArgumentException $e) {
+        error("missing argument '$key'");
+    }
+}
+
 function arg(string $key, mixed $default = null): mixed
 {
     if (!isset($_REQUEST[$key])) {

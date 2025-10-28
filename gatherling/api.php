@@ -98,12 +98,17 @@ function main(): never
             break;
 
         case 'recent_events':
-            $sql = '
+            $count = argInt('count', 10);
+            if ($count <= 0 || $count > 100) {
+                $count = 10;
+            }
+            $sql = "
                 SELECT e.name
                 FROM events e
                 WHERE e.finalized AND e.start < NOW()
-            ORDER BY e.start DESC
-                LIMIT 10';
+                ORDER BY e.start DESC
+                LIMIT $count";
+
             $eventNames = db()->strings($sql);
             foreach ($eventNames as $eventName) {
                 $event = new Event($eventName);
