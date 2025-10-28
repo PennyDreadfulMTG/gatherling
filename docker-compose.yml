@@ -6,7 +6,11 @@ services:
       - "81:80"
     depends_on:
       - db
-    env_file: .env.docker
+    env_file:
+      - .env.docker
+      - path: .env  # If you want to override any env vars for local development
+        required: false
+
     volumes:
       - ./:/var/www
       - /var/www/vendor  # Don't overwrite this, we want the version we copied over in build
@@ -17,7 +21,10 @@ services:
            target: /var/www/gatherling
   db:
     image: mariadb
-    env_file: .env.docker
+    env_file:
+      - .env.docker
+      - path: .env  # If you want to override any env vars for local development
+        required: false
     ports:
       - "3307:3306"
     volumes:
