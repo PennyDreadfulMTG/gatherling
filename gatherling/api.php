@@ -98,18 +98,13 @@ function main(): never
             break;
 
         case 'recent_events':
-            $count = argInt('count', 10);
-            if ($count <= 0 || $count > 100) {
-                $count = 10;
-            }
-            $sql = "
+            $sql = '
                 SELECT e.name
                 FROM events e
                 WHERE e.finalized AND e.start < NOW()
-                ORDER BY e.start DESC
-                LIMIT :limit";
-
-            $eventNames = db()->strings($sql, [['limit' => $count]]);
+            ORDER BY e.start DESC
+                LIMIT 10';
+            $eventNames = db()->strings($sql);
             foreach ($eventNames as $eventName) {
                 $event = new Event($eventName);
                 $result[$event->name] = repr_json_event($event);
