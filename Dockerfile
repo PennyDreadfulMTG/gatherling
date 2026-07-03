@@ -1,4 +1,4 @@
-FROM php:8.2-apache as compose
+FROM php:8.5.3RC1-apache as compose
 WORKDIR /restore
 COPY composer.* ./
 RUN apt-get update && apt-get install -y git zip unzip
@@ -8,7 +8,7 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable mysqli
 RUN curl --silent --show-error https://getcomposer.org/installer | php
 RUN php composer.phar --version && php composer.phar install
 
-FROM php:8.2-apache
+FROM php:8.5.3RC1-apache
 LABEL maintainer="Katelyn Gigante"
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
