@@ -1,0 +1,25 @@
+"$schema" = "https://conductor.build/schemas/settings.repo.schema.json"
+
+[scripts]
+# Runs before the agent starts, in every new workspace, local and cloud.
+# bin/setup is idempotent and provisions MariaDB itself when the sandbox has none,
+# so the same command works in both places.
+setup = "bin/setup"
+
+# Several workspaces would share one MariaDB and one gatherling_test database.
+# Tests wrap each case in a transaction and roll back, but concurrent schema
+# migrations would still collide.
+run_mode = "nonconcurrent"
+
+[scripts.run.verify]
+command = "bin/verify"
+icon = "circle-check"
+default = true
+
+[scripts.run.tests]
+command = "composer tests"
+icon = "test-tube"
+
+[scripts.run.tasks]
+command = "bin/tasks"
+icon = "list-checks"
