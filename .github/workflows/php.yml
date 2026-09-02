@@ -1,12 +1,56 @@
-name: PHP Composer
+name: CI
 
 on:
   - push
   - pull_request
 
-jobs:
-  build:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
+jobs:
+  # Static analysis and linting need no database, so they run first and fast.
+  # A type error should not wait behind a five minute database setup.
+  static:
+    name: Static analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: curl, mysqli, pdo, pdo_mysql, simplexml, mbstring
+          coverage: none
+
+      - name: Cache Composer packages
+        uses: actions/cache@v6.1.0
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      # No config.php: static analysis must not need a database or credentials.
+
+      - name: phpstan
+        run: vendor/bin/phpstan analyse --memory-limit=2G --no-progress --error-format=github
+
+      - name: psalm
+        run: vendor/bin/psalm --no-cache --threads=4 --no-progress --output-format=github
+
+      - name: phpcs
+        run: vendor/bin/phpcs -q -d memory_limit=2G --runtime-set testVersion 8.2 .
+
+      # Every tracked debt metric may go down, never up. See bin/ratchet.
+      - name: Debt ratchet
+        run: bin/ratchet
+
+  tests:
+    name: Tests
     runs-on: ubuntu-latest
     services:
       mariadb:
@@ -14,48 +58,74 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: gatherling
         ports:
-        - 3306:3306
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
 
     steps:
-    - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@v6.0.1
 
-    # - name: Validate composer.json and composer.lock
-    #   run: composer validate
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: curl, mysqli, pdo, pdo_mysql, simplexml, mbstring
+          coverage: pcov
 
-    - name: Setup PHP with PECL extension
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.2'
-        extensions: curl, mysqli
+      - name: Setup problem matchers for PHP
+        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+      - name: Setup problem matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-    - name: Setup problem matchers for PHP
-      run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
-    - name: Setup problem matchers for PHPUnit
-      run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+      - name: Cache Composer packages
+        uses: actions/cache@v6.1.0
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-php-
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v6.1.0
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
 
-    - name: Install dependencies
-      if: steps.composer-cache.outputs.cache-hit != 'true'
-      run: composer install --prefer-dist --no-progress
-    - name: Regenerate Autoloader
-      run: composer dump-autoload
-    - run: cp gatherling/config.php.github gatherling/config.php
-    - run: php gatherling/admin/db-upgrade.php
-    - run: php gatherling/insertcardset.php M10
-    - run: php gatherling/insertcardset.php ELD
-    - run: php gatherling/util/updateDefaultFormats.php
-    - run: vendor/bin/phpunit tests/
+      - run: cp gatherling/config.php.github gatherling/config.php
+      - run: php gatherling/admin/db-upgrade.php
+      - run: php gatherling/insertcardset.php M10
+      - run: php gatherling/insertcardset.php ELD
+      - run: php gatherling/util/updateDefaultFormats.php
 
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
+      - name: PHPUnit
+        run: vendor/bin/phpunit tests --coverage-text --coverage-clover=coverage.xml
 
-    # - name: Run test suite
-    #   run: composer run-script test
+      # Coverage may go up, never down. See bin/ratchet.
+      - name: Coverage ratchet
+        run: bin/ratchet
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage.xml
+          if-no-files-found: ignore
+
+  frontend:
+    name: CSS and JS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.1
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install JS dependencies
+        run: bun install
+
+      - name: stylelint
+        run: bunx stylelint '**/*.css' '!vendor/**/*.css' '!node_modules/**/*.css'
+
+      - name: JS tests
+        run: bun test
