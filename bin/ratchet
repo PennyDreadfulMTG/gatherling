@@ -66,6 +66,18 @@ const FLOORS = [
     'covered_lines'   => 'lines covered by tests',
 ];
 
+/**
+ * Slack allowed before a floor counts as regressed, as a fraction.
+ *
+ * Coverage is not perfectly reproducible: PHP version and driver differ between a
+ * developer's machine and CI, and that alone moved this by 3 lines. Without slack the
+ * mark can only ever be set from whichever environment measured lowest. 1% still
+ * catches anyone deleting a meaningful number of tests.
+ */
+const TOLERANCE = [
+    'covered_lines' => 0.01,
+];
+
 // ---------------------------------------------------------------- collection
 
 /** @return list<string> */
@@ -258,7 +270,8 @@ function report(array $current, array $marks): int
             $delta = '';
         } else {
             $diff = $now - $mark;
-            $bad = $isFloor ? $diff < 0 : $diff > 0;
+            $slack = (int) floor($mark * (TOLERANCE[$key] ?? 0.0));
+            $bad = $isFloor ? $diff < -$slack : $diff > $slack;
             $good = $isFloor ? $diff > 0 : $diff < 0;
             if ($bad) {
                 $status = 'REGRESSED';
