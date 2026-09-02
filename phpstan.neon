@@ -8,8 +8,10 @@ parameters:
     paths:
         - .
     excludePaths:
-        - node_modules
+        - node_modules (?)
         - vendor
+        # Gitignored and machine-specific; its contents differ per developer.
+        - gatherling/config.php (?)
     strictRules:
         allRules: true
         disallowedLooseComparison: false

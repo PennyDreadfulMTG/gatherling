@@ -7,6 +7,7 @@ namespace Gatherling\Auth;
 use function Gatherling\Helpers\db;
 use function Safe\json_decode;
 use function Safe\json_encode;
+use function Safe\session_start;
 
 class Session
 {

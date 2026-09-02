@@ -12,6 +12,10 @@
     <projectFiles>
         <directory name="gatherling" />
         <directory name="tests" />
+        <ignoreFiles allowMissingFiles="true">
+            <!-- Gitignored and machine-specific; its contents differ per developer. -->
+            <file name="gatherling/config.php" />
+        </ignoreFiles>
     </projectFiles>
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin" />

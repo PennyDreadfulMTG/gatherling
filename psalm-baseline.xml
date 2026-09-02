@@ -1608,34 +1608,6 @@
       <code><![CDATA[$CONFIG['GIT_HASH']]]></code>
     </MixedArrayAssignment>
   </file>
-  <file src="gatherling/config.php">
-    <MixedArrayAssignment>
-      <code><![CDATA[$CONFIG['DISCORD_CLIENT_ID']]]></code>
-      <code><![CDATA[$CONFIG['DISCORD_CLIENT_SECRET']]]></code>
-      <code><![CDATA[$CONFIG['base_url']]]></code>
-      <code><![CDATA[$CONFIG['brevo_api_key']]]></code>
-      <code><![CDATA[$CONFIG['calendar_description']]]></code>
-      <code><![CDATA[$CONFIG['db_database']]]></code>
-      <code><![CDATA[$CONFIG['db_hostname']]]></code>
-      <code><![CDATA[$CONFIG['db_password']]]></code>
-      <code><![CDATA[$CONFIG['db_test_database']]]></code>
-      <code><![CDATA[$CONFIG['db_test_hostname']]]></code>
-      <code><![CDATA[$CONFIG['db_test_password']]]></code>
-      <code><![CDATA[$CONFIG['db_test_username']]]></code>
-      <code><![CDATA[$CONFIG['db_username']]]></code>
-      <code><![CDATA[$CONFIG['env']]]></code>
-      <code><![CDATA[$CONFIG['infobot_passkey']]]></code>
-      <code><![CDATA[$CONFIG['infobot_prefix']]]></code>
-      <code><![CDATA[$CONFIG['password_reset_key']]]></code>
-      <code><![CDATA[$CONFIG['site_name']]]></code>
-    </MixedArrayAssignment>
-    <PossiblyUndefinedGlobalVariable>
-      <code><![CDATA[$CONFIG]]></code>
-    </PossiblyUndefinedGlobalVariable>
-    <UnusedVariable>
-      <code><![CDATA[$CONFIG]]></code>
-    </UnusedVariable>
-  </file>
   <file src="gatherling/deck.php">
     <PossiblyNullArgument>
       <code><![CDATA[$deck]]></code>
