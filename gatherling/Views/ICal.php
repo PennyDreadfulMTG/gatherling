@@ -6,7 +6,9 @@ namespace Gatherling\Views;
 
 class ICal extends TemplateResponse
 {
-    private const string ICAL_DATE_FORMAT = 'Ymd\THis';
+    // No native type on this constant: they need PHP 8.3 and composer.json says ^8.2,
+    // where this file would fail to parse and take calendar.php down with it.
+    private const ICAL_DATE_FORMAT = 'Ymd\THis';
 
     /** @var list<array{start: string, end: string, name: string, url: string|null}> */
     public array $events;
