@@ -11,6 +11,7 @@ use Gatherling\Models\Player;
 use Gatherling\Models\Series;
 use Gatherling\Models\Matchup;
 use Gatherling\Tests\Support\TestCases\DatabaseCase;
+use PHPUnit\Framework\Attributes\Depends;
 use Safe\DateTimeImmutable;
 
 use function Safe\json_encode;
@@ -34,7 +35,7 @@ final class EventsTest extends DatabaseCase
         return $series;
     }
 
-    /** @depends testSeriesCreation */
+    #[Depends('testSeriesCreation')]
     public function testEventCreation(Series $series): Event
     {
         $recentEvents = $series->getRecentEvents(1);
@@ -84,7 +85,7 @@ final class EventsTest extends DatabaseCase
         return $event;
     }
 
-    /** @depends testEventCreation */
+    #[Depends('testEventCreation')]
     public function testRegistration(Event $event): Event
     {
         for ($i = 0; $i < 10; $i++) {
@@ -120,7 +121,7 @@ final class EventsTest extends DatabaseCase
         return $event;
     }
 
-    /** @depends testRegistration */
+    #[Depends('testRegistration')]
     public function testEventStart(Event $event): Event
     {
         self::assertEquals($event->active, 0);
@@ -144,7 +145,7 @@ final class EventsTest extends DatabaseCase
         return $event;
     }
 
-    /** @depends testEventStart */
+    #[Depends('testEventStart')]
     public function testReporting(Event $event): Event
     {
         $matches = $event->getRoundMatches(1);

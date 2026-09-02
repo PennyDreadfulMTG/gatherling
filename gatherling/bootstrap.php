@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Gatherling\Helpers\ErrorHandler;
 use Gatherling\Auth\Session;
 
+use function Gatherling\Helpers\isUnderTest;
 use function Safe\file_get_contents;
 use function Safe\ob_start;
 use function Safe\php_sapi_name;
@@ -39,11 +40,16 @@ if (file_exists('../.git/HEAD')) {
 
 set_exception_handler(fn (\Throwable $e) => (new ErrorHandler())->handle($e));
 
-Sentry\init([
-    'dsn'         => 'https://15d8086e6ca2459e912b942f7c1c15c8@errors.redpoint.games/12',
-    'environment' => 'Gatherling',
-    'release'     => $CONFIG['GIT_HASH'],
-]);
+// Sentry installs its own error handler, which sits on top of PHPUnit's and swallows
+// PHP warnings and notices before PHPUnit can turn them into test failures. Under test
+// we neither want that nor want to report to Sentry at all.
+if (!isUnderTest()) {
+    Sentry\init([
+        'dsn'         => 'https://15d8086e6ca2459e912b942f7c1c15c8@errors.redpoint.games/12',
+        'environment' => 'Gatherling',
+        'release'     => $CONFIG['GIT_HASH'],
+    ]);
+}
 
 ob_start();
 

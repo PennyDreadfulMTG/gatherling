@@ -44,6 +44,18 @@ function marshal(mixed $value): Marshaller
     return new Marshaller($value);
 }
 
+/**
+ * True when running under PHPUnit.
+ *
+ * Used to keep test runs out of anything that talks to the outside world or that
+ * installs global handlers competing with PHPUnit's. Checked without autoloading so
+ * it is safe to call from bootstrap.php.
+ */
+function isUnderTest(): bool
+{
+    return defined('TESTING') || class_exists(\PHPUnit\Framework\TestCase::class, false);
+}
+
 function files(): Files
 {
     return new Files($_FILES);

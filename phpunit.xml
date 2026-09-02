@@ -1,9 +1,61 @@
-<phpunit stopOnFailure="true">
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         cacheDirectory=".phpunit.cache"
+         colors="true"
+         beStrictAboutOutputDuringTests="true"
+         failOnWarning="true"
+         failOnNotice="true"
+         failOnRisky="true"
+         failOnDeprecation="true"
+         failOnPhpunitDeprecation="true"
+         failOnEmptyTestSuite="true"
+         displayDetailsOnTestsThatTriggerErrors="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnTestsThatTriggerNotices="true"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         displayDetailsOnPhpunitDeprecations="true">
+
+    <testsuites>
+        <testsuite name="gatherling">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <!--
+        Defines what counts as "our code". Two effects:
+          1. Coverage is measured against these files.
+          2. restrictNotices/restrictWarnings are off, so a PHP warning or notice
+             raised anywhere - including in test code - fails the run.
+             ignoreIndirectDeprecations keeps vendor deprecations from doing so.
+    -->
+    <source restrictNotices="false"
+            restrictWarnings="false"
+            ignoreIndirectDeprecations="true">
+        <include>
+            <directory suffix=".php">gatherling</directory>
+        </include>
+        <exclude>
+            <file>gatherling/config.php</file>
+            <directory>gatherling/templates</directory>
+        </exclude>
+    </source>
+
     <extensions>
         <bootstrap class="Gatherling\Tests\Support\Listeners\DatabaseTestListener" />
         <bootstrap class="Gatherling\Tests\Support\Listeners\LogTestListener" />
     </extensions>
+
     <php>
         <const name="TESTING" value="true"/>
+        <!--
+            mustache/mustache 2.14 emits implicit-nullable deprecations on PHP 8.4.
+            Supported CI is 8.2 where this does not fire, but developers run newer
+            PHP. Printed deprecations would trip beStrictAboutOutputDuringTests, so
+            suppress the display; PHPUnit's own handler still records deprecations
+            raised by our code and fails the run.
+            Remove this once mustache is upgraded to v3 (task T-0003).
+        -->
+        <ini name="display_errors" value="0"/>
     </php>
 </phpunit>
