@@ -1,0 +1,196 @@
+#!/usr/bin/env bash
+# Set up a Gatherling development workspace from nothing.
+# Idempotent: safe to re-run.
+#
+# Override defaults with env vars:
+#   GATHERLING_DB_HOST GATHERLING_DB_USER GATHERLING_DB_PASS
+#   GATHERLING_DB_NAME GATHERLING_DB_TEST_NAME
+set -uo pipefail
+
+cd "$(dirname "$0")/.."
+ROOT=$(pwd)
+
+DB_HOST=${GATHERLING_DB_HOST:-localhost}
+DB_USER=${GATHERLING_DB_USER:-gatherling}
+DB_PASS=${GATHERLING_DB_PASS:-'Pa$$w0rD'}
+DB_NAME=${GATHERLING_DB_NAME:-gatherling}
+DB_TEST_NAME=${GATHERLING_DB_TEST_NAME:-gatherling_test}
+
+step() { printf '\n\033[1m==> %s\033[0m\n' "$1"; }
+fail() { printf '\033[31mFAILED: %s\033[0m\n' "$1" >&2; exit 1; }
+
+step "Checking prerequisites"
+command -v php >/dev/null || fail "php not found"
+command -v composer >/dev/null || fail "composer not found"
+php -r 'exit(version_compare(PHP_VERSION, "8.2", ">=") ? 0 : 1);' || fail "PHP 8.2+ required, found $(php -r 'echo PHP_VERSION;')"
+# Captured once rather than piped per-check: `php -m | grep -q` exits grep early,
+# php takes SIGPIPE, and with pipefail the whole check spuriously fails.
+MODULES=$(php -m)
+for ext in curl mysqli pdo_mysql SimpleXML mbstring; do
+    grep -qix "$ext" <<<"$MODULES" || fail "PHP extension missing: $ext"
+done
+grep -qiE '^(xdebug|pcov)$' <<<"$MODULES" || echo "  note: no xdebug/pcov, coverage will be unavailable"
+echo "  php $(php -r 'echo PHP_VERSION;') ok"
+
+step "Installing PHP dependencies"
+composer install --prefer-dist --no-progress --no-interaction || fail "composer install"
+
+step "Writing gatherling/config.php"
+if [ -f gatherling/config.php ]; then
+    echo "  already exists, leaving alone"
+else
+    cat > gatherling/config.php <<PHPEOF
+<?php
+
+# Local development config, written by bin/setup. Gitignored.
+# See config.php.example for every available setting.
+
+\$CONFIG['env'] = 'dev';
+
+\$CONFIG['db_hostname'] = \$CONFIG['db_test_hostname'] = '${DB_HOST}';
+\$CONFIG['db_username'] = \$CONFIG['db_test_username'] = '${DB_USER}';
+\$CONFIG['db_password'] = \$CONFIG['db_test_password'] = '${DB_PASS}';
+\$CONFIG['db_database'] = '${DB_NAME}';
+\$CONFIG['db_test_database'] = '${DB_TEST_NAME}';
+
+\$CONFIG['base_url'] = 'http://localhost/gatherling/';
+\$CONFIG['calendar_description'] = 'Gatherling Calendar';
+
+\$CONFIG['infobot_passkey'] = '';
+PHPEOF
+    php -l gatherling/config.php >/dev/null || fail "generated config.php is not valid PHP"
+    echo "  written"
+fi
+
+step "Checking database connectivity"
+
+can_connect() {
+    php -r '
+        require "gatherling/config.php";
+        try {
+            new PDO("mysql:host={$CONFIG["db_hostname"]}", $CONFIG["db_username"], $CONFIG["db_password"]);
+        } catch (PDOException $e) {
+            fwrite(STDERR, $e->getMessage() . "\n");
+            exit(1);
+        }
+    ' 2>/dev/null
+}
+
+# Anything that can talk to the server as an administrator. On a fresh Linux box
+# that is root over the unix socket; on a dev box it may be a password.
+admin_sql() {
+    for admin in "mariadb -u root" "mysql -u root" "sudo -n mariadb -u root" "sudo -n mysql -u root"; do
+        if $admin -e "SELECT 1" >/dev/null 2>&1; then
+            $admin -e "$1" >/dev/null 2>&1 && return 0
+        fi
+    done
+    return 1
+}
+
+provision_database() {
+    # A cloud sandbox starts with no database at all. Install and start one.
+    if ! command -v mariadbd >/dev/null && ! command -v mysqld >/dev/null; then
+        command -v apt-get >/dev/null || return 1
+        echo "  no database server found, installing mariadb"
+        SUDO=""
+        [ "$(id -u)" != "0" ] && SUDO="sudo -n"
+        DEBIAN_FRONTEND=noninteractive $SUDO apt-get update -qq >/dev/null 2>&1 || return 1
+        DEBIAN_FRONTEND=noninteractive $SUDO apt-get install -y -qq mariadb-server >/dev/null 2>&1 || return 1
+    fi
+
+    echo "  starting the database server"
+    SUDO=""
+    [ "$(id -u)" != "0" ] && SUDO="sudo -n"
+    # No systemd in a container, so try the service wrapper then the daemon directly.
+    $SUDO service mariadb start >/dev/null 2>&1 \
+        || $SUDO service mysql start >/dev/null 2>&1 \
+        || { $SUDO mkdir -p /run/mysqld && $SUDO chown mysql:mysql /run/mysqld 2>/dev/null
+             $SUDO nohup mariadbd-safe --skip-grant-tables=0 >/dev/null 2>&1 & }
+
+    for _ in $(seq 1 30); do
+        admin_sql "SELECT 1" && break
+        sleep 1
+    done
+
+    echo "  creating ${DB_USER} and the databases"
+    admin_sql "
+        CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASS}';
+        CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASS}';
+        CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;
+        CREATE DATABASE IF NOT EXISTS \`${DB_TEST_NAME}\`;
+        GRANT ALL ON \`${DB_NAME}\`.* TO '${DB_USER}'@'localhost';
+        GRANT ALL ON \`${DB_TEST_NAME}\`.* TO '${DB_USER}'@'localhost';
+        GRANT ALL ON \`${DB_NAME}\`.* TO '${DB_USER}'@'%';
+        GRANT ALL ON \`${DB_TEST_NAME}\`.* TO '${DB_USER}'@'%';
+        FLUSH PRIVILEGES;"
+}
+
+if ! can_connect; then
+    provision_database || true
+fi
+
+if ! can_connect; then
+    cat >&2 <<MSG
+
+Could not connect to MariaDB as '${DB_USER}'@'${DB_HOST}', and could not provision
+one automatically.
+
+If a server is running but the user does not exist:
+
+  sudo mysql -u root
+  mysql> CREATE USER '${DB_USER}'@'${DB_HOST}' IDENTIFIED BY '${DB_PASS}';
+  mysql> GRANT ALL ON \`${DB_NAME}\`.* TO '${DB_USER}'@'${DB_HOST}';
+  mysql> GRANT ALL ON \`${DB_TEST_NAME}\`.* TO '${DB_USER}'@'${DB_HOST}';
+
+Or point bin/setup at a different server with GATHERLING_DB_HOST, GATHERLING_DB_USER,
+GATHERLING_DB_PASS. Most of the test suite needs a real database, so do not work
+around this.
+MSG
+    exit 1
+fi
+echo "  connected"
+
+step "Running migrations"
+php gatherling/admin/db-upgrade.php >/dev/null 2>&1 || fail "db-upgrade.php (re-run without >/dev/null to see why)"
+echo "  schema up to date"
+
+step "Seeding card data"
+NEED_SEED=$(php -r '
+    require "gatherling/bootstrap.php";
+    try {
+        echo Gatherling\Helpers\db()->int("SELECT COUNT(*) FROM cards") > 0 ? "no" : "yes";
+    } catch (Throwable $e) { echo "yes"; }
+' 2>/dev/null)
+if [ "$NEED_SEED" = "yes" ]; then
+    for set in M10 ELD; do
+        echo "  inserting $set"
+        php gatherling/insertcardset.php "$set" >/dev/null 2>&1 || echo "    warning: $set failed (needs network?)"
+    done
+    php gatherling/util/updateDefaultFormats.php >/dev/null 2>&1 || echo "  warning: updateDefaultFormats failed (needs network?)"
+else
+    echo "  cards already present, skipping"
+fi
+
+step "Registering the ratchet merge driver"
+# .ratchet.json is touched by every branch that improves a metric, so it conflicts
+# constantly. The resolution is always "keep the better side", which bin/ratchet
+# can do on its own. Config is per-repository, so this has to run per clone.
+git config merge.ratchet.name "keep the better side of each debt metric" \
+    && git config merge.ratchet.driver "$ROOT/bin/ratchet --merge %O %A %B" \
+    && echo "  registered" || echo "  warning: could not register (not a git repo?)"
+
+step "Installing JavaScript dependencies"
+if command -v bun >/dev/null; then
+    bun install >/dev/null 2>&1 && echo "  ok" || echo "  warning: bun install failed"
+else
+    echo "  bun not installed, skipping (JS tests will be skipped by bin/verify)"
+fi
+
+step "Smoke test"
+if vendor/bin/phpunit tests/Helpers >/dev/null 2>&1; then
+    echo "  passing"
+else
+    fail "smoke test failed - run 'vendor/bin/phpunit tests/Helpers' to see why"
+fi
+
+printf '\n\033[32mSetup complete.\033[0m Run \033[1mbin/verify\033[0m to run every check.\n'

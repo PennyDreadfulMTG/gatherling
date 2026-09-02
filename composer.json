@@ -3,19 +3,40 @@
     "description": "Magic the Gathering tournament software",
     "version": "5.1.0",
     "scripts": {
-        "qa": ["@tests", "@analyze", "@lint", "@jstests", "@csslint", "@du"],
-        "tests": "vendor/bin/phpunit --stop-on-defect tests",
+        "setup": "bin/setup",
+        "claim": "bin/claim",
+        "verify": "bin/verify",
+        "ratchet": "bin/ratchet",
+        "qa": "bin/verify",
+        "tests": "XDEBUG_MODE=off vendor/bin/phpunit",
+        "test": "@tests",
+        "coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text --coverage-html=.coverage",
         "lint": "vendor/bin/phpcs -d memory_limit=2G --runtime-set testVersion 8.2 .",
         "autofix": "vendor/bin/phpcbf -d memory_limit=2G --runtime-set testVersion 8.2 .",
-        "phpstan": "vendor/bin/phpstan --memory-limit=2G",
-        "psalm": "vendor/bin/psalm --no-cache --threads=1",
-        "analyze": ["@phpstan", "@psalm"],
+        "phpstan": "vendor/bin/phpstan analyse --memory-limit=2G",
+        "psalm": "vendor/bin/psalm --no-cache --threads=4",
+        "analyze": [
+            "@phpstan",
+            "@psalm"
+        ],
+        "static": [
+            "@phpstan",
+            "@psalm"
+        ],
         "phpstan-baseline": "vendor/bin/phpstan analyse --generate-baseline",
         "psalm-baseline": "vendor/bin/psalm --set-baseline=psalm-baseline.xml",
         "jstests": "bun test",
         "csslint": "npx stylelint '**/*.css' '!vendor/**/*.css' && npx prettier --write '**/*.css' '!vendor/**/*.css'",
         "cssfix": "npx stylelint --fix '**/*.css' '!vendor/**/*.css'",
         "du": "composer dump-autoload --verbose"
+    },
+    "scripts-descriptions": {
+        "setup": "Set up this workspace from nothing. Idempotent.",
+        "verify": "Run every check CI runs. This is the definition of done.",
+        "ratchet": "Check the debt metrics have not regressed.",
+        "tests": "Run the PHPUnit suite. Extra args are passed through.",
+        "coverage": "Run the suite with coverage, HTML report in .coverage/.",
+        "claim": "Claim a task so two agents do not do the same work."
     },
     "require": {
         "php": "^8.2",

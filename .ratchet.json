@@ -1,0 +1,12 @@
+{
+    "covered_lines": 2236,
+    "exits": 33,
+    "legacy_page_main": 31,
+    "loose_equality": 478,
+    "mysqli_files": 3,
+    "phpstan_baseline": 505,
+    "psalm_baseline": 996,
+    "raw_echo": 4,
+    "superglobals": 218,
+    "test_methods": 115
+}

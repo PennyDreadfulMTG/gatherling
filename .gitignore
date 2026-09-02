@@ -40,3 +40,14 @@ yarn-error.log*
 *.sw?
 /.dccache
 .phpactor.json
+
+# Coverage reports
+/coverage.xml
+/.coverage/
+
+# Python bytecode from bin/ scripts
+__pycache__/
+
+# Conductor agent scratch space
+.context/
+.fanout/

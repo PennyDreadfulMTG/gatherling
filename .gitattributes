@@ -1,0 +1,8 @@
+# Parallel branches each improve different debt metrics, so .ratchet.json conflicts
+# constantly and the resolution is always mechanical: keep the better side of each
+# metric. bin/setup registers the driver; without it git falls back to a normal
+# conflict, which is safe, just manual.
+.ratchet.json merge=ratchet
+
+# Generated. Regenerate with bin/import-tasks rather than resolving by hand.
+docs/TASKS.md merge=union

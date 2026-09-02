@@ -1,0 +1,383 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * The ratchet: every tracked debt metric may go down, never up.
+ *
+ * Marks live in .ratchet.json, which is committed. CI runs this on every push.
+ * A change that increases any metric fails the build.
+ *
+ *   bin/ratchet            check (exit 1 if anything regressed)
+ *   bin/ratchet --update   lower the marks to match reality, after an improvement
+ *   bin/ratchet --report   print the table without failing
+ *   bin/ratchet --merge BASE OURS THEIRS
+ *                          resolve a .ratchet.json merge conflict by taking the
+ *                          better of the two sides for every metric. Registered as
+ *                          a git merge driver by bin/setup, so parallel branches
+ *                          that each improved a different metric merge cleanly.
+ *
+ * Metrics are counted from PHP tokens, not text, so comments and string literals
+ * do not produce false positives.
+ */
+
+declare(strict_types=1);
+
+// Resolve any file arguments before chdir, because git invokes the merge driver
+// with paths relative to wherever it happens to be running.
+$INVOKED_FROM = getcwd() ?: '.';
+$argv = array_map(
+    fn (string $arg): string => (!str_starts_with($arg, '-') && file_exists($INVOKED_FROM . '/' . $arg))
+        ? $INVOKED_FROM . '/' . $arg
+        : $arg,
+    $argv
+);
+
+chdir(__DIR__ . '/../');
+
+const MARKS_FILE = '.ratchet.json';
+
+/** Files that are allowed to do the thing a metric forbids. */
+const EXEMPT = [
+    'superglobals' => [
+        'gatherling/Helpers/helpers.php',   // the wrappers themselves
+        'gatherling/Helpers/Files.php',
+        'gatherling/Auth/Session.php',      // session_start machinery
+        'gatherling/bootstrap.php',
+    ],
+    'exits' => [
+        'gatherling/Views/Response.php',    // the one legitimate exit, for now
+    ],
+];
+
+const DESCRIPTIONS = [
+    'phpstan_baseline' => 'phpstan errors suppressed by baseline',
+    'psalm_baseline'   => 'psalm errors suppressed by baseline',
+    'exits'            => 'exit/die calls (throw instead)',
+    'superglobals'     => 'direct superglobal accesses (use get()/post()/...)',
+    'mysqli_files'     => 'files still using mysqli (use db())',
+    'loose_equality'   => '== and != comparisons (use === and !==)',
+    'raw_echo'         => 'echo statements outside templates',
+    'legacy_page_main' => 'page entry points with an untestable main(): never',
+];
+
+/** These may only ever increase. Deleting tests should fail the build too. */
+const FLOORS = [
+    'test_methods'    => 'test methods',
+    'covered_lines'   => 'lines covered by tests',
+];
+
+// ---------------------------------------------------------------- collection
+
+/** @return list<string> */
+function phpFiles(): array
+{
+    $files = [];
+    $dir = new RecursiveDirectoryIterator('gatherling', FilesystemIterator::SKIP_DOTS);
+    /** @var SplFileInfo $file */
+    foreach (new RecursiveIteratorIterator($dir) as $file) {
+        if ($file->getExtension() !== 'php') {
+            continue;
+        }
+        $path = str_replace('\\', '/', $file->getPathname());
+        if (str_contains($path, '/vendor/') || str_ends_with($path, '/config.php')) {
+            continue;
+        }
+        $files[] = $path;
+    }
+    sort($files);
+    return $files;
+}
+
+function exempt(string $metric, string $path): bool
+{
+    return in_array($path, EXEMPT[$metric] ?? [], true);
+}
+
+/** @return array<string, int> */
+function collect(): array
+{
+    $counts = [
+        'exits' => 0,
+        'superglobals' => 0,
+        'mysqli_files' => 0,
+        'loose_equality' => 0,
+        'raw_echo' => 0,
+        'legacy_page_main' => 0,
+    ];
+    $superglobals = ['$_GET', '$_POST', '$_SESSION', '$_SERVER', '$_FILES', '$_REQUEST', '$_ENV'];
+
+    foreach (phpFiles() as $path) {
+        $source = file_get_contents($path);
+        if ($source === false) {
+            continue;
+        }
+        $tokens = token_get_all($source);
+        $usesMysqli = false;
+
+        foreach ($tokens as $token) {
+            if (!is_array($token)) {
+                continue;
+            }
+            [$id, $text] = $token;
+            switch ($id) {
+                case T_EXIT:
+                    if (!exempt('exits', $path)) {
+                        $counts['exits']++;
+                    }
+                    break;
+                case T_ECHO:
+                    $counts['raw_echo']++;
+                    break;
+                case T_IS_EQUAL:
+                case T_IS_NOT_EQUAL:
+                    $counts['loose_equality']++;
+                    break;
+                case T_VARIABLE:
+                    if (in_array($text, $superglobals, true) && !exempt('superglobals', $path)) {
+                        $counts['superglobals']++;
+                    }
+                    break;
+                case T_STRING:
+                    if (stripos($text, 'mysqli') === 0) {
+                        $usesMysqli = true;
+                    }
+                    break;
+            }
+        }
+
+        if ($usesMysqli) {
+            $counts['mysqli_files']++;
+        }
+        // A top-level page whose main() is declared ": never" cannot be called from a test.
+        if (substr_count($path, '/') === 1 && preg_match('/function main\(\)\s*:\s*never/', $source) === 1) {
+            $counts['legacy_page_main']++;
+        }
+    }
+
+    $counts['phpstan_baseline'] = phpstanBaselineCount();
+    $counts['psalm_baseline'] = psalmBaselineCount();
+    $counts['test_methods'] = testMethodCount();
+
+    $covered = coveredLines();
+    if ($covered !== null) {
+        $counts['covered_lines'] = $covered;
+    }
+
+    return $counts;
+}
+
+/**
+ * Lines covered, read from a clover report.
+ *
+ * Null when no report is present, in which case the metric is left alone rather
+ * than treated as zero. Generate one with `composer coverage` or, in CI,
+ * `phpunit --coverage-clover=coverage.xml`.
+ */
+function coveredLines(): ?int
+{
+    foreach (['coverage.xml', '.coverage/clover.xml'] as $path) {
+        if (!file_exists($path)) {
+            continue;
+        }
+        $xml = @simplexml_load_file($path);
+        if ($xml === false) {
+            continue;
+        }
+        $metrics = $xml->project->metrics ?? null;
+        if ($metrics === null) {
+            continue;
+        }
+        return (int) $metrics['coveredstatements'];
+    }
+    return null;
+}
+
+function phpstanBaselineCount(): int
+{
+    if (!file_exists('phpstan-baseline.neon')) {
+        return 0;
+    }
+    $contents = file_get_contents('phpstan-baseline.neon') ?: '';
+    preg_match_all('/^\s*count:\s*(\d+)/m', $contents, $matches);
+    return array_sum(array_map('intval', $matches[1]));
+}
+
+function psalmBaselineCount(): int
+{
+    if (!file_exists('psalm-baseline.xml')) {
+        return 0;
+    }
+    $contents = file_get_contents('psalm-baseline.xml') ?: '';
+    // Each suppressed issue is one <code> element. occurrences= is a summary attribute
+    // that psalm does not always write, so count the elements.
+    return substr_count($contents, '<code>');
+}
+
+function testMethodCount(): int
+{
+    $count = 0;
+    if (!is_dir('tests')) {
+        return 0;
+    }
+    $dir = new RecursiveDirectoryIterator('tests', FilesystemIterator::SKIP_DOTS);
+    /** @var SplFileInfo $file */
+    foreach (new RecursiveIteratorIterator($dir) as $file) {
+        if ($file->getExtension() !== 'php') {
+            continue;
+        }
+        $source = file_get_contents($file->getPathname()) ?: '';
+        $count += preg_match_all('/\bfunction\s+test[A-Z_]\w*\s*\(/', $source);
+        // #[Test] attribute form
+        $count += preg_match_all('/#\[Test\]/', $source);
+    }
+    return $count;
+}
+
+// ------------------------------------------------------------------- reporting
+
+/** @param array<string, int> $current @param array<string, int> $marks */
+function report(array $current, array $marks): int
+{
+    $regressions = 0;
+    $improvements = 0;
+
+    $rows = [];
+    foreach (array_merge(DESCRIPTIONS, FLOORS) as $key => $description) {
+        if (!array_key_exists($key, $current)) {
+            // Not measured this run (coverage without a clover report). Leave it alone
+            // rather than reading the absence as a drop to zero.
+            $rows[] = [$description, 'n/a', isset($marks[$key]) ? (string) $marks[$key] : '-', '', 'unmeasured'];
+            continue;
+        }
+        $now = $current[$key];
+        $mark = $marks[$key] ?? null;
+        $isFloor = array_key_exists($key, FLOORS);
+
+        if ($mark === null) {
+            $status = 'new';
+            $delta = '';
+        } else {
+            $diff = $now - $mark;
+            $bad = $isFloor ? $diff < 0 : $diff > 0;
+            $good = $isFloor ? $diff > 0 : $diff < 0;
+            if ($bad) {
+                $status = 'REGRESSED';
+                $regressions++;
+            } elseif ($good) {
+                $status = 'improved';
+                $improvements++;
+            } else {
+                $status = '';
+            }
+            $delta = $diff === 0 ? '' : sprintf('%+d', $diff);
+        }
+        $rows[] = [$description, (string) $now, $mark === null ? '-' : (string) $mark, $delta, $status];
+    }
+    unset($key, $description);
+
+    $width = 0;
+    foreach ($rows as $row) {
+        $width = max($width, strlen($row[0]));
+    }
+    printf("%-{$width}s  %7s  %7s  %6s\n", 'metric', 'now', 'mark', 'delta');
+    echo str_repeat('-', $width + 26), "\n";
+    foreach ($rows as [$description, $now, $mark, $delta, $status]) {
+        $line = sprintf("%-{$width}s  %7s  %7s  %6s", $description, $now, $mark, $delta);
+        if ($status === 'REGRESSED') {
+            echo "\033[31m$line  REGRESSED\033[0m\n";
+        } elseif ($status === 'improved') {
+            echo "\033[32m$line  improved\033[0m\n";
+        } elseif ($status === 'new') {
+            echo "$line  (new metric)\n";
+        } elseif ($status === 'unmeasured') {
+            echo "\033[90m$line  (not measured this run)\033[0m\n";
+        } else {
+            echo "$line\n";
+        }
+    }
+
+    if ($improvements > 0 && $regressions === 0) {
+        echo "\n\033[32m$improvements metric(s) improved.\033[0m Run 'bin/ratchet --update' to lock the gain in.\n";
+    }
+    return $regressions;
+}
+
+// ---------------------------------------------------------------------- main
+
+$mode = $argv[1] ?? '--check';
+
+if ($mode === '--merge') {
+    // git hands us three files: the common ancestor, our side, their side.
+    // We must write the resolution into the "ours" path and exit 0.
+    [$basePath, $oursPath, $theirsPath] = [$argv[2] ?? '', $argv[3] ?? '', $argv[4] ?? ''];
+    if ($oursPath === '' || $theirsPath === '') {
+        fwrite(STDERR, "usage: bin/ratchet --merge BASE OURS THEIRS\n");
+        exit(2);
+    }
+    $read = function (string $path): array {
+        if ($path === '' || !file_exists($path)) {
+            return [];
+        }
+        $decoded = json_decode((string) file_get_contents($path), true);
+        return is_array($decoded) ? $decoded : [];
+    };
+    $ours = $read($oursPath);
+    $theirs = $read($theirsPath);
+
+    $merged = [];
+    foreach (array_unique([...array_keys($ours), ...array_keys($theirs)]) as $key) {
+        $candidates = [];
+        if (isset($ours[$key])) {
+            $candidates[] = (int) $ours[$key];
+        }
+        if (isset($theirs[$key])) {
+            $candidates[] = (int) $theirs[$key];
+        }
+        // Keep whichever side is further along: lower for a debt ceiling, higher for
+        // a floor. Two branches that each improved something both keep their gain.
+        $merged[$key] = array_key_exists($key, FLOORS) ? max($candidates) : min($candidates);
+    }
+    ksort($merged);
+    file_put_contents($oursPath, json_encode($merged, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR) . "\n");
+    fwrite(STDERR, "ratchet: merged " . count($merged) . " metric(s), keeping the better side of each\n");
+    exit(0);
+}
+
+$current = collect();
+/** @var array<string, int> $marks */
+$marks = file_exists(MARKS_FILE) ? (array) json_decode((string) file_get_contents(MARKS_FILE), true) : [];
+
+if ($mode === '--update') {
+    $next = $marks;   // keep marks for anything not measured this run
+    foreach ($current as $key => $value) {
+        $mark = $marks[$key] ?? null;
+        if ($mark === null) {
+            $next[$key] = $value;
+        } elseif (array_key_exists($key, FLOORS)) {
+            $next[$key] = max($mark, $value);
+        } else {
+            $next[$key] = min($mark, $value);
+        }
+    }
+    ksort($next);
+    file_put_contents(MARKS_FILE, json_encode($next, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR) . "\n");
+    echo "Updated " . MARKS_FILE . ":\n\n";
+    report($current, $next);
+    exit(0);
+}
+
+$regressions = report($current, $marks);
+
+if ($mode === '--report') {
+    exit(0);
+}
+
+if ($regressions > 0) {
+    echo "\n\033[31m$regressions metric(s) got worse.\033[0m\n";
+    echo "The ratchet only turns one way. Fix the regression rather than updating the mark.\n";
+    echo "If a metric legitimately had to rise, explain why in the PR and update it deliberately.\n";
+    exit(1);
+}
+
+echo "\n\033[32mRatchet holds.\033[0m\n";
+exit(0);

@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+# Run every check CI runs. This is the definition of "done".
+#
+# Runs all checks even after one fails, so you see every problem in one pass.
+#
+#   bin/verify              everything
+#   bin/verify --fast       skip psalm (the slow one)
+#   bin/verify tests phpstan   just those checks
+#
+# Exit code 0 means you are done. Anything else means you are not.
+set -uo pipefail
+
+cd "$(dirname "$0")/.."
+
+FAST=0
+REQUESTED=()
+for arg in "$@"; do
+    case "$arg" in
+        --fast) FAST=1 ;;
+        -*) echo "unknown option: $arg" >&2; exit 2 ;;
+        *) REQUESTED+=("$arg") ;;
+    esac
+done
+
+ALL_CHECKS=(tests phpstan psalm lint ratchet csslint jstests)
+if [ ${#REQUESTED[@]} -gt 0 ]; then
+    CHECKS=("${REQUESTED[@]}")
+else
+    CHECKS=("${ALL_CHECKS[@]}")
+    if [ "$FAST" = "1" ]; then
+        CHECKS=(tests phpstan lint ratchet)
+    fi
+fi
+
+RESULTS=()
+FAILED=0
+LOGDIR=$(mktemp -d)
+trap 'rm -rf "$LOGDIR"' EXIT
+
+run() {
+    local name=$1; shift
+    local log="$LOGDIR/$name.log"
+    printf '\033[1m==> %s\033[0m ' "$name"
+    local start=$SECONDS
+    if "$@" >"$log" 2>&1; then
+        local secs=$((SECONDS - start))
+        printf '\033[32mok\033[0m (%ss)\n' "$secs"
+        RESULTS+=("ok    $name")
+    else
+        local secs=$((SECONDS - start))
+        printf '\033[31mFAILED\033[0m (%ss)\n' "$secs"
+        RESULTS+=("FAIL  $name")
+        FAILED=1
+        echo "--- $name output ---"
+        tail -80 "$log"
+        echo "--- end $name output ---"
+    fi
+}
+
+skip() {
+    printf '\033[1m==> %s\033[0m \033[33mskipped\033[0m (%s)\n' "$1" "$2"
+    RESULTS+=("skip  $1")
+}
+
+has() { command -v "$1" >/dev/null 2>&1; }
+
+for check in "${CHECKS[@]}"; do
+    case "$check" in
+        tests)
+            run tests vendor/bin/phpunit tests
+            ;;
+        phpstan)
+            run phpstan vendor/bin/phpstan analyse --memory-limit=2G --no-progress
+            ;;
+        psalm)
+            run psalm vendor/bin/psalm --no-cache --threads=4 --no-progress
+            ;;
+        lint)
+            run lint vendor/bin/phpcs -q -d memory_limit=2G --runtime-set testVersion 8.2 .
+            ;;
+        ratchet)
+            run ratchet bin/ratchet
+            ;;
+        csslint)
+            # node_modules is only present if someone ran `bun install`. Skipping is
+            # correct here: CI always has it, so the check is never actually lost.
+            if [ -x node_modules/.bin/stylelint ]; then
+                run csslint node_modules/.bin/stylelint '**/*.css' '!vendor/**/*.css' '!node_modules/**/*.css'
+            else
+                skip csslint "stylelint not installed (run: bun install)"
+            fi
+            ;;
+        jstests)
+            if has bun; then
+                run jstests bun test
+            else
+                skip jstests "bun not installed"
+            fi
+            ;;
+        *)
+            echo "unknown check: $check" >&2
+            echo "available: ${ALL_CHECKS[*]}" >&2
+            exit 2
+            ;;
+    esac
+done
+
+echo
+echo "────────────────────────────"
+for r in "${RESULTS[@]}"; do
+    case "$r" in
+        ok*)   printf '\033[32m%s\033[0m\n' "$r" ;;
+        FAIL*) printf '\033[31m%s\033[0m\n' "$r" ;;
+        *)     printf '\033[33m%s\033[0m\n' "$r" ;;
+    esac
+done
+echo "────────────────────────────"
+
+if [ "$FAILED" = "1" ]; then
+    printf '\033[31mNot done.\033[0m Fix the failures above and re-run.\n'
+    exit 1
+fi
+printf '\033[32mAll checks passed.\033[0m\n'
