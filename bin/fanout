@@ -1,0 +1,189 @@
+#!/usr/bin/env python3
+"""Set N agents going on N tasks that will not collide.
+
+    bin/fanout                 plan 5 agents, change nothing
+    bin/fanout 3               plan 3
+    bin/fanout --theme perf    all from one lane
+    bin/fanout --go            claim the tasks and write the prompts to .fanout/
+    bin/fanout --cloud --go    also create Conductor cloud workspaces and start them
+
+Picks tasks greedily: highest value first, skipping any task whose predicted files
+overlap one already picked. File prediction is a heuristic (see bin/_predict.py) and
+errs toward over-caution, which is the safe direction here - it separates tasks that
+might have collided rather than risking two agents in one file.
+
+Prints a ready-to-paste prompt per agent. With --go it also claims each task, so a
+second run of bin/fanout picks a different set.
+"""
+
+import argparse
+import importlib.machinery
+import importlib.util
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+CONDUCTOR = Path.home() / "Library/Application Support/com.conductor.app/bin/conductor"
+
+PROMPT = """Read CLAUDE.md, then run bin/setup.
+
+Your task is {id}. Claim it first:  bin/claim {id}
+
+{text}
+
+Follow docs/WORKFLOW.md.{kind_advice}
+
+Work only on this task. If you spot something else wrong, add a line to
+docs/braindump.txt and carry on - do not fix it.
+
+Other agents are working in this repo right now. These files are yours to edit:
+
+{files}
+
+Reading anything else is fine. But if the fix needs you to EDIT a file outside that
+list, stop and tell me before you do - another agent may be in it. That list is a
+best guess from the task text, so being wrong is expected; just flag it.
+
+Commit to the branch bin/claim suggests. Do not push and do not open a PR.
+
+Stop when bin/verify is green. Then tell me what the problem actually was, what your
+test proves, and anything you found but deliberately left alone.
+"""
+
+BUG_ADVICE = (
+    " This is a bug, so write the failing test first - if you cannot make a test "
+    "fail you have not found the bug yet."
+)
+REFACTOR_ADVICE = (
+    " This is a refactor, so behaviour must not change. If the area has no tests, "
+    "add characterization tests pinning current behaviour in their own commit first."
+)
+
+
+def load_module(name, path):
+    loader = importlib.machinery.SourceFileLoader(name, str(path))
+    spec = importlib.util.spec_from_loader(name, loader)
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+
+def claimed_ids():
+    result = subprocess.run([str(ROOT / "bin/claim"), "--list"],
+                            capture_output=True, text=True, cwd=ROOT)
+    return {line.split()[0] for line in result.stdout.splitlines() if line.startswith("T-")}
+
+
+def pick(tasks, predict, count, theme, risk):
+    """Greedy: best task first, skip anything sharing a predicted file."""
+    held = claimed_ids()
+    pool = [t for t in tasks if not t["done"] and t["id"] not in held]
+    if theme:
+        pool = [t for t in pool if t["theme"] == theme]
+    if risk:
+        pool = [t for t in pool if t["risk"] == risk]
+    # Pinned first, then bugs, then low risk (quick wins), then stable by id.
+    order = {"low": 0, "medium": 1, "high": 2}
+    pool.sort(key=lambda t: (not t["pinned"], t["theme"] != "bug", order[t["risk"]], t["id"]))
+
+    chosen, taken = [], set()
+    for task in pool:
+        files = set(predict(task["text"], limit=6))
+        if files & taken:
+            continue
+        chosen.append({**task, "files": sorted(files)})
+        taken |= files
+        if len(chosen) == count:
+            break
+    return chosen
+
+
+def build_prompt(task):
+    if task["theme"] == "bug":
+        advice = BUG_ADVICE
+    elif task["theme"] in ("arch", "views", "types"):
+        advice = REFACTOR_ADVICE
+    else:
+        advice = ""
+    files = "\n".join(f"  {f}" for f in task["files"]) or "  (work it out from the task)"
+    return PROMPT.format(id=task["id"], text=task["text"], kind_advice=advice, files=files)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("count", nargs="?", type=int, default=5)
+    parser.add_argument("--theme")
+    parser.add_argument("--risk", choices=["low", "medium", "high"])
+    parser.add_argument("--go", action="store_true",
+                        help="claim the tasks and write prompts to .fanout/")
+    parser.add_argument("--cloud", action="store_true",
+                        help="with --go, also create Conductor cloud workspaces")
+    args = parser.parse_args()
+
+    tasks_mod = load_module("tasks_cli", ROOT / "bin/tasks")
+    predict_mod = load_module("predict", ROOT / "bin/_predict.py")
+
+    chosen = pick(tasks_mod.load(), predict_mod.predict, args.count, args.theme, args.risk)
+    if not chosen:
+        sys.exit("nothing available - everything matching is claimed or done")
+    if len(chosen) < args.count:
+        print(f"note: could only find {len(chosen)} non-colliding tasks, not {args.count}\n")
+
+    print(f"{len(chosen)} agents, no overlap in their predicted edit files:\n")
+    for i, task in enumerate(chosen, 1):
+        print(f"  {i}. {task['id']}  [{task['theme']}/{task['risk']}]  {task['text'][:72]}")
+        for f in task["files"]:
+            print(f"       {f}")
+    print()
+
+    if not args.go:
+        print("Files are predicted from the task text, so treat them as a starting point.")
+        print("Agents are told to flag before editing anything outside their list.")
+        print("Dry run. Nothing claimed. Re-run with --go to claim and write prompts.\n")
+        for i, task in enumerate(chosen, 1):
+            print("=" * 72)
+            print(f"AGENT {i} - workspace name: {task['theme']}-{task['id'][2:].lower()}")
+            print("=" * 72)
+            print(build_prompt(task))
+        return 0
+
+    outdir = ROOT / ".fanout"
+    if outdir.exists():
+        shutil.rmtree(outdir)
+    outdir.mkdir()
+
+    for i, task in enumerate(chosen, 1):
+        claim = subprocess.run([str(ROOT / "bin/claim"), task["id"]],
+                               capture_output=True, text=True, cwd=ROOT)
+        if claim.returncode != 0:
+            print(f"  ! {task['id']} was claimed by someone else, skipping")
+            continue
+        name = f"{task['theme']}-{task['id'][2:].lower()}"
+        path = outdir / f"{i}-{name}.txt"
+        path.write_text(build_prompt(task), encoding="utf-8")
+        print(f"  claimed {task['id']} -> {path.relative_to(ROOT)}")
+
+        if args.cloud:
+            if not CONDUCTOR.exists():
+                print("    ! conductor CLI not found")
+                continue
+            created = subprocess.run(
+                [str(CONDUCTOR), "workspace", "create", "--name", name,
+                 "--message-file", str(path), "--env", "GATHERLING_CLAIMS=remote"],
+                capture_output=True, text=True)
+            if created.returncode == 0:
+                print(f"    cloud workspace started: {created.stdout.strip().splitlines()[-1:]}")
+            else:
+                print(f"    ! cloud create failed: {created.stderr.strip().splitlines()[:1]}")
+
+    print(f"\nPrompts in {outdir.relative_to(ROOT)}/. For local Conductor workspaces:")
+    print("  make a workspace per file, name it after the file, paste the contents in.")
+    print("\nRelease a claim if you change your mind:  bin/claim --release T-XXXXXX")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

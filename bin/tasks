@@ -1,0 +1,185 @@
+#!/usr/bin/env python3
+"""Query docs/TASKS.md.
+
+    bin/tasks                          counts per theme
+    bin/tasks list --theme bug         open tasks in a theme
+    bin/tasks list --risk low          open tasks by risk
+    bin/tasks list --grep decksearch   open tasks matching text
+    bin/tasks show T-5155AD            one task, with a suggested branch name
+    bin/tasks next --theme bug         pick one to work on
+    bin/tasks done T-5155AD            tick it off in the braindump
+
+    bin/tasks list --shard 2/4         the second quarter of the matching tasks
+
+Filters combine. `list` prints IDs and text only, so it is cheap to read.
+
+--shard splits the matching tasks deterministically by ID hash. Give each agent a
+different shard and they cannot collide, with no coordination and no shared
+filesystem. Use it for remote or cloud agents; use bin/claim when the agents are
+worktrees on one machine.
+"""
+
+import argparse
+import hashlib
+import random
+import re
+import sys
+from collections import Counter
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+TASKS = ROOT / "docs" / "TASKS.md"
+BRAINDUMP = ROOT / "docs" / "braindump.txt"
+
+LINE = re.compile(
+    r"^- \[(?P<done>[ x])\] `(?P<id>T-[0-9A-F]{6})` \((?P<meta>[^)]*)\)(?P<flag>\s\*\*\[start here\]\*\*)?\s(?P<text>.*)$"
+)
+
+
+def load():
+    if not TASKS.exists():
+        sys.exit(f"{TASKS} not found. Run bin/import-tasks first.")
+    # Each task appears twice: once in a summary section, once under its theme.
+    # Merge the two rather than keeping whichever came first, because the theme
+    # heading and the [start here] flag are not both present in either one.
+    by_id: dict[str, dict] = {}
+    current_theme = None
+    for line in TASKS.read_text(encoding="utf-8").splitlines():
+        heading = re.match(r"^### (\w+) \(", line)
+        if heading:
+            current_theme = heading.group(1)
+        match = LINE.match(line)
+        if not match:
+            continue
+        meta = match.group("meta")
+        task = by_id.setdefault(match.group("id"), {
+            "id": match.group("id"),
+            "text": match.group("text"),
+            "theme": "?",
+            "risk": "-",
+            "done": False,
+            "pinned": False,
+        })
+        if current_theme:
+            task["theme"] = current_theme
+        elif "/" in meta:
+            task["theme"] = meta.split("/")[0]
+        if meta != "done":
+            task["risk"] = meta.split("/")[-1]
+        task["done"] = task["done"] or match.group("done") == "x" or meta == "done"
+        task["pinned"] = task["pinned"] or bool(match.group("flag"))
+    return list(by_id.values())
+
+
+def matching(tasks, args):
+    out = [t for t in tasks if not t["done"]]
+    if getattr(args, "theme", None):
+        out = [t for t in out if t["theme"] == args.theme]
+    if getattr(args, "risk", None):
+        out = [t for t in out if t["risk"] == args.risk]
+    if getattr(args, "grep", None):
+        needle = args.grep.lower()
+        out = [t for t in out if needle in t["text"].lower()]
+    if getattr(args, "pinned", False):
+        out = [t for t in out if t["pinned"]]
+    shard = getattr(args, "shard", None)
+    if shard:
+        try:
+            index, total = (int(part) for part in shard.split("/", 1))
+        except ValueError:
+            sys.exit("--shard wants N/M, for example --shard 2/4")
+        if not 1 <= index <= total:
+            sys.exit(f"--shard {shard}: N must be between 1 and M")
+        # Hash the ID rather than slicing the list, so a shard stays stable as
+        # tasks are completed and the list shrinks.
+        out = [
+            t for t in out
+            if int(hashlib.sha256(t["id"].encode()).hexdigest(), 16) % total == index - 1
+        ]
+    return out
+
+
+def branch_name(task):
+    slug = re.sub(r"[^a-z0-9]+", "-", task["text"].lower())[:40].strip("-")
+    return f"{task['theme']}/{task['id'].lower()}-{slug}"
+
+
+def show(task):
+    print(f"{task['id']}  [{task['theme']}/{task['risk']}]{'  START HERE' if task['pinned'] else ''}")
+    print()
+    print(task["text"])
+    print()
+    print(f"branch:  {branch_name(task)}")
+    print(f"done:    bin/verify passes, and bin/tasks done {task['id']}")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = parser.add_subparsers(dest="cmd")
+
+    def filters(p):
+        p.add_argument("--theme")
+        p.add_argument("--risk", choices=["low", "medium", "high"])
+        p.add_argument("--grep")
+        p.add_argument("--pinned", action="store_true")
+        p.add_argument("--shard", metavar="N/M", help="deterministic slice, e.g. 2/4")
+        return p
+
+    filters(sub.add_parser("list", help="list open tasks"))
+    filters(sub.add_parser("next", help="pick one open task"))
+    sub.add_parser("show", help="show one task").add_argument("id")
+    sub.add_parser("done", help="tick a task off").add_argument("id")
+
+    args = parser.parse_args()
+    tasks = load()
+
+    if args.cmd is None:
+        counts = Counter(t["theme"] for t in tasks if not t["done"])
+        total = sum(counts.values())
+        done = sum(1 for t in tasks if t["done"])
+        risks = Counter(t["risk"] for t in tasks if not t["done"])
+        print(f"{total} open, {done} done\n")
+        for theme, count in counts.most_common():
+            print(f"  {theme:8} {count:4}")
+        print(f"\n  by risk: " + ", ".join(f"{r} {risks[r]}" for r in ("low", "medium", "high") if risks[r]))
+        print(f"\n  {sum(1 for t in tasks if t['pinned'] and not t['done'])} pinned - bin/tasks list --pinned")
+        return 0
+
+    if args.cmd in ("show", "done"):
+        wanted = args.id.upper()
+        found = [t for t in tasks if t["id"] == wanted]
+        if not found:
+            sys.exit(f"no such task: {args.id}")
+        task = found[0]
+        if args.cmd == "show":
+            show(task)
+            return 0
+        # done: comment the line out in the braindump and regenerate
+        lines = BRAINDUMP.read_text(encoding="utf-8").splitlines()
+        for i, line in enumerate(lines):
+            if line.strip().removeprefix("DONE ").strip() == task["text"]:
+                if line.strip().startswith("DONE "):
+                    sys.exit(f"{task['id']} is already marked done")
+                lines[i] = "DONE " + line
+                BRAINDUMP.write_text("\n".join(lines) + "\n", encoding="utf-8")
+                print(f"marked {task['id']} done in braindump.txt")
+                print("now run: bin/import-tasks")
+                return 0
+        sys.exit(f"could not find the line for {task['id']} in braindump.txt")
+
+    selected = matching(tasks, args)
+    if args.cmd == "next":
+        if not selected:
+            sys.exit("nothing matches")
+        pinned = [t for t in selected if t["pinned"]]
+        show(random.choice(pinned or selected))
+        return 0
+
+    for task in selected:
+        print(f"{task['id']}  {task['risk']:6}  {task['text'][:120]}")
+    print(f"\n{len(selected)} task(s)")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
