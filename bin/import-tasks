@@ -1,0 +1,333 @@
+#!/usr/bin/env python3
+"""Generate docs/TASKS.md from docs/braindump.txt.
+
+The braindump is a freeform list, one idea per line, written before any of this
+existed. This turns it into stable, addressable tasks without editing the text:
+every line keeps its wording and gets an ID derived from a hash of that text, so
+IDs do not move when the file is re-ordered or re-generated.
+
+Themes and risk are assigned by weighted keyword scoring. It is a filing system,
+not a judgement - expect a chunk of it to be arguable. Fix a wrong theme by
+editing PINNED below, or just ignore it; the ID is the part that matters.
+
+    bin/import-tasks
+"""
+
+import hashlib
+import re
+import sys
+from collections import Counter
+from pathlib import Path
+from typing import Optional
+
+ROOT = Path(__file__).resolve().parent.parent
+SOURCE = ROOT / "docs" / "braindump.txt"
+TARGET = ROOT / "docs" / "TASKS.md"
+
+# Prefix written by `bin/tasks done`.
+DONE_PREFIX = "DONE "
+
+BLURBS = {
+    "bug": "confirmed defects and data integrity",
+    "perf": "slow pages and N+1 queries",
+    "errors": "validation, exceptions, HTTP status codes",
+    "db": "schema, foreign keys, the query layer",
+    "types": "types, nullability, enums, static analysis",
+    "test": "test coverage and test infrastructure",
+    "views": "components and templates",
+    "ui": "design, layout, copy",
+    "infra": "CI, tooling, logging, config, deploys",
+    "arch": "structural refactors, naming, organisation",
+}
+
+# Ties are broken by this order, so put the buckets you most want to notice first.
+THEME_ORDER = ["bug", "perf", "errors", "db", "types", "test", "views", "ui", "infra", "arch"]
+
+# (weight, pattern). Weight 3 is a near-certain signal, 1 is a hint.
+KEYWORDS: dict[str, list[tuple[int, str]]] = {
+    "bug": [
+        (3, r"doesn'?t work|does not work|is broken|\bis broken\b|didn'?t work|not working"),
+        (3, r"\bbug\b|\brepro\b|damages? the db|corrupt|orphan|disassociat"),
+        (3, r"you get a 500|we 500\b|causes a 500|500 error|explodes?\b"),
+        (3, r"silently|fails? silently|inconsistent state|garbled|\bwut\b"),
+        (2, r"shouldn'?t (happen|be possible)|but that shouldn'?t|why is that|why does"),
+        (2, r"needs? investigation|investigate|figure out why|find out why"),
+        (2, r"incorrectly|is wrong\b|are wrong\b|wrong by|not quite right|breaks?\b"),
+        (2, r"lets you|allows you to|you actually can|it'?s possible to"),
+        (1, r"\bstale\b|\bdupe\b|duplicate record"),
+    ],
+    "perf": [
+        (3, r"\bslow\b|slowe?r|speedup|efficien|inefficient|performance"),
+        (3, r"in a loop|in an inner loop|query.in.loop|zillions?|100 queries|n\+1"),
+        (3, r"takes a long time|maxes out|half the time|loads every|ridic performing"),
+        (2, r"could (just )?be one (query|update|insert)|should just be one query"),
+        (2, r"push(ed)? to the outer query|one query not|per deck"),
+    ],
+    "errors": [
+        (3, r"validat|\bexception\b|exceptions\b|throw|raise\b|try.?catch"),
+        (3, r"\b400\b|\b403\b|\b404\b|bad ?request|forbidden|not found"),
+        (3, r"error handl|error message|errormsg|error page|nice error|proper error"),
+        (2, r"rollback|transaction|all succeed or all fail"),
+        (2, r"stack trace|user.?facing (error|message)|getusermessage"),
+        (1, r"\berror\b|\berrors\b|\bfail\b|\bfails\b"),
+    ],
+    "db": [
+        (3, r"\bsql\b|\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bJOIN\b"),
+        (3, r"foreign key|\bFK\b|\bFKs\b|\bschema\b|migration|tinyint|\bcolumn\b"),
+        (3, r"\bDB::|db code|\bPDO\b|mysqli|bindparam|placeholder|named param"),
+        (3, r"\bdto\b|fetch.class|\bDtos?\b"),
+        (2, r"\bin the db\b|\bfrom the db\b|\bto the db\b|database|\btables?\b(?!\s*layout)"),
+        (2, r"\bquery\b|queries"),
+        (1, r"\bprimary key\b|\bpks\b|\bids?\b\s+not|numeric ids"),
+    ],
+    "types": [
+        (3, r"\benums?\b|nullable|not.nullable|readonly|\bmixed\b"),
+        (3, r"phpstan|psalm|\bbaseline\b|strict(ly)? type|strongly typed"),
+        (3, r"should be an? (int|bool|enum|float|string|datetime)"),
+        (2, r"\btypes?\b|typed|type confusion|first order type|DateTimeImmutable"),
+        (2, r"===|triple equals|loose comparison|== is bad|falsy"),
+        (2, r"\bnull\b|\bnot null\b"),
+        (1, r"\bfinal\b|\bconst\b|constants"),
+    ],
+    "test": [
+        (3, r"\btests?\b|\btesting\b|phpunit|databasecase|\bfixtures?\b"),
+        (3, r"\bcoverage\b|assert(Same|Equals)?|add a test|tests for"),
+        (2, r"\bmock\b|test db|test database|test run"),
+    ],
+    "views": [
+        (3, r"component|template|mustache|partial|dropmenu|drop ?menu"),
+        (3, r"should be a component|make .{0,20}a component|\.mustache"),
+        (2, r"\brender\b|\bhtml\b|\bmarkup\b|heredoc"),
+        (2, r"\bselects?\b|\boptions?\b|\bdropdowns?\b"),
+        (1, r"\bpage\b|\bpages\b|\bviews?\b"),
+    ],
+    "ui": [
+        (3, r"\bdesign\b|responsive|\blayout\b|\bcss\b|stylelint|typography"),
+        (3, r"font ?size|contrast|squish|cramped|\bpaddings?\b|\bmargins?\b|max.?width"),
+        (3, r"looks? (wonky|dumb|bad|silly)|\bwonky\b|\bugly\b|\bdisplay of\b"),
+        (2, r"\bcolou?rs?\b|\bicons?\b|\bmedals?\b|\btroph(y|ies)\b|\bwubrg\b"),
+        (2, r"center|centre|align|spacing|grid_|redesign|\bbold\b|\bth\b|\btds?\b"),
+        (2, r"bad copy|\bwording\b|copy is|\bcopy\b.{0,15}(bad|silly|repeats)"),
+        (1, r"\bscreen\b|\bbuttons?\b|\bformat(ting)?\b|\bshow\b|\bhide\b"),
+    ],
+    "infra": [
+        (3, r"\bci\b|github|workflow|autodeploy|\bdeploy\b|docker|devcontainer"),
+        (3, r"\blogging\b|\blogs?\b|monolog|sentry|log level|error_log|rotate"),
+        (3, r"\breadme\b|contributing|composer|phpcs|prettier|styleci|lint rule|linter"),
+        (2, r"\benv\b|\bconfig\b|configuration|environment variable"),
+        (2, r"latest stable|\bupgrade\b|\bversions?\b|update to latest"),
+        (1, r"\bprod\b|production|dev\.gatherling"),
+    ],
+    "arch": [
+        (3, r"refactor|\bextract\b|combine|unify|\bDRY\b|duplicat|repetiti"),
+        (3, r"shared? code|share the code|should be shared|near.?identical|copy and paste"),
+        (3, r"routing|front controller|index\.php|namespace"),
+        (2, r"belongs in|should live|move (the|it|this|them)|rename"),
+        (2, r"centrali[sz]|standardi[sz]|canonical|convention|consistent"),
+        (2, r"get rid of|scrap|retire|\bkill\b|remove the concept"),
+        (1, r"\bhelpers?\b|\bmodels?\b|\bclass(es)?\b"),
+    ],
+}
+
+COMPILED = {
+    theme: [(w, re.compile(p, re.I)) for w, p in patterns]
+    for theme, patterns in KEYWORDS.items()
+}
+
+# Hand-picked. These are data loss, or they unblock a lot of other work.
+# Matched on a distinctive fragment of the original line.
+PINNED = [
+    # Data loss and integrity, happening in production now.
+    "Cannot get event for deck without event ID",
+    "Recalculating ratings doesn't work",
+    "Calculating standings should be a transaction",
+    "you actually CAN delete a player with matches recorded",
+    "we need to make the invalid palyer has a match thing impossible",
+    "You get a 500 if you have two of the same entry in your maindeck",
+    "We allow trailing spaces in player username",
+    "shows everyone as seed 127",
+    # Testability - these unblock everything in the test phase.
+    "Can't rename admin to Admin",
+    "Get rid of all exits in favor of exceptions",
+    "remove all calls to exit in favor of exception throwing",
+    "some kind of top level error handling and logging",
+    "Tests that find things like type errors just loading a page",
+    "test a full page rendering with Html",
+    "Some tests of event so that it doesn't break all the time",
+    "We need some shared way to make players, events, series",
+    "Must find a way to test api",
+    "It must be an errorr to provide or lookup a value",
+    "must run phpstan and psalm on ci",
+    "Figure out why PHP Warnings don't cause test failures",
+    "PHP Warning should end a test",
+    "composer test shold proxy along args",
+]
+
+LOW_RISK = re.compile(r"""
+    \brename\b|\btypos?\b|bad copy|\bwording\b|remove all center|
+    should be a component|make .{0,25} a component|
+    lint rule|enforce|single quotes|whitespace|
+    magic number|hardcoded|hardcoding|
+    bad name|is a bad name|sucks as a name|
+    \bconsts?\b|constants|\bcomment\b
+""", re.X | re.I)
+
+HIGH_RISK = re.compile(r"""
+    migration|\bschema\b|foreign key|\bFKs?\b|drop (the )?column|
+    numeric ids|primary key|\bpks\b|
+    redesign|overhaul|responsive|
+    routing|front controller|index\.php|
+    rewrite|refactor Deck->save|deck\.main|
+    remove Pagination|remove jquery|
+    delete a format|blow away|
+    validation library|full on proper validation|
+    \btransactions?\b|recalculat
+""", re.X | re.I)
+
+
+def classify(line: str) -> str:
+    scores: dict[str, int] = {}
+    for theme, patterns in COMPILED.items():
+        score = sum(weight for weight, pattern in patterns if pattern.search(line))
+        if score:
+            scores[theme] = score
+    if not scores:
+        return "arch"
+    best = max(scores.values())
+    for theme in THEME_ORDER:
+        if scores.get(theme) == best:
+            return theme
+    return "arch"
+
+
+def risk_for(line: str) -> str:
+    if HIGH_RISK.search(line):
+        return "high"
+    if LOW_RISK.search(line):
+        return "low"
+    return "medium"
+
+
+def task_id(line: str) -> str:
+    """Stable ID from the line's content, so re-ordering the braindump is harmless."""
+    return "T-" + hashlib.sha256(line.strip().encode("utf-8")).hexdigest()[:6].upper()
+
+
+def matches_any(line: str, fragments) -> Optional[str]:
+    lowered = line.lower()
+    for fragment in fragments:
+        if fragment.lower() in lowered:
+            return fragment
+    return None
+
+
+def main() -> int:
+    if not SOURCE.exists():
+        print(f"missing {SOURCE}", file=sys.stderr)
+        return 1
+
+    lines = [ln.strip() for ln in SOURCE.read_text(encoding="utf-8").splitlines() if ln.strip()]
+
+    seen: set[str] = set()
+    tasks = []
+    for line in lines:
+        # `bin/tasks done` marks a line by prefixing DONE. Strip it before hashing so
+        # the ID does not change when a task is completed.
+        completed_here = line.startswith(DONE_PREFIX)
+        if completed_here:
+            line = line[len(DONE_PREFIX):].strip()
+        tid = task_id(line)
+        if tid in seen:
+            continue
+        seen.add(tid)
+        note = "marked done" if completed_here else None
+        tasks.append({
+            "id": tid,
+            "text": line,
+            "theme": classify(line),
+            "risk": risk_for(line),
+            "pinned": matches_any(line, PINNED) is not None,
+            "done": note,
+        })
+
+    by_theme: dict[str, list[dict]] = {}
+    for task in tasks:
+        by_theme.setdefault(task["theme"], []).append(task)
+
+    theme_counts = Counter(t["theme"] for t in tasks)
+    risk_counts = Counter(t["risk"] for t in tasks)
+    pinned = [t for t in tasks if t["pinned"] and not t["done"]]
+    done = [t for t in tasks if t["done"]]
+
+    out: list[str] = []
+    out.append("# Tasks\n")
+    out.append(
+        "Generated from `docs/braindump.txt` by `bin/import-tasks`. Do not hand-edit the task\n"
+        "lines - edit the braindump and re-run. IDs are a hash of the text, so they survive\n"
+        "re-ordering and re-generation.\n"
+    )
+    out.append(
+        "Task text is verbatim, typos and all. Some lines hold more than one idea; split them\n"
+        "in the braindump if that gets in the way. Themes are assigned by keyword scoring and\n"
+        "a fair number will be arguable - the ID is the part that matters, not the bucket.\n"
+    )
+    out.append("See `docs/MODERNIZATION.md` for how to pick one up.\n")
+
+    out.append("## At a glance\n")
+    out.append(f"{len(tasks)} tasks, {len(done)} marked done.\n")
+    out.append("| theme | count | what it covers |")
+    out.append("| --- | ---: | --- |")
+    for theme in THEME_ORDER:
+        if theme_counts.get(theme):
+            out.append(f"| `{theme}` | {theme_counts[theme]} | {BLURBS[theme]} |")
+    out.append("")
+    out.append(
+        f"Risk: {risk_counts['low']} low, {risk_counts['medium']} medium, {risk_counts['high']} high. "
+        "Low risk means mechanical and easy to verify - good first tasks. High risk means it "
+        "changes behaviour or touches the schema, so get tests in place first.\n"
+    )
+
+    if pinned:
+        out.append("## Start here\n")
+        out.append(
+            "Hand-picked. The first group is losing or corrupting real data in production. The\n"
+            "second group unblocks the rest of the plan, because until pages can be called from\n"
+            "a test there is no safe way to do the other 500.\n"
+        )
+        for task in sorted(pinned, key=lambda t: (t["theme"] != "bug", t["id"])):
+            out.append(f"- [ ] `{task['id']}` ({task['theme']}/{task['risk']}) {task['text']}")
+        out.append("")
+
+    if done:
+        out.append("## Already done\n")
+        out.append("Marked done in the canonical braindump.\n")
+        for task in sorted(done, key=lambda t: t["id"]):
+            out.append(f"- [x] `{task['id']}` {task['text']}")
+            out.append(f"  - {task['done']}")
+        out.append("")
+
+    out.append("## All tasks by theme\n")
+    for theme in THEME_ORDER:
+        if not by_theme.get(theme):
+            continue
+        out.append(f"### {theme} ({theme_counts[theme]}) - {BLURBS[theme]}\n")
+        risk_rank = {"low": 0, "medium": 1, "high": 2}
+        for task in sorted(by_theme[theme], key=lambda t: (risk_rank[t["risk"]], t["id"])):
+            if task["done"]:
+                out.append(f"- [x] `{task['id']}` (done) {task['text']}")
+                continue
+            flag = " **[start here]**" if task["pinned"] else ""
+            out.append(f"- [ ] `{task['id']}` ({task['risk']}){flag} {task['text']}")
+        out.append("")
+
+    TARGET.write_text("\n".join(out), encoding="utf-8")
+    print(f"wrote {TARGET.relative_to(ROOT)}")
+    print(f"  {len(tasks)} tasks, {len(pinned)} pinned, {len(done)} marked done")
+    for theme in THEME_ORDER:
+        if theme_counts.get(theme):
+            print(f"  {theme:8} {theme_counts[theme]:4}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Run the check currently enforced by CI. Expand this entry point as CI grows.
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+if [ "$#" -gt 0 ]; then
+    composer tests -- "$@"
+else
+    composer tests
+fi

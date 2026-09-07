@@ -1,0 +1,24 @@
+"$schema" = "https://conductor.build/schemas/settings.repo.schema.json"
+
+[scripts]
+# Repository-owned setup entry point. Cloud repository configuration should invoke
+# this same command so local and Cloud workspaces share one implementation.
+setup = "bin/setup"
+
+# Several workspaces would share one MariaDB and one gatherling_test database.
+# Tests wrap each case in a transaction and roll back, but concurrent schema
+# migrations would still collide.
+run_mode = "nonconcurrent"
+
+[scripts.run.verify]
+command = "bin/verify"
+icon = "circle-check"
+default = true
+
+[scripts.run.tests]
+command = "composer tests"
+icon = "test-tube"
+
+[scripts.run.tasks]
+command = "bin/tasks"
+icon = "list-checks"

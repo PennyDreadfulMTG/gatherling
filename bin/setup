@@ -1,0 +1,230 @@
+#!/usr/bin/env bash
+# Prepare a Gatherling development workspace. Safe to run repeatedly.
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+ROOT=$(pwd)
+
+DB_HOST=${GATHERLING_DB_HOST:-localhost}
+DB_USER=${GATHERLING_DB_USER:-gatherling}
+DB_PASS=${GATHERLING_DB_PASS:-'Pa$$w0rD'}
+DB_NAME=${GATHERLING_DB_NAME:-gatherling}
+DB_TEST_NAME=${GATHERLING_DB_TEST_NAME:-gatherling_test}
+DB_SOCKET=${GATHERLING_DB_SOCKET:-/var/lib/mysql/mysql.sock}
+
+step() { printf '\n\033[1m==> %s\033[0m\n' "$1"; }
+fail() { printf '\033[31mFAILED: %s\033[0m\n' "$1" >&2; exit 1; }
+
+php_supported() {
+    command -v php >/dev/null 2>&1 && php -r '
+        exit(
+            version_compare(PHP_VERSION, "8.2", ">=")
+            && version_compare(PHP_VERSION, "8.5", "<") ? 0 : 1
+        );
+    '
+}
+
+install_cloud_prerequisites() {
+    [ "${CONDUCTOR_IS_LOCAL:-}" = 0 ] || return 0
+    command -v dnf >/dev/null 2>&1 || return 0
+
+    if ! php_supported; then
+        echo "  installing the repository-compatible PHP 8.4 runtime"
+        sudo dnf install -y --allowerasing \
+            php8.4 php8.4-cli php8.4-common php8.4-mbstring \
+            php8.4-mysqlnd php8.4-pdo php8.4-process php8.4-xml >/dev/null
+    fi
+
+    if ! command -v mariadbd >/dev/null 2>&1; then
+        echo "  installing MariaDB"
+        sudo dnf install -y mariadb118 mariadb118-server \
+            mariadb118-server-utils >/dev/null
+    fi
+}
+
+disable_stale_cloud_php_ini() {
+    [ "${CONDUCTOR_IS_LOCAL:-}" = 0 ] || return 0
+    local extension_dir
+    extension_dir=$(php -n -r 'echo ini_get("extension_dir");')
+    if [ -f /etc/php.d/30-xdebug.ini ] && [ ! -f "$extension_dir/xdebug.so" ]; then
+        sudo mv /etc/php.d/30-xdebug.ini /etc/php.d/30-xdebug.ini.disabled
+    fi
+    if [ -f /etc/php.d/25-pcov.ini ] && [ ! -f "$extension_dir/pcov.so" ]; then
+        sudo mv /etc/php.d/25-pcov.ini /etc/php.d/25-pcov.ini.disabled
+    fi
+}
+
+step "Checking prerequisites"
+install_cloud_prerequisites
+disable_stale_cloud_php_ini
+php_supported || fail "PHP 8.2-8.4 required, found $(php -r 'echo PHP_VERSION;' 2>/dev/null || echo none)"
+command -v composer >/dev/null 2>&1 || fail "composer not found"
+MODULES=$(php -m)
+for ext in curl mysqli pdo_mysql SimpleXML mbstring; do
+    grep -qix "$ext" <<<"$MODULES" || fail "PHP extension missing: $ext"
+done
+echo "  php $(php -r 'echo PHP_VERSION;') ok"
+
+step "Installing PHP dependencies"
+composer install --prefer-dist --no-progress --no-interaction
+
+step "Writing gatherling/config.php"
+if [ -f gatherling/config.php ]; then
+    echo "  already exists, leaving alone"
+else
+    cp gatherling/config.php.example gatherling/config.php
+    echo "  written from config.php.example"
+fi
+
+can_connect() {
+    php -r '
+        require "gatherling/config.php";
+        try {
+            new PDO(
+                "mysql:host={$CONFIG["db_hostname"]}",
+                $CONFIG["db_username"],
+                $CONFIG["db_password"]
+            );
+        } catch (PDOException $e) {
+            exit(1);
+        }
+    ' >/dev/null 2>&1
+}
+
+admin_sql() {
+    local sql=$1
+    local admin
+    for admin in \
+        "mariadb --protocol=socket --socket=$DB_SOCKET -u root" \
+        "mysql --protocol=socket --socket=$DB_SOCKET -u root" \
+        "sudo -n mariadb --protocol=socket --socket=$DB_SOCKET -u root" \
+        "sudo -n mysql --protocol=socket --socket=$DB_SOCKET -u root"
+    do
+        if $admin -e "SELECT 1" >/dev/null 2>&1; then
+            $admin -e "$sql" >/dev/null 2>&1 && return 0
+        fi
+    done
+    return 1
+}
+
+timezone_loaded() {
+    local admin value
+    for admin in \
+        "mariadb --protocol=socket --socket=$DB_SOCKET -u root" \
+        "mysql --protocol=socket --socket=$DB_SOCKET -u root" \
+        "sudo -n mariadb --protocol=socket --socket=$DB_SOCKET -u root" \
+        "sudo -n mysql --protocol=socket --socket=$DB_SOCKET -u root"
+    do
+        if value=$($admin --batch --skip-column-names mysql \
+            -e "SELECT COUNT(*) FROM time_zone_name WHERE Name = 'America/New_York'" \
+            2>/dev/null); then
+            [ "$value" -gt 0 ] && return 0
+        fi
+    done
+    return 1
+}
+
+start_cloud_database() {
+    command -v mariadbd >/dev/null 2>&1 || return 1
+    command -v mariadb-install-db >/dev/null 2>&1 || return 1
+
+    mkdir -p .context
+    sudo install -d -o mysql -g mysql -m 750 /var/lib/mysql
+    sudo install -d -o mysql -g mysql -m 755 /run/mariadb
+    if [ ! -d /var/lib/mysql/mysql ]; then
+        sudo mariadb-install-db \
+            --user=mysql \
+            --datadir=/var/lib/mysql \
+            --auth-root-authentication-method=normal \
+            --skip-test-db >/dev/null
+    fi
+    sudo chown -R mysql:mysql /var/lib/mysql
+
+    local daemon
+    daemon=$(command -v mariadbd)
+    setsid sudo -u mysql nohup "$daemon" \
+        --datadir=/var/lib/mysql \
+        --socket="$DB_SOCKET" \
+        --pid-file=/run/mariadb/gatherling.pid \
+        --bind-address=127.0.0.1 \
+        --port=3306 \
+        --innodb-buffer-pool-size=256M \
+        >>"$ROOT/.context/mariadb.log" 2>&1 </dev/null &
+}
+
+start_database() {
+    if [ "${CONDUCTOR_IS_LOCAL:-}" = 0 ]; then
+        start_cloud_database
+    elif command -v brew >/dev/null 2>&1; then
+        brew services start mariadb >/dev/null
+    elif command -v service >/dev/null 2>&1; then
+        sudo -n service mariadb start >/dev/null 2>&1 \
+            || sudo -n service mysql start >/dev/null 2>&1
+    else
+        return 1
+    fi
+}
+
+step "Checking database connectivity"
+if ! can_connect; then
+    if ! admin_sql "SELECT 1"; then
+        echo "  starting MariaDB"
+        start_database || true
+        for _ in $(seq 1 60); do
+            admin_sql "SELECT 1" && break
+            sleep 0.5
+        done
+    fi
+
+    admin_sql "
+        CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASS}';
+        CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASS}';
+        CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;
+        CREATE DATABASE IF NOT EXISTS \`${DB_TEST_NAME}\`;
+        GRANT ALL ON \`${DB_NAME}\`.* TO '${DB_USER}'@'localhost';
+        GRANT ALL ON \`${DB_TEST_NAME}\`.* TO '${DB_USER}'@'localhost';
+        GRANT ALL ON \`${DB_NAME}\`.* TO '${DB_USER}'@'%';
+        GRANT ALL ON \`${DB_TEST_NAME}\`.* TO '${DB_USER}'@'%';
+        FLUSH PRIVILEGES;
+    " || true
+fi
+
+can_connect || fail "cannot connect to MariaDB as ${DB_USER}@${DB_HOST}"
+echo "  connected"
+
+if [ "${CONDUCTOR_IS_LOCAL:-}" = 0 ] && command -v mysql_tzinfo_to_sql >/dev/null 2>&1; then
+    if ! timezone_loaded; then
+        echo "  loading timezone data"
+        sudo mysql_tzinfo_to_sql /usr/share/zoneinfo 2>/dev/null \
+            | sudo mariadb --protocol=socket --socket="$DB_SOCKET" -u root mysql
+    fi
+fi
+
+step "Running migrations"
+php gatherling/admin/db-upgrade.php >/dev/null
+echo "  schema up to date"
+
+step "Seeding card data"
+NEED_SEED=$(php -r '
+    require "gatherling/bootstrap.php";
+    try {
+        echo Gatherling\Helpers\db()->int("SELECT COUNT(*) FROM cards") > 0 ? "no" : "yes";
+    } catch (Throwable $e) {
+        echo "yes";
+    }
+' 2>/dev/null)
+if [ "$NEED_SEED" = yes ]; then
+    for set in M10 ELD; do
+        echo "  inserting $set"
+        php gatherling/insertcardset.php "$set" >/dev/null
+    done
+    php gatherling/util/updateDefaultFormats.php >/dev/null
+else
+    echo "  cards already present, skipping"
+fi
+
+step "Smoke test"
+bin/verify --filter FilesTest >/dev/null
+echo "  passing"
+
+printf '\n\033[32mSetup complete.\033[0m Run \033[1mbin/verify\033[0m before review.\n'
