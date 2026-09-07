@@ -40,3 +40,10 @@ yarn-error.log*
 *.sw?
 /.dccache
 .phpactor.json
+
+# Agent workspace scratch and generated fanout prompts.
+/.context/
+/.fanout/
+
+# Python bytecode from repository tools.
+__pycache__/

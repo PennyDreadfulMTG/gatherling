@@ -2,6 +2,12 @@
 
 A website for running Magic: the Gathering tournaments.
 
+## Future modernization
+
+The repository preserves a dormant, agent-oriented cleanup backlog. See
+[`docs/MODERNIZATION.md`](docs/MODERNIZATION.md) when that project is intentionally
+started; ordinary development does not use it.
+
 ## Local Setup
 
 - Install PHP, MariaDB, Composer, php-curl, php-mysqli, php-pdo, php-pod_mysql, php-simplexml.

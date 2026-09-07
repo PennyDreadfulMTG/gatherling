@@ -1,0 +1,192 @@
+#!/usr/bin/env bash
+# Claim a task so two agents do not do the same work.
+#
+#   bin/claim next [--theme bug] [--risk low] [--pinned]   pick and claim in one atomic step
+#   bin/claim T-5155AD                                     claim a specific task
+#   bin/claim --list                                       every open claim
+#   bin/claim --mine                                       what this workspace holds
+#   bin/claim --release T-5155AD                           give it back
+#   bin/claim --prune [days]                               drop claims older than N days (default 2)
+#   bin/claim --where                                      which mode is in effect and why
+#
+# Two modes, set with GATHERLING_CLAIMS:
+#
+#   local  (default)  Claims are refs under refs/claims/ in the local .git. Conductor
+#                     workspaces are worktrees sharing one .git, so a claim in one is
+#                     instantly visible in the others. No network, nothing pushed.
+#
+#   remote            Claims are refs under refs/claims/ on origin. Needed when agents
+#                     do not share a filesystem - Conductor Cloud, CI, or separate
+#                     machines. Every claim is a network round trip and writes to the
+#                     shared remote.
+#
+# Both modes are atomic. Local uses `git update-ref` create, which fails if the ref
+# exists. Remote relies on a push to an existing ref being rejected as non-fast-forward,
+# since claim refs point at blobs and blobs have no ancestry. Two agents racing for one
+# task: exactly one wins, the other gets exit 1 and the holder's details.
+set -uo pipefail
+
+cd "$(dirname "$0")/.."
+
+MODE=${GATHERLING_CLAIMS:-local}
+WHO=${GATHERLING_AGENT:-$(git config user.name 2>/dev/null || echo unknown)}
+WORKSPACE=$(basename "$(pwd)")
+REMOTE=${GATHERLING_CLAIMS_REMOTE:-origin}
+REFS=refs/claims
+
+die() { printf '\033[31m%s\033[0m\n' "$1" >&2; exit 1; }
+
+case "$MODE" in
+    local|remote) ;;
+    *) die "GATHERLING_CLAIMS must be 'local' or 'remote', got '$MODE'" ;;
+esac
+
+if [ "$MODE" = remote ] && ! git remote get-url "$REMOTE" >/dev/null 2>&1; then
+    die "GATHERLING_CLAIMS=remote but there is no '$REMOTE' remote"
+fi
+
+claim_body() {
+    printf 'task: %s\nwho: %s\nworkspace: %s\nbranch: %s\nclaimed: %s\n' \
+        "$1" "$WHO" "$WORKSPACE" "$(git branch --show-current)" "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+}
+
+# Atomic create. Returns 1 if someone already holds it.
+take() {
+    local id=$1 blob
+    blob=$(claim_body "$id" | git hash-object -w --stdin) || die "could not write claim object"
+    if [ "$MODE" = local ]; then
+        git update-ref --stdin <<<"create $REFS/$id $blob" 2>/dev/null
+    else
+        # A non-fast-forward push is rejected, which is exactly create-only semantics.
+        git push "$REMOTE" "${blob}:$REFS/$id" >/dev/null 2>&1
+    fi
+}
+
+holder() {
+    local id=$1
+    if [ "$MODE" = local ]; then
+        git cat-file blob "$REFS/$id" 2>/dev/null
+    else
+        git fetch -q "$REMOTE" "$REFS/$id" 2>/dev/null && git cat-file blob FETCH_HEAD 2>/dev/null
+    fi
+}
+
+list_claims() {
+    if [ "$MODE" = local ]; then
+        git for-each-ref "$REFS" --format='%(refname:strip=2)' 2>/dev/null
+    else
+        git ls-remote "$REMOTE" "$REFS/*" 2>/dev/null | awk '{print $2}' | sed "s|^$REFS/||"
+    fi
+}
+
+drop() {
+    if [ "$MODE" = local ]; then
+        git update-ref -d "$REFS/$1"
+    else
+        git push "$REMOTE" --delete "$REFS/$1" >/dev/null 2>&1
+    fi
+}
+
+field() { sed -n "s/^$2: //p" <<<"$1"; }
+
+show_claim() {
+    local id=$1 body
+    body=$(holder "$id")
+    printf '%-10s %-20s %-22s %s\n' \
+        "$id" "$(field "$body" who)" "$(field "$body" workspace)" "$(field "$body" claimed)"
+}
+
+case "${1:---help}" in
+    --where)
+        echo "mode:      $MODE"
+        if [ "$MODE" = local ]; then
+            echo "claims in: $(git rev-parse --git-common-dir)/$REFS"
+            echo "shared with: other worktrees of this repo only - NOT other machines"
+            echo
+            echo "Running agents that do not share this filesystem (Conductor Cloud, CI,"
+            echo "another machine)? Set GATHERLING_CLAIMS=remote, or partition instead with"
+            echo "bin/tasks list --shard N/M."
+        else
+            echo "claims on: $(git remote get-url "$REMOTE") under $REFS/"
+            echo "shared with: everyone who can reach that remote"
+        fi
+        ;;
+
+    --list)
+        claims=$(list_claims)
+        [ -z "$claims" ] && { echo "no open claims ($MODE)"; exit 0; }
+        printf '%-10s %-20s %-22s %s\n' TASK WHO WORKSPACE CLAIMED
+        for id in $claims; do show_claim "$id"; done
+        ;;
+
+    --mine)
+        found=0
+        for id in $(list_claims); do
+            body=$(holder "$id")
+            if [ "$(field "$body" who)" = "$WHO" ] && [ "$(field "$body" workspace)" = "$WORKSPACE" ]; then
+                show_claim "$id"; found=1
+            fi
+        done
+        [ "$found" = "0" ] && echo "no claims held by $WHO in $WORKSPACE ($MODE)"
+        ;;
+
+    --release)
+        id=$(tr '[:lower:]' '[:upper:]' <<<"${2:-}")
+        [ -z "$id" ] && die "usage: bin/claim --release T-XXXXXX"
+        list_claims | grep -qx "$id" || die "$id is not claimed ($MODE)"
+        drop "$id" || die "could not release $id"
+        echo "released $id"
+        ;;
+
+    --prune)
+        days=${2:-2}
+        cutoff=$(( $(date +%s) - days * 86400 ))
+        pruned=0
+        for id in $(list_claims); do
+            claimed=$(field "$(holder "$id")" claimed)
+            # date -j is macOS, date -d is GNU. Try both.
+            ts=$(date -j -u -f '%Y-%m-%dT%H:%M:%SZ' "$claimed" +%s 2>/dev/null \
+                 || date -u -d "$claimed" +%s 2>/dev/null || echo 0)
+            if [ "$ts" -gt 0 ] && [ "$ts" -lt "$cutoff" ]; then
+                drop "$id" && { echo "pruned $id (claimed $claimed)"; pruned=$((pruned+1)); }
+            fi
+        done
+        echo "pruned $pruned claim(s) older than $days day(s)"
+        ;;
+
+    next)
+        shift
+        # Ask bin/tasks for candidates, then take the first one nobody holds. The take
+        # is atomic, so losing a race just means moving on to the next candidate.
+        candidates=$(bin/tasks list "$@" 2>/dev/null | awk '/^T-/ {print $1}')
+        [ -z "$candidates" ] && die "no open tasks match those filters"
+        for id in $candidates; do
+            if take "$id"; then
+                echo "claimed $id ($MODE)"
+                echo
+                bin/tasks show "$id"
+                exit 0
+            fi
+        done
+        die "every task matching those filters is already claimed (bin/claim --list)"
+        ;;
+
+    -h|--help)
+        sed -n '2,25p' "$0" | sed 's/^# \{0,1\}//'
+        ;;
+
+    *)
+        id=$(tr '[:lower:]' '[:upper:]' <<<"$1")
+        [[ "$id" =~ ^T-[0-9A-F]{6}$ ]] || die "not a task id: $1"
+        bin/tasks show "$id" >/dev/null 2>&1 || die "no such task: $id"
+        if take "$id"; then
+            echo "claimed $id ($MODE)"
+            echo
+            bin/tasks show "$id"
+        else
+            printf '\033[33m%s is already claimed:\033[0m\n' "$id" >&2
+            holder "$id" >&2
+            exit 1
+        fi
+        ;;
+esac
