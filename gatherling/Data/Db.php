@@ -14,7 +14,7 @@ use PDOStatement;
 use PDO;
 use Safe\DateTimeImmutable;
 
-use function Gatherling\Helpers\config;
+use function Gatherling\Helpers\{config, databaseHostname, databaseName, databasePassword, databasePort, databaseUsername};
 use function Gatherling\Helpers\logger;
 use function Gatherling\Helpers\marshal;
 use function Safe\preg_match;
@@ -46,15 +46,15 @@ class Db
         }
 
         try {
-            $database = config()->string('db_database');
-            $username = config()->string('db_username');
-            $password = config()->string('db_password');
-            $hostname = config()->string('db_hostname');
+            $database = databaseName();
+            $username = databaseUsername();
+            $password = databasePassword();
+            $hostname = databaseHostname();
         } catch (MarshalException $e) {
             throw new ConfigurationException('Incorrect database configuration', 0, $e);
         }
 
-        $dsn = 'mysql:host=' . $hostname . ';charset=utf8mb4';
+        $dsn = 'mysql:host=' . $hostname . ';port=' . databasePort() . ';charset=utf8mb4';
         if ($connectToDatabase) {
             $dsn .= ';dbname=' . $database;
         }
