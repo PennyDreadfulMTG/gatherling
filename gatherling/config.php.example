@@ -8,6 +8,8 @@ $CONFIG['env'] = 'dev'; # Should be 'prod' for production.
 # === Database ===
 
 $CONFIG['db_hostname'] = $CONFIG['db_test_hostname'] = 'localhost';
+# If you change the port number below to other than 3306, use 127.0.0.1 as the hostname above instead of localhost.
+$CONFIG['db_port'] = $CONFIG['db_test_port'] = 3306;
 $CONFIG['db_username'] = $CONFIG['db_test_username'] = 'gatherling';
 $CONFIG['db_password'] = $CONFIG['db_test_password'] = 'Pa$$w0rD';
 $CONFIG['db_database'] = 'gatherling';
