@@ -8,7 +8,7 @@ use Exception;
 use mysqli;
 use PDO;
 
-use function Gatherling\Helpers\config;
+use function Gatherling\Helpers\{databaseHostname, databaseName, databasePassword, databasePort, databaseUsername};
 use function Safe\define;
 
 // Use PHP7 default error reporting to avoid a complex refactor
@@ -24,14 +24,16 @@ class Database
 
         if (!isset($instance)) {
             $instance = new mysqli(
-                config()->string('db_hostname'),
-                config()->string('db_username'),
-                config()->string('db_password')
+                databaseHostname(),
+                databaseUsername(),
+                databasePassword(),
+                null,
+                databasePort()
             );
             if (mysqli_connect_errno()) {
                 throw new Exception((string) mysqli_connect_error());
             }
-            $db_selected = $instance->select_db(config()->string('db_database'));
+            $db_selected = $instance->select_db(databaseName());
             if (!$db_selected) {
                 throw new \Exception('Error creating database: ' . mysqli_error($instance) . "\n");
             }
@@ -48,9 +50,9 @@ class Database
 
         if (!isset($pdo_instance)) {
             $pdo_instance = new PDO(
-                'mysql:hostname=' . config()->string('db_hostname') . ';port=3306;dbname=' . config()->string('db_database'),
-                config()->string('db_username'),
-                config()->string('db_password')
+                'mysql:host=' . databaseHostname() . ';port=' . databasePort() . ';dbname=' . databaseName(),
+                databaseUsername(),
+                databasePassword()
             );
         }
 

@@ -78,10 +78,12 @@ fi
 
 can_connect() {
     php -r '
+        require "vendor/autoload.php";
         require "gatherling/config.php";
         try {
+            $port = Gatherling\Helpers\databasePort();
             new PDO(
-                "mysql:host={$CONFIG["db_hostname"]}",
+                "mysql:host={$CONFIG["db_hostname"]};port=$port",
                 $CONFIG["db_username"],
                 $CONFIG["db_password"]
             );

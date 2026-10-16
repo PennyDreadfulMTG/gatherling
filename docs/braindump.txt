@@ -579,3 +579,5 @@ selectInput is the last holdout on the select stuff move to dropmenu
 bestEver in ratings.php just arbitrarily returns one of thebest ever if there is a tie - instead return the oldest, or all fo them?
 showCreateNextEvent and showCreateNextSeason are a little package of repeated stuff
 Should all our private vars actually be protected? Probably
+Local QA: handle absent config.php/node_modules in static-check configuration, use Safe\session_start in Auth/Session.php, and keep bin/verify runnable in Windows checkouts with CRLF.
+Document the MariaDB version required by INSERT ... RETURNING in Data/Db.php; XAMPP's MariaDB 10.4.32 fails DbTest::testInsert because RETURNING requires MariaDB 10.5 or newer.

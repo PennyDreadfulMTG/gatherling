@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gatherling;
 
 use DateInterval;
+use Gatherling\Exceptions\NotFoundInDatabaseException;
 use Gatherling\Exceptions\ValidationException;
 use Gatherling\Models\Database;
 use Gatherling\Models\Entry;
@@ -87,17 +88,17 @@ function newEventFromEventName(string $eventName, bool $newSeason = false): Even
 {
     try {
         $oldEvent = new Event($eventName);
-    } catch (\Exception $exc) {
-        if ($exc->getMessage() == "Event $eventName not found in DB") {
-            $seriesName = preg_replace('/ 1.00$/', '', $eventName);
-            $oldEvent = new Event('');
-            $oldEvent->name = $eventName;
-            $oldEvent->season = $newSeason ? 1 : 0;
-            $oldEvent->number = 0;
-            $oldEvent->series = $seriesName;
-        } else {
+    } catch (NotFoundInDatabaseException $exc) {
+        // action.php uses this placeholder when a series has no previous event.
+        if (!str_ends_with($eventName, ' 1.00')) {
             throw $exc;
         }
+        $seriesName = preg_replace('/ 1\.00$/', '', $eventName);
+        $oldEvent = new Event('');
+        $oldEvent->name = $eventName;
+        $oldEvent->season = $newSeason ? 1 : 0;
+        $oldEvent->number = 0;
+        $oldEvent->series = $seriesName;
     }
 
     $newEvent = new Event('');

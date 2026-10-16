@@ -7,7 +7,7 @@ namespace Gatherling\Data;
 use Gatherling\Exceptions\ConfigurationException;
 use Gatherling\Exceptions\DatabaseException;
 
-use function Gatherling\Helpers\config;
+use function Gatherling\Helpers\{config, databaseHostname, databaseName, databasePassword, databasePort, databaseUsername};
 use function Gatherling\Helpers\db;
 use function Gatherling\Helpers\logger;
 use function Safe\exec;
@@ -79,13 +79,14 @@ class Setup
     public static function dropTestDatabase(): void
     {
         logger()->info('Dropping test database');
-        db()->dropDatabase(config()->string('db_test_database'));
+        db()->dropDatabase(databaseName(true));
     }
 
     private static function activateTestDatabase(): void
     {
         global $CONFIG;
 
+        $port = databasePort(true);
         $toCopy = [
             'db_test_hostname' => 'db_hostname',
             'db_test_username' => 'db_username',
@@ -100,13 +101,15 @@ class Setup
             }
             $CONFIG[$to] = $CONFIG[$from];
         }
+        /** @var array<string, mixed> $CONFIG */
+        $CONFIG['db_port'] = $port;
     }
 
     // Creates the database if it doesn't exist.
     private static function create(): void
     {
         logger()->info('Creating database if necessary');
-        db()->createDatabase(config()->string('db_database'));
+        db()->createDatabase(databaseName());
     }
 
     private static function restoreDump(string $path): void
@@ -115,14 +118,15 @@ class Setup
             throw new DatabaseException('Refusing to restore dump in production environment');
         }
 
-        $host = config()->string('db_hostname');
-        $user = config()->string('db_username');
-        $pass = config()->string('db_password');
-        $db = config()->string('db_database');
+        $host = databaseHostname();
+        $user = databaseUsername();
+        $pass = databasePassword();
+        $db = databaseName();
 
         $cmd = sprintf(
-            'mysql -h%s -u%s -p%s %s < %s',
+            'mysql -h%s -P%d -u%s -p%s %s < %s',
             escapeshellarg($host),
+            databasePort(),
             escapeshellarg($user),
             escapeshellarg($pass),
             escapeshellarg($db),
